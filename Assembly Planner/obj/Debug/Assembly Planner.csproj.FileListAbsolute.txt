@@ -1,0 +1,14 @@
+c:\users\matt\documents\visual studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\Assembly Planner.exe.config
+c:\users\matt\documents\visual studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\Resources\NewEdgeRules.csv
+c:\users\matt\documents\visual studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\Resources\NewFaRules.csv
+c:\users\matt\documents\visual studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\Assembly Planner.exe
+c:\users\matt\documents\visual studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\Assembly Planner.pdb
+c:\users\matt\documents\visual studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\StarMath.dll
+c:\users\matt\documents\visual studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\TessellationAndVoxelizationGeometryLibrary.dll
+c:\users\matt\documents\visual studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\MIConvexHull.dll
+c:\users\matt\documents\visual studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\TessellationAndVoxelizationGeometryLibrary.pdb
+c:\users\matt\documents\visual studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\StarMath.pdb
+c:\users\matt\documents\visual studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\MIConvexHull.pdb
+c:\users\matt\documents\visual studio 2013\Projects\Assembly Planner\Assembly Planner\obj\Debug\Assembly Planner.csprojResolveAssemblyReference.cache
+c:\users\matt\documents\visual studio 2013\Projects\Assembly Planner\Assembly Planner\obj\Debug\Assembly Planner.exe
+c:\users\matt\documents\visual studio 2013\Projects\Assembly Planner\Assembly Planner\obj\Debug\Assembly Planner.pdb
