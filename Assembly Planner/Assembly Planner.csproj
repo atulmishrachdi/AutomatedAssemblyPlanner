@@ -32,6 +32,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MIConvexHull, Version=1.0.10.1021, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\tvgl\packages\MIConvexHull.1.0.10.1021\lib\portable-net4+sl4+wp7+win8\MIConvexHull.dll</HintPath>
+    </Reference>
     <Reference Include="StarMath">
       <HintPath>..\packages\StarMath.2.0.15.0217\lib\portable-net4+sl5+wp8+win8\StarMath.dll</HintPath>
     </Reference>
@@ -44,6 +48,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DisassemblyDirections\ConstantsPrimitiveOverlap.cs" />
+    <Compile Include="DisassemblyDirections\DisassemblyDirections.cs" />
+    <Compile Include="DisassemblyDirections\Icosahedron.cs" />
+    <Compile Include="DisassemblyDirections\PrimitivePrimitiveInteractions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -55,6 +63,18 @@
     <Content Include="StarMath.XML" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\GraphSynth\graphsynth_465a7e41942c\AssemblyEvaluator\AssemblyEvaluation.csproj">
+      <Project>{b5d1ed57-304d-4538-8a1f-d1c4d986f32f}</Project>
+      <Name>AssemblyEvaluation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\GraphSynth\graphsynth_465a7e41942c\GraphSynthSourceFiles\GraphSynth.BaseClasses\GraphSynth.BaseClasses.csproj">
+      <Project>{d679f4e2-fd18-48ac-9c0c-b60155a61d37}</Project>
+      <Name>GraphSynth.BaseClasses</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\iFAB-Assem\rules\ruleEditing.csproj">
+      <Project>{b91d7a93-e1ab-4f86-997a-4923d781f29a}</Project>
+      <Name>ruleEditing</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\tvgl\TessellationAndVoxelizationGeometryLibrary\TessellationAndVoxelizationGeometryLibraryUniversal.csproj">
       <Project>{e3489019-d590-46a8-b2c2-e3481e8db77c}</Project>
       <Name>TessellationAndVoxelizationGeometryLibraryUniversal</Name>
