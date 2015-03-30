@@ -48,8 +48,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DisassemblyDirections\BlockingDetermination.cs" />
     <Compile Include="DisassemblyDirections\ConstantsPrimitiveOverlap.cs" />
     <Compile Include="DisassemblyDirections\DisassemblyDirections.cs" />
+    <Compile Include="DisassemblyDirections\GraphConstants.cs" />
     <Compile Include="DisassemblyDirections\Icosahedron.cs" />
     <Compile Include="DisassemblyDirections\PrimitivePrimitiveInteractions.cs" />
     <Compile Include="Program.cs" />

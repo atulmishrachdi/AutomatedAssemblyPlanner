@@ -6,8 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using GraphSynth.Representation;
 using StarMathLib;
-using TVGL;
-using TVGL.Primitive_Surfaces.ClassifyTesselationAsPrimitives;
 using TVGL.Tessellation;
 
 namespace Assembly_Planner
@@ -18,61 +16,48 @@ namespace Assembly_Planner
         internal static void Run(designGraph assemblyGraph)
         {
             Directions = Icosahedron.DirectionGeneration();
-            var dirPool = new List<int>();
+            var globalDirPool = new List<int>();
             var solids = new List<TessellatedSolid>();
-            var solidPrimitive = PrimitiveMaker(solids);
-            foreach (var solid1 in solids)
+            var solidPrimitive = BlockingDetermination.PrimitiveMaker(solids);
+            AddingNodesToGraph(assemblyGraph, solids);
+            for (var i = 0; i < solids.Count; i++)
             {
+                var solid1 = solids[i];
                 var part1Primitives = solidPrimitive[solid1];
-                if (!assemblyGraph.nodes.Exists(n => n.name == solid1.Name))
-                    assemblyGraph.addNode(solid1.Name);
-                foreach (var solid2 in solids)
+                for (var j = i+1; i < solids.Count; i++)
                 {
+                    var solid2 = solids[j];
                     var part2Primitives = solidPrimitive[solid2];
-                    if (!assemblyGraph.nodes.Exists(n => n.name == solid1.Name))
-                        assemblyGraph.addNode(solid1.Name);
-                    if (DefineBlocking(solid1, solid2, part1Primitives, part2Primitives, dirPool))
-                        // I still dont know which one is moving, which one is ref
+                    var localDirInd = new List<int>();
+                    if (BlockingDetermination.DefineBlocking(solid1, solid2, part1Primitives, part2Primitives, globalDirPool, Directions, out localDirInd))
                     {
+                        // I still dont know which one is moving, which one is ref
                         var from = assemblyGraph[solid1.Name];
                         var to = assemblyGraph[solid2.Name];
                         assemblyGraph.addArc((node)from, (node)to);
+                        var a = assemblyGraph.arcs.Last();
+                        AddInformationToTheArc(a, localDirInd);
                     }
                 }
             }
         }
 
-        private static Dictionary<TessellatedSolid, List<PrimitiveSurface>> PrimitiveMaker(List<TessellatedSolid> parts)
+        private static void AddInformationToTheArc(arc a, List<int> localDirInd)
         {
-            var partPrimitive = new Dictionary<TessellatedSolid, List<PrimitiveSurface>>(); 
-            foreach (var solid in parts)
+            a.localVariables.Add(GraphConstants.DirectionInd);
+            foreach (var dir in localDirInd)
             {
-                var solidPrim = TesselationToPrimitives.Run(solid);
-                partPrimitive.Add(solid,solidPrim);
+                a.localVariables.Add(dir);
             }
-            return partPrimitive;
+            a.localVariables.Add(GraphConstants.DirectionInd);
         }
-        
-        internal static bool DefineBlocking(TessellatedSolid a, TessellatedSolid b, List<PrimitiveSurface> aP,
-            List<PrimitiveSurface> bP, List<int> dirPool)
+
+        private static void AddingNodesToGraph(designGraph assemblyGraph, List<TessellatedSolid> solids)
         {
-            if (BoundingBoxOverlappingCheck(a, b))
+            foreach (var solid in solids)
             {
-                if (ConvexHullOverlappingCheck(a, b))
-                {
-                    var dirInd = new List<int>();
-                    for (var i = 0; i < Directions.Count; i++)
-                        dirInd.Add(i);
-                    if (PrimitivePrimitiveInteractions.PrimitiveOverlapping(aP, bP, dirInd))
-                    {
-                        // dirInd is the list of directions that must be added to the arc between part1 and part2
-                        // I also need to creat the pool of directions
-                        dirPool.AddRange(dirInd.Where(d=> !dirPool.Contains(d)));
-                        return true;
-                    }
-                }
+                assemblyGraph.addNode(solid.Name);
             }
-            return false;
         }
 
     }

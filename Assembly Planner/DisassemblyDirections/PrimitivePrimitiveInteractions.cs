@@ -11,7 +11,7 @@ namespace Assembly_Planner
 {
     class PrimitivePrimitiveInteractions
     {
-        internal static bool PrimitiveOverlapping(List<PrimitiveSurface> aP, List<PrimitiveSurface> bP, List<int> dirInd)
+        internal static bool PrimitiveOverlap(List<PrimitiveSurface> aP, List<PrimitiveSurface> bP, List<int> dirInd)
         {
             var overlap = false;
             foreach (var primitiveA in aP)

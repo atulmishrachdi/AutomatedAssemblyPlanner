@@ -14,9 +14,6 @@ namespace Assembly_Planner
         static void Main(string[] args)
         {
             var assemblyGraph = new designGraph();
-            assemblyGraph.addNode("node_one");
-            graphElement iuy = assemblyGraph["node_one"];
-            if (n1 == iuy) Console.WriteLine("same");
             DisassemblyDirections.Run(assemblyGraph); //Input: assembly model 
         }
     }
