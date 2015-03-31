@@ -20,29 +20,31 @@ namespace Assembly_Planner
             var solids = new List<TessellatedSolid>();
             var solidPrimitive = BlockingDetermination.PrimitiveMaker(solids);
             AddingNodesToGraph(assemblyGraph, solids);
+            
             for (var i = 0; i < solids.Count; i++)
             {
                 var solid1 = solids[i];
-                var part1Primitives = solidPrimitive[solid1];
-                for (var j = i+1; i < solids.Count; i++)
+                var solid1Primitives = solidPrimitive[solid1];
+                for (var j = i+1; j < solids.Count; j++)
                 {
                     var solid2 = solids[j];
-                    var part2Primitives = solidPrimitive[solid2];
-                    var localDirInd = new List<int>();
-                    if (BlockingDetermination.DefineBlocking(solid1, solid2, part1Primitives, part2Primitives, globalDirPool, Directions, out localDirInd))
+                    var solid2Primitives = solidPrimitive[solid2];
+                    List<int> localDirInd;
+                    if (BlockingDetermination.DefineBlocking(solid1, solid2, solid1Primitives, solid2Primitives,
+                        globalDirPool, Directions, out localDirInd))
                     {
-                        // I still dont know which one is moving, which one is ref
-                        var from = assemblyGraph[solid1.Name];
-                        var to = assemblyGraph[solid2.Name];
-                        assemblyGraph.addArc((node)from, (node)to);
+                        // I wrote the code in a way that "solid1" is always reference and "solid2" is always moving
+                        var from = assemblyGraph[solid2.Name];
+                        var to = assemblyGraph[solid1.Name];
+                        assemblyGraph.addArc((node) from, (node) to);
                         var a = assemblyGraph.arcs.Last();
-                        AddInformationToTheArc(a, localDirInd);
+                        AddInformationToArc(a, localDirInd);
                     }
                 }
             }
         }
 
-        private static void AddInformationToTheArc(arc a, List<int> localDirInd)
+        private static void AddInformationToArc(arc a, IEnumerable<int> localDirInd)
         {
             a.localVariables.Add(GraphConstants.DirectionInd);
             foreach (var dir in localDirInd)
@@ -52,7 +54,7 @@ namespace Assembly_Planner
             a.localVariables.Add(GraphConstants.DirectionInd);
         }
 
-        private static void AddingNodesToGraph(designGraph assemblyGraph, List<TessellatedSolid> solids)
+        private static void AddingNodesToGraph(designGraph assemblyGraph, IEnumerable<TessellatedSolid> solids)
         {
             foreach (var solid in solids)
             {

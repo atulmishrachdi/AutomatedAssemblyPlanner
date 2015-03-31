@@ -12,17 +12,24 @@ c:\users\matt\documents\visual studio 2013\Projects\Assembly Planner\Assembly Pl
 c:\users\matt\documents\visual studio 2013\Projects\Assembly Planner\Assembly Planner\obj\Debug\Assembly Planner.csprojResolveAssemblyReference.cache
 c:\users\matt\documents\visual studio 2013\Projects\Assembly Planner\Assembly Planner\obj\Debug\Assembly Planner.exe
 c:\users\matt\documents\visual studio 2013\Projects\Assembly Planner\Assembly Planner\obj\Debug\Assembly Planner.pdb
-C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\Assembly Planner.exe.config
-C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\obj\Debug\Assembly Planner.exe
-C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\obj\Debug\Assembly Planner.pdb
 C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\Resources\NewEdgeRules.csv
 C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\Resources\NewFaRules.csv
+C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\Assembly Planner.exe.config
 C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\Assembly Planner.exe
 C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\Assembly Planner.pdb
+C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\AssemblyEvaluator.dll
+C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\GraphSynth.BaseClasses.dll
+C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\MIConvexHull.dll
+C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\ruleEditing.dll
 C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\StarMath.dll
 C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\TessellationAndVoxelizationGeometryLibrary.dll
-C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\MIConvexHull.dll
+C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\AssemblyEvaluator.pdb
+C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\ruleEditing.pdb
 C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\TessellationAndVoxelizationGeometryLibrary.pdb
-C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\StarMath.pdb
+C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\GraphSynth.BaseClasses.pdb
+C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\GraphSynth.BaseClasses.xml
 C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\MIConvexHull.pdb
+C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\StarMath.pdb
 C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\obj\Debug\Assembly Planner.csprojResolveAssemblyReference.cache
+C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\obj\Debug\Assembly Planner.exe
+C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\obj\Debug\Assembly Planner.pdb

@@ -11,40 +11,41 @@ namespace Assembly_Planner
 {
     class PrimitivePrimitiveInteractions
     {
-        internal static bool PrimitiveOverlap(List<PrimitiveSurface> aP, List<PrimitiveSurface> bP, List<int> dirInd)
+        internal static bool PrimitiveOverlap(List<PrimitiveSurface> solid1P, List<PrimitiveSurface> solid2P, List<int> dirInd)
         {
             var overlap = false;
-            foreach (var primitiveA in aP)
+            foreach (var primitiveA in solid1P)
             {
-                foreach (var primitiveB in bP)
+                foreach (var primitiveB in solid2P)
                 {
                     overlap = false;
 
-                    if (primitiveA is Flat && primitiveB is Flat)
+                    // 1=flat, 2 =cylinder, 3 = sphere, 4= cone
+                    if (primitiveA is Flat && primitiveB is Flat) 
                     {
-                        overlap = FlatFlatOverlappingCheck((Flat)primitiveA, (Flat)primitiveB, dirInd);
+                        overlap = FlatFlatOverlappingCheck((Flat)primitiveA, (Flat)primitiveB, dirInd); //
                         break;
                     }
                     if (primitiveA is Flat && primitiveB is Cylinder)
                     {
-                        overlap = FlatCylinderOverlappingCheck((Cylinder)primitiveB, (Flat)primitiveA, dirInd);
+                        overlap = FlatCylinderOverlappingCheck((Cylinder)primitiveB, (Flat)primitiveA, dirInd, 1);//
                         break;
                     }
                     if (primitiveA is Flat && primitiveB is Sphere)
                     {
-                        overlap = FlatSphereOverlappingCheck((Sphere)primitiveB, (Flat)primitiveA, dirInd);
+                        overlap = FlatSphereOverlappingCheck((Sphere)primitiveB, (Flat)primitiveA, dirInd, 1);//
                         break;
                     }
                     if (primitiveA is Flat && primitiveB is Cone)
                     {
-                        overlap = FlatConeOverlappingCheck((Cone)primitiveB, (Flat)primitiveA, dirInd);
+                        overlap = FlatConeOverlappingCheck((Cone)primitiveB, (Flat)primitiveA, dirInd, 1);//
                         break;
                     }
 
 
                     if (primitiveA is Cylinder && primitiveB is Flat)
                     {
-                        overlap = FlatCylinderOverlappingCheck((Cylinder)primitiveA, (Flat)primitiveB, dirInd);
+                        overlap = FlatCylinderOverlappingCheck((Cylinder)primitiveA, (Flat)primitiveB, dirInd, 2);//
                         break;
                     }
                     if (primitiveA is Cylinder && primitiveB is Cylinder)
@@ -59,14 +60,14 @@ namespace Assembly_Planner
                     }
                     if (primitiveA is Cylinder && primitiveB is Cone)
                     {
-                        overlap = ConeCylinderOverlappingCheck((Cone)primitiveB, (Cylinder)primitiveA, dirInd);
+                        overlap = ConeCylinderOverlappingCheck((Cone)primitiveB, (Cylinder)primitiveA, dirInd, 2);
                         break;
                     }
 
 
                     if (primitiveA is Sphere && primitiveB is Flat)
                     {
-                        overlap = FlatSphereOverlappingCheck((Sphere)primitiveA, (Flat)primitiveB, dirInd);
+                        overlap = FlatSphereOverlappingCheck((Sphere)primitiveA, (Flat)primitiveB, dirInd, 3);//
                         break;
                     }
                     if (primitiveA is Sphere && primitiveB is Cylinder)
@@ -81,23 +82,23 @@ namespace Assembly_Planner
                     }
                     if (primitiveA is Sphere && primitiveB is Cone)
                     {
-                        overlap = ConeSphereOverlappingCheck((Cone)primitiveB, (Sphere)primitiveA, dirInd);
+                        overlap = ConeSphereOverlappingCheck((Cone)primitiveB, (Sphere)primitiveA, dirInd, 3);
                         break;
                     }
 
                     if (primitiveA is Cone && primitiveB is Flat)
                     {
-                        overlap = FlatConeOverlappingCheck((Cone)primitiveA, (Flat)primitiveB, dirInd);
+                        overlap = FlatConeOverlappingCheck((Cone)primitiveA, (Flat)primitiveB, dirInd, 4);//
                         break;
                     }
                     if (primitiveA is Cone && primitiveB is Cylinder)
                     {
-                        overlap = ConeCylinderOverlappingCheck((Cone)primitiveA, (Cylinder)primitiveB, dirInd);
+                        overlap = ConeCylinderOverlappingCheck((Cone)primitiveA, (Cylinder)primitiveB, dirInd, 4);
                         break;
                     }
                     if (primitiveA is Cone && primitiveB is Sphere)
                     {
-                        overlap = ConeSphereOverlappingCheck((Cone)primitiveA, (Sphere)primitiveB, dirInd);
+                        overlap = ConeSphereOverlappingCheck((Cone)primitiveA, (Sphere)primitiveB, dirInd, 4);
                         break;
                     }
                     if (primitiveA is Cone && primitiveB is Cone)
@@ -110,14 +111,14 @@ namespace Assembly_Planner
             return overlap;
         }
         
-        public static bool ConeSphereOverlappingCheck(Cone cone, Sphere sphere, List<int> dirInd)
+        public static bool ConeSphereOverlappingCheck(Cone cone, Sphere sphere, List<int> dirInd, int re)
         {
             if (!cone.IsPositive && sphere.IsPositive)
-                return NegConePosSphereOverlappingCheck(cone, sphere, dirInd);
+                return NegConePosSphereOverlappingCheck(cone, sphere, dirInd, re);
             return false;
         }
 
-        private static bool NegConePosSphereOverlappingCheck(Cone cone, Sphere sphere, List<int> dirInd)
+        private static bool NegConePosSphereOverlappingCheck(Cone cone, Sphere sphere, List<int> dirInd, int re)
         {
             var overlap = false;
             var t1 = (sphere.Center[0] - cone.Apex[0]) / (cone.Axis[0]);
@@ -133,31 +134,81 @@ namespace Assembly_Planner
                                                                 && TwoTrianglesSamePlaneCheck(f1, f2)))
                     {
                         overlap = TwoTriangleOverlapCheck(f1, f2);
+                        if (overlap)
+                            break;
                     }
+                    if (overlap)
+                        break;
                 }
             }
-            if (overlap)
+            if (!overlap) return false;
+            // For a sphere inside of a cone:
+            //    if sphere is reference:
+            //       if the angle between axis and the normal of one of the faces is less than 90 (dot is pos)
+            //          removal direction has he same direction as the neg axis
+            //       if dot is neg
+            //          removal direction has he same direction as the axis
+            //    if cone is reference:
+            //       if the angle between axis and the normal of one of the faces is less than 90 (dot is pos)
+            //          removal direction has he same direction as the axis
+            //       if dot is neg
+            //          removal direction has he same direction as the neg axis
+            
+            if (re == 3)
             {
-                // the axis of the cylinder is the removal direction
-                //foreach (var dir in DisassemblyDirections.Directions)
+                if (cone.Axis.normalize().dotProduct(cone.Faces[0].Normal) > 0)
+                {
+                    for (var i = 0; i < dirInd.Count; i++)
+                    {
+                        var dir = DisassemblyDirections.Directions[dirInd[i]];
+                        if (1 + cone.Axis.normalize().dotProduct(dir) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall) continue;
+                        dirInd.Remove(dirInd[i]);
+                        i--;
+                    }
+                }
+                else
+                {
+                    for (var i = 0; i < dirInd.Count; i++)
+                    {
+                        var dir = DisassemblyDirections.Directions[dirInd[i]];
+                        if (1 - cone.Axis.normalize().dotProduct(dir) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall) continue;
+                        dirInd.Remove(dirInd[i]);
+                        i--;
+                    }
+                }
+                return true;
+            }
+            
+            if (cone.Axis.normalize().dotProduct(cone.Faces[0].Normal) > 0)
+            {
                 for (var i = 0; i < dirInd.Count; i++)
                 {
                     var dir = DisassemblyDirections.Directions[dirInd[i]];
-                    var sin = Math.Sin(Math.Acos(cone.Axis.normalize().dotProduct(dir)));
-                    if (Math.Abs(sin) < ConstantsPrimitiveOverlap.CheckWithGlobDirsSin) continue;
+                    if (1 - cone.Axis.normalize().dotProduct(dir) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall) continue;
                     dirInd.Remove(dirInd[i]);
+                    i--;
                 }
             }
-            return overlap;
+            else
+            {
+                for (var i = 0; i < dirInd.Count; i++)
+                {
+                    var dir = DisassemblyDirections.Directions[dirInd[i]];
+                    if (1 + cone.Axis.normalize().dotProduct(dir) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall) continue;
+                    dirInd.Remove(dirInd[i]);
+                    i--;
+                }
+            }
+            return true;
         }
 
-        public static bool ConeCylinderOverlappingCheck(Cone cone, Cylinder cylinder, List<int> dirInd)
+        public static bool ConeCylinderOverlappingCheck(Cone cone, Cylinder cylinder, List<int> dirInd, int re)
         {
             if (!cone.IsPositive || !cylinder.IsPositive) return false;
-            return PosConePosCylinderOverlappingCheck(cone, cylinder, dirInd);
+            return PosConePosCylinderOverlappingCheck(cone, cylinder, dirInd, re);
         }
 
-        private static bool PosConePosCylinderOverlappingCheck(Cone cone, Cylinder cylinder, List<int> dirInd)
+        private static bool PosConePosCylinderOverlappingCheck(Cone cone, Cylinder cylinder, List<int> dirInd, int re)
         {
             var overlap = false;
             foreach (var fA in cone.Faces)
@@ -166,21 +217,38 @@ namespace Assembly_Planner
                     TwoTrianglesSamePlaneCheck(fA, fB)))
                 {
                     overlap = TwoTriangleOverlapCheck(fA, fB);
-                    if (overlap)
+
+                    if (!overlap) continue;
+                    if (re == 2)
                     {
                         for (var i = 0; i < dirInd.Count; i++)
                         {
                             var dir = DisassemblyDirections.Directions[dirInd[i]];
-                            if (fB.Normal.dotProduct(dir) > ConstantsPrimitiveOverlap.CheckWithGlobDirs)
+                            if (fB.Normal.dotProduct(dir) < ConstantsPrimitiveOverlap.CheckWithGlobDirs)
+                            {
                                 dirInd.Remove(dirInd[i]);
+                                i--;
+                            }
+                                    
+                        }
+                        return true;
+                    }
+                    for (var i = 0; i < dirInd.Count; i++)
+                    {
+                        var dir = DisassemblyDirections.Directions[dirInd[i]];
+                        if (fB.Normal.dotProduct(dir) > ConstantsPrimitiveOverlap.CheckWithGlobDirs)
+                        {
+                            dirInd.Remove(dirInd[i]);
+                            i--;
                         }
                     }
+                    return true;
                 }
             }
-            return overlap;
+            return false;
         }
 
-        public static bool FlatConeOverlappingCheck(Cone cone, Flat flat, List<int> dirInd)
+        public static bool FlatConeOverlappingCheck(Cone cone, Flat flat, List<int> dirInd, int re)
         {
             if (!cone.IsPositive) return false;
             var r = new Random();
@@ -200,9 +268,10 @@ namespace Assembly_Planner
                     }
                 }
             }
-            if (overlap)
+            if (!overlap) return false;
+            // exactly like flat-flat
+            if (re == 1)
             {
-                // exactly like flat-flat
                 for (var i = 0; i < dirInd.Count; i++)
                 {
                     var dir = DisassemblyDirections.Directions[dirInd[i]];
@@ -210,16 +279,25 @@ namespace Assembly_Planner
                         dirInd.Remove(dirInd[i]);
                 }
             }
-            return overlap;
+            else
+            {
+                for (var i = 0; i < dirInd.Count; i++)
+                {
+                    var dir = DisassemblyDirections.Directions[dirInd[i]];
+                    if (flat.Normal.dotProduct(dir) > ConstantsPrimitiveOverlap.CheckWithGlobDirs)
+                        dirInd.Remove(dirInd[i]);
+                }
+            }
+            return true;
         }
 
         public static bool SphereSphereOverlappingCheck(Sphere sphere1, Sphere sphere2, List<int> dirInd)
         {
             if (!sphere1.IsPositive && !sphere2.IsPositive) return false;
             if (sphere1.IsPositive && sphere2.IsPositive)
-                return PosSpherePosSphereOverlappingCheck(sphere1, sphere1, dirInd);
+                return PosSpherePosSphereOverlappingCheck(sphere1, sphere2, dirInd);
 
-            return PosSphereNegSphereOverlappingCheck(sphere1, sphere1, dirInd);
+            return PosSphereNegSphereOverlappingCheck(sphere1, sphere2, dirInd);
 
         }
 
@@ -232,7 +310,7 @@ namespace Assembly_Planner
         public static bool CylinderCylinderOverlappingCheck(Cylinder primitiveA, Cylinder primitiveB, List<int> dirInd)
         {
             if (!primitiveA.IsPositive && primitiveB.IsPositive)
-                return NegCylinderPosCylinderOverlappingCheck(primitiveA, primitiveB, dirInd);
+                return NegCylinderPosCylinderOverlappingCheck(primitiveA, primitiveB, dirInd); 
             if (primitiveA.IsPositive && !primitiveB.IsPositive)
                 return NegCylinderPosCylinderOverlappingCheck(primitiveB, primitiveA, dirInd);
             if (primitiveA.IsPositive && primitiveB.IsPositive)
@@ -245,11 +323,11 @@ namespace Assembly_Planner
         {
 
             if (!cone1.IsPositive && cone2.IsPositive)
-                return NegConePosConeOverlappingCheck(cone1, cone2, dirInd);
+                return NegConePosConeOverlappingCheck(cone1, cone2, dirInd, 10); // 10: first one is reference
             if (cone1.IsPositive && !cone2.IsPositive)
-                return NegConePosConeOverlappingCheck(cone2, cone1, dirInd);
+                return NegConePosConeOverlappingCheck(cone2, cone1, dirInd, 20); // 20: second one is reference
             if (cone1.IsPositive && cone2.IsPositive)
-                return PosConePosConeOverlappingCheck(cone1, cone1, dirInd);
+                return PosConePosConeOverlappingCheck(cone1, cone2, dirInd);
             if (!cone1.IsPositive && !cone2.IsPositive) return false;
             return false;
         }
@@ -263,21 +341,23 @@ namespace Assembly_Planner
                     TwoTrianglesSamePlaneCheck(fA, fB)))
                 {
                     overlap = TwoTriangleOverlapCheck(fA, fB);
-                    if (overlap)
+                    if (!overlap) continue;
+                    for (var i = 0; i < dirInd.Count; i++)
                     {
-                        for (var i = 0; i < dirInd.Count; i++)
+                        var dir = DisassemblyDirections.Directions[dirInd[i]];
+                        if (fB.Normal.dotProduct(dir) > ConstantsPrimitiveOverlap.CheckWithGlobDirs)
                         {
-                            var dir = DisassemblyDirections.Directions[dirInd[i]];
-                            if (fB.Normal.dotProduct(dir) > ConstantsPrimitiveOverlap.CheckWithGlobDirs)
-                                dirInd.Remove(dirInd[i]);
+                            dirInd.Remove(dirInd[i]);
+                            i--;
                         }
                     }
+                    return true;
                 }
             }
-            return overlap;
+            return false;
         }
 
-        private static bool NegConePosConeOverlappingCheck(Cone cone1, Cone cone2, List<int> dirInd)
+        private static bool NegConePosConeOverlappingCheck(Cone cone1, Cone cone2, List<int> dirInd, int re)
         {
 
             // cone1 is negative cone and cone2 is positive cone.
@@ -286,33 +366,64 @@ namespace Assembly_Planner
             {
                 foreach (var f1 in cone1.Faces)
                 {
-                    foreach (var f2 in cone2.Faces)
+                    foreach (var f2 in cone2.Faces.Where(f2=>TwoTrianglesParallelCheck(f1.Normal, f2.Normal) 
+                        && TwoTrianglesSamePlaneCheck(f1, f2) && TwoTriangleOverlapCheck(f1, f2)))
                     {
-                        if (TwoTrianglesParallelCheck(f1.Normal, f2.Normal))
-                        {
-                            if (TwoTrianglesSamePlaneCheck(f1, f2))
-                            {
-                                if (TwoTriangleOverlapCheck(f1, f2))
-                                {
-                                    overlap = true;
-                                }
-                            }
-                        }
+                        overlap = true;
+                        break;
                     }
+                    if (overlap) break;
                 }
             }
-            if (overlap)
+            if (!overlap) return false;
+            
+            // work with cone1: negative
+            if (re == 20)
             {
-                // only keep the directions along the axis of the cylinder. Keep the ones with the angle close to zero.
+                if (cone1.Axis.normalize().dotProduct(cone1.Faces[0].Normal) > 0)
+                {
+                    for (var i = 0; i < dirInd.Count; i++)
+                    {
+                        var dir = DisassemblyDirections.Directions[dirInd[i]];
+                        if (1 + cone1.Axis.normalize().dotProduct(dir) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall) continue;
+                        dirInd.Remove(dirInd[i]);
+                        i--;
+                    }
+                }
+                else
+                {
+                    for (var i = 0; i < dirInd.Count; i++)
+                    {
+                        var dir = DisassemblyDirections.Directions[dirInd[i]];
+                        if (1 - cone1.Axis.normalize().dotProduct(dir) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall) continue;
+                        dirInd.Remove(dirInd[i]);
+                        i--;
+                    }
+                }
+                return true;
+            }
+
+            if (cone1.Axis.normalize().dotProduct(cone1.Faces[0].Normal) > 0)
+            {
                 for (var i = 0; i < dirInd.Count; i++)
                 {
                     var dir = DisassemblyDirections.Directions[dirInd[i]];
-                    var sin = Math.Sin(Math.Acos(cone1.Axis.normalize().dotProduct(dir)));
-                    if (Math.Abs(sin) < ConstantsPrimitiveOverlap.CheckWithGlobDirsSin) continue;
+                    if (1 - cone1.Axis.normalize().dotProduct(dir) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall) continue;
                     dirInd.Remove(dirInd[i]);
+                    i--;
                 }
             }
-            return overlap;
+            else
+            {
+                for (var i = 0; i < dirInd.Count; i++)
+                {
+                    var dir = DisassemblyDirections.Directions[dirInd[i]];
+                    if (1 + cone1.Axis.normalize().dotProduct(dir) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall) continue;
+                    dirInd.Remove(dirInd[i]);
+                    i--;
+                }
+            }
+            return true;
         }
 
         public static bool FlatFlatOverlappingCheck(Flat primitiveA, Flat primitiveB, List<int> dirInd)
@@ -347,78 +458,97 @@ namespace Assembly_Planner
             // if they overlap, update the directions
             if (overlap)
             {
-                // take one of the pparts, for example A, then in the directions, remove the ones which make a positive dot product with the normal
+                // take one of the parts, for example A, then in the directions, remove the ones which make a positive dot product with the normal
                 for (var i = 0; i < dirInd.Count; i++)
                 {
                     var dir = DisassemblyDirections.Directions[dirInd[i]];
-                    if (primitiveB.Normal.dotProduct(dir) > ConstantsPrimitiveOverlap.CheckWithGlobDirs)
+                    if (primitiveA.Normal.dotProduct(dir) < ConstantsPrimitiveOverlap.CheckWithGlobDirs)
+                    {
                         dirInd.Remove(dirInd[i]);
+                        i--;
+                    }
                 }
             }
             return overlap;
         }
 
-        public static bool FlatCylinderOverlappingCheck(Cylinder primitiveA, Flat primitiveB, List<int> dirInd)
+        public static bool FlatCylinderOverlappingCheck(Cylinder cylinder, Flat flat, List<int> dirInd, int re)
         {
             // This must be a positive cylinder. There is no flat and negative cylinder. A cyliner, B flat
             // if there is any triangle on the cylinder with a parralel normal to the flat patch (and opposite direction). And then
             // if the distance between them is close to zero, then, check if they overlap o not.
-            if (!primitiveA.IsPositive) return false;
+            if (!cylinder.IsPositive) return false;
             var r = new Random();
-            var rndFaceB = primitiveB.Faces[r.Next(primitiveB.Faces.Count)];
+            var rndFaceB = flat.Faces[r.Next(flat.Faces.Count)];
             var overlap = false;
-            foreach (var cylFace in primitiveA.Faces)
+            foreach (var cylFace in cylinder.Faces)
             {
-                if (TwoTrianglesParallelCheck(cylFace.Normal, primitiveB.Normal))
+                if (TwoTrianglesParallelCheck(cylFace.Normal, flat.Normal))
                 {
                     if (TwoTrianglesSamePlaneCheck(cylFace, rndFaceB))
                     {
                         // now check if they overlap or not
-                        foreach (var fFace in primitiveB.Faces)
+                        foreach (var fFace in flat.Faces)
                         {
                             overlap = TwoTriangleOverlapCheck(cylFace, fFace);
                         }
                     }
                 }
             }
-            if (overlap)
+            if (!overlap) return false;
+            if (re == 1)
             {
-                // exactly like flat-flat
                 for (var i = 0; i < dirInd.Count; i++)
                 {
                     var dir = DisassemblyDirections.Directions[dirInd[i]];
-                    if (primitiveB.Normal.dotProduct(dir) < ConstantsPrimitiveOverlap.CheckWithGlobDirs)
+                    if (flat.Normal.dotProduct(dir) < ConstantsPrimitiveOverlap.CheckWithGlobDirs)
+                    {
                         dirInd.Remove(dirInd[i]);
+                        i--;
+                    }
                 }
             }
-            return overlap;
+            else // ref == 2
+            {
+                for (var i = 0; i < dirInd.Count; i++)
+                {
+                    var dir = DisassemblyDirections.Directions[dirInd[i]];
+                    if (flat.Normal.dotProduct(dir) > ConstantsPrimitiveOverlap.CheckWithGlobDirs)
+                    {
+                        dirInd.Remove(dirInd[i]);
+                        i--;
+                    }
+                }
+            }
+
+            return true;
         }
 
-        private static bool NegCylinderPosCylinderOverlappingCheck(Cylinder primitiveA, Cylinder primitiveB, List<int> dirInd)
+        private static bool NegCylinderPosCylinderOverlappingCheck(Cylinder cylinder1, Cylinder cylinder2, List<int> dirInd)
         {
             // this is actually positive cylinder with negative cylinder. primitiveA is negative cylinder and 
             // primitiveB is positive cylinder. Like a normal 
             // check the centerlines. Is the vector of the center lines the same? 
             // now check the radius. 
             var overlap = false;
-            if (Math.Abs(primitiveA.Axis.dotProduct(primitiveB.Axis)) - 1 < ConstantsPrimitiveOverlap.ParralelLines)
+            if (Math.Abs(cylinder1.Axis.dotProduct(cylinder2.Axis)) - 1 < ConstantsPrimitiveOverlap.ParralelLines)
             {
                 // now centerlines are either parallel or the same. Now check and see if they are exactly the same
                 // Take the anchor of B, using the axis of B, write the equation of the line. Check and see if 
                 // the anchor of A is on the line equation.
-                var t1 = (primitiveA.Anchor[0] - primitiveB.Anchor[0]) / (primitiveB.Axis[0]);
-                var t2 = (primitiveA.Anchor[1] - primitiveB.Anchor[1]) / (primitiveB.Axis[1]);
-                var t3 = (primitiveA.Anchor[2] - primitiveB.Anchor[2]) / (primitiveB.Axis[2]);
+                var t1 = (cylinder1.Anchor[0] - cylinder2.Anchor[0]) / (cylinder2.Axis[0]);
+                var t2 = (cylinder1.Anchor[1] - cylinder2.Anchor[1]) / (cylinder2.Axis[1]);
+                var t3 = (cylinder1.Anchor[2] - cylinder2.Anchor[2]) / (cylinder2.Axis[2]);
                 if (Math.Abs(t1 - t2) < ConstantsPrimitiveOverlap.PointOnLine &&
                     Math.Abs(t1 - t3) < ConstantsPrimitiveOverlap.PointOnLine &&
                     Math.Abs(t3 - t2) < ConstantsPrimitiveOverlap.PointOnLine)
                 {
                     // Now check the radius
-                    if (Math.Abs(primitiveA.Radius - primitiveB.Radius) < ConstantsPrimitiveOverlap.RadiusDifs)
+                    if (Math.Abs(cylinder1.Radius - cylinder2.Radius) < ConstantsPrimitiveOverlap.RadiusDifs)
                     {
-                        foreach (var f1 in primitiveA.Faces)
+                        foreach (var f1 in cylinder1.Faces)
                         {
-                            foreach (var f2 in primitiveB.Faces)
+                            foreach (var f2 in cylinder2.Faces)
                             {
                                 overlap = TwoTriangleOverlapCheck(f1, f2);
                             }
@@ -426,19 +556,16 @@ namespace Assembly_Planner
                     }
                 }
             }
-            if (overlap)
+            if (!overlap) return false;
+            // only keep the directions along the axis of the cylinder. Keep the ones with the angle close to zero.
+            for (var i = 0; i < dirInd.Count; i++)
             {
-                // only keep the directions along the axis of the cylinder. Keep the ones with the angle close to zero.
-                for (var i = 0; i < dirInd.Count; i++)
-                {
-                    var dir = DisassemblyDirections.Directions[dirInd[i]];
-                    var sin = Math.Sin(Math.Acos(primitiveA.Axis.normalize().dotProduct(dir)));
-                    if (Math.Abs(sin) < ConstantsPrimitiveOverlap.CheckWithGlobDirsSin) continue;
-                    dirInd.Remove(dirInd[i]);
-                }
-
+                var dir = DisassemblyDirections.Directions[dirInd[i]];
+                if (1 - Math.Abs(cylinder1.Axis.normalize().dotProduct(dir)) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall) continue;
+                dirInd.Remove(dirInd[i]);
+                i--;
             }
-            return overlap;
+            return true;
         }
 
         private static bool PosCylinderPosCylinderOverlappingCheck(Cylinder cylinder1, Cylinder cylinder2, List<int> dirInd)
@@ -450,18 +577,20 @@ namespace Assembly_Planner
                     TwoTrianglesSamePlaneCheck(fA, fB)))
                 {
                     overlap = TwoTriangleOverlapCheck(fA, fB);
-                    if (overlap)
+                    if (!overlap) continue;
+                    for (var i = 0; i < dirInd.Count; i++)
                     {
-                        for (var i = 0; i < dirInd.Count; i++)
+                        var dir = DisassemblyDirections.Directions[dirInd[i]];
+                        if (fB.Normal.dotProduct(dir) > ConstantsPrimitiveOverlap.CheckWithGlobDirs)
                         {
-                            var dir = DisassemblyDirections.Directions[dirInd[i]];
-                            if (fB.Normal.dotProduct(dir) > ConstantsPrimitiveOverlap.CheckWithGlobDirs)
-                                dirInd.Remove(dirInd[i]);
+                            dirInd.Remove(dirInd[i]);
+                            i--;
                         }
                     }
+                    return true;
                 }
             }
-            return overlap;
+            return false;
         }
 
         private static bool PosSphereNegSphereOverlappingCheck(Sphere primitiveA, Sphere primitiveB, List<int> dirInd)
@@ -481,78 +610,89 @@ namespace Assembly_Planner
             return false;
         }
 
-        private static bool PosSpherePosSphereOverlappingCheck(Sphere primitiveA, Sphere primitiveB, List<int> dirInd)
+        private static bool PosSpherePosSphereOverlappingCheck(Sphere sphere1, Sphere sphere2, List<int> dirInd)
         {
             //postive(A)-Positive(B)
             // Seems to be really time consuming
             var overlap = false;
-            foreach (var fA in primitiveA.Faces)
+            foreach (var fA in sphere1.Faces)
             {
-                foreach (var fB in primitiveB.Faces.Where(fB => TwoTrianglesParallelCheck(fA.Normal, fB.Normal) &&
+                foreach (var fB in sphere2.Faces.Where(fB => TwoTrianglesParallelCheck(fA.Normal, fB.Normal) &&
                     TwoTrianglesSamePlaneCheck(fA, fB)))
                 {
-                    overlap = TwoTriangleOverlapCheck(fA, fB);
-                    if (overlap)
+                    if (!TwoTriangleOverlapCheck(fA, fB)) continue;
+                    for (var i = 0; i < dirInd.Count; i++)
                     {
-                        for (var i = 0; i < dirInd.Count; i++)
+                        var dir = DisassemblyDirections.Directions[dirInd[i]];
+                        if (fB.Normal.dotProduct(dir) > ConstantsPrimitiveOverlap.CheckWithGlobDirs)
                         {
-                            var dir = DisassemblyDirections.Directions[dirInd[i]];
-                            if (fB.Normal.dotProduct(dir) > ConstantsPrimitiveOverlap.CheckWithGlobDirs)
-                                dirInd.Remove(dirInd[i]);
+                            dirInd.Remove(dirInd[i]);
+                            i--;
                         }
                     }
+                    return true;
                 }
             }
-            return overlap;
+            return false;
         }
 
-        public static bool FlatSphereOverlappingCheck(Sphere sphere, Flat primitiveB, List<int> dirInd)
+        public static bool FlatSphereOverlappingCheck(Sphere sphere, Flat flat, List<int> dirInd, int re)
         {
             if (!sphere.IsPositive) return false;
             // Positive sphere (primitiveA) and primitiveB is flat.
             // similar to flat-cylinder
             var overlap = false;
             var r = new Random();
-            var rndFaceB = primitiveB.Faces[r.Next(primitiveB.Faces.Count)];
-            foreach (var sophFace in sphere.Faces.Where(sophFace => TwoTrianglesParallelCheck(sophFace.Normal, primitiveB.Normal))
+            var rndFaceB = flat.Faces[r.Next(flat.Faces.Count)];
+            foreach (var sophFace in sphere.Faces.Where(sophFace => TwoTrianglesParallelCheck(sophFace.Normal, flat.Normal))
                                                      .Where(sophFace => TwoTrianglesSamePlaneCheck(sophFace, rndFaceB)))
             {
-                foreach (var fFace in primitiveB.Faces)
+                foreach (var fFace in flat.Faces)
                 {
                     if (TwoTriangleOverlapCheck(sophFace, fFace))
                         overlap = true;
                 }
             }
-            if (overlap)
+            if (!overlap) return false;
+            if (re == 1)
             {
                 for (var i = 0; i < dirInd.Count; i++)
                 {
                     var dir = DisassemblyDirections.Directions[dirInd[i]];
-                    if (primitiveB.Normal.dotProduct(dir) > ConstantsPrimitiveOverlap.CheckWithGlobDirs)
+                    if (flat.Normal.dotProduct(dir) < ConstantsPrimitiveOverlap.CheckWithGlobDirs)
                         dirInd.Remove(dirInd[i]);
                 }
             }
-            return overlap;
+            else
+            {
+                for (var i = 0; i < dirInd.Count; i++)
+                {
+                    var dir = DisassemblyDirections.Directions[dirInd[i]];
+                    if (flat.Normal.dotProduct(dir) > ConstantsPrimitiveOverlap.CheckWithGlobDirs)
+                        dirInd.Remove(dirInd[i]);
+                }
+            }
+            return true;
         }
 
-        private static bool NegCylinderPosSphereOverlappingCheck(Cylinder primitiveA, Sphere primitiveB, List<int> dirInd)
+        private static bool NegCylinderPosSphereOverlappingCheck(Cylinder cylinder, Sphere sphere, List<int> dirInd)
         {
             // if the center of the sphere is on the cylinder centerline.
             // or again: two faces parralel, on the same plane and overlap
             var overlap = false;
-            var t1 = (primitiveB.Center[0] - primitiveA.Anchor[0]) / (primitiveA.Axis[0]);
-            var t2 = (primitiveB.Center[1] - primitiveA.Anchor[1]) / (primitiveA.Axis[1]);
-            var t3 = (primitiveB.Center[2] - primitiveA.Anchor[2]) / (primitiveA.Axis[2]);
+            var t1 = (sphere.Center[0] - cylinder.Anchor[0]) / (cylinder.Axis[0]);
+            var t2 = (sphere.Center[1] - cylinder.Anchor[1]) / (cylinder.Axis[1]);
+            var t3 = (sphere.Center[2] - cylinder.Anchor[2]) / (cylinder.Axis[2]);
             if (Math.Abs(t1 - t2) < ConstantsPrimitiveOverlap.PointOnLine &&
                 Math.Abs(t1 - t3) < ConstantsPrimitiveOverlap.PointOnLine &&
                 Math.Abs(t3 - t2) < ConstantsPrimitiveOverlap.PointOnLine)
             {
                 // Now check the radius
-                if (Math.Abs(primitiveA.Radius - primitiveA.Radius) < ConstantsPrimitiveOverlap.RadiusDifs)
+                if (Math.Abs(cylinder.Radius - cylinder.Radius) < ConstantsPrimitiveOverlap.RadiusDifs)
                 {
-                    foreach (var f1 in primitiveA.Faces)
+                    foreach (var f1 in cylinder.Faces)
                     {
-                        foreach (var f2 in primitiveB.Faces.Where(f2 => TwoTrianglesParallelCheck(f1.Normal, f2.Normal)
+                        foreach (var f2 in sphere.Faces.Where(f2 => TwoTrianglesParallelCheck(f1.Normal, f2.Normal)
                                                                         && TwoTrianglesSamePlaneCheck(f1, f2)))
                         {
                             overlap = TwoTriangleOverlapCheck(f1, f2);
@@ -565,16 +705,10 @@ namespace Assembly_Planner
             for (var i = 0; i < dirInd.Count; i++)
             {
                 var dir = DisassemblyDirections.Directions[dirInd[i]];
-                var sin = Math.Sin(Math.Acos(primitiveA.Axis.normalize().dotProduct(dir)));
-                if (Math.Abs(sin) < ConstantsPrimitiveOverlap.CheckWithGlobDirsSin) continue;
+                if (1 - Math.Abs(cylinder.Axis.normalize().dotProduct(dir)) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall) continue;
                 dirInd.Remove(dirInd[i]);
+                i--;
             }
-            //foreach (var dir in directions)
-            //{
-            //    var sin = Math.Sin(Math.Acos(primitiveA.Axis.normalize().dotProduct(dir)));
-            //    if (Math.Abs(sin) < 0.01) continue;
-            //    directions.Remove(dir);
-            //}
             return true;
         }
 

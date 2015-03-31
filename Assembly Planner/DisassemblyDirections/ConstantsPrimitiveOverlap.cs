@@ -14,7 +14,7 @@ namespace Assembly_Planner
         public const double PointOnLine = 0.00001;
         public const double PointPoint = 0.0001;
         public const double PlaneDist = 0.0001;
-        public const double CheckWithGlobDirsSin = 0.01;
+        public const double CheckWithGlobDirsParall = 0.015;
         public const double CheckWithGlobDirs = 0.0;
     }
 }

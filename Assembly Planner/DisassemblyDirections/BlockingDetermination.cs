@@ -23,20 +23,20 @@ namespace Assembly_Planner
             return partPrimitive;
         }
 
-        internal static bool DefineBlocking(TessellatedSolid a, TessellatedSolid b, List<PrimitiveSurface> aP,
-            List<PrimitiveSurface> bP, List<int> globalDirPool, List<double[]> directions, out List<int> dirInd)
+        internal static bool DefineBlocking(TessellatedSolid solid1, TessellatedSolid solid2, List<PrimitiveSurface> solid1P,
+            List<PrimitiveSurface> solid2P, List<int> globalDirPool, List<double[]> directions, out List<int> dirInd)
         {
-            if (BoundingBoxOverlap(a, b))
+            if (BoundingBoxOverlap(solid1, solid2))
             {
-                if (ConvexHullOverlap(a, b))
+                if (ConvexHullOverlap(solid1, solid2))
                 {
                     var localDirInd = new List<int>();
                     for (var i = 0; i < directions.Count; i++)
                         localDirInd.Add(i);
-                    if (PrimitivePrimitiveInteractions.PrimitiveOverlap(aP, bP, localDirInd))
+                    if (PrimitivePrimitiveInteractions.PrimitiveOverlap(solid1P, solid2P, localDirInd))
                     {
                         // dirInd is the list of directions that must be added to the arc between part1 and part2
-                        // I also need to creat the pool of directions
+                        Console.WriteLine(@"An overlap is detected between two distict solids!");
                         globalDirPool.AddRange(localDirInd.Where(d => !globalDirPool.Contains(d)));
                         dirInd = localDirInd;
                         return true;
