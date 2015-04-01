@@ -24,14 +24,14 @@ namespace Assembly_Planner
         }
 
         internal static bool DefineBlocking(TessellatedSolid solid1, TessellatedSolid solid2, List<PrimitiveSurface> solid1P,
-            List<PrimitiveSurface> solid2P, List<int> globalDirPool, List<double[]> directions, out List<int> dirInd)
+            List<PrimitiveSurface> solid2P, List<int> globalDirPool, out List<int> dirInd)
         {
             if (BoundingBoxOverlap(solid1, solid2))
             {
                 if (ConvexHullOverlap(solid1, solid2))
                 {
                     var localDirInd = new List<int>();
-                    for (var i = 0; i < directions.Count; i++)
+                    for (var i = 0; i < DisassemblyDirections.Directions.Count; i++)
                         localDirInd.Add(i);
                     if (PrimitivePrimitiveInteractions.PrimitiveOverlap(solid1P, solid2P, localDirInd))
                     {

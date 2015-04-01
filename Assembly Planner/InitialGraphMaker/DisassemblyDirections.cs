@@ -31,7 +31,7 @@ namespace Assembly_Planner
                     var solid2Primitives = solidPrimitive[solid2];
                     List<int> localDirInd;
                     if (BlockingDetermination.DefineBlocking(solid1, solid2, solid1Primitives, solid2Primitives,
-                        globalDirPool, Directions, out localDirInd))
+                        globalDirPool, out localDirInd))
                     {
                         // I wrote the code in a way that "solid1" is always "Reference" and "solid2" is always "Moving".
                         var from = assemblyGraph[solid2.Name]; // Moving
@@ -42,7 +42,7 @@ namespace Assembly_Planner
                     }
                 }
             }
-            DisassemblyProcess.Run(assemblyGraph, Directions, globalDirPool);
+            DisassemblyProcess.Run(assemblyGraph, globalDirPool);
         }
 
         private static void AddInformationToArc(arc a, IEnumerable<int> localDirInd)

@@ -56,7 +56,7 @@
     <Compile Include="InitialGraphMaker\BlockingDetermination.cs" />
     <Compile Include="InitialGraphMaker\ConstantsPrimitiveOverlap.cs" />
     <Compile Include="InitialGraphMaker\DisassemblyDirections.cs" />
-    <Compile Include="InitialGraphMaker\GraphConstants.cs" />
+    <Compile Include="DisassemblyProcess\GraphConstants.cs" />
     <Compile Include="InitialGraphMaker\Icosahedron.cs" />
     <Compile Include="InitialGraphMaker\PrimitivePrimitiveInteractions.cs" />
     <Compile Include="Program.cs" />
