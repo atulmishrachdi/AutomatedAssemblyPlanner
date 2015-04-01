@@ -33,25 +33,26 @@ namespace Assembly_Planner
                     if (BlockingDetermination.DefineBlocking(solid1, solid2, solid1Primitives, solid2Primitives,
                         globalDirPool, Directions, out localDirInd))
                     {
-                        // I wrote the code in a way that "solid1" is always reference and "solid2" is always moving
-                        var from = assemblyGraph[solid2.Name];
-                        var to = assemblyGraph[solid1.Name];
+                        // I wrote the code in a way that "solid1" is always "Reference" and "solid2" is always "Moving".
+                        var from = assemblyGraph[solid2.Name]; // Moving
+                        var to = assemblyGraph[solid1.Name];   // Reference
                         assemblyGraph.addArc((node) from, (node) to);
                         var a = assemblyGraph.arcs.Last();
                         AddInformationToArc(a, localDirInd);
                     }
                 }
             }
+            DisassemblyProcess.Run(assemblyGraph, Directions, globalDirPool);
         }
 
         private static void AddInformationToArc(arc a, IEnumerable<int> localDirInd)
         {
-            a.localVariables.Add(GraphConstants.DirectionInd);
+            a.localVariables.Add(GraphConstants.DirIndLowerBound);
             foreach (var dir in localDirInd)
             {
                 a.localVariables.Add(dir);
             }
-            a.localVariables.Add(GraphConstants.DirectionInd);
+            a.localVariables.Add(GraphConstants.DirIndUpperBound);
         }
 
         private static void AddingNodesToGraph(designGraph assemblyGraph, IEnumerable<TessellatedSolid> solids)

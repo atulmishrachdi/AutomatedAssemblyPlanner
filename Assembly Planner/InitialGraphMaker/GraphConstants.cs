@@ -8,6 +8,7 @@ namespace Assembly_Planner
 {
     class GraphConstants
     {
-        public const int DirectionInd = -10;  // all the integers between two -10s are the feasible directions for the arc
+        public const int DirIndUpperBound = -11;  // all the integers between two -10 and -11 are the feasible directions for the arc
+        public const int DirIndLowerBound = -10;
     }
 }
