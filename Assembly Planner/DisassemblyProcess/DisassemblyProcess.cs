@@ -27,7 +27,7 @@ namespace Assembly_Planner
                 foreach (var hy in assemblyGraph.hyperarcs.Where(h=>h.localLabels.Contains(DisConstants.SeperateHyperarcs)))
                 {
                     SCC.StronglyConnectedComponents(assemblyGraph, hy, cndDir);
-                    DBG.DirectionalBlockingGraph(hy, cndDir);
+                    DBG.DirectionalBlockingGraph(assemblyGraph, hy, cndDir);
                     OptionGenerator.GenerateOptions(hy, cndDir);
                 }
             }

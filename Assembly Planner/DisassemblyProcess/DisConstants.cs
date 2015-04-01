@@ -10,5 +10,6 @@ namespace Assembly_Planner
     {
         internal static string SeperateHyperarcs = "Seperate";
         internal static string SCC = "SCC";
+        internal static string Removable = "Removable";
     }
 }
