@@ -48,12 +48,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DisassemblyDirections\BlockingDetermination.cs" />
-    <Compile Include="DisassemblyDirections\ConstantsPrimitiveOverlap.cs" />
-    <Compile Include="DisassemblyDirections\DisassemblyDirections.cs" />
-    <Compile Include="DisassemblyDirections\GraphConstants.cs" />
-    <Compile Include="DisassemblyDirections\Icosahedron.cs" />
-    <Compile Include="DisassemblyDirections\PrimitivePrimitiveInteractions.cs" />
+    <Compile Include="DisassemblyProcess\DBG.cs" />
+    <Compile Include="DisassemblyProcess\DisassemblyProcess.cs" />
+    <Compile Include="DisassemblyProcess\DisConstants.cs" />
+    <Compile Include="DisassemblyProcess\OptionGenerator.cs" />
+    <Compile Include="DisassemblyProcess\SCC.cs" />
+    <Compile Include="InitialGraphMaker\BlockingDetermination.cs" />
+    <Compile Include="InitialGraphMaker\ConstantsPrimitiveOverlap.cs" />
+    <Compile Include="InitialGraphMaker\DisassemblyDirections.cs" />
+    <Compile Include="InitialGraphMaker\GraphConstants.cs" />
+    <Compile Include="InitialGraphMaker\Icosahedron.cs" />
+    <Compile Include="InitialGraphMaker\PrimitivePrimitiveInteractions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -73,15 +78,12 @@
       <Project>{d679f4e2-fd18-48ac-9c0c-b60155a61d37}</Project>
       <Name>GraphSynth.BaseClasses</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\iFAB-Assem\rules\ruleEditing.csproj">
-      <Project>{b91d7a93-e1ab-4f86-997a-4923d781f29a}</Project>
-      <Name>ruleEditing</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\tvgl\TessellationAndVoxelizationGeometryLibrary\TessellationAndVoxelizationGeometryLibraryUniversal.csproj">
       <Project>{e3489019-d590-46a8-b2c2-e3481e8db77c}</Project>
       <Name>TessellationAndVoxelizationGeometryLibraryUniversal</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

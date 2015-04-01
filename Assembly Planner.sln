@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TessellationAndVoxelization
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyEvaluation", "..\GraphSynth\graphsynth_465a7e41942c\AssemblyEvaluator\AssemblyEvaluation.csproj", "{B5D1ED57-304D-4538-8A1F-D1C4D986F32F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ruleEditing", "..\iFAB-Assem\rules\ruleEditing.csproj", "{B91D7A93-E1AB-4F86-997A-4923D781F29A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphSynth.BaseClasses", "..\GraphSynth\graphsynth_465a7e41942c\GraphSynthSourceFiles\GraphSynth.BaseClasses\GraphSynth.BaseClasses.csproj", "{D679F4E2-FD18-48AC-9C0C-B60155A61D37}"
 EndProject
 Global
@@ -89,24 +87,6 @@ Global
 		{B5D1ED57-304D-4538-8A1F-D1C4D986F32F}.WPF GUI Release|Any CPU.Build.0 = Release|Any CPU
 		{B5D1ED57-304D-4538-8A1F-D1C4D986F32F}.WPF GUI Release|x86.ActiveCfg = Release|x86
 		{B5D1ED57-304D-4538-8A1F-D1C4D986F32F}.WPF GUI Release|x86.Build.0 = Release|x86
-		{B91D7A93-E1AB-4F86-997A-4923D781F29A}.Console Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B91D7A93-E1AB-4F86-997A-4923D781F29A}.Console Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B91D7A93-E1AB-4F86-997A-4923D781F29A}.Console Debug|x86.ActiveCfg = Debug|Any CPU
-		{B91D7A93-E1AB-4F86-997A-4923D781F29A}.Console Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B91D7A93-E1AB-4F86-997A-4923D781F29A}.Console Release|Any CPU.Build.0 = Release|Any CPU
-		{B91D7A93-E1AB-4F86-997A-4923D781F29A}.Console Release|x86.ActiveCfg = Release|Any CPU
-		{B91D7A93-E1AB-4F86-997A-4923D781F29A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B91D7A93-E1AB-4F86-997A-4923D781F29A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B91D7A93-E1AB-4F86-997A-4923D781F29A}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{B91D7A93-E1AB-4F86-997A-4923D781F29A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B91D7A93-E1AB-4F86-997A-4923D781F29A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B91D7A93-E1AB-4F86-997A-4923D781F29A}.Release|x86.ActiveCfg = Release|Any CPU
-		{B91D7A93-E1AB-4F86-997A-4923D781F29A}.WPF GUI Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B91D7A93-E1AB-4F86-997A-4923D781F29A}.WPF GUI Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B91D7A93-E1AB-4F86-997A-4923D781F29A}.WPF GUI Debug|x86.ActiveCfg = Debug|Any CPU
-		{B91D7A93-E1AB-4F86-997A-4923D781F29A}.WPF GUI Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B91D7A93-E1AB-4F86-997A-4923D781F29A}.WPF GUI Release|Any CPU.Build.0 = Release|Any CPU
-		{B91D7A93-E1AB-4F86-997A-4923D781F29A}.WPF GUI Release|x86.ActiveCfg = Release|Any CPU
 		{D679F4E2-FD18-48AC-9C0C-B60155A61D37}.Console Debug|Any CPU.ActiveCfg = Console Debug|Any CPU
 		{D679F4E2-FD18-48AC-9C0C-B60155A61D37}.Console Debug|Any CPU.Build.0 = Console Debug|Any CPU
 		{D679F4E2-FD18-48AC-9C0C-B60155A61D37}.Console Debug|x86.ActiveCfg = Console Debug|Any CPU
