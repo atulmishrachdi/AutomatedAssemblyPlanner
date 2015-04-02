@@ -20,15 +20,15 @@ namespace Assembly_Planner
             
             assemblyGraph.addHyperArc(assemblyGraph.nodes, "ini");
             var iniHy = assemblyGraph.hyperarcs[assemblyGraph.hyperarcs.Count - 1];
-            iniHy.localLabels.Add(DisConstants.SeperateHyperarcs);            
+            iniHy.localLabels.Add(DisConstants.SeperateHyperarcs);
             foreach (var i in globalDirPool)
             {
                 var cndDir = DisassemblyDirections.Directions[i];
                 foreach (var hy in assemblyGraph.hyperarcs.Where(h=>h.localLabels.Contains(DisConstants.SeperateHyperarcs)))
                 {
                     SCC.StronglyConnectedComponents(assemblyGraph, hy, cndDir);
-                    DBG.DirectionalBlockingGraph(assemblyGraph, hy, cndDir);
-                    OptionGenerator.GenerateOptions(hy, cndDir);
+                    var blockingDic = DBG.DirectionalBlockingGraph(assemblyGraph, hy, cndDir);
+                    OptionGenerator.GenerateOptions(assemblyGraph, hy, cndDir, blockingDic);
                 }
             }
 
@@ -36,6 +36,8 @@ namespace Assembly_Planner
             // After apply, we can erase everything and start making the SCCs and DBGs from the beginning, 
             //    But majarity of the later options had beed found before, so I need to find a way to store them
             //    and use them again.
+
+            // After apply, add the "seperate" lable to the chosen Hyperarc
         }
     }
 }

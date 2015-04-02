@@ -10,7 +10,7 @@ namespace Assembly_Planner
 {
     internal class DBG
     {
-        internal static void DirectionalBlockingGraph(designGraph assemblyGraph, hyperarc hy, double[] cndDir)
+        internal static Dictionary<hyperarc, List<hyperarc>> DirectionalBlockingGraph(designGraph assemblyGraph, hyperarc hy, double[] cndDir)
         {
             // So, I am trying to make the DBG for for each seperate hyperarc. 
             // This hyperarc includes small hyperarcs with the lable  "SCC"
@@ -49,6 +49,7 @@ namespace Assembly_Planner
                 }
                 dbgDictionary.Add(sccHy,blockedWith);
             }
+            return dbgDictionary;
         }
 
         private static int Parallel(arc borderArc, double[] cndDir)
