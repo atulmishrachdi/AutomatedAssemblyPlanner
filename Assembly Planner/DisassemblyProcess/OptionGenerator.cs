@@ -26,10 +26,13 @@ namespace Assembly_Planner
                 {
                     if (blockingDic[sccHy].All(trash.Contains))
                     {
-                        var multipleSCCs = new List<hyperarc>();
                         PreceedingFinder(sccHy, blockingDic);
-                        multipleSCCs.AddRange(Preceedings);
+                        var nodes = new List<node>();
+                        foreach (var hyperarc in Preceedings)
+                            nodes.AddRange(hyperarc.nodes);
                         Preceedings.Clear();
+                        assemblyGraph.addHyperArc(nodes);
+                        assemblyGraph.hyperarcs[assemblyGraph.hyperarcs.Count - 1].localLabels.Add(DisConstants.Removable);
                     }
                 }
 
