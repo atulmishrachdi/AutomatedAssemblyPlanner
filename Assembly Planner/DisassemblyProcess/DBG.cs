@@ -10,7 +10,7 @@ namespace Assembly_Planner
 {
     internal class DBG
     {
-        internal static Dictionary<hyperarc, List<hyperarc>> DirectionalBlockingGraph(designGraph assemblyGraph, hyperarc hy, double[] cndDir)
+        internal static Dictionary<hyperarc, List<hyperarc>> DirectionalBlockingGraph(designGraph assemblyGraph, hyperarc hy, int cndDirInd)
         {
             // So, I am trying to make the DBG for for each seperate hyperarc. 
             // This hyperarc includes small hyperarcs with the lable  "SCC"
@@ -34,14 +34,14 @@ namespace Assembly_Planner
 
                     if (sccHy.nodes.Contains(borderArc.From))
                     {
-                        if (Parallel(borderArc, cndDir) != -1) continue;
+                        if (Parallel(borderArc, cndDirInd) != -1) continue;
                         var blocking = BlockingSccFinder(assemblyGraph, sccHy, borderArc);
                         if (!blockedWith.Contains(blocking))
                             blockedWith.Add(blocking);
                     }
                     else // contains  "To"
                     {
-                        if (Parallel(borderArc, cndDir) != 1) continue;
+                        if (Parallel(borderArc, cndDirInd) != 1) continue;
                         var blocking = BlockingSccFinder(assemblyGraph, sccHy, borderArc);
                         if (!blockedWith.Contains(blocking))
                             blockedWith.Add(blocking);
@@ -52,8 +52,9 @@ namespace Assembly_Planner
             return dbgDictionary;
         }
 
-        private static int Parallel(arc borderArc, double[] cndDir)
+        private static int Parallel(arc borderArc, int cndDirInd)
         {
+            var cndDir = DisassemblyDirections.Directions[cndDirInd];
             var indexL = borderArc.localVariables.IndexOf(GraphConstants.DirIndLowerBound);
             var indexU = borderArc.localVariables.IndexOf(GraphConstants.DirIndUpperBound);
             for (var i = indexL + 1; i < indexU; i++)

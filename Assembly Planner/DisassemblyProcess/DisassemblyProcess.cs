@@ -12,6 +12,7 @@ namespace Assembly_Planner
 {
     public class DisassemblyProcess : AbstractAssemblySearch
     {
+        public static Dictionary<int, List<List<node>>> SccTracker = new Dictionary<int, List<List<node>>>();
         internal static void Run(designGraph assemblyGraph, List<int> globalDirPool)
         {
             // This is a surrogate graph-based approach for "disassembly"
@@ -36,26 +37,26 @@ namespace Assembly_Planner
                 candidates.Clear();
                 foreach (var current in beam)
                 {
-                    foreach (var i in globalDirPool)
+                    foreach (var cndDirInd in globalDirPool)
                     {
-                        var cndDir = DisassemblyDirections.Directions[i];
-                        foreach (var hy in assemblyGraph.hyperarcs.Where(h => h.localLabels.Contains(DisConstants.SeperateHyperarcs)))
+                        foreach (var seperateHy in assemblyGraph.hyperarcs.Where(h => h.localLabels.Contains(DisConstants.SeperateHyperarcs)))
                         {
-                            SCC.StronglyConnectedComponents(assemblyGraph, hy, cndDir);
-                            var blockingDic = DBG.DirectionalBlockingGraph(assemblyGraph, hy, cndDir);
-                            OptionGenerator.GenerateOptions(assemblyGraph, hy, cndDir, blockingDic);
+                            SCC.StronglyConnectedComponents(assemblyGraph, seperateHy, cndDirInd);
+                            var blockingDic = DBG.DirectionalBlockingGraph(assemblyGraph, seperateHy, cndDirInd);
+                            OptionGenerator.GenerateOptions(assemblyGraph, seperateHy, blockingDic);
                         }
-                    }
-                    var ruleChoices = recogRule.recognize(assemblyGraph);
-                    foreach (var opt in ruleChoices)
-                    {
-                        var child = (AssemblyCandidate)current.copy();
-                        transferLmappingToChild(child.graph, current.graph, opt);
-                        child = ApplyChild(child);
-                        if (assemblyEvaluator.Evaluate(child, opt) > 0)
-                            lock (candidates)
-                                candidates.Add(child.performanceParams, child); 
-                        child.addToRecipe(opt);
+                        var ruleChoices = recogRule.recognize(assemblyGraph);
+                        foreach (var opt in ruleChoices)
+                        {
+                            var child = (AssemblyCandidate)current.copy();
+                            transferLmappingToChild(child.graph, current.graph, opt);
+                            child = Updates.ApplyChild(child);
+                            if (assemblyEvaluator.Evaluate(child, opt) > 0)
+                                lock (candidates)
+                                    candidates.Add(child.performanceParams, child);
+                            child.addToRecipe(opt);
+                        }
+                        Updates.UpdateAssemblyGraph(assemblyGraph);
                     }
                 }
                 beam.Clear();
@@ -82,17 +83,5 @@ namespace Assembly_Planner
             // After apply, add the "seperate" lable to the chosen Hyperarc
         }
 
-        private static AssemblyCandidate ApplyChild(AssemblyCandidate child)
-        {
-            for (var i = 0; i < child.graph.hyperarcs.Count; i++)
-            {
-                var hy = child.graph.hyperarcs[i];
-                if (!hy.localLabels.Contains(DisConstants.SCC) &&
-                    !hy.localLabels.Contains(DisConstants.SeperateHyperarcs)) continue;
-                child.graph.removeHyperArc(hy);
-                i--;
-            }
-            return child;
-        }
     }
 }

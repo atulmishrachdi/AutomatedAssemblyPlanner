@@ -10,7 +10,7 @@ namespace Assembly_Planner
     internal class OptionGenerator
     {
         static List<hyperarc> Preceedings = new List<hyperarc>();
-        internal static void GenerateOptions(designGraph assemblyGraph, hyperarc hy, double[] cndDir, 
+        internal static void GenerateOptions(designGraph assemblyGraph, hyperarc hy,
             Dictionary<hyperarc, List<hyperarc>> blockingDic)
         {
             // I need to use the blocking information to find the removable SCCs.
