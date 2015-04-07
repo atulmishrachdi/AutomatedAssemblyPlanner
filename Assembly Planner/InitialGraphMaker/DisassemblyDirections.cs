@@ -13,7 +13,7 @@ namespace Assembly_Planner
     internal class DisassemblyDirections
     {
         public static List<double[]> Directions = new List<double[]>(); 
-        internal static void Run(designGraph assemblyGraph)
+        internal static List<int> Run(designGraph assemblyGraph)
         {
             Directions = Icosahedron.DirectionGeneration();
             var globalDirPool = new List<int>();
@@ -42,7 +42,7 @@ namespace Assembly_Planner
                     }
                 }
             }
-            DisassemblyProcess.Run(assemblyGraph, globalDirPool);
+            return globalDirPool;
         }
 
         private static void AddInformationToArc(arc a, IEnumerable<int> localDirInd)

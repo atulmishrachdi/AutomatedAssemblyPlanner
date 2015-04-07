@@ -14,7 +14,8 @@ namespace Assembly_Planner
         static void Main(string[] args)
         {
             var assemblyGraph = new designGraph();
-            DisassemblyDirections.Run(assemblyGraph); //Input: assembly model 
+            var globalDirPool = DisassemblyDirections.Run(assemblyGraph); //Input: assembly model
+            DisassemblyProcess.Run(assemblyGraph, globalDirPool);
         }
     }
 
