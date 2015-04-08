@@ -10,9 +10,11 @@ namespace Assembly_Planner
 {
     internal class DBG
     {
-        internal static Dictionary<hyperarc, List<hyperarc>> DirectionalBlockingGraph(designGraph assemblyGraph, hyperarc hy, int cndDirInd)
+        internal static Dictionary<hyperarc, List<hyperarc>> DirectionalBlockingGraph(designGraph assemblyGraph, hyperarc seperate, int cndDirInd)
         {
-            // So, I am trying to make the DBG for for each seperate hyperarc. 
+            // The function
+
+            //So, I am trying to make the DBG for for each seperate hyperarc. 
             // This hyperarc includes small hyperarcs with the lable  "SCC"
             // Each element of the DBG is one SCC hyperarc
             //  I was thinking instead of having a graph for DBG, simly create a dictionary
@@ -60,9 +62,9 @@ namespace Assembly_Planner
             for (var i = indexL + 1; i < indexU; i++)
             {
                 var arcDisDir = DisassemblyDirections.Directions[(int)borderArc.localVariables[i]];
-                if (1 - arcDisDir.dotProduct(cndDir) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall)
+                if (Math.Abs(1 - arcDisDir.dotProduct(cndDir)) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall)
                     return 1;
-                if (1 + arcDisDir.dotProduct(cndDir) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall)
+                if (Math.Abs(1 + arcDisDir.dotProduct(cndDir)) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall)
                     return -1;
             }
             return 0;

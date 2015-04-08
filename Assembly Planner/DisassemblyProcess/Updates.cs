@@ -13,6 +13,7 @@ namespace Assembly_Planner
     {
         internal static AssemblyCandidate ApplyChild(AssemblyCandidate child)
         {
+            // The function removes hyperarcs with "SCC" or "Seperate" lables
             for (var i = 0; i < child.graph.hyperarcs.Count; i++)
             {
                 var hy = child.graph.hyperarcs[i];
@@ -26,20 +27,21 @@ namespace Assembly_Planner
 
         internal static void UpdateAssemblyGraph(designGraph assemblyGraph)
         {
+            // The function removes hyperarcs with "Removable" lables
             foreach (var hy in assemblyGraph.hyperarcs.Where(h=>h.localLabels.Contains(DisConstants.Removable)))
                 assemblyGraph.removeHyperArc(hy);
         }
 
         internal static void UpdateGlobalDirections(List<int> globalDirPool)
         {
-            // This  update only keeps one of the parallel directions
+            // The function removes one of each parallel directions pair.
             for (var i = 0; i < globalDirPool.Count - 1; i++)
             {
                 var dir1 = DisassemblyDirections.Directions[globalDirPool[i]];
                 for (var j = i+1; j < globalDirPool.Count; j++)
                 {
                     var dir2 = DisassemblyDirections.Directions[globalDirPool[j]];
-                    if (!(1 + dir1.dotProduct(dir2) < DisConstants.Parallel)) continue;
+                    if (Math.Abs(1 + dir1.dotProduct(dir2)) > DisConstants.Parallel) continue;
                     globalDirPool.RemoveAt(j);
                     j--;
                 }

@@ -15,13 +15,10 @@ namespace Assembly_Planner
         public static Dictionary<int, List<List<node>>> SccTracker = new Dictionary<int, List<List<node>>>();
         internal static void Run(designGraph assemblyGraph, List<int> globalDirPool)
         {
-            // This is a surrogate graph-based approach for "disassembly"
             // take a direction from the pool
             //   find the SCCs
             //   create the DBG
             //   generate the options
-            
-            // check list:
 
             Updates.UpdateGlobalDirections(globalDirPool);
             assemblyGraph.addHyperArc(assemblyGraph.nodes);
@@ -77,13 +74,6 @@ namespace Assembly_Planner
                         break;
                 }
             }
-
-            // Now all the options are generated and it is the time to do the search
-            // After apply, we can erase everything and start making the SCCs and DBGs from the beginning, 
-            //    But majarity of the later options had beed found before, so I need to find a way to store them
-            //    and use them again.
-
-            // After apply, add the "seperate" lable to the chosen Hyperarc
         }
 
     }

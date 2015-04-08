@@ -12,11 +12,16 @@ namespace Assembly_Planner
     {
         internal static void StronglyConnectedComponents(designGraph assemblyGraph, hyperarc seperate, int cndDir)
         {
+            // The function takes every hyperarc with "seperate" lable and generates its SCCs with respect to 
+            // the candidate direction. After generation, a new hyperarc is added to the graph with local lable "SCC".
+            
             var stack = new Stack<node>();
             var visited = new List<node>();
 
-            foreach (var node in seperate.nodes)
+            foreach (var node in seperate.nodes.Where(n=>!visited.Contains(n)))
             {
+                stack.Clear();
+                visited.Clear();
                 stack.Push(node);
                 while (stack.Count > 0)
                 {
@@ -39,16 +44,22 @@ namespace Assembly_Planner
             }
         }
 
-        private static bool Removable(arc pNodeArc, int cndDir)
+        private static bool Removable(arc pNodeArc, int cndDirInd)
         {
+            // The function returns "true" if the local variables of the"pNodeArc" 
+            // contains a direction that is parralel to the candidate direction. 
+
             var indexL = pNodeArc.localVariables.IndexOf(GraphConstants.DirIndLowerBound);
             var indexU = pNodeArc.localVariables.IndexOf(GraphConstants.DirIndUpperBound);
             for (var i = indexL + 1; i < indexU; i++)
             {
-                //var arcDisDir = DisassemblyDirections.Directions[(int) pNodeArc.localVariables[i]];
-                //if (1 - Math.Abs(arcDisDir.dotProduct(cndDir)) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall)
-                var dirInd = pNodeArc.localVariables[i];
-                if (dirInd == cndDir)
+                var arcDisDir = DisassemblyDirections.Directions[(int)pNodeArc.localVariables[i]];
+                if (Math.Abs(1 - Math.Abs(arcDisDir.dotProduct(DisassemblyDirections.Directions[cndDirInd]))) <
+                    ConstantsPrimitiveOverlap.CheckWithGlobDirsParall ||
+                    Math.Abs(1 + Math.Abs(arcDisDir.dotProduct(DisassemblyDirections.Directions[cndDirInd]))) <
+                    ConstantsPrimitiveOverlap.CheckWithGlobDirsParall)
+                    //var dirInd = pNodeArc.localVariables[i];
+                    //if (dirInd == cndDirInd)
                     return true;
             }
             return false;
