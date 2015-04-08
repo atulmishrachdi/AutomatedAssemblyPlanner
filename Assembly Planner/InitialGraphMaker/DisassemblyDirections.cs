@@ -21,7 +21,7 @@ namespace Assembly_Planner
             var solidPrimitive = BlockingDetermination.PrimitiveMaker(solids);
             AddingNodesToGraph(assemblyGraph, solids);
             
-            for (var i = 0; i < solids.Count; i++)
+            for (var i = 0; i < solids.Count - 1; i++)
             {
                 var solid1 = solids[i];
                 var solid1Primitives = solidPrimitive[solid1];

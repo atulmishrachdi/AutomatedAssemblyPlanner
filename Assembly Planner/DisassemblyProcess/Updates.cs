@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AssemblyEvaluation;
 using GraphSynth.Representation;
+using StarMathLib;
 
 namespace Assembly_Planner
 {
@@ -27,6 +28,22 @@ namespace Assembly_Planner
         {
             foreach (var hy in assemblyGraph.hyperarcs.Where(h=>h.localLabels.Contains(DisConstants.Removable)))
                 assemblyGraph.removeHyperArc(hy);
+        }
+
+        internal static void UpdateGlobalDirections(List<int> globalDirPool)
+        {
+            // This  update only keeps one of the parallel directions
+            for (var i = 0; i < globalDirPool.Count - 1; i++)
+            {
+                var dir1 = DisassemblyDirections.Directions[globalDirPool[i]];
+                for (var j = i+1; j < globalDirPool.Count; j++)
+                {
+                    var dir2 = DisassemblyDirections.Directions[globalDirPool[j]];
+                    if (!(1 + dir1.dotProduct(dir2) < DisConstants.Parallel)) continue;
+                    globalDirPool.RemoveAt(j);
+                    j--;
+                }
+            }
         }
     }
 }

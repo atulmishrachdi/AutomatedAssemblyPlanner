@@ -21,6 +21,9 @@ namespace Assembly_Planner
             //   create the DBG
             //   generate the options
             
+            // check list:
+
+            Updates.UpdateGlobalDirections(globalDirPool);
             assemblyGraph.addHyperArc(assemblyGraph.nodes);
             var iniHy = assemblyGraph.hyperarcs[assemblyGraph.hyperarcs.Count - 1];
             iniHy.localLabels.Add(DisConstants.SeperateHyperarcs);

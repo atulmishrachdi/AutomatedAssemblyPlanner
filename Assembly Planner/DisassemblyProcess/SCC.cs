@@ -10,12 +10,12 @@ namespace Assembly_Planner
 {
     internal class SCC
     {
-        internal static void StronglyConnectedComponents(designGraph assemblyGraph, hyperarc hy, int cndDir)
+        internal static void StronglyConnectedComponents(designGraph assemblyGraph, hyperarc seperate, int cndDir)
         {
             var stack = new Stack<node>();
             var visited = new List<node>();
 
-            foreach (var node in hy.nodes)
+            foreach (var node in seperate.nodes)
             {
                 stack.Push(node);
                 while (stack.Count > 0)
@@ -33,6 +33,7 @@ namespace Assembly_Planner
                         stack.Push(otherNode);
                     }
                 }
+                if (visited.Count == seperate.nodes.Count) continue;
                 assemblyGraph.addHyperArc(visited);
                 assemblyGraph.hyperarcs[assemblyGraph.hyperarcs.Count - 1].localLabels.Add(DisConstants.SCC);
             }
