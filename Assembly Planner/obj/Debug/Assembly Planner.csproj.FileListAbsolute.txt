@@ -20,11 +20,9 @@ C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\A
 C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\AssemblyEvaluator.dll
 C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\GraphSynth.BaseClasses.dll
 C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\MIConvexHull.dll
-C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\ruleEditing.dll
 C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\StarMath.dll
 C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\TessellationAndVoxelizationGeometryLibrary.dll
 C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\AssemblyEvaluator.pdb
-C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\ruleEditing.pdb
 C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\TessellationAndVoxelizationGeometryLibrary.pdb
 C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\GraphSynth.BaseClasses.pdb
 C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\GraphSynth.BaseClasses.xml

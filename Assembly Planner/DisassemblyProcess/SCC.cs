@@ -17,8 +17,8 @@ namespace Assembly_Planner
             
             var stack = new Stack<node>();
             var visited = new List<node>();
-
-            foreach (var node in seperate.nodes.Where(n=>!visited.Contains(n)))
+            var globalVisited = new List<node>();
+            foreach (var node in seperate.nodes.Where(n => !globalVisited.Contains(n)))
             {
                 stack.Clear();
                 visited.Clear();
@@ -27,8 +27,9 @@ namespace Assembly_Planner
                 {
                     var pNode = stack.Pop();
                     visited.Add(pNode);
+                    globalVisited.Add(pNode);
 
-                    foreach (arc pNodeArc in pNode.arcs)
+                    foreach (arc pNodeArc in pNode.arcs.Where(a=>a.GetType() == typeof (arc)))
                     {
                         if (Removable(pNodeArc, cndDir))
                             continue;

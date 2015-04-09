@@ -24,11 +24,11 @@ namespace Assembly_Planner
                     preAddedSccs.AddRange(premadeSCC);
                 }
             }
-
+            var globalVisited = new List<node>();
             var stack = new Stack<node>();
             var visited = new List<node>();
             var sccTrackerNodes = new List<List<node>>();
-            foreach (var node in seperateHy.nodes.Where(n => !preAddedSccs.Contains(n) && !visited.Contains(n)))
+            foreach (var node in seperateHy.nodes.Where(n => !preAddedSccs.Contains(n) && !globalVisited.Contains(n)))
             {
                 stack.Clear();
                 visited.Clear();
@@ -37,8 +37,9 @@ namespace Assembly_Planner
                 {
                     var pNode = stack.Pop();
                     visited.Add(pNode);
+                    globalVisited.Add(pNode);
 
-                    foreach (arc pNodeArc in pNode.arcs)
+                    foreach (arc pNodeArc in pNode.arcs.Where(a => a.GetType() == typeof(arc)))
                     {
                         if (SCC.Removable(pNodeArc, cndDir))
                             continue;

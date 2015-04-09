@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GraphSynth;
 using GraphSynth.Representation;
 using StarMathLib;
 using TVGL.Primitive_Surfaces.ClassifyTesselationAsPrimitives;
@@ -13,8 +14,11 @@ namespace Assembly_Planner
     {
         static void Main(string[] args)
         {
-            var assemblyGraph = new designGraph();
-            var globalDirPool = DisassemblyDirections.Run(assemblyGraph); //Input: assembly model
+            var filer = new BasicFiler("", "", "");
+
+            var assemblyGraph = (designGraph)filer.Open("C:\\Users\\Nima\\Documents\\OSU\\Project\\AssemblyPlanner\\Test\\inputNG.gxml")[0];
+            List<int> globalDirPool = new List<int>{0,1,2,3,4,5};
+          //  List<int> globalDirPool = DisassemblyDirections.Run(assemblyGraph); //Input: assembly model
             DisassemblyProcess.Run(assemblyGraph, globalDirPool);
         }
     }

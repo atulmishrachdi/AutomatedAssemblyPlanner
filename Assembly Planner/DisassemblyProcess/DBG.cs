@@ -95,7 +95,7 @@ namespace Assembly_Planner
             var borders = new List<arc>();
             foreach (node node in sccHy.nodes)
             {
-                foreach (arc arc in node.arcs)
+                foreach (arc arc in node.arcs.Where(a => a.GetType() == typeof(arc)))
                 {
                     var otherNode = arc.From == node ? arc.To : arc.From;
                     if (sccHy.nodes.Contains(otherNode)) continue;

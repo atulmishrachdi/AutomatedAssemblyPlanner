@@ -47,5 +47,13 @@ namespace Assembly_Planner
                 }
             }
         }
+
+        internal static List<hyperarc> UpdatePreceedings(List<hyperarc> Preceedings)
+        {
+            var list = new List<hyperarc>();
+            foreach (var preceeding in Preceedings.Where(p=>!list.Contains(p)))
+                list.Add(preceeding);
+            return list;
+        }
     }
 }
