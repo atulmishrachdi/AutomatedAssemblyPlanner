@@ -13,6 +13,7 @@ namespace Assembly_Planner
         // to take benefit from premade SCC hyperarcs. The dictionary will be updated after each "apply"
         internal static void StronglyConnectedComponents(designGraph assemblyGraph, hyperarc seperateHy, int cndDir)
         {
+            
             var preAddedSccs = new List<node>();
             if (DisassemblyProcess.SccTracker.Keys.Contains(cndDir))
             {
@@ -27,8 +28,10 @@ namespace Assembly_Planner
             var stack = new Stack<node>();
             var visited = new List<node>();
             var sccTrackerNodes = new List<List<node>>();
-            foreach (var node in seperateHy.nodes.Where(n => !preAddedSccs.Contains(n)))
+            foreach (var node in seperateHy.nodes.Where(n => !preAddedSccs.Contains(n) && !visited.Contains(n)))
             {
+                stack.Clear();
+                visited.Clear();
                 stack.Push(node);
                 while (stack.Count > 0)
                 {
@@ -37,7 +40,7 @@ namespace Assembly_Planner
 
                     foreach (arc pNodeArc in pNode.arcs)
                     {
-                        if (Removable(pNodeArc, cndDir))
+                        if (SCC.Removable(pNodeArc, cndDir))
                             continue;
                         var otherNode = pNodeArc.From == pNode ? pNodeArc.To : pNodeArc.From;
                         if (visited.Contains(otherNode))
@@ -55,19 +58,5 @@ namespace Assembly_Planner
                 DisassemblyProcess.SccTracker.Add(cndDir, sccTrackerNodes);
         }
 
-        private static bool Removable(arc pNodeArc, int cndDir)
-        {
-            var indexL = pNodeArc.localVariables.IndexOf(GraphConstants.DirIndLowerBound);
-            var indexU = pNodeArc.localVariables.IndexOf(GraphConstants.DirIndUpperBound);
-            for (var i = indexL + 1; i < indexU; i++)
-            {
-                //var arcDisDir = DisassemblyDirections.Directions[(int) pNodeArc.localVariables[i]];
-                //if (1 - Math.Abs(arcDisDir.dotProduct(cndDir)) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall)
-                var dirInd = pNodeArc.localVariables[i];
-                if (dirInd == cndDir)
-                    return true;
-            }
-            return false;
-        }
     }
 }

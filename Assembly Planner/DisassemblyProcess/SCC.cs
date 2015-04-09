@@ -44,7 +44,7 @@ namespace Assembly_Planner
             }
         }
 
-        private static bool Removable(arc pNodeArc, int cndDirInd)
+        public static bool Removable(arc pNodeArc, int cndDirInd)
         {
             // The function returns "true" if the local variables of the"pNodeArc" 
             // contains a direction that is parralel to the candidate direction. 
