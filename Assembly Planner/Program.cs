@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AssemblyEvaluation;
 using GraphSynth;
 using GraphSynth.Representation;
 using StarMathLib;
@@ -14,12 +15,13 @@ namespace Assembly_Planner
     {
         static void Main(string[] args)
         {
-            var filer = new BasicFiler("", "", "");
-
+            var filer = new BasicFiler("","","");
             var assemblyGraph = (designGraph)filer.Open("C:\\Users\\Nima\\Documents\\OSU\\Project\\AssemblyPlanner\\Test\\inputNG.gxml")[0];
-            List<int> globalDirPool = new List<int>{0,1,2,3,4,5};
-          //  List<int> globalDirPool = DisassemblyDirections.Run(assemblyGraph); //Input: assembly model
-            DisassemblyProcess.Run(assemblyGraph, globalDirPool);
+            var globalDirPool = new List<int>{0,1,2,3,4,5};
+            //List<int> globalDirPool = DisassemblyDirections.Run(assemblyGraph); //Input: assembly model
+            var solutions = new List<AssemblyCandidate>();
+            DisassemblyProcess.Run(assemblyGraph, globalDirPool); // the output is the assembly sequence
+            OptimalOrientation.Run(solutions);
         }
     }
 

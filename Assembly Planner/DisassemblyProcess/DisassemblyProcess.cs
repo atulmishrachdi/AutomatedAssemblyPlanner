@@ -14,9 +14,11 @@ namespace Assembly_Planner
     public class DisassemblyProcess //: AbstractAssemblySearch
     {
         public static Dictionary<int, List<List<node>>> SccTracker = new Dictionary<int, List<List<node>>>();
+
         internal static void Run(designGraph assemblyGraph, List<int> globalDirPool)
         {
             DisassemblyDirections.Directions = TemporaryDirections();
+            //DisassemblyDirections.Directions = Icosahedron.DirectionGeneration();
             var assemblyEvaluator = new AssemblyEvaluator(null);
             // take a direction from the pool
             //   find the SCCs
@@ -32,11 +34,14 @@ namespace Assembly_Planner
             var beam = new Queue<AssemblyCandidate>(DisConstants.BeamWidth);
             var found = false;
             AssemblyCandidate goal = null;
-            beam.Enqueue(new AssemblyCandidate(new candidate(assemblyGraph, 1)));
+            beam.Enqueue(new AssemblyCandidate(new candidate(assemblyGraph,1)));
             var recogRule = new grammarRule();
+            var set = new ruleSet();
+            recogRule.L = new designGraph();
             var haRemovable = new hyperarc();
             haRemovable.localLabels.Add(DisConstants.Removable);
-            //recogRule.L.addHyperArc(haRemovable);
+            recogRule.L.addHyperArc(haRemovable);
+            set.Add(recogRule);
 
             while (beam.Count != 0 && !found)
             {
@@ -45,16 +50,16 @@ namespace Assembly_Planner
                 {
                     foreach (var cndDirInd in globalDirPool)
                     {
-                        foreach (var seperateHy in assemblyGraph.hyperarcs.Where(h => h.localLabels.Contains(DisConstants.SeperateHyperarcs)).ToList())
+                        foreach (var seperateHy in current.graph.hyperarcs.Where(h => h.localLabels.Contains(DisConstants.SeperateHyperarcs)).ToList())
                         {
                             //SCC.StronglyConnectedComponents(assemblyGraph, seperateHy, cndDirInd);
-                            OptimizedSCC.StronglyConnectedComponents(assemblyGraph, seperateHy, cndDirInd);
-                            var blockingDic = DBG.DirectionalBlockingGraph(assemblyGraph, seperateHy, cndDirInd);
-                            OptionGenerator.GenerateOptions(assemblyGraph, seperateHy, blockingDic);
+                            OptimizedSCC.StronglyConnectedComponents(current.graph, seperateHy, cndDirInd);
+                            var blockingDic = DBG.DirectionalBlockingGraph(current.graph, seperateHy, cndDirInd);
+                            OptionGenerator.GenerateOptions(current.graph, seperateHy, blockingDic);
                         }
                     }
                     var optCount =
-                        assemblyGraph.hyperarcs.Where(h => h.localLabels.Contains(DisConstants.Removable))
+                        current.graph.hyperarcs.Where(h => h.localLabels.Contains(DisConstants.Removable))
                             .ToList().Count;
                     var ruleChoices = recogRule.recognize(current.graph);
                     foreach (var opt in ruleChoices)
@@ -67,7 +72,7 @@ namespace Assembly_Planner
                                 candidates.Add(child.performanceParams, child);
                         child.addToRecipe(opt);
                     }
-                    Updates.UpdateAssemblyGraph(assemblyGraph);
+                    Updates.UpdateAssemblyGraph(current.graph);
                 }
                 beam.Clear();
                 var count = 0;

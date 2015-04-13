@@ -55,15 +55,45 @@
     <Compile Include="DisassemblyProcess\OptionGenerator.cs" />
     <Compile Include="DisassemblyProcess\SCC.cs" />
     <Compile Include="DisassemblyProcess\Updates.cs" />
+    <Compile Include="Evaluation\AssemblyEvaluator.cs" />
+    <Compile Include="Evaluation\BlockingDetermination.cs" />
+    <Compile Include="Evaluation\Constants.cs" />
+    <Compile Include="Evaluation\ConvexHullEvaluator.cs" />
+    <Compile Include="Evaluation\DataInterfaceWithCPP.cs" />
+    <Compile Include="Evaluation\EvaluatePath.cs" />
+    <Compile Include="Evaluation\EvaluatePathPINVOKE.cs" />
+    <Compile Include="Evaluation\FeasibilityEvaluator.cs" />
+    <Compile Include="Evaluation\InputData.cs" />
+    <Compile Include="Evaluation\LiaisonGraphCreator.cs" />
+    <Compile Include="Evaluation\Math.cs" />
+    <Compile Include="Evaluation\MultiObj_optimizeSort.cs" />
+    <Compile Include="Evaluation\NewComFaces.cs" />
+    <Compile Include="Evaluation\NewFootprintFaces.cs" />
+    <Compile Include="Evaluation\NewFootprintFacesClass.cs" />
+    <Compile Include="Evaluation\OutputXML\Action.cs" />
+    <Compile Include="Evaluation\OutputXML\AssemblyCandidate.cs" />
+    <Compile Include="Evaluation\OutputXML\AssemblySequence.cs" />
+    <Compile Include="Evaluation\OutputXML\Enumerators.cs" />
+    <Compile Include="Evaluation\OutputXML\Part_and_Subassembly.cs" />
+    <Compile Include="Evaluation\PathDeterminationEvaluator.cs" />
+    <Compile Include="Evaluation\ReOrientations.cs" />
+    <Compile Include="Evaluation\STLGeometryFunctions.cs" />
+    <Compile Include="Evaluation\StLReader.cs" />
+    <Compile Include="Evaluation\TimeEvaluator.cs" />
+    <Compile Include="Evaluation\_AbstractAssemblySearch.cs" />
     <Compile Include="InitialGraphMaker\BlockingDetermination.cs" />
     <Compile Include="InitialGraphMaker\ConstantsPrimitiveOverlap.cs" />
     <Compile Include="InitialGraphMaker\DisassemblyDirections.cs" />
     <Compile Include="DisassemblyProcess\GraphConstants.cs" />
     <Compile Include="InitialGraphMaker\Icosahedron.cs" />
     <Compile Include="InitialGraphMaker\PrimitivePrimitiveInteractions.cs" />
+    <Compile Include="PostProcessor\OptimalOrientation.cs" />
+    <Compile Include="PostProcessor\PostProcessingConstnts.cs" />
+    <Compile Include="PostProcessor\TasksClass.cs" />
+    <Compile Include="PostProcessor\WorkerAllocation.cs" />
+    <Compile Include="PostProcessor\WorkersClass.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Search\OrderedDepthFirstSearch.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -73,10 +103,6 @@
     <Content Include="StarMath.XML" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\GraphSynth\graphsynth_465a7e41942c\AssemblyEvaluator\AssemblyEvaluation.csproj">
-      <Project>{b5d1ed57-304d-4538-8a1f-d1c4d986f32f}</Project>
-      <Name>AssemblyEvaluation</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\GraphSynth\graphsynth_465a7e41942c\GraphSynthSourceFiles\GraphSynth.BaseClasses\GraphSynth.BaseClasses.csproj">
       <Project>{d679f4e2-fd18-48ac-9c0c-b60155a61d37}</Project>
       <Name>GraphSynth.BaseClasses</Name>

@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly Planner", "Assembl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TessellationAndVoxelizationGeometryLibraryUniversal", "..\tvgl\TessellationAndVoxelizationGeometryLibrary\TessellationAndVoxelizationGeometryLibraryUniversal.csproj", "{E3489019-D590-46A8-B2C2-E3481E8DB77C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyEvaluation", "..\GraphSynth\graphsynth_465a7e41942c\AssemblyEvaluator\AssemblyEvaluation.csproj", "{B5D1ED57-304D-4538-8A1F-D1C4D986F32F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphSynth.BaseClasses", "..\GraphSynth\graphsynth_465a7e41942c\GraphSynthSourceFiles\GraphSynth.BaseClasses\GraphSynth.BaseClasses.csproj", "{D679F4E2-FD18-48AC-9C0C-B60155A61D37}"
 EndProject
 Global
@@ -63,30 +61,6 @@ Global
 		{E3489019-D590-46A8-B2C2-E3481E8DB77C}.WPF GUI Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E3489019-D590-46A8-B2C2-E3481E8DB77C}.WPF GUI Release|Any CPU.Build.0 = Release|Any CPU
 		{E3489019-D590-46A8-B2C2-E3481E8DB77C}.WPF GUI Release|x86.ActiveCfg = Release|Any CPU
-		{B5D1ED57-304D-4538-8A1F-D1C4D986F32F}.Console Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B5D1ED57-304D-4538-8A1F-D1C4D986F32F}.Console Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B5D1ED57-304D-4538-8A1F-D1C4D986F32F}.Console Debug|x86.ActiveCfg = Debug|x86
-		{B5D1ED57-304D-4538-8A1F-D1C4D986F32F}.Console Debug|x86.Build.0 = Debug|x86
-		{B5D1ED57-304D-4538-8A1F-D1C4D986F32F}.Console Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B5D1ED57-304D-4538-8A1F-D1C4D986F32F}.Console Release|Any CPU.Build.0 = Release|Any CPU
-		{B5D1ED57-304D-4538-8A1F-D1C4D986F32F}.Console Release|x86.ActiveCfg = Release|x86
-		{B5D1ED57-304D-4538-8A1F-D1C4D986F32F}.Console Release|x86.Build.0 = Release|x86
-		{B5D1ED57-304D-4538-8A1F-D1C4D986F32F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B5D1ED57-304D-4538-8A1F-D1C4D986F32F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B5D1ED57-304D-4538-8A1F-D1C4D986F32F}.Debug|x86.ActiveCfg = Debug|x86
-		{B5D1ED57-304D-4538-8A1F-D1C4D986F32F}.Debug|x86.Build.0 = Debug|x86
-		{B5D1ED57-304D-4538-8A1F-D1C4D986F32F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B5D1ED57-304D-4538-8A1F-D1C4D986F32F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B5D1ED57-304D-4538-8A1F-D1C4D986F32F}.Release|x86.ActiveCfg = Release|x86
-		{B5D1ED57-304D-4538-8A1F-D1C4D986F32F}.Release|x86.Build.0 = Release|x86
-		{B5D1ED57-304D-4538-8A1F-D1C4D986F32F}.WPF GUI Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B5D1ED57-304D-4538-8A1F-D1C4D986F32F}.WPF GUI Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B5D1ED57-304D-4538-8A1F-D1C4D986F32F}.WPF GUI Debug|x86.ActiveCfg = Debug|x86
-		{B5D1ED57-304D-4538-8A1F-D1C4D986F32F}.WPF GUI Debug|x86.Build.0 = Debug|x86
-		{B5D1ED57-304D-4538-8A1F-D1C4D986F32F}.WPF GUI Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B5D1ED57-304D-4538-8A1F-D1C4D986F32F}.WPF GUI Release|Any CPU.Build.0 = Release|Any CPU
-		{B5D1ED57-304D-4538-8A1F-D1C4D986F32F}.WPF GUI Release|x86.ActiveCfg = Release|x86
-		{B5D1ED57-304D-4538-8A1F-D1C4D986F32F}.WPF GUI Release|x86.Build.0 = Release|x86
 		{D679F4E2-FD18-48AC-9C0C-B60155A61D37}.Console Debug|Any CPU.ActiveCfg = Console Debug|Any CPU
 		{D679F4E2-FD18-48AC-9C0C-B60155A61D37}.Console Debug|Any CPU.Build.0 = Console Debug|Any CPU
 		{D679F4E2-FD18-48AC-9C0C-B60155A61D37}.Console Debug|x86.ActiveCfg = Console Debug|Any CPU
