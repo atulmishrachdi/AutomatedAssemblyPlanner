@@ -101,6 +101,7 @@ namespace AssemblyEvaluation
 
         private bool ActionIsRemoveSCC(grammarRule rule)
         {
+            return true;
             return rule.name.Equals("choose_SCC");
         }
         /// <summary>
@@ -277,7 +278,8 @@ namespace AssemblyEvaluation
 
         private static bool ActionIsAssemblyByAssembly(grammarRule rule)
         {
-            return rule.name.Equals("merger-additional");
+            return false;
+            //return rule.name.Equals("merger-additional");
         }
 
 

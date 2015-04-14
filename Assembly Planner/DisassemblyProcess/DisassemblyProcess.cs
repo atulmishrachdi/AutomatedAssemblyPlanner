@@ -14,16 +14,17 @@ namespace Assembly_Planner
     public class DisassemblyProcess //: AbstractAssemblySearch
     {
         public static Dictionary<int, List<List<node>>> SccTracker = new Dictionary<int, List<List<node>>>();
-
-        internal static void Run(designGraph assemblyGraph, List<int> globalDirPool)
+        protected static AssemblyEvaluator assemblyEvaluator;
+        internal static void Run(ConvexHullAndBoundingBox inputData, List<int> globalDirPool)
         {
+            var assemblyGraph = inputData.graphAssembly;
             DisassemblyDirections.Directions = TemporaryDirections();
             //DisassemblyDirections.Directions = Icosahedron.DirectionGeneration();
-            var assemblyEvaluator = new AssemblyEvaluator(null);
             // take a direction from the pool
             //   find the SCCs
             //   create the DBG
             //   generate the options
+            assemblyEvaluator = new AssemblyEvaluator(inputData.ConvexHullDictionary);
 
             Updates.UpdateGlobalDirections(globalDirPool);
             assemblyGraph.addHyperArc(assemblyGraph.nodes);
@@ -36,12 +37,10 @@ namespace Assembly_Planner
             AssemblyCandidate goal = null;
             beam.Enqueue(new AssemblyCandidate(new candidate(assemblyGraph,1)));
             var recogRule = new grammarRule();
-            var set = new ruleSet();
             recogRule.L = new designGraph();
-            var haRemovable = new hyperarc();
+            var haRemovable = new ruleHyperarc();
             haRemovable.localLabels.Add(DisConstants.Removable);
             recogRule.L.addHyperArc(haRemovable);
-            set.Add(recogRule);
 
             while (beam.Count != 0 && !found)
             {
@@ -58,15 +57,13 @@ namespace Assembly_Planner
                             OptionGenerator.GenerateOptions(current.graph, seperateHy, blockingDic);
                         }
                     }
-                    var optCount =
-                        current.graph.hyperarcs.Where(h => h.localLabels.Contains(DisConstants.Removable))
-                            .ToList().Count;
                     var ruleChoices = recogRule.recognize(current.graph);
                     foreach (var opt in ruleChoices)
                     {
                         var child = (AssemblyCandidate)current.copy();
                         SearchProcess.transferLmappingToChild(child.graph, current.graph, opt);
-                        child = Updates.ApplyChild(child);
+                        Updates.ApplyChild(child);
+                        opt.hyperarcs.Add(Updates.AddSecondHyperToOption(child,opt));
                         if (assemblyEvaluator.Evaluate(child, opt) > 0)
                             lock (candidates)
                                 candidates.Add(child.performanceParams, child);

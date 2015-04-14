@@ -21,9 +21,9 @@ C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\G
 C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\MIConvexHull.dll
 C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\StarMath.dll
 C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\TessellationAndVoxelizationGeometryLibrary.dll
-C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\TessellationAndVoxelizationGeometryLibrary.pdb
 C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\GraphSynth.BaseClasses.pdb
 C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\GraphSynth.BaseClasses.xml
+C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\TessellationAndVoxelizationGeometryLibrary.pdb
 C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\MIConvexHull.pdb
 C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\bin\Debug\StarMath.pdb
 C:\Users\Nima\Documents\OSU\Project\AssemblyPlanner\Assembly Planner\obj\Debug\Assembly Planner.csprojResolveAssemblyReference.cache

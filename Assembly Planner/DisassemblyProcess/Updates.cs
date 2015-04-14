@@ -11,18 +11,23 @@ namespace Assembly_Planner
 {
     class Updates
     {
-        internal static AssemblyCandidate ApplyChild(AssemblyCandidate child)
+        internal static void ApplyChild(AssemblyCandidate child)
         {
             // The function removes hyperarcs with "SCC" or "Seperate" lables
             for (var i = 0; i < child.graph.hyperarcs.Count; i++)
             {
                 var hy = child.graph.hyperarcs[i];
-                if (!hy.localLabels.Contains(DisConstants.SCC) &&
-                    !hy.localLabels.Contains(DisConstants.SeperateHyperarcs)) continue;
-                child.graph.removeHyperArc(hy);
-                i--;
+                if (!hy.localLabels.Contains(DisConstants.Removable))// Maybe all of them contains "Removable"
+                {
+                    child.graph.removeHyperArc(hy);
+                    i--;
+                }
+                else
+                {
+                    if (hy.localLabels.Contains(DisConstants.SCC))
+                        hy.localLabels.Remove(DisConstants.SCC);
+                }
             }
-            return child;
         }
 
         internal static void UpdateAssemblyGraph(designGraph assemblyGraph)
@@ -54,6 +59,12 @@ namespace Assembly_Planner
             foreach (var preceeding in Preceedings.Where(p=>!list.Contains(p)))
                 list.Add(preceeding);
             return list;
+        }
+
+        internal static hyperarc AddSecondHyperToOption(AssemblyCandidate child, option opt)
+        {
+            var otherNodes = child.graph.nodes.Where(n => !opt.hyperarcs[0].nodes.Contains(n)).ToList();
+            return new hyperarc("",otherNodes);
         }
     }
 }

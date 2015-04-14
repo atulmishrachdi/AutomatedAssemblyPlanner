@@ -20,7 +20,8 @@ namespace Assembly_Planner
             var globalDirPool = new List<int>{0,1,2,3,4,5};
             //List<int> globalDirPool = DisassemblyDirections.Run(assemblyGraph); //Input: assembly model
             var solutions = new List<AssemblyCandidate>();
-            DisassemblyProcess.Run(assemblyGraph, globalDirPool); // the output is the assembly sequence
+            var inputData = new ConvexHullAndBoundingBox(assemblyGraph);
+            DisassemblyProcess.Run(inputData, globalDirPool); // the output is the assembly sequence
             OptimalOrientation.Run(solutions);
         }
     }

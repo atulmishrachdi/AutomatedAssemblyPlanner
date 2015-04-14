@@ -67,9 +67,7 @@
     <Compile Include="Evaluation\LiaisonGraphCreator.cs" />
     <Compile Include="Evaluation\Math.cs" />
     <Compile Include="Evaluation\MultiObj_optimizeSort.cs" />
-    <Compile Include="Evaluation\NewComFaces.cs" />
     <Compile Include="Evaluation\NewFootprintFaces.cs" />
-    <Compile Include="Evaluation\NewFootprintFacesClass.cs" />
     <Compile Include="Evaluation\OutputXML\Action.cs" />
     <Compile Include="Evaluation\OutputXML\AssemblyCandidate.cs" />
     <Compile Include="Evaluation\OutputXML\AssemblySequence.cs" />
@@ -81,6 +79,7 @@
     <Compile Include="Evaluation\StLReader.cs" />
     <Compile Include="Evaluation\TimeEvaluator.cs" />
     <Compile Include="Evaluation\_AbstractAssemblySearch.cs" />
+    <Compile Include="GeometryReasoning\ConvexHullAndBoundingBox.cs" />
     <Compile Include="InitialGraphMaker\BlockingDetermination.cs" />
     <Compile Include="InitialGraphMaker\ConstantsPrimitiveOverlap.cs" />
     <Compile Include="InitialGraphMaker\DisassemblyDirections.cs" />
