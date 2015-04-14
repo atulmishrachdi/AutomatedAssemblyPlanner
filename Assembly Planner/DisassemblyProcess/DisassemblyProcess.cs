@@ -51,10 +51,15 @@ namespace Assembly_Planner
                     {
                         foreach (var seperateHy in current.graph.hyperarcs.Where(h => h.localLabels.Contains(DisConstants.SeperateHyperarcs)).ToList())
                         {
-                            //SCC.StronglyConnectedComponents(assemblyGraph, seperateHy, cndDirInd);
-                            OptimizedSCC.StronglyConnectedComponents(current.graph, seperateHy, cndDirInd);
+                            SCC.StronglyConnectedComponents(assemblyGraph, seperateHy, cndDirInd);
+                            //OptimizedSCC.StronglyConnectedComponents(current.graph, seperateHy, cndDirInd);
                             var blockingDic = DBG.DirectionalBlockingGraph(current.graph, seperateHy, cndDirInd);
                             OptionGenerator.GenerateOptions(current.graph, seperateHy, blockingDic);
+                            var a =
+                                current.graph.hyperarcs.Where(
+                                    hy => hy.localLabels.Contains(DisConstants.Removable) && hy.nodes.Count == 20)
+                                    .ToList()
+                                    .Count();
                         }
                     }
                     var ruleChoices = recogRule.recognize(current.graph);

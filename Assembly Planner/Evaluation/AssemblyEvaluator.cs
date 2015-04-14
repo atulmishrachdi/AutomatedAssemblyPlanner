@@ -58,7 +58,7 @@ namespace AssemblyEvaluation
             //c.f3 += newSubAsm.Install.Time;
             //c.f4 = timeEvaluator.EvaluateTimeOfLongestBranch(c.Sequence);
             //c.OrderScore = feasibility.EvaluateOrder(movingNodes, refNodes);
-                               if (double.IsNaN(insertionDirection.Position[0])) Console.WriteLine();
+            if (double.IsNaN(insertionDirection.Position[0])) Console.WriteLine();
             //c.AccessibilityScore = ComputeAccessibleMetric(insertionPoint, insertionDirection, newSubAsm.Install.Reference.CVXHull.Points.ToList()); // Accessible Penalty Factor
 
             double evaluationScore = InitialEvaluation(newSubAsm, newSubAsm.Install.InstallDirection, insertionDirection, refNodes, movingNodes, c);
@@ -70,9 +70,11 @@ namespace AssemblyEvaluation
             foreach (var a in connectingArcs)
                 c.graph.removeArc(a);
 
-            foreach (var hy in c.graph.hyperarcs)
-                c.graph.removeHyperArc(hy);
-
+            for (var j = 0; j < c.graph.hyperarcs.Count; j++)
+            {
+                c.graph.removeHyperArc(c.graph.hyperarcs[j]);
+                j--;
+            }
             c.graph.addHyperArc(refNodes);
             c.graph.hyperarcs[c.graph.hyperarcs.Count - 1].localLabels.Add("Seperate");
             c.graph.addHyperArc(movingNodes);

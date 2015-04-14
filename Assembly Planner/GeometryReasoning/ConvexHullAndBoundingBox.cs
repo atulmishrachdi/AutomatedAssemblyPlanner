@@ -38,10 +38,8 @@ namespace Assembly_Planner
             {
                 if (STLGeometryFunctions.ReadFromSTLFile(fileInfo.Open(FileMode.Open), out vertices))
                 {
-                    SearchIO.output("CVXHull for " + fileInfo.Name);
                     ConvexHullDictionary.Add(Path.GetFileNameWithoutExtension(fileInfo.Name),
                         ConvexHull.Create(vertices));
-                    SearchIO.output("...done");
                 }
             }
             //);
@@ -50,7 +48,6 @@ namespace Assembly_Planner
             {
                 if (!ConvexHullDictionary.ContainsKey(Path.GetFileNameWithoutExtension(fileInfo.Name)))
                 {
-                    SearchIO.output("CVXHull for " + fileInfo.Name);
                     if (STLGeometryFunctions.ReadFromTXTFile(fileInfo.Open(FileMode.Open), out vertices))
                         ConvexHullDictionary.Add(Path.GetFileNameWithoutExtension(fileInfo.Name),
                             ConvexHull.Create(vertices));
