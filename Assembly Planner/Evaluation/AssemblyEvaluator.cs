@@ -67,6 +67,7 @@ namespace AssemblyEvaluation
             //c.StabilityScore = StabilityConvinenceAndRotationCosts(insertionDirection, newSubAsm/*,AssemblySequence.refFacesInCombined*/, aaa);
             //return newSubAsm.Install.Time * (c.AccessibilityScore + c.StabilityScore + 1); // Overall Objective
             
+
             foreach (var a in connectingArcs)
                 c.graph.removeArc(a);
 
@@ -78,27 +79,20 @@ namespace AssemblyEvaluation
                 j--;
             }
 
-            if (refNodes.Count == 1)
+            var install = new[] {refNodes,movingNodes};
+            foreach (var list in install)
             {
-                c.graph.addHyperArc(refNodes);
-                c.graph.hyperarcs[c.graph.hyperarcs.Count - 1].localLabels.Add("Done");
+                if (list.Count == 1)
+                {
+                    c.graph.addHyperArc(list);
+                    c.graph.hyperarcs[c.graph.hyperarcs.Count - 1].localLabels.Add("Done");
+                }
+                else
+                {
+                    c.graph.addHyperArc(list);
+                    c.graph.hyperarcs[c.graph.hyperarcs.Count - 1].localLabels.Add("Seperated");
+                }
             }
-            if (movingNodes.Count == 1)
-            {
-                c.graph.addHyperArc(movingNodes);
-                c.graph.hyperarcs[c.graph.hyperarcs.Count - 1].localLabels.Add("Done");
-            }
-            if (refNodes.Count != 1)
-            {
-                c.graph.addHyperArc(refNodes);
-                c.graph.hyperarcs[c.graph.hyperarcs.Count - 1].localLabels.Add("Seperated");
-            }
-            if (movingNodes.Count != 1)
-            {
-                c.graph.addHyperArc(movingNodes);
-                c.graph.hyperarcs[c.graph.hyperarcs.Count - 1].localLabels.Add("Seperated");
-            }
-
             
             return evaluationScore;
         }

@@ -42,7 +42,7 @@ namespace Assembly_Planner
             while (candidates.Count != 0 && !found)
             {
                 var current = candidates.Values[0];
-                candidates.RemoveAt(0);
+                candidates.Clear();
                 if (isCurrentTheGoal(current))
                 {
                     goal = current;
@@ -56,7 +56,7 @@ namespace Assembly_Planner
                             current.graph.hyperarcs.Where(h => h.localLabels.Contains(DisConstants.SeperateHyperarcs))
                                 .ToList())
                     {
-                        SCC.StronglyConnectedComponents(assemblyGraph, seperateHy, cndDirInd);
+                        SCC.StronglyConnectedComponents(current.graph, seperateHy, cndDirInd);
                         //OptimizedSCC.StronglyConnectedComponents(current.graph, seperateHy, cndDirInd);
                         var blockingDic = DBG.DirectionalBlockingGraph(current.graph, seperateHy, cndDirInd);
                         OptionGenerator.GenerateOptions(current.graph, seperateHy, blockingDic);
@@ -67,8 +67,8 @@ namespace Assembly_Planner
                 {
                     var child = (AssemblyCandidate) current.copy();
                     SearchProcess.transferLmappingToChild(child.graph, current.graph, opt);
-                    Updates.ApplyChild(child, opt);
                     opt.hyperarcs.Add(Updates.AddSecondHyperToOption(child, opt));
+                    Updates.ApplyChild(child, opt);
                     if (assemblyEvaluator.Evaluate(child, opt) > 0)
                         lock (candidates)
                             candidates.Add(child.performanceParams, child);
@@ -96,12 +96,7 @@ namespace Assembly_Planner
 
         protected static bool isCurrentTheGoal(AssemblyCandidate current)
         {
-            var result = (current.graph.hyperarcs.Count == 1 &&
-                !current.graph.globalLabels.Contains("invalid"));
-            var saveMe = false;
-            //if (saveMe)
-            //Save("debugGraph" + DateTime.Now.Millisecond, current.graph);
-            return result;
+            return current.graph.hyperarcs.Where(h => h.localLabels.Contains("Done")).Count() == 20;
         }
     }
 }

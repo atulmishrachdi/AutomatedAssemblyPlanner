@@ -21,8 +21,8 @@ namespace Assembly_Planner
             //List<int> globalDirPool = DisassemblyDirections.Run(assemblyGraph); //Input: assembly model
             var solutions = new List<AssemblyCandidate>();
             var inputData = new ConvexHullAndBoundingBox(assemblyGraph);
-            //DisassemblyProcessOrderedDFS.Run(inputData, globalDirPool); // the output is the assembly sequence
-            DisassemblyProcessBeam.Run(inputData, globalDirPool);
+            DisassemblyProcessOrderedDFS.Run(inputData, globalDirPool); // the output is the assembly sequence
+            //DisassemblyProcessBeam.Run(inputData, globalDirPool);
             OptimalOrientation.Run(solutions);
         }
     }
