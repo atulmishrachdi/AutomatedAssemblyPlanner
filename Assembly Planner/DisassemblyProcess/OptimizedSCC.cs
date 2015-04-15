@@ -15,9 +15,9 @@ namespace Assembly_Planner
         {
             
             var preAddedSccs = new List<node>();
-            if (DisassemblyProcess.SccTracker.Keys.Contains(cndDir))
+            if (DisassemblyProcessBeam.SccTracker.Keys.Contains(cndDir))
             {
-                foreach (var premadeSCC in DisassemblyProcess.SccTracker[cndDir])
+                foreach (var premadeSCC in DisassemblyProcessBeam.SccTracker[cndDir])
                 {
                     var c = 0;
                     foreach (var node in premadeSCC)
@@ -65,10 +65,10 @@ namespace Assembly_Planner
                 assemblyGraph.hyperarcs[assemblyGraph.hyperarcs.Count - 1].localLabels.Add(DisConstants.SCC);
                 sccTrackerNodes.Add(visited.ToList());
             }
-            if (DisassemblyProcess.SccTracker.Keys.Contains(cndDir))
-                DisassemblyProcess.SccTracker[cndDir] = sccTrackerNodes;
+            if (DisassemblyProcessBeam.SccTracker.Keys.Contains(cndDir))
+                DisassemblyProcessBeam.SccTracker[cndDir] = sccTrackerNodes;
             else
-                DisassemblyProcess.SccTracker.Add(cndDir, sccTrackerNodes);
+                DisassemblyProcessBeam.SccTracker.Add(cndDir, sccTrackerNodes);
         }
 
     }

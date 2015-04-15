@@ -11,7 +11,7 @@ using GraphSynth.Search;
 
 namespace Assembly_Planner
 {
-    public class DisassemblyProcess //: AbstractAssemblySearch
+    public class DisassemblyProcessBeam //: AbstractAssemblySearch
     {
         public static Dictionary<int, List<List<node>>> SccTracker = new Dictionary<int, List<List<node>>>();
         protected static AssemblyEvaluator assemblyEvaluator;
@@ -53,7 +53,7 @@ namespace Assembly_Planner
                     {
                         foreach (var seperateHy in current.graph.hyperarcs.Where(h => h.localLabels.Contains(DisConstants.SeperateHyperarcs)).ToList())
                         {
-                            SCC.StronglyConnectedComponents(assemblyGraph, seperateHy, cndDirInd);
+                            SCC.StronglyConnectedComponents(current.graph, seperateHy, cndDirInd);
                             //OptimizedSCC.StronglyConnectedComponents(current.graph, seperateHy, cndDirInd);
                             var blockingDic = DBG.DirectionalBlockingGraph(current.graph, seperateHy, cndDirInd);
                             OptionGenerator.GenerateOptions(current.graph, seperateHy, blockingDic);
@@ -64,8 +64,8 @@ namespace Assembly_Planner
                     {
                         var child = (AssemblyCandidate)current.copy();
                         SearchProcess.transferLmappingToChild(child.graph, current.graph, opt);
-                        Updates.ApplyChild(child);
                         opt.hyperarcs.Add(Updates.AddSecondHyperToOption(child,opt));
+                        Updates.ApplyChild(child, opt);
                         if (assemblyEvaluator.Evaluate(child, opt) > 0)
                             lock (candidates)
                                 candidates.Add(child.performanceParams, child);
@@ -83,9 +83,9 @@ namespace Assembly_Planner
                         found = true;
                         break;
                     }
-                    beam.Enqueue(c);
                     if (++count > DisConstants.BeamWidth)
                         break;
+                    beam.Enqueue(c);
                 }
             }
             solutions.Add(goal);
@@ -107,12 +107,7 @@ namespace Assembly_Planner
 
         protected static bool isCurrentTheGoal(AssemblyCandidate current)
         {
-            var result = (current.graph.hyperarcs.Count == 1 &&
-                !current.graph.globalLabels.Contains("invalid"));
-            var saveMe = false;
-            //if (saveMe)
-                //Save("debugGraph" + DateTime.Now.Millisecond, current.graph);
-            return result;
+            return current.graph.hyperarcs.Where(h => h.localLabels.Contains("Done")).Count() == 20;
         }
 
         //public override string text

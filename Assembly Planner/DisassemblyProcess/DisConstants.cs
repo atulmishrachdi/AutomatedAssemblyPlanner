@@ -11,7 +11,8 @@ namespace Assembly_Planner
         internal static string SeperateHyperarcs = "Seperated";
         internal static string SCC = "SCC";
         internal static string Removable = "Removable";
-        internal static int BeamWidth = 5;
+        internal static string SingleNode = "Done";
+        internal static int BeamWidth = 1;
         internal static double Parallel = 1e-5;
     }
 }

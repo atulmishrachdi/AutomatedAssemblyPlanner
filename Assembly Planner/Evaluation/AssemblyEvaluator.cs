@@ -72,13 +72,33 @@ namespace AssemblyEvaluation
 
             for (var j = 0; j < c.graph.hyperarcs.Count; j++)
             {
+                var hy = c.graph.hyperarcs[j];
+                if (hy.localLabels.Contains("Seperated") || hy.localLabels.Contains("Done")) continue;
                 c.graph.removeHyperArc(c.graph.hyperarcs[j]);
                 j--;
             }
-            c.graph.addHyperArc(refNodes);
-            c.graph.hyperarcs[c.graph.hyperarcs.Count - 1].localLabels.Add("Seperated");
-            c.graph.addHyperArc(movingNodes);
-            c.graph.hyperarcs[c.graph.hyperarcs.Count - 1].localLabels.Add("Seperated");
+
+            if (refNodes.Count == 1)
+            {
+                c.graph.addHyperArc(refNodes);
+                c.graph.hyperarcs[c.graph.hyperarcs.Count - 1].localLabels.Add("Done");
+            }
+            if (movingNodes.Count == 1)
+            {
+                c.graph.addHyperArc(movingNodes);
+                c.graph.hyperarcs[c.graph.hyperarcs.Count - 1].localLabels.Add("Done");
+            }
+            if (refNodes.Count != 1)
+            {
+                c.graph.addHyperArc(refNodes);
+                c.graph.hyperarcs[c.graph.hyperarcs.Count - 1].localLabels.Add("Seperated");
+            }
+            if (movingNodes.Count != 1)
+            {
+                c.graph.addHyperArc(movingNodes);
+                c.graph.hyperarcs[c.graph.hyperarcs.Count - 1].localLabels.Add("Seperated");
+            }
+
             
             return evaluationScore;
         }

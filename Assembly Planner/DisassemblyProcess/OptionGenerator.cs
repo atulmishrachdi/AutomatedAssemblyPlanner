@@ -82,8 +82,8 @@ namespace Assembly_Planner
                     var nodes = new List<node>();
                     foreach (var hy in merged)
                         nodes.AddRange(hy.nodes);
-                    //if (nodes.Count == seperate.nodes.Count)
-                    //    continue;
+                    if (nodes.Count == seperate.nodes.Count)
+                        continue;
                     assemblyGraph.addHyperArc(nodes);
                     assemblyGraph.hyperarcs[assemblyGraph.hyperarcs.Count - 1].localLabels.Add(
                                 DisConstants.Removable);

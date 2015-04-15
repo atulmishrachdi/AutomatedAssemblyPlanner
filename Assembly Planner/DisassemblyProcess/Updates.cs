@@ -11,12 +11,21 @@ namespace Assembly_Planner
 {
     class Updates
     {
-        internal static void ApplyChild(AssemblyCandidate child)
+        internal static void ApplyChild(AssemblyCandidate child, option opt)
         {
             // The function removes hyperarcs with "SCC" or "Seperate" lables
             for (var i = 0; i < child.graph.hyperarcs.Count; i++)
             {
                 var hy = child.graph.hyperarcs[i];
+                if (hy.localLabels.Contains(DisConstants.SeperateHyperarcs) && hy.nodes.Any(n=> opt.hyperarcs[0].nodes.Contains(n)))
+                {
+                    child.graph.removeHyperArc(hy);
+                    i--;
+                    continue;
+                }
+                if ((hy.localLabels.Contains(DisConstants.SeperateHyperarcs) && !hy.nodes.Any(n => opt.hyperarcs[0].nodes.Contains(n))) || hy.localLabels.Contains(DisConstants.SingleNode))
+                    continue;
+
                 if (!hy.localLabels.Contains(DisConstants.Removable))// Maybe all of them contains "Removable"
                 {
                     child.graph.removeHyperArc(hy);
@@ -69,8 +78,12 @@ namespace Assembly_Planner
 
         internal static hyperarc AddSecondHyperToOption(AssemblyCandidate child, option opt)
         {
-            var otherNodes = child.graph.nodes.Where(n => !opt.hyperarcs[0].nodes.Contains(n)).ToList();
-            return new hyperarc("",otherNodes);
+            foreach (var sepHy in child.graph.hyperarcs.Where(a => a.localLabels.Contains(DisConstants.SeperateHyperarcs) && opt.hyperarcs[0].nodes.All(n => a.nodes.Contains(n)))) //
+            {
+                var otherNodes = sepHy.nodes.Where(n => !opt.hyperarcs[0].nodes.Contains(n)).ToList();
+                return new hyperarc("", otherNodes);
+            }
+            return null;
         }
     }
 }
