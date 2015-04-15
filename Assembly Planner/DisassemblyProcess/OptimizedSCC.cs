@@ -17,16 +17,28 @@ namespace Assembly_Planner
             var preAddedSccs = new List<node>();
             if (DisassemblyProcess.SccTracker.Keys.Contains(cndDir))
             {
-                foreach (var premadeSCC in DisassemblyProcess.SccTracker[cndDir].Where(pmSCC => pmSCC.All(n => seperateHy.nodes.Contains(n))))
+                foreach (var premadeSCC in DisassemblyProcess.SccTracker[cndDir])
                 {
+                    var c = 0;
+                    foreach (var node in premadeSCC)
+                    {
+                        c += seperateHy.nodes.Count(n => n.name == node.name);
+                    }
+                    if (c != premadeSCC.Count) continue;
                     assemblyGraph.addHyperArc(premadeSCC);
                     assemblyGraph.hyperarcs[assemblyGraph.hyperarcs.Count - 1].localLabels.Add(DisConstants.SCC);
                     preAddedSccs.AddRange(premadeSCC);
                 }
+                //foreach (var premadeSCC in DisassemblyProcess.SccTracker[cndDir].Where(pmSCC => pmSCC.All(n => seperateHy.nodes.Contains(n))))
+                //{
+                //    assemblyGraph.addHyperArc(premadeSCC);
+                //    assemblyGraph.hyperarcs[assemblyGraph.hyperarcs.Count - 1].localLabels.Add(DisConstants.SCC);
+                //    preAddedSccs.AddRange(premadeSCC);
+                //}
             }
             var globalVisited = new List<node>();
             var stack = new Stack<node>();
-            var visited = new List<node>();
+            var visited = new HashSet<node>();
             var sccTrackerNodes = new List<List<node>>();
             foreach (var node in seperateHy.nodes.Where(n => !preAddedSccs.Contains(n) && !globalVisited.Contains(n)))
             {
@@ -49,9 +61,9 @@ namespace Assembly_Planner
                         stack.Push(otherNode);
                     }
                 }
-                assemblyGraph.addHyperArc(visited);
+                assemblyGraph.addHyperArc(visited.ToList());
                 assemblyGraph.hyperarcs[assemblyGraph.hyperarcs.Count - 1].localLabels.Add(DisConstants.SCC);
-                sccTrackerNodes.Add(visited);
+                sccTrackerNodes.Add(visited.ToList());
             }
             if (DisassemblyProcess.SccTracker.Keys.Contains(cndDir))
                 DisassemblyProcess.SccTracker[cndDir] = sccTrackerNodes;

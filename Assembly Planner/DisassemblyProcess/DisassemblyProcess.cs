@@ -20,6 +20,7 @@ namespace Assembly_Planner
             var assemblyGraph = inputData.graphAssembly;
             DisassemblyDirections.Directions = TemporaryDirections();
             //DisassemblyDirections.Directions = Icosahedron.DirectionGeneration();
+            var solutions = new List<AssemblyCandidate>();
             // take a direction from the pool
             //   find the SCCs
             //   create the DBG
@@ -36,6 +37,7 @@ namespace Assembly_Planner
             var found = false;
             AssemblyCandidate goal = null;
             beam.Enqueue(new AssemblyCandidate(new candidate(assemblyGraph,1)));
+            
             var recogRule = new grammarRule();
             recogRule.L = new designGraph();
             var haRemovable = new ruleHyperarc();
@@ -55,11 +57,6 @@ namespace Assembly_Planner
                             //OptimizedSCC.StronglyConnectedComponents(current.graph, seperateHy, cndDirInd);
                             var blockingDic = DBG.DirectionalBlockingGraph(current.graph, seperateHy, cndDirInd);
                             OptionGenerator.GenerateOptions(current.graph, seperateHy, blockingDic);
-                            var a =
-                                current.graph.hyperarcs.Where(
-                                    hy => hy.localLabels.Contains(DisConstants.Removable) && hy.nodes.Count == 20)
-                                    .ToList()
-                                    .Count();
                         }
                     }
                     var ruleChoices = recogRule.recognize(current.graph);
@@ -91,6 +88,7 @@ namespace Assembly_Planner
                         break;
                 }
             }
+            solutions.Add(goal);
         }
 
         private static List<double[]> TemporaryDirections()
@@ -107,9 +105,14 @@ namespace Assembly_Planner
             return list;
         }
 
-        private static bool isCurrentTheGoal(AssemblyCandidate c)
+        protected static bool isCurrentTheGoal(AssemblyCandidate current)
         {
-            throw new NotImplementedException();
+            var result = (current.graph.hyperarcs.Count == 1 &&
+                !current.graph.globalLabels.Contains("invalid"));
+            var saveMe = false;
+            //if (saveMe)
+                //Save("debugGraph" + DateTime.Now.Millisecond, current.graph);
+            return result;
         }
 
         //public override string text

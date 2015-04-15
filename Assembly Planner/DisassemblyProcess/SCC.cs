@@ -16,8 +16,8 @@ namespace Assembly_Planner
             // the candidate direction. After generation, a new hyperarc is added to the graph with local lable "SCC".
             
             var stack = new Stack<node>();
-            var visited = new List<node>();
-            var globalVisited = new List<node>();
+            var visited = new HashSet<node>();
+            var globalVisited = new HashSet<node>();
             foreach (var node in seperate.nodes.Where(n => !globalVisited.Contains(n)))
             {
                 stack.Clear();
@@ -40,7 +40,7 @@ namespace Assembly_Planner
                     }
                 }
                 if (visited.Count == seperate.nodes.Count) continue;
-                assemblyGraph.addHyperArc(visited);
+                assemblyGraph.addHyperArc(visited.ToList());
                 assemblyGraph.hyperarcs[assemblyGraph.hyperarcs.Count - 1].localLabels.Add(DisConstants.SCC);
             }
         }

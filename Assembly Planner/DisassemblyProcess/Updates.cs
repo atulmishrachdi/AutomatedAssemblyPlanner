@@ -33,8 +33,14 @@ namespace Assembly_Planner
         internal static void UpdateAssemblyGraph(designGraph assemblyGraph)
         {
             // The function removes hyperarcs with "Removable" lables
-            foreach (var hy in assemblyGraph.hyperarcs.Where(h=>h.localLabels.Contains(DisConstants.Removable)))
-                assemblyGraph.removeHyperArc(hy);
+            for (var i = 0; i < assemblyGraph.hyperarcs.Count; i++)
+            {
+                var h = assemblyGraph.hyperarcs[i];
+                if (!h.localLabels.Contains(DisConstants.Removable))
+                    continue;
+                    assemblyGraph.removeHyperArc(h);
+                    i--;
+            }
         }
 
         internal static void UpdateGlobalDirections(List<int> globalDirPool)
