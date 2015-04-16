@@ -22,7 +22,7 @@ namespace Assembly_Planner
         public ConvexHullAndBoundingBox(designGraph graphAssembly1)
         {
             graphAssembly = graphAssembly1;
-            InputDir = "C:\\Users\\Nima\\Documents\\OSU\\Project\\AssemblyPlanner\\Test\\CubeTXT";
+            InputDir = "..\\..\\..\\Test\\CubeTXT";
             LoadAndSaveTesselatedPartFiles(); 
             MakeBBDictionaryFromCVXHullDictionary();
         }
