@@ -23,7 +23,7 @@ namespace Assembly_Planner
                 new double[] {0, 0, -1},
                 new double[] {0, 0, 1}
             };
-            const int h1 = 2;
+            const int h1 = 1;
             const int h2 = 1;
             var stepSize = h2*1.0/(Math.Pow(10, h1));
             //for the plane [1,0,0]

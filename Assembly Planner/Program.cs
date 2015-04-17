@@ -20,14 +20,19 @@ namespace Assembly_Planner
         static void Main(string[] args)
         {
             var filer = new BasicFiler("", "", "");
-            List<TessellatedSolid> parts = GetSTLs("..\\..\\..\\Test\\");
-            var assemblyGraph = (designGraph)filer.Open("..\\..\\..\\Test\\inputNG.gxml")[0];
-            var globalDirPool = new List<int> { 0, 1, 2, 3, 4, 5 };
-            //List<int> globalDirPool = DisassemblyDirections.Run(assemblyGraph); //Input: assembly model
+            var solids = GetSTLs("..\\..\\..\\Test\\CubeSTL");
+            //var assemblyGraph = (designGraph)filer.Open("..\\..\\..\\Test\\inputNG.gxml")[0];
+            
+            //var globalDirPool = new List<int> { 0, 1, 2, 3, 4, 5 };
+            var assemblyGraph = new designGraph();
+            List<int> globalDirPool = DisassemblyDirections.Run(assemblyGraph, solids); //Input: assembly model
+            
             var solutions = new List<AssemblyCandidate>();
             var inputData = new ConvexHullAndBoundingBox(assemblyGraph);
-            DisassemblyProcessOrderedDFS.Run(inputData, globalDirPool); // the output is the assembly sequence
-            //DisassemblyProcessBeam.Run(inputData, globalDirPool);
+            
+            //OrderedDFS.Run(inputData, globalDirPool); // the output is the assembly sequence
+            BeamSearch.Run(inputData, globalDirPool);
+            
             OptimalOrientation.Run(solutions);
         }
 
@@ -39,7 +44,7 @@ namespace Assembly_Planner
             Parallel.ForEach(fis, fileInfo =>
             //foreach (var fileInfo in fis)
             {
-                var ts = TVGL.IOFunctions.IO.Open(fileInfo.Open(FileMode.Open), fileInfo.Name);
+                var ts = TVGL.IO.Open(fileInfo.Open(FileMode.Open), fileInfo.Name);
                 lock(parts)parts.Add(ts);
             }
             );

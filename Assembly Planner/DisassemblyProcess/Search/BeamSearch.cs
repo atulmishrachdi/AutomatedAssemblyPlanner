@@ -11,14 +11,14 @@ using GraphSynth.Search;
 
 namespace Assembly_Planner
 {
-    public class DisassemblyProcessBeam //: AbstractAssemblySearch
+    public class BeamSearch
     {
         public static Dictionary<int, List<List<node>>> SccTracker = new Dictionary<int, List<List<node>>>();
         protected static AssemblyEvaluator assemblyEvaluator;
         internal static void Run(ConvexHullAndBoundingBox inputData, List<int> globalDirPool)
         {
             var assemblyGraph = inputData.graphAssembly;
-            DisassemblyDirections.Directions = TemporaryDirections();
+            //DisassemblyDirections.Directions = TemporaryDirections();
             //DisassemblyDirections.Directions = Icosahedron.DirectionGeneration();
             var solutions = new List<AssemblyCandidate>();
             // take a direction from the pool
@@ -62,6 +62,7 @@ namespace Assembly_Planner
                     var ruleChoices = recogRule.recognize(current.graph);
                     foreach (var opt in ruleChoices)
                     {
+                        //opt.hyperarcs[0].nodes.Count ==1 &&opt.hyperarcs[1].nodes.Count ==1
                         var child = (AssemblyCandidate)current.copy();
                         SearchProcess.transferLmappingToChild(child.graph, current.graph, opt);
                         opt.hyperarcs.Add(Updates.AddSecondHyperToOption(child,opt));
@@ -110,14 +111,5 @@ namespace Assembly_Planner
             return current.graph.hyperarcs.Where(h => h.localLabels.Contains("Done")).Count() == 20;
         }
 
-        //public override string text
-        //{
-        //    get { throw new NotImplementedException(); }
-        //}
-
-        //protected override void getAssemblyPlan(AssemblyCandidate seed, List<AssemblyCandidate> solutions)
-        //{
-        //    throw new NotImplementedException();
-        //}
     }
 }

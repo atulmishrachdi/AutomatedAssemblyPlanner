@@ -10,7 +10,7 @@ using GraphSynth.Search;
 
 namespace Assembly_Planner
 {
-    class DisassemblyProcessOrderedDFS
+    class OrderedDFS
     {
         public static Dictionary<int, List<List<node>>> SccTracker = new Dictionary<int, List<List<node>>>();
         protected static AssemblyEvaluator assemblyEvaluator;
@@ -69,7 +69,7 @@ namespace Assembly_Planner
                     SearchProcess.transferLmappingToChild(child.graph, current.graph, opt);
                     opt.hyperarcs.Add(Updates.AddSecondHyperToOption(child, opt));
                     Updates.ApplyChild(child, opt);
-                    if (assemblyEvaluator.Evaluate(child, opt) > 0)
+                    //if (assemblyEvaluator.Evaluate(child, opt) > 0)
                         lock (candidates)
                             candidates.Add(child.performanceParams, child);
                     child.addToRecipe(opt);

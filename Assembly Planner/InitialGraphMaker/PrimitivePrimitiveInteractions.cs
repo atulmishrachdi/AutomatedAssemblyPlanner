@@ -11,104 +11,112 @@ namespace Assembly_Planner
 {
     class PrimitivePrimitiveInteractions
     {
+        public static int c1;
         internal static bool PrimitiveOverlap(List<PrimitiveSurface> solid1P, List<PrimitiveSurface> solid2P, List<int> dirInd)
         {
             var overlap = false;
+            var globlOverlappingCheck = dirInd.Count();
+            c1 = 0;
+            var c2 = 0;
             foreach (var primitiveA in solid1P)
             {
                 foreach (var primitiveB in solid2P)
                 {
                     overlap = false;
-
+                    c2++;
                     // 1=flat, 2 =cylinder, 3 = sphere, 4= cone
                     if (primitiveA is Flat && primitiveB is Flat) 
                     {
                         overlap = FlatFlatOverlappingCheck((Flat)primitiveA, (Flat)primitiveB, dirInd); //
-                        break;
+                        continue;
                     }
                     if (primitiveA is Flat && primitiveB is Cylinder)
                     {
                         overlap = FlatCylinderOverlappingCheck((Cylinder)primitiveB, (Flat)primitiveA, dirInd, 1);//
-                        break;
+                        continue;
                     }
                     if (primitiveA is Flat && primitiveB is Sphere)
                     {
                         overlap = FlatSphereOverlappingCheck((Sphere)primitiveB, (Flat)primitiveA, dirInd, 1);//
-                        break;
+                        continue;
                     }
                     if (primitiveA is Flat && primitiveB is Cone)
                     {
                         overlap = FlatConeOverlappingCheck((Cone)primitiveB, (Flat)primitiveA, dirInd, 1);//
-                        break;
+                        continue;
                     }
 
 
                     if (primitiveA is Cylinder && primitiveB is Flat)
                     {
                         overlap = FlatCylinderOverlappingCheck((Cylinder)primitiveA, (Flat)primitiveB, dirInd, 2);//
-                        break;
+                        continue;
                     }
                     if (primitiveA is Cylinder && primitiveB is Cylinder)
                     {
                         overlap = CylinderCylinderOverlappingCheck((Cylinder)primitiveA, (Cylinder)primitiveB, dirInd);
-                        break;
+                        continue;
                     }
                     if (primitiveA is Cylinder && primitiveB is Sphere)
                     {
                         overlap = CylinderSphereOverlappingCheck((Cylinder)primitiveA, (Sphere)primitiveB, dirInd);
-                        break;
+                        continue;
                     }
                     if (primitiveA is Cylinder && primitiveB is Cone)
                     {
                         overlap = ConeCylinderOverlappingCheck((Cone)primitiveB, (Cylinder)primitiveA, dirInd, 2);
-                        break;
+                        continue;
                     }
 
 
                     if (primitiveA is Sphere && primitiveB is Flat)
                     {
                         overlap = FlatSphereOverlappingCheck((Sphere)primitiveA, (Flat)primitiveB, dirInd, 3);//
-                        break;
+                        continue;
                     }
                     if (primitiveA is Sphere && primitiveB is Cylinder)
                     {
                         overlap = CylinderSphereOverlappingCheck((Cylinder)primitiveB, (Sphere)primitiveA, dirInd);
-                        break;
+                        continue;
                     }
                     if (primitiveA is Sphere && primitiveB is Sphere)
                     {
                         overlap = SphereSphereOverlappingCheck((Sphere)primitiveA, (Sphere)primitiveB, dirInd);
-                        break;
+                        continue;
                     }
                     if (primitiveA is Sphere && primitiveB is Cone)
                     {
                         overlap = ConeSphereOverlappingCheck((Cone)primitiveB, (Sphere)primitiveA, dirInd, 3);
-                        break;
+                        continue;
                     }
 
                     if (primitiveA is Cone && primitiveB is Flat)
                     {
                         overlap = FlatConeOverlappingCheck((Cone)primitiveA, (Flat)primitiveB, dirInd, 4);//
-                        break;
+                        continue;
                     }
                     if (primitiveA is Cone && primitiveB is Cylinder)
                     {
                         overlap = ConeCylinderOverlappingCheck((Cone)primitiveA, (Cylinder)primitiveB, dirInd, 4);
-                        break;
+                        continue;
                     }
                     if (primitiveA is Cone && primitiveB is Sphere)
                     {
                         overlap = ConeSphereOverlappingCheck((Cone)primitiveA, (Sphere)primitiveB, dirInd, 4);
-                        break;
+                        continue;
                     }
                     if (primitiveA is Cone && primitiveB is Cone)
                     {
                         overlap = ConeConeOverlappingCheck((Cone)primitiveA, (Cone)primitiveB, dirInd);
-                        break;
+                        continue;
                     }
                 }
             }
-            return overlap;
+            if (globlOverlappingCheck > dirInd.Count)
+            {
+                return true;
+            }
+            return false;
         }
         
         public static bool ConeSphereOverlappingCheck(Cone cone, Sphere sphere, List<int> dirInd, int re)
@@ -437,8 +445,8 @@ namespace Assembly_Planner
             // Take a random face and make a plane.
             var r = new Random();
             var rndFaceA = aFaces[r.Next(aFaces.Count)];
-            var rndFaceB = aFaces[r.Next(bFaces.Count)];
-
+            var rndFaceB = bFaces[r.Next(bFaces.Count)];
+            var c = 0;
             if (TwoTrianglesParallelCheck(primitiveA.Normal, primitiveB.Normal))
             {
                 bool samePlane = TwoTrianglesSamePlaneCheck(rndFaceA, rndFaceB);
@@ -447,10 +455,13 @@ namespace Assembly_Planner
                     // now check and see if any area of a is inside the boundaries of b or vicee versa
                     foreach (var f1 in primitiveA.Faces)
                     {
-                        foreach (var f2 in primitiveA.Faces)
+                        foreach (var f2 in primitiveB.Faces)
                         {
                             if (TwoTriangleOverlapCheck(f1, f2))
+                            {
                                 overlap = true;
+                                c++;
+                            }
                         }
                     }
                 }
@@ -458,6 +469,7 @@ namespace Assembly_Planner
             // if they overlap, update the directions
             if (overlap)
             {
+                c1++;
                 // take one of the parts, for example A, then in the directions, remove the ones which make a positive dot product with the normal
                 for (var i = 0; i < dirInd.Count; i++)
                 {

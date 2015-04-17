@@ -39,6 +39,37 @@ namespace AssemblyEvaluation
             var connectingArcs = c.graph.arcs.Where(a => ((movingNodes.Contains(a.To) && refNodes.Contains(a.From))
                                                          || (movingNodes.Contains(a.From) && refNodes.Contains(a.To)))).ToList();
 
+            var install = new[] { refNodes, movingNodes };
+            // For the moving or references which have unconnected parts: for example the moving is made of two parts which are
+            // not connected to each other. I have to find a solution to avoid the error of "connectingArcs == 0" on the next iterations
+            // Again I need to creat a stack and push every node.
+
+
+            foreach (var refORmov in install)
+            {
+                var stack = new Stack<node>();
+                var globalVisited = new List<node>();
+
+                while (globalVisited.Count != refORmov.Count)
+                {
+                    var notAssignedNode = refORmov.Where(n => !globalVisited.Contains(n)).ToList()[0];
+                    while (stack.Count != 0)
+                    {
+
+                    }
+                }
+            }
+            foreach (var refORmov in install)
+            {
+                var islands = new List<List<node>>();
+                var firstNode = refORmov[0];
+                for (var j = 1; j < refORmov.Count; j++)
+                {
+                    var secondtNode = refORmov[0];
+                    // if there is an arc which connects t
+                }
+            }
+
             // STEP #2: Getting insertion point coordinates
             double insertionDistance;
             var insertionDirection = FindPartDisconnectMovement(connectingArcs, refNodes, out insertionDistance);
@@ -79,7 +110,6 @@ namespace AssemblyEvaluation
                 j--;
             }
 
-            var install = new[] {refNodes,movingNodes};
             foreach (var list in install)
             {
                 if (list.Count == 1)
