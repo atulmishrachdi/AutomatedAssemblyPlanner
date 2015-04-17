@@ -19,14 +19,13 @@ namespace Assembly_Planner
     {
         static void Main(string[] args)
         {
-            var filer = new BasicFiler("", "", "");
+            //var filer = new BasicFiler("", "", "");
             var solids = GetSTLs("..\\..\\..\\Test\\CubeSTL");
             //var assemblyGraph = (designGraph)filer.Open("..\\..\\..\\Test\\inputNG.gxml")[0];
-            
             //var globalDirPool = new List<int> { 0, 1, 2, 3, 4, 5 };
             var assemblyGraph = new designGraph();
             List<int> globalDirPool = DisassemblyDirections.Run(assemblyGraph, solids); //Input: assembly model
-            
+            Updates.AddPartsProperties(assemblyGraph);
             var solutions = new List<AssemblyCandidate>();
             var inputData = new ConvexHullAndBoundingBox(assemblyGraph);
             
@@ -45,6 +44,7 @@ namespace Assembly_Planner
             //foreach (var fileInfo in fis)
             {
                 var ts = TVGL.IO.Open(fileInfo.Open(FileMode.Open), fileInfo.Name);
+                ts.Name = ts.Name.Remove(0, 1);
                 lock(parts)parts.Add(ts);
             }
             );

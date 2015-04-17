@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -84,6 +85,24 @@ namespace Assembly_Planner
                 return new hyperarc("", otherNodes);
             }
             return null;
+        }
+
+        internal static void AddPartsProperties(designGraph assemblyGraph)
+        {
+            var reader = new StreamReader(File.OpenRead(@"..\..\..\Test\CubeSTL\partsInformation.csv"));
+            while (!reader.EndOfStream)
+            {
+                var line = reader.ReadLine();
+                var values = line.Split(',');
+                var list = new List<double>();
+                var i = 1;
+                var node = assemblyGraph.nodes.Where(n => n.name == Convert.ToString(values[0])).ToList()[0];
+                while (i < 12)
+                {
+                    node.localVariables.Add(Convert.ToDouble(values[i]));
+                    i++;
+                }
+            }
         }
     }
 }

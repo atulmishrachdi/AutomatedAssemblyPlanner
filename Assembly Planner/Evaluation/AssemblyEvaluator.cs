@@ -45,30 +45,30 @@ namespace AssemblyEvaluation
             // Again I need to creat a stack and push every node.
 
 
-            foreach (var refORmov in install)
-            {
-                var stack = new Stack<node>();
-                var globalVisited = new List<node>();
+            //foreach (var refORmov in install)
+            //{
+            //    var stack = new Stack<node>();
+            //    var globalVisited = new List<node>();
 
-                while (globalVisited.Count != refORmov.Count)
-                {
-                    var notAssignedNode = refORmov.Where(n => !globalVisited.Contains(n)).ToList()[0];
-                    while (stack.Count != 0)
-                    {
+            //    while (globalVisited.Count != refORmov.Count)
+            //    {
+            //        var notAssignedNode = refORmov.Where(n => !globalVisited.Contains(n)).ToList()[0];
+            //        while (stack.Count != 0)
+            //        {
 
-                    }
-                }
-            }
-            foreach (var refORmov in install)
-            {
-                var islands = new List<List<node>>();
-                var firstNode = refORmov[0];
-                for (var j = 1; j < refORmov.Count; j++)
-                {
-                    var secondtNode = refORmov[0];
-                    // if there is an arc which connects t
-                }
-            }
+            //        }
+            //    }
+            //}
+            //foreach (var refORmov in install)
+            //{
+            //    var islands = new List<List<node>>();
+            //    var firstNode = refORmov[0];
+            //    for (var j = 1; j < refORmov.Count; j++)
+            //    {
+            //        var secondtNode = refORmov[0];
+            //        // if there is an arc which connects t
+            //    }
+            //}
 
             // STEP #2: Getting insertion point coordinates
             double insertionDistance;
