@@ -36,7 +36,7 @@ namespace Assembly_Planner
                     if (PrimitivePrimitiveInteractions.PrimitiveOverlap(solid1P, solid2P, localDirInd))
                     {
                         // dirInd is the list of directions that must be added to the arc between part1 and part2
-                        Console.WriteLine(@"An overlap is detected between" + solid1.Name +"   and   " +solid2.Name);
+                        Console.WriteLine(@"An overlap is detected between   " + solid1.Name +"   and   " +solid2.Name);
                         globalDirPool.AddRange(localDirInd.Where(d => !globalDirPool.Contains(d)));
                         dirInd = localDirInd;
                         return true;

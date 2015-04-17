@@ -29,8 +29,8 @@ namespace Assembly_Planner
             var solutions = new List<AssemblyCandidate>();
             var inputData = new ConvexHullAndBoundingBox(assemblyGraph);
             
-            //OrderedDFS.Run(inputData, globalDirPool); // the output is the assembly sequence
-            BeamSearch.Run(inputData, globalDirPool);
+            OrderedDFS.Run(inputData, globalDirPool); // the output is the assembly sequence
+            //BeamSearch.Run(inputData, globalDirPool);
             
             OptimalOrientation.Run(solutions);
         }

@@ -17,8 +17,8 @@ namespace Assembly_Planner
         internal static void Run(ConvexHullAndBoundingBox inputData, List<int> globalDirPool)
         {
             var assemblyGraph = inputData.graphAssembly;
-            DisassemblyDirections.Directions = TemporaryDirections();
-            //DisassemblyDirections.Directions = Icosahedron.DirectionGeneration();
+            //DisassemblyDirections.Directions = TemporaryDirections();
+            DisassemblyDirections.Directions = Icosahedron.DirectionGeneration();
             var solutions = new List<AssemblyCandidate>();
             assemblyEvaluator = new AssemblyEvaluator(inputData.ConvexHullDictionary);
 
@@ -69,7 +69,7 @@ namespace Assembly_Planner
                     SearchProcess.transferLmappingToChild(child.graph, current.graph, opt);
                     opt.hyperarcs.Add(Updates.AddSecondHyperToOption(child, opt));
                     Updates.ApplyChild(child, opt);
-                    //if (assemblyEvaluator.Evaluate(child, opt) > 0)
+                    if (assemblyEvaluator.Evaluate(child, opt) > 0)
                         lock (candidates)
                             candidates.Add(child.performanceParams, child);
                     child.addToRecipe(opt);
