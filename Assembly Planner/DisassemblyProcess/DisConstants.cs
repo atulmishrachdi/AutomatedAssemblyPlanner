@@ -12,7 +12,7 @@ namespace Assembly_Planner
         internal static string SCC = "SCC";
         internal static string Removable = "Removable";
         internal static string SingleNode = "Done";
-        internal static int BeamWidth = 50;
+        internal static int BeamWidth = 1;
         internal static double Parallel = 1e-5;
     }
 }

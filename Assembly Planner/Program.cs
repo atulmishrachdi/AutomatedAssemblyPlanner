@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -19,19 +20,20 @@ namespace Assembly_Planner
     {
         static void Main(string[] args)
         {
+            Stopwatch stopwatch = Stopwatch.StartNew();
             //var filer = new BasicFiler("", "", "");
-            var solids = GetSTLs("..\\..\\..\\Test\\CubeSTL");
+            var solids = GetSTLs("..\\..\\..\\Test\\More Sample Cases\\Cone-Cone\\1");
             //var assemblyGraph = (designGraph)filer.Open("..\\..\\..\\Test\\inputNG.gxml")[0];
             //var globalDirPool = new List<int> { 0, 1, 2, 3, 4, 5 };
             var assemblyGraph = new designGraph();
             List<int> globalDirPool = DisassemblyDirections.Run(assemblyGraph, solids); //Input: assembly model
             Updates.AddPartsProperties(assemblyGraph);
-            var solutions = new List<AssemblyCandidate>();
             var inputData = new ConvexHullAndBoundingBox(assemblyGraph);
             
-            OrderedDFS.Run(inputData, globalDirPool); // the output is the assembly sequence
-            //BeamSearch.Run(inputData, globalDirPool);
-            
+            //var solutions = OrderedDFS.Run(inputData, globalDirPool); // the output is the assembly sequence
+            var solutions = BeamSearch.Run(inputData, globalDirPool);
+            stopwatch.Stop();
+            Console.WriteLine("O my God, THIS IS FAST! We opened an STL, did the primitive classification, made the graph and did the search in only " + stopwatch.Elapsed);
             OptimalOrientation.Run(solutions);
         }
 

@@ -52,8 +52,8 @@ namespace Assembly_Planner
             foreach (var f in a.ConvexHullFaces)
             {
                 var n = f.Normal;
-                var dStar = n.dotProduct(f.Vertices[0].Position, 3);
-                if (b.ConvexHullVertices.All(pt => (n.dotProduct(pt.Position, 3)) > dStar))
+                var dStar = n.dotProduct(f.Vertices[0].Position);
+                if (b.ConvexHullVertices.All(pt => (n.dotProduct(pt.Position)) > dStar))
                 {
                     return false;
                 }
@@ -61,8 +61,8 @@ namespace Assembly_Planner
             foreach (var f in b.ConvexHullFaces)
             {
                 var n = f.Normal;
-                var dStar = n.dotProduct(f.Vertices[0].Position, 3);
-                if (a.ConvexHullVertices.All(pt => (n.dotProduct(pt.Position, 3)) > dStar))
+                var dStar = n.dotProduct(f.Vertices[0].Position);
+                if (a.ConvexHullVertices.All(pt => (n.dotProduct(pt.Position)) > dStar))
                 {
                     return false;
                 }

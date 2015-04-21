@@ -393,7 +393,7 @@ namespace Assembly_Planner
                     for (var i = 0; i < dirInd.Count; i++)
                     {
                         var dir = DisassemblyDirections.Directions[dirInd[i]];
-                        if (1 + cone1.Axis.normalize().dotProduct(dir) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall) continue;
+                        if (1 + cone1.Axis.normalize().dotProduct(dir) < Math.Abs(cone1.Aperture)) continue;
                         dirInd.Remove(dirInd[i]);
                         i--;
                     }
@@ -403,7 +403,7 @@ namespace Assembly_Planner
                     for (var i = 0; i < dirInd.Count; i++)
                     {
                         var dir = DisassemblyDirections.Directions[dirInd[i]];
-                        if (1 - cone1.Axis.normalize().dotProduct(dir) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall) continue;
+                        if (1 - cone1.Axis.normalize().dotProduct(dir) < Math.Abs(cone1.Aperture)) continue;
                         dirInd.Remove(dirInd[i]);
                         i--;
                     }
@@ -416,7 +416,7 @@ namespace Assembly_Planner
                 for (var i = 0; i < dirInd.Count; i++)
                 {
                     var dir = DisassemblyDirections.Directions[dirInd[i]];
-                    if (1 - cone1.Axis.normalize().dotProduct(dir) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall) continue;
+                    if (1 - cone1.Axis.normalize().dotProduct(dir) < Math.Abs(cone1.Aperture)) continue;
                     dirInd.Remove(dirInd[i]);
                     i--;
                 }
@@ -426,7 +426,7 @@ namespace Assembly_Planner
                 for (var i = 0; i < dirInd.Count; i++)
                 {
                     var dir = DisassemblyDirections.Directions[dirInd[i]];
-                    if (1 + cone1.Axis.normalize().dotProduct(dir) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall) continue;
+                    if (1 + cone1.Axis.normalize().dotProduct(dir) < Math.Abs(cone1.Aperture)) continue;
                     dirInd.Remove(dirInd[i]);
                     i--;
                 }
@@ -542,28 +542,53 @@ namespace Assembly_Planner
             // primitiveB is positive cylinder. Like a normal 
             // check the centerlines. Is the vector of the center lines the same? 
             // now check the radius. 
-            var overlap = false;
+            var overlap = true;
             if (Math.Abs(cylinder1.Axis.dotProduct(cylinder2.Axis)) - 1 < ConstantsPrimitiveOverlap.ParralelLines)
             {
                 // now centerlines are either parallel or the same. Now check and see if they are exactly the same
                 // Take the anchor of B, using the axis of B, write the equation of the line. Check and see if 
                 // the anchor of A is on the line equation.
-                var t1 = (cylinder1.Anchor[0] - cylinder2.Anchor[0]) / (cylinder2.Axis[0]);
-                var t2 = (cylinder1.Anchor[1] - cylinder2.Anchor[1]) / (cylinder2.Axis[1]);
-                var t3 = (cylinder1.Anchor[2] - cylinder2.Anchor[2]) / (cylinder2.Axis[2]);
-                if (Math.Abs(t1 - t2) < ConstantsPrimitiveOverlap.PointOnLine &&
-                    Math.Abs(t1 - t3) < ConstantsPrimitiveOverlap.PointOnLine &&
-                    Math.Abs(t3 - t2) < ConstantsPrimitiveOverlap.PointOnLine)
+                var t = new List<double>();
+                for (var  i = 0; i < 3; i++)
                 {
+                    var axis = cylinder2.Axis[i];
+                    if (Math.Abs(axis) < ConstantsPrimitiveOverlap.EqualToZero) // if a, b or c is zero
+                    {
+                        if (Math.Abs(cylinder1.Anchor[i] - cylinder2.Anchor[i]) > ConstantsPrimitiveOverlap.EqualToZero)
+                        {
+                            overlap = false;
+                            break;
+                        }
+                    }
+                    else
+                        t.Add((cylinder1.Anchor[i] - cylinder2.Anchor[i]) / axis);
+                }
+                if (overlap)
+                {
+                    for (var i = 0; i < t.Count-1; i++)
+                    {
+                        for (var j = i+1; j < t.Count; j++)
+                        {
+                            if (Math.Abs(t[i] - t[j]) > ConstantsPrimitiveOverlap.PointOnLine)
+                                overlap = false;
+                        }
+                    }
+                }
+                if (overlap)
+                {
+                    overlap = false;
                     // Now check the radius
                     if (Math.Abs(cylinder1.Radius - cylinder2.Radius) < ConstantsPrimitiveOverlap.RadiusDifs)
                     {
                         foreach (var f1 in cylinder1.Faces)
                         {
-                            foreach (var f2 in cylinder2.Faces)
+                            foreach (var f2 in cylinder2.Faces.Where(f2=>TwoTriangleOverlapCheck(f1, f2)))
                             {
-                                overlap = TwoTriangleOverlapCheck(f1, f2);
+                                overlap = true;
+                                break;
                             }
+                            if (overlap)
+                                break;
                         }
                     }
                 }
@@ -573,7 +598,8 @@ namespace Assembly_Planner
             for (var i = 0; i < dirInd.Count; i++)
             {
                 var dir = DisassemblyDirections.Directions[dirInd[i]];
-                if (1 - Math.Abs(cylinder1.Axis.normalize().dotProduct(dir)) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall) continue;
+                if (1 - Math.Abs(cylinder1.Axis.normalize().dotProduct(dir)) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall) 
+                    continue;
                 dirInd.Remove(dirInd[i]);
                 i--;
             }
@@ -729,9 +755,9 @@ namespace Assembly_Planner
         {
             var q = rndFaceA.Center;
             var p = rndFaceB.Center;
+
             var pq = new[] { q[0] - p[0], q[1] - p[1], q[2] - p[2] };
-            var d = Math.Abs(pq.dotProduct(rndFaceA.Normal)) /
-            (Math.Sqrt(Math.Pow(rndFaceA.Normal[0], 2.0) + Math.Pow(rndFaceA.Normal[1], 2.0) + Math.Pow(rndFaceA.Normal[2], 2.0)));
+            var d = Math.Abs(pq.dotProduct(rndFaceA.Normal));
             return d < ConstantsPrimitiveOverlap.PlaneDist;
         }
 

@@ -15,7 +15,7 @@ namespace Assembly_Planner
     {
         public static Dictionary<int, List<List<node>>> SccTracker = new Dictionary<int, List<List<node>>>();
         protected static AssemblyEvaluator assemblyEvaluator;
-        internal static void Run(ConvexHullAndBoundingBox inputData, List<int> globalDirPool)
+        internal static List<AssemblyCandidate> Run(ConvexHullAndBoundingBox inputData, List<int> globalDirPool)
         {
             var assemblyGraph = inputData.graphAssembly;
             //DisassemblyDirections.Directions = TemporaryDirections();
@@ -90,6 +90,7 @@ namespace Assembly_Planner
                 }
             }
             solutions.Add(goal);
+            return solutions;
         }
 
         private static List<double[]> TemporaryDirections()
