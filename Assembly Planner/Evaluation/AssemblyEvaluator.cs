@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using Assembly_Planner;
 using GeometryReasoning;
 using GraphSynth;
 using GraphSynth.Representation;
@@ -13,7 +14,7 @@ namespace AssemblyEvaluation
     public class AssemblyEvaluator
     {
         private static List<List<DefaultConvexFace<Vertex>>> newRefCVHFacesInCom = new List<List<DefaultConvexFace<Vertex>>>();
-        public static List<NewFootprintFaces> nFFList = new List<NewFootprintFaces>();
+        public static List<FootprintFace> FootPrintFaces = new List<FootprintFace>();
         private Dictionary<string, ConvexHull<Vertex, DefaultConvexFace<Vertex>>> convexHullForParts;
         public static Dictionary<string, Vector> insertionDirectionDic = new Dictionary<string, Vector>();
         private int Iterations;
@@ -32,45 +33,17 @@ namespace AssemblyEvaluation
 
         public double Evaluate(AssemblyCandidate c, option opt)
         {
-            // STEP #1: Set up moving and reference subassemblies
+            // Set up moving and reference subassemblies
             var newSubAsm = c.Sequence.Update(opt, convexHullForParts);
             var refNodes = newSubAsm.Install.Reference.PartNodes.Select(n => (node)c.graph[n]).ToList();
             var movingNodes = newSubAsm.Install.Moving.PartNodes.Select(n => (node)c.graph[n]).ToList();
+            var install = new[] { refNodes, movingNodes };
+            
             var connectingArcs = c.graph.arcs.Where(a => ((movingNodes.Contains(a.To) && refNodes.Contains(a.From))
                                                          || (movingNodes.Contains(a.From) && refNodes.Contains(a.To)))).ToList();
+            if (connectingArcs.Count == 0) return -1;
 
-            var install = new[] { refNodes, movingNodes };
-            // For the moving or references which have unconnected parts: for example the moving is made of two parts which are
-            // not connected to each other. I have to find a solution to avoid the error of "connectingArcs == 0" on the next iterations
-            // Again I need to creat a stack and push every node.
-
-
-            //foreach (var refORmov in install)
-            //{
-            //    var stack = new Stack<node>();
-            //    var globalVisited = new List<node>();
-
-            //    while (globalVisited.Count != refORmov.Count)
-            //    {
-            //        var notAssignedNode = refORmov.Where(n => !globalVisited.Contains(n)).ToList()[0];
-            //        while (stack.Count != 0)
-            //        {
-
-            //        }
-            //    }
-            //}
-            //foreach (var refORmov in install)
-            //{
-            //    var islands = new List<List<node>>();
-            //    var firstNode = refORmov[0];
-            //    for (var j = 1; j < refORmov.Count; j++)
-            //    {
-            //        var secondtNode = refORmov[0];
-            //        // if there is an arc which connects t
-            //    }
-            //}
-
-            // STEP #2: Getting insertion point coordinates
+            // Getting insertion point coordinates
             double insertionDistance;
             var insertionDirection = FindPartDisconnectMovement(connectingArcs, refNodes, out insertionDistance);
 
@@ -84,46 +57,16 @@ namespace AssemblyEvaluation
             
             //var travelDistance = PathDeterminationEvaluator.FindTravelDistance(newSubAsm, insertionDirection, insertionPoint);
             //newSubAsm.Install.Time =
-            //    timeEvaluator.EvaluateTimeForInstall(connectingArcs.Count(), travelDistance, insertionDistance, newSubAsm);
+                //timeEvaluator.EvaluateTimeForInstall(connectingArcs.Count(), travelDistance, insertionDistance, newSubAsm);
 
-            //c.f3 += newSubAsm.Install.Time;
-            //c.f4 = timeEvaluator.EvaluateTimeOfLongestBranch(c.Sequence);
-            //c.OrderScore = feasibility.EvaluateOrder(movingNodes, refNodes);
             if (double.IsNaN(insertionDirection.Position[0])) Console.WriteLine();
-            //c.AccessibilityScore = ComputeAccessibleMetric(insertionPoint, insertionDirection, newSubAsm.Install.Reference.CVXHull.Points.ToList()); // Accessible Penalty Factor
 
             double evaluationScore = InitialEvaluation(newSubAsm, newSubAsm.Install.InstallDirection, insertionDirection, refNodes, movingNodes, c);
-            //c.StabilityScore = ComputeStabilityMetric(insertionDirection, newSubAsm, combinedCVXHull, AssemblySequence.refFacesInCombined); // Stability Penalty Factor
-            //var aaa = new NewFootprintFaces();
-            //c.StabilityScore = StabilityConvinenceAndRotationCosts(insertionDirection, newSubAsm/*,AssemblySequence.refFacesInCombined*/, aaa);
-            //return newSubAsm.Install.Time * (c.AccessibilityScore + c.StabilityScore + 1); // Overall Objective
             
-
             foreach (var a in connectingArcs)
                 c.graph.removeArc(a);
 
-            for (var j = 0; j < c.graph.hyperarcs.Count; j++)
-            {
-                var hy = c.graph.hyperarcs[j];
-                if (hy.localLabels.Contains("Seperated") || hy.localLabels.Contains("Done")) continue;
-                c.graph.removeHyperArc(c.graph.hyperarcs[j]);
-                j--;
-            }
-
-            foreach (var list in install)
-            {
-                if (list.Count == 1)
-                {
-                    c.graph.addHyperArc(list);
-                    c.graph.hyperarcs[c.graph.hyperarcs.Count - 1].localLabels.Add("Done");
-                }
-                else
-                {
-                    c.graph.addHyperArc(list);
-                    c.graph.hyperarcs[c.graph.hyperarcs.Count - 1].localLabels.Add("Seperated");
-                }
-            }
-            
+            Updates.UpdateChildGraph(c, install);
             return evaluationScore;
         }
 
@@ -236,7 +179,7 @@ namespace AssemblyEvaluation
             return installDirection;
         }
 
-        public static List<DefaultConvexFace<Vertex>> UnchangedRefFacesDuringInstallation(SubAssembly newSubAsm, Vector insertionDirection)
+        public static List<DefaultConvexFace<Vertex>> UnaffectedRefFacesDuringInstallation(SubAssembly newSubAsm, Vector insertionDirection)
         {
             var notAffectedFacesInCom = newSubAsm.Install.Reference.CVXHull.Faces.ToList();
 
@@ -262,9 +205,9 @@ namespace AssemblyEvaluation
 
         private static void FindAdgacentFaces()
         {
-            foreach (var firstFace in nFFList)
+            foreach (var firstFace in FootPrintFaces)
             {
-                foreach (var secondFace in nFFList.Where(secondFace => secondFace.ExCoVer.Any(
+                foreach (var secondFace in FootPrintFaces.Where(secondFace => secondFace.ExCoVer.Any(
                     eachPointOfSecondFace => firstFace.ExCoVer
                         .Contains(eachPointOfSecondFace))))
                 {
@@ -277,71 +220,42 @@ namespace AssemblyEvaluation
 
         private static double InitialEvaluation(SubAssembly newSubAsm, double[] installDirection, Vector insertionDirection, List<node> refNodes, List<node> movingNodes, AssemblyCandidate c)
         {
-            nFFList.Clear();
+            FootPrintFaces.Clear();
             newRefCVHFacesInCom.Clear();
             FindAdgacentFaces();
-            // We need the faces in reference which are not hit by moving during insertion:
-            var unChangedFaces = UnchangedRefFacesDuringInstallation(newSubAsm, insertionDirection);
-            // Now merge the faces with the angle less than ??? to make a larger face
-            mergingFacesWithSemiParallelNormals(unChangedFaces);
-            // Unique name for each new merged face
-            for (var i = 0; i < nFFList.Count; i++)
-            {
-                nFFList[i].Name = i + 1;
-            }
-            //Finding unique external verticies
-            foreach (var t in nFFList)
-            {
-                t.ExVer = new List<Vertex>();
-                var coVer = t.ExCoVer;
-                t.ExVer.Add(coVer[0]);
-                for (var i = 1; i < coVer.Count; i++)
-                {
-                    if (!t.ExVer.Contains(coVer[i]))
-                        t.ExVer.Add(coVer[i]);
-                }
-            }
-            //double timeScore = timeEvaluation(newSubAsm, refNodes, movingNodes);
-            c.TimeScore = TimeEvaluation(newSubAsm, refNodes, movingNodes);
-            //double accessScore = AccessabilityEvaluatio(insertionDirection);
+            
+            var unAffectedFaces = UnaffectedRefFacesDuringInstallation(newSubAsm, insertionDirection);
+            MergingFaces(unAffectedFaces);
+
+            for (var i = 0; i < FootPrintFaces.Count; i++)
+                FootPrintFaces[i].Name = i + 1;
+            
+            c.TimeScore = TimeEvaluation(refNodes, movingNodes);
             c.AccessibilityScore = AccessabilityEvaluation(installDirection);
-            //double stabilityScore = StabilityEvaluation(newSubAsm, insertionDirection);
             c.StabilityScore = StabilityEvaluation(newSubAsm);
             insertionDirectionDic.Add(newSubAsm.Name, insertionDirection);
-            //return timeScore + accessScore + stabilityScore;
             return c.TimeScore + c.AccessibilityScore + c.StabilityScore;
         }
 
         private static double StabilityEvaluation(SubAssembly newSubAsm)
         {
-            //return 8.0;
             double r = 0.0;
-            foreach (var newFa in nFFList)
-            {
-                double SI = CheckStabilityForReference(newSubAsm, newFa);
-                r += SI;
-            }
-            //var r = nFFList.Sum(a => a.RefS) / nFFList.Count;
-            r = r / nFFList.Count;
+            foreach (var newFa in FootPrintFaces)
+                r += CheckStabilityForReference(newSubAsm, newFa);
+            r = r / FootPrintFaces.Count;
             return r;
         }
 
         public static double AccessabilityEvaluation(double[] installDirection)
         {
-            //return 8.0;
-            double r = 0.0;
-
-            foreach (var f in nFFList)
-            {
-                double AI = CheckAccessability(installDirection, f);
-                r += AI;
-            }
-            //r = nFFList.Sum(a => a.IC) / nFFList.Count;
-            r = r/nFFList.Count;
+            var r = 0.0;
+            foreach (var f in FootPrintFaces)
+                r += CheckAccessability(installDirection, f);
+            r = r/FootPrintFaces.Count;
             return r;
         }
 
-        private static double TimeEvaluation(SubAssembly newSubAsm, List<node> refNodes, List<node> movingNodes)
+        private static double TimeEvaluation(List<node> refNodes, List<node> movingNodes)
         {
             // This should be s.th. like equal moving and reference assembly time. I must try to find a way to 
             // estimate these two times. Better score for a subassembly with Ref time = moving Time;
@@ -352,52 +266,12 @@ namespace AssemblyEvaluation
             return 10 * r;
         }
 
-        public static double CheckStabilityForReference(SubAssembly newSubAsm, NewFootprintFaces f)
+        public static double CheckStabilityForReference(SubAssembly newSubAsm, FootprintFace f)
         {
             var refCOM = newSubAsm.Install.Reference.CenterOfMass;
-            // For calculating the projection of COM on current New face, we have normal,
-            // we have the position of COM and we have points on the edge. 
-            // First We are looking for the parameters in this plane equation:
-            // a(x-x0) + b(y-y0) + c(z-z0) = 0 plane equation or "ax + bY + cz = d"
-            var x0 = f.ExCoVer[0].Position[0];
-            var a = f.Normal[0];
-            var y0 = f.ExCoVer[0].Position[1];
-            var b = f.Normal[1];
-            var z0 = f.ExCoVer[0].Position[2];
-            var c = f.Normal[2];
-            var d = x0 * a + y0 * b + z0 * c;
-            var u = refCOM.Position[0];
-            var v = refCOM.Position[1];
-            var w = refCOM.Position[2];
-            var t0 = -(a * u + b * v + c * w + d) / (a * a + b * b + c * c);
-
-            f.COMP = new Vertex(0,0,0);
-            f.COMP.Position[0] = u + a * t0; // x element
-            f.COMP.Position[1] = v + b * t0; // y element
-            f.COMP.Position[2] = w + c * t0; // z element
-
-            for (var i = 0; i < f.ExCoVer.Count; i += 2)
-            {
-                // Checking if COM is inside or outside
-                var fromPoint = f.ExCoVer[i];
-                var toPoint = f.ExCoVer[i + 1];
-                var currentEdge = StarMath.subtract(toPoint.Position, fromPoint.Position, 3);
-                var arcToComProj = StarMath.subtract(f.COMP.Position, fromPoint.Position, 3);
-                var arbitraryPoint = new Vertex(0, 0, 0);
-                foreach (var eachVertex in f.ExVer.Where(q => q != fromPoint && q != toPoint))
-                {
-                    arbitraryPoint = eachVertex;
-                    break;
-                }
-                var arcToCArbitrary = StarMath.subtract(arbitraryPoint.Position, fromPoint.Position, 3);
-                var crProduct1 = StarMath.crossProduct(currentEdge, arcToCArbitrary);
-                var crProduct2 = StarMath.crossProduct(currentEdge, arcToComProj);
-
-                if (!(Math.Acos(StarMath.dotProduct(crProduct1, crProduct2, 3)) >
-                      (Math.PI / 10))) continue;
-                f.IsComInsideFace = false;
-                break;
-            }
+            
+            CenterOfMassProjectionOnFootprintFace(f, refCOM);
+            IsTheProjectionInsideOfTheFace(f);
 
             f.MinDisNeaEdg = double.PositiveInfinity;
             var x02 = f.COMP.Position[0];
@@ -430,9 +304,59 @@ namespace AssemblyEvaluation
             return f.RefS;
         }
 
-        public static double CheckAccessability(double[] installDirection, NewFootprintFaces f)
+        private static void IsTheProjectionInsideOfTheFace(FootprintFace f)
         {
-            var angleBetweenInsDirAndNormal = Math.Acos(StarMath.dotProduct(installDirection, f.Normal, 3));
+            for (var i = 0; i < f.ExCoVer.Count; i += 2)
+            {
+                // Checking if COM is inside or outside
+                var fromPoint = f.ExCoVer[i];
+                var toPoint = f.ExCoVer[i + 1];
+                var currentEdge = toPoint.Position.subtract(fromPoint.Position);
+                var arcToComProj = f.COMP.Position.subtract(fromPoint.Position);
+                var arbitraryPoint = new Vertex(0, 0, 0);
+                foreach (var eachVertex in f.ExVer.Where(q => q != fromPoint && q != toPoint))
+                {
+                    arbitraryPoint = eachVertex;
+                    break;
+                }
+                var arcToCArbitrary = arbitraryPoint.Position.subtract(fromPoint.Position);
+                var crProduct1 = currentEdge.crossProduct(arcToCArbitrary);
+                var crProduct2 = currentEdge.crossProduct(arcToComProj);
+
+                if (!(Math.Acos(crProduct1.dotProduct(crProduct2)) >
+                      (Math.PI / 10))) continue;
+                f.IsComInsideFace = false;
+                break;
+            }
+        }
+
+        private static void CenterOfMassProjectionOnFootprintFace(FootprintFace f, Vertex refCOM)
+        {
+            // For calculating the projection of COM on current New face, we have normal,
+            // we have the position of COM and we have points on the edge. 
+            // First We are looking for the parameters in this plane equation:
+            // a(x-x0) + b(y-y0) + c(z-z0) = 0 plane equation or "ax + bY + cz = d"
+            var x0 = f.ExCoVer[0].Position[0];
+            var a = f.Normal[0];
+            var y0 = f.ExCoVer[0].Position[1];
+            var b = f.Normal[1];
+            var z0 = f.ExCoVer[0].Position[2];
+            var c = f.Normal[2];
+            var d = x0 * a + y0 * b + z0 * c;
+            var u = refCOM.Position[0];
+            var v = refCOM.Position[1];
+            var w = refCOM.Position[2];
+            var t0 = -(a * u + b * v + c * w + d) / (a * a + b * b + c * c);
+
+            f.COMP = new Vertex(0, 0, 0);
+            f.COMP.Position[0] = u + a * t0; // x element
+            f.COMP.Position[1] = v + b * t0; // y element
+            f.COMP.Position[2] = w + c * t0; // z element
+        }
+
+        public static double CheckAccessability(double[] installDirection, FootprintFace f)
+        {
+            var angleBetweenInsDirAndNormal = Math.Acos(installDirection.dotProduct(f.Normal));
             var radToDeg = angleBetweenInsDirAndNormal * (180 / Math.PI);
             for (var i = 0; i < 11; i++)
             {
@@ -444,22 +368,22 @@ namespace AssemblyEvaluation
         }
 
 
-        public static void mergingFacesWithSemiParallelNormals(List<DefaultConvexFace<Vertex>> unChangedFaces)
+        public static void MergingFaces(List<DefaultConvexFace<Vertex>> unChangedFaces)
         {
             for (var c = 0; c < unChangedFaces.Count; c++)
             {
-                var ini = new NewFootprintFaces();
-                nFFList.Add(ini);
+                var ini = new FootprintFace();
+                FootPrintFaces.Add(ini);
                 var normal2 = unChangedFaces[c].Normal;
-                nFFList[c].Normal = normal2;
-                nFFList[c].ExCoVer = new List<Vertex>();
-                nFFList[c].Faces = new List<DefaultConvexFace<Vertex>>();
+                FootPrintFaces[c].Normal = normal2;
+                FootPrintFaces[c].ExCoVer = new List<Vertex>();
+                FootPrintFaces[c].Faces = new List<DefaultConvexFace<Vertex>>();
                 for (var i = 0; i < 3; i++)
                 {
                     for (var j = i + 1; j < 3; j++)
                     {
-                        nFFList[c].ExCoVer.Add(unChangedFaces[c].Vertices[i]);
-                        nFFList[c].ExCoVer.Add(unChangedFaces[c].Vertices[j]);
+                        FootPrintFaces[c].ExCoVer.Add(unChangedFaces[c].Vertices[i]);
+                        FootPrintFaces[c].ExCoVer.Add(unChangedFaces[c].Vertices[j]);
                     }
                 }
                 for (var n = 0; n < unChangedFaces.Count; n++)
@@ -467,28 +391,28 @@ namespace AssemblyEvaluation
                     var normal1 = unChangedFaces[n].Normal;
                     var normalsDP = StarMath.dotProduct(normal1, normal2, 3);
                     if (!(Math.Acos(normalsDP) < Math.PI / 18) || !(Math.Acos(normalsDP) > -Math.PI / 18)) continue;
-                    nFFList[c].Faces.Add(unChangedFaces[n]);
-                    nFFList[c].Normal = StarMath.add(normal1, nFFList[c].Normal, 3);
+                    FootPrintFaces[c].Faces.Add(unChangedFaces[n]);
+                    FootPrintFaces[c].Normal = StarMath.add(normal1, FootPrintFaces[c].Normal, 3);
                     for (var i = 0; i < 3; i++)
                     {
                         for (var j = i + 1; j < 3; j++)
                         {
-                            nFFList[c].ExCoVer.Add(unChangedFaces[n].Vertices[i]);
-                            nFFList[c].ExCoVer.Add(unChangedFaces[n].Vertices[j]);
+                            FootPrintFaces[c].ExCoVer.Add(unChangedFaces[n].Vertices[i]);
+                            FootPrintFaces[c].ExCoVer.Add(unChangedFaces[n].Vertices[j]);
 
-                            for (var k = 0; k < nFFList[c].ExCoVer.Count - 2; k += 2)
+                            for (var k = 0; k < FootPrintFaces[c].ExCoVer.Count - 2; k += 2)
                             {
-                                if (nFFList[c].ExCoVer[k] == unChangedFaces[n].Vertices[i] &&
-                                    nFFList[c].ExCoVer[k + 1] == unChangedFaces[n].Vertices[j])
+                                if (FootPrintFaces[c].ExCoVer[k] == unChangedFaces[n].Vertices[i] &&
+                                    FootPrintFaces[c].ExCoVer[k + 1] == unChangedFaces[n].Vertices[j])
                                 {
-                                    nFFList[c].ExCoVer.Remove(unChangedFaces[n].Vertices[i]);
-                                    nFFList[c].ExCoVer.Remove(unChangedFaces[n].Vertices[j]);
+                                    FootPrintFaces[c].ExCoVer.Remove(unChangedFaces[n].Vertices[i]);
+                                    FootPrintFaces[c].ExCoVer.Remove(unChangedFaces[n].Vertices[j]);
                                     break;
                                 }
-                                if (nFFList[c].ExCoVer[k] != unChangedFaces[n].Vertices[j] ||
-                                    nFFList[c].ExCoVer[k + 1] != unChangedFaces[n].Vertices[i]) continue;
-                                nFFList[c].ExCoVer.Remove(unChangedFaces[n].Vertices[i]);
-                                nFFList[c].ExCoVer.Remove(unChangedFaces[n].Vertices[j]);
+                                if (FootPrintFaces[c].ExCoVer[k] != unChangedFaces[n].Vertices[j] ||
+                                    FootPrintFaces[c].ExCoVer[k + 1] != unChangedFaces[n].Vertices[i]) continue;
+                                FootPrintFaces[c].ExCoVer.Remove(unChangedFaces[n].Vertices[i]);
+                                FootPrintFaces[c].ExCoVer.Remove(unChangedFaces[n].Vertices[j]);
                                 break;
                             }
                         }
@@ -496,6 +420,18 @@ namespace AssemblyEvaluation
                     unChangedFaces.Remove(unChangedFaces[n]);
                 }
 
+            }
+            //Finding unique external verticies
+            foreach (var t in FootPrintFaces)
+            {
+                t.ExVer = new List<Vertex>();
+                var coVer = t.ExCoVer;
+                t.ExVer.Add(coVer[0]);
+                for (var i = 1; i < coVer.Count; i++)
+                {
+                    if (!t.ExVer.Contains(coVer[i]))
+                        t.ExVer.Add(coVer[i]);
+                }
             }
         }
     }

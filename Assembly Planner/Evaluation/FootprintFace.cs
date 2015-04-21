@@ -6,7 +6,7 @@ using MIConvexHull;
 
 namespace AssemblyEvaluation
 {
-    public class NewFootprintFaces
+    public class FootprintFace
     {
         /// <summary>
         /// Gets the New Face's Unique Name

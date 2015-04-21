@@ -40,19 +40,6 @@ namespace Assembly_Planner
             }
         }
 
-        internal static void UpdateAssemblyGraph(designGraph assemblyGraph)
-        {
-            // The function removes hyperarcs with "Removable" lables
-            for (var i = 0; i < assemblyGraph.hyperarcs.Count; i++)
-            {
-                var h = assemblyGraph.hyperarcs[i];
-                if (!h.localLabels.Contains(DisConstants.Removable))
-                    continue;
-                    assemblyGraph.removeHyperArc(h);
-                    i--;
-            }
-        }
-
         internal static void UpdateGlobalDirections(List<int> globalDirPool)
         {
             // The function removes one of each parallel directions pair.
@@ -101,6 +88,32 @@ namespace Assembly_Planner
                 {
                     node.localVariables.Add(Convert.ToDouble(values[i]));
                     i++;
+                }
+            }
+        }
+
+        internal static void UpdateChildGraph(AssemblyCandidate c, List<node>[] install)
+        {
+            // This is happening in Evaluation
+            for (var j = 0; j < c.graph.hyperarcs.Count; j++)
+            {
+                var hy = c.graph.hyperarcs[j];
+                if (hy.localLabels.Contains(DisConstants.SeperateHyperarcs) || hy.localLabels.Contains(DisConstants.SingleNode)) continue;
+                c.graph.removeHyperArc(c.graph.hyperarcs[j]);
+                j--;
+            }
+
+            foreach (var list in install)
+            {
+                if (list.Count == 1)
+                {
+                    c.graph.addHyperArc(list);
+                    c.graph.hyperarcs[c.graph.hyperarcs.Count - 1].localLabels.Add(DisConstants.SingleNode);
+                }
+                else
+                {
+                    c.graph.addHyperArc(list);
+                    c.graph.hyperarcs[c.graph.hyperarcs.Count - 1].localLabels.Add(DisConstants.SeperateHyperarcs);
                 }
             }
         }

@@ -72,7 +72,6 @@ namespace Assembly_Planner
                                 candidates.Add(child.performanceParams, child);
                         child.addToRecipe(opt);
                     }
-                    Updates.UpdateAssemblyGraph(current.graph);
                 }
                 beam.Clear();
                 var count = 0;

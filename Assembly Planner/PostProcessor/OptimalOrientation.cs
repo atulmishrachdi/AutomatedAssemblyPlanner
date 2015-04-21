@@ -18,9 +18,9 @@ namespace Assembly_Planner
         public class PreAndCost
         {
             public SubAssembly SubAssembly;
-            public NewFootprintFaces Face;
+            public FootprintFace Face;
             public double MinCost;
-            public NewFootprintFaces FromFace;
+            public FootprintFace FromFace;
             public SubAssembly FromSubAssembly;
         }
 
@@ -32,7 +32,7 @@ namespace Assembly_Planner
 
         public static void Dijkstra(AssemblyCandidate candidate)
         {
-            AssemblyEvaluator.nFFList.Clear();
+            AssemblyEvaluator.FootPrintFaces.Clear();
 
             InstTasks = new Dictionary<string, SubAssembly>();
             BuildingInstallationTaskDictionary(candidate.Sequence.Subassemblies[0]);
@@ -60,10 +60,10 @@ namespace Assembly_Planner
                 var ftask = RefPrec[RefPrec.Count - 1];
 
                 var pureStartFaces = ftask.Install.Reference.CVXHull.Faces.ToList();
-                AssemblyEvaluator.mergingFacesWithSemiParallelNormals(pureStartFaces);
-                var fromFaces = new List<NewFootprintFaces>();
-                fromFaces.AddRange(AssemblyEvaluator.nFFList);
-                AssemblyEvaluator.nFFList.Clear();
+                AssemblyEvaluator.MergingFaces(pureStartFaces);
+                var fromFaces = new List<FootprintFace>();
+                fromFaces.AddRange(AssemblyEvaluator.FootPrintFaces);
+                AssemblyEvaluator.FootPrintFaces.Clear();
 
                 Console.WriteLine("Which of the following faces is your current footprint face in the subassembly    " + ftask.Name + "   ?");
                 Console.WriteLine("Enter the corresponding number to the console:");
@@ -76,12 +76,12 @@ namespace Assembly_Planner
                 var read = Convert.ToInt32(Console.ReadLine());
                 var startingFace = fromFaces[read];
 
-                var notAffected = AssemblyEvaluator.UnchangedRefFacesDuringInstallation(ftask,
+                var notAffected = AssemblyEvaluator.UnaffectedRefFacesDuringInstallation(ftask,
                     AssemblyEvaluator.insertionDirectionDic[ftask.Name]);
-                AssemblyEvaluator.mergingFacesWithSemiParallelNormals(notAffected);
-                var toFaces = new List<NewFootprintFaces>();
-                toFaces.AddRange(AssemblyEvaluator.nFFList);
-                AssemblyEvaluator.nFFList.Clear();
+                AssemblyEvaluator.MergingFaces(notAffected);
+                var toFaces = new List<FootprintFace>();
+                toFaces.AddRange(AssemblyEvaluator.FootPrintFaces);
+                AssemblyEvaluator.FootPrintFaces.Clear();
 
                 var precAndMinC = new List<PreAndCost>();
 
@@ -117,15 +117,15 @@ namespace Assembly_Planner
                     {
                         var curSubAsse = RefPrec[i];
                         var preSubAsse = RefPrec[i + 1];
-                        AssemblyEvaluator.mergingFacesWithSemiParallelNormals(pureStartFaces);
+                        AssemblyEvaluator.MergingFaces(pureStartFaces);
                         fromFaces = toFaces;
 
-                        notAffected = AssemblyEvaluator.UnchangedRefFacesDuringInstallation(curSubAsse,
+                        notAffected = AssemblyEvaluator.UnaffectedRefFacesDuringInstallation(curSubAsse,
                             AssemblyEvaluator.insertionDirectionDic[curSubAsse.Name]);
-                        AssemblyEvaluator.mergingFacesWithSemiParallelNormals(notAffected);
-                        toFaces = new List<NewFootprintFaces>();
-                        toFaces.AddRange(AssemblyEvaluator.nFFList);
-                        AssemblyEvaluator.nFFList.Clear();
+                        AssemblyEvaluator.MergingFaces(notAffected);
+                        toFaces = new List<FootprintFace>();
+                        toFaces.AddRange(AssemblyEvaluator.FootPrintFaces);
+                        AssemblyEvaluator.FootPrintFaces.Clear();
 
                         foreach (var tFace in toFaces)
                         {
@@ -210,7 +210,7 @@ namespace Assembly_Planner
 
 
 
-        private static double StabilityAndAcccessabilityCostCalcultor(SubAssembly task, NewFootprintFaces tFace)
+        private static double StabilityAndAcccessabilityCostCalcultor(SubAssembly task, FootprintFace tFace)
         {
             var SI = AssemblyEvaluator.CheckStabilityForReference(task, tFace);
             var AI = AssemblyEvaluator.CheckAccessability(task.Install.InstallDirection, tFace);
@@ -218,7 +218,7 @@ namespace Assembly_Planner
         }
 
 
-        private static double RiLiCostCalculator(SubAssembly task, NewFootprintFaces fFace, NewFootprintFaces tFace)
+        private static double RiLiCostCalculator(SubAssembly task, FootprintFace fFace, FootprintFace tFace)
         {
             // the width of the part is still unknown
             // if the face is adjacent, there is no need to lift it.
