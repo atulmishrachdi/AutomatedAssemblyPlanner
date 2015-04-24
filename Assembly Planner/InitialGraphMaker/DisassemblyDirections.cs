@@ -16,8 +16,6 @@ namespace Assembly_Planner
         internal static List<int> Run(designGraph assemblyGraph, List<TessellatedSolid> solids)
         {
             Directions = Icosahedron.DirectionGeneration();
-            var ae = new List<int>();
-            var ae2 = new List<double[]>();
             var globalDirPool = new List<int>();
             var solidPrimitive = BlockingDetermination.PrimitiveMaker(solids);
             AddingNodesToGraph(assemblyGraph, solids);
@@ -39,9 +37,12 @@ namespace Assembly_Planner
                         var to = assemblyGraph[solid1.Name];   // Reference
                         assemblyGraph.addArc((node) from, (node) to);
                         var a = assemblyGraph.arcs.Last();
-                        ae.AddRange(localDirInd);
-                        ae2.Add(Directions[localDirInd[0]]);
                         AddInformationToArc(a, localDirInd);
+                        //if (localDirInd.Count == 2)
+                        //{
+                        //    var m = Directions[localDirInd[0]];
+                        //    var n = Directions[localDirInd[1]];
+                        //}
                     }
                 }
             }
