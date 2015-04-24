@@ -15,7 +15,7 @@ namespace Assembly_Planner
         public static List<double[]> Directions = new List<double[]>(); 
         internal static List<int> Run(designGraph assemblyGraph, List<TessellatedSolid> solids)
         {
-            Directions = Icosahedron.DirectionGeneration();
+            Directions = IcosahedronPro.DirectionGeneration();
             var globalDirPool = new List<int>();
             var solidPrimitive = BlockingDetermination.PrimitiveMaker(solids);
             AddingNodesToGraph(assemblyGraph, solids);
