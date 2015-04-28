@@ -19,7 +19,7 @@ namespace Assembly_Planner
             blockingDic = UpdateBlockingDic(blockingDic);
             var freeSCCs = blockingDic.Keys.Where(k => blockingDic[k].Count == 0).ToList();
             var combinations = CombinationsCreator(freeSCCs);
-            AddingOptionsToGraph(assemblyGraph, combinations);
+            //AddingOptionsToGraph(assemblyGraph, combinations);
 
             var counter = 0;
             var cp1 = new List<List<hyperarc>>();
@@ -35,9 +35,12 @@ namespace Assembly_Planner
                     freeSCCs =
                         blockingDic.Keys.Where(k => blockingDic[k].All(opt.Contains) && opt.All(blockingDic[k].Contains))
                             .ToList();
+                    if (freeSCCs.Count == 0) continue;
+                    if (freeSCCs.Sum(hy => hy.nodes.Count) + opt.Sum(hy => hy.nodes.Count) == seperate.nodes.Count)
+                        continue;
                     combinations = CombinationsCreator(freeSCCs);
                     var combAndPar = AddingParents(opt, combinations, seperate.nodes.Count);
-                    AddingOptionsToGraph(assemblyGraph, combAndPar);
+                    //AddingOptionsToGraph(assemblyGraph, combAndPar);
                     cp2.AddRange(combAndPar);
                 }
                 counter = 1;
@@ -67,12 +70,12 @@ namespace Assembly_Planner
         {
             var comb2 = new List<List<hyperarc>>();
             foreach (var c in combinations)
-                foreach (var h in opt)
-                    if (c.Sum(hy => hy.nodes.Count) + opt.Sum(hy => hy.nodes.Count) != seperateNodesCount)
-                    {
+            {
+                if (c.Sum(hy => hy.nodes.Count) + opt.Sum(hy => hy.nodes.Count) != seperateNodesCount)
+                    foreach (var h in opt)
                         c.Add(h);
-                        comb2.Add(c);
-                    }
+                comb2.Add(c);
+            }
             return comb2;
         }
 

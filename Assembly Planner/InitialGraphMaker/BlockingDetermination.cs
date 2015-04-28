@@ -38,6 +38,11 @@ namespace Assembly_Planner
                         // dirInd is the list of directions that must be added to the arc between part1 and part2
                         Console.WriteLine(@"An overlap is detected between   " + solid1.Name +"   and   " +solid2.Name);
                         globalDirPool.AddRange(localDirInd.Where(d => !globalDirPool.Contains(d)));
+
+                        foreach (var i in localDirInd)
+                        {
+                            Console.WriteLine(DisassemblyDirections.Directions[i][0] + " " + DisassemblyDirections.Directions[i][1] + " " + DisassemblyDirections.Directions[i][2]);
+                        }
                         dirInd = localDirInd;
                         return true;
                     }

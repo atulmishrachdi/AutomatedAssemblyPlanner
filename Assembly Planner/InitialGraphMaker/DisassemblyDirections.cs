@@ -46,8 +46,8 @@ namespace Assembly_Planner
                     }
                 }
             }
-            
             return globalDirPool;
+
         }
 
         private static void AddInformationToArc(arc a, IEnumerable<int> localDirInd)

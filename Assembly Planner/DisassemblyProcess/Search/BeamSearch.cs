@@ -57,6 +57,8 @@ namespace Assembly_Planner
                             //OptimizedSCC.StronglyConnectedComponents(current.graph, seperateHy, cndDirInd);
                             var blockingDic = DBG.DirectionalBlockingGraph(current.graph, seperateHy, cndDirInd);
                             OptionGeneratorPro.GenerateOptions(current.graph, seperateHy, blockingDic);
+                            var aaa = recogRule.recognize(current.graph);
+                            var fff = current.graph.hyperarcs.Where(hy => hy.nodes.Count > 35).ToList();
                         }
                     }
                     var ruleChoices = recogRule.recognize(current.graph);

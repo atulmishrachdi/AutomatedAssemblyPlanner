@@ -460,16 +460,16 @@ namespace Assembly_Planner
                             if (TwoTriangleOverlapCheck(f1, f2))
                             {
                                 overlap = true;
-                                c++;
+                                break;
                             }
                         }
+                        if (overlap) break;
                     }
                 }
             }
             // if they overlap, update the directions
             if (overlap)
             {
-                c1++;
                 // take one of the parts, for example A, then in the directions, remove the ones which make a positive dot product with the normal
                 for (var i = 0; i < dirInd.Count; i++)
                 {
