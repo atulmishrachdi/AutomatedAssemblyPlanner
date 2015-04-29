@@ -22,7 +22,7 @@ namespace Assembly_Planner
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
             //var filer = new BasicFiler("", "", "");
-            var solids = GetSTLs("..\\..\\..\\Test\\3by3");
+            var solids = GetSTLs("..\\..\\..\\Test\\Double");
             //var assemblyGraph = (designGraph)filer.Open("..\\..\\..\\Test\\inputNG.gxml")[0];
             //var globalDirPool = new List<int> { 0, 1, 2, 3, 4, 5 };
             var assemblyGraph = new designGraph();

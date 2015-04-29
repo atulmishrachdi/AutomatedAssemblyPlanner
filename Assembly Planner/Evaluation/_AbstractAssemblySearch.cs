@@ -149,7 +149,7 @@ namespace GraphSynth
             /* for any left at end, give them the highest value. */
             foreach (var n in current.graph.nodes)
                 NodeOrdering.Add(n.name, layerNumber);
-            SearchIO.output(IntCollectionConverter.convert(current.optionNumbersInRecipe), 3);
+            SearchIO.output(IntCollectionConverter.Convert(current.optionNumbersInRecipe), 3);
             return NodeOrdering;
         }
         private Dictionary<string, int> GetNodeOrderingParallel(AssemblyCandidate current)
@@ -198,7 +198,7 @@ namespace GraphSynth
             /* for any left at end, give them the highest value. */
             foreach (var n in current.graph.nodes)
                 NodeOrdering.Add(n.name, layerNumber);
-            SearchIO.output(IntCollectionConverter.convert(current.optionNumbersInRecipe), 3);
+            SearchIO.output(IntCollectionConverter.Convert(current.optionNumbersInRecipe), 3);
             return NodeOrdering;
         }
 
