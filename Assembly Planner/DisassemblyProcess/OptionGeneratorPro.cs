@@ -19,7 +19,7 @@ namespace Assembly_Planner
             blockingDic = UpdateBlockingDic(blockingDic);
             var freeSCCs = blockingDic.Keys.Where(k => blockingDic[k].Count == 0).ToList();
             var combinations = CombinationsCreator(freeSCCs);
-            //AddingOptionsToGraph(assemblyGraph, combinations);
+            AddingOptionsToGraph(assemblyGraph, combinations, seperate.nodes.Count);
 
             var counter = 0;
             var cp1 = new List<List<hyperarc>>();
@@ -36,11 +36,9 @@ namespace Assembly_Planner
                         blockingDic.Keys.Where(k => blockingDic[k].All(opt.Contains) && opt.All(blockingDic[k].Contains))
                             .ToList();
                     if (freeSCCs.Count == 0) continue;
-                    if (freeSCCs.Sum(hy => hy.nodes.Count) + opt.Sum(hy => hy.nodes.Count) == seperate.nodes.Count)
-                        continue;
                     combinations = CombinationsCreator(freeSCCs);
-                    var combAndPar = AddingParents(opt, combinations, seperate.nodes.Count);
-                    //AddingOptionsToGraph(assemblyGraph, combAndPar);
+                    var combAndPar = AddingParents(opt, combinations);
+                    AddingOptionsToGraph(assemblyGraph, combAndPar, seperate.nodes.Count);
                     cp2.AddRange(combAndPar);
                 }
                 counter = 1;
@@ -53,27 +51,27 @@ namespace Assembly_Planner
                 assemblyGraph.hyperarcs.Remove(SCCHy);
         }
 
-        private static void AddingOptionsToGraph(designGraph assemblyGraph, List<List<hyperarc>> combAndPar)
+        private static void AddingOptionsToGraph(designGraph assemblyGraph, List<List<hyperarc>> combAndPar, int sep)
         {
             foreach (var opt in combAndPar)
             {
                 var nodes = new List<node>();
                 foreach (var hy in opt)
                     nodes.AddRange(hy.nodes);
+                if (nodes.Count == sep) continue;
                 assemblyGraph.addHyperArc(nodes);
                 assemblyGraph.hyperarcs[assemblyGraph.hyperarcs.Count - 1].localLabels.Add(
                     DisConstants.Removable);
             }
         }
 
-        private static List<List<hyperarc>> AddingParents(List<hyperarc> opt, List<List<hyperarc>> combinations, int seperateNodesCount)
+        private static List<List<hyperarc>> AddingParents(List<hyperarc> opt, List<List<hyperarc>> combinations)
         {
             var comb2 = new List<List<hyperarc>>();
             foreach (var c in combinations)
             {
-                if (c.Sum(hy => hy.nodes.Count) + opt.Sum(hy => hy.nodes.Count) != seperateNodesCount)
-                    foreach (var h in opt)
-                        c.Add(h);
+                foreach (var h in opt)
+                    c.Add(h);
                 comb2.Add(c);
             }
             return comb2;

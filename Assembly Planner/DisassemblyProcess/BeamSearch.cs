@@ -43,22 +43,23 @@ namespace Assembly_Planner
             var haRemovable = new ruleHyperarc();
             haRemovable.localLabels.Add(DisConstants.Removable);
             recogRule.L.addHyperArc(haRemovable);
-
+            var before = 100;
+            var after = 0;
             while (beam.Count != 0 && !found)
             {
                 candidates.Clear();
                 foreach (var current in beam)
                 {
+                    var seperateHys = current.graph.hyperarcs.Where(h => h.localLabels.Contains(DisConstants.SeperateHyperarcs)).ToList();
                     foreach (var cndDirInd in globalDirPool)
                     {
-                        foreach (var seperateHy in current.graph.hyperarcs.Where(h => h.localLabels.Contains(DisConstants.SeperateHyperarcs)).ToList())
+                        foreach (var seperateHy in seperateHys)
                         {
                             SCC.StronglyConnectedComponents(current.graph, seperateHy, cndDirInd);
                             //OptimizedSCC.StronglyConnectedComponents(current.graph, seperateHy, cndDirInd);
                             var blockingDic = DBG.DirectionalBlockingGraph(current.graph, seperateHy, cndDirInd);
                             OptionGeneratorPro.GenerateOptions(current.graph, seperateHy, blockingDic);
                             var aaa = recogRule.recognize(current.graph);
-                            var fff = current.graph.hyperarcs.Where(hy => hy.nodes.Count > 35).ToList();
                         }
                     }
                     var ruleChoices = recogRule.recognize(current.graph);
