@@ -38,13 +38,13 @@ namespace Assembly_Planner
                     if (freeSCCs.Count == 0) continue;
                     combinations = CombinationsCreator(freeSCCs);
                     var combAndPar = AddingParents(opt, combinations);
-                    AddingOptionsToGraph(assemblyGraph, combAndPar, seperate.nodes.Count);
+                    //AddingOptionsToGraph(assemblyGraph, combAndPar, seperate.nodes.Count);
                     cp2.AddRange(combAndPar);
                 }
                 counter = 1;
                 cp1 = new List<List<hyperarc>>(cp2);
             } while (cp1.Count > 0);
-            
+
             foreach (var SCCHy in assemblyGraph.hyperarcs.Where(hyScc =>
                             hyScc.localLabels.Contains(DisConstants.SCC) &&
                             !hyScc.localLabels.Contains(DisConstants.Removable)).ToList())
@@ -58,11 +58,26 @@ namespace Assembly_Planner
                 var nodes = new List<node>();
                 foreach (var hy in opt)
                     nodes.AddRange(hy.nodes);
+
                 if (nodes.Count == sep) continue;
-                assemblyGraph.addHyperArc(nodes);
-                assemblyGraph.hyperarcs[assemblyGraph.hyperarcs.Count - 1].localLabels.Add(
-                    DisConstants.Removable);
+                var newHyperarc = assemblyGraph.addHyperArc(nodes);
+                newHyperarc.localLabels.Add(DisConstants.Removable);
             }
+        }
+
+        private static List<option> AddingOptionsToGraph(List<List<hyperarc>> combAndPar, int sep)
+        {
+            var optionList = new List<option>();
+            foreach (var opt in combAndPar)
+            {
+                var newOption = new option(null);
+                var nodes = new List<node>();
+                foreach (var hy in opt)
+                  newOption.nodes.AddRange(hy.nodes);
+                // careful are you adding nodes more than once!      use Linq Distinct?
+                optionList.Add(newOption);
+            }
+            return optionList;
         }
 
         private static List<List<hyperarc>> AddingParents(List<hyperarc> opt, List<List<hyperarc>> combinations)
@@ -86,20 +101,20 @@ namespace Assembly_Planner
                 lastGroup.Add(new List<hyperarc> { hy });
                 comb.Add(new List<hyperarc> { hy });
             }
-                
+
             var i = 0;
             while (i < freeSCCs.Count - 1)
             {
                 var newGroup = new List<List<hyperarc>>();
-                for (var j = 0; j< freeSCCs.Count-1; j++)
+                for (var j = 0; j < freeSCCs.Count - 1; j++)
                 {
                     var hy1 = freeSCCs[j];
-                    for (var k = j+1; k < lastGroup.Count; k++)
+                    for (var k = j + 1; k < lastGroup.Count; k++)
                     {
                         var hy2 = lastGroup[k];
-                        var com = new List<hyperarc>{hy1};
+                        var com = new List<hyperarc> { hy1 };
                         com.AddRange(hy2);
-                        if ((newGroup.Any(hy => hy.All(com.Contains) && com.All(hy.Contains))) || hy2.Contains(hy1) )
+                        if ((newGroup.Any(hy => hy.All(com.Contains) && com.All(hy.Contains))) || hy2.Contains(hy1))
                             continue;
                         newGroup.Add(com);
                     }
@@ -122,7 +137,7 @@ namespace Assembly_Planner
                 Preceedings = Updates.UpdatePreceedings(Preceedings);
                 var cpy = new List<hyperarc>(Preceedings);
                 newBlocking.Add(sccHy, cpy);
-        }
+            }
             return newBlocking;
         }
 
