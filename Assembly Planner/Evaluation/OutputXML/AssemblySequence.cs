@@ -22,7 +22,7 @@ namespace AssemblyEvaluation
             var ruleAction = c.recipe[recipeIndex];
         }
 
-        public SubAssembly Update(option opt, Dictionary<string, ConvexHull<Vertex, DefaultConvexFace<Vertex>>> convexHullForParts)
+        public SubAssembly Update(option opt, List<node> rest, Dictionary<string, ConvexHull<Vertex, DefaultConvexFace<Vertex>>> convexHullForParts)
         {
             Part refAssembly, movingAssembly;
             if (ActionIsAssemblyByAssembly(opt.rule))
@@ -44,26 +44,26 @@ namespace AssemblyEvaluation
             }
             else if (ActionIsRemoveSCC(opt.rule))
             {
-                var movingHyperArc = opt.hyperarcs[0];
-                var newSubAsmHyperArc = opt.hyperarcs[1];
-                if (movingHyperArc.nodes.Count == 1)
+                var movingNodes = opt.nodes;
+                var newSubAsmNodes = rest;
+                if (movingNodes.Count == 1)
                 {
-                    var nodeName = movingHyperArc.nodes[0].name;
+                    var nodeName = movingNodes[0].name;
                     movingAssembly = new Part(nodeName,
-                        GetPartMass(movingHyperArc.nodes[0]), GetPartVolume(movingHyperArc.nodes[0]),
-                        convexHullForParts[nodeName], GetPartCenterOfMass(movingHyperArc.nodes[0]));
+                        GetPartMass(movingNodes[0]), GetPartVolume(movingNodes[0]),
+                        convexHullForParts[nodeName], GetPartCenterOfMass(movingNodes[0]));
                 }
                 else
                 {
-                    var combinedCVXHullM = CreateCombinedConvexHull2(movingHyperArc.nodes, convexHullForParts);
-                    var VolumeM = GetSubassemblyVolume(movingHyperArc.nodes);
-                    var MassM = GetSubassemblyMass(movingHyperArc.nodes);
-                    var centerOfMass = GetSubassemblyCenterOfMass(movingHyperArc.nodes);
-                    movingAssembly = new SubAssembly(movingHyperArc.nodes, combinedCVXHullM, MassM, VolumeM,centerOfMass);
+                    var combinedCVXHullM = CreateCombinedConvexHull2(movingNodes, convexHullForParts);
+                    var VolumeM = GetSubassemblyVolume(movingNodes);
+                    var MassM = GetSubassemblyMass(movingNodes);
+                    var centerOfMass = GetSubassemblyCenterOfMass(movingNodes);
+                    movingAssembly = new SubAssembly(movingNodes, combinedCVXHullM, MassM, VolumeM,centerOfMass);
                 }
 
                 var referenceHyperArcnodes =  new List<node>();
-                referenceHyperArcnodes = (List<node>) newSubAsmHyperArc.nodes.Where(a => !movingHyperArc.nodes.Contains(a)).ToList();
+                referenceHyperArcnodes = (List<node>)newSubAsmNodes.Where(a => !movingNodes.Contains(a)).ToList();
                 if (referenceHyperArcnodes.Count == 1)
                 {
                     var nodeName = referenceHyperArcnodes[0].name;

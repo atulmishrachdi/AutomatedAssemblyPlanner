@@ -19,12 +19,7 @@ namespace Assembly_Planner
         {
             var assemblyGraph = inputData.graphAssembly;
             //DisassemblyDirections.Directions = TemporaryDirections();
-            //DisassemblyDirections.Directions = Icosahedron.DirectionGeneration();
             var solutions = new List<AssemblyCandidate>();
-            // take a direction from the pool
-            //   find the SCCs
-            //   create the DBG
-            //   generate the options
             assemblyEvaluator = new AssemblyEvaluator(inputData.ConvexHullDictionary);
 
             Updates.UpdateGlobalDirections(globalDirPool);
@@ -37,20 +32,13 @@ namespace Assembly_Planner
             var found = false;
             AssemblyCandidate goal = null;
             beam.Enqueue(new AssemblyCandidate(new candidate(assemblyGraph,1)));
-            
-            var recogRule = new grammarRule();
-            recogRule.L = new designGraph();
-            var haRemovable = new ruleHyperarc();
-            haRemovable.localLabels.Add(DisConstants.Removable);
-            recogRule.L.addHyperArc(haRemovable);
-            var before = 100;
-            var after = 0;
             while (beam.Count != 0 && !found)
             {
                 candidates.Clear();
                 foreach (var current in beam)
                 {
                     var seperateHys = current.graph.hyperarcs.Where(h => h.localLabels.Contains(DisConstants.SeperateHyperarcs)).ToList();
+                    var options = new List<option>();
                     foreach (var cndDirInd in globalDirPool)
                     {
                         foreach (var seperateHy in seperateHys)
@@ -58,19 +46,18 @@ namespace Assembly_Planner
                             SCC.StronglyConnectedComponents(current.graph, seperateHy, cndDirInd);
                             //OptimizedSCC.StronglyConnectedComponents(current.graph, seperateHy, cndDirInd);
                             var blockingDic = DBG.DirectionalBlockingGraph(current.graph, seperateHy, cndDirInd);
-                            OptionGeneratorPro.GenerateOptions(current.graph, seperateHy, blockingDic);
-                            var aaa = recogRule.recognize(current.graph);
+                            //OptionGeneratorPro.GenerateOptions(current.graph, seperateHy, blockingDic);
+                            options.AddRange(OptionGeneratorPro.GenerateOptions(current.graph, seperateHy, blockingDic));
                         }
                     }
-                    var ruleChoices = recogRule.recognize(current.graph);
-                    foreach (var opt in ruleChoices)
+                    //var ruleChoices = recogRule.recognize(current.graph);
+                    foreach (var opt in options)
                     {
-                        //opt.hyperarcs[0].nodes.Count ==1 &&opt.hyperarcs[1].nodes.Count ==1
                         var child = (AssemblyCandidate)current.copy();
                         SearchProcess.transferLmappingToChild(child.graph, current.graph, opt);
-                        opt.hyperarcs.Add(Updates.AddSecondHyperToOption(child,opt));
+                        var rest = Updates.AddSecondHyperToOption(child,opt);
                         Updates.ApplyChild(child, opt);
-                        if (assemblyEvaluator.Evaluate(child, opt) > 0)
+                        if (assemblyEvaluator.Evaluate(child, opt,rest) > 0)
                             lock (candidates)
                                 candidates.Add(child.performanceParams, child);
                         child.addToRecipe(opt);

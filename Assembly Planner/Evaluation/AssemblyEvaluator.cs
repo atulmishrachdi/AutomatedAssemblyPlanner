@@ -31,10 +31,10 @@ namespace AssemblyEvaluation
         #endregion
 
 
-        public double Evaluate(AssemblyCandidate c, option opt)
+        public double Evaluate(AssemblyCandidate c, option opt, List<node> rest)
         {
             // Set up moving and reference subassemblies
-            var newSubAsm = c.Sequence.Update(opt, convexHullForParts);
+            var newSubAsm = c.Sequence.Update(opt, rest, convexHullForParts);
             var refNodes = newSubAsm.Install.Reference.PartNodes.Select(n => (node)c.graph[n]).ToList();
             var movingNodes = newSubAsm.Install.Moving.PartNodes.Select(n => (node)c.graph[n]).ToList();
             var install = new[] { refNodes, movingNodes };

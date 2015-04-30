@@ -18,16 +18,16 @@ namespace Assembly_Planner
             for (var i = 0; i < child.graph.hyperarcs.Count; i++)
             {
                 var hy = child.graph.hyperarcs[i];
-                if (hy.localLabels.Contains(DisConstants.SeperateHyperarcs) && hy.nodes.Any(n=> opt.hyperarcs[0].nodes.Contains(n)))
+                if (hy.localLabels.Contains(DisConstants.SeperateHyperarcs) && hy.nodes.Any(n=> opt.nodes.Contains(n)))
                 {
                     child.graph.removeHyperArc(hy);
                     i--;
                     continue;
                 }
-                if ((hy.localLabels.Contains(DisConstants.SeperateHyperarcs) && !hy.nodes.Any(n => opt.hyperarcs[0].nodes.Contains(n))) || hy.localLabels.Contains(DisConstants.SingleNode))
+                if ((hy.localLabels.Contains(DisConstants.SeperateHyperarcs) && !hy.nodes.Any(n => opt.nodes.Contains(n))) || hy.localLabels.Contains(DisConstants.SingleNode))
                     continue;
 
-                if (!hy.localLabels.Contains(DisConstants.Removable))// Maybe all of them contains "Removable"
+                if (!hy.localLabels.Contains(DisConstants.Removable))// Maybe all of them contain "Removable"
                 {
                     child.graph.removeHyperArc(hy);
                     i--;
@@ -64,13 +64,10 @@ namespace Assembly_Planner
             return list;
         }
 
-        internal static hyperarc AddSecondHyperToOption(AssemblyCandidate child, option opt)
+        internal static List<node> AddSecondHyperToOption(AssemblyCandidate child, option opt)
         {
-            foreach (var sepHy in child.graph.hyperarcs.Where(a => a.localLabels.Contains(DisConstants.SeperateHyperarcs) && opt.hyperarcs[0].nodes.All(n => a.nodes.Contains(n)))) //
-            {
-                var otherNodes = sepHy.nodes.Where(n => !opt.hyperarcs[0].nodes.Contains(n)).ToList();
-                return new hyperarc("", otherNodes);
-            }
+            foreach (var sepHy in child.graph.hyperarcs.Where(a => a.localLabels.Contains(DisConstants.SeperateHyperarcs) && opt.nodes.All(n => a.nodes.Contains(n)))) //
+                return sepHy.nodes.Where(n => !opt.nodes.Contains(n)).ToList();
             return null;
         }
 

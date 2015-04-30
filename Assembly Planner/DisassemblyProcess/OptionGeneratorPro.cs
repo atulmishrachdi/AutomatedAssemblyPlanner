@@ -13,14 +13,15 @@ namespace Assembly_Planner
         static List<hyperarc> Preceedings = new List<hyperarc>();
         private static int co;
 
-        internal static void GenerateOptions(designGraph assemblyGraph, hyperarc seperate,
+        internal static List<option> GenerateOptions(designGraph assemblyGraph, hyperarc seperate,
             Dictionary<hyperarc, List<hyperarc>> blockingDic)
         {
             blockingDic = UpdateBlockingDic(blockingDic);
             var freeSCCs = blockingDic.Keys.Where(k => blockingDic[k].Count == 0).ToList();
             var combinations = CombinationsCreator(freeSCCs);
-            AddingOptionsToGraph(assemblyGraph, combinations, seperate.nodes.Count);
-
+            var options = new List<option>();
+            //AddingOptionsToGraph(assemblyGraph, combinations, seperate.nodes.Count);
+            options.AddRange(AddingOptionsToGraph(combinations, seperate.nodes.Count));
             var counter = 0;
             var cp1 = new List<List<hyperarc>>();
             var cp2 = new List<List<hyperarc>>();
@@ -39,6 +40,7 @@ namespace Assembly_Planner
                     combinations = CombinationsCreator(freeSCCs);
                     var combAndPar = AddingParents(opt, combinations);
                     //AddingOptionsToGraph(assemblyGraph, combAndPar, seperate.nodes.Count);
+                    options.AddRange(AddingOptionsToGraph(combAndPar, seperate.nodes.Count));
                     cp2.AddRange(combAndPar);
                 }
                 counter = 1;
@@ -49,6 +51,7 @@ namespace Assembly_Planner
                             hyScc.localLabels.Contains(DisConstants.SCC) &&
                             !hyScc.localLabels.Contains(DisConstants.Removable)).ToList())
                 assemblyGraph.hyperarcs.Remove(SCCHy);
+            return options;
         }
 
         private static void AddingOptionsToGraph(designGraph assemblyGraph, List<List<hyperarc>> combAndPar, int sep)
@@ -70,10 +73,14 @@ namespace Assembly_Planner
             var optionList = new List<option>();
             foreach (var opt in combAndPar)
             {
-                var newOption = new option(null);
                 var nodes = new List<node>();
+                var rule = new grammarRule();
+                rule.L = new designGraph();
+                var newOption = new option(rule);
                 foreach (var hy in opt)
-                  newOption.nodes.AddRange(hy.nodes);
+                    nodes.AddRange(hy.nodes);
+                if (nodes.Count == sep) continue;  
+                newOption.nodes.AddRange(nodes);
                 // careful are you adding nodes more than once!      use Linq Distinct?
                 optionList.Add(newOption);
             }
