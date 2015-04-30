@@ -18,7 +18,6 @@ namespace Assembly_Planner
         {
             var assemblyGraph = inputData.graphAssembly;
             //DisassemblyDirections.Directions = TemporaryDirections();
-            DisassemblyDirections.Directions = Icosahedron.DirectionGeneration();
             var solutions = new List<AssemblyCandidate>();
             assemblyEvaluator = new AssemblyEvaluator(inputData.ConvexHullDictionary);
 
@@ -33,12 +32,6 @@ namespace Assembly_Planner
             var ini = new AssemblyCandidate(new candidate(assemblyGraph, 1));
             candidates.Add(new List<double>(), ini);
 
-            var recogRule = new grammarRule();
-            recogRule.L = new designGraph();
-            var haRemovable = new ruleHyperarc();
-            haRemovable.localLabels.Add(DisConstants.Removable);
-            recogRule.L.addHyperArc(haRemovable);
-
             while (candidates.Count != 0 && !found)
             {
                 var current = candidates.Values[0];
@@ -49,6 +42,7 @@ namespace Assembly_Planner
                     found = true;
                     break;
                 }
+                var options = new List<option>();
                 foreach (var cndDirInd in globalDirPool)
                 {
                     foreach (
@@ -59,17 +53,16 @@ namespace Assembly_Planner
                         SCC.StronglyConnectedComponents(current.graph, seperateHy, cndDirInd);
                         //OptimizedSCC.StronglyConnectedComponents(current.graph, seperateHy, cndDirInd);
                         var blockingDic = DBG.DirectionalBlockingGraph(current.graph, seperateHy, cndDirInd);
-                        OptionGenerator.GenerateOptions(current.graph, seperateHy, blockingDic);
+                        options.AddRange(OptionGeneratorPro.GenerateOptions(current.graph, seperateHy, blockingDic));
                     }
                 }
-                var ruleChoices = recogRule.recognize(current.graph);
-                foreach (var opt in ruleChoices)
+                foreach (var opt in options)
                 {
                     var child = (AssemblyCandidate) current.copy();
                     SearchProcess.transferLmappingToChild(child.graph, current.graph, opt);
-                    opt.hyperarcs.Add(Updates.AddSecondHyperToOption(child, opt));
+                    var rest = Updates.AddSecondHyperToOption(child, opt);
                     Updates.ApplyChild(child, opt);
-                    if (assemblyEvaluator.Evaluate(child, opt) > 0)
+                    if (assemblyEvaluator.Evaluate(child, opt, rest) > 0)
                         lock (candidates)
                             candidates.Add(child.performanceParams, child);
                     child.addToRecipe(opt);
