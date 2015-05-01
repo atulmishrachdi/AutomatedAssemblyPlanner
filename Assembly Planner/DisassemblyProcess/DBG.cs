@@ -22,8 +22,7 @@ namespace Assembly_Planner
 
             var dbgDictionary = new Dictionary<hyperarc, List<hyperarc>>();
 
-            foreach (var sccHy in assemblyGraph.hyperarcs.Where(h => h.localLabels.Contains(DisConstants.SCC) 
-                     && !h.localLabels.Contains(DisConstants.Removable)))
+            foreach (var sccHy in assemblyGraph.hyperarcs.Where(h => h.localLabels.Contains(DisConstants.SCC)))
             {
                 var hyperarcBorderArcs = HyperarcBorderArcsFinder(sccHy);
                 var blockedWith = new List<hyperarc>();
@@ -74,15 +73,13 @@ namespace Assembly_Planner
         {
             if (sccHy.nodes.Contains(arc.From))
             {
-                foreach (var hy in graph.hyperarcs.Where(h => h.localLabels.Contains(DisConstants.SCC) 
-                         && !h.localLabels.Contains(DisConstants.Removable)))
+                foreach (var hy in graph.hyperarcs.Where(h => h.localLabels.Contains(DisConstants.SCC)))
                 {
                     if (hy.nodes.Contains(arc.To))
                         return hy;
                 }
             }
-            foreach (var hy in graph.hyperarcs.Where(h => h.localLabels.Contains(DisConstants.SCC)
-                     && !h.localLabels.Contains(DisConstants.Removable)))
+            foreach (var hy in graph.hyperarcs.Where(h => h.localLabels.Contains(DisConstants.SCC)))
             {
                 if (hy.nodes.Contains(arc.From))
                     return hy;

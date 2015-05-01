@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AssemblyEvaluation;
+using Assembly_Planner.DisassemblyProcess;
 using GraphSynth;
 using GraphSynth.Representation;
 using GraphSynth.Search;
@@ -50,8 +51,8 @@ namespace Assembly_Planner
                             current.graph.hyperarcs.Where(h => h.localLabels.Contains(DisConstants.SeperateHyperarcs))
                                 .ToList())
                     {
-                        SCC.StronglyConnectedComponents(current.graph, seperateHy, cndDirInd);
-                        //OptimizedSCC.StronglyConnectedComponents(current.graph, seperateHy, cndDirInd);
+                        //SCC.StronglyConnectedComponents(current.graph, seperateHy, cndDirInd);
+                        BoostedSCC.StronglyConnectedComponents(current.graph, seperateHy, cndDirInd);
                         var blockingDic = DBG.DirectionalBlockingGraph(current.graph, seperateHy, cndDirInd);
                         options.AddRange(OptionGeneratorPro.GenerateOptions(current.graph, seperateHy, blockingDic));
                     }

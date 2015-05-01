@@ -7,7 +7,7 @@ using GraphSynth.Representation;
 
 namespace Assembly_Planner
 {
-    internal class OptimizedSCC
+    internal class BoostedSCC
     {
         // OptimizedSCC is the modified SCC. In this class, a dictionary of SCCs for each direction is created
         // to take benefit from premade SCC hyperarcs. The dictionary will be updated after each "apply"
@@ -21,18 +21,20 @@ namespace Assembly_Planner
                 {
                     var c = 0;
                     foreach (var node in premadeSCC)
-                    {
                         c += seperateHy.nodes.Count(n => n.name == node.name);
-                    }
                     if (c != premadeSCC.Count) continue;
-                    assemblyGraph.addHyperArc(premadeSCC);
-                    assemblyGraph.hyperarcs[assemblyGraph.hyperarcs.Count - 1].localLabels.Add(DisConstants.SCC);
+
+                    var nodes = new List<node>();
+                    foreach (var n in premadeSCC)
+                        nodes.AddRange(seperateHy.nodes.Where(a=>a.name == n.name));
+                    var last = assemblyGraph.addHyperArc(nodes);
+                    last.localLabels.Add(DisConstants.SCC);
                     preAddedSccs.AddRange(premadeSCC);
                 }
                 //foreach (var premadeSCC in DisassemblyProcess.SccTracker[cndDir].Where(pmSCC => pmSCC.All(n => seperateHy.nodes.Contains(n))))
                 //{
-                //    assemblyGraph.addHyperArc(premadeSCC);
-                //    assemblyGraph.hyperarcs[assemblyGraph.hyperarcs.Count - 1].localLabels.Add(DisConstants.SCC);
+                //    var last = assemblyGraph.addHyperArc(premadeSCC);
+                //    last.localLabels.Add(DisConstants.SCC);
                 //    preAddedSccs.AddRange(premadeSCC);
                 //}
             }
@@ -40,8 +42,10 @@ namespace Assembly_Planner
             var stack = new Stack<node>();
             var visited = new HashSet<node>();
             var sccTrackerNodes = new List<List<node>>();
-            foreach (var node in seperateHy.nodes.Where(n => !preAddedSccs.Contains(n) && !globalVisited.Contains(n)))
+            foreach (var node in seperateHy.nodes.Where(n =>!globalVisited.Contains(n)))
             {
+                if (preAddedSccs.Any(n => n.name == node.name)) 
+                    continue;
                 stack.Clear();
                 visited.Clear();
                 stack.Push(node);
