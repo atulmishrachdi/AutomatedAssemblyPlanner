@@ -22,16 +22,16 @@ namespace Assembly_Planner
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
             //var filer = new BasicFiler("", "", "");
-            var solids = GetSTLs("..\\..\\..\\Test\\Double");
+            var solids = GetSTLs("..\\..\\..\\Test\\CubeSTL");
             //var assemblyGraph = (designGraph)filer.Open("..\\..\\..\\Test\\inputNG.gxml")[0];
             //var globalDirPool = new List<int> { 0, 1, 2, 3, 4, 5 };
             var assemblyGraph = new designGraph();
             List<int> globalDirPool = DisassemblyDirections.Run(assemblyGraph, solids); //Input: assembly model
-            //Updates.AddPartsProperties(assemblyGraph);
+            Updates.AddPartsProperties(assemblyGraph);
             var inputData = new ConvexHullAndBoundingBox(assemblyGraph);
             
-            //var solutions = OrderedDFS.Run(inputData, globalDirPool); // the output is the assembly sequence
-            var solutions = BeamSearch.Run(inputData, globalDirPool);
+            var solutions = OrderedDFS.Run(inputData, globalDirPool); // the output is the assembly sequence
+            //var solutions = BeamSearch.Run(inputData, globalDirPool);
             stopwatch.Stop();
             Console.WriteLine(" In only  "+ stopwatch.Elapsed);
             Console.WriteLine("     1. An assembly in STL format is read");

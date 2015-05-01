@@ -7,6 +7,7 @@ using MIConvexHull;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using StarMathLib;
 
 namespace AssemblyEvaluation
@@ -41,7 +42,11 @@ namespace AssemblyEvaluation
             
             var connectingArcs = c.graph.arcs.Where(a => ((movingNodes.Contains(a.To) && refNodes.Contains(a.From))
                                                          || (movingNodes.Contains(a.From) && refNodes.Contains(a.To)))).ToList();
-            if (connectingArcs.Count == 0) return -1;
+            //if (connectingArcs.Count == 0) return -1;
+            foreach (var a in connectingArcs)
+                c.graph.removeArc(a);
+            if (Updates.EitherRefOrMovHasSeperatedSubassemblies(install))
+                return -1;
 
             // Getting insertion point coordinates
             double insertionDistance;
@@ -63,9 +68,6 @@ namespace AssemblyEvaluation
 
             double evaluationScore = InitialEvaluation(newSubAsm, newSubAsm.Install.InstallDirection, insertionDirection, refNodes, movingNodes, c);
             
-            foreach (var a in connectingArcs)
-                c.graph.removeArc(a);
-
             Updates.UpdateChildGraph(c, install);
             return evaluationScore;
         }

@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly Planner", "Assembl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TessellationAndVoxelizationGeometryLibraryUniversal", "..\tvgl\TessellationAndVoxelizationGeometryLibrary\TessellationAndVoxelizationGeometryLibraryUniversal.csproj", "{E3489019-D590-46A8-B2C2-E3481E8DB77C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphSynth.BaseClasses", "..\GraphSynth\graphsynth_465a7e41942c\GraphSynthSourceFiles\GraphSynth.BaseClasses\GraphSynth.BaseClasses.csproj", "{D679F4E2-FD18-48AC-9C0C-B60155A61D37}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphSynth.BaseClasses", "..\GraphSynth\GraphSynthSourceFiles\GraphSynth.BaseClasses\GraphSynth.BaseClasses.csproj", "{D679F4E2-FD18-48AC-9C0C-B60155A61D37}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
