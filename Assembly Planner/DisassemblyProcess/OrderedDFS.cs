@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AssemblyEvaluation;
-using Assembly_Planner.DisassemblyProcess;
 using GraphSynth;
 using GraphSynth.Representation;
 using GraphSynth.Search;
@@ -70,8 +69,10 @@ namespace Assembly_Planner
                 }
             }
             solutions.Add(goal);
+            TemporaryFixingSequence(goal);
             return solutions;
         }
+
 
         private static List<double[]> TemporaryDirections()
         {
@@ -90,6 +91,23 @@ namespace Assembly_Planner
         protected static bool isCurrentTheGoal(AssemblyCandidate current)
         {
             return current.graph.hyperarcs.Where(h => h.localLabels.Contains("Done")).Count() == 20;
+        }
+
+        private static void TemporaryFixingSequence(AssemblyCandidate goal)
+        {
+            var subAsms = goal.Sequence.Subassemblies;
+            for (var i = subAsms.Count - 1; i > 0; i--)
+            {
+                foreach (var sub in subAsms)
+                {
+                    if (sub.Install.Moving.PartNodes.All(n=>subAsms[i].PartNodes.Contains(n)) &&
+                        subAsms[i].PartNodes.All(n=>sub.Install.Moving.PartNodes.Contains(n)))
+                        sub.Install.Moving = subAsms[i];
+                    if (sub.Install.Reference.PartNodes.All(n => subAsms[i].PartNodes.Contains(n)) &&
+                        subAsms[i].PartNodes.All(n => sub.Install.Reference.PartNodes.Contains(n)))
+                        sub.Install.Reference = subAsms[i];
+                }
+            }
         }
     }
 }

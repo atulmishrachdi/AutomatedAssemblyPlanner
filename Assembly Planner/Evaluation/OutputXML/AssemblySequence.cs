@@ -22,7 +22,8 @@ namespace AssemblyEvaluation
             var ruleAction = c.recipe[recipeIndex];
         }
 
-        public SubAssembly Update(option opt, List<node> rest, Dictionary<string, ConvexHull<Vertex, DefaultConvexFace<Vertex>>> convexHullForParts)
+        public SubAssembly Update(option opt, List<node> rest,
+            Dictionary<string, ConvexHull<Vertex, DefaultConvexFace<Vertex>>> convexHullForParts)
         {
             Part refAssembly, movingAssembly;
             if (ActionIsAssemblyByAssembly(opt.rule))
@@ -31,12 +32,12 @@ namespace AssemblyEvaluation
                 var node1 = opt.nodes[1];
                 var node0name = node0.name;
                 var node1name = node1.name;
-                 refAssembly = Subassemblies.FirstOrDefault(subasm => subasm.PartNodes.Contains(node0name));
+                refAssembly = Subassemblies.FirstOrDefault(subasm => subasm.PartNodes.Contains(node0name));
                 if (refAssembly == null)
                     refAssembly = new Part(node0name, GetPartMass(node0), GetPartVolume(node0),
                         convexHullForParts[node0name], GetPartCenterOfMass(node0));
                 else Subassemblies.Remove((SubAssembly) refAssembly);
-                 movingAssembly = Subassemblies.FirstOrDefault(subasm => subasm.PartNodes.Contains(node1name));
+                movingAssembly = Subassemblies.FirstOrDefault(subasm => subasm.PartNodes.Contains(node1name));
                 if (movingAssembly == null)
                     movingAssembly = new Part(node1name, GetPartMass(node1), GetPartVolume(node1),
                         convexHullForParts[node1name], GetPartCenterOfMass(node0));
@@ -59,11 +60,11 @@ namespace AssemblyEvaluation
                     var VolumeM = GetSubassemblyVolume(movingNodes);
                     var MassM = GetSubassemblyMass(movingNodes);
                     var centerOfMass = GetSubassemblyCenterOfMass(movingNodes);
-                    movingAssembly = new SubAssembly(movingNodes, combinedCVXHullM, MassM, VolumeM,centerOfMass);
+                    movingAssembly = new SubAssembly(movingNodes, combinedCVXHullM, MassM, VolumeM, centerOfMass);
                 }
 
-                var referenceHyperArcnodes =  new List<node>();
-                referenceHyperArcnodes = (List<node>)newSubAsmNodes.Where(a => !movingNodes.Contains(a)).ToList();
+                var referenceHyperArcnodes = new List<node>();
+                referenceHyperArcnodes = (List<node>) newSubAsmNodes.Where(a => !movingNodes.Contains(a)).ToList();
                 if (referenceHyperArcnodes.Count == 1)
                 {
                     var nodeName = referenceHyperArcnodes[0].name;
@@ -81,21 +82,25 @@ namespace AssemblyEvaluation
                 }
             }
             else throw new Exception("Only install rules in assembly at this point.");
-            ConvexHull<Vertex, DefaultConvexFace<Vertex>> combinedCVXHull = CreateCombinedConvexHull(refAssembly.CVXHull, movingAssembly.CVXHull);
-                //List<DefaultConvexFace<Vertex>> refFacesInCombined, movingFacesInCombined;
-                var InstallCharacter = shouldReferenceAndMovingBeSwitched(refAssembly, movingAssembly, combinedCVXHull, out refFacesInCombined, out movingFacesInCombined);
-                if ((int)InstallCharacter < 0)
-                {
-                    var tempASM = refAssembly;
-                    refAssembly = movingAssembly;
-                    movingAssembly = tempASM;
-                    refFacesInCombined = movingFacesInCombined; // no need to use temp here, as the movingFaces in the 
-                    // combined convex hull are not needed.
-                    InstallCharacter = (InstallCharacterType)(-((int)InstallCharacter));
-                }
-                var newSubassembly = new SubAssembly(refAssembly, movingAssembly, combinedCVXHull, InstallCharacter, refFacesInCombined);
-                Subassemblies.Add(newSubassembly);
-                return newSubassembly;
+            ConvexHull<Vertex, DefaultConvexFace<Vertex>> combinedCVXHull = CreateCombinedConvexHull(
+                refAssembly.CVXHull, movingAssembly.CVXHull);
+            //List<DefaultConvexFace<Vertex>> refFacesInCombined, movingFacesInCombined;
+            var InstallCharacter = shouldReferenceAndMovingBeSwitched(refAssembly, movingAssembly, combinedCVXHull,
+                out refFacesInCombined, out movingFacesInCombined);
+            if ((int) InstallCharacter < 0)
+            {
+                var tempASM = refAssembly;
+                refAssembly = movingAssembly;
+                movingAssembly = tempASM;
+                refFacesInCombined = movingFacesInCombined; // no need to use temp here, as the movingFaces in the 
+                // combined convex hull are not needed.
+                InstallCharacter = (InstallCharacterType) (-((int) InstallCharacter));
+            }
+            var newSubassembly = new SubAssembly(refAssembly, movingAssembly, combinedCVXHull, InstallCharacter,
+                refFacesInCombined);
+            // instead of adding to Subassemblies, newSubassembly must be added to its preceeding subassembly (to its parent)
+            Subassemblies.Add(newSubassembly);
+            return newSubassembly;
         }
 
 
