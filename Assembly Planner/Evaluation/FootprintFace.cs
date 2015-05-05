@@ -71,7 +71,7 @@ namespace AssemblyEvaluation
         /// <value>
         /// Adjacent Faces
         /// </value>
-        public List<double> Adjacents { get; set; }
+        public List<FootprintFace> Adjacents { get; set; }
         /// <summary>
         /// Gets the IsComInsideFace
         /// </summary>

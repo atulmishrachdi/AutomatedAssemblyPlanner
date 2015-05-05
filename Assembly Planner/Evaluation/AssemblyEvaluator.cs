@@ -15,9 +15,7 @@ namespace AssemblyEvaluation
     public class AssemblyEvaluator
     {
         private static List<List<DefaultConvexFace<Vertex>>> newRefCVHFacesInCom = new List<List<DefaultConvexFace<Vertex>>>();
-        public static List<FootprintFace> FootPrintFaces = new List<FootprintFace>();
         private Dictionary<string, ConvexHull<Vertex, DefaultConvexFace<Vertex>>> convexHullForParts;
-        public static Dictionary<string, Vector> insertionDirectionDic = new Dictionary<string, Vector>();
         private int Iterations;
 
         #region Constructor
@@ -57,7 +55,7 @@ namespace AssemblyEvaluation
             var insertionPoint = (i == -1) ? new Vertex(0, 0, 0)
                 : new Vertex(firstArc.localVariables[i + 1], firstArc.localVariables[i + 2], firstArc.localVariables[i + 3]);
 
-            newSubAsm.Install.InstallDirection = StarMath.multiply(insertionDistance, insertionDirection.Position, 3);
+            newSubAsm.Install.InstallDirection = StarMath.multiply(insertionDistance, insertionDirection.Position);
             newSubAsm.Install.InstallPoint = insertionPoint.Position;
             
             //var travelDistance = PathDeterminationEvaluator.FindTravelDistance(newSubAsm, insertionDirection, insertionPoint);
@@ -66,10 +64,24 @@ namespace AssemblyEvaluation
 
             if (double.IsNaN(insertionDirection.Position[0])) Console.WriteLine();
 
-            double evaluationScore = InitialEvaluation(newSubAsm, newSubAsm.Install.InstallDirection, insertionDirection, refNodes, movingNodes, c);
+            double evaluationScore = InitialEvaluation(newSubAsm, newSubAsm.Install.InstallDirection, refNodes, movingNodes, c);
             
             Updates.UpdateChildGraph(c, install);
             return evaluationScore;
+        }
+
+
+        private static double InitialEvaluation(SubAssembly newSubAsm, double[] installDirection, List<node> refNodes, List<node> movingNodes, AssemblyCandidate c)
+        {
+            newRefCVHFacesInCom.Clear();
+
+            var unAffectedFaces = UnaffectedRefFacesDuringInstallation(newSubAsm);
+            var mergedFaces = MergingFaces(unAffectedFaces);
+
+            c.TimeScore = TimeEvaluation(refNodes, movingNodes);
+            c.AccessibilityScore = AccessabilityEvaluation(installDirection, mergedFaces);
+            c.StabilityScore = StabilityEvaluation(newSubAsm, mergedFaces);
+            return c.TimeScore + c.AccessibilityScore + c.StabilityScore;
         }
 
         private Vector FindPartDisconnectMovement(IEnumerable<arc> connectingArcs, List<node> refNodes, out double insertionDistance)
@@ -181,22 +193,17 @@ namespace AssemblyEvaluation
             return installDirection;
         }
 
-        public static List<DefaultConvexFace<Vertex>> UnaffectedRefFacesDuringInstallation(SubAssembly newSubAsm, Vector insertionDirection)
+        public static List<DefaultConvexFace<Vertex>> UnaffectedRefFacesDuringInstallation(SubAssembly newSubAsm)
         {
+            var insertionDirection = newSubAsm.Install.InstallDirection;
             var notAffectedFacesInCom = newSubAsm.Install.Reference.CVXHull.Faces.ToList();
-
-            var halfOfRefCvh = new List<DefaultConvexFace<Vertex>>();
-            foreach (var f in newSubAsm.Install.Reference.CVXHull.Faces)
-            {
-                var dotProduct = StarMath.dotProduct(f.Normal, insertionDirection.Position, 3);
-                if (Math.Acos(dotProduct) > (Math.PI / 2))
-                    halfOfRefCvh.Add(f);
-            }
+            var halfOfRefCvh = newSubAsm.Install.Reference.CVXHull.Faces.Where(f => f.Normal.dotProduct(insertionDirection) < 0).ToList();
             foreach (var eachFace in halfOfRefCvh)
             {
                 foreach (var eachMovingVerticies in newSubAsm.Install.Moving.CVXHull.Points)
                 {
-                    var ray = new Ray(eachMovingVerticies, insertionDirection);
+                    var vector = new Vector(insertionDirection);
+                    var ray = new Ray(eachMovingVerticies, vector);
                     var faceAffected = STLGeometryFunctions.RayIntersectsWithFace(ray, eachFace);
                     if (faceAffected)
                         notAffectedFacesInCom.Remove(eachFace);
@@ -205,41 +212,7 @@ namespace AssemblyEvaluation
             return notAffectedFacesInCom;
         }
 
-        private static void FindAdgacentFaces()
-        {
-            foreach (var firstFace in FootPrintFaces)
-            {
-                foreach (var secondFace in FootPrintFaces.Where(secondFace => secondFace.ExCoVer.Any(
-                    eachPointOfSecondFace => firstFace.ExCoVer
-                        .Contains(eachPointOfSecondFace))))
-                {
-                    firstFace.Adjacents.Add(secondFace.Name);
-                    break;
-                }
-            }
-        }
-
-
-        private static double InitialEvaluation(SubAssembly newSubAsm, double[] installDirection, Vector insertionDirection, List<node> refNodes, List<node> movingNodes, AssemblyCandidate c)
-        {
-            FootPrintFaces.Clear();
-            newRefCVHFacesInCom.Clear();
-            FindAdgacentFaces();
-            
-            var unAffectedFaces = UnaffectedRefFacesDuringInstallation(newSubAsm, insertionDirection);
-            MergingFaces(unAffectedFaces);
-
-            for (var i = 0; i < FootPrintFaces.Count; i++)
-                FootPrintFaces[i].Name = i + 1;
-            
-            c.TimeScore = TimeEvaluation(refNodes, movingNodes);
-            c.AccessibilityScore = AccessabilityEvaluation(installDirection);
-            c.StabilityScore = StabilityEvaluation(newSubAsm);
-            insertionDirectionDic.Add(newSubAsm.Name, insertionDirection);
-            return c.TimeScore + c.AccessibilityScore + c.StabilityScore;
-        }
-
-        private static double StabilityEvaluation(SubAssembly newSubAsm)
+        private static double StabilityEvaluation(SubAssembly newSubAsm, List<FootprintFace> FootPrintFaces)
         {
             double r = 0.0;
             foreach (var newFa in FootPrintFaces)
@@ -248,7 +221,7 @@ namespace AssemblyEvaluation
             return r;
         }
 
-        public static double AccessabilityEvaluation(double[] installDirection)
+        public static double AccessabilityEvaluation(double[] installDirection, List<FootprintFace> FootPrintFaces)
         {
             var r = 0.0;
             foreach (var f in FootPrintFaces)
@@ -370,51 +343,52 @@ namespace AssemblyEvaluation
         }
 
 
-        public static void MergingFaces(List<DefaultConvexFace<Vertex>> unChangedFaces)
+        public static List<FootprintFace> MergingFaces(List<DefaultConvexFace<Vertex>> unChangedFaces)
         {
+            var FootprintFaces = new List<FootprintFace>();
             for (var c = 0; c < unChangedFaces.Count; c++)
             {
                 var ini = new FootprintFace();
-                FootPrintFaces.Add(ini);
+                FootprintFaces.Add(ini);
                 var normal2 = unChangedFaces[c].Normal;
-                FootPrintFaces[c].Normal = normal2;
-                FootPrintFaces[c].ExCoVer = new List<Vertex>();
-                FootPrintFaces[c].Faces = new List<DefaultConvexFace<Vertex>>();
+                FootprintFaces[c].Normal = normal2;
+                FootprintFaces[c].ExCoVer = new List<Vertex>();
+                FootprintFaces[c].Faces = new List<DefaultConvexFace<Vertex>>();
                 for (var i = 0; i < 3; i++)
                 {
                     for (var j = i + 1; j < 3; j++)
                     {
-                        FootPrintFaces[c].ExCoVer.Add(unChangedFaces[c].Vertices[i]);
-                        FootPrintFaces[c].ExCoVer.Add(unChangedFaces[c].Vertices[j]);
+                        FootprintFaces[c].ExCoVer.Add(unChangedFaces[c].Vertices[i]);
+                        FootprintFaces[c].ExCoVer.Add(unChangedFaces[c].Vertices[j]);
                     }
                 }
                 for (var n = 0; n < unChangedFaces.Count; n++)
                 {
                     var normal1 = unChangedFaces[n].Normal;
-                    var normalsDP = StarMath.dotProduct(normal1, normal2, 3);
+                    var normalsDP = normal1.dotProduct(normal2);
                     if (!(Math.Acos(normalsDP) < Math.PI / 18) || !(Math.Acos(normalsDP) > -Math.PI / 18)) continue;
-                    FootPrintFaces[c].Faces.Add(unChangedFaces[n]);
-                    FootPrintFaces[c].Normal = StarMath.add(normal1, FootPrintFaces[c].Normal, 3);
+                    FootprintFaces[c].Faces.Add(unChangedFaces[n]);
+                    FootprintFaces[c].Normal = StarMath.add(normal1, FootprintFaces[c].Normal, 3);
                     for (var i = 0; i < 3; i++)
                     {
                         for (var j = i + 1; j < 3; j++)
                         {
-                            FootPrintFaces[c].ExCoVer.Add(unChangedFaces[n].Vertices[i]);
-                            FootPrintFaces[c].ExCoVer.Add(unChangedFaces[n].Vertices[j]);
+                            FootprintFaces[c].ExCoVer.Add(unChangedFaces[n].Vertices[i]);
+                            FootprintFaces[c].ExCoVer.Add(unChangedFaces[n].Vertices[j]);
 
-                            for (var k = 0; k < FootPrintFaces[c].ExCoVer.Count - 2; k += 2)
+                            for (var k = 0; k < FootprintFaces[c].ExCoVer.Count - 2; k += 2)
                             {
-                                if (FootPrintFaces[c].ExCoVer[k] == unChangedFaces[n].Vertices[i] &&
-                                    FootPrintFaces[c].ExCoVer[k + 1] == unChangedFaces[n].Vertices[j])
+                                if (FootprintFaces[c].ExCoVer[k] == unChangedFaces[n].Vertices[i] &&
+                                    FootprintFaces[c].ExCoVer[k + 1] == unChangedFaces[n].Vertices[j])
                                 {
-                                    FootPrintFaces[c].ExCoVer.Remove(unChangedFaces[n].Vertices[i]);
-                                    FootPrintFaces[c].ExCoVer.Remove(unChangedFaces[n].Vertices[j]);
+                                    FootprintFaces[c].ExCoVer.Remove(unChangedFaces[n].Vertices[i]);
+                                    FootprintFaces[c].ExCoVer.Remove(unChangedFaces[n].Vertices[j]);
                                     break;
                                 }
-                                if (FootPrintFaces[c].ExCoVer[k] != unChangedFaces[n].Vertices[j] ||
-                                    FootPrintFaces[c].ExCoVer[k + 1] != unChangedFaces[n].Vertices[i]) continue;
-                                FootPrintFaces[c].ExCoVer.Remove(unChangedFaces[n].Vertices[i]);
-                                FootPrintFaces[c].ExCoVer.Remove(unChangedFaces[n].Vertices[j]);
+                                if (FootprintFaces[c].ExCoVer[k] != unChangedFaces[n].Vertices[j] ||
+                                    FootprintFaces[c].ExCoVer[k + 1] != unChangedFaces[n].Vertices[i]) continue;
+                                FootprintFaces[c].ExCoVer.Remove(unChangedFaces[n].Vertices[i]);
+                                FootprintFaces[c].ExCoVer.Remove(unChangedFaces[n].Vertices[j]);
                                 break;
                             }
                         }
@@ -423,8 +397,9 @@ namespace AssemblyEvaluation
                 }
 
             }
+            Random rnd = new Random();
             //Finding unique external verticies
-            foreach (var t in FootPrintFaces)
+            foreach (var t in FootprintFaces)
             {
                 t.ExVer = new List<Vertex>();
                 var coVer = t.ExCoVer;
@@ -434,7 +409,20 @@ namespace AssemblyEvaluation
                     if (!t.ExVer.Contains(coVer[i]))
                         t.ExVer.Add(coVer[i]);
                 }
+                t.Name = rnd.Next(0, 1000000);
             }
+            foreach (var firstFace in FootprintFaces)
+            {
+                firstFace.Adjacents = new List<FootprintFace>();
+                foreach (var secondFace in FootprintFaces.Where(secondFace => secondFace.ExCoVer.Any(
+                    eachPointOfSecondFace => firstFace.ExCoVer
+                        .Contains(eachPointOfSecondFace))))
+                {
+                    firstFace.Adjacents.Add(secondFace);
+                    break;
+                }
+            }
+            return FootprintFaces;
         }
     }
 }

@@ -32,20 +32,13 @@ namespace Assembly_Planner
 
         public static void Dijkstra(AssemblyCandidate candidate)
         {
-            AssemblyEvaluator.FootPrintFaces.Clear();
-
             InstTasks = new Dictionary<string, SubAssembly>();
-            BuildingInstallationTaskDictionary(candidate.Sequence.Subassemblies[0]);
+            UpdatePostProcessor.BuildingInstallationTaskDictionary(candidate.Sequence.Subassemblies[0]);
 
             SucTasks = new Dictionary<string, List<string>>();
-            BuildSuccedingTaskDictionary(candidate.Sequence.Subassemblies[0], new List<string>());
+            UpdatePostProcessor.BuildSuccedingTaskDictionary(candidate.Sequence.Subassemblies[0], new List<string>());
 
-            var lastTask = new SubAssembly();
-            foreach (var sucT in SucTasks.Keys.Where(sucT => SucTasks[sucT].Count == 0))
-            {
-                lastTask = InstTasks[sucT];
-                break;
-            }
+            var lastTask = InstTasks[SucTasks.Keys.Where(sucT => SucTasks[sucT].Count == 0).ToList()[0]];
 
             var loopMakingSubAsse = new List<SubAssembly>();
             loopMakingSubAsse.Add(lastTask);
@@ -55,15 +48,12 @@ namespace Assembly_Planner
                 var lastSubAssEachMoving = loopMakingSubAsse[h];
                 RefPrec = new List<SubAssembly>();
                 Movings = new List<SubAssembly>();
-                BuildingListOfReferencePreceedings(loopMakingSubAsse[h]);
+                UpdatePostProcessor.BuildingListOfReferencePreceedings(loopMakingSubAsse[h]);
 
                 var ftask = RefPrec[RefPrec.Count - 1];
 
-                var pureStartFaces = ftask.Install.Reference.CVXHull.Faces.ToList();
-                AssemblyEvaluator.MergingFaces(pureStartFaces);
-                var fromFaces = new List<FootprintFace>();
-                fromFaces.AddRange(AssemblyEvaluator.FootPrintFaces);
-                AssemblyEvaluator.FootPrintFaces.Clear();
+                var initialFaces = ftask.Install.Reference.CVXHull.Faces.ToList();
+                var fromFaces = AssemblyEvaluator.MergingFaces(initialFaces);
 
                 Console.WriteLine("Which of the following faces is your current footprint face in the subassembly    " + ftask.Name + "   ?");
                 Console.WriteLine("Enter the corresponding number to the console:");
@@ -75,13 +65,8 @@ namespace Assembly_Planner
 
                 var read = Convert.ToInt32(Console.ReadLine());
                 var startingFace = fromFaces[read];
-
-                var notAffected = AssemblyEvaluator.UnaffectedRefFacesDuringInstallation(ftask,
-                    AssemblyEvaluator.insertionDirectionDic[ftask.Name]);
-                AssemblyEvaluator.MergingFaces(notAffected);
-                var toFaces = new List<FootprintFace>();
-                toFaces.AddRange(AssemblyEvaluator.FootPrintFaces);
-                AssemblyEvaluator.FootPrintFaces.Clear();
+                var notAffected = AssemblyEvaluator.UnaffectedRefFacesDuringInstallation(ftask);
+                var toFaces = AssemblyEvaluator.MergingFaces(notAffected);
 
                 var precAndMinC = new List<PreAndCost>();
 
@@ -93,7 +78,7 @@ namespace Assembly_Planner
 
                     precAndMinC[last].SubAssembly = ftask;
                     precAndMinC[last].Face = tFace;
-                    precAndMinC[last].MinCost = double.PositiveInfinity;
+                    precAndMinC[last].MinCost = Double.PositiveInfinity;
 
                     double stabilityAccessCost = StabilityAndAcccessabilityCostCalcultor(ftask, tFace);
 
@@ -117,15 +102,11 @@ namespace Assembly_Planner
                     {
                         var curSubAsse = RefPrec[i];
                         var preSubAsse = RefPrec[i + 1];
-                        AssemblyEvaluator.MergingFaces(pureStartFaces);
+                        AssemblyEvaluator.MergingFaces(initialFaces);
                         fromFaces = toFaces;
 
-                        notAffected = AssemblyEvaluator.UnaffectedRefFacesDuringInstallation(curSubAsse,
-                            AssemblyEvaluator.insertionDirectionDic[curSubAsse.Name]);
-                        AssemblyEvaluator.MergingFaces(notAffected);
-                        toFaces = new List<FootprintFace>();
-                        toFaces.AddRange(AssemblyEvaluator.FootPrintFaces);
-                        AssemblyEvaluator.FootPrintFaces.Clear();
+                        notAffected = AssemblyEvaluator.UnaffectedRefFacesDuringInstallation(curSubAsse);
+                        toFaces = new List<FootprintFace>(AssemblyEvaluator.MergingFaces(notAffected));
 
                         foreach (var tFace in toFaces)
                         {
@@ -136,7 +117,7 @@ namespace Assembly_Planner
                             precAndMinC[last].SubAssembly = curSubAsse;
                             precAndMinC[last].FromSubAssembly = preSubAsse;
                             precAndMinC[last].Face = tFace;
-                            precAndMinC[last].MinCost = double.PositiveInfinity;
+                            precAndMinC[last].MinCost = Double.PositiveInfinity;
 
                             double stabilityAccessCost = StabilityAndAcccessabilityCostCalcultor(curSubAsse, tFace);
 
@@ -173,7 +154,7 @@ namespace Assembly_Planner
             }
 
             PreAndCost minCostFace = null;
-            var min = double.PositiveInfinity;
+            var min = Double.PositiveInfinity;
             foreach (var v in precAndMinC.Where(a => a.SubAssembly == lastSubAssEachMoving).Where(v => v.MinCost < min))
             {
                 minCostFace = v;
@@ -253,7 +234,7 @@ namespace Assembly_Planner
             var angleInRad = Math.Acos(fFace.Normal.dotProduct(tFace.Normal));
             var angleBetweenCurrentAndCandidate = angleInRad * (180 / Math.PI);
 
-            if (fFace.Adjacents.Contains(tFace.Name))
+            if (fFace.Adjacents.Where(f => f.Name == tFace.Name).ToList().Count>0)
             {
                 // It's adjacent, then do s.th ????????????
                 // Giving RI and LI some values?
@@ -299,40 +280,6 @@ namespace Assembly_Planner
             liftingIndices.LI = task.Mass / liftingIndices.RWL;
 
             return liftingIndices.LI + rotatingIndex.RI;
-        }
-
-        private static void BuildSuccedingTaskDictionary(SubAssembly subAssembly, List<string> successors)
-        {
-            if (subAssembly == null) return;
-            SucTasks.Add(subAssembly.Name, successors);
-
-            var subSubAssembly = subAssembly.Install.Moving;
-            var subSuccessors = new List<string>(successors);
-            subSuccessors.Add(subAssembly.Name);
-            BuildSuccedingTaskDictionary(subSubAssembly as SubAssembly, subSuccessors);
-
-
-            subSubAssembly = subAssembly.Install.Reference;
-            subSuccessors = new List<string>(successors);
-            subSuccessors.Add(subAssembly.Name);
-            BuildSuccedingTaskDictionary(subSubAssembly as SubAssembly, subSuccessors);
-        }
-
-        private static void BuildingInstallationTaskDictionary(SubAssembly subAssembly)
-        {
-            if (subAssembly == null) return;
-            InstTasks.Add(subAssembly.Name, subAssembly);
-            BuildingInstallationTaskDictionary(subAssembly.Install.Moving as SubAssembly);
-            BuildingInstallationTaskDictionary(subAssembly.Install.Reference as SubAssembly);
-        }
-
-        private static void BuildingListOfReferencePreceedings(SubAssembly subAssembly)
-        {
-            if (subAssembly == null) return;
-            RefPrec.Add(subAssembly);
-            if (subAssembly.Install.Moving.PartNodes.Count > 1)
-                Movings.Add(subAssembly.Install.Moving as SubAssembly);
-            BuildingListOfReferencePreceedings(subAssembly.Install.Reference as SubAssembly);
         }
     }
 }
