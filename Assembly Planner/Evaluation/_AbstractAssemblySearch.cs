@@ -1,5 +1,4 @@
 ﻿using AssemblyEvaluation;
-using Assembly_Planner.PostProcessor;
 using GeometryReasoning;
 using GraphSynth.Representation;
 using GraphSynth.Search;
@@ -53,7 +52,7 @@ namespace GraphSynth
                 newSeed.f0 = newSeed.f1 = newSeed.f2 = newSeed.f3 = newSeed.f4 = 0.0;
                 getAssemblyPlan(newSeed, solutions);
             //}
-            WorkerAllocation.Run(solutions);
+            //WorkerAllocation.Run(solutions);
 
             stopwatch.Stop();
             outputSolutionPlans(solutions, stopwatch.Elapsed);

@@ -24,14 +24,17 @@ namespace Assembly_Planner
             public SubAssembly FromSubAssembly;
         }
 
-        internal static void Run(List<AssemblyCandidate> solutions)
+        internal static Dictionary<string, double> Run(List<AssemblyCandidate> solutions)
         {
             foreach (var c in solutions.Where(c => c != null))
-                Dijkstra(c);
+                return Dijkstra(c);
+            return null;
         }
 
-        public static void Dijkstra(AssemblyCandidate candidate)
+        public static Dictionary<string, double> Dijkstra(AssemblyCandidate candidate)
         {
+            var taskCommands = new Dictionary<string, double>();
+
             InstTasks = new Dictionary<string, SubAssembly>();
             UpdatePostProcessor.BuildingInstallationTaskDictionary(candidate.Sequence.Subassemblies[0]);
 
@@ -132,22 +135,21 @@ namespace Assembly_Planner
                         }
                     }
                 }
-                Commander(RefPrec, precAndMinC, lastSubAssEachMoving);
+                Commander(RefPrec, precAndMinC, lastSubAssEachMoving, taskCommands);
                 loopMakingSubAsse.Remove(lastSubAssEachMoving);
                 h--;
                 loopMakingSubAsse.AddRange(Movings);
             }
-            Console.ReadLine();
+            return taskCommands;
         }
 
 
 
-        private static void Commander(List<SubAssembly> RefPrec, List<PreAndCost> precAndMinC, SubAssembly lastSubAssEachMoving)
+        private static void Commander(List<SubAssembly> RefPrec, List<PreAndCost> precAndMinC, SubAssembly lastSubAssEachMoving, Dictionary<string, double> taskCommands)
         {
             var commands = new List<string>();
             foreach (var v in RefPrec)
                 commands.Add(null);
-
             PreAndCost minCostFace = null;
             var min = Double.PositiveInfinity;
             foreach (var v in precAndMinC.Where(a => a.SubAssembly == lastSubAssEachMoving).Where(v => v.MinCost < min))
@@ -157,6 +159,7 @@ namespace Assembly_Planner
             }
 
             commands[commands.Count - 1] = "In Subassembly:  " + minCostFace.SubAssembly.Name + ", face:  " + minCostFace.Face.Name;
+            taskCommands.Add(minCostFace.SubAssembly.Name, minCostFace.Face.Name);
             var e = 1;
             var stay = true;
             do
@@ -164,24 +167,26 @@ namespace Assembly_Planner
                 if (minCostFace.FromSubAssembly == null)
                 {
 
-                    commands[0] = "For the first step change your footprint face from:" + minCostFace.FromFace + "  to:  " + minCostFace.Face.Name;
+                    //commands[0] = "For the first step change your footprint face from:" + minCostFace.FromFace + "  to:  " + minCostFace.Face.Name;
+                    //taskCommands.Add(minCostFace.SubAssembly.Name, minCostFace.Face.Name);
                     stay = false;
                 }
                 else
                 {
                     e++;
                     foreach (var v in precAndMinC.Where(v =>
-                                    v.Face == minCostFace.FromFace &&
-                                    v.SubAssembly == minCostFace.FromSubAssembly))
+                                    v.Face.Name == minCostFace.FromFace.Name &&
+                                    v.SubAssembly.Name == minCostFace.FromSubAssembly.Name))
                     {
                         minCostFace = v;
                         commands[commands.Count - e] = "In Subassembly:  " + minCostFace.SubAssembly.Name + ", face:  " + minCostFace.Face.Name;
+                        taskCommands.Add(minCostFace.SubAssembly.Name, minCostFace.Face.Name);
                         break;
                     }
                 }
             } while (stay);
-            foreach (var c in commands)
-                Console.WriteLine(c);
+            //foreach (var c in commands)
+            //    Console.WriteLine(c);
         }
 
 

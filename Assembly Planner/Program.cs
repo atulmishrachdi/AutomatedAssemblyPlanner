@@ -33,13 +33,11 @@ namespace Assembly_Planner
             var solutions = OrderedDFS.Run(inputData, globalDirPool); // the output is the assembly sequence
             //var solutions = BeamSearch.Run(inputData, globalDirPool);
             stopwatch.Stop();
-            Console.WriteLine(" In only  "+ stopwatch.Elapsed);
-            Console.WriteLine("     1. An assembly in STL format is read");
-            Console.WriteLine("     2. The  primitive classification is done for each individual solid");
-            Console.WriteLine("     3. Part by part interactions are explored");
-            Console.WriteLine("     4. A graph is made from the scratch");
-            Console.WriteLine("     5. A Beam search with the beam width of "+ DisConstants.BeamWidth + " is done");
-            OptimalOrientation.Run(solutions);
+            Console.WriteLine(" Geometric Reasoning and Search are done in  "+ stopwatch.Elapsed);
+            var reorientation = OptimalOrientation.Run(solutions);
+            WorkerAllocation.Run(solutions, reorientation);
+            Console.ReadLine();
+
         }
 
         private static List<TessellatedSolid> GetSTLs(string InputDir)

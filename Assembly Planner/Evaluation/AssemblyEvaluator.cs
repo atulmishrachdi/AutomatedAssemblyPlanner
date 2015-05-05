@@ -17,12 +17,13 @@ namespace AssemblyEvaluation
         private static List<List<DefaultConvexFace<Vertex>>> newRefCVHFacesInCom = new List<List<DefaultConvexFace<Vertex>>>();
         private Dictionary<string, ConvexHull<Vertex, DefaultConvexFace<Vertex>>> convexHullForParts;
         private int Iterations;
+        private readonly TimeEvaluator timeEvaluator;
 
         #region Constructor
         public AssemblyEvaluator(Dictionary<string, ConvexHull<Vertex, DefaultConvexFace<Vertex>>> convexHullForParts)
         {
             //feasibility = new FeasibilityEvaluator();
-            //timeEvaluator = new TimeEvaluator();
+            timeEvaluator = new TimeEvaluator();
             this.convexHullForParts = convexHullForParts;
             //    reOrientations = new ReOrientations();
         }
@@ -57,11 +58,12 @@ namespace AssemblyEvaluation
 
             newSubAsm.Install.InstallDirection = StarMath.multiply(insertionDistance, insertionDirection.Position);
             newSubAsm.Install.InstallPoint = insertionPoint.Position;
-            
-            //var travelDistance = PathDeterminationEvaluator.FindTravelDistance(newSubAsm, insertionDirection, insertionPoint);
-            //newSubAsm.Install.Time =
-                //timeEvaluator.EvaluateTimeForInstall(connectingArcs.Count(), travelDistance, insertionDistance, newSubAsm);
 
+            var travelDistance = 1000;//PathDeterminationEvaluator.FindTravelDistance(newSubAsm, insertionDirection, insertionPoint);
+            newSubAsm.Install.Time =
+                timeEvaluator.EvaluateTimeForInstall(connectingArcs.Count(), travelDistance, insertionDistance, newSubAsm);
+            c.f3 += newSubAsm.Install.Time;
+            //c.f4 = timeEvaluator.EvaluateTimeOfLongestBranch(c.Sequence);
             if (double.IsNaN(insertionDirection.Position[0])) Console.WriteLine();
 
             double evaluationScore = InitialEvaluation(newSubAsm, newSubAsm.Install.InstallDirection, refNodes, movingNodes, c);
