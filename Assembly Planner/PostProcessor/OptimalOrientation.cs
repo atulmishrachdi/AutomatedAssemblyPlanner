@@ -132,15 +132,12 @@ namespace Assembly_Planner
                         }
                     }
                 }
-
                 Commander(RefPrec, precAndMinC, lastSubAssEachMoving);
-
                 loopMakingSubAsse.Remove(lastSubAssEachMoving);
                 h--;
                 loopMakingSubAsse.AddRange(Movings);
             }
-
-
+            Console.ReadLine();
         }
 
 
@@ -149,9 +146,7 @@ namespace Assembly_Planner
         {
             var commands = new List<string>();
             foreach (var v in RefPrec)
-            {
                 commands.Add(null);
-            }
 
             PreAndCost minCostFace = null;
             var min = Double.PositiveInfinity;
@@ -184,9 +179,9 @@ namespace Assembly_Planner
                         break;
                     }
                 }
-
-
             } while (stay);
+            foreach (var c in commands)
+                Console.WriteLine(c);
         }
 
 
@@ -213,7 +208,7 @@ namespace Assembly_Planner
                     var yDif = p1.Position[1] - p2.Position[1];
                     var zDif = p1.Position[2] - p2.Position[2];
                     if (Math.Sqrt((xDif * xDif) + (yDif * yDif) + (zDif * zDif)) > maxDist)
-                        maxDist = Math.Sqrt((xDif * xDif) + (yDif * yDif) + (zDif * zDif));
+                        maxDist = (Math.Sqrt((xDif * xDif) + (yDif * yDif) + (zDif * zDif)))/10; // since it is in mm
                 }
             }
             // if the candidate face is adjacent, do s.th else (do what????), othrwise calculate LI and RI
@@ -231,7 +226,7 @@ namespace Assembly_Planner
             };
             var rotatingIndex = new PostProcessingConstnts.RotatingIndices();
             //angle between candidate face and current face
-            var angleInRad = Math.Acos(fFace.Normal.dotProduct(tFace.Normal));
+            var angleInRad = Math.Acos(fFace.Normal.normalize().dotProduct(tFace.Normal.normalize()));
             var angleBetweenCurrentAndCandidate = angleInRad * (180 / Math.PI);
 
             if (fFace.Adjacents.Where(f => f.Name == tFace.Name).ToList().Count>0)

@@ -98,9 +98,22 @@ namespace AssemblyEvaluation
             }
             var newSubassembly = new SubAssembly(refAssembly, movingAssembly, combinedCVXHull, InstallCharacter,
                 refFacesInCombined);
+            newSubassembly.CenterOfMass = CombinedCenterOfMass(newSubassembly);
             // instead of adding to Subassemblies, newSubassembly must be added to its preceeding subassembly (to its parent)
             Subassemblies.Add(newSubassembly);
             return newSubassembly;
+        }
+
+        private Vertex CombinedCenterOfMass(SubAssembly newSubassembly)
+        {
+            return
+                new Vertex(
+                    (newSubassembly.Install.Moving.CenterOfMass.Position[0] +
+                     newSubassembly.Install.Reference.CenterOfMass.Position[0])/2,
+                    (newSubassembly.Install.Moving.CenterOfMass.Position[1] +
+                     newSubassembly.Install.Reference.CenterOfMass.Position[1])/2,
+                    (newSubassembly.Install.Moving.CenterOfMass.Position[2] +
+                     newSubassembly.Install.Reference.CenterOfMass.Position[2])/2);
         }
 
 
