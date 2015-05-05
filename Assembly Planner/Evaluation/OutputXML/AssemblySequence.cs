@@ -1,6 +1,7 @@
 ﻿using GraphSynth.Representation;
 using MIConvexHull;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using StarMathLib;
@@ -96,12 +97,25 @@ namespace AssemblyEvaluation
                 // combined convex hull are not needed.
                 InstallCharacter = (InstallCharacterType) (-((int) InstallCharacter));
             }
+            string refName = nameMaker(refAssembly);
+            string movName = nameMaker(movingAssembly);
             var newSubassembly = new SubAssembly(refAssembly, movingAssembly, combinedCVXHull, InstallCharacter,
                 refFacesInCombined);
+            newSubassembly.Name = refName +"   on   "+movName;
             newSubassembly.CenterOfMass = CombinedCenterOfMass(newSubassembly);
             // instead of adding to Subassemblies, newSubassembly must be added to its preceeding subassembly (to its parent)
             Subassemblies.Add(newSubassembly);
             return newSubassembly;
+        }
+
+        private string nameMaker(Part refAssembly)
+        {
+            var name = refAssembly.PartNodes[0];
+            for (var i = 1; i < refAssembly.PartNodes.Count; i++)
+            {
+                name = name +","+refAssembly.PartNodes[i];
+            }
+            return name;
         }
 
         private Vertex CombinedCenterOfMass(SubAssembly newSubassembly)

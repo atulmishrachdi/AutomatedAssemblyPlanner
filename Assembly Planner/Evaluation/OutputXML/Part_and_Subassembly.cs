@@ -79,7 +79,7 @@ namespace AssemblyEvaluation
         public SubAssembly(Part refAssembly, Part movingAssembly, ConvexHull<Vertex, DefaultConvexFace<Vertex>> combinedCVXHull,
             InstallCharacterType InstallCharacter, List<DefaultConvexFace<Vertex>> refFacesInCombined)
         {
-            Name = "subasm-" + Guid.NewGuid();
+            Name = "";
             PartNodes = new List<string>(refAssembly.PartNodes);
             PartNodes.AddRange(movingAssembly.PartNodes);
             Install = new InstallAction { Reference = refAssembly, Moving = movingAssembly };
