@@ -97,18 +97,18 @@ namespace AssemblyEvaluation
                 // combined convex hull are not needed.
                 InstallCharacter = (InstallCharacterType) (-((int) InstallCharacter));
             }
-            string refName = nameMaker(refAssembly);
-            string movName = nameMaker(movingAssembly);
+            string refName = NameMaker(refAssembly);
+            string movName = NameMaker(movingAssembly);
             var newSubassembly = new SubAssembly(refAssembly, movingAssembly, combinedCVXHull, InstallCharacter,
                 refFacesInCombined);
-            newSubassembly.Name = refName +"   on   "+movName;
+            //newSubassembly.Name = refName +"   on   "+movName;
             newSubassembly.CenterOfMass = CombinedCenterOfMass(newSubassembly);
             // instead of adding to Subassemblies, newSubassembly must be added to its preceeding subassembly (to its parent)
             Subassemblies.Add(newSubassembly);
             return newSubassembly;
         }
 
-        private string nameMaker(Part refAssembly)
+        private string NameMaker(Part refAssembly)
         {
             var name = refAssembly.PartNodes[0];
             for (var i = 1; i < refAssembly.PartNodes.Count; i++)

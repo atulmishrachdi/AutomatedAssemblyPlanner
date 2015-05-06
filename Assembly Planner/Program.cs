@@ -22,7 +22,7 @@ namespace Assembly_Planner
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
             //var filer = new BasicFiler("", "", "");
-            var solids = GetSTLs("..\\..\\..\\Test\\CubeSTL");
+            var solids = GetSTLs("..\\..\\..\\Test\\Pump Assembly");
             //var assemblyGraph = (designGraph)filer.Open("..\\..\\..\\Test\\inputNG.gxml")[0];
             //var globalDirPool = new List<int> { 0, 1, 2, 3, 4, 5 };
             var assemblyGraph = new designGraph();
@@ -49,7 +49,7 @@ namespace Assembly_Planner
             //foreach (var fileInfo in fis)
             {
                 var ts = TVGL.IO.Open(fileInfo.Open(FileMode.Open), fileInfo.Name);
-                ts.Name = ts.Name.Remove(0, 1);
+                //ts.Name = ts.Name.Remove(0, 1);
                 lock(parts)parts.Add(ts);
             }
             );

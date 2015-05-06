@@ -367,10 +367,9 @@ namespace AssemblyEvaluation
                 for (var n = 0; n < unChangedFaces.Count; n++)
                 {
                     var normal1 = unChangedFaces[n].Normal;
-                    var normalsDP = normal1.dotProduct(normal2);
-                    if (!(Math.Acos(normalsDP) < Math.PI / 18) || !(Math.Acos(normalsDP) > -Math.PI / 18)) continue;
+                    if ((1 - normal1.dotProduct(normal2)>0.2)) continue;
                     FootprintFaces[c].Faces.Add(unChangedFaces[n]);
-                    FootprintFaces[c].Normal = StarMath.add(normal1, FootprintFaces[c].Normal, 3);
+                    FootprintFaces[c].Normal = normal1.add(FootprintFaces[c].Normal, 3);
                     for (var i = 0; i < 3; i++)
                     {
                         for (var j = i + 1; j < 3; j++)
