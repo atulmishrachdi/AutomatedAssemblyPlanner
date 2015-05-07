@@ -59,7 +59,6 @@ namespace Assembly_Planner
                 var fromFaces = AssemblyEvaluator.MergingFaces(initialFaces);
 
                 Console.WriteLine("Which of the following faces is your current footprint face in the subassembly    " + ftask.Name + "   ?");
-                Console.WriteLine("Enter the corresponding number to the console:");
                 foreach (var f in fromFaces)
                 {
                     var index = fromFaces.IndexOf(f);
@@ -85,14 +84,6 @@ namespace Assembly_Planner
 
                     double stabilityAccessCost = StabilityAndAcccessabilityCostCalcultor(ftask, tFace);
 
-                    /*foreach (var fFace in fromFaces)
-                    {
-                        double totalCost = RiLiCostCalculator(ftask, fFace, tFace) + stabilityAccessCost;
-                        if (!(totalCost < precAndMinC[last].MinCost)) continue;
-                        precAndMinC[last].MinCost = totalCost;
-                        precAndMinC[last].FromFace = fFace;
-                    }*/
-
                     //For choosen starting face:
                     precAndMinC[last].MinCost = RiLiCostCalculator(ftask, startingFace, tFace) + stabilityAccessCost;
                     precAndMinC[last].FromFace = startingFace;
@@ -101,7 +92,6 @@ namespace Assembly_Planner
                 if (RefPrec.Count > 1)
                 {
                     for (var i = RefPrec.Count - 2; i >= 0; i--)
-                    //foreach (var t in RefPrec.Where(t => t.Install.Moving.PartNodes.Count == 1 && t.Install.Reference.PartNodes.Count == 1)) // the last added one or the one with one part in ref and one part in moving
                     {
                         var curSubAsse = RefPrec[i];
                         var preSubAsse = RefPrec[i + 1];
@@ -120,14 +110,14 @@ namespace Assembly_Planner
                             precAndMinC[last].SubAssembly = curSubAsse;
                             precAndMinC[last].FromSubAssembly = preSubAsse;
                             precAndMinC[last].Face = tFace;
-                            precAndMinC[last].MinCost = Double.PositiveInfinity;
+                            precAndMinC[last].MinCost = double.PositiveInfinity;
 
-                            double stabilityAccessCost = StabilityAndAcccessabilityCostCalcultor(curSubAsse, tFace);
+                            var stabilityAccessCost = StabilityAndAcccessabilityCostCalcultor(curSubAsse, tFace);
 
                             foreach (var fFace in fromFaces)
                             {
                                 var m = precAndMinC.Where(a => a.Face == fFace && a.SubAssembly == preSubAsse).ToList();
-                                double totalCost = m[0].MinCost + RiLiCostCalculator(curSubAsse, fFace, tFace) + stabilityAccessCost;
+                                var totalCost = m[0].MinCost + RiLiCostCalculator(curSubAsse, fFace, tFace) + stabilityAccessCost;
                                 if (!(totalCost < precAndMinC[last].MinCost)) continue;
                                 precAndMinC[last].MinCost = totalCost;
                                 precAndMinC[last].FromFace = fFace;
@@ -151,7 +141,7 @@ namespace Assembly_Planner
             foreach (var v in RefPrec)
                 commands.Add(null);
             PreAndCost minCostFace = null;
-            var min = Double.PositiveInfinity;
+            var min = double.PositiveInfinity;
             foreach (var v in precAndMinC.Where(a => a.SubAssembly == lastSubAssEachMoving).Where(v => v.MinCost < min))
             {
                 minCostFace = v;
@@ -165,12 +155,7 @@ namespace Assembly_Planner
             do
             {
                 if (minCostFace.FromSubAssembly == null)
-                {
-
-                    //commands[0] = "For the first step change your footprint face from:" + minCostFace.FromFace + "  to:  " + minCostFace.Face.Name;
-                    //taskCommands.Add(minCostFace.SubAssembly.Name, minCostFace.Face.Name);
                     stay = false;
-                }
                 else
                 {
                     e++;
@@ -248,14 +233,10 @@ namespace Assembly_Planner
                 // 1-(0.0075*|V-30|) in inch
                 double horizontalDistance;
                 if (vertDist < 10)
-                {
                     // we can assume the width of the object = the smallest side
                     horizontalDistance = 10 + partWidth / 2;
-                }
                 else
-                {
                     horizontalDistance = 8 + partWidth / 2;
-                }
                 rotatingIndex.HM = 10 / horizontalDistance;
                 rotatingIndex.CM = 1;
                 liftingIndices.HM = 10 / horizontalDistance;

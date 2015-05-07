@@ -398,7 +398,7 @@ namespace AssemblyEvaluation
                 }
 
             }
-            Random rnd = new Random();
+            var rnd = new Random();
             //Finding unique external verticies
             foreach (var t in FootprintFaces)
             {
