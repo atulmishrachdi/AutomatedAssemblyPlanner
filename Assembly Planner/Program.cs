@@ -48,9 +48,9 @@ namespace Assembly_Planner
             Parallel.ForEach(fis, fileInfo =>
             //foreach (var fileInfo in fis)
             {
-                var ts = TVGL.IO.Open(fileInfo.Open(FileMode.Open), fileInfo.Name);
+                var ts = TVGL.IOFunctions.IO.Open(fileInfo.Open(FileMode.Open), fileInfo.Name);
                 //ts.Name = ts.Name.Remove(0, 1);
-                lock(parts)parts.Add(ts);
+                lock(parts)parts.Add(ts[0]);
             }
             );
             return parts;

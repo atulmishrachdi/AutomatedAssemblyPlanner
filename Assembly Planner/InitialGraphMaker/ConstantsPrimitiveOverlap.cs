@@ -17,5 +17,7 @@ namespace Assembly_Planner
         public const double CheckWithGlobDirsParall = 0.00015;  //0.05
         public const double CheckWithGlobDirs = -0.0001;
         public const double EqualToZero = 5e-4;
+        public const double ConePortion = 0.35;
+        public static double ConeAreaPortion = 0.25;
     }
 }
