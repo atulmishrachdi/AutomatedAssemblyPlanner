@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security;
 using System.Text;
@@ -88,13 +89,32 @@ namespace Assembly_Planner
 
         private static List<Edge> MergingDenseEdges(List<Edge> patch, List<Edge>[] cluster)
         {
-            var startingEdge = cluster[0][0];
-            var ind = patch
-            for (var i = 0; i < patch.Count; i++)
+            var copyPatch = new List<Edge>(patch);
+            if (cluster[0].Contains(patch[0])) //if the starting face is sparse
             {
-                if (cluster[0].Contains(patch[i]))
-                    continue;
-                s
+                var localDense = new List<Edge>();
+                for (var i = 1; i < patch.Count; i++)
+                {
+                    if (cluster[0].Contains(patch[i]))
+                    {
+                        if (localDense.Count > 5)
+                        {
+                            // here I must replace the localDense with a new edge
+                            localDense[0].To = localDense[localDense.Count - 1].To;
+
+                        }
+                        localDense.Clear();
+                        continue;
+                    }
+                    localDense.Add(patch[i]);
+                }
+            }
+
+            else //if the starting face is dense
+            {
+                // take the dense edges from the begining and the last group of dense edges at the end (if exists)
+                var localDense = new List<Edge>();
+
             }
         }
 
