@@ -91,6 +91,7 @@ namespace Assembly_Planner
 
         private static bool IsGear(List<int> crossSign)
         {
+            crossSign = CrossUpdate(crossSign);
             if (crossSign.Count < 10) return false;
             var isGear = true;
             var counter = 0;
@@ -115,6 +116,78 @@ namespace Assembly_Planner
             }
             if (isGear && counter > BoltAndGearConstants.GearTeeth)
                 return true;
+            return false;
+        }
+
+        private static List<int> CrossUpdate(List<int> crossSign)
+        {
+            var updatedCrossSign = new List<int>(crossSign);
+            var count1 = 0;
+            var count2 = 0;
+            var currentSign = updatedCrossSign[0];
+            if (currentSign == 1) count1++;
+            else count2++;
+            var endOfStream = false;
+            var i = 0;
+            while (endOfStream == false)
+            {
+                int startInd, endInd;
+                if (i == 0)
+                    startInd = i;
+                else startInd = i + 1;
+                while (OtherSignCountIsZero(currentSign, count1, count2))
+                {
+                    i++;
+                    if (i == updatedCrossSign.Count)
+                    {
+                        endOfStream = true;
+                        break;
+                    }
+                    if (updatedCrossSign[i] == 1)
+                        count1++;
+                    else
+                        count2++;
+                }
+                i--;
+                endInd = i;
+                if (CountCurrentSign(currentSign, count1, count2) > 2)
+                    // keep only two
+                    for (var j = startInd + 2; j < endInd + 1; j++)
+                    {
+                        updatedCrossSign.RemoveAt(j);
+                        j--;
+                        endInd--;
+                        i--;
+                    }
+                currentSign = OppositeOfCurrent(currentSign);
+                count1 = 0;
+                count2 = 0;
+            }
+            return updatedCrossSign;
+        }
+
+        private static int OppositeOfCurrent(int currentSign)
+        {
+            if (currentSign == 1) return -1;
+            else return 1;
+        }
+
+        private static int CountCurrentSign(int currentSign, int count1, int count2)
+        {
+            if (currentSign == 1) return count1;
+            else return count2;
+        }
+
+        private static bool OtherSignCountIsZero(int currentSign, int count1, int count2)
+        {
+            if (currentSign == 1)
+            {
+                if (count2 == 0) return true;
+            }
+            else
+            {
+                if (count1 == 0) return true;
+            }
             return false;
         }
 
