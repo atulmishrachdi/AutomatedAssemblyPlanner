@@ -52,8 +52,6 @@ namespace Assembly_Planner
                     var patches = SortedConnectedPatches(outerGearEdges);
                     foreach (var patch in patches)
                     {
-                        // The clustering must be added here. Do the clustering only if the 
-                        // length of the longest to the length of the shortest is more than s.th.
                         var cluster = new List<GearEdge>[2];
                         var newPatch = new List<GearEdge>();
                         if (ClusteringDenseAndSparseEdges.ContainsDense(patch))
@@ -72,8 +70,8 @@ namespace Assembly_Planner
                             cross = vec1.crossProduct(vec2);
                             crossP.Add(cross);
                         }
-                        if (crossP.Count == 0) continue;
-                        var crossSign = ConvertCrossToSign(crossP);
+                        if (crossP.Count < 10) continue;
+                        var crossSign = BoltAndGearUpdateFunctions.ConvertCrossToSign(crossP);
                         if (!IsGear(crossSign)) continue;
                         Console.WriteLine("Is " + solid.Name + " a gear? 'y' or 'n'");
                         var read = Convert.ToString(Console.ReadLine());
@@ -91,8 +89,7 @@ namespace Assembly_Planner
 
         private static bool IsGear(List<int> crossSign)
         {
-            crossSign = CrossUpdate(crossSign);
-            if (crossSign.Count < 10) return false;
+            crossSign = BoltAndGearUpdateFunctions.CrossUpdate(crossSign);
             var isGear = true;
             var counter = 0;
             var startInd = 0;
@@ -116,78 +113,6 @@ namespace Assembly_Planner
             }
             if (isGear && counter > BoltAndGearConstants.GearTeeth)
                 return true;
-            return false;
-        }
-
-        private static List<int> CrossUpdate(List<int> crossSign)
-        {
-            var updatedCrossSign = new List<int>(crossSign);
-            var count1 = 0;
-            var count2 = 0;
-            var currentSign = updatedCrossSign[0];
-            if (currentSign == 1) count1++;
-            else count2++;
-            var endOfStream = false;
-            var i = 0;
-            while (endOfStream == false)
-            {
-                int startInd, endInd;
-                if (i == 0)
-                    startInd = i;
-                else startInd = i + 1;
-                while (OtherSignCountIsZero(currentSign, count1, count2))
-                {
-                    i++;
-                    if (i == updatedCrossSign.Count)
-                    {
-                        endOfStream = true;
-                        break;
-                    }
-                    if (updatedCrossSign[i] == 1)
-                        count1++;
-                    else
-                        count2++;
-                }
-                i--;
-                endInd = i;
-                if (CountCurrentSign(currentSign, count1, count2) > 2)
-                    // keep only two
-                    for (var j = startInd + 2; j < endInd + 1; j++)
-                    {
-                        updatedCrossSign.RemoveAt(j);
-                        j--;
-                        endInd--;
-                        i--;
-                    }
-                currentSign = OppositeOfCurrent(currentSign);
-                count1 = 0;
-                count2 = 0;
-            }
-            return updatedCrossSign;
-        }
-
-        private static int OppositeOfCurrent(int currentSign)
-        {
-            if (currentSign == 1) return -1;
-            else return 1;
-        }
-
-        private static int CountCurrentSign(int currentSign, int count1, int count2)
-        {
-            if (currentSign == 1) return count1;
-            else return count2;
-        }
-
-        private static bool OtherSignCountIsZero(int currentSign, int count1, int count2)
-        {
-            if (currentSign == 1)
-            {
-                if (count2 == 0) return true;
-            }
-            else
-            {
-                if (count1 == 0) return true;
-            }
             return false;
         }
 
@@ -223,9 +148,9 @@ namespace Assembly_Planner
                         var last = patches[c][patches[c].Count - 1];
                         if (ed1.To == last.To)
                         {
-                            var twm = last.To;
+                            var tem = last.To;
                             last.To = last.From;
-                            last.From = twm;
+                            last.From = tem;
                             last.Vector = last.Vector.multiply(-1);
                         }
 
@@ -240,26 +165,6 @@ namespace Assembly_Planner
         private static bool SmoothAngle(double[] vec1, double[] vec2)
         {
             return Math.Abs(vec1.dotProduct(vec2)) > BoltAndGearConstants.SmoothAngle;
-        }
-
-        private static List<int> ConvertCrossToSign(List<double[]> crossP)
-        {
-            var signs = new List<int> {1};
-            var mainCross = crossP[0];
-            for (var i = 1; i < crossP.Count; i++)
-            {
-                var cross2 = crossP[i];
-                if ((Math.Sign(mainCross[0]) != Math.Sign(cross2[0]) ||
-                     (Math.Sign(mainCross[0]) == 0 && Math.Sign(cross2[0]) == 0)) &&
-                    (Math.Sign(mainCross[1]) != Math.Sign(cross2[1]) ||
-                     (Math.Sign(mainCross[1]) == 0 && Math.Sign(cross2[1]) == 0)) &&
-                    (Math.Sign(mainCross[2]) != Math.Sign(cross2[2]) ||
-                     (Math.Sign(mainCross[2]) == 0 && Math.Sign(cross2[2]) == 0)))
-                    signs.Add(-1);
-                else
-                    signs.Add(1);
-            }
-                return signs;
         }
     }
 }
