@@ -50,9 +50,8 @@
   <ItemGroup>
     <Compile Include="DisassemblyProcess\BeamSearch.cs" />
     <Compile Include="DisassemblyProcess\DBG.cs" />
-    <Compile Include="DisassemblyProcess\designGraph.cs" />
     <Compile Include="DisassemblyProcess\DisConstants.cs" />
-    <Compile Include="DisassemblyProcess\OptimizedSCC.cs" />
+    <Compile Include="DisassemblyProcess\BoostedSCC.cs" />
     <Compile Include="DisassemblyProcess\OptionGenerator.cs" />
     <Compile Include="DisassemblyProcess\OptionGeneratorPro.cs" />
     <Compile Include="DisassemblyProcess\OrderedDFS.cs" />
@@ -83,15 +82,22 @@
     <Compile Include="GeometryReasoning\STLGeometryFunctions.cs" />
     <Compile Include="GeometryReasoning\StLReader.cs" />
     <Compile Include="InitialGraphMaker\BlockingDetermination.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\BoltAndGearConstants.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\BoltAndGearDetection.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\BoltAndGearUpdateFunctions.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\ClusteringDenseAndSparseEdges.cs" />
     <Compile Include="InitialGraphMaker\ConstantsPrimitiveOverlap.cs" />
     <Compile Include="InitialGraphMaker\DisassemblyDirections.cs" />
     <Compile Include="DisassemblyProcess\GraphConstants.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\GearEdge.cs" />
     <Compile Include="InitialGraphMaker\Icosahedron.cs" />
     <Compile Include="InitialGraphMaker\IcosahedronPro.cs" />
     <Compile Include="InitialGraphMaker\PrimitivePrimitiveInteractions.cs" />
     <Compile Include="PostProcessor\OptimalOrientation.cs" />
     <Compile Include="PostProcessor\PostProcessingConstnts.cs" />
+    <Compile Include="PostProcessor\Scheduling.cs" />
     <Compile Include="PostProcessor\TasksClass.cs" />
+    <Compile Include="PostProcessor\UpdatePostProcessor.cs" />
     <Compile Include="PostProcessor\WorkerAllocation.cs" />
     <Compile Include="PostProcessor\WorkersClass.cs" />
     <Compile Include="Program.cs" />
@@ -105,7 +111,7 @@
     <Content Include="StarMath.XML" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\GraphSynth\graphsynth_465a7e41942c\GraphSynthSourceFiles\GraphSynth.BaseClasses\GraphSynth.BaseClasses.csproj">
+    <ProjectReference Include="..\..\GraphSynth\GraphSynthSourceFiles\GraphSynth.BaseClasses\GraphSynth.BaseClasses.csproj">
       <Project>{d679f4e2-fd18-48ac-9c0c-b60155a61d37}</Project>
       <Name>GraphSynth.BaseClasses</Name>
     </ProjectReference>

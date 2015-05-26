@@ -21,19 +21,17 @@ namespace Assembly_Planner
             var solidPrimitive = BlockingDetermination.PrimitiveMaker(solids);
             var screwsAndBolts = BoltAndGearDetection.ScrewAndBoltDetector(solidPrimitive);
             var gears = BoltAndGearDetection.GearDetector(solidPrimitive);
-            AddingNodesToGraph(assemblyGraph, solids);
+            AddingNodesToGraph(assemblyGraph, solids, gears, screwsAndBolts);
             for (var i = 0; i < solids.Count - 1; i++)
             {
                 var solid1 = solids[i];
-                if (screwsAndBolts.Contains(solid1)) continue;
                 var solid1Primitives = solidPrimitive[solid1];
                 for (var j = i+1; j < solids.Count; j++)
                 {
                     var solid2 = solids[j];
-                    if (screwsAndBolts.Contains(solid2)) continue;
                     var solid2Primitives = solidPrimitive[solid2];
                     List<int> localDirInd;
-                    if (BlockingDetermination.DefineBlocking(solid1, solid2, solid1Primitives, solid2Primitives,
+                    if (BlockingDetermination.DefineBlocking(assemblyGraph, solid1, solid2, solid1Primitives, solid2Primitives,
                         globalDirPool, out localDirInd))
                     {
                         // I wrote the code in a way that "solid1" is always "Reference" and "solid2" is always "Moving".
@@ -64,11 +62,22 @@ namespace Assembly_Planner
             a.localVariables.Add(GraphConstants.DirIndUpperBound);
         }
 
-        private static void AddingNodesToGraph(designGraph assemblyGraph, IEnumerable<TessellatedSolid> solids)
+        private static void AddingNodesToGraph(designGraph assemblyGraph, List<TessellatedSolid> solids,
+            Dictionary<TessellatedSolid, double[]> gears, Dictionary<TessellatedSolid, double[]> bolts)
         {
             foreach (var solid in solids)
             {
-                assemblyGraph.addNode(solid.Name);
+                var node = assemblyGraph.addNode(solid.Name);
+                if (gears.Keys.Contains(solid))
+                {
+                    node.localLabels.Add(DisConstants.Gear);
+                    node.localVariables.Add(DisConstants.GearNormal);
+                    node.localVariables.AddRange(gears[solid]);
+                }
+                if (!bolts.Keys.Contains(solid)) continue;
+                node.localLabels.Add(DisConstants.Bolt);
+                node.localVariables.Add(DisConstants.BoltCenterLine);
+                node.localVariables.AddRange(bolts[solid]);
             }
         }
 

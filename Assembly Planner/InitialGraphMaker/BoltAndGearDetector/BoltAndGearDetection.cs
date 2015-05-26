@@ -14,14 +14,14 @@ namespace Assembly_Planner
 {
     class BoltAndGearDetection
     {
-        internal static List<TessellatedSolid> ScrewAndBoltDetector(
+        internal static Dictionary<TessellatedSolid, double[]> ScrewAndBoltDetector(
             Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive)
         {
             // Here are my thoughts about a bolt:
             // Since all of the threads are classified as cone, 
             //    if the number of cones are more than 30 percent of the total number of primitives
             //    AND, the summation of area of cone primitivies are more than 30 percent of the solid surface area
-            var bolts = new List<TessellatedSolid>();
+            var bolts = new Dictionary<TessellatedSolid, double[]>();
             foreach (var solid in solidPrimitive.Keys)
             {
                 var cones = solidPrimitive[solid].Where(p => p is Cone).ToList();
@@ -31,14 +31,21 @@ namespace Assembly_Planner
                 Console.WriteLine("Is " + solid.Name + " a Bolt or Screw? 'y' or 'n'");
                 var read = Convert.ToString(Console.ReadLine());
                 if (read == "y")
-                    bolts.Add(solid);
+                {
+                    bolts.Add(solid, BoltCenterLine(solid));
+                }
             }
             return bolts;
         }
 
-        internal static List<TessellatedSolid> GearDetector(Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive)
+        private static double[] BoltCenterLine(TessellatedSolid solid)
         {
-            var gears = new List<TessellatedSolid>();
+            throw new NotImplementedException();
+        }
+
+        internal static Dictionary<TessellatedSolid, double[]> GearDetector(Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive)
+        {
+            var gears = new Dictionary<TessellatedSolid, double[]>();
             foreach (var solid in solidPrimitive.Keys)
             {
                 var gear = false;
@@ -78,7 +85,7 @@ namespace Assembly_Planner
                         if (read == "n")
                             continue;
                         gear = true;
-                        gears.Add(solid);
+                        gears.Add(solid, flatPrim.Faces[0].Normal);
                         break;
                     }
                     if (gear) break;

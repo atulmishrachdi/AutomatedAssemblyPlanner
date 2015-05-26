@@ -14,5 +14,9 @@ namespace Assembly_Planner
         internal static string SingleNode = "Done";
         internal static int BeamWidth = 50;
         internal static double Parallel = 1e-5;
+        internal static string Gear = "Gear";
+        internal static string Bolt = "Bolt";
+        internal static double GearNormal = -11000.0;
+        public static double BoltCenterLine = -12000.0;
     }
 }
