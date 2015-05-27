@@ -32,15 +32,24 @@ namespace Assembly_Planner
                 var read = Convert.ToString(Console.ReadLine());
                 if (read == "y")
                 {
-                    bolts.Add(solid, BoltCenterLine(solid));
+                    bolts.Add(solid, BoltCenterLine(solidPrimitive[solid]));
                 }
             }
             return bolts;
         }
 
-        private static double[] BoltCenterLine(TessellatedSolid solid)
+        private static double[] BoltCenterLine(List<PrimitiveSurface> primitiveSurfaces)
         {
-            throw new NotImplementedException();
+            // the center line of the screw CAN be the axis of the largest cylinder. I have looked at several test cases
+            // and this rule works for almost all of them. 
+            var maxCountFace = 0;
+            var finalCenterline = new double[3];
+            foreach (Cylinder cylinder in primitiveSurfaces.Where(prim => prim is Cylinder))
+            {
+                if (cylinder.Faces.Count > maxCountFace)
+                    finalCenterline = cylinder.Axis;
+            }
+            return finalCenterline;
         }
 
         internal static Dictionary<TessellatedSolid, double[]> GearDetector(Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive)

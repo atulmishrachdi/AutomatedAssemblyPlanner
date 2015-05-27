@@ -24,7 +24,9 @@ namespace Assembly_Planner
             return partPrimitive;
         }
 
-        internal static bool DefineBlocking(designGraph assemblyGraph, TessellatedSolid solid1, TessellatedSolid solid2, List<PrimitiveSurface> solid1P, List<PrimitiveSurface> solid2P, List<int> globalDirPool, out List<int> dirInd)
+        internal static bool DefineBlocking(designGraph assemblyGraph, TessellatedSolid solid1, TessellatedSolid solid2,
+            List<PrimitiveSurface> solid1P, List<PrimitiveSurface> solid2P, List<int> globalDirPool,
+            out List<int> dirInd)
         {
             if (BoundingBoxOverlap(solid1, solid2))
             {
@@ -47,12 +49,20 @@ namespace Assembly_Planner
                     if (PrimitivePrimitiveInteractions.PrimitiveOverlap(solid1P, solid2P, localDirInd))
                     {
                         // dirInd is the list of directions that must be added to the arc between part1 and part2
-                        Console.WriteLine(@"An overlap is detected between   " + solid1.Name +"   and   " +solid2.Name);
-                        globalDirPool.AddRange(localDirInd.Where(d => !globalDirPool.Contains(d)));
+                        Console.WriteLine(@"An overlap is detected between   " + solid1.Name + "   and   " + solid2.Name);
 
+                        if (BoltOverlapping(assemblyGraph, solid1, solid2))
+                        {
+                            dirInd = BoltRemovalDirection(assemblyGraph, solid1, solid2);
+                            return true;
+                        }
+
+                        globalDirPool.AddRange(localDirInd.Where(d => !globalDirPool.Contains(d)));
                         foreach (var i in localDirInd)
                         {
-                            Console.WriteLine(DisassemblyDirections.Directions[i][0] + " " + DisassemblyDirections.Directions[i][1] + " " + DisassemblyDirections.Directions[i][2]);
+                            Console.WriteLine(DisassemblyDirections.Directions[i][0] + " " +
+                                              DisassemblyDirections.Directions[i][1] + " " +
+                                              DisassemblyDirections.Directions[i][2]);
                         }
                         dirInd = localDirInd;
                         return true;
@@ -61,6 +71,22 @@ namespace Assembly_Planner
             }
             dirInd = null;
             return false;
+        }
+
+        private static List<int> BoltRemovalDirection(designGraph assemblyGraph, TessellatedSolid solid1, TessellatedSolid solid2)
+        {
+            var dir = new double[3];
+            if (assemblyGraph[solid1.Name].localLabels.Contains(DisConstants.Bolt))
+                dir = VariableOfTheIndex(DisConstants.BoltCenterLine, assemblyGraph[solid1.Name].localVariables);
+            else 
+                dir = VariableOfTheIndex(DisConstants.BoltCenterLine, assemblyGraph[solid2.Name].localVariables);
+            return NormalIndexInGlobalDirns(dir);
+        }
+
+        private static bool BoltOverlapping(designGraph assemblyGraph, TessellatedSolid solid1, TessellatedSolid solid2)
+        {
+            return assemblyGraph[solid1.Name].localLabels.Contains(DisConstants.Bolt) ||
+                   assemblyGraph[solid2.Name].localLabels.Contains(DisConstants.Bolt);
         }
 
         private static bool ParallelNormals(designGraph assemblyGraph, TessellatedSolid solid1, TessellatedSolid solid2)
@@ -85,10 +111,8 @@ namespace Assembly_Planner
 
         private static bool GearGear(designGraph assemblyGraph, TessellatedSolid solid1, TessellatedSolid solid2)
         {
-            if (assemblyGraph[solid1.Name].localLabels.Contains(DisConstants.Gear) &&
-                assemblyGraph[solid2.Name].localLabels.Contains(DisConstants.Gear))
-                return true;
-            return false;
+            return assemblyGraph[solid1.Name].localLabels.Contains(DisConstants.Gear) &&
+                   assemblyGraph[solid2.Name].localLabels.Contains(DisConstants.Gear);
         }
 
         private static bool ConvexHullOverlap(TessellatedSolid a, TessellatedSolid b)
