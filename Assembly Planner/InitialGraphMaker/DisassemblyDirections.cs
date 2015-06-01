@@ -63,7 +63,7 @@ namespace Assembly_Planner
         }
 
         private static void AddingNodesToGraph(designGraph assemblyGraph, List<TessellatedSolid> solids,
-            Dictionary<TessellatedSolid, double[]> gears, Dictionary<TessellatedSolid, double[]> bolts)
+            Dictionary<TessellatedSolid, double[]> gears, Dictionary<TessellatedSolid> bolts)
         {
             foreach (var solid in solids)
             {
@@ -76,8 +76,6 @@ namespace Assembly_Planner
                 }
                 if (!bolts.Keys.Contains(solid)) continue;
                 node.localLabels.Add(DisConstants.Bolt);
-                node.localVariables.Add(DisConstants.BoltCenterLine);
-                node.localVariables.AddRange(bolts[solid]);
             }
         }
 

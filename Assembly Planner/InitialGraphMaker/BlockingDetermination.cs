@@ -76,10 +76,33 @@ namespace Assembly_Planner
         private static List<int> BoltRemovalDirection(designGraph assemblyGraph, TessellatedSolid solid1, TessellatedSolid solid2)
         {
             var dir = new double[3];
+            var CvhSolid = new TessellatedSolid();
             if (assemblyGraph[solid1.Name].localLabels.Contains(DisConstants.Bolt))
-                dir = VariableOfTheIndex(DisConstants.BoltCenterLine, assemblyGraph[solid1.Name].localVariables);
-            else 
-                dir = VariableOfTheIndex(DisConstants.BoltCenterLine, assemblyGraph[solid2.Name].localVariables);
+            {
+                CvhSolid.Faces = solid1.ConvexHullFaces;
+                CvhSolid.Edges = solid1.ConvexHullEdges;
+                //dir = VariableOfTheIndex(DisConstants.BoltCenterLine, assemblyGraph[solid1.Name].localVariables);
+            }
+            else
+            {
+                CvhSolid.Faces = solid2.ConvexHullFaces;
+                CvhSolid.Edges = solid2.ConvexHullEdges;
+                //dir = VariableOfTheIndex(DisConstants.BoltCenterLine, assemblyGraph[solid2.Name].localVariables);
+            }
+            var solidPrim = TesselationToPrimitives.Run(CvhSolid);
+            var cones = solidPrim.Where(p => p is Cone).ToList();
+            if (cones.Count == 0)
+                throw Exception("If the part is Bolt or Screw, its CVH must contain Cone primitive");
+            var largestCone = new PrimitiveSurface();
+            var maxArea = 0.0;
+            foreach (var cone in cones)
+            {
+                if (cone.Area < maxArea) continue;
+                maxArea = cone.Area;
+                largestCone = cone;
+            }
+            var selectedCone = (Cone)largestCone;
+            dir = selectedCone.Axis.multiply(-1);
             return NormalIndexInGlobalDirns(dir);
         }
 
