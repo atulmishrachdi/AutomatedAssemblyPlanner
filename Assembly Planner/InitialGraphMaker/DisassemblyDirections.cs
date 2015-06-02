@@ -54,7 +54,7 @@ namespace Assembly_Planner
                     }
                 }
             }
-            Fastener.AddFastenersInformation(screwsAndBolts, solidsNoFastener, solidPrimitive);
+            Fastener.AddFastenersInformation(assemblyGraph, screwsAndBolts, solidsNoFastener, solidPrimitive);
             return globalDirPool;
         }
 

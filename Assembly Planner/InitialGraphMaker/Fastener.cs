@@ -5,12 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using TVGL;
 using TVGL.Tessellation;
+using GraphSynth.Representation;
 
 namespace Assembly_Planner
 {
     internal class Fastener
     {
-        internal static void AddFastenersInformation(List<TessellatedSolid> screwsAndBolts, List<TessellatedSolid> solidsNoFastener,
+        internal static void AddFastenersInformation(designGraph assemblyGraph, List<TessellatedSolid> screwsAndBolts, List<TessellatedSolid> solidsNoFastener,
             Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive)
         {
             foreach (var fastener in screwsAndBolts)
@@ -27,7 +28,22 @@ namespace Assembly_Planner
                                 lockedByTheFastener.Add(solid);
                 }
                 // now find the removal direction of the fastener.
-                BoltRemovalDirection(fastener);
+                var RD = BoltRemovalDirection(fastener);
+                AddRemovalInformationToArcs(assemblyGraph, lockedByTheFastener, RD);
+            }
+            // So, by this point, if there is a fastener between two or more parts, a new local variable
+            // is added to their arc which shows the direction of freedom of the fastener.
+            // So if I want to seperate two parts or two subassemblies, now I know that there is a 
+            // fastener holding them to each other. And I also know the removal direction of the fastener
+        }
+
+        private static void AddRemovalInformationToArcs(designGraph assemblyGraph, List<TessellatedSolid> lockedByTheFastener, List<int> RD)
+        {
+            var partsName = lockedByTheFastener.SelectMany(p=>p.Name).ToList(); // check this
+            foreach (arc arc in assemblyGraph.arcs.Where(a => partsName.Contains(a.From) && partsName.Contains(a.To)).ToList())
+            {
+                arc.localVariables.Add(DisConstants.BoltDirectionOfFreedom);
+                arc.localVariables.Add(RD[0]);
             }
         }
 
@@ -74,6 +90,5 @@ namespace Assembly_Planner
             dir = selectedCone.Axis.multiply(-1);
             return NormalIndexInGlobalDirns(dir);
         }
-    
     }
 }

@@ -17,6 +17,6 @@ namespace Assembly_Planner
         internal static string Gear = "Gear";
         internal static string Bolt = "Bolt";
         internal static double GearNormal = -11000.0;
-        public static double BoltCenterLine = -12000.0;
+        public static double BoltDirectionOfFreedom = -12000.0;
     }
 }
