@@ -14,14 +14,14 @@ namespace Assembly_Planner
 {
     class BoltAndGearDetection
     {
-        internal static Dictionary<TessellatedSolid> ScrewAndBoltDetector(
+        internal static List<TessellatedSolid> ScrewAndBoltDetector(
             Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive)
         {
             // Here are my thoughts about a bolt:
             // Since all of the threads are classified as cone, 
             //    if the number of cones are more than 30 percent of the total number of primitives
             //    AND, the summation of area of cone primitivies are more than 30 percent of the solid surface area
-            var bolts = new Dictionary<TessellatedSolid>();
+            var bolts = new List<TessellatedSolid>();
             foreach (var solid in solidPrimitive.Keys)
             {
                 var cones = solidPrimitive[solid].Where(p => p is Cone).ToList();

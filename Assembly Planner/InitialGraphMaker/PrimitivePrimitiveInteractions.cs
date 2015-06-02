@@ -9,7 +9,7 @@ using TVGL.Tessellation;
 
 namespace Assembly_Planner
 {
-    class PrimitivePrimitiveInteractions
+    internal class PrimitivePrimitiveInteractions
     {
         public static int c1;
         internal static bool PrimitiveOverlap(List<PrimitiveSurface> solid1P, List<PrimitiveSurface> solid2P, List<int> dirInd)

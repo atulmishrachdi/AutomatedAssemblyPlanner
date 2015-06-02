@@ -11,7 +11,7 @@ using TVGL.Tessellation;
 
 namespace Assembly_Planner
 {
-    class BlockingDetermination
+    internal class BlockingDetermination
     {
         internal static Dictionary<TessellatedSolid, List<PrimitiveSurface>> PrimitiveMaker(List<TessellatedSolid> parts)
         {
@@ -50,13 +50,6 @@ namespace Assembly_Planner
                     {
                         // dirInd is the list of directions that must be added to the arc between part1 and part2
                         Console.WriteLine(@"An overlap is detected between   " + solid1.Name + "   and   " + solid2.Name);
-
-                        if (BoltOverlapping(assemblyGraph, solid1, solid2))
-                        {
-                            dirInd = BoltRemovalDirection(assemblyGraph, solid1, solid2);
-                            return true;
-                        }
-
                         globalDirPool.AddRange(localDirInd.Where(d => !globalDirPool.Contains(d)));
                         foreach (var i in localDirInd)
                         {
@@ -71,45 +64,6 @@ namespace Assembly_Planner
             }
             dirInd = null;
             return false;
-        }
-
-        private static List<int> BoltRemovalDirection(designGraph assemblyGraph, TessellatedSolid solid1, TessellatedSolid solid2)
-        {
-            var dir = new double[3];
-            var CvhSolid = new TessellatedSolid();
-            if (assemblyGraph[solid1.Name].localLabels.Contains(DisConstants.Bolt))
-            {
-                CvhSolid.Faces = solid1.ConvexHullFaces;
-                CvhSolid.Edges = solid1.ConvexHullEdges;
-                //dir = VariableOfTheIndex(DisConstants.BoltCenterLine, assemblyGraph[solid1.Name].localVariables);
-            }
-            else
-            {
-                CvhSolid.Faces = solid2.ConvexHullFaces;
-                CvhSolid.Edges = solid2.ConvexHullEdges;
-                //dir = VariableOfTheIndex(DisConstants.BoltCenterLine, assemblyGraph[solid2.Name].localVariables);
-            }
-            var solidPrim = TesselationToPrimitives.Run(CvhSolid);
-            var cones = solidPrim.Where(p => p is Cone).ToList();
-            if (cones.Count == 0)
-                throw Exception("If the part is Bolt or Screw, its CVH must contain Cone primitive");
-            var largestCone = new PrimitiveSurface();
-            var maxArea = 0.0;
-            foreach (var cone in cones)
-            {
-                if (cone.Area < maxArea) continue;
-                maxArea = cone.Area;
-                largestCone = cone;
-            }
-            var selectedCone = (Cone)largestCone;
-            dir = selectedCone.Axis.multiply(-1);
-            return NormalIndexInGlobalDirns(dir);
-        }
-
-        private static bool BoltOverlapping(designGraph assemblyGraph, TessellatedSolid solid1, TessellatedSolid solid2)
-        {
-            return assemblyGraph[solid1.Name].localLabels.Contains(DisConstants.Bolt) ||
-                   assemblyGraph[solid2.Name].localLabels.Contains(DisConstants.Bolt);
         }
 
         private static bool ParallelNormals(designGraph assemblyGraph, TessellatedSolid solid1, TessellatedSolid solid2)
@@ -138,7 +92,7 @@ namespace Assembly_Planner
                    assemblyGraph[solid2.Name].localLabels.Contains(DisConstants.Gear);
         }
 
-        private static bool ConvexHullOverlap(TessellatedSolid a, TessellatedSolid b)
+        internal static bool ConvexHullOverlap(TessellatedSolid a, TessellatedSolid b)
         {
             foreach (var f in a.ConvexHullFaces)
             {
@@ -161,7 +115,7 @@ namespace Assembly_Planner
             return true;
         }
 
-        private static bool BoundingBoxOverlap(TessellatedSolid a, TessellatedSolid b)
+        internal static bool BoundingBoxOverlap(TessellatedSolid a, TessellatedSolid b)
         {
             return (!(a.XMin > b.XMax || a.YMin > b.YMax || a.ZMin > b.ZMax
                       || b.XMin > a.XMax|| b.YMin > a.YMax || b.ZMin > a.ZMax));

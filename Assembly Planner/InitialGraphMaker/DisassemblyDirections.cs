@@ -19,16 +19,22 @@ namespace Assembly_Planner
             Directions = IcosahedronPro.DirectionGeneration();
             var globalDirPool = new List<int>();
             var solidPrimitive = BlockingDetermination.PrimitiveMaker(solids);
+            
             var screwsAndBolts = BoltAndGearDetection.ScrewAndBoltDetector(solidPrimitive);
             var gears = BoltAndGearDetection.GearDetector(solidPrimitive);
-            AddingNodesToGraph(assemblyGraph, solids, gears, screwsAndBolts);
-            for (var i = 0; i < solids.Count - 1; i++)
+            
+            var solidsNoFastener = new List<TessellatedSolid>(solids);
+            solidsNoFastener.RemoveRange(screwsAndBolts);
+            
+            AddingNodesToGraph(assemblyGraph, solidsNoFastener, gears, screwsAndBolts);
+            
+            for (var i = 0; i < solidsNoFastener.Count - 1; i++)
             {
-                var solid1 = solids[i];
+                var solid1 = solidsNoFastener[i];
                 var solid1Primitives = solidPrimitive[solid1];
-                for (var j = i+1; j < solids.Count; j++)
+                for (var j = i + 1; j < solidsNoFastener.Count; j++)
                 {
-                    var solid2 = solids[j];
+                    var solid2 = solidsNoFastener[j];
                     var solid2Primitives = solidPrimitive[solid2];
                     List<int> localDirInd;
                     if (BlockingDetermination.DefineBlocking(assemblyGraph, solid1, solid2, solid1Primitives, solid2Primitives,
@@ -48,8 +54,8 @@ namespace Assembly_Planner
                     }
                 }
             }
+            Fastener.AddFastenersInformation(screwsAndBolts, solidsNoFastener, solidPrimitive);
             return globalDirPool;
-
         }
 
         private static void AddInformationToArc(arc a, IEnumerable<int> localDirInd)
@@ -74,8 +80,6 @@ namespace Assembly_Planner
                     node.localVariables.Add(DisConstants.GearNormal);
                     node.localVariables.AddRange(gears[solid]);
                 }
-                if (!bolts.Keys.Contains(solid)) continue;
-                node.localLabels.Add(DisConstants.Bolt);
             }
         }
 
