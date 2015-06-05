@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using TVGL;
 using TVGL.Tessellation;
 using GraphSynth.Representation;
+using PrimitiveClassificationOfTessellatedSolids;
+using StarMathLib;
 
 namespace Assembly_Planner
 {
@@ -71,7 +73,7 @@ namespace Assembly_Planner
             var CvhSolid = new TessellatedSolid
             {
                 Faces = fastener.ConvexHullFaces,
-                Edges = fastener.ConvexHullEdges;
+                Edges = fastener.ConvexHullEdges
             };
 
             var solidPrim = TesselationToPrimitives.Run(CvhSolid);

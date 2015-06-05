@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using GraphSynth.Representation;
 using StarMathLib;
 using TVGL;
-using TVGL.Primitive_Surfaces.ClassifyTesselationAsPrimitives;
 using TVGL.Tessellation;
+using PrimitiveClassificationOfTessellatedSolids;
 
 namespace Assembly_Planner
 {

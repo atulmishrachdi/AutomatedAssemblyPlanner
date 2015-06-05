@@ -69,7 +69,7 @@ namespace Assembly_Planner
         }
 
         private static void AddingNodesToGraph(designGraph assemblyGraph, List<TessellatedSolid> solids,
-            Dictionary<TessellatedSolid, double[]> gears, Dictionary<TessellatedSolid> bolts)
+            Dictionary<TessellatedSolid, double[]> gears, List<TessellatedSolid> bolts)
         {
             foreach (var solid in solids)
             {
