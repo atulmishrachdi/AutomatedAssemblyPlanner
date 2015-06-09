@@ -32,17 +32,17 @@ namespace Assembly_Planner
             {
                 if (ConvexHullOverlap(solid1, solid2))
                 {
-                    if (GearGear(assemblyGraph, solid1, solid2))
-                    {
+                    //if (GearGear(assemblyGraph, solid1, solid2))
+                    //{
                         // one more condition to check. If Gear-Gear, check and see if the normals of the solids are parallel
-                        if (!ParallelNormals(assemblyGraph, solid1, solid2))
-                        {
-                            dirInd = null;
-                            return false;
-                        }
-                        dirInd = GearNormal(assemblyGraph, solid1);
-                        return true;
-                    }
+                    //    if (!ParallelNormals(assemblyGraph, solid1, solid2))
+                    //    {
+                    //        dirInd = null;
+                    //        return false;
+                    //    }
+                    //    dirInd = GearNormal(assemblyGraph, solid1);
+                    //    return true;
+                    //}
                     var localDirInd = new List<int>();
                     for (var i = 0; i < DisassemblyDirections.Directions.Count; i++)
                         localDirInd.Add(i);

@@ -13,7 +13,7 @@ namespace Assembly_Planner
 {
     internal class Fastener
     {
-        internal static void AddFastenersInformation(designGraph assemblyGraph, List<TessellatedSolid> screwsAndBolts, List<TessellatedSolid> solidsNoFastener,
+        /*internal static void AddFastenersInformation(designGraph assemblyGraph, List<TessellatedSolid> screwsAndBolts, List<TessellatedSolid> solidsNoFastener,
             Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive)
         {
             foreach (var fastener in screwsAndBolts)
@@ -91,6 +91,6 @@ namespace Assembly_Planner
             var selectedCone = (Cone)largestCone;
             dir = selectedCone.Axis.multiply(-1);
             return NormalIndexInGlobalDirns(dir);
-        }
+        }*/
     }
 }

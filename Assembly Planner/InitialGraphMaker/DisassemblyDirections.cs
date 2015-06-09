@@ -20,13 +20,13 @@ namespace Assembly_Planner
             var globalDirPool = new List<int>();
             var solidPrimitive = BlockingDetermination.PrimitiveMaker(solids);
             
-            var screwsAndBolts = BoltAndGearDetection.ScrewAndBoltDetector(solidPrimitive);
-            var gears = BoltAndGearDetection.GearDetector(solidPrimitive);
+            //var screwsAndBolts = BoltAndGearDetection.ScrewAndBoltDetector(solidPrimitive);
+            //var gears = BoltAndGearDetection.GearDetector(solidPrimitive);
             
             var solidsNoFastener = new List<TessellatedSolid>(solids);
-            solidsNoFastener.RemoveRange(screwsAndBolts);
-            
-            AddingNodesToGraph(assemblyGraph, solidsNoFastener, gears, screwsAndBolts);
+            //solidsNoFastener.RemoveRange(screwsAndBolts);
+
+            AddingNodesToGraph(assemblyGraph, solidsNoFastener);//, gears, screwsAndBolts);
             
             for (var i = 0; i < solidsNoFastener.Count - 1; i++)
             {
@@ -54,7 +54,7 @@ namespace Assembly_Planner
                     }
                 }
             }
-            Fastener.AddFastenersInformation(assemblyGraph, screwsAndBolts, solidsNoFastener, solidPrimitive);
+            //Fastener.AddFastenersInformation(assemblyGraph, screwsAndBolts, solidsNoFastener, solidPrimitive);
             return globalDirPool;
         }
 
@@ -68,18 +68,18 @@ namespace Assembly_Planner
             a.localVariables.Add(GraphConstants.DirIndUpperBound);
         }
 
-        private static void AddingNodesToGraph(designGraph assemblyGraph, List<TessellatedSolid> solids,
-            Dictionary<TessellatedSolid, double[]> gears, List<TessellatedSolid> bolts)
+        private static void AddingNodesToGraph(designGraph assemblyGraph, List<TessellatedSolid> solids)//,
+            //Dictionary<TessellatedSolid, double[]> gears)
         {
             foreach (var solid in solids)
             {
                 var node = assemblyGraph.addNode(solid.Name);
-                if (gears.Keys.Contains(solid))
-                {
-                    node.localLabels.Add(DisConstants.Gear);
-                    node.localVariables.Add(DisConstants.GearNormal);
-                    node.localVariables.AddRange(gears[solid]);
-                }
+                //if (gears.Keys.Contains(solid))
+                //{
+                //    node.localLabels.Add(DisConstants.Gear);
+                //    node.localVariables.Add(DisConstants.GearNormal);
+                //    node.localVariables.AddRange(gears[solid]);
+                //}
             }
         }
 

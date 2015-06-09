@@ -79,14 +79,14 @@ namespace Assembly_Planner
 
         internal static void AddPartsProperties(designGraph assemblyGraph)
         {
-            var reader = new StreamReader(File.OpenRead(@"..\..\..\Test\Pump Assembly\Properties.csv"));
+            var reader = new StreamReader(File.OpenRead(@"..\..\..\Test\CubeSTL\partsInformation.csv"));
             while (!reader.EndOfStream)
             {
                 var line = reader.ReadLine();
                 var values = line.Split(',');
                 var i = 1;
                 var node = assemblyGraph.nodes.Where(n => n.name == Convert.ToString(values[0])).ToList()[0];
-                while (i < 9)
+                while (i < 12)
                 {
                     node.localVariables.Add(Convert.ToDouble(values[i]));
                     i++;
