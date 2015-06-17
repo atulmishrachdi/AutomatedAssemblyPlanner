@@ -24,7 +24,7 @@ namespace PrimitiveClassificationOfTessellatedSolids
         internal const double SmMs1 = 0.1; internal const double SmMs2 = 0.2;
         internal const double SmMe1 = 1.8; internal const double SmMe2 = 2;
         internal const double SmHs1 = 1.8; internal const double SmHs2 = 2;
-        internal const double MinConeGaussPlaneOffset = 0.4; // sine of 1 degrees 0.1
+        internal const double MinConeGaussPlaneOffset = 0.1; // sine of 1 degrees 0.1
 
         internal static List<double> MakingListOfLimABNbeta2()
         {
@@ -75,8 +75,8 @@ namespace PrimitiveClassificationOfTessellatedSolids
 
         internal static List<List<int>> readingEdgesRules2()
         {
-            var reader = getStreamReader("NewEdgeRules.csv"); // "EdRulesBeta.csv"
-            //var reader = new StreamReader(File.OpenRead(@"..\..\..\EdRulesBeta.csv"));
+            //var reader = getStreamReader("NewEdgeRules.csv"); // "EdRulesBeta.csv"
+            var reader = new StreamReader(File.OpenRead("D:\\Nima-Project\\AssemblyPlanning\\PrimitiveClassificationOfTessellatedSolids\\NewEdgeRules.csv"));
             var Lists = new List<List<int>>();
             bool blocker = true;
             while (!reader.EndOfStream)
@@ -104,8 +104,8 @@ namespace PrimitiveClassificationOfTessellatedSolids
 
         internal static List<List<int>> readingFacesRules()
         {
-            var reader = getStreamReader("NewFaRules.csv");//FaRules2.csv
-            //var reader = new StreamReader(File.OpenRead(@"..\..\..\FaRules2.csv"));
+            //var reader = getStreamReader("NewFaRules.csv");//FaRules2.csv
+            var reader = new StreamReader(File.OpenRead("D:\\Nima-Project\\AssemblyPlanning\\PrimitiveClassificationOfTessellatedSolids\\NewFaRules.csv"));
             List<List<int>> Lists = new List<List<int>>();
             bool blocker = true;
             while (!reader.EndOfStream)

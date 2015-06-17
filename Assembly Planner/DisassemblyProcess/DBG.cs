@@ -55,17 +55,25 @@ namespace Assembly_Planner
 
         private static int Parallel(arc borderArc, int cndDirInd)
         {
+            // 1: parallel and same direction
+            // -1: parallel but opposite direction
+            // 0 not parallel. 
             var cndDir = DisassemblyDirections.Directions[cndDirInd];
             var indexL = borderArc.localVariables.IndexOf(GraphConstants.DirIndLowerBound);
             var indexU = borderArc.localVariables.IndexOf(GraphConstants.DirIndUpperBound);
+            var paralAndSame = false;
+            var paralButOppose = false;
             for (var i = indexL + 1; i < indexU; i++)
             {
                 var arcDisDir = DisassemblyDirections.Directions[(int)borderArc.localVariables[i]];
                 if (Math.Abs(1 - arcDisDir.dotProduct(cndDir)) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall)
-                    return 1;
+                    paralAndSame = true;
                 if (Math.Abs(1 + arcDisDir.dotProduct(cndDir)) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall)
-                    return -1;
+                    paralButOppose = true;
             }
+            if (paralAndSame && paralButOppose) return 0;
+            if (paralAndSame) return 1;
+            if (paralButOppose) return -1;
             return 0;
         }
 

@@ -132,7 +132,7 @@ namespace PrimitiveClassificationOfTessellatedSolids
                 }
                 else
                 {
-                    if (primitive.Area < maxFaceArea / 30) //12
+                    if (primitive.Area < maxFaceArea / 70) //12
                     {
                         primitives.Remove(primitive);
                         i--;
@@ -839,9 +839,17 @@ namespace PrimitiveClassificationOfTessellatedSolids
             normalOfGaussPlane = normalOfGaussPlane.divide(normalsOfGaussPlane.Count);
 
             var distance = faces.Sum(face => face.Normal.dotProduct(normalOfGaussPlane));
-            distance /= n;
+            if (distance < 0)
+            {
+                axis = normalOfGaussPlane.multiply(-1);
+                distance = -distance/n;
+            }
+            else
+            {
+                distance /= n;
+                axis = normalOfGaussPlane;
+            }
             coneAngle = Math.Asin(distance);
-            axis = normalOfGaussPlane;
             return (Math.Abs(distance) >= ClassificationConstants.MinConeGaussPlaneOffset);
         }
 
