@@ -64,15 +64,42 @@ namespace Assembly_Planner
                 connectedButUnblocked.Add(sccHy,notBlockedWith);
             }
             dbgDictionary = UnconnectedBlockingDetermination.Run(dbgDictionary, connectedButUnblocked, cndDirInd);
+            if (MutualBlocking(assemblyGraph, dbgDictionary))
+                dbgDictionary = DirectionalBlockingGraph(assemblyGraph, seperate, cndDirInd);
             dbgDictionary = UpdateBlockingDic(dbgDictionary);
             return dbgDictionary;
         }
 
-        private static int Parallel(arc borderArc, int cndDirInd)
+        private static bool MutualBlocking(designGraph assemblyGraph, Dictionary<hyperarc, List<hyperarc>> dbgDictionary)
         {
-            // 1: parallel and same direction
+            for (var i = 0; i < dbgDictionary.Count - 1; i++)
+            {
+                var iKey = dbgDictionary.Keys.ToList()[i];
+                for (var j = i + 1; j < dbgDictionary.Count; j++)
+                {
+                    var jKey = dbgDictionary.Keys.ToList()[j];
+                    if (dbgDictionary[iKey].Contains(jKey) && dbgDictionary[jKey].Contains(iKey))
+                    {
+                        var nodes = new List<node>();
+                        nodes.AddRange(iKey.nodes);
+                        nodes.AddRange(jKey.nodes);
+                        assemblyGraph.removeHyperArc(iKey);
+                        assemblyGraph.removeHyperArc(jKey);
+                        var last = assemblyGraph.addHyperArc(nodes);
+                        last.localLabels.Add(DisConstants.SCC);
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        internal static int Parallel(arc borderArc, int cndDirInd)
+        {
+            //  1: parallel and same direction
             // -1: parallel but opposite direction
-            // 0 not parallel. 
+            //  0: not parallel. 
+            //  2: parralel same direction and opposite direction
             var cndDir = DisassemblyDirections.Directions[cndDirInd];
             var indexL = borderArc.localVariables.IndexOf(GraphConstants.DirIndLowerBound);
             var indexU = borderArc.localVariables.IndexOf(GraphConstants.DirIndUpperBound);
@@ -86,7 +113,7 @@ namespace Assembly_Planner
                 if (Math.Abs(1 + arcDisDir.dotProduct(cndDir)) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall)
                     paralButOppose = true;
             }
-            if (paralAndSame && paralButOppose) return 0;
+            if (paralAndSame && paralButOppose) return 2;
             if (paralAndSame) return 1;
             if (paralButOppose) return -1;
             return 0;
@@ -110,7 +137,7 @@ namespace Assembly_Planner
             return null;
         }
 
-        private static List<arc> HyperarcBorderArcsFinder(hyperarc sccHy)
+        internal static List<arc> HyperarcBorderArcsFinder(hyperarc sccHy)
         {
             var borders = new List<arc>();
             foreach (node node in sccHy.nodes)

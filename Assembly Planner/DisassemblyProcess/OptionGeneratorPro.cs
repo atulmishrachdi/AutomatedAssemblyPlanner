@@ -13,7 +13,6 @@ namespace Assembly_Planner
         internal static List<option> GenerateOptions(designGraph assemblyGraph, hyperarc seperate,
             Dictionary<hyperarc, List<hyperarc>> blockingDic)
         {
-            if (blockingDic == null) return null;
             var freeSCCs = blockingDic.Keys.Where(k => blockingDic[k].Count == 0).ToList();
             var combinations = CombinationsCreator(freeSCCs);
             var options = new List<option>();

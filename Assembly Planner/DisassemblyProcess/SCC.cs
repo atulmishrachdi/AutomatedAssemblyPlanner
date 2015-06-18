@@ -14,7 +14,7 @@ namespace Assembly_Planner
         {
             // The function takes every hyperarc with "seperate" lable and generates its SCCs with respect to 
             // the candidate direction. After generation, a new hyperarc is added to the graph with local lable "SCC".
-            
+
             var stack = new Stack<node>();
             var visited = new HashSet<node>();
             var globalVisited = new HashSet<node>();
@@ -29,7 +29,7 @@ namespace Assembly_Planner
                     visited.Add(pNode);
                     globalVisited.Add(pNode);
 
-                    foreach (arc pNodeArc in pNode.arcs.Where(a=>a.GetType() == typeof (arc)))
+                    foreach (arc pNodeArc in pNode.arcs.Where(a => a.GetType() == typeof(arc)))
                     {
                         if (Removable(pNodeArc, cndDir))
                             continue;
@@ -40,9 +40,11 @@ namespace Assembly_Planner
                     }
                 }
                 if (visited.Count == seperate.nodes.Count) continue;
-                assemblyGraph.addHyperArc(visited.ToList());
-                assemblyGraph.hyperarcs[assemblyGraph.hyperarcs.Count - 1].localLabels.Add(DisConstants.SCC);
+
+                var last = assemblyGraph.addHyperArc(visited.ToList());
+                last.localLabels.Add(DisConstants.SCC);
             }
+
         }
 
         public static bool Removable(arc pNodeArc, int cndDirInd)
