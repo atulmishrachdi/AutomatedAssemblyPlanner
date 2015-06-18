@@ -13,9 +13,11 @@ namespace Assembly_Planner
 {
     internal class DisassemblyDirections
     {
-        public static List<double[]> Directions = new List<double[]>(); 
+        public static List<double[]> Directions = new List<double[]>();
+        internal static List<TessellatedSolid> Solids;
         internal static List<int> Run(designGraph assemblyGraph, List<TessellatedSolid> solids)
         {
+            Solids = new List<TessellatedSolid>(solids);
             Directions = IcosahedronPro.DirectionGeneration();
             var globalDirPool = new List<int>();
             var solidPrimitive = BlockingDetermination.PrimitiveMaker(solids);

@@ -43,14 +43,14 @@ namespace Assembly_Planner
 
         internal static void UpdateGlobalDirections(List<int> globalDirPool)
         {
-            // The function removes one of each parallel directions pair.
+            // The function removes one of each parallel direction pair.
             for (var i = 0; i < globalDirPool.Count - 1; i++)
             {
                 var dir1 = DisassemblyDirections.Directions[globalDirPool[i]];
                 for (var j = i + 1; j < globalDirPool.Count; j++)
                 {
                     var dir2 = DisassemblyDirections.Directions[globalDirPool[j]];
-                    if (Math.Abs(1 + dir1.dotProduct(dir2)) > DisConstants.Parallel) continue;
+                    if (Math.Abs(1 + dir1.dotProduct(dir2)) > 1e-3) continue;
                     globalDirPool.RemoveAt(j);
                     j--;
                 }

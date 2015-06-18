@@ -10,13 +10,10 @@ namespace Assembly_Planner
 {
     internal class OptionGeneratorPro
     {
-        static List<hyperarc> Preceedings = new List<hyperarc>();
-        private static int co;
-
         internal static List<option> GenerateOptions(designGraph assemblyGraph, hyperarc seperate,
             Dictionary<hyperarc, List<hyperarc>> blockingDic)
         {
-            blockingDic = UpdateBlockingDic(blockingDic);
+            if (blockingDic == null) return null;
             var freeSCCs = blockingDic.Keys.Where(k => blockingDic[k].Count == 0).ToList();
             var combinations = CombinationsCreator(freeSCCs);
             var options = new List<option>();
@@ -131,30 +128,6 @@ namespace Assembly_Planner
                 i++;
             }
             return comb;
-        }
-
-        private static Dictionary<hyperarc, List<hyperarc>> UpdateBlockingDic(Dictionary<hyperarc, List<hyperarc>> blockingDic)
-        {
-            var newBlocking = new Dictionary<hyperarc, List<hyperarc>>();
-            foreach (var sccHy in blockingDic.Keys)
-            {
-                Preceedings.Clear();
-                co = 0;
-                PreceedingFinder(sccHy, blockingDic);
-                Preceedings = Updates.UpdatePreceedings(Preceedings);
-                var cpy = new List<hyperarc>(Preceedings);
-                newBlocking.Add(sccHy, cpy);
-            }
-            return newBlocking;
-        }
-
-        private static void PreceedingFinder(hyperarc sccHy, Dictionary<hyperarc, List<hyperarc>> blockingDic)
-        {
-            co++;
-            if (co != 1)
-                Preceedings.Add(sccHy);
-            foreach (var value in blockingDic[sccHy])
-                PreceedingFinder(value, blockingDic);
         }
     }
 }
