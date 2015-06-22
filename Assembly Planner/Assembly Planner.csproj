@@ -98,6 +98,7 @@
     <Compile Include="InitialGraphMaker\Icosahedron.cs" />
     <Compile Include="InitialGraphMaker\IcosahedronPro.cs" />
     <Compile Include="InitialGraphMaker\PrimitivePrimitiveInteractions.cs" />
+    <Compile Include="MotionPlanning\UnconnectedBlockingDetermination.cs" />
     <Compile Include="PostProcessor\OptimalOrientation.cs" />
     <Compile Include="PostProcessor\PostProcessingConstnts.cs" />
     <Compile Include="PostProcessor\Scheduling.cs" />
