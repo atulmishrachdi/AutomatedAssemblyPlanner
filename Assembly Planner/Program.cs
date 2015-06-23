@@ -15,7 +15,8 @@ namespace Assembly_Planner
         {
             var stopwatch = Stopwatch.StartNew();
             //var filer = new BasicFiler("", "", "");
-            var solids = GetSTLs("..\\..\\..\\Test\\CubeSTL");
+            //var solids = GetSTLs("../../../Test/CubeSTL");
+			var solids = GetSTLs("/home/proper/Projects/Campbell/AssemblyPlanner/Test/CubeSTL");
             //var assemblyGraph = (designGraph)filer.Open("..\\..\\..\\Test\\inputNG.gxml")[0];
             //var globalDirPool = new List<int> { 0, 1, 2, 3, 4, 5 };
             var assemblyGraph = new designGraph();
@@ -36,9 +37,9 @@ namespace Assembly_Planner
         {
             var parts = new List<TessellatedSolid>();
             var di = new DirectoryInfo(InputDir);
-            var fis = di.EnumerateFiles("*.stl");
+            var fis = di.EnumerateFiles("*.STL");
             Parallel.ForEach(fis, fileInfo =>
-                //foreach (var fileInfo in fis)
+            //foreach (var fileInfo in fis)
             {
                 var ts = IO.Open(fileInfo.Open(FileMode.Open), fileInfo.Name);
                 //ts.Name = ts.Name.Remove(0, 1);

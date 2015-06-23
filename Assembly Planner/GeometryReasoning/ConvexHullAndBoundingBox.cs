@@ -22,7 +22,7 @@ namespace Assembly_Planner
         public ConvexHullAndBoundingBox(designGraph graphAssembly1)
         {
             graphAssembly = graphAssembly1;
-            InputDir = "..\\..\\..\\Test\\Pump Assembly";
+            InputDir = "../../../Test/CubeTXT";
             LoadAndSaveTesselatedPartFiles(); 
             MakeBBDictionaryFromCVXHullDictionary();
         }
@@ -32,16 +32,16 @@ namespace Assembly_Planner
             ConvexHullDictionary = new Dictionary<string, ConvexHull<Vertex, DefaultConvexFace<Vertex>>>();
             var di = new DirectoryInfo(InputDir);
             List<Vertex> vertices;
-            IEnumerable<FileInfo> fis = di.EnumerateFiles("*.stl");
+            IEnumerable<FileInfo> fis = di.EnumerateFiles("*.STL");
             //Parallel.ForEach(fis, fileInfo =>
-            foreach (var fileInfo in fis)
-            {
-                if (STLGeometryFunctions.ReadFromSTLFile(fileInfo.Open(FileMode.Open), out vertices))
-                {
-                    ConvexHullDictionary.Add(Path.GetFileNameWithoutExtension(fileInfo.Name),
-                        ConvexHull.Create(vertices));
-                }
-            }
+            //foreach (var fileInfo in fis)
+            //{
+            //   if (STLGeometryFunctions.ReadFromSTLFile(fileInfo.Open(FileMode.Open), out vertices))
+            //    {
+             //       ConvexHullDictionary.Add(Path.GetFileNameWithoutExtension(fileInfo.Name),
+             //           ConvexHull.Create(vertices));
+             //   }
+            //}
             //);
             fis = di.EnumerateFiles("*.txt");
             foreach (var fileInfo in fis)

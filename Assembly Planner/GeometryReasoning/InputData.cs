@@ -67,7 +67,7 @@ namespace GeometryReasoning
             ConvexHullDictionary = new Dictionary<string, ConvexHull<Vertex, DefaultConvexFace<Vertex>>>();
             var di = new DirectoryInfo(InputDir);
             List<Vertex> vertices;
-            IEnumerable<FileInfo> fis = di.EnumerateFiles("*.stl");
+            IEnumerable<FileInfo> fis = di.EnumerateFiles("*.STL");
             //Parallel.ForEach(fis, fileInfo =>
             foreach (var fileInfo in fis)
             {
