@@ -15,6 +15,12 @@ namespace Assembly_Planner
     internal class UnconnectedBlockingDetermination
     {
 
+        static readonly List<int[]> binaryFaceIndices = new List<int[]>
+        {
+           new []{0,0,0}, new []{0,0,1},new []{0,1,0},new []{0,1,1},
+           new []{1,0,0}, new []{1,0,1},new []{1,1,0},new []{1,1,1},
+        };
+
         internal static Dictionary<hyperarc, List<hyperarc>> Run(Dictionary<hyperarc, List<hyperarc>> dbgDictionary,
             Dictionary<hyperarc, List<hyperarc>> connectedButUnblocked, int cndDirInd)
         {
@@ -87,6 +93,161 @@ namespace Assembly_Planner
                 }
             }
             return dbgDictionary;
+        }
+
+        internal static void FiniteDirectionsBetweenConnectedParts(TessellatedSolid solid1, TessellatedSolid solid2, List<int> localDirInd, out List<int> finDirs, out List<int> infDirs)
+        {
+            // solid1 is Reference and solid2 is Moving
+            finDirs = new List<int>();
+            infDirs = new List<int>();
+            
+            foreach (var dir in localDirInd)
+            {
+                var direction = DisassemblyDirections.Directions[dir];
+                var rays = new List<Ray>();
+                foreach (var vertex in solid2.ConvexHullVertices)
+                    rays.Add(new Ray(new AssemblyEvaluation.Vertex(vertex.Position[0], vertex.Position[1], vertex.Position[2]),
+                                    new Vector(direction[0], direction[1], direction[2])));
+                if (rays.Any(ray => solid1.Faces.Any(f => RayIntersectsWithFace(ray, f))))
+                    finDirs.Add(dir);
+                else
+                    infDirs.Add(dir);
+            }
+        }
+
+        internal static void FiniteDirectionsBetweenUnconnectedParts(node node, List<TessellatedSolid> solids, List<int> freeDirs, designGraph assemblyGraph)
+        {
+            // Foreach direction find the sequence of the blocking parts. like this: it is first blocked by A, then B, then C ...
+            var solid = solids.Where(s => s.Name == node.name).ToList()[0];
+            foreach (var dir in freeDirs)
+            {
+                var direction = DisassemblyDirections.Directions[dir];
+                var blockingPartsAndDistances = new Dictionary<TessellatedSolid, double>();
+                var rays = new List<Ray>();
+                foreach (var vertex in solid.ConvexHullVertices)
+                    rays.Add(new Ray(new AssemblyEvaluation.Vertex(vertex.Position[0], vertex.Position[1], vertex.Position[2]),
+                                    new Vector(direction[0], direction[1], direction[2])));
+                foreach (
+                    var part in
+                        solids.Where(
+                            s =>
+                                s != solid && // if it is not the same part
+                                (assemblyGraph.arcs.Any( // if there is no arc between the current and the candidate
+                                    a =>
+                                        (a.From.name == solid.Name && a.To.name == s.Name) ||
+                                        (a.From.name == s.Name && a.To.name == solid.Name)))))
+                {
+                    if (!BoundingBoxBlocking(direction, part, solid)) continue;
+                    var distanceToTheClosestFace = double.PositiveInfinity;
+                    var overlap = false;
+                    foreach (var ray in rays)
+                    {
+                        if (part.ConvexHullFaces.Any(f => RayIntersectsWithFace(ray, f)))
+                            //now find the faces that intersect with the ray and find the distance between them
+                        {
+                            overlap = true;
+                            foreach (
+                                var blockingPolygonalFace in
+                                    part.Faces.Where(f => RayIntersectsWithFace(ray, f)).ToList())
+                            {
+                                var d = DistanceToTheFace(ray.Position, blockingPolygonalFace);
+                                if (d < distanceToTheClosestFace) distanceToTheClosestFace = d;
+                            }
+                        }
+                    }
+                    if (overlap) blockingPartsAndDistances.Add(part, distanceToTheClosestFace);
+                }
+                // by this point, I now know that for this direction, what parts are blocking the solid and with what order.
+            }
+        }
+
+        private static double DistanceToTheFace(double[] p, PolygonalFace blockingPolygonalFace)
+        {
+            return
+                Math.Abs(blockingPolygonalFace.Normal.dotProduct(p.subtract(blockingPolygonalFace.Vertices[0].Position)));
+        }
+
+        private static bool BoundingBoxBlocking(double[] v, TessellatedSolid partBlo, TessellatedSolid partMov)
+        {
+            var blockingBoundingBox = new[] { partBlo.XMin, partBlo.XMax, partBlo.YMin, partBlo.YMax, partBlo.ZMin, partBlo.ZMax };
+            var movingBoundingBox = new[] { partMov.XMin, partMov.XMax, partMov.YMin, partMov.YMax, partMov.ZMin, partMov.ZMax };
+            return BoundingBoxBlocking(v, blockingBoundingBox, movingBoundingBox);
+        }
+
+        private static bool BoundingBoxBlocking(double[] v, double[] blockingBox, double[] movingPartBox)
+        {
+            var facingCornerIndices = new int[3];
+            lock (facingCornerIndices)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    var signOfElement = Math.Sign(v[i]);
+                    if (signOfElement > 0 && movingPartBox[2 * i] > blockingBox[2 * i + 1])
+                        return false;
+                    if (signOfElement < 0 && movingPartBox[2 * i + 1] < blockingBox[2 * i])
+                        return false;
+                    if (signOfElement > 0) facingCornerIndices[i] = 1;
+                }
+                var complementaryCornerIndices = new[] { (1 - facingCornerIndices[0]), (1 - facingCornerIndices[1]), (1 - facingCornerIndices[2]) };
+
+                var movingCompleCorner = new[]
+                {
+                    movingPartBox[complementaryCornerIndices[0]],
+                    movingPartBox[complementaryCornerIndices[1] + 2],
+                    movingPartBox[complementaryCornerIndices[2] + 4]
+                };
+                var blockingFacingCorner = new[]
+                {
+                    blockingBox[facingCornerIndices[0]],
+                    blockingBox[facingCornerIndices[1] + 2],
+                    blockingBox[facingCornerIndices[2] + 4]
+                };
+
+                var movingDxPlaneMin = v.dotProduct(movingCompleCorner, 3);
+                var blockingDxPlaneMax = v.dotProduct(blockingFacingCorner, 3);
+                if (movingDxPlaneMin > blockingDxPlaneMax) return false;
+                var superficialBloackingFace = new DefaultConvexFace<AssemblyEvaluation.Vertex>
+                {
+                    Vertices = new AssemblyEvaluation.Vertex[6],
+                    Normal = v
+                };
+                var index = 0;
+                for (int i = 0; i < 8; i++)
+                {
+                    var vertexIndices = binaryFaceIndices[i];
+                    if (vertexIndices[0] == facingCornerIndices[0] && vertexIndices[1] == facingCornerIndices[1] &&
+                        vertexIndices[2] == facingCornerIndices[2]) continue;
+                    if (vertexIndices[0] == complementaryCornerIndices[0] &&
+                        vertexIndices[1] == complementaryCornerIndices[1] &&
+                        vertexIndices[2] == complementaryCornerIndices[2]) continue;
+                    superficialBloackingFace.Vertices[index] = new AssemblyEvaluation.Vertex(new[]
+                    {
+                        blockingBox[vertexIndices[0]],
+                        blockingBox[vertexIndices[1] + 2],
+                        blockingBox[vertexIndices[2] + 4]
+                    });
+                    index++;
+                }
+
+                for (int i = 0; i < 8; i++)
+                {
+                    var vertexIndices = binaryFaceIndices[i];
+                    if (vertexIndices[0] == facingCornerIndices[0] && vertexIndices[1] == facingCornerIndices[1] &&
+                        vertexIndices[2] == facingCornerIndices[2]) continue;
+                    if (vertexIndices[0] == complementaryCornerIndices[0] &&
+                        vertexIndices[1] == complementaryCornerIndices[1] &&
+                        vertexIndices[2] == complementaryCornerIndices[2]) continue;
+                    var ray = new Ray(new AssemblyEvaluation.Vertex(new[]
+                    {
+                        movingPartBox[vertexIndices[0]],
+                        movingPartBox[vertexIndices[1] + 2],
+                        movingPartBox[vertexIndices[2] + 4]
+                    }),
+                        new Vector(v[0], v[1], v[2]));
+                    if (STLGeometryFunctions.RayIntersectsWithFace(ray, superficialBloackingFace)) return true;
+                }
+                return false;
+            }
         }
 
         public static bool RayIntersectsWithFace(Ray ray, PolygonalFace face)
