@@ -60,11 +60,11 @@ namespace Assembly_Planner
                 }
             }
             //Fastener.AddFastenersInformation(assemblyGraph, screwsAndBolts, solidsNoFastener, solidPrimitive);
-            foreach (var node in assemblyGraph.nodes)
-            {
-                var freeDirs = FreeDirectionFinder(node, assemblyGraph);
-                UnconnectedBlockingDetermination.FiniteDirectionsBetweenUnconnectedParts(node, solids, freeDirs, assemblyGraph);
-            }
+            //foreach (var node in assemblyGraph.nodes)
+            //{
+            //    var freeDirs = FreeDirectionFinder(node, assemblyGraph);
+            //    UnconnectedBlockingDetermination.FiniteDirectionsBetweenUnconnectedParts(node, solids, freeDirs, assemblyGraph);
+            //}
 
             return globalDirPool;
         }

@@ -30,37 +30,6 @@ namespace AssemblyEvaluation
 
         #endregion
 
-        public SubAssembly EvaluateSim(AssemblyCandidate c, option opt, List<node> rest)
-        {
-            var newSubAsm = c.Sequence.Update(opt, rest, convexHullForParts);
-            var refNodes = newSubAsm.Install.Reference.PartNodes.Select(n => (node)c.graph[n]).ToList();
-            var movingNodes = newSubAsm.Install.Moving.PartNodes.Select(n => (node) c.graph[n]).ToList();
-            var connectingArcs = c.graph.arcs.Where(a => ((movingNodes.Contains(a.To) && refNodes.Contains(a.From))
-                                             || (movingNodes.Contains(a.From) && refNodes.Contains(a.To)))).ToList();
-            //if (connectingArcs.Count == 0) return -1;
-            foreach (var a in connectingArcs)
-                c.graph.removeArc(a);
-            var install = new[] { refNodes, movingNodes };
-            if (Updates.EitherRefOrMovHasSeperatedSubassemblies(install))
-                return null;
-            double insertionDistance;
-            var insertionDirection = FindPartDisconnectMovement(connectingArcs, refNodes, out insertionDistance);
-
-            var firstArc = connectingArcs[0];
-            var i = firstArc.localVariables.IndexOf(Constants.CLASH_LOCATION);
-            var insertionPoint = (i == -1) ? new Vertex(0, 0, 0)
-                : new Vertex(firstArc.localVariables[i + 1], firstArc.localVariables[i + 2], firstArc.localVariables[i + 3]);
-
-            newSubAsm.Install.InstallDirection = StarMath.multiply(insertionDistance, insertionDirection.Position);
-            newSubAsm.Install.InstallPoint = insertionPoint.Position;
-
-            var travelDistance = 1000;//PathDeterminationEvaluator.FindTravelDistance(newSubAsm, insertionDirection, insertionPoint);
-            newSubAsm.Install.Time =
-                timeEvaluator.EvaluateTimeForInstall(connectingArcs.Count(), travelDistance, insertionDistance, newSubAsm);
-            c.f3 += newSubAsm.Install.Time;
-            return newSubAsm;
-        }
-
         public double Evaluate(AssemblyCandidate c, option opt, List<node> rest)
         {
             // Set up moving and reference subassemblies
