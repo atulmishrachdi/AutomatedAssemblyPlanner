@@ -4,139 +4,139 @@
         <name>TessellationAndVoxelizationGeometryLibrary</name>
     </assembly>
     <members>
-        <member name="T:TVGL.Boolean_Operations.CoincidentEdgeContactElement">
+        <member name="T:TVGL.CoincidentEdgeContactElement">
             <summary>
             The contact element corresponds to an existing edge within the solid.
             </summary>
         </member>
-        <member name="T:TVGL.Boolean_Operations.ContactElement">
+        <member name="T:TVGL.ContactElement">
             <summary>
             A ContactElement describes the atomic class for the collective ContactData class which describes
             how a slice affects the solid. A ContactElement is basically an edge that may or may not correspond
             to a real edge in the solid. Additionally, it has properties that reference pertinent data in the solid.
             </summary>
         </member>
-        <member name="M:TVGL.Boolean_Operations.ContactElement.GetInPlaneFlat(TVGL.Tessellation.PolygonalFace)">
+        <member name="M:TVGL.ContactElement.GetInPlaneFlat(TVGL.Tessellation.PolygonalFace)">
             <summary>
             Gets the in plane flat.
             </summary>
             <param name="startFace">The start face.</param>
             <returns>Flat.</returns>
         </member>
-        <member name="P:TVGL.Boolean_Operations.ContactElement.ContactEdge">
+        <member name="P:TVGL.ContactElement.ContactEdge">
             <summary>
             Gets the edge corresponds to the surface of the solid within the designated slice.
             </summary>
             <value>The contact edge.</value>
         </member>
-        <member name="P:TVGL.Boolean_Operations.ContactElement.SplitFacePositive">
+        <member name="P:TVGL.ContactElement.SplitFacePositive">
             <summary>
             Gets the split face.
             </summary>
             <value>The split face.</value>                
         </member>
-        <member name="P:TVGL.Boolean_Operations.CoincidentEdgeContactElement.EndVertex">
+        <member name="P:TVGL.CoincidentEdgeContactElement.EndVertex">
             <summary>
             Gets or sets the reference vertex at the other end (use in conjunction
             with ReferenceVertex).
             </summary>
             <value>The reference end.</value>
         </member>
-        <!-- Badly formed XML comment ignored for member "T:TVGL.Boolean_Operations.ThroughFaceContactElement" -->
-        <member name="P:TVGL.Boolean_Operations.ThroughFaceContactElement.SplitEdge">
+        <!-- Badly formed XML comment ignored for member "T:TVGL.ThroughFaceContactElement" -->
+        <member name="P:TVGL.ThroughFaceContactElement.SplitEdge">
             <summary>
             Gets the split edge.
             </summary>
             <value>The split edge.</value>
         </member>
-        <member name="T:TVGL.Boolean_Operations.ThroughVertexContactElement">
+        <member name="T:TVGL.ThroughVertexContactElement">
             <summary>
             The contact element passed through a vertex in the solid.
             </summary>
         </member>
-        <member name="T:TVGL.Boolean_Operations.ArtificialContactElement">
+        <member name="T:TVGL.ArtificialContactElement">
             <summary>
             The contact element is created artificially and doesn't correspond to elements
             within the real solid.
             </summary>
         </member>
-        <member name="T:TVGL.Boolean_Operations.ContactData">
+        <member name="T:TVGL.ContactData">
             <summary>
             A ContactData object represents a 2D path on the surface of the tesselated solid. 
             It is notably comprised of loops (both positive and negative) and loops are comprised
             of contact elements).
             </summary>
         </member>
-        <member name="M:TVGL.Boolean_Operations.ContactData.#ctor(System.Collections.Generic.List{TVGL.Boolean_Operations.Loop},System.Collections.Generic.List{TVGL.Tessellation.Edge})">
+        <member name="M:TVGL.ContactData.#ctor(System.Collections.Generic.List{TVGL.Loop},System.Collections.Generic.List{TVGL.Tessellation.Edge})">
             <summary>
-            Initializes a new instance of the <see cref="T:TVGL.Boolean_Operations.ContactData"/> class.
+            Initializes a new instance of the <see cref="T:TVGL.ContactData"/> class.
             </summary>
             <param name="loops">The loops.</param>
             <param name="additionalEdges">The additional edges.</param>
         </member>
-        <member name="F:TVGL.Boolean_Operations.ContactData.Perimeter">
+        <member name="F:TVGL.ContactData.Perimeter">
             <summary>
             The combined perimeter of the 2D loops defined with the Contact Data.
             </summary>
         </member>
-        <member name="F:TVGL.Boolean_Operations.ContactData.Area">
+        <member name="F:TVGL.ContactData.Area">
             <summary>
             The combined area of the 2D loops defined with the Contact Data
             </summary>
         </member>
-        <member name="P:TVGL.Boolean_Operations.ContactData.PositiveLoops">
+        <member name="P:TVGL.ContactData.PositiveLoops">
             <summary>
             Gets the positive loops.
             </summary>
             <value>The positive loops.</value>
         </member>
-        <member name="P:TVGL.Boolean_Operations.ContactData.NegativeLoops">
+        <member name="P:TVGL.ContactData.NegativeLoops">
             <summary>
             Gets the loops of negative area (i.e. holes).
             </summary>
             <value>The negative loops.</value>                    
         </member>
-        <member name="P:TVGL.Boolean_Operations.ContactData.AllLoops">
+        <member name="P:TVGL.ContactData.AllLoops">
             <summary>
             Gets all loops in one list (the positive loops are followed by the
             negative loops).
             </summary>
             <value>All loops.</value>
         </member>
-        <member name="T:TVGL.Boolean_Operations.Loop">
+        <member name="T:TVGL.Loop">
             <summary>
             The Loop class is basically a list of ContactElements that form a path. Usually, this path
             is closed, hence the name "loop", but it may be used and useful for open paths as well.
             </summary>
         </member>
-        <member name="F:TVGL.Boolean_Operations.Loop.IsPositive">
+        <member name="F:TVGL.Loop.IsPositive">
             <summary>
             Is the loop positive - meaning does it enclose material versus representing a hole
             </summary>
         </member>
-        <member name="F:TVGL.Boolean_Operations.Loop.Perimeter">
+        <member name="F:TVGL.Loop.Perimeter">
             <summary>
             The length of the loop.
             </summary>
         </member>
-        <member name="F:TVGL.Boolean_Operations.Loop.Area">
+        <member name="F:TVGL.Loop.Area">
             <summary>
             The area of the loop
             </summary>
         </member>
-        <member name="F:TVGL.Boolean_Operations.Loop.IsClosed">
+        <member name="F:TVGL.Loop.IsClosed">
             <summary>
             Is the loop closed?
             </summary>
         </member>
-        <member name="F:TVGL.Boolean_Operations.Loop.ArtificiallyClosed">
+        <member name="F:TVGL.Loop.ArtificiallyClosed">
             <summary>
             Was the loop closed by artificial ContactElements
             </summary>
         </member>
-        <member name="M:TVGL.Boolean_Operations.Loop.#ctor(System.Collections.Generic.ICollection{TVGL.Boolean_Operations.ContactElement},System.Double[],System.Boolean,System.Boolean)">
+        <member name="M:TVGL.Loop.#ctor(System.Collections.Generic.ICollection{TVGL.ContactElement},System.Double[],System.Boolean,System.Boolean)">
             <summary>
-            Initializes a new instance of the <see cref="T:TVGL.Boolean_Operations.Loop"/> class.
+            Initializes a new instance of the <see cref="T:TVGL.Loop"/> class.
             </summary>
             <param name="contactElements">The contact elements.</param>
             <param name="normal">The normal.</param>
@@ -159,7 +159,7 @@
             <returns>ContactData.</returns>
             <exception cref="T:System.Exception">Contact Edges found that are not contained in loop.</exception>
         </member>
-        <member name="M:TVGL.Boolean_Operations.Slice.FindLoop(TVGL.Flat,System.Collections.Generic.List{TVGL.Boolean_Operations.ContactElement},System.Double[])">
+        <member name="M:TVGL.Boolean_Operations.Slice.FindLoop(TVGL.Flat,System.Collections.Generic.List{TVGL.ContactElement},System.Double[])">
             <summary>
             Finds the loop.
             </summary>
@@ -180,7 +180,7 @@
             This means that are on the side that the normal faces.</param>
             <param name="negativeSideSolids">The solids on the negative side of the plane.</param>
         </member>
-        <member name="M:TVGL.Boolean_Operations.Slice.DivideUpContact(TVGL.Tessellation.TessellatedSolid,TVGL.Boolean_Operations.ContactData,TVGL.Flat)">
+        <member name="M:TVGL.Boolean_Operations.Slice.DivideUpContact(TVGL.Tessellation.TessellatedSolid,TVGL.ContactData,TVGL.Flat)">
             <summary>
             Divides up contact.
             </summary>
@@ -1426,6 +1426,253 @@
             </summary>
             <value>The name.</value>
         </member>
+        <member name="T:TVGL.Miscellaneous_Functions.TraingulatePolygon.Node">
+            <summary>
+            Node class used in Triangulate Polygon
+            Inherets position from point class
+            </summary>
+        </member>
+        <member name="T:TVGL.Point">
+            <summary>
+            The Point class is used to indicate a 2D or 3D location that may be outside
+            of a solid (hence making Vertex an inappropriate choice). 
+            One of the useful aspects of the point object is that they contain a 
+            reference (or References) to vertices that may be representing in a 
+            transformed way. For example "Get2DProjection" returns the 2D projection of
+            a set of vertices without changing those vertices. This is done by "wrapping"
+            these Point objects around a vertex and then providing their new position. 
+            </summary>
+        </member>
+        <member name="M:TVGL.Point.#ctor(MIConvexHull.IVertex)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TVGL.Point"/> class.
+            </summary>
+            <param name="v">The v.</param>
+        </member>
+        <member name="M:TVGL.Point.#ctor(MIConvexHull.IVertex,System.Double,System.Double)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TVGL.Point"/> class.
+            </summary>
+            <param name="vertex">The vertex.</param>
+            <param name="x">The x.</param>
+            <param name="y">The y.</param>
+        </member>
+        <member name="M:TVGL.Point.#ctor(MIConvexHull.IVertex,System.Double,System.Double,System.Double)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TVGL.Point"/> class.
+            </summary>
+            <param name="vertex">The vertex.</param>
+            <param name="x">The x.</param>
+            <param name="y">The y.</param>
+            <param name="z">The z.</param>
+        </member>
+        <member name="P:TVGL.Point.X">
+            <summary>
+            Gets or sets the x.
+            </summary>
+            <value>The x.</value>
+        </member>
+        <member name="P:TVGL.Point.Y">
+            <summary>
+            Gets or sets the y.
+            </summary>
+            <value>The y.</value>
+        </member>
+        <member name="P:TVGL.Point.Z">
+            <summary>
+            Gets or sets the z coordinate. If one is using Point in a 2D capacity, it can be ignored.
+            </summary>
+            <value>The z.</value>
+        </member>
+        <member name="P:TVGL.Point.References">
+            <summary>
+            Gets or sets the references.
+            </summary>
+            <value>The references.</value>
+        </member>
+        <member name="P:TVGL.Point.Position">
+            <summary>
+            Gets or sets the coordinates or position.
+            </summary>
+            <value>The coordinates or position.</value>
+        </member>
+        <member name="M:TVGL.Miscellaneous_Functions.TraingulatePolygon.Node.#ctor(TVGL.Point,System.Int32,System.Int32)">
+            <summary>
+            Create a new node from a given point
+            /// </summary>
+            <param name="point"></param>
+        </member>
+        <member name="P:TVGL.Miscellaneous_Functions.TraingulatePolygon.Node.LoopID">
+            <summary>
+            Gets the loop ID that this node belongs to.
+            </summary>
+        </member>
+        <member name="P:TVGL.Miscellaneous_Functions.TraingulatePolygon.Node.StartLine">
+            <summary>
+            Gets the line that starts at this node.
+            </summary>
+        </member>
+        <member name="P:TVGL.Miscellaneous_Functions.TraingulatePolygon.Node.EndLine">
+            <summary>
+            Gets the line that ends at this node.
+            </summary>
+        </member>
+        <member name="P:TVGL.Miscellaneous_Functions.TraingulatePolygon.Node.Type">
+            <summary>
+            Gets the type of  node.
+            </summary>
+        </member>
+        <member name="P:TVGL.Miscellaneous_Functions.TraingulatePolygon.Node.Point">
+            <summary>
+            Gets the base class, Point of this node.
+            </summary>
+        </member>
+        <member name="T:TVGL.Miscellaneous_Functions.TraingulatePolygon.Trapezoid">
+            <summary>
+            Trapezoid Class
+            </summary>
+        </member>
+        <member name="M:TVGL.Miscellaneous_Functions.TraingulatePolygon.Trapezoid.#ctor(TVGL.Miscellaneous_Functions.TraingulatePolygon.Node,TVGL.Miscellaneous_Functions.TraingulatePolygon.Node,TVGL.Miscellaneous_Functions.TraingulatePolygon.Line,TVGL.Miscellaneous_Functions.TraingulatePolygon.Line)">
+            <summary>
+            Constructs a new trapezoid based on two nodes and two vertical lines.
+            </summary>
+            <param name="topNode"></param>
+            <param name="bottomNode"></param>
+            <param name="leftLine"></param>
+            <param name="rightLine"></param>
+        </member>
+        <member name="P:TVGL.Miscellaneous_Functions.TraingulatePolygon.Trapezoid.TopNode">
+            <summary>
+            Gets the TopNode. Set is through constructor.
+            </summary>
+        </member>
+        <member name="P:TVGL.Miscellaneous_Functions.TraingulatePolygon.Trapezoid.BottomNode">
+            <summary>
+            Gets the BottomNode. Set is through constructor.
+            </summary>
+        </member>
+        <member name="P:TVGL.Miscellaneous_Functions.TraingulatePolygon.Trapezoid.LeftLine">
+            <summary>
+            Gets the left vertical line of the trapezoid. Set is through constructor.
+            </summary>
+        </member>
+        <member name="P:TVGL.Miscellaneous_Functions.TraingulatePolygon.Trapezoid.RightLine">
+            <summary>
+            Gets the right vertical line of the trapezoid. Set is through constructor.
+            </summary>
+        </member>
+        <member name="T:TVGL.Miscellaneous_Functions.TraingulatePolygon.PartialTrapezoid">
+            <summary>
+            Partial Trapezoid Class. Used to hold information to create Trapezoids.
+            </summary>
+        </member>
+        <member name="M:TVGL.Miscellaneous_Functions.TraingulatePolygon.PartialTrapezoid.#ctor(TVGL.Miscellaneous_Functions.TraingulatePolygon.Node,TVGL.Miscellaneous_Functions.TraingulatePolygon.Line,TVGL.Miscellaneous_Functions.TraingulatePolygon.Line)">
+            <summary>
+            Constructs a partial trapezoid
+            </summary>
+            <param name="topNode"></param>
+            <param name="leftLine"></param>
+            <param name="rightLine"></param>
+        </member>
+        <member name="M:TVGL.Miscellaneous_Functions.TraingulatePolygon.PartialTrapezoid.Contains(TVGL.Miscellaneous_Functions.TraingulatePolygon.Line,TVGL.Miscellaneous_Functions.TraingulatePolygon.Line)">
+            <summary>
+            Checks whether the partial trapezoid contains the two lines.
+            </summary>
+            <param name="line1"></param>
+            <param name="line2"></param>
+            <returns></returns>
+        </member>
+        <member name="P:TVGL.Miscellaneous_Functions.TraingulatePolygon.PartialTrapezoid.TopNode">
+            <summary>
+            Gets the TopNode. Set is through constructor.
+            </summary>
+        </member>
+        <member name="P:TVGL.Miscellaneous_Functions.TraingulatePolygon.PartialTrapezoid.LeftLine">
+            <summary>
+            Gets the left vertical line of the trapezoid. Set is through constructor.
+            </summary>
+        </member>
+        <member name="P:TVGL.Miscellaneous_Functions.TraingulatePolygon.PartialTrapezoid.RightLine">
+            <summary>
+            Gets the right vertical line of the trapezoid. Set is through constructor.
+            </summary>
+        </member>
+        <member name="T:TVGL.Miscellaneous_Functions.TraingulatePolygon.MonotonePolygon">
+            <summary>
+            Monotone Polygon, which consists of two ordered chains
+            The chains start and end at the same nodes
+            </summary>
+        </member>
+        <member name="M:TVGL.Miscellaneous_Functions.TraingulatePolygon.MonotonePolygon.#ctor(System.Collections.Generic.List{TVGL.Miscellaneous_Functions.TraingulatePolygon.Node},System.Collections.Generic.List{TVGL.Miscellaneous_Functions.TraingulatePolygon.Node},System.Collections.Generic.List{TVGL.Miscellaneous_Functions.TraingulatePolygon.Node})">
+            <summary>
+            Constructs a MonotonePolygon based on a list of nodes.
+            </summary>
+            <param name="leftChain"></param>
+            <param name="rightChain"></param>
+            <param name="sortedMonotonePolyNodesChain"></param>
+        </member>
+        <member name="P:TVGL.Miscellaneous_Functions.TraingulatePolygon.MonotonePolygon.LeftChain">
+            <summary>
+            Gets Monochain1. Set is through the constructor.
+            </summary>
+        </member>
+        <member name="P:TVGL.Miscellaneous_Functions.TraingulatePolygon.MonotonePolygon.RightChain">
+            <summary>
+            Gets Monochain2. Set is through the constructor.
+            </summary>
+        </member>
+        <member name="P:TVGL.Miscellaneous_Functions.TraingulatePolygon.MonotonePolygon.SortedNodes">
+            <summary>
+            Gets Monochain2. Set is through the constructor.
+            </summary>
+        </member>
+        <member name="T:TVGL.Miscellaneous_Functions.TraingulatePolygon.Line">
+            <summary>
+            Line
+            </summary>
+        </member>
+        <member name="M:TVGL.Miscellaneous_Functions.TraingulatePolygon.Line.#ctor(TVGL.Miscellaneous_Functions.TraingulatePolygon.Node,TVGL.Miscellaneous_Functions.TraingulatePolygon.Node)">
+            <summary>
+            Sets to and from nodes as well as slope and intercept of line.
+            </summary>
+            <param name="fromNode"></param>
+            <param name="toNode"></param>
+        </member>
+        <member name="M:TVGL.Miscellaneous_Functions.TraingulatePolygon.Line.Xintercept(System.Double)">
+            <summary>
+            Gets X intercept given Y
+            </summary>
+            <param name="y"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TVGL.Miscellaneous_Functions.TraingulatePolygon.Line.Yintercept(System.Double)">
+            <summary>
+              Gets Y intercept given X
+            </summary>
+            <param name="x"></param>
+            <returns></returns>
+        </member>
+        <member name="P:TVGL.Miscellaneous_Functions.TraingulatePolygon.Line.ToNode">
+            <summary>
+            Gets the Node which the line is pointing to. Set is through the constructor.
+            </summary>
+        </member>
+        <member name="P:TVGL.Miscellaneous_Functions.TraingulatePolygon.Line.FromNode">
+            <summary>
+            Gets the Node which the line is pointing away from. Set is through the constructor.
+            </summary>
+        </member>
+        <member name="M:TVGL.Miscellaneous_Functions.TraingulatePolygon.TriangulatePolygon.Run(TVGL.Point[][],System.Boolean[])">
+            <summary>
+                Triangulates a Polygon into faces.
+            </summary>
+            <param name="points2D">The 2D points represented in loops.</param>
+            <param name="isPositive">Indicates whether the corresponding loop is positive or not.</param>
+            <returns>List&lt;Point[]&gt;, which represents vertices of new faces.</returns>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:TVGL.Miscellaneous_Functions.TraingulatePolygon.TriangulatePolygon.NodeType(TVGL.Point,TVGL.Point,TVGL.Point)" -->
+        <!-- Badly formed XML comment ignored for member "M:TVGL.Miscellaneous_Functions.TraingulatePolygon.TriangulatePolygon.GetAngle(TVGL.Point,TVGL.Point,TVGL.Point)" -->
         <member name="T:TVGL.Torus">
             <summary>
             Class Torus.
@@ -2876,6 +3123,11 @@
             The Directions are the three unit vectors that describe the orientation of the box.
             </summary>
         </member>
+        <member name="F:TVGL.BoundingBox.CornerPoints">
+            <summary>
+            The corner points
+            </summary>
+        </member>
         <member name="M:TVGL.BoundingBox.#ctor(System.Double,MIConvexHull.IVertex[],System.Double[][])">
             <summary>
             Initializes a new instance of the <see cref="T:TVGL.BoundingBox"/> class.
@@ -2910,12 +3162,14 @@
             <param name="direction">The direction.</param>
             <returns>List&lt;System.Double[]&gt;.</returns>
         </member>
-        <member name="M:TVGL.MinimumEnclosure.ConvexHull2D(System.Collections.Generic.IList{System.Double[]})">
-            <summary>                   
-            Returns the 2D convex hull for the x and y values of the vertices - ignoring their z coordinate. This is essentially
-            called by the other overload of "ConvexHull2D".
+        <member name="M:TVGL.MinimumEnclosure.ConvexHull2D(System.Collections.Generic.IList{TVGL.Point})">
+            <summary>
+            Returns the 2D convex hull for the 3D vertices within the plane defined by the normal, direction.
+            The returned points are a List of points (3D double array) that represent the points as they have been
+            converted to the 2D plane. The vertices are not altered by this function. This is a simple two-line function
+            that first call the non-destructive "Get2DProjectionPoints" and then the overload of "ConvexHull2D".
             </summary>
-            <param name="origVertices">The original vertices.</param>
+            <param name="points">The points.</param>
             <returns>List&lt;System.Double[]&gt;.</returns>
         </member>
         <member name="M:TVGL.MinimumEnclosure.OrientedBoundingBox(TVGL.Tessellation.TessellatedSolid)">
@@ -2937,35 +3191,25 @@
             <returns>BoundingBox.</returns>
             <exception cref="T:System.Exception"></exception>
         </member>
+        <member name="M:TVGL.MinimumEnclosure.Get2DProjectionPoints(System.Collections.Generic.IList{MIConvexHull.IVertex},System.Double[])">
+            <summary>
+            Returns the positions (array of 3D arrays) of the vertices as that they would be represented in 
+            the x-y plane (although the z-values will be non-zero). This does not destructively alter
+            the vertices. 
+            </summary>
+            <param name="vertices">The vertices.</param>
+            <param name="direction">The direction.</param>
+            <returns>Point2D[].</returns>
+        </member>
         <member name="M:TVGL.MinimumEnclosure.Get2DProjectionPoints(System.Collections.Generic.IList{MIConvexHull.IVertex},System.Double[],System.Double[0:,0:]@)">
             <summary>
-            Transforms the vertices so that they are in the x-y plane (although the z-values will be non-zero)
-            This destructively alters the vertices. However, the backTransform is provided to change the points
-            back if needed.
-            </summary>
-            <param name="vertices">The vertices.</param>
-            <param name="direction">The direction.</param>
-            <param name="backTransform">The back transform.</param>
-        </member>
-        <member name="M:TVGL.MinimumEnclosure.Get2DProjectionPoints(System.Collections.Generic.IList{MIConvexHull.IVertex},System.Double[])">
-            <summary>                      
-            Returns the positions (array of 3D arrays) of the vertices as that they would be represted in 
+            Returns the positions (array of 3D arrays) of the vertices as that they would be represented in 
             the x-y plane (although the z-values will be non-zero). This does not destructively alter
             the vertices. 
             </summary>
             <param name="vertices">The vertices.</param>
             <param name="direction">The direction.</param>
-            <returns>System.Double[][].</returns>
-        </member>
-        <member name="M:TVGL.MinimumEnclosure.Get2DProjectionPoints(System.Collections.Generic.IList{System.Double[]},System.Double[])">
-            <summary>                                  
-            Returns the positions (array of 3D arrays) of the vertices as that they would be represted in 
-            the x-y plane (although the z-values will be non-zero). This does not destructively alter
-            the vertices. 
-            </summary>
-            <param name="vertices">The vertices.</param>
-            <param name="direction">The direction.</param>
-            <returns>System.Double[][].</returns>
+            <returns>Point2D[].</returns>
         </member>
         <member name="M:TVGL.MinimumEnclosure.GetLengthAndExtremeVertices(System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{MIConvexHull.IVertex},MIConvexHull.IVertex@,MIConvexHull.IVertex@)">
             <summary>
@@ -2978,7 +3222,7 @@
             <param name="vHigh">The v high.</param>
             <returns>System.Double.</returns>
         </member>
-        <member name="M:TVGL.MinimumEnclosure.RotatingCalipers2DMethod(System.Collections.Generic.IList{System.Double[]},System.Double@)">
+        <member name="M:TVGL.MinimumEnclosure.RotatingCalipers2DMethod(System.Collections.Generic.IList{TVGL.Point},System.Double@)">
             <summary>
             Rotatings the calipers2 d method.
             </summary>

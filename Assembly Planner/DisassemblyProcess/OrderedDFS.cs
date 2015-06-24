@@ -108,6 +108,8 @@ namespace Assembly_Planner
                         sub.Install.Reference = subAsms[i];
                 }
             }
+            
         }
+       
     }
 }

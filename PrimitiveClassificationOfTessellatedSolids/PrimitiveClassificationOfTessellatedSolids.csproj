@@ -43,8 +43,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="TessellationAndVoxelizationGeometryLibrary">
-      <HintPath>..\packages\TVGL.1.0.15.0605\lib\portable-net45+sl5+wp8+win8\TessellationAndVoxelizationGeometryLibrary.dll</HintPath>
+    <Reference Include="TessellationAndVoxelizationGeometryLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\TVGL.1.0.15.0624\lib\portable-net45+sl5+wp8+win8\TessellationAndVoxelizationGeometryLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

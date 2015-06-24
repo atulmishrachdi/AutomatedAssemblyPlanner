@@ -37,11 +37,11 @@ namespace AssemblyEvaluation
             string[] refPartsFullPath = new string[refParts.Length];
 
             for (int i = 0; i < movingParts.Length; i++) {
-                movingPartsFullPath[i] = "../input_Mechanic/" + movingParts[i] + ".stl";
+                movingPartsFullPath[i] = "../input_Mechanic/" + movingParts[i] + ".STL";
             }
 
             for (int i = 0; i < refParts.Length; i++) {
-                refPartsFullPath[i] = "../input_Mechanic/" + refParts[i] + ".stl";
+                refPartsFullPath[i] = "../input_Mechanic/" + refParts[i] + ".STL";
             }
 
             if (Double.IsNaN(insertionDirection[0]) || Double.IsNaN(insertionDirection[1]) || Double.IsNaN(insertionDirection[2]))
