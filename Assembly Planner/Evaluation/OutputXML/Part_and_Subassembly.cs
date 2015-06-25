@@ -57,8 +57,9 @@ namespace AssemblyEvaluation
 
             var com = new Vector(0, 0, 0);
             // find install direction by averaging all visible_DOF
-            foreach (var pt in convexHull.Points)
-                com.AddInPlace(pt);
+            if (convexHull!=null)
+                foreach (var pt in convexHull.Points)
+                    com.AddInPlace(pt);
             //CenterOfMass = new Vertex(StarMath.divide(com.Position, convexHull.Points.Count(), 3));
             CenterOfMass = centerOfMass;
         }

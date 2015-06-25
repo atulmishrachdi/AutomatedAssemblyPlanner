@@ -38,16 +38,16 @@ namespace Assembly_Planner
 				return 0;
 			}
 
-			Graph.addHyperArc(A);	 //adding and removing this arc is a hack
-			var arc = Graph.hyperarcs[Graph.hyperarcs.Count - 1];
+			//Graph.addHyperArc(A);	 //adding and removing this arc is a hack
+			// var arc = Graph.hyperarcs[Graph.hyperarcs.Count - 1];
 			var options = new List<option>();
 			foreach (var cndDirInd in globalDirPool)
 			{
-				SCC.StronglyConnectedComponents(Graph, arc, cndDirInd);
-				var blockingDic = DBG.DirectionalBlockingGraph(Graph, arc, cndDirInd);
-				options.AddRange(OptionGeneratorPro.GenerateOptions(Graph, arc, blockingDic));
+                SCCBinary.StronglyConnectedComponents(Graph, A, cndDirInd);
+                var blockingDic = DBGBinary.DirectionalBlockingGraph(Graph, A, cndDirInd);
+                options.AddRange(OptionGeneratorProBinary.GenerateOptions(Graph, A, blockingDic));
 			}
-			Graph.removeHyperArc(arc);
+			//Graph.removeHyperArc(arc);
 
 			double Best = 999999;
 			SubAssembly Bestsa = null, BestReference = null, BestMoving = null;
