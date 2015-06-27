@@ -101,17 +101,32 @@ namespace Assembly_Planner
             finDirs = new List<int>();
             infDirs = new List<int>();
             
+            var aa = new List<double>();
             foreach (var dir in localDirInd)
             {
                 var direction = DisassemblyDirections.Directions[dir];
                 var rays = new List<Ray>();
-                foreach (var vertex in solid2.ConvexHullVertices)
+                foreach (var vertex in solid2.Vertices)
                     rays.Add(new Ray(new AssemblyEvaluation.Vertex(vertex.Position[0], vertex.Position[1], vertex.Position[2]),
                                     new Vector(direction[0], direction[1], direction[2])));
-                if (rays.Any(ray => solid1.Faces.Any(f => RayIntersectsWithFace(ray, f))))
-                    finDirs.Add(dir);
-                else
-                    infDirs.Add(dir);
+                //if (rays.Any(ray => solid1.Faces.Any(f => RayIntersectsWithFace(ray, f))))
+                foreach (var ray in rays)
+                {
+                    foreach (var f in solid1.Faces)
+                    {
+                        if (RayIntersectsWithFace(ray, f))
+                        {
+                            finDirs.Add(dir);
+                            aa.Add(DistanceToTheFace(ray.Position, f));
+                        }
+                    }
+                }
+                //{
+                 //   finDirs.Add(dir);
+                //    var a = DistanceToTheFace()
+               // }
+               // else
+                //    infDirs.Add(dir);
             }
         }
 
@@ -119,9 +134,10 @@ namespace Assembly_Planner
         {
             // Foreach direction find the sequence of the blocking parts. like this: it is first blocked by A, then B, then C ...
             var solid = solids.Where(s => s.Name == node.name).ToList()[0];
-            foreach (var dir in freeDirs)
+            //var nodeArcs = node.arcs.Where(a => a is arc) as List<arc>;
+            foreach (var directionInd in freeDirs)
             {
-                var direction = DisassemblyDirections.Directions[dir];
+                var direction = DisassemblyDirections.Directions[directionInd];
                 var blockingPartsAndDistances = new Dictionary<TessellatedSolid, double>();
                 var rays = new List<Ray>();
                 foreach (var vertex in solid.ConvexHullVertices)
@@ -132,7 +148,7 @@ namespace Assembly_Planner
                         solids.Where(
                             s =>
                                 s != solid && // if it is not the same part
-                                (assemblyGraph.arcs.Any( // if there is no arc between the current and the candidate
+                                (!assemblyGraph.arcs.Any( // if there is no arc between the current and the candidate
                                     a =>
                                         (a.From.name == solid.Name && a.To.name == s.Name) ||
                                         (a.From.name == s.Name && a.To.name == solid.Name)))))
@@ -157,7 +173,26 @@ namespace Assembly_Planner
                     }
                     if (overlap) blockingPartsAndDistances.Add(part, distanceToTheClosestFace);
                 }
-                // by this point, I now know that for this direction, what parts are blocking the solid and with what order.
+                // by this point, I now know that for this direction, what parts are blocking the solid and in what order.
+                if (blockingPartsAndDistances.Count == 0) continue;
+                if (DisassemblyDirections.NonAdjacentBlocking.ContainsKey(directionInd))
+                    DisassemblyDirections.NonAdjacentBlocking[directionInd].Add(new[]
+                    {
+                        node,
+                        assemblyGraph.nodes.Where(n => n.name == blockingPartsAndDistances.Keys.ToList()[0].Name)
+                            .ToList()[0]
+                    });
+                else
+                    DisassemblyDirections.NonAdjacentBlocking.Add(directionInd,
+                        new List<node[]>
+                        {
+                            new[]
+                            {
+                                node,
+                                assemblyGraph.nodes.Where(n => n.name == blockingPartsAndDistances.Keys.ToList()[0].Name)
+                                    .ToList()[0]
+                            }
+                        });
             }
         }
 
@@ -264,12 +299,12 @@ namespace Assembly_Planner
                 if (negativeDirCounter == 0) return false;
                 inPlaneVerts[i] = new AssemblyEvaluation.Vertex(face.Vertices[i].Position.add(StarMath.multiply(-dxtoPlane, ray.Direction, 3), 3));
             }
-            if (inPlaneVerts.Min(v => v.Position[0]) > ray.Position[0]) return false;
-            if (inPlaneVerts.Max(v => v.Position[0]) < ray.Position[0]) return false;
-            if (inPlaneVerts.Min(v => v.Position[1]) > ray.Position[1]) return false;
-            if (inPlaneVerts.Max(v => v.Position[1]) < ray.Position[1]) return false;
-            if (inPlaneVerts.Min(v => v.Position[2]) > ray.Position[2]) return false;
-            if (inPlaneVerts.Max(v => v.Position[2]) < ray.Position[2]) return false;
+            if (inPlaneVerts.Min(v => v.Position[0]) > ray.Position[0] ) return false;
+            if (inPlaneVerts.Max(v => v.Position[0]) < ray.Position[0] ) return false;
+            if (inPlaneVerts.Min(v => v.Position[1]) > ray.Position[1] ) return false;
+            if (inPlaneVerts.Max(v => v.Position[1]) < ray.Position[1] ) return false;
+            if (inPlaneVerts.Min(v => v.Position[2]) > ray.Position[2] ) return false;
+            if (inPlaneVerts.Max(v => v.Position[2]) < ray.Position[2] ) return false;
             if (inPlaneVerts.GetLength(0) > 3) return true;
             var crossProductsToCorners = new List<double[]>();
             for (int i = 0; i < 3; i++)
@@ -285,7 +320,7 @@ namespace Assembly_Planner
             for (int i = 0; i < 3; i++)
             {
                 var j = (i == 2) ? 0 : i + 1;
-                if (crossProductsToCorners[i].dotProduct(crossProductsToCorners[j], 3) <= 0) return false;
+                if (crossProductsToCorners[i].dotProduct(crossProductsToCorners[j], 3) <= 0.15) return false;
             }
             return true;
         }

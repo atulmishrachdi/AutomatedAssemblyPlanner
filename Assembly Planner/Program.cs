@@ -22,7 +22,7 @@ namespace Assembly_Planner
             var globalDirPool = DisassemblyDirections.Run(assemblyGraph, solids); //Input: assembly model
             Updates.AddPartsProperties(assemblyGraph);
             var inputData = new ConvexHullAndBoundingBox(assemblyGraph);
-
+            //var solutions = RecursiveOptimizedSearch.Run(inputData, globalDirPool);
             var solutions = OrderedDFS.Run(inputData, globalDirPool); // the output is the assembly sequence
             //var solutions = BeamSearch.Run(inputData, globalDirPool);
             stopwatch.Stop();

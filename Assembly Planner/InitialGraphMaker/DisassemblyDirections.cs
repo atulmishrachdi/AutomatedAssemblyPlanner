@@ -16,6 +16,7 @@ namespace Assembly_Planner
     {
         public static List<double[]> Directions = new List<double[]>();
         internal static List<TessellatedSolid> Solids;
+        internal static Dictionary<int, List<node[]>> NonAdjacentBlocking = new Dictionary<int, List<node[]>>(); //node[0] is blocked by node[1]
         internal static List<int> Run(designGraph assemblyGraph, List<TessellatedSolid> solids)
         {
             Solids = new List<TessellatedSolid>(solids);
@@ -44,8 +45,8 @@ namespace Assembly_Planner
                         globalDirPool, out localDirInd))
                     {
                         // I wrote the code in a way that "solid1" is always "Reference" and "solid2" is always "Moving".
-                        List<int> finDirs, infDirs;
-                        UnconnectedBlockingDetermination.FiniteDirectionsBetweenConnectedParts(solid1, solid2, localDirInd, out finDirs, out infDirs);
+                        //List<int> finDirs, infDirs;
+                        //UnconnectedBlockingDetermination.FiniteDirectionsBetweenConnectedParts(solid1, solid2, localDirInd, out finDirs, out infDirs);
                         var from = assemblyGraph[solid2.Name]; // Moving
                         var to = assemblyGraph[solid1.Name];   // Reference
                         assemblyGraph.addArc((node) from, (node) to);
@@ -60,11 +61,12 @@ namespace Assembly_Planner
                 }
             }
             //Fastener.AddFastenersInformation(assemblyGraph, screwsAndBolts, solidsNoFastener, solidPrimitive);
-            //foreach (var node in assemblyGraph.nodes)
-            //{
-            //    var freeDirs = FreeDirectionFinder(node, assemblyGraph);
-            //    UnconnectedBlockingDetermination.FiniteDirectionsBetweenUnconnectedParts(node, solids, freeDirs, assemblyGraph);
-            //}
+            foreach (var node in assemblyGraph.nodes)
+            {
+                var freeDirs = FreeDirectionFinder(node);
+                var freeDirInd = (from dir in freeDirs from gDir in Directions where dir[0] == gDir[0] && dir[1] == gDir[1] && dir[2] == gDir[2] select Directions.IndexOf(gDir)).ToList();
+                UnconnectedBlockingDetermination.FiniteDirectionsBetweenUnconnectedParts(node, solids, freeDirInd, assemblyGraph);
+            }
 
             return globalDirPool;
         }
@@ -94,9 +96,23 @@ namespace Assembly_Planner
             }
         }
 
-        private static List<int> FreeDirectionFinder(node node, designGraph assemblyGraph)
+        private static List<double[]> FreeDirectionFinder(node node)
         {
-            throw new NotImplementedException();
+            var dirsG = new List<List<double[]>>();
+            foreach (arc arc in node.arcs.Where(a => a is arc))
+            {
+                var iniDirs = new List<double[]>();
+                var indexL0 = arc.localVariables.IndexOf(GraphConstants.DirIndLowerBound);
+                var indexU0 = arc.localVariables.IndexOf(GraphConstants.DirIndUpperBound);
+                if (node == arc.From)
+                    for (var i = indexL0 + 1; i < indexU0; i++)
+                        iniDirs.Add(Directions[(int)arc.localVariables[i]]);
+                else
+                    for (var i = indexL0 + 1; i < indexU0; i++)
+                        iniDirs.Add((Directions[(int)arc.localVariables[i]]).multiply(-1));
+                dirsG.Add(iniDirs);
+            }
+            return dirsG[0].Where(dir => dirsG.All(dirs => dirs.Any(d => Math.Abs(1 - d.dotProduct(dir)) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall))).ToList();
         }
 
     }
