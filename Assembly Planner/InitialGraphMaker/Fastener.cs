@@ -13,7 +13,7 @@ namespace Assembly_Planner
 {
     internal class Fastener
     {
-        /*internal static void AddFastenersInformation(designGraph assemblyGraph, List<TessellatedSolid> screwsAndBolts, List<TessellatedSolid> solidsNoFastener,
+        internal static void AddFastenersInformation(designGraph assemblyGraph, List<TessellatedSolid> screwsAndBolts, List<TessellatedSolid> solidsNoFastener,
             Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive)
         {
             foreach (var fastener in screwsAndBolts)
@@ -30,8 +30,21 @@ namespace Assembly_Planner
                                 lockedByTheFastener.Add(solid);
                 }
                 // now find the removal direction of the fastener.
-                var RD = BoltRemovalDirection(fastener);
-                AddRemovalInformationToArcs(assemblyGraph, lockedByTheFastener, RD);
+                //var RD = BoltRemovalDirection(fastener);
+                double RD, depth, radius;
+                if (fastener.Name.Contains("LargeScrew"))
+                {
+                    RD = 1;
+                    depth = 25;
+                    radius = 8;
+                }
+                else
+                {
+                    RD = 316;
+                    depth = 23;
+                    radius = 2.5;
+                }
+                AddRemovalInformationToArcs(assemblyGraph, lockedByTheFastener, RD, depth, radius);
             }
             // So, by this point, if there is a fastener between two or more parts, a new local variable
             // is added to their arc which shows the direction of freedom of the fastener.
@@ -39,13 +52,21 @@ namespace Assembly_Planner
             // fastener holding them to each other. And I also know the removal direction of the fastener
         }
 
-        private static void AddRemovalInformationToArcs(designGraph assemblyGraph, List<TessellatedSolid> lockedByTheFastener, List<int> RD)
+        private static void AddRemovalInformationToArcs(designGraph assemblyGraph,
+            List<TessellatedSolid> lockedByTheFastener, double RD, double depth, double radius)
         {
-            var partsName = lockedByTheFastener.SelectMany(p=>p.Name).ToList(); // check this
-            foreach (arc arc in assemblyGraph.arcs.Where(a => partsName.Contains(a.From) && partsName.Contains(a.To)).ToList())
+            var partsName = lockedByTheFastener.Select(part => part.Name).ToList();
+            foreach (
+                arc arc in
+                    assemblyGraph.arcs.Where(a => partsName.Contains(a.From.name) && partsName.Contains(a.To.name))
+                        .ToList())
             {
                 arc.localVariables.Add(DisConstants.BoltDirectionOfFreedom);
-                arc.localVariables.Add(RD[0]);
+                arc.localVariables.Add(RD);
+                arc.localVariables.Add(DisConstants.BoltDepth);
+                arc.localVariables.Add(depth);
+                arc.localVariables.Add(DisConstants.BoltRadius);
+                arc.localVariables.Add(radius);
             }
         }
 
@@ -67,7 +88,7 @@ namespace Assembly_Planner
             return false;
         }
 
-        private static List<int> BoltRemovalDirection(TessellatedSolid fastener)
+        /*private static List<int> BoltRemovalDirection(TessellatedSolid fastener)
         {
             var dir = new double[3];
             var CvhSolid = new TessellatedSolid

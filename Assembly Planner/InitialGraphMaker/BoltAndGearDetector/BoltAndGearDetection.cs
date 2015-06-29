@@ -17,11 +17,15 @@ namespace Assembly_Planner
         internal static List<TessellatedSolid> ScrewAndBoltDetector(
             Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive)
         {
+            var bolts = new List<TessellatedSolid>();
+            foreach (var solid in solidPrimitive.Keys)
+                if (solid.Name.Contains("Screw")) 
+                    bolts.Add(solid);
+            return bolts;
             // Here are my thoughts about a bolt:
             // Since all of the threads are classified as cone, 
             //    if the number of cones are more than 30 percent of the total number of primitives
             //    AND, the summation of area of cone primitivies are more than 30 percent of the solid surface area
-            var bolts = new List<TessellatedSolid>();
             foreach (var solid in solidPrimitive.Keys)
             {
                 var cones = solidPrimitive[solid].Where(p => p is Cone).ToList();

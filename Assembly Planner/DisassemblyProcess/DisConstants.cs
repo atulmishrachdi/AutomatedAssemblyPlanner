@@ -18,5 +18,7 @@ namespace Assembly_Planner
         internal static string Bolt = "Bolt";
         internal static double GearNormal = -11000.0;
         public static double BoltDirectionOfFreedom = -12000.0;
+        public static double BoltDepth = -13000.0;
+        public static double BoltRadius = -14000.0;
     }
 }

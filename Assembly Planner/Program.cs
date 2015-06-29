@@ -13,22 +13,22 @@ namespace Assembly_Planner
     {
         private static void Main(string[] args)
         {
-            var stopwatch = Stopwatch.StartNew();
-            //var filer = new BasicFiler("", "", "");
             var solids = GetSTLs("../../../Test/Pump Assembly");
-            //var assemblyGraph = (designGraph)filer.Open("..\\..\\..\\Test\\inputNG.gxml")[0];
-            //var globalDirPool = new List<int> { 0, 1, 2, 3, 4, 5 };
             var assemblyGraph = new designGraph();
-            var globalDirPool = DisassemblyDirections.Run(assemblyGraph, solids); //Input: assembly model
+            
+            //var globalDirPool = DisassemblyDirections.Run(assemblyGraph, solids); //Input: assembly model
+            var globalDirPool = DisassemblyDirectionsWithFastener.Run(assemblyGraph, solids); //Input: assembly model
+            
             Updates.AddPartsProperties(assemblyGraph);
             var inputData = new ConvexHullAndBoundingBox(assemblyGraph);
+            
             //var solutions = RecursiveOptimizedSearch.Run(inputData, globalDirPool);
             var solutions = OrderedDFS.Run(inputData, globalDirPool); // the output is the assembly sequence
             //var solutions = BeamSearch.Run(inputData, globalDirPool);
-            stopwatch.Stop();
-            Console.WriteLine(" Geometric Reasoning and Search are done in  " + stopwatch.Elapsed);
+           
             var reorientation = OptimalOrientation.Run(solutions);
             WorkerAllocation.Run(solutions, reorientation);
+            
             Console.ReadLine();
         }
 

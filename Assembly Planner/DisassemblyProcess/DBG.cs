@@ -109,31 +109,28 @@ namespace Assembly_Planner
                 }
                 else
                 {
-                    if (DisassemblyDirections.NonAdjacentBlocking.ContainsKey(dir))
+                    if (!DisassemblyDirections.NonAdjacentBlocking.ContainsKey(dir)) continue;
+                    foreach (var nonAdjBlo in DisassemblyDirections.NonAdjacentBlocking[dir])
                     {
-                        foreach (var nonAdjBlo in DisassemblyDirections.NonAdjacentBlocking[dir])
+                        foreach (
+                            var scc1 in
+                                dbgDictionary.Keys.Where(scc1 => scc1.nodes.Any(n => n.name == nonAdjBlo[1].name))
+                                    .ToList())
                         {
                             foreach (
-                                var scc1 in
-                                    dbgDictionary.Keys.Where(scc1 => scc1.nodes.Any(n => n.name == nonAdjBlo[1].name))
-                                        .ToList())
+                                var scc2 in
+                                    dbgDictionary.Keys.Where(
+                                        scc2 => scc2 != scc1 && scc2.nodes.Any(n => n.name == nonAdjBlo[0].name)))
                             {
-                                foreach (
-                                    var scc2 in
-                                        dbgDictionary.Keys.Where(
-                                            scc2 => scc2 != scc1 && scc2.nodes.Any(n => n.name == nonAdjBlo[0].name)))
-                                {
-                                    if (!dbgDictionary[scc1].Contains(scc2))
-                                        dbgDictionary[scc1].Add(scc2);
+                                if (!dbgDictionary[scc1].Contains(scc2))
+                                    dbgDictionary[scc1].Add(scc2);
 
-                                    break;
-                                }
                                 break;
                             }
+                            break;
                         }
                     }
                 }
-
             }
             return dbgDictionary;
         }
