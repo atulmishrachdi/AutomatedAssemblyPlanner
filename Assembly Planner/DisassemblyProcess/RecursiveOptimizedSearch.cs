@@ -13,6 +13,7 @@ namespace Assembly_Planner
     class RecursiveOptimizedSearch
     {
         protected static EvaluationForBinaryTree assemblyEvaluator;
+		protected static int[] Count = new int[21];
 
         internal static List<AssemblyCandidate> Run(ConvexHullAndBoundingBox inputData, List<int> globalDirPool)
         {
@@ -23,7 +24,13 @@ namespace Assembly_Planner
             Updates.UpdateGlobalDirections(globalDirPool);
 
 			SubAssembly Tree;
-			F(out Tree, assemblyGraph, assemblyGraph.nodes, globalDirPool);
+			var Best = F(out Tree, assemblyGraph, assemblyGraph.nodes, globalDirPool);
+
+			Console.WriteLine("Best assembly time is: " + Best);
+			for (int i = 1; i <= 20; i++)
+			{
+				Console.WriteLine(i+" "+Count[i]);
+			}
 
 			AssemblyCandidate goal = null;
 			goal.Sequence.Subassemblies.Add(Tree);
@@ -34,12 +41,11 @@ namespace Assembly_Planner
 		protected static double F(out SubAssembly Tree, designGraph Graph, List<node> A, List<int> globalDirPool)
 		{
 			if (A.Count <= 1) {
+				Count[1]++;
 				Tree = null;
 				return 0;
 			}
 
-			//Graph.addHyperArc(A);	 //adding and removing this arc is a hack
-			// var arc = Graph.hyperarcs[Graph.hyperarcs.Count - 1];
 			var options = new List<option>();
 			foreach (var cndDirInd in globalDirPool)
 			{
@@ -47,7 +53,6 @@ namespace Assembly_Planner
                 var blockingDic = DBGBinary.DirectionalBlockingGraph(Graph, A, cndDirInd);
                 options.AddRange(OptionGeneratorProBinary.GenerateOptions(Graph, A, blockingDic));
 			}
-			//Graph.removeHyperArc(arc);
 
 			double Best = 999999;
 			SubAssembly Bestsa = null, BestReference = null, BestMoving = null;
@@ -63,8 +68,10 @@ namespace Assembly_Planner
 				{
 					List<node> RefNodes = sa.Install.Reference.PartNodes.Select(n => (node)Graph[n]).ToList();
 					List<node> MovNodes = sa.Install.Moving.PartNodes.Select(n => (node)Graph[n]).ToList();
-					var Evaluation = sa.Install.Time + Math.Max(F(out Reference, Graph, RefNodes, globalDirPool),
-					                                            F(out Moving,    Graph, MovNodes, globalDirPool));
+					double RefTime = F(out Reference, Graph, RefNodes, globalDirPool);
+					double MovTime = F(out Moving,    Graph, MovNodes, globalDirPool);
+					double MaxT = Math.Max (RefTime, MovTime);
+					double Evaluation = sa.Install.Time + MaxT;
 					if (Evaluation < Best)
 					{
 						Best = Evaluation;
@@ -79,6 +86,7 @@ namespace Assembly_Planner
 			Tree.Install.Reference = BestReference;
 			Tree.Install.Moving = BestMoving;
 
+			Count[A.Count]++;
 			return Best;
 		}
     }
