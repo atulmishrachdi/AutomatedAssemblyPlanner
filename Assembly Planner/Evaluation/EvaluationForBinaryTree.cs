@@ -17,7 +17,7 @@ namespace Assembly_Planner
             var rest = subassemblyNodes.Where(n => !optNodes.Contains(n)).ToList();
             sub = Update(optNodes, rest);
             var install = new[] { rest, optNodes };
-            if (Updates.EitherRefOrMovHasSeperatedSubassemblies(install))
+            if (EitherRefOrMovHasSeperatedSubassemblies(install, subassemblyNodes))
                 return -1;
             sub.Install.Time = 10;
             return 1;
@@ -48,6 +48,42 @@ namespace Assembly_Planner
             var newSubassembly = new SubAssembly(refAssembly, movingAssembly, null, 0,
                 null);
             return newSubassembly;
+        }
+
+        internal static bool EitherRefOrMovHasSeperatedSubassemblies(List<node>[] install, 
+            List<node> A)
+        {
+            foreach (var subAsm in install)
+            {
+                var stack = new Stack<node>();
+                var visited = new HashSet<node>();
+                var globalVisited = new HashSet<node>();
+                foreach (var node in subAsm.Where(n => !globalVisited.Contains(n)))
+                {
+                    stack.Clear();
+                    visited.Clear();
+                    stack.Push(node);
+                    while (stack.Count > 0)
+                    {
+                        var pNode = stack.Pop();
+                        visited.Add(pNode);
+                        globalVisited.Add(pNode);
+
+                        foreach (arc arc in pNode.arcs.Where(a => a.GetType() == typeof (arc)))
+                        {
+                            if (!A.Contains(arc.From) || !A.Contains(arc.To) ||
+                                !subAsm.Contains(arc.From) || !subAsm.Contains(arc.To)) continue;
+                            var otherNode = arc.From == pNode ? arc.To : arc.From;
+                            if (visited.Contains(otherNode))
+                                continue;
+                            stack.Push(otherNode);
+                        }
+                    }
+                    if (visited.Count < subAsm.Count)
+                        return true;
+                }
+            }
+            return false;
         }
     }
 }
