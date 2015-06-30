@@ -30,6 +30,7 @@ namespace AssemblyEvaluation
 
         #endregion
 
+
         public double Evaluate(AssemblyCandidate c, option opt, List<node> rest)
         {
             // Set up moving and reference subassemblies
@@ -58,28 +59,29 @@ namespace AssemblyEvaluation
             newSubAsm.Install.InstallDirection = StarMath.multiply(insertionDistance, insertionDirection.Position);
             newSubAsm.Install.InstallPoint = insertionPoint.Position;
 
-            var travelDistance = 1000;//PathDeterminationEvaluator.FindTravelDistance(newSubAsm, insertionDirection, insertionPoint);
+            var travelDistance = 1;//m
+            //PathDeterminationEvaluator.FindTravelDistance(newSubAsm, insertionDirection, insertionPoint);
             newSubAsm.Install.Time =
-                timeEvaluator.EvaluateTimeForInstall(connectingArcs.Count(), travelDistance, insertionDistance, newSubAsm);
+                timeEvaluator.EvaluateTimeForInstall(connectingArcs, travelDistance, insertionDistance, newSubAsm);
             c.f3 += newSubAsm.Install.Time;
             //c.f4 = timeEvaluator.EvaluateTimeOfLongestBranch(c.Sequence);
             if (double.IsNaN(insertionDirection.Position[0])) Console.WriteLine();
 
-            double evaluationScore = InitialEvaluation(newSubAsm, newSubAsm.Install.InstallDirection, refNodes, movingNodes, c);
+            double evaluationScore = InitialEvaluation(newSubAsm, newSubAsm.Install.InstallDirection, refNodes, movingNodes, c,newSubAsm.Install.Time );
             
             Updates.UpdateChildGraph(c, install);
             return evaluationScore;
         }
 
 
-        private static double InitialEvaluation(SubAssembly newSubAsm, double[] installDirection, List<node> refNodes, List<node> movingNodes, AssemblyCandidate c)
+        private static double InitialEvaluation(SubAssembly newSubAsm, double[] installDirection, List<node> refNodes, List<node> movingNodes, AssemblyCandidate c, double InstallTime)
         {
             newRefCVHFacesInCom.Clear();
 
             var unAffectedFaces = UnaffectedRefFacesDuringInstallation(newSubAsm);
             var mergedFaces = MergingFaces(unAffectedFaces);
 
-            c.TimeScore = TimeEvaluation(refNodes, movingNodes);
+            c.TimeScore = InstallTime;
             c.AccessibilityScore = AccessabilityEvaluation(installDirection, mergedFaces);
             c.StabilityScore = StabilityEvaluation(newSubAsm, mergedFaces);
             return c.TimeScore + c.AccessibilityScore + c.StabilityScore;
