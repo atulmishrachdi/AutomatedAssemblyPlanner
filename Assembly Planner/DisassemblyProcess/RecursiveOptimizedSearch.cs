@@ -16,7 +16,7 @@ namespace Assembly_Planner
 		protected static int[] Count = new int[21];
 		protected static designGraph Graph;
 		protected static List<int> DirPool;
-		protected static Dictionary<HashSet<node>, double> Memo = new Dictionary<HashSet<node>, double>(HashSet<node>.CreateSetComparer());
+		protected static Dictionary<HashSet<node>, MemoData> Memo = new Dictionary<HashSet<node>, MemoData>(HashSet<node>.CreateSetComparer());
 		//var myDictionary = new Dictionary<HashSet<T>, TValue>(HashSet<T>.CreateSetComparer());
 
 		internal static SubAssembly Run(ConvexHullAndBoundingBox inputData, List<int> globalDirPool)
@@ -35,28 +35,34 @@ namespace Assembly_Planner
 				if (assemblyEvaluator.EvaluateSub (Asm, Fr, out sa)>0)
 				{
 					HashSet<node> A = new HashSet<node>(new node[] {arc.From,arc.To});
-					Memo.Add(A, sa.Install.Time);
+					MemoData D = new MemoData (sa.Install.Time, sa);
+					Memo.Add(A, D);
 				}
 			}
 
 			SubAssembly Tree;
 			var Best = F(out Tree, Graph.nodes);
 
-			Console.WriteLine("Best assembly time is: " + Best);
-			for (int i = 1; i <= 20; i++)
-			{
-				Console.WriteLine(i+" "+Count[i]);
-			}
+			Console.WriteLine("Best assembly time found: " + Best);
+			//for (int i = 1; i <= 20; i++)
+			//	Console.WriteLine(i+" "+Count[i]);
 
             return Tree;
         }
 
 		protected static double F(out SubAssembly Tree, List<node> A)
 		{
+			Count[A.Count]++;
+
 			if (A.Count <= 1) {
-				Count[1]++;
 				Tree = null;
 				return 0;
+			}
+
+			HashSet<node> sanodes = new HashSet<node>(A);
+			if (Memo.ContainsKey (sanodes)) {
+				Tree =  Memo[sanodes].sa;
+				return Memo[sanodes].Value;
 			}
 
 			//var options = new List<option>();
@@ -108,7 +114,9 @@ namespace Assembly_Planner
 			Tree.Install.Reference = BestReference;
 			Tree.Install.Moving = BestMoving;
 
-			Count[A.Count]++;
+			MemoData D = new MemoData (Best, Bestsa);
+			Memo.Add(sanodes, D);
+
 			return Best;
 		}
 
@@ -118,6 +126,10 @@ namespace Assembly_Planner
 			if (A.Count <= 1)
 				return 0;
 
+			HashSet<node> sanodes = new HashSet<node>(A);
+			if(Memo.ContainsKey(sanodes))
+				return Memo[sanodes].Value;
+
 			var L = Math.Log (A.Count, 2);
 			double MinTreeDepth = Math.Ceiling(L);
 			Graph.addHyperArc(A);
@@ -126,16 +138,14 @@ namespace Assembly_Planner
 			foreach(arc arc in hy.IntraArcs)
 			{
 				HashSet<node> arcnodes = new HashSet<node>(new node[] {arc.From,arc.To});
-				Values.Add(Memo[arcnodes]);
+				Values.Add(Memo[arcnodes].Value);
 			}
 			Graph.removeHyperArc(hy);
 			Values.Sort();
 
 			double total = 0;
 			for(int x=0;x<MinTreeDepth;x++)
-			{
 				total = total + Values[x];
-			}
 
 			return total;
 /*
@@ -157,6 +167,19 @@ namespace Assembly_Planner
 */
 		}
     }
+
+	//stores memoization information
+	class MemoData
+	{
+		public double Value;
+		public SubAssembly sa;
+
+		public MemoData(double V, SubAssembly S)
+		{
+			Value = V;
+			sa = S;
+		}
+	}
 
 	//Stores information about a candidate option
 	class TreeCandidate:IComparable<TreeCandidate>
