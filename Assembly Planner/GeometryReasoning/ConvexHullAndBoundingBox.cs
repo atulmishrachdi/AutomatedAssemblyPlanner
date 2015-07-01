@@ -19,10 +19,10 @@ namespace Assembly_Planner
         public Dictionary<string, ConvexHull<Vertex, DefaultConvexFace<Vertex>>> ConvexHullDictionary;
         public Dictionary<string, double[]> BoundingBoxDictionary;
 
-        public ConvexHullAndBoundingBox(designGraph graphAssembly1)
+        public ConvexHullAndBoundingBox(string inputDir, designGraph graphAssembly1)
         {
             graphAssembly = graphAssembly1;
-            InputDir = "../../../Test/PumpWExtention";
+            InputDir = inputDir;
             LoadAndSaveTesselatedPartFiles(); 
             MakeBBDictionaryFromCVXHullDictionary();
         }

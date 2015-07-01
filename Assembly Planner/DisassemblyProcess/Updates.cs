@@ -77,9 +77,9 @@ namespace Assembly_Planner
             return null;
         }
 
-        internal static void AddPartsProperties(designGraph assemblyGraph)
+        internal static void AddPartsProperties(string inputDir, designGraph assemblyGraph)
         {
-            var reader = new StreamReader(File.OpenRead(@"../../../Test/PumpWExtention/PropertiesNoFastener.csv"));
+            var reader = new StreamReader(File.OpenRead(@inputDir + "/information.csv"));
             while (!reader.EndOfStream)
             {
                 var line = reader.ReadLine();
