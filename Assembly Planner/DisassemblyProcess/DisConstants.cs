@@ -20,5 +20,6 @@ namespace Assembly_Planner
         public static double BoltDirectionOfFreedom = -12000.0;
         public static double BoltDepth = -13000.0;
         public static double BoltRadius = -14000.0;
+        public static double IsItBetweenMoreThanTwoNodes = -15000.0; // 0 if No, 1 if Yes
     }
 }

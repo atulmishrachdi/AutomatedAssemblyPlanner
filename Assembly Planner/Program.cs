@@ -13,7 +13,7 @@ namespace Assembly_Planner
     {
         private static void Main(string[] args)
         {
-            var solids = GetSTLs("../../../Test/Pump Assembly");
+            var solids = GetSTLs("../../../Test/PumpWExtention");
             var assemblyGraph = new designGraph();
             
             //var globalDirPool = DisassemblyDirections.Run(assemblyGraph, solids); //Input: assembly model

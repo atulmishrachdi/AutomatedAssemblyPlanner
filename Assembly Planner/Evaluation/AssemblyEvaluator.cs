@@ -43,7 +43,23 @@ namespace AssemblyEvaluation
                                                          || (movingNodes.Contains(a.From) && refNodes.Contains(a.To)))).ToList();
             //if (connectingArcs.Count == 0) return -1;
             foreach (var a in connectingArcs)
+            {
+                if (a.localVariables.Contains(DisConstants.IsItBetweenMoreThanTwoNodes))
+                {
+                    var counter = a.localVariables.IndexOf(GraphConstants.DirIndUpperBound)+1;
+                    while (counter < a.localVariables.Count)
+                    {
+                        if (a.localVariables[counter + 7] == 0)
+                        {
+                            counter += 8;
+                            continue;
+                        }
+                        Updates.RemoveRepeatedFasteners(c.graph, a);
+                        counter += 8;
+                    }
+                }
                 c.graph.removeArc(a);
+            }
             if (Updates.EitherRefOrMovHasSeperatedSubassemblies(install))
                 return -1;
 
