@@ -19,13 +19,11 @@ namespace Assembly_Planner
 		protected static Dictionary<HashSet<node>, double> Memo = new Dictionary<HashSet<node>, double>(HashSet<node>.CreateSetComparer());
 		//var myDictionary = new Dictionary<HashSet<T>, TValue>(HashSet<T>.CreateSetComparer());
 
-        internal static List<AssemblyCandidate> Run(ConvexHullAndBoundingBox inputData, List<int> globalDirPool)
+		internal static SubAssembly Run(ConvexHullAndBoundingBox inputData, List<int> globalDirPool)
         {
 			Graph = inputData.graphAssembly;
 			DirPool = globalDirPool;
 			Updates.UpdateGlobalDirections(DirPool);
-
-            var solutions = new List<AssemblyCandidate>();
 			assemblyEvaluator = new EvaluationForBinaryTree();//inputData.ConvexHullDictionary);
 
 			//initialize memoization with 2-node (i.e., arc) subassemblies so heuristic works
@@ -50,10 +48,7 @@ namespace Assembly_Planner
 				Console.WriteLine(i+" "+Count[i]);
 			}
 
-			AssemblyCandidate goal = new AssemblyCandidate(new candidate());
-			goal.Sequence.Subassemblies.Add(Tree);
-            solutions.Add(goal);
-            return solutions;
+            return Tree;
         }
 
 		protected static double F(out SubAssembly Tree, List<node> A)
