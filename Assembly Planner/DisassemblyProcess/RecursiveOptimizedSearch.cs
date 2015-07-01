@@ -28,6 +28,7 @@ namespace Assembly_Planner
             var solutions = new List<AssemblyCandidate>();
 			assemblyEvaluator = new EvaluationForBinaryTree();//inputData.ConvexHullDictionary);
 
+			//initialize memoization with 2-node (i.e., arc) subassemblies so heuristic works
 			foreach (arc arc in Graph.arcs)
 			{
 				List<node> Asm = new List<node>(new node[] {arc.From,arc.To});
@@ -39,17 +40,7 @@ namespace Assembly_Planner
 					Memo.Add(A, sa.Install.Time);
 				}
 			}
-			/*
-			foreach( KeyValuePair<HashSet<node>, double> kvp in Memo )
-			{
-				Console.Write("Key = ");
-				foreach (node i in kvp.Key)
-				{
-					Console.Write(" {0}", i.name);
-				}
-				Console.WriteLine(", Value = {0}", kvp.Value);
-			}
-*/
+
 			SubAssembly Tree;
 			var Best = F(out Tree, Graph.nodes);
 
@@ -59,7 +50,7 @@ namespace Assembly_Planner
 				Console.WriteLine(i+" "+Count[i]);
 			}
 
-			AssemblyCandidate goal = null;
+			AssemblyCandidate goal = new AssemblyCandidate(new candidate());
 			goal.Sequence.Subassemblies.Add(Tree);
             solutions.Add(goal);
             return solutions;
