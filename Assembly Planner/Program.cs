@@ -18,7 +18,7 @@ namespace Assembly_Planner
             
             //var globalDirPool = DisassemblyDirections.Run(assemblyGraph, solids); //Input: assembly model
             var globalDirPool = DisassemblyDirectionsWithFastener.Run(assemblyGraph, solids); //Input: assembly model
-            
+                
             Updates.AddPartsProperties(assemblyGraph);
             var inputData = new ConvexHullAndBoundingBox(assemblyGraph);
             

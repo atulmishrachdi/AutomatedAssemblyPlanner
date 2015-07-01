@@ -1,4 +1,5 @@
-﻿using GraphSynth.Representation;
+﻿using System;
+using GraphSynth.Representation;
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -52,7 +53,7 @@ namespace GeometryReasoning
                         //if there is not an arc between n1 and n2 add an arc
                         if (!(n1.arcsFrom.Exists(a => a.To == n2) || n1.arcsTo.Exists(a => a.From == n2)))
                         {
-                            SearchIO.output("Making arc between: " + n1.name + " & " + n2.name);
+                            Console.WriteLine("Making arc between: " + n1.name + " & " + n2.name);
                             graph.addArc(a1, n1, n2);
                         }
                         reader.Read();

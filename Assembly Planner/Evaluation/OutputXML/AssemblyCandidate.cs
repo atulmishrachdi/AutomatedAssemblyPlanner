@@ -84,8 +84,8 @@ namespace AssemblyEvaluation
             }
             catch (Exception ioe)
             {
-                SearchIO.output("***XML Serialization Error***");
-                SearchIO.output(ioe.ToString());
+                Console.WriteLine("***XML Serialization Error***");
+                Console.WriteLine(ioe.ToString());
             }
             finally
             {

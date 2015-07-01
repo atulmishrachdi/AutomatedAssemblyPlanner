@@ -34,3 +34,18 @@ D:\Nima-Project\AssemblyPlanning\Assembly Planner\bin\Debug\TessellationAndVoxel
 D:\Nima-Project\AssemblyPlanning\Assembly Planner\obj\Debug\Assembly Planner.csprojResolveAssemblyReference.cache
 D:\Nima-Project\AssemblyPlanning\Assembly Planner\obj\Debug\Assembly Planner.exe
 D:\Nima-Project\AssemblyPlanning\Assembly Planner\obj\Debug\Assembly Planner.pdb
+C:\Users\Matt\Documents\Visual Studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\Assembly Planner.exe.config
+C:\Users\Matt\Documents\Visual Studio 2013\Projects\Assembly Planner\Assembly Planner\obj\Debug\Assembly Planner.exe
+C:\Users\Matt\Documents\Visual Studio 2013\Projects\Assembly Planner\Assembly Planner\obj\Debug\Assembly Planner.pdb
+C:\Users\Matt\Documents\Visual Studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\Assembly Planner.exe
+C:\Users\Matt\Documents\Visual Studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\Assembly Planner.pdb
+C:\Users\Matt\Documents\Visual Studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\GraphSynth.BaseClasses.dll
+C:\Users\Matt\Documents\Visual Studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\PrimitiveClassificationOfTessellatedSolids.dll
+C:\Users\Matt\Documents\Visual Studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\StarMath.dll
+C:\Users\Matt\Documents\Visual Studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\TessellationAndVoxelizationGeometryLibrary.dll
+C:\Users\Matt\Documents\Visual Studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\GraphSynth.BaseClasses.pdb
+C:\Users\Matt\Documents\Visual Studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\GraphSynth.BaseClasses.xml
+C:\Users\Matt\Documents\Visual Studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\PrimitiveClassificationOfTessellatedSolids.pdb
+C:\Users\Matt\Documents\Visual Studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\MIConvexHull.pdb
+C:\Users\Matt\Documents\Visual Studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\StarMath.pdb
+C:\Users\Matt\Documents\Visual Studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\TessellationAndVoxelizationGeometryLibrary.pdb

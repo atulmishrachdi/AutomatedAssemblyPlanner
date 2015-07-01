@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using AssemblyEvaluation;
 using GraphSynth;
 using GraphSynth.Representation;
-using GraphSynth.Search;
 
 namespace Assembly_Planner
 {
@@ -54,7 +53,7 @@ namespace Assembly_Planner
                     foreach (var opt in options)
                     {
                         var child = (AssemblyCandidate)current.copy();
-                        SearchProcess.transferLmappingToChild(child.graph, current.graph, opt);
+                        option.transferLmappingToChild(child.graph, current.graph, opt);
                         var rest = Updates.AddSecondHyperToOption(child,opt);
                         Updates.ApplyChild(child, opt);
                         if (assemblyEvaluator.Evaluate(child, opt,rest) > 0)

@@ -109,13 +109,13 @@ namespace AssemblyEvaluation
 #else
                 RiemannianDx = PathDeterminationEvaluator.FindPathLength(newSubAsm.Install.Moving.PartNodes.ToArray(),
                     newSubAsm.Install.Reference.PartNodes.ToArray(), newSubAsm.Install.InstallDirection, insertionPoint.Position); 
-                SearchIO.output("OMPL = "+RiemannianDx+", Sep. Hull = "+sepHullDx);
+                Console.WriteLine("OMPL = "+RiemannianDx+", Sep. Hull = "+sepHullDx);
 #endif
             }
             else RiemannianDx = sepHullDx;
             if (RiemannianDx < 0)
             {
-                SearchIO.output("Infeasible path found");
+                Console.WriteLine("Infeasible path found");
                 return Constants.MaxPathForInfeasibleInstall;
             }
             else return sepHullDx;

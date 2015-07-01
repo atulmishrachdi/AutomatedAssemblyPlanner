@@ -22,32 +22,32 @@ namespace GeometryReasoning
 
 
 
-        public InputData(GlobalSettings settings)
-        {
-            graphAssembly = settings.seed;
-            InputDir = settings.InputDirAbs;
-            //var basicFiler = new BasicFiler(InputDir, "output", "");
-            //if (File.Exists(InputDir + "input.gxml"))
-            //{
-            //    settings.seed = graphAssembly = (designGraph)basicFiler.Open(InputDir + "input.gxml")[0];
-            //   Parallel.Invoke(LoadCADData, LoadAndSaveTesselatedPartFiles);
-            LoadAndSaveTesselatedPartFiles(); 
-            //BuildFromSAT();
-            MakeBBDictionaryFromCVXHullDictionary();
-            //}
-            //else
-            //{
-            //    graphAssembly = new designGraph();
-            //   Parallel.Invoke(LoadCADData, LoadOrMakeLiaisonData, LoadAndSaveTesselatedPartFiles);
-            //  BuildFromSAT();
-            //   MakeBBDictionaryFromCVXHullDictionary();
-            //   if (!BlockingDetermination.DefineBlocking(graphAssembly, ConvexHullDictionary, BoundingBoxDictionary))
-            //       return;
-            //basicFiler.Save(InputDir + "input.gxml", graphAssembly);
-            //  settings.seed = graphAssembly;
-            //}
-            DataInterface.TerminateACIS();
-        }
+        //public InputData(GlobalSettings settings)
+        //{
+        //    graphAssembly = settings.seed;
+        //    InputDir = settings.InputDirAbs;
+        //    //var basicFiler = new BasicFiler(InputDir, "output", "");
+        //    //if (File.Exists(InputDir + "input.gxml"))
+        //    //{
+        //    //    settings.seed = graphAssembly = (designGraph)basicFiler.Open(InputDir + "input.gxml")[0];
+        //    //   Parallel.Invoke(LoadCADData, LoadAndSaveTesselatedPartFiles);
+        //    LoadAndSaveTesselatedPartFiles(); 
+        //    //BuildFromSAT();
+        //    MakeBBDictionaryFromCVXHullDictionary();
+        //    //}
+        //    //else
+        //    //{
+        //    //    graphAssembly = new designGraph();
+        //    //   Parallel.Invoke(LoadCADData, LoadOrMakeLiaisonData, LoadAndSaveTesselatedPartFiles);
+        //    //  BuildFromSAT();
+        //    //   MakeBBDictionaryFromCVXHullDictionary();
+        //    //   if (!BlockingDetermination.DefineBlocking(graphAssembly, ConvexHullDictionary, BoundingBoxDictionary))
+        //    //       return;
+        //    //basicFiler.Save(InputDir + "input.gxml", graphAssembly);
+        //    //  settings.seed = graphAssembly;
+        //    //}
+        //    DataInterface.TerminateACIS();
+        //}
 
         /// <summary>
         /// This function loads the .SAT file from the directory
@@ -73,10 +73,10 @@ namespace GeometryReasoning
             {
                 if (STLGeometryFunctions.ReadFromSTLFile(fileInfo.Open(FileMode.Open), out vertices))
                 {
-                    SearchIO.output("CVXHull for " + fileInfo.Name);
+                    Console.WriteLine("CVXHull for " + fileInfo.Name);
                     ConvexHullDictionary.Add(Path.GetFileNameWithoutExtension(fileInfo.Name),
                         ConvexHull.Create(vertices));
-                    SearchIO.output("...done");
+                    Console.WriteLine("...done");
                 }
             }
             //);
@@ -85,11 +85,11 @@ namespace GeometryReasoning
             {
                 if (!ConvexHullDictionary.ContainsKey(Path.GetFileNameWithoutExtension(fileInfo.Name)))
                 {
-                    SearchIO.output("CVXHull for " + fileInfo.Name);
+                    Console.WriteLine("CVXHull for " + fileInfo.Name);
                     if (STLGeometryFunctions.ReadFromTXTFile(fileInfo.Open(FileMode.Open), out vertices))
                         ConvexHullDictionary.Add(Path.GetFileNameWithoutExtension(fileInfo.Name),
                             ConvexHull.Create(vertices));
-                    SearchIO.output("...done");
+                    Console.WriteLine("...done");
                 }
             }
         }

@@ -176,7 +176,7 @@ namespace AssemblyEvaluation
             if (double.IsNaN(installDirection.Position[0]))
             {
                 installDirection.Position = new[] {1.0, 0.0, 0.0};
-                SearchIO.output("unable to find install direction between parts",3);
+                Console.WriteLine("unable to find install direction between parts",3);
             }
 
             // now, we have to figure out how much to move.

@@ -27,24 +27,25 @@ namespace AssemblyEvaluation
             Dictionary<string, ConvexHull<Vertex, DefaultConvexFace<Vertex>>> convexHullForParts)
         {
             Part refAssembly, movingAssembly;
-            if (ActionIsAssemblyByAssembly(opt.rule))
-            {
-                var node0 = opt.nodes[0];
-                var node1 = opt.nodes[1];
-                var node0name = node0.name;
-                var node1name = node1.name;
-                refAssembly = Subassemblies.FirstOrDefault(subasm => subasm.PartNodes.Contains(node0name));
-                if (refAssembly == null)
-                    refAssembly = new Part(node0name, GetPartMass(node0), GetPartVolume(node0),
-                        convexHullForParts[node0name], GetPartCenterOfMass(node0));
-                else Subassemblies.Remove((SubAssembly) refAssembly);
-                movingAssembly = Subassemblies.FirstOrDefault(subasm => subasm.PartNodes.Contains(node1name));
-                if (movingAssembly == null)
-                    movingAssembly = new Part(node1name, GetPartMass(node1), GetPartVolume(node1),
-                        convexHullForParts[node1name], GetPartCenterOfMass(node0));
-                else Subassemblies.Remove((SubAssembly) movingAssembly);
-            }
-            else if (ActionIsRemoveSCC(opt.rule))
+            //if (ActionIsAssemblyByAssembly(opt.rule))
+            //{
+            //    var node0 = opt.nodes[0];
+            //    var node1 = opt.nodes[1];
+            //    var node0name = node0.name;
+            //    var node1name = node1.name;
+            //    refAssembly = Subassemblies.FirstOrDefault(subasm => subasm.PartNodes.Contains(node0name));
+            //    if (refAssembly == null)
+            //        refAssembly = new Part(node0name, GetPartMass(node0), GetPartVolume(node0),
+            //            convexHullForParts[node0name], GetPartCenterOfMass(node0));
+            //    else Subassemblies.Remove((SubAssembly) refAssembly);
+            //    movingAssembly = Subassemblies.FirstOrDefault(subasm => subasm.PartNodes.Contains(node1name));
+            //    if (movingAssembly == null)
+            //        movingAssembly = new Part(node1name, GetPartMass(node1), GetPartVolume(node1),
+            //            convexHullForParts[node1name], GetPartCenterOfMass(node0));
+            //    else Subassemblies.Remove((SubAssembly) movingAssembly);
+            //}
+            //else
+                if (true )//ActionIsRemoveSCC(opt.rule))
             {
                 var movingNodes = opt.nodes;
                 var newSubAsmNodes = rest;
@@ -131,11 +132,11 @@ namespace AssemblyEvaluation
         }
 
 
-        private bool ActionIsRemoveSCC(grammarRule rule)
-        {
-            return true;
-            return rule.name.Equals("choose_SCC");
-        }
+        //private bool ActionIsRemoveSCC(grammarRule rule)
+        //{
+        //    return true;
+        //    return rule.name.Equals("choose_SCC");
+        //}
         /// <summary>
         /// Should the reference and moving be switched? Essentially the initial choice about what is the reference
         /// and what is the moving sub-assemblies is arbitrary. With this function, we make a detailed check to determine
@@ -308,11 +309,11 @@ namespace AssemblyEvaluation
         }
 
 
-        private static bool ActionIsAssemblyByAssembly(grammarRule rule)
-        {
-            return false;
-            //return rule.name.Equals("merger-additional");
-        }
+        //private static bool ActionIsAssemblyByAssembly(grammarRule rule)
+        //{
+        //    return false;
+        //    //return rule.name.Equals("merger-additional");
+        //}
 
 
 
