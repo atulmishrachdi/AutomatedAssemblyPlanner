@@ -13,14 +13,19 @@ namespace Assembly_Planner
     {
         private static void Main(string[] args)
         {
-            var solids = GetSTLs("../../../Test/Pump Assembly");
+            var inputDir =
+                //"../../../Test/Cube";
+                //"../../../Test/Pump Assembly";
+                "../../../Test/Double";
+                //"../../../Test/PumpWExtention
+            var solids = GetSTLs(inputDir);//"../../../Test/PumpWExtention");
             var assemblyGraph = new designGraph();
             
             //var globalDirPool = DisassemblyDirections.Run(assemblyGraph, solids); //Input: assembly model
             var globalDirPool = DisassemblyDirectionsWithFastener.Run(assemblyGraph, solids); //Input: assembly model
-            
-            Updates.AddPartsProperties(assemblyGraph);
-            var inputData = new ConvexHullAndBoundingBox(assemblyGraph);
+
+            //Updates.AddPartsProperties(inputDir, assemblyGraph);
+            var inputData = new ConvexHullAndBoundingBox(inputDir, assemblyGraph);
             
             //var solutions = RecursiveOptimizedSearch.Run(inputData, globalDirPool);
             var solutions = OrderedDFS.Run(inputData, globalDirPool); // the output is the assembly sequence

@@ -38,6 +38,12 @@ namespace Assembly_Planner
                     depth = 25;
                     radius = 8;
                 }
+                else if (fastener.Name.Contains("ScrewLong"))
+                {
+                    RD = 316;
+                    depth = 27;
+                    radius = 6;
+                }
                 else
                 {
                     RD = 316;
@@ -55,6 +61,8 @@ namespace Assembly_Planner
         private static void AddRemovalInformationToArcs(designGraph assemblyGraph,
             List<TessellatedSolid> lockedByTheFastener, double RD, double depth, double radius)
         {
+            var moreThanTwoNodes = 0;
+            if (lockedByTheFastener.Count > 2) moreThanTwoNodes = 1;
             var partsName = lockedByTheFastener.Select(part => part.Name).ToList();
             foreach (
                 arc arc in
@@ -67,6 +75,8 @@ namespace Assembly_Planner
                 arc.localVariables.Add(depth);
                 arc.localVariables.Add(DisConstants.BoltRadius);
                 arc.localVariables.Add(radius);
+                arc.localVariables.Add(DisConstants.IsItBetweenMoreThanTwoNodes);
+                arc.localVariables.Add(moreThanTwoNodes);
             }
         }
 

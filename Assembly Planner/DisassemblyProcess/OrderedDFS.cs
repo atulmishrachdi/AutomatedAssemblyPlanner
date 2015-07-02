@@ -89,7 +89,7 @@ namespace Assembly_Planner
 
         protected static bool isCurrentTheGoal(AssemblyCandidate current)
         {
-            return current.graph.hyperarcs.Where(h => h.localLabels.Contains("Done")).Count() == 15;
+            return current.graph.hyperarcs.Where(h => h.localLabels.Contains("Done")).Count() == 5;
         }
 
         private static void TemporaryFixingSequence(AssemblyCandidate goal)

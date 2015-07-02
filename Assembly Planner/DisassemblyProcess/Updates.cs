@@ -77,9 +77,9 @@ namespace Assembly_Planner
             return null;
         }
 
-        internal static void AddPartsProperties(designGraph assemblyGraph)
+        internal static void AddPartsProperties(string inputDir, designGraph assemblyGraph)
         {
-            var reader = new StreamReader(File.OpenRead(@"../../../Test/Pump Assembly/PropertiesNoFastener.csv"));
+            var reader = new StreamReader(File.OpenRead(@inputDir + "/information.csv"));
             while (!reader.EndOfStream)
             {
                 var line = reader.ReadLine();
@@ -153,6 +153,40 @@ namespace Assembly_Planner
                 }
             }
             return false;
+        }
+
+        internal static void RemoveRepeatedFasteners(designGraph designGraph, arc a)
+        {
+            var counter = a.localVariables.IndexOf(GraphConstants.DirIndUpperBound) + 1;
+            while (counter < a.localVariables.Count)
+            {
+                if (a.localVariables[counter + 7] == 0)
+                {
+                    counter += 8;
+                    continue;
+                }
+
+                foreach (arc arc in designGraph.arcs.Where(a1 => a1 is arc && a1 != a).ToList())
+                {
+                    if (!arc.localVariables.Contains(DisConstants.IsItBetweenMoreThanTwoNodes)) continue;
+                    var counter2 = arc.localVariables.IndexOf(GraphConstants.DirIndUpperBound) + 1;
+                    while (counter2 < arc.localVariables.Count)
+                    {
+                        if (arc.localVariables[counter2 + 7] == 0)
+                        {
+                            counter2 += 8;
+                            continue;
+                        }
+                        if (arc.localVariables[counter2 + 1] != a.localVariables[counter + 1]) continue;
+                        if (arc.localVariables[counter2 + 3] != a.localVariables[counter + 3]) continue;
+                        if (arc.localVariables[counter2 + 5] != a.localVariables[counter + 5]) continue;
+                        arc.localVariables.RemoveRange(counter2,8);
+                    }
+
+                }
+
+                counter += 8;
+            }
         }
     }
 }
