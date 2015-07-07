@@ -19,8 +19,8 @@ namespace Assembly_Planner
             //AddingOptionsToGraph(assemblyGraph, combinations, seperate.nodes.Count);
             options.AddRange(AddingOptionsToGraph(combinations, seperate, options));
             var counter = 0;
-            var cp1 = new List<List<hyperarc>>();
-            var cp2 = new List<List<hyperarc>>();
+            var cp1 = new HashSet<HashSet<hyperarc>>();
+            var cp2 = new HashSet<HashSet<hyperarc>>();
 
             do
             {
@@ -29,45 +29,40 @@ namespace Assembly_Planner
                 cp2.Clear();
                 foreach (var opt in cp1)
                 {
-                    freeSCCs =
-                        blockingDic.Keys.Where(k => blockingDic[k].All(opt.Contains) && opt.All(blockingDic[k].Contains))
-                            .ToList();
+                    freeSCCs.Clear();
+                    foreach (var key in blockingDic.Keys)
+                    {
+                        if (opt.Contains(key)) continue;
+                        if (!blockingDic[key].All(bl => opt.Contains(bl))) continue;
+                        var newOp = new HashSet<hyperarc>(opt) { key };
+                        if (!cp1.Where(cp => cp.All(hy => newOp.Contains(hy))).Any(cp => newOp.All(cp.Contains)))
+                            freeSCCs.Add(key);
+                    }
+
                     if (freeSCCs.Count == 0) continue;
                     combinations = CombinationsCreator(freeSCCs);
                     var combAndPar = AddingParents(opt, combinations);
                     //AddingOptionsToGraph(assemblyGraph, combAndPar, seperate.nodes.Count);
                     options.AddRange(AddingOptionsToGraph(combAndPar, seperate, options));
-                    cp2.AddRange(combAndPar);
+                    cp2.UnionWith(combAndPar);
                 }
                 counter = 1;
-                cp1 = new List<List<hyperarc>>(cp2);
+                cp1 = new HashSet<HashSet<hyperarc>>(cp2);
             } while (cp1.Count > 0);
 
             foreach (var SCCHy in assemblyGraph.hyperarcs.Where(hyScc =>
-                            hyScc.localLabels.Contains(DisConstants.SCC) &&
-                            !hyScc.localLabels.Contains(DisConstants.Removable)).ToList())
+                hyScc.localLabels.Contains(DisConstants.SCC) &&
+                !hyScc.localLabels.Contains(DisConstants.Removable)).ToList())
                 assemblyGraph.hyperarcs.Remove(SCCHy);
+
             return options;
         }
 
-        private static void AddingOptionsToGraph(designGraph assemblyGraph, List<List<hyperarc>> combAndPar, int sep)
-        {
-            foreach (var opt in combAndPar)
-            {
-                var nodes = new List<node>();
-                foreach (var hy in opt)
-                    nodes.AddRange(hy.nodes);
-
-                if (nodes.Count == sep) continue;
-                var newHyperarc = assemblyGraph.addHyperArc(nodes);
-                newHyperarc.localLabels.Add(DisConstants.Removable);
-            }
-        }
-
-        private static List<option> AddingOptionsToGraph(List<List<hyperarc>> combAndPar, List<node> sep,
+        private static HashSet<option> AddingOptionsToGraph(HashSet<HashSet<hyperarc>> combAndPar, List<node> seperate,
             List<option> options)
         {
-            var optionList = new List<option>();
+            var optionList = new HashSet<option>();
+            var sep = seperate.Count;
             foreach (var opt in combAndPar)
             {
                 var nodes = new List<node>();
@@ -76,24 +71,23 @@ namespace Assembly_Planner
                 var newOption = new option(rule);
                 foreach (var hy in opt)
                     nodes.AddRange(hy.nodes);
-                var otherHalf = sep.Where(n => !nodes.Contains(n)).ToList();
+                var otherHalf = seperate.Where(n => !nodes.Contains(n)).ToList();
 
-                if (nodes.Count == sep.Count) continue;
+                if (nodes.Count == sep) continue;
                 if (optionList.Any(o => o.nodes.All(nodes.Contains) && nodes.All(o.nodes.Contains))) continue;
                 if (optionList.Any(o => o.nodes.All(otherHalf.Contains) && otherHalf.All(o.nodes.Contains))) continue;
                 if (options.Any(o => o.nodes.All(nodes.Contains) && nodes.All(o.nodes.Contains))) continue;
                 if (options.Any(o => o.nodes.All(otherHalf.Contains) && otherHalf.All(o.nodes.Contains))) continue;
-               
+
                 newOption.nodes.AddRange(nodes);
-                // careful are you adding nodes more than once!      use Linq Distinct?
                 optionList.Add(newOption);
             }
             return optionList;
         }
 
-        private static List<List<hyperarc>> AddingParents(List<hyperarc> opt, List<List<hyperarc>> combinations)
+        private static HashSet<HashSet<hyperarc>> AddingParents(HashSet<hyperarc> opt, HashSet<HashSet<hyperarc>> combinations)
         {
-            var comb2 = new List<List<hyperarc>>();
+            var comb2 = new HashSet<HashSet<hyperarc>>();
             foreach (var c in combinations)
             {
                 foreach (var h in opt)
@@ -103,35 +97,36 @@ namespace Assembly_Planner
             return comb2;
         }
 
-        private static List<List<hyperarc>> CombinationsCreator(List<hyperarc> freeSCCs)
+        private static HashSet<HashSet<hyperarc>> CombinationsCreator(List<hyperarc> freeSCCs)
         {
-            var comb = new List<List<hyperarc>>();
+            var comb = new HashSet<HashSet<hyperarc>>();
             var lastGroup = new List<List<hyperarc>>();
             foreach (var hy in freeSCCs)
             {
                 lastGroup.Add(new List<hyperarc> { hy });
-                comb.Add(new List<hyperarc> { hy });
+                comb.Add(new HashSet<hyperarc> { hy });
             }
 
             var i = 0;
             while (i < freeSCCs.Count - 1)
             {
-                var newGroup = new List<List<hyperarc>>();
+                var newGroup = new HashSet<HashSet<hyperarc>>();
                 for (var j = 0; j < freeSCCs.Count - 1; j++)
                 {
                     var hy1 = freeSCCs[j];
                     for (var k = j + 1; k < lastGroup.Count; k++)
                     {
                         var hy2 = lastGroup[k];
-                        var com = new List<hyperarc> { hy1 };
-                        com.AddRange(hy2);
+                        var com = new HashSet<hyperarc> { hy1 };
+                        com.UnionWith(hy2);
                         if ((newGroup.Any(hy => hy.All(com.Contains) && com.All(hy.Contains))) || hy2.Contains(hy1))
                             continue;
                         newGroup.Add(com);
                     }
                 }
-                comb.AddRange(newGroup);
-                lastGroup = newGroup;
+                comb.UnionWith(newGroup);
+                lastGroup.Clear();
+                lastGroup.AddRange(newGroup.Select(nG => nG.ToList()));
                 i++;
             }
             return comb;

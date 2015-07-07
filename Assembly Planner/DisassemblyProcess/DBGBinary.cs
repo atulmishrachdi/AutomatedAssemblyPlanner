@@ -26,12 +26,12 @@ namespace Assembly_Planner
             //            but it is blocked by that. Also shaft is not touching the lid, but it is blocked by that. 
 
             var dbgDictionary = new Dictionary<hyperarc, List<hyperarc>>();
-            var connectedButUnblocked = new Dictionary<hyperarc, List<hyperarc>>();
+            //var connectedButUnblocked = new Dictionary<hyperarc, List<hyperarc>>();
             foreach (var sccHy in assemblyGraph.hyperarcs.Where(h => h.localLabels.Contains(DisConstants.SCC)))
             {
                 var hyperarcBorderArcs = HyperarcBorderArcsFinder(sccHy);
                 var blockedWith = new List<hyperarc>();
-                var notBlockedWith = new List<hyperarc>();
+                //var notBlockedWith = new List<hyperarc>();
                 foreach (var borderArc in hyperarcBorderArcs.Where(a => A.Contains(a.From) && A.Contains(a.To)))
                 {
                     // if (From in sccHy)
@@ -43,7 +43,7 @@ namespace Assembly_Planner
                     {
                         if (Parallel(borderArc, cndDirInd) != -1)
                         {
-                            notBlockedWith.Add(blocking);
+                            //notBlockedWith.Add(blocking);
                             continue;
                         }
                         if (!blockedWith.Contains(blocking))
@@ -53,7 +53,7 @@ namespace Assembly_Planner
                     {
                         if (Parallel(borderArc, cndDirInd) != 1)
                         {
-                            notBlockedWith.Add(blocking);
+                            //notBlockedWith.Add(blocking);
                             continue;
                         }
                         if (!blockedWith.Contains(blocking))
@@ -61,7 +61,7 @@ namespace Assembly_Planner
                     }
                 }
                 dbgDictionary.Add(sccHy, blockedWith);
-                connectedButUnblocked.Add(sccHy, notBlockedWith);
+                //connectedButUnblocked.Add(sccHy, notBlockedWith);
             }
             dbgDictionary = CombineWithNonAdjacentBlockings2(dbgDictionary, cndDirInd);
             //dbgDictionary = UnconnectedBlockingDetermination.Run(dbgDictionary, connectedButUnblocked, cndDirInd);
@@ -69,6 +69,32 @@ namespace Assembly_Planner
                 dbgDictionary = DirectionalBlockingGraph(assemblyGraph, A, cndDirInd);
             dbgDictionary = UpdateBlockingDic(dbgDictionary);
             return dbgDictionary;
+        }
+
+
+        internal static int Parallel(arc borderArc, int cndDirInd)
+        {
+            //  1: parallel and same direction
+            // -1: parallel but opposite direction
+            //  0: not parallel. 
+            //  2: parralel same direction and opposite direction
+            var cndDir = DisassemblyDirections.Directions[cndDirInd];
+            var indexL = borderArc.localVariables.IndexOf(GraphConstants.DirIndLowerBound);
+            var indexU = borderArc.localVariables.IndexOf(GraphConstants.DirIndUpperBound);
+            var paralAndSame = false;
+            var paralButOppose = false;
+            for (var i = indexL + 1; i < indexU; i++)
+            {
+                var arcDisDir = DisassemblyDirections.Directions[(int)borderArc.localVariables[i]];
+                if (Math.Abs(1 - arcDisDir.dotProduct(cndDir)) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall)
+                    paralAndSame = true;
+                if (Math.Abs(1 + arcDisDir.dotProduct(cndDir)) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall)
+                    paralButOppose = true;
+            }
+            if (paralAndSame && paralButOppose) return 2;
+            if (paralAndSame) return 1;
+            if (paralButOppose) return -1;
+            return 0;
         }
 
         private static Dictionary<hyperarc, List<hyperarc>> CombineWithNonAdjacentBlockings2(Dictionary<hyperarc, List<hyperarc>> dbgDictionary, int cndDirInd)
@@ -151,31 +177,6 @@ namespace Assembly_Planner
                 }
             }
             return false;
-        }
-
-        internal static int Parallel(arc borderArc, int cndDirInd)
-        {
-            //  1: parallel and same direction
-            // -1: parallel but opposite direction
-            //  0: not parallel. 
-            //  2: parralel same direction and opposite direction
-            var cndDir = DisassemblyDirections.Directions[cndDirInd];
-            var indexL = borderArc.localVariables.IndexOf(GraphConstants.DirIndLowerBound);
-            var indexU = borderArc.localVariables.IndexOf(GraphConstants.DirIndUpperBound);
-            var paralAndSame = false;
-            var paralButOppose = false;
-            for (var i = indexL + 1; i < indexU; i++)
-            {
-                var arcDisDir = DisassemblyDirections.Directions[(int)borderArc.localVariables[i]];
-                if (Math.Abs(1 - arcDisDir.dotProduct(cndDir)) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall)
-                    paralAndSame = true;
-                if (Math.Abs(1 + arcDisDir.dotProduct(cndDir)) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall)
-                    paralButOppose = true;
-            }
-            if (paralAndSame && paralButOppose) return 2;
-            if (paralAndSame) return 1;
-            if (paralButOppose) return -1;
-            return 0;
         }
 
         private static hyperarc BlockingSccFinder(designGraph graph, hyperarc sccHy, arc arc)

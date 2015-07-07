@@ -26,12 +26,12 @@ namespace Assembly_Planner
             //            but it is blocked by that. Also shaft is not touching the lid, but it is blocked by that. 
             
             var dbgDictionary = new Dictionary<hyperarc, List<hyperarc>>();
-            var connectedButUnblocked= new Dictionary<hyperarc, List<hyperarc>>();
+            //var connectedButUnblocked= new Dictionary<hyperarc, List<hyperarc>>();
             foreach (var sccHy in assemblyGraph.hyperarcs.Where(h => h.localLabels.Contains(DisConstants.SCC)))
             {
                 var hyperarcBorderArcs = HyperarcBorderArcsFinder(sccHy);
                 var blockedWith = new List<hyperarc>();
-                var notBlockedWith = new List<hyperarc>();
+                //var notBlockedWith = new List<hyperarc>();
                 foreach (var borderArc in hyperarcBorderArcs)
                 {
                     // if (From in sccHy)
@@ -43,7 +43,7 @@ namespace Assembly_Planner
                     {
                         if (Parallel(borderArc, cndDirInd) != -1)
                         {
-                            notBlockedWith.Add(blocking);
+                            //notBlockedWith.Add(blocking);
                             continue;
                         }
                         if (!blockedWith.Contains(blocking))
@@ -53,7 +53,7 @@ namespace Assembly_Planner
                     {
                         if (Parallel(borderArc, cndDirInd) != 1)
                         {
-                            notBlockedWith.Add(blocking);
+                            //notBlockedWith.Add(blocking);
                             continue;
                         }
                         if (!blockedWith.Contains(blocking))
@@ -61,15 +61,39 @@ namespace Assembly_Planner
                     }
                 }
                 dbgDictionary.Add(sccHy,blockedWith);
-                connectedButUnblocked.Add(sccHy,notBlockedWith);
+                //connectedButUnblocked.Add(sccHy,notBlockedWith);
             }
             dbgDictionary = CombineWithNonAdjacentBlockings2(dbgDictionary, cndDirInd);
-            //dbgDictionary = UnconnectedBlockingDetermination.Run(dbgDictionary, connectedButUnblocked, cndDirInd);
             if (MutualBlocking(assemblyGraph, dbgDictionary))
                 dbgDictionary = DirectionalBlockingGraph(assemblyGraph, seperate, cndDirInd);
             dbgDictionary = UpdateBlockingDic(dbgDictionary);
             return dbgDictionary;
         }
+
+        private static bool MutualBlocking(designGraph assemblyGraph, Dictionary<hyperarc, List<hyperarc>> dbgDictionary)
+        {
+            for (var i = 0; i < dbgDictionary.Count - 1; i++)
+            {
+                var iKey = dbgDictionary.Keys.ToList()[i];
+                for (var j = i + 1; j < dbgDictionary.Count; j++)
+                {
+                    var jKey = dbgDictionary.Keys.ToList()[j];
+                    if (dbgDictionary[iKey].Contains(jKey) && dbgDictionary[jKey].Contains(iKey))
+                    {
+                        var nodes = new List<node>();
+                        nodes.AddRange(iKey.nodes);
+                        nodes.AddRange(jKey.nodes);
+                        assemblyGraph.removeHyperArc(iKey);
+                        assemblyGraph.removeHyperArc(jKey);
+                        var last = assemblyGraph.addHyperArc(nodes);
+                        last.localLabels.Add(DisConstants.SCC);
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
 
         private static Dictionary<hyperarc, List<hyperarc>> CombineWithNonAdjacentBlockings2(Dictionary<hyperarc, List<hyperarc>> dbgDictionary, int cndDirInd)
         {
@@ -127,95 +151,6 @@ namespace Assembly_Planner
                 }
             }
             return dbgDictionary;
-        }
-
-        private static Dictionary<hyperarc, List<hyperarc>> CombineWithNonAdjacentBlockings(
-            Dictionary<hyperarc, List<hyperarc>> dbgDictionary, int cndDirInd)
-        {
-            var direction = DisassemblyDirections.Directions[cndDirInd];
-            var dirs = (from gDir in DisassemblyDirections.Directions
-                        where 1 - Math.Abs(gDir.dotProduct(direction)) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall
-                select DisassemblyDirections.Directions.IndexOf(gDir)).ToList();
-            if (!DisassemblyDirections.NonAdjacentBlocking.Keys.ToList().Contains(dirs[0]) &&
-                !DisassemblyDirections.NonAdjacentBlocking.Keys.ToList().Contains(dirs[1])) return dbgDictionary;
-
-            foreach (var dir in dirs)
-            {
-                if (dir == cndDirInd)
-                {
-                    if (DisassemblyDirections.NonAdjacentBlocking.ContainsKey(dir))
-                    {
-                        foreach (var nonAdjBlo in DisassemblyDirections.NonAdjacentBlocking[dir])
-                        {
-                            foreach (
-                                var scc1 in
-                                    dbgDictionary.Keys.Where(scc1 => scc1.nodes.Any(n => n.name == nonAdjBlo[0].name))
-                                        .ToList())
-                            {
-                                foreach (
-                                    var scc2 in
-                                        dbgDictionary.Keys.Where(
-                                            scc2 => scc2 != scc1 && scc2.nodes.Any(n => n.name == nonAdjBlo[1].name)))
-                                {
-                                    if (!dbgDictionary[scc1].Contains(scc2))
-                                        dbgDictionary[scc1].Add(scc2);
-                                    break;
-                                }
-                                break;
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    if (!DisassemblyDirections.NonAdjacentBlocking.ContainsKey(dir)) continue;
-                    foreach (var nonAdjBlo in DisassemblyDirections.NonAdjacentBlocking[dir])
-                    {
-                        foreach (
-                            var scc1 in
-                                dbgDictionary.Keys.Where(scc1 => scc1.nodes.Any(n => n.name == nonAdjBlo[1].name))
-                                    .ToList())
-                        {
-                            foreach (
-                                var scc2 in
-                                    dbgDictionary.Keys.Where(
-                                        scc2 => scc2 != scc1 && scc2.nodes.Any(n => n.name == nonAdjBlo[0].name)))
-                            {
-                                if (!dbgDictionary[scc1].Contains(scc2))
-                                    dbgDictionary[scc1].Add(scc2);
-
-                                break;
-                            }
-                            break;
-                        }
-                    }
-                }
-            }
-            return dbgDictionary;
-        }
-
-        private static bool MutualBlocking(designGraph assemblyGraph, Dictionary<hyperarc, List<hyperarc>> dbgDictionary)
-        {
-            for (var i = 0; i < dbgDictionary.Count - 1; i++)
-            {
-                var iKey = dbgDictionary.Keys.ToList()[i];
-                for (var j = i + 1; j < dbgDictionary.Count; j++)
-                {
-                    var jKey = dbgDictionary.Keys.ToList()[j];
-                    if (dbgDictionary[iKey].Contains(jKey) && dbgDictionary[jKey].Contains(iKey))
-                    {
-                        var nodes = new List<node>();
-                        nodes.AddRange(iKey.nodes);
-                        nodes.AddRange(jKey.nodes);
-                        assemblyGraph.removeHyperArc(iKey);
-                        assemblyGraph.removeHyperArc(jKey);
-                        var last = assemblyGraph.addHyperArc(nodes);
-                        last.localLabels.Add(DisConstants.SCC);
-                        return true;
-                    }
-                }
-            }
-            return false;
         }
 
         internal static int Parallel(arc borderArc, int cndDirInd)
