@@ -47,7 +47,7 @@ namespace Assembly_Planner
                             //OptimizedSCC.StronglyConnectedComponents(current.graph, seperateHy, cndDirInd);
                             var blockingDic = DBG.DirectionalBlockingGraph(current.graph, seperateHy, cndDirInd);
                             //OptionGeneratorPro.GenerateOptions(current.graph, seperateHy, blockingDic);
-                            options.AddRange(OptionGeneratorPro.GenerateOptions(current.graph, seperateHy, blockingDic));
+                            options.AddRange(OptionGeneratorPro.GenerateOptions(current.graph, seperateHy, blockingDic, options));
                         }
                     }
                     //var ruleChoices = recogRule.recognize(current.graph);

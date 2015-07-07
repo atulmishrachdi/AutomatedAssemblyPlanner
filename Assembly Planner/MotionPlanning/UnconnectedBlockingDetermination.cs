@@ -28,7 +28,7 @@ namespace Assembly_Planner
             foreach (var scc1 in dbgDictionary.Keys)
             {
                 var blocked = false;
-                foreach (var scc2 in dbgDictionary.Keys.Where(s => s != scc1 && !dbgDictionary[scc1].Contains(s) && !connectedButUnblocked[scc1].Contains(s)))
+                foreach (var scc2 in dbgDictionary.Keys.Where(s => s != scc1 && !dbgDictionary[scc1].Contains(s) ))//&& !connectedButUnblocked[scc1].Contains(s)))
                 {
                     var verticesScc1 = new List<TVGL.Tessellation.Vertex>();
                     var verticesScc2 = new List<TVGL.Tessellation.Vertex>();
@@ -38,12 +38,12 @@ namespace Assembly_Planner
                     {
                         foreach (var solid in DisassemblyDirections.Solids.Where(solid => solid.Name == node.name))
                         {
-                            facesScc1.AddRange(solid.Faces);
+                            facesScc1.AddRange(solid.ConvexHullFaces);
                             break;
                         }
                         foreach (var solid in DisassemblyDirections.Solids.Where(solid => solid.Name == node.name))
                         {
-                            verticesScc1.AddRange(solid.Vertices);
+                            verticesScc1.AddRange(solid.ConvexHullVertices);
                             break;
                         }
                     }
@@ -51,12 +51,12 @@ namespace Assembly_Planner
                     {
                         foreach (var solid in DisassemblyDirections.Solids.Where(solid => solid.Name == node.name))
                         {
-                            facesScc2.AddRange(solid.Faces);
+                            facesScc2.AddRange(solid.ConvexHullFaces);
                             break;
                         }
                         foreach (var solid in DisassemblyDirections.Solids.Where(solid => solid.Name == node.name))
                         {
-                            verticesScc2.AddRange(solid.Vertices);
+                            verticesScc2.AddRange(solid.ConvexHullVertices);
                             break;
                         }
                     }
@@ -153,7 +153,7 @@ namespace Assembly_Planner
                                         (a.From.name == solid.Name && a.To.name == s.Name) ||
                                         (a.From.name == s.Name && a.To.name == solid.Name)))))
                 {
-                    if (!BoundingBoxBlocking(direction, part, solid)) continue;
+                    //if (!BoundingBoxBlocking(direction, part, solid)) continue;
                     var distanceToTheClosestFace = double.PositiveInfinity;
                     var overlap = false;
                     foreach (var ray in rays)
@@ -175,24 +175,14 @@ namespace Assembly_Planner
                 }
                 // by this point, I now know that for this direction, what parts are blocking the solid and in what order.
                 if (blockingPartsAndDistances.Count == 0) continue;
+                
+                var blockingArray =
+                    blockingPartsAndDistances.Keys.Select(
+                        b => new[] {node, assemblyGraph.nodes.Where(n => n.name == b.Name).ToList()[0]}).ToList();
                 if (DisassemblyDirections.NonAdjacentBlocking.ContainsKey(directionInd))
-                    DisassemblyDirections.NonAdjacentBlocking[directionInd].Add(new[]
-                    {
-                        node,
-                        assemblyGraph.nodes.Where(n => n.name == blockingPartsAndDistances.Keys.ToList()[0].Name)
-                            .ToList()[0]
-                    });
+                    DisassemblyDirections.NonAdjacentBlocking[directionInd].AddRange(blockingArray);
                 else
-                    DisassemblyDirections.NonAdjacentBlocking.Add(directionInd,
-                        new List<node[]>
-                        {
-                            new[]
-                            {
-                                node,
-                                assemblyGraph.nodes.Where(n => n.name == blockingPartsAndDistances.Keys.ToList()[0].Name)
-                                    .ToList()[0]
-                            }
-                        });
+                    DisassemblyDirections.NonAdjacentBlocking.Add(directionInd,blockingArray);
             }
         }
 

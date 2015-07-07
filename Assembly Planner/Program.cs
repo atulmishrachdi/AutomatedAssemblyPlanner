@@ -16,23 +16,24 @@ namespace Assembly_Planner
             var inputDir =
                 //"../../../Test/Cube";
                 //"../../../Test/Pump Assembly";
-                "../../../Test/Double";
-                //"../../../Test/PumpWExtention
+                //"../../../Test/Double";
+                "../../../Test/PumpWExtention";
             var solids = GetSTLs(inputDir);//"../../../Test/PumpWExtention");
             var assemblyGraph = new designGraph();
             
-            //var globalDirPool = DisassemblyDirections.Run(assemblyGraph, solids); //Input: assembly model
-            var globalDirPool = DisassemblyDirectionsWithFastener.Run(assemblyGraph, solids); //Input: assembly model
-
-            //Updates.AddPartsProperties(inputDir, assemblyGraph);
-            var inputData = new ConvexHullAndBoundingBox(inputDir, assemblyGraph);
+            //var globalDirPool = DisassemblyDirections.Run(assemblyGraph, solids);
+            var globalDirPool = DisassemblyDirectionsWithFastener.Run(assemblyGraph, solids);
             
+
+            Updates.AddPartsProperties(inputDir, assemblyGraph);
+            var inputData = new ConvexHullAndBoundingBox(inputDir, assemblyGraph);
+            NonadjacentBlockingDetermination.Run(assemblyGraph, solids, globalDirPool);
             //var solutions = RecursiveOptimizedSearch.Run(inputData, globalDirPool);
             var solutions = OrderedDFS.Run(inputData, globalDirPool); // the output is the assembly sequence
             //var solutions = BeamSearch.Run(inputData, globalDirPool);
            
-            var reorientation = OptimalOrientation.Run(solutions);
-            WorkerAllocation.Run(solutions, reorientation);
+            //var reorientation = OptimalOrientation.Run(solutions);
+            //WorkerAllocation.Run(solutions, reorientation);
             
             Console.ReadLine();
         }

@@ -63,10 +63,69 @@ namespace Assembly_Planner
                 dbgDictionary.Add(sccHy,blockedWith);
                 connectedButUnblocked.Add(sccHy,notBlockedWith);
             }
-            dbgDictionary = CombineWithNonAdjacentBlockings(dbgDictionary, cndDirInd);
+            dbgDictionary = CombineWithNonAdjacentBlockings2(dbgDictionary, cndDirInd);
+            //dbgDictionary = UnconnectedBlockingDetermination.Run(dbgDictionary, connectedButUnblocked, cndDirInd);
             if (MutualBlocking(assemblyGraph, dbgDictionary))
                 dbgDictionary = DirectionalBlockingGraph(assemblyGraph, seperate, cndDirInd);
             dbgDictionary = UpdateBlockingDic(dbgDictionary);
+            return dbgDictionary;
+        }
+
+        private static Dictionary<hyperarc, List<hyperarc>> CombineWithNonAdjacentBlockings2(Dictionary<hyperarc, List<hyperarc>> dbgDictionary, int cndDirInd)
+        {
+            var direction = DisassemblyDirections.Directions[cndDirInd];
+            var dirs = (from gDir in DisassemblyDirections.Directions
+                        where 1 - Math.Abs(gDir.dotProduct(direction)) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall
+                        select DisassemblyDirections.Directions.IndexOf(gDir)).ToList();
+            
+            foreach (var dir in dirs)
+            {
+                if (dir == cndDirInd)
+                {
+                    foreach (var nonAdjBlo in NonadjacentBlockingDetermination.NonAdjacentBlocking[dir])
+                    {
+                        foreach (
+                            var scc1 in
+                                dbgDictionary.Keys.Where(scc1 => scc1.nodes.Any(n => n.name == nonAdjBlo.blockingSolids[0].Name))
+                                    .ToList())
+                        {
+                            foreach (
+                                var scc2 in
+                                    dbgDictionary.Keys.Where(
+                                        scc2 => scc2 != scc1 && scc2.nodes.Any(n => n.name == nonAdjBlo.blockingSolids[1].Name)))
+                            {
+                                if (!dbgDictionary[scc1].Contains(scc2))
+                                    dbgDictionary[scc1].Add(scc2);
+                                break;
+                            }
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var nonAdjBlo in NonadjacentBlockingDetermination.NonAdjacentBlocking[dir])
+                    {
+                        foreach (
+                            var scc1 in
+                                dbgDictionary.Keys.Where(scc1 => scc1.nodes.Any(n => n.name == nonAdjBlo.blockingSolids[1].Name))
+                                    .ToList())
+                        {
+                            foreach (
+                                var scc2 in
+                                    dbgDictionary.Keys.Where(
+                                        scc2 => scc2 != scc1 && scc2.nodes.Any(n => n.name == nonAdjBlo.blockingSolids[0].Name)))
+                            {
+                                if (!dbgDictionary[scc1].Contains(scc2))
+                                    dbgDictionary[scc1].Add(scc2);
+
+                                break;
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
             return dbgDictionary;
         }
 

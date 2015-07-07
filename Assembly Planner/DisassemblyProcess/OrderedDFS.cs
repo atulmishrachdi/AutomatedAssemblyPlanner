@@ -49,10 +49,10 @@ namespace Assembly_Planner
                             current.graph.hyperarcs.Where(h => h.localLabels.Contains(DisConstants.SeperateHyperarcs))
                                 .ToList())
                     {
-                        //SCC.StronglyConnectedComponents(current.graph, seperateHy, cndDirInd);
-                        BoostedSCC.StronglyConnectedComponents(current.graph, seperateHy, cndDirInd);
+                        SCC.StronglyConnectedComponents(current.graph, seperateHy, cndDirInd);
+                        //BoostedSCC.StronglyConnectedComponents(current.graph, seperateHy, cndDirInd);
                         var blockingDic = DBG.DirectionalBlockingGraph(current.graph, seperateHy, cndDirInd);
-                        options.AddRange(OptionGeneratorPro.GenerateOptions(current.graph, seperateHy, blockingDic));
+                        options.AddRange(OptionGeneratorPro.GenerateOptions(current.graph, seperateHy, blockingDic, options));
                     }
                 }
                 foreach (var opt in options)
@@ -62,7 +62,7 @@ namespace Assembly_Planner
                     var rest = Updates.AddSecondHyperToOption(child, opt);
                     Updates.ApplyChild(child, opt);
                     if (assemblyEvaluator.Evaluate(child, opt, rest) > 0)
-                        lock (candidates)
+                        //lock (candidates)
                             candidates.Add(child.performanceParams, child);
                     child.addToRecipe(opt);
                 }

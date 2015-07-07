@@ -32,3 +32,20 @@ D:\Desktop\assemblyplanner\Assembly Planner\obj\Debug\Assembly Planner.exe
 D:\Desktop\assemblyplanner\Assembly Planner\obj\Debug\Assembly Planner.pdb
 D:\Desktop\assemblyplanner\Assembly Planner\bin\Debug\Assembly Planner.exe.config
 D:\Desktop\assemblyplanner\Assembly Planner\bin\Debug\Assembly Planner.pdb
+D:\Nima-Project\AssemblyPlanning\Assembly Planner\bin\Debug\Assembly Planner.exe.config
+D:\Nima-Project\AssemblyPlanning\Assembly Planner\obj\Debug\Assembly Planner.exe
+D:\Nima-Project\AssemblyPlanning\Assembly Planner\obj\Debug\Assembly Planner.pdb
+D:\Nima-Project\AssemblyPlanning\Assembly Planner\bin\Debug\Assembly Planner.exe
+D:\Nima-Project\AssemblyPlanning\Assembly Planner\bin\Debug\Assembly Planner.pdb
+D:\Nima-Project\AssemblyPlanning\Assembly Planner\bin\Debug\GraphSynth.BaseClasses.dll
+D:\Nima-Project\AssemblyPlanning\Assembly Planner\bin\Debug\MIConvexHull.dll
+D:\Nima-Project\AssemblyPlanning\Assembly Planner\bin\Debug\PrimitiveClassificationOfTessellatedSolids.dll
+D:\Nima-Project\AssemblyPlanning\Assembly Planner\bin\Debug\StarMath.dll
+D:\Nima-Project\AssemblyPlanning\Assembly Planner\bin\Debug\TessellationAndVoxelizationGeometryLibrary.dll
+D:\Nima-Project\AssemblyPlanning\Assembly Planner\bin\Debug\GraphSynth.BaseClasses.pdb
+D:\Nima-Project\AssemblyPlanning\Assembly Planner\bin\Debug\GraphSynth.BaseClasses.xml
+D:\Nima-Project\AssemblyPlanning\Assembly Planner\bin\Debug\PrimitiveClassificationOfTessellatedSolids.pdb
+D:\Nima-Project\AssemblyPlanning\Assembly Planner\bin\Debug\MIConvexHull.pdb
+D:\Nima-Project\AssemblyPlanning\Assembly Planner\bin\Debug\StarMath.pdb
+D:\Nima-Project\AssemblyPlanning\Assembly Planner\bin\Debug\TessellationAndVoxelizationGeometryLibrary.pdb
+D:\Nima-Project\AssemblyPlanning\Assembly Planner\obj\Debug\Assembly Planner.csprojResolveAssemblyReference.cache

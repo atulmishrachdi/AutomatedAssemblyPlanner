@@ -22,6 +22,7 @@ namespace Assembly_Planner
             Solids = new List<TessellatedSolid>(solids);
             Directions = IcosahedronPro.DirectionGeneration();
             DisassemblyDirections.Directions = new List<double[]>(Directions);
+            
             var globalDirPool = new List<int>();
             var solidPrimitive = BlockingDetermination.PrimitiveMaker(solids);
             var screwsAndBolts = BoltAndGearDetection.ScrewAndBoltDetector(solidPrimitive);
@@ -30,7 +31,7 @@ namespace Assembly_Planner
             var solidsNoFastener = new List<TessellatedSolid>(solids);
             foreach (var bolt in screwsAndBolts)
                 solidsNoFastener.Remove(bolt);
-
+            DisassemblyDirections.Solids = new List<TessellatedSolid>(solidsNoFastener);
             AddingNodesToGraph(assemblyGraph, solidsNoFastener);//, gears, screwsAndBolts);
 
             for (var i = 0; i < solidsNoFastener.Count - 1; i++)
@@ -62,13 +63,12 @@ namespace Assembly_Planner
                 }
             }
             Fastener.AddFastenersInformation(assemblyGraph, screwsAndBolts, solidsNoFastener, solidPrimitive);
-            foreach (var node in assemblyGraph.nodes)
-            {
-                var freeDirs = FreeDirectionFinder(node);
-                var freeDirInd = (from dir in freeDirs from gDir in Directions where dir[0] == gDir[0] && dir[1] == gDir[1] && dir[2] == gDir[2] select Directions.IndexOf(gDir)).ToList();
-                UnconnectedBlockingDetermination.FiniteDirectionsBetweenUnconnectedParts(node, solids, freeDirInd, assemblyGraph);
-            }
-
+            //foreach (var node in assemblyGraph.nodes)
+            //{
+            //    var freeDirs = FreeDirectionFinder(node);
+            //    var freeDirInd = (from dir in freeDirs from gDir in Directions where dir[0] == gDir[0] && dir[1] == gDir[1] && dir[2] == gDir[2] select Directions.IndexOf(gDir)).ToList();
+            //    UnconnectedBlockingDetermination.FiniteDirectionsBetweenUnconnectedParts(node, solidsNoFastener, freeDirInd, assemblyGraph);
+            //}
             return globalDirPool;
         }
 
