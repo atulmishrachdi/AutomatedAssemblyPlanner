@@ -77,7 +77,7 @@ namespace Assembly_Planner
             var dirs = (from gDir in DisassemblyDirections.Directions
                         where 1 - Math.Abs(gDir.dotProduct(direction)) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall
                         select DisassemblyDirections.Directions.IndexOf(gDir)).ToList();
-            
+            if (NonadjacentBlockingDetermination.NonAdjacentBlocking.Count == 0) return dbgDictionary;
             foreach (var dir in dirs)
             {
                 if (dir == cndDirInd)

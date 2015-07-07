@@ -14,22 +14,22 @@ namespace Assembly_Planner
         private static void Main(string[] args)
         {
             var inputDir =
-                //"../../../Test/Cube";
+                "../../../Test/Cube";
                 //"../../../Test/Pump Assembly";
                 //"../../../Test/Double";
-                "../../../Test/PumpWExtention";
+                //"../../../Test/PumpWExtention";
             var solids = GetSTLs(inputDir);//"../../../Test/PumpWExtention");
             var assemblyGraph = new designGraph();
             
             //var globalDirPool = DisassemblyDirections.Run(assemblyGraph, solids);
             var globalDirPool = DisassemblyDirectionsWithFastener.Run(assemblyGraph, solids);
             
-
-            Updates.AddPartsProperties(inputDir, assemblyGraph);
             var inputData = new ConvexHullAndBoundingBox(inputDir, assemblyGraph);
-            NonadjacentBlockingDetermination.Run(assemblyGraph, solids, globalDirPool);
-            //var solutions = RecursiveOptimizedSearch.Run(inputData, globalDirPool);
-            var solutions = OrderedDFS.Run(inputData, globalDirPool); // the output is the assembly sequence
+            //Updates.AddPartsProperties(inputDir, assemblyGraph);
+            //NonadjacentBlockingDetermination.Run(assemblyGraph, solids, globalDirPool);
+            
+            var solutions = RecursiveOptimizedSearch.Run(inputData, globalDirPool);
+            //var solutions = OrderedDFS.Run(inputData, globalDirPool); // the output is the assembly sequence
             //var solutions = BeamSearch.Run(inputData, globalDirPool);
            
             //var reorientation = OptimalOrientation.Run(solutions);

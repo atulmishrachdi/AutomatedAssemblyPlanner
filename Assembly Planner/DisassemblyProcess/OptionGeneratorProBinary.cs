@@ -17,7 +17,7 @@ namespace Assembly_Planner
             var combinations = CombinationsCreator(freeSCCs);
             var options = new List<option>();
             //AddingOptionsToGraph(assemblyGraph, combinations, seperate.nodes.Count);
-            options.AddRange(AddingOptionsToGraph(combinations, seperate.Count));
+            options.AddRange(AddingOptionsToGraph(combinations, seperate, options));
             var counter = 0;
             var cp1 = new List<List<hyperarc>>();
             var cp2 = new List<List<hyperarc>>();
@@ -36,7 +36,7 @@ namespace Assembly_Planner
                     combinations = CombinationsCreator(freeSCCs);
                     var combAndPar = AddingParents(opt, combinations);
                     //AddingOptionsToGraph(assemblyGraph, combAndPar, seperate.nodes.Count);
-                    options.AddRange(AddingOptionsToGraph(combAndPar, seperate.Count));
+                    options.AddRange(AddingOptionsToGraph(combAndPar, seperate, options));
                     cp2.AddRange(combAndPar);
                 }
                 counter = 1;
@@ -64,7 +64,8 @@ namespace Assembly_Planner
             }
         }
 
-        private static List<option> AddingOptionsToGraph(List<List<hyperarc>> combAndPar, int sep)
+        private static List<option> AddingOptionsToGraph(List<List<hyperarc>> combAndPar, List<node> sep,
+            List<option> options)
         {
             var optionList = new List<option>();
             foreach (var opt in combAndPar)
@@ -75,7 +76,14 @@ namespace Assembly_Planner
                 var newOption = new option(rule);
                 foreach (var hy in opt)
                     nodes.AddRange(hy.nodes);
-                if (nodes.Count == sep) continue;
+                var otherHalf = sep.Where(n => !nodes.Contains(n)).ToList();
+
+                if (nodes.Count == sep.Count) continue;
+                if (optionList.Any(o => o.nodes.All(nodes.Contains) && nodes.All(o.nodes.Contains))) continue;
+                if (optionList.Any(o => o.nodes.All(otherHalf.Contains) && otherHalf.All(o.nodes.Contains))) continue;
+                if (options.Any(o => o.nodes.All(nodes.Contains) && nodes.All(o.nodes.Contains))) continue;
+                if (options.Any(o => o.nodes.All(otherHalf.Contains) && otherHalf.All(o.nodes.Contains))) continue;
+               
                 newOption.nodes.AddRange(nodes);
                 // careful are you adding nodes more than once!      use Linq Distinct?
                 optionList.Add(newOption);
