@@ -213,7 +213,45 @@ namespace Assembly_Planner
             return
                 Math.Abs(blockingPolygonalFace.Normal.dotProduct(p.subtract(blockingPolygonalFace.Vertices[0].Position)));
         }
+
+
+
+        internal static void FiniteDirectionsBetweenConnectedParts(TessellatedSolid solid1, TessellatedSolid solid2, List<int> localDirInd, out List<int> finDirs, out List<int> infDirs)
+        {
+            // solid1 is Reference and solid2 is Moving
+            finDirs = new List<int>();
+            infDirs = new List<int>();
+
+            var aa = new List<double>();
+            foreach (var dir in localDirInd)
+            {
+                var direction = DisassemblyDirections.Directions[dir];
+                var rays = new List<Ray>();
+                foreach (var vertex in solid2.Vertices)
+                    rays.Add(new Ray(new AssemblyEvaluation.Vertex(vertex.Position[0], vertex.Position[1], vertex.Position[2]),
+                                    new Vector(direction[0], direction[1], direction[2])));
+                //if (rays.Any(ray => solid1.Faces.Any(f => RayIntersectsWithFace(ray, f))))
+                foreach (var ray in rays)
+                {
+                    foreach (var f in solid1.Faces)
+                    {
+                        if (RayIntersectsWithFace(ray, f))
+                        {
+                            finDirs.Add(dir);
+                            aa.Add(DistanceToTheFace(ray.Position, f));
+                        }
+                    }
+                }
+                //{
+                //   finDirs.Add(dir);
+                //    var a = DistanceToTheFace()
+                // }
+                // else
+                //    infDirs.Add(dir);
+            }
+        }
     }
+
 
     internal class NonAdjacentBlockings
     {

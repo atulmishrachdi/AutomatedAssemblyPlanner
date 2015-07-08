@@ -47,28 +47,18 @@ namespace Assembly_Planner
                         globalDirPool, out localDirInd))
                     {
                         // I wrote the code in a way that "solid1" is always "Reference" and "solid2" is always "Moving".
-                        //List<int> finDirs, infDirs;
-                        //UnconnectedBlockingDetermination.FiniteDirectionsBetweenConnectedParts(solid1, solid2, localDirInd, out finDirs, out infDirs);
+                        List<int> finDirs, infDirs;
+                        NonadjacentBlockingDetermination.FiniteDirectionsBetweenConnectedParts(solid1, solid2,
+                            localDirInd, out finDirs, out infDirs);
                         var from = assemblyGraph[solid2.Name]; // Moving
                         var to = assemblyGraph[solid1.Name];   // Reference
                         assemblyGraph.addArc((node)from, (node)to);
                         var a = assemblyGraph.arcs.Last();
                         AddInformationToArc(a, localDirInd);
-                        //if (localDirInd.Count == 2)
-                        //{
-                        //    var m = Directions[localDirInd[0]];
-                        //    var n = Directions[localDirInd[1]];
-                        //}
                     }
                 }
             }
             Fastener.AddFastenersInformation(assemblyGraph, screwsAndBolts, solidsNoFastener, solidPrimitive);
-            //foreach (var node in assemblyGraph.nodes)
-            //{
-            //    var freeDirs = FreeDirectionFinder(node);
-            //    var freeDirInd = (from dir in freeDirs from gDir in Directions where dir[0] == gDir[0] && dir[1] == gDir[1] && dir[2] == gDir[2] select Directions.IndexOf(gDir)).ToList();
-            //    UnconnectedBlockingDetermination.FiniteDirectionsBetweenUnconnectedParts(node, solidsNoFastener, freeDirInd, assemblyGraph);
-            //}
             return globalDirPool;
         }
 

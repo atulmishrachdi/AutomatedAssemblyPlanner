@@ -24,21 +24,17 @@ namespace Assembly_Planner
             var globalDirPool = new List<int>();
             var solidPrimitive = BlockingDetermination.PrimitiveMaker(solids);
             
-            //var screwsAndBolts = BoltAndGearDetection.ScrewAndBoltDetector(solidPrimitive);
             //var gears = BoltAndGearDetection.GearDetector(solidPrimitive);
-            
-            var solidsNoFastener = new List<TessellatedSolid>(solids);
-            //solidsNoFastener.RemoveRange(screwsAndBolts);
 
-            AddingNodesToGraph(assemblyGraph, solidsNoFastener);//, gears, screwsAndBolts);
-            
-            for (var i = 0; i < solidsNoFastener.Count - 1; i++)
+            AddingNodesToGraph(assemblyGraph, solids);//, gears, screwsAndBolts);
+
+            for (var i = 0; i < solids.Count - 1; i++)
             {
-                var solid1 = solidsNoFastener[i];
+                var solid1 = solids[i];
                 var solid1Primitives = solidPrimitive[solid1];
-                for (var j = i + 1; j < solidsNoFastener.Count; j++)
+                for (var j = i + 1; j < solids.Count; j++)
                 {
-                    var solid2 = solidsNoFastener[j];
+                    var solid2 = solids[j];
                     var solid2Primitives = solidPrimitive[solid2];
                     List<int> localDirInd;
                     if (BlockingDetermination.DefineBlocking(assemblyGraph, solid1, solid2, solid1Primitives, solid2Primitives,
@@ -52,22 +48,9 @@ namespace Assembly_Planner
                         assemblyGraph.addArc((node) from, (node) to);
                         var a = assemblyGraph.arcs.Last();
                         AddInformationToArc(a, localDirInd);
-                        //if (localDirInd.Count == 2)
-                        //{
-                        //    var m = Directions[localDirInd[0]];
-                        //    var n = Directions[localDirInd[1]];
-                        //}
                     }
                 }
             }
-            //Fastener.AddFastenersInformation(assemblyGraph, screwsAndBolts, solidsNoFastener, solidPrimitive);
-            foreach (var node in assemblyGraph.nodes)
-            {
-                var freeDirs = FreeDirectionFinder(node);
-                var freeDirInd = (from dir in freeDirs from gDir in Directions where dir[0] == gDir[0] && dir[1] == gDir[1] && dir[2] == gDir[2] select Directions.IndexOf(gDir)).ToList();
-                UnconnectedBlockingDetermination.FiniteDirectionsBetweenUnconnectedParts(node, solids, freeDirInd, assemblyGraph);
-            }
-
             return globalDirPool;
         }
 
