@@ -12,7 +12,7 @@ namespace Assembly_Planner
         internal static List<double[]> DirectionGeneration()
         {
             var directions = new List<double[]>();
-            const int stepSize = 90;
+            const int stepSize = 40;
             
             // x = r sin(theta)*cos(phi)
             // y = r sin(theta)*sin(phi)
@@ -32,6 +32,18 @@ namespace Assembly_Planner
                     directions.Add(new[]{x,y,z});
                 }
             }
+            if (!directions.Any(d => d[0] == 1 && d[1] == 0 && d[2] == 0))
+                directions.Add(new[] { 1, 0.0, 0 });
+            if (!directions.Any(d => d[0] == 0 && d[1] == 1 && d[2] == 0))
+                directions.Add(new[] { 0, 1.0, 0 });
+            if (!directions.Any(d => d[0] == 0 && d[1] == 0 && d[2] == 1))
+                directions.Add(new[] { 0, 0, 1.0 });
+            if (!directions.Any(d => d[0] == -1 && d[1] == 0 && d[2] == 0))
+                directions.Add(new[] { -1, 0.0, 0 });
+            if (!directions.Any(d => d[0] == 0 && d[1] == -1 && d[2] == 0))
+                directions.Add(new[] { 0, -1.0, 0 });
+            if (!directions.Any(d => d[0] == 0 && d[1] == 0 && d[2] == -1))
+                directions.Add(new[] { 0, 0, -1.0 });
             return directions;
         }
     }

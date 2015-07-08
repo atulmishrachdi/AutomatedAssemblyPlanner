@@ -47,7 +47,7 @@ namespace Assembly_Planner
                                               (a.From.name == solid.Name && a.To.name == s.Name) ||
                                               (a.From.name == s.Name && a.To.name == solid.Name))))
                     {
-                        //if (!BoundingBoxBlocking(direction, solidBlocking, solid)) continue; //there is a problem with this code
+                        if (!BoundingBoxBlocking(direction, solidBlocking, solid)) continue; //there is a problem with this code
                         var distanceToTheClosestFace = double.PositiveInfinity;
                         var overlap = false;
                         foreach (var ray in rays)
@@ -55,11 +55,11 @@ namespace Assembly_Planner
                             if (solidBlocking.ConvexHullFaces.Any(f => RayIntersectsWithFace(ray, f)))
                                 //now find the faces that intersect with the ray and find the distance between them
                             {
-                                overlap = true;
                                 foreach (
                                     var blockingPolygonalFace in
                                         solidBlocking.Faces.Where(f => RayIntersectsWithFace(ray, f)).ToList())
                                 {
+                                    overlap = true;
                                     var d = DistanceToTheFace(ray.Position, blockingPolygonalFace);
                                     if (d < distanceToTheClosestFace) distanceToTheClosestFace = d;
                                 }
@@ -87,6 +87,13 @@ namespace Assembly_Planner
 
         private static bool BoundingBoxBlocking(double[] v, double[] blockingBox, double[] movingPartBox)
         {
+            // 1. if bounding box overlap, return true?
+            if (!(movingPartBox[0] > blockingBox[1] + 0.1) && !(movingPartBox[2] > blockingBox[3] + 0.1) &&
+                !(movingPartBox[4] > blockingBox[5] + 0.1) &&
+                !(blockingBox[0] > movingPartBox[1] + 0.1) && !(blockingBox[2] > movingPartBox[3] + 0.1) &&
+                !(blockingBox[4] > movingPartBox[5] + 0.1))
+                return true;
+
             var facingCornerIndices = new int[3];
             lock (facingCornerIndices)
             {
@@ -196,7 +203,7 @@ namespace Assembly_Planner
             for (int i = 0; i < 3; i++)
             {
                 var j = (i == 2) ? 0 : i + 1;
-                if (crossProductsToCorners[i].dotProduct(crossProductsToCorners[j], 3) <= 0.15) return false;
+                if (crossProductsToCorners[i].dotProduct(crossProductsToCorners[j], 3) <= 0) return false; // 0.15
             }
             return true;
         }
