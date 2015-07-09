@@ -13,7 +13,7 @@ namespace Assembly_Planner
     class RecursiveOptimizedSearch
     {
         protected static EvaluationForBinaryTree assemblyEvaluator;
-		protected static int[] Count = new int[21];
+		protected static int[] Count = new int[100];
 		protected static designGraph Graph;
 		protected static List<int> DirPool;
 		protected static Dictionary<HashSet<node>, MemoData> Memo = new Dictionary<HashSet<node>, MemoData>(HashSet<node>.CreateSetComparer());
@@ -44,8 +44,8 @@ namespace Assembly_Planner
 			var Best = F(out Tree, Graph.nodes);
 
 			Console.WriteLine("Best assembly time found: " + Best);
-			//for (int i = 1; i <= 20; i++)
-			//	Console.WriteLine(i+" "+Count[i]);
+			for (int i = 1; i < 100; i++)
+				Console.WriteLine(i+" "+Count[i]);
 
             return Tree;
         }
@@ -81,6 +81,9 @@ namespace Assembly_Planner
 					{
 						TC.RefNodes = TC.sa.Install.Reference.PartNodes.Select (n => (node)Graph [n]).ToList ();
 						TC.MovNodes = TC.sa.Install.Moving.PartNodes.Select (n => (node)Graph [n]).ToList ();
+						//if (Math.Min (TC.RefNodes.Count, TC.MovNodes.Count) > 21)	//example constraint
+						//	continue;
+
 						double HR = H(TC.RefNodes);
 						double HM = H(TC.MovNodes);
 						TC.H = TC.sa.Install.Time + Math.Max(HR,HM);
@@ -189,8 +192,12 @@ namespace Assembly_Planner
 		public List<node> MovNodes;
 		public double H;	//heuristic value
 
-		public int CompareTo(TreeCandidate other) {  //compare based on heuristic values
-			return H.CompareTo(other.H);
+		public int CompareTo(TreeCandidate other) { 
+			if(H != other.H)
+				return H.CompareTo(other.H);		//first try to sort on heuristic values
+			var MaxNodes = Math.Max (RefNodes.Count, MovNodes.Count);
+			var OtherMaxNodes = Math.Max(other.RefNodes.Count, other.MovNodes.Count);
+			return MaxNodes.CompareTo(OtherMaxNodes); //if they are even, try to split parts evenly
 		}
 	}
 }
