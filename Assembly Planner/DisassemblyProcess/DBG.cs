@@ -160,8 +160,8 @@ namespace Assembly_Planner
             //  0: not parallel. 
             //  2: parralel same direction and opposite direction
             var cndDir = DisassemblyDirections.Directions[cndDirInd];
-            var indexL = borderArc.localVariables.IndexOf(GraphConstants.DirIndLowerBound);
-            var indexU = borderArc.localVariables.IndexOf(GraphConstants.DirIndUpperBound);
+            var indexL = borderArc.localVariables.IndexOf(DisConstants.DirIndLowerBound);
+            var indexU = borderArc.localVariables.IndexOf(DisConstants.DirIndUpperBound);
             var paralAndSame = false;
             var paralButOppose = false;
             for (var i = indexL + 1; i < indexU; i++)

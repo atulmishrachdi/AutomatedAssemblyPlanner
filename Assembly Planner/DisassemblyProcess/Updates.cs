@@ -155,37 +155,59 @@ namespace Assembly_Planner
             return false;
         }
 
-        internal static void RemoveRepeatedFasteners(designGraph designGraph, arc a)
+        internal static void RemoveRepeatedFastenersMain(arc a, designGraph graph)
         {
-            var counter = a.localVariables.IndexOf(GraphConstants.DirIndUpperBound) + 1;
+            if (!a.localVariables.Contains(DisConstants.IndexOfNodesLockedByFastenerL)) return;
+            var counter = a.localVariables.IndexOf(DisConstants.DirIndUpperBound) + 1;
+            var boltsInformation = new List<List<double>>();
             while (counter < a.localVariables.Count)
             {
-                if (a.localVariables[counter + 7] == 0)
+                var oneBoltInfo = new List<double>();
+                for (var i = counter; i < a.localVariables.Count; i++)
                 {
-                    counter += 8;
-                    continue;
+                    oneBoltInfo.Add(a.localVariables[i]);
+                    if (i != a.localVariables.Count - 1 &&
+                        a.localVariables[i + 1] != DisConstants.BoltDirectionOfFreedom) continue;
+                    boltsInformation.Add(oneBoltInfo);
+                    counter += oneBoltInfo.Count;
+                    break;
                 }
-
-                foreach (arc arc in designGraph.arcs.Where(a1 => a1 is arc && a1 != a).ToList())
+            }
+            foreach (var oneBoltInfo in boltsInformation)
+            {
+                if (!oneBoltInfo.Contains(DisConstants.IndexOfNodesLockedByFastenerL)) continue;
+                var l = oneBoltInfo.IndexOf(DisConstants.IndexOfNodesLockedByFastenerL);
+                var u = oneBoltInfo.IndexOf(DisConstants.IndexOfNodesLockedByFastenerU); 
+                var nodes = new List<node>();
+                for (var i = l + 1; i < u; i++)
+                    nodes.Add(graph.nodes[(int)oneBoltInfo[i]]);
+                foreach (
+                    arc arc in
+                        graph.arcs.Where(
+                            arc => arc is arc && arc != a && (nodes.Contains(arc.From) && nodes.Contains(arc.To))))
                 {
-                    if (!arc.localVariables.Contains(DisConstants.IsItBetweenMoreThanTwoNodes)) continue;
-                    var counter2 = arc.localVariables.IndexOf(GraphConstants.DirIndUpperBound) + 1;
+                    var counter2 = arc.localVariables.IndexOf(DisConstants.DirIndUpperBound) + 1;
                     while (counter2 < arc.localVariables.Count)
                     {
-                        if (arc.localVariables[counter2 + 7] == 0)
+                        var list = new List<double>();
+                        var removed = false;
+                        for (var i = 0; i < oneBoltInfo.Count; i++)
                         {
-                            counter2 += 8;
-                            continue;
+                            list.Add(arc.localVariables[i+counter2]);
+                            if (i + counter2 != arc.localVariables.Count - 1 &&
+                                arc.localVariables[i + counter2 + 1] != DisConstants.BoltDirectionOfFreedom) continue;
+                            if (oneBoltInfo.SequenceEqual(list))
+                            {
+                                arc.localVariables.RemoveRange(counter2, list.Count);
+                                removed = true;
+                                break;
+                            }
+                            counter2 += list.Count;
+                            break;
                         }
-                        if (arc.localVariables[counter2 + 1] != a.localVariables[counter + 1]) continue;
-                        if (arc.localVariables[counter2 + 3] != a.localVariables[counter + 3]) continue;
-                        if (arc.localVariables[counter2 + 5] != a.localVariables[counter + 5]) continue;
-                        arc.localVariables.RemoveRange(counter2,8);
+                        if (removed) break;
                     }
-
                 }
-
-                counter += 8;
             }
         }
     }

@@ -17,9 +17,12 @@ namespace Assembly_Planner
         internal static string Gear = "Gear";
         internal static string Bolt = "Bolt";
         internal static double GearNormal = -11000.0;
+        public const int DirIndUpperBound = -11;  // all the integers between two -10 and -11 are the feasible directions for the arc
+        public const int DirIndLowerBound = -10;
         public static double BoltDirectionOfFreedom = -12000.0;
         public static double BoltDepth = -13000.0;
         public static double BoltRadius = -14000.0;
-        public static double IsItBetweenMoreThanTwoNodes = -15000.0; // 0 if No, 1 if Yes
+        public static double IndexOfNodesLockedByFastenerL = -15000.0;
+        public static double IndexOfNodesLockedByFastenerU = -15001.0;
     }
 }

@@ -58,15 +58,13 @@ namespace Assembly_Planner
             // fastener holding them to each other. And I also know the removal direction of the fastener
         }
 
-        private static void AddRemovalInformationToArcs(designGraph assemblyGraph,
+        private static void AddRemovalInformationToArcs(designGraph graph,
             List<TessellatedSolid> lockedByTheFastener, double RD, double depth, double radius)
         {
-            var moreThanTwoNodes = 0;
-            if (lockedByTheFastener.Count > 2) moreThanTwoNodes = 1;
             var partsName = lockedByTheFastener.Select(part => part.Name).ToList();
             foreach (
                 arc arc in
-                    assemblyGraph.arcs.Where(a => partsName.Contains(a.From.name) && partsName.Contains(a.To.name))
+                    graph.arcs.Where(a => partsName.Contains(a.From.name) && partsName.Contains(a.To.name))
                         .ToList())
             {
                 arc.localVariables.Add(DisConstants.BoltDirectionOfFreedom);
@@ -75,8 +73,13 @@ namespace Assembly_Planner
                 arc.localVariables.Add(depth);
                 arc.localVariables.Add(DisConstants.BoltRadius);
                 arc.localVariables.Add(radius);
-                arc.localVariables.Add(DisConstants.IsItBetweenMoreThanTwoNodes);
-                arc.localVariables.Add(moreThanTwoNodes);
+                
+                if (lockedByTheFastener.Count < 3) continue;
+                arc.localVariables.Add(DisConstants.IndexOfNodesLockedByFastenerL);
+                foreach (var solid in lockedByTheFastener)
+                    arc.localVariables.Add(graph.nodes.IndexOf(graph.nodes.Where(n => n.name == solid.Name).ToList()[0]));
+                arc.localVariables.Add(DisConstants.IndexOfNodesLockedByFastenerU);
+
             }
         }
 

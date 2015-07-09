@@ -56,12 +56,12 @@ namespace Assembly_Planner
 
         private static void AddInformationToArc(arc a, IEnumerable<int> localDirInd)
         {
-            a.localVariables.Add(GraphConstants.DirIndLowerBound);
+            a.localVariables.Add(DisConstants.DirIndLowerBound);
             foreach (var dir in localDirInd)
             {
                 a.localVariables.Add(dir);
             }
-            a.localVariables.Add(GraphConstants.DirIndUpperBound);
+            a.localVariables.Add(DisConstants.DirIndUpperBound);
         }
 
         private static void AddingNodesToGraph(designGraph assemblyGraph, List<TessellatedSolid> solids)//,
@@ -85,8 +85,8 @@ namespace Assembly_Planner
             foreach (arc arc in node.arcs.Where(a => a is arc))
             {
                 var iniDirs = new List<double[]>();
-                var indexL0 = arc.localVariables.IndexOf(GraphConstants.DirIndLowerBound);
-                var indexU0 = arc.localVariables.IndexOf(GraphConstants.DirIndUpperBound);
+                var indexL0 = arc.localVariables.IndexOf(DisConstants.DirIndLowerBound);
+                var indexU0 = arc.localVariables.IndexOf(DisConstants.DirIndUpperBound);
                 if (node == arc.From)
                     for (var i = indexL0 + 1; i < indexU0; i++)
                         iniDirs.Add(Directions[(int)arc.localVariables[i]]);
