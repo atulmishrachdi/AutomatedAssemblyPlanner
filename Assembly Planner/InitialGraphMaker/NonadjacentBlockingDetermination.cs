@@ -8,7 +8,7 @@ using GeometryReasoning;
 using GraphSynth.Representation;
 using MIConvexHull;
 using StarMathLib;
-using TVGL.Tessellation;
+using TVGL;
 
 namespace Assembly_Planner
 {
@@ -26,12 +26,12 @@ namespace Assembly_Planner
         internal static void Run(designGraph graph,
             List<TessellatedSolid> solids, List<int> gDir)
         {
-            
+
             foreach (var dir in gDir)
             {
                 var direction = DisassemblyDirections.Directions[dir];
                 var blockingsForDirection = new List<NonAdjacentBlockings>();
-                foreach (var solid in solids.Where(s=> graph.nodes.Any(n=>n.name == s.Name)))
+                foreach (var solid in solids.Where(s => graph.nodes.Any(n => n.name == s.Name)))
                 {
                     // now find the blocking parts
                     var rays = new List<Ray>();
@@ -39,7 +39,7 @@ namespace Assembly_Planner
                         rays.Add(new Ray(new AssemblyEvaluation.Vertex(vertex.Position[0], vertex.Position[1], vertex.Position[2]),
                                         new Vector(direction[0], direction[1], direction[2])));
 
-                    foreach (var solidBlocking in 
+                    foreach (var solidBlocking in
                         solids.Where(s => graph.nodes.Any(n => n.name == s.Name) // it is not fastener
                                           && s != solid // it is not the same as current solid 
                                           &&
@@ -53,7 +53,7 @@ namespace Assembly_Planner
                         foreach (var ray in rays)
                         {
                             if (solidBlocking.ConvexHullFaces.Any(f => RayIntersectsWithFace(ray, f)))
-                                //now find the faces that intersect with the ray and find the distance between them
+                            //now find the faces that intersect with the ray and find the distance between them
                             {
                                 foreach (
                                     var blockingPolygonalFace in
@@ -170,34 +170,18 @@ namespace Assembly_Planner
 
         public static bool RayIntersectsWithFace(Ray ray, PolygonalFace face)
         {
-            if (Math.Abs(ray.Direction.dotProduct(face.Normal)) < Constants.NearlyParallelFace) return false;
-            var inPlaneVerts = new AssemblyEvaluation.Vertex[3];
-            var negativeDirCounter = 3;
-            for (var i = 0; i < 3; i++)
-            {
-                var vectFromRayToFacePt = new Vector(ray.Position);
-                vectFromRayToFacePt = vectFromRayToFacePt.MakeVectorTo(face.Vertices[i]);
-                var dxtoPlane = ray.Direction.dotProduct(vectFromRayToFacePt.Position);
-                if (dxtoPlane < 0) negativeDirCounter--;
-                if (negativeDirCounter == 0) return false;
-                inPlaneVerts[i] = new AssemblyEvaluation.Vertex(face.Vertices[i].Position.add(StarMath.multiply(-dxtoPlane, ray.Direction)));
-            }
-            if (inPlaneVerts.Min(v => v.Position[0]) > ray.Position[0]) return false;
-            if (inPlaneVerts.Max(v => v.Position[0]) < ray.Position[0]) return false;
-            if (inPlaneVerts.Min(v => v.Position[1]) > ray.Position[1]) return false;
-            if (inPlaneVerts.Max(v => v.Position[1]) < ray.Position[1]) return false;
-            if (inPlaneVerts.Min(v => v.Position[2]) > ray.Position[2]) return false;
-            if (inPlaneVerts.Max(v => v.Position[2]) < ray.Position[2]) return false;
-            if (inPlaneVerts.GetLength(0) > 3) return true;
+            var raysPointOnFacePlane = MiscFunctions.PointOnPlaneFromRay(face.Normal,
+                face.Center.dotProduct(face.Normal), ray.Position, ray.Direction);
+            if (raysPointOnFacePlane == null) return false;
+
             var crossProductsToCorners = new List<double[]>();
             for (int i = 0; i < 3; i++)
             {
                 var j = (i == 2) ? 0 : i + 1;
                 var crossProductsFrom_i_To_j =
-                    inPlaneVerts[i].Position.subtract(ray.Position)
-                        .normalizeInPlace(3)
-                        .crossProduct(inPlaneVerts[j].Position.subtract(ray.Position).normalizeInPlace(3));
-                if (crossProductsFrom_i_To_j.norm2(true) < Constants.NearlyOnLine) return false;
+                    face.Vertices[i].Position.subtract(raysPointOnFacePlane).normalize()
+                        .crossProduct(face.Vertices[j].Position.subtract(ray.Position).normalize());
+                if (crossProductsFrom_i_To_j.norm2(true) < AssemblyEvaluation.Constants.NearlyOnLine) return false;
                 crossProductsToCorners.Add(crossProductsFrom_i_To_j);
             }
             for (int i = 0; i < 3; i++)
@@ -255,21 +239,21 @@ namespace Assembly_Planner
 
     internal class NonAdjacentBlockings
     {
-      /// <summary>
-      /// blockingSolids[0] is blocked by blockingSolids[1]
-      /// </summary>
-      /// <value>
-      /// blockingSolids
-      /// </value>
-      internal TessellatedSolid[] blockingSolids { get; set; }
-      /// <summary>
-      /// for each blockingSolids[], a double is added to this list. So, 
-      /// blockingDistance is the distance between blockingSolids[0]
-      /// and blockingSolids[1]
-      /// </summary>
-      /// <value>
-      /// blockingDistance
-      /// </value>
-      internal double blockingDistance { get; set; }
+        /// <summary>
+        /// blockingSolids[0] is blocked by blockingSolids[1]
+        /// </summary>
+        /// <value>
+        /// blockingSolids
+        /// </value>
+        internal TessellatedSolid[] blockingSolids { get; set; }
+        /// <summary>
+        /// for each blockingSolids[], a double is added to this list. So, 
+        /// blockingDistance is the distance between blockingSolids[0]
+        /// and blockingSolids[1]
+        /// </summary>
+        /// <value>
+        /// blockingDistance
+        /// </value>
+        internal double blockingDistance { get; set; }
     }
 }

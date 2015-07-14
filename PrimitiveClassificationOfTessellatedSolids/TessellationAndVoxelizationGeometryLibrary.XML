@@ -4,11 +4,6 @@
         <name>TessellationAndVoxelizationGeometryLibrary</name>
     </assembly>
     <members>
-        <member name="T:TVGL.CoincidentEdgeContactElement">
-            <summary>
-            The contact element corresponds to an existing edge within the solid.
-            </summary>
-        </member>
         <member name="T:TVGL.ContactElement">
             <summary>
             A ContactElement describes the atomic class for the collective ContactData class which describes
@@ -16,18 +11,19 @@
             to a real edge in the solid. Additionally, it has properties that reference pertinent data in the solid.
             </summary>
         </member>
-        <member name="M:TVGL.ContactElement.GetInPlaneFlat(TVGL.Tessellation.PolygonalFace)">
-            <summary>
-            Gets the in plane flat.
-            </summary>
-            <param name="startFace">The start face.</param>
-            <returns>Flat.</returns>
-        </member>
-        <member name="P:TVGL.ContactElement.ContactEdge">
+        <member name="F:TVGL.ContactElement.ContactEdge">
             <summary>
             Gets the edge corresponds to the surface of the solid within the designated slice.
             </summary>
             <value>The contact edge.</value>
+        </member>
+        <member name="F:TVGL.ContactElement.ReverseDirection">
+            <summary>
+            Is the edge in the reverse direction needed to describe the loop in the proper
+            right-hand rule approach? Since all new edges are created in the proper direction
+            this is only set to true for edges that are part of the loop but existed in the
+            model previously.
+            </summary>
         </member>
         <member name="P:TVGL.ContactElement.SplitFacePositive">
             <summary>
@@ -35,44 +31,25 @@
             </summary>
             <value>The split face.</value>                
         </member>
-        <member name="P:TVGL.CoincidentEdgeContactElement.EndVertex">
-            <summary>
-            Gets or sets the reference vertex at the other end (use in conjunction
-            with ReferenceVertex).
-            </summary>
-            <value>The reference end.</value>
-        </member>
-        <!-- Badly formed XML comment ignored for member "T:TVGL.ThroughFaceContactElement" -->
-        <member name="P:TVGL.ThroughFaceContactElement.SplitEdge">
-            <summary>
-            Gets the split edge.
-            </summary>
-            <value>The split edge.</value>
-        </member>
-        <member name="T:TVGL.ThroughVertexContactElement">
-            <summary>
-            The contact element passed through a vertex in the solid.
-            </summary>
-        </member>
-        <member name="T:TVGL.ArtificialContactElement">
-            <summary>
-            The contact element is created artificially and doesn't correspond to elements
-            within the real solid.
-            </summary>
-        </member>
         <member name="T:TVGL.ContactData">
             <summary>
-            A ContactData object represents a 2D path on the surface of the tesselated solid. 
+            A ContactData object represents a 2D path on the surface of the tessellated solid. 
             It is notably comprised of loops (both positive and negative) and loops are comprised
             of contact elements).
             </summary>
         </member>
-        <member name="M:TVGL.ContactData.#ctor(System.Collections.Generic.List{TVGL.Loop},System.Collections.Generic.List{TVGL.Tessellation.Edge})">
+        <member name="M:TVGL.ContactData.#ctor(System.Collections.Generic.List{TVGL.Loop},System.Collections.Generic.List{TVGL.PolygonalFace})">
             <summary>
             Initializes a new instance of the <see cref="T:TVGL.ContactData"/> class.
             </summary>
             <param name="loops">The loops.</param>
+            <param name="inPlaneFaces"></param>
             <param name="additionalEdges">The additional edges.</param>
+        </member>
+        <member name="F:TVGL.ContactData.NumberOfNewVertices">
+            <summary>
+            The number of new vertices
+            </summary>
         </member>
         <member name="F:TVGL.ContactData.Perimeter">
             <summary>
@@ -134,7 +111,12 @@
             Was the loop closed by artificial ContactElements
             </summary>
         </member>
-        <member name="M:TVGL.Loop.#ctor(System.Collections.Generic.ICollection{TVGL.ContactElement},System.Double[],System.Boolean,System.Boolean)">
+        <member name="F:TVGL.Loop.EnclosesInPlaneFace">
+            <summary>
+            Does the loop enclose a bunch of faces that lie in the plane?
+            </summary>
+        </member>
+        <member name="M:TVGL.Loop.#ctor(System.Collections.Generic.ICollection{TVGL.ContactElement},System.Double[],System.Boolean,System.Boolean,System.Boolean)">
             <summary>
             Initializes a new instance of the <see cref="T:TVGL.Loop"/> class.
             </summary>
@@ -142,45 +124,38 @@
             <param name="normal">The normal.</param>
             <param name="isClosed">is closed.</param>
             <param name="artificiallyClosed">is artificially closed.</param>
+            <param name="b"></param>
         </member>
         <member name="T:TVGL.Boolean_Operations.Slice">
             <summary>
             The Slice class includes static functions for cutting a tessellated solid.
             </summary>
         </member>
-        <member name="M:TVGL.Boolean_Operations.Slice.DefineContact(TVGL.Flat,TVGL.Tessellation.TessellatedSolid)">
+        <member name="M:TVGL.Boolean_Operations.Slice.DefineContact(TVGL.Flat,TVGL.TessellatedSolid,System.Boolean)">
             <summary>
             When the tessellated solid is sliced at the specified plane, the contact surfaces are
-            described by the return ContactData object. This is a non-destructive function typically
-            used to find the shape and size of 2D surface on the prescribed plane..
+            described by the returned ContactData object. This is a non-destructive function typically
+            used to find the shape and size of 2D surface on the prescribed plane.
             </summary>
             <param name="plane">The plane.</param>
             <param name="ts">The ts.</param>
+            <param name="artificiallyCloseOpenLoops">The artificially close open loops.</param>
             <returns>ContactData.</returns>
             <exception cref="T:System.Exception">Contact Edges found that are not contained in loop.</exception>
         </member>
-        <member name="M:TVGL.Boolean_Operations.Slice.FindLoop(TVGL.Flat,System.Collections.Generic.List{TVGL.ContactElement},System.Double[])">
-            <summary>
-            Finds the loop.
-            </summary>
-            <param name="plane">The plane.</param>
-            <param name="contacts">The contacts.</param>
-            <param name="vertexDistancesToPlane"></param>
-            <returns>Loop.</returns>
-        </member>
-        <member name="M:TVGL.Boolean_Operations.Slice.OnFlat(TVGL.Tessellation.TessellatedSolid,TVGL.Flat,System.Collections.Generic.List{TVGL.Tessellation.TessellatedSolid}@,System.Collections.Generic.List{TVGL.Tessellation.TessellatedSolid}@)">
+        <member name="M:TVGL.Boolean_Operations.Slice.OnFlat(TVGL.TessellatedSolid,TVGL.Flat,System.Collections.Generic.List{TVGL.TessellatedSolid}@,System.Collections.Generic.List{TVGL.TessellatedSolid}@)">
             <summary>
             Performs the slicing operation on the prescribed flat plane. This destructively alters
             the tessellated solid into one or more solids which are returned in the "out" parameter
             lists.
             </summary>
-            <param name="oldSolid">The old solid.</param>
+            <param name="ts">The ts.</param>
             <param name="plane">The plane.</param>
             <param name="positiveSideSolids">The solids that are on the positive side of the plane
             This means that are on the side that the normal faces.</param>
             <param name="negativeSideSolids">The solids on the negative side of the plane.</param>
         </member>
-        <member name="M:TVGL.Boolean_Operations.Slice.DivideUpContact(TVGL.Tessellation.TessellatedSolid,TVGL.ContactData,TVGL.Flat)">
+        <member name="M:TVGL.Boolean_Operations.Slice.DivideUpContact(TVGL.TessellatedSolid,TVGL.ContactData,TVGL.Flat)">
             <summary>
             Divides up contact.
             </summary>
@@ -188,6 +163,216 @@
             <param name="contactData">The contact data.</param>
             <param name="plane">The plane.</param>
             <exception cref="T:System.Exception">face is supposed to be split at plane but lives only on one side</exception>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:TVGL.Enclosure_Operations.GaussianSphere" -->
+        <member name="F:TVGL.Enclosure_Operations.GaussianSphere.Nodes">
+            <summary>
+            The volume of the bounding box.
+            </summary>
+        </member>
+        <member name="F:TVGL.Enclosure_Operations.GaussianSphere.Arcs">
+            <summary>
+            The Directions are the three unit vectors that describe the orientation of the box.
+            </summary>
+        </member>
+        <member name="M:TVGL.Enclosure_Operations.GaussianSphere.#ctor(TVGL.TessellatedSolid)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TVGL.Enclosure_Operations.GaussianSphere"/> class.
+            </summary>
+        </member>
+        <member name="T:TVGL.MinimumEnclosure">
+            <summary>
+            The MinimumEnclosure class includes static functions for defining smallest enclosures for a 
+            tessellated solid. For example: convex hull, minimum bounding box, or minimum bounding sphere.
+            </summary>
+            <summary>
+            The MinimumEnclosure class includes static functions for defining smallest enclosures for a 
+            tessellated solid. For example: convex hull, minimum bounding box, or minimum bounding sphere.
+            </summary>
+            <summary>
+            The MinimumEnclosure class includes static functions for defining smallest enclosures for a 
+            tesselated solid. For example: convex hull, minimum bounding box, or minimum bounding sphere.
+            </summary>
+        </member>
+        <member name="F:TVGL.MinimumEnclosure.MaxDeltaAngle">
+            <summary>
+            The maximum delta angle
+            </summary>
+        </member>
+        <member name="M:TVGL.MinimumEnclosure.MinimumCircle(System.Collections.Generic.List{TVGL.Point},TVGL.Point@,System.Double@)">
+            <summary>
+            Minimums the circle.
+            </summary>
+            <references>
+            Based on Emo Welzl?s "move-to-front hueristic" and this paper (algorithm 1).
+            http://www.inf.ethz.ch/personal/gaertner/texts/own_work/esa99_final.pdf
+            This algorithm runs in near linear time. Visiting most points just a few times.
+            Though a linear algorithm was found by Meggido, this algorithm is more robust
+            (doesn't care about multiple points on a line and fewer rounding functions)
+            and directly applicable to multiple dimensions (in our case, just 2 and 3 D).
+            </references>
+            <param name="points"></param>
+            <param name="center">The center.</param>
+            <param name="radius">The radius.</param>
+            <returns>System.Double.</returns>
+        </member>
+        <member name="M:TVGL.MinimumEnclosure.ConvexHull2D(System.Collections.Generic.IList{TVGL.Vertex},System.Double[])">
+            <summary>
+            Returns the 2D convex hull for the 3D vertices within the plane defined by the normal, direction.
+            The returned points are a List of points (3D double array) that represent the points as they have been
+            converted to the 2D plane. The vertices are not altered by this function. This is a simple two-line function
+            that first call the non-destructive "Get2DProjectionPoints" and then the overload of "ConvexHull2D".
+            </summary>
+            <param name="vertices">The vertices.</param>
+            <param name="direction">The direction.</param>
+            <returns>List&lt;System.Double[]&gt;.</returns>
+        </member>
+        <member name="M:TVGL.MinimumEnclosure.ConvexHull2D(System.Collections.Generic.IList{TVGL.Point})">
+            <summary>
+            Returns the 2D convex hull for the 3D vertices within the plane defined by the normal, direction.
+            The returned points are a List of points (3D double array) that represent the points as they have been
+            converted to the 2D plane. The vertices are not altered by this function. This is a simple two-line function
+            that first call the non-destructive "Get2DProjectionPoints" and then the overload of "ConvexHull2D".
+            </summary>
+            <param name="points">The points.</param>
+            <returns>List&lt;System.Double[]&gt;.</returns>
+        </member>
+        <member name="M:TVGL.MinimumEnclosure.OrientedBoundingBox(TVGL.TessellatedSolid)">
+            <summary>
+             Finds the minimum bounding box oriented along a particular direction.
+            </summary>
+            <param name="ts">The ts.</param>
+            <returns>BoundingBox.</returns>
+        </member>
+        <member name="M:TVGL.MinimumEnclosure.Find_via_ContinuousPCA_Approach(TVGL.TessellatedSolid)">
+            <summary>
+            Finds the minimum bounding box using a direct approach called continuous PCA.
+            Variant include All-PCA Min-PCA, Max-PCA, and continuous PCA [http://dl.acm.org/citation.cfm?id=2019641]
+            The most accurate is continuous PCA, and Dimitrov 2009 has some good improvements
+            Dimitrov, Holst, and Kriegel. "Closed-Form Solutions for Continuous PCA and Bounding Box Algorithms"
+            http://link.springer.com/chapter/10.1007%2F978-3-642-10226-4_3
+            Simple implementation (2/5)
+            </summary>
+            <timeDomain>
+            O(nlog(n)) time
+            </timeDomain>
+            <accuracy>
+            Generally fairly accurate, but suboptimal solutions. 
+            Particular cases can yeild very poor results.
+            Ex. Dimitrov showed in 2009 that continuous PCA yeilds a volume 4x optimal for a octahedron
+            http://page.mi.fu-berlin.de/rote/Papers/pdf/Bounds+on+the+quality+of+the+PCA+bounding+boxes.pdf
+            </accuracy>
+        </member>
+        <member name="M:TVGL.MinimumEnclosure.Find_via_ORourke_Approach(TVGL.TessellatedSolid)">
+            <summary>
+            Finds the minimum bounding box using a brute force method based on the 2D Caliper Approach 
+            Based on: O'Rourke. "Finding Minimal Enclosing Boxes." 1985.
+            http://cs.smith.edu/~orourke/Papers/MinVolBox.pdf
+            Difficult implementation (5/5)
+            </summary>
+            <timeDomain>
+            (n^3) time
+            </timeDomain>
+            <accuracy>
+            Gaurantees and optimal solution.
+            </accuracy>
+        </member>
+        <member name="M:TVGL.MinimumEnclosure.Find_via_HYBBRID_Approach(TVGL.TessellatedSolid)">
+            <summary>
+            Finds the minimum bounding box using an iterative optimization based on the genetic algorithm and Nelder-Mead algorithm
+            Based on: CHANG, GORISSEN, and MELCHIOR. "Fast Oriented Bounding Box Optimization on the Rotation Group SO(3, R)." Oct 2011.
+            http://dl.acm.org/citation.cfm?id=2019641
+            Difficult implementation (4/5)
+            </summary>
+            <timeDomain>
+            Much faster than O'Rourke's, more accurate than hueristic based (PCA).
+            Near linear in practice
+            </timeDomain>
+            <accuracy>
+            Often exact, but some small error may be present.
+            </accuracy>
+        </member>
+        <member name="M:TVGL.MinimumEnclosure.Find_via_MC_ApproachOne(TVGL.TessellatedSolid)">
+            <summary>
+            The MC_ApproachOne is a brute force method which includes the flush face algorithm, 
+            but limits the maximum angle of rotation between faces. 
+            In this way, it gaurantees a much more optimal solution than the O(n^2) time algorithm.
+            </summary>
+            <timeDomain>
+            Since the computation cost for each Bounding Box is linear O(n),
+            and the approximate worse case number of normals considered is n*PI/maxDeltaAngle,
+            Lower Bound O(n^2). Upper Bound O(n^(2)*PI/maxDeltaAngle). [ex.  upper bound is O(36*n^2) when MaxDeltaAngle = 5 degrees.]
+            </timeDomain>
+            <accuracy>
+            Garantees the optimial orientation is within MaxDeltaAngle error.
+            </accuracy>
+        </member>
+        <member name="M:TVGL.MinimumEnclosure.FindOBBAlongDirection(System.Collections.Generic.IList{TVGL.Vertex},System.Double[])">
+            <summary>
+            Finds the minimum oriented bounding rectangle (2D). The 3D points of a tessellated solid
+            are projected to the plane defined by "direction". This returns a BoundingBox structure
+            where the first direction is the same as the prescribed direction and the other two are
+            in-plane unit vectors.
+            </summary>
+            <param name="vertices">The vertices.</param>
+            <param name="direction">The direction.</param>
+            <returns>BoundingBox.</returns>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:TVGL.MinimumEnclosure.GetLengthAndExtremeVertices(System.Double[],System.Collections.Generic.IList{TVGL.Vertex},TVGL.Vertex@,TVGL.Vertex@)">
+            <summary>
+            Given a direction, dir, this function returns the maximum length along this direction
+            for the provided vertices as well as the two vertices that represent the extremes.
+            </summary>
+            <param name="dir">The dir.</param>
+            <param name="vertices">The vertices.</param>
+            <param name="vLow">The v low.</param>
+            <param name="vHigh">The v high.</param>
+            <returns>System.Double.</returns>
+        </member>
+        <member name="M:TVGL.MinimumEnclosure.RotatingCalipers2DMethod(System.Collections.Generic.IList{TVGL.Point},System.Double@)">
+            <summary>
+            Rotating the calipers2 d method.
+            </summary>
+            <param name="points">The points.</param>
+            <param name="minArea">The minimum area.</param>
+            <returns>System.Double.</returns>
+        </member>
+        <member name="M:TVGL.MinimumEnclosure.Circle.#ctor(System.Collections.Generic.IEnumerable{TVGL.Point})">
+            <summary>
+            Create a new circle from either 2 or 3 points
+            /// </summary>
+            <param name="points"></param>
+        </member>
+        <member name="M:TVGL.MinimumEnclosure.Circle.Bounds(TVGL.Point)">
+            <summary>
+            Gets X intercept given Y
+            </summary>
+            <param name="point"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TVGL.MinimumEnclosure.Circle.Furthest(TVGL.Point,TVGL.Point@,System.Collections.Generic.List{TVGL.Point}@)">
+            <summary>
+            </summary>
+            <param name="point"></param>
+            <param name="furthestPoint"></param>
+            <param name="previousPoints"></param>
+            <returns></returns>
+        </member>
+        <member name="P:TVGL.MinimumEnclosure.Circle.Points">
+            <summary>
+            Gets one point of the circle.
+            </summary>
+        </member>
+        <member name="P:TVGL.MinimumEnclosure.Circle.Center">
+            <summary>
+            Gets one point of the circle.
+            </summary>
+        </member>
+        <member name="P:TVGL.MinimumEnclosure.Circle.SqRadius">
+            <summary>
+            Gets one point of the circle.
+            </summary>
         </member>
         <member name="T:ClassesFor_3mf_Files.CT_Model">
             <summary>
@@ -1426,12 +1611,229 @@
             </summary>
             <value>The name.</value>
         </member>
-        <member name="T:TVGL.Miscellaneous_Functions.TraingulatePolygon.Node">
+        <member name="M:TVGL.Offset.Run(System.Collections.Generic.List{TVGL.Point[]})">
+            <summary>
+                Triangulates a Polygon into faces.
+            </summary>
+            <param name="points2D">The 2D points represented in loops.</param>
+            <param name="isPositive">Indicates whether the corresponding loop is positive or not.</param>
+            <returns>List&lt;Point[]&gt;, which represents vertices of new faces.</returns>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="T:TVGL.Node">
             <summary>
             Node class used in Triangulate Polygon
             Inherets position from point class
             </summary>
         </member>
+        <member name="M:TVGL.Node.#ctor(TVGL.Point,TVGL.NodeType,System.Int32)">
+            <summary>
+            Create a new node from a given point
+            /// </summary>
+            <param name="point"></param>
+        </member>
+        <member name="P:TVGL.Node.LoopID">
+            <summary>
+            Gets the loop ID that this node belongs to.
+            </summary>
+        </member>
+        <member name="P:TVGL.Node.X">
+            <summary>
+            Gets or sets the x.
+            </summary>
+            <value>The x.</value>
+        </member>
+        <member name="P:TVGL.Node.Y">
+            <summary>
+            Gets or sets the y.
+            </summary>
+            <value>The y.</value>
+        </member>
+        <member name="P:TVGL.Node.Z">
+            <summary>
+            Gets or sets the z coordinate. If one is using Point in a 2D capacity, it can be ignored.
+            </summary>
+            <value>The z.</value>
+        </member>
+        <member name="P:TVGL.Node.StartLine">
+            <summary>
+            Gets the line that starts at this node.
+            </summary>
+        </member>
+        <member name="P:TVGL.Node.EndLine">
+            <summary>
+            Gets the line that ends at this node.
+            </summary>
+        </member>
+        <member name="P:TVGL.Node.Type">
+            <summary>
+            Gets the type of  node.
+            </summary>
+        </member>
+        <member name="P:TVGL.Node.Point">
+            <summary>
+            Gets the base class, Point of this node.
+            </summary>
+        </member>
+        <member name="P:TVGL.Node.IsRightChain">
+            <summary>
+            Gets the base class, Point of this node.
+            </summary>
+        </member>
+        <member name="P:TVGL.Node.IsLeftChain">
+            <summary>
+            Gets the base class, Point of this node.
+            </summary>
+        </member>
+        <member name="T:TVGL.Trapezoid">
+            <summary>
+            Trapezoid Class
+            </summary>
+        </member>
+        <member name="M:TVGL.Trapezoid.#ctor(TVGL.Node,TVGL.Node,TVGL.Line,TVGL.Line)">
+            <summary>
+            Constructs a new trapezoid based on two nodes and two vertical lines.
+            </summary>
+            <param name="topNode"></param>
+            <param name="bottomNode"></param>
+            <param name="leftLine"></param>
+            <param name="rightLine"></param>
+        </member>
+        <member name="P:TVGL.Trapezoid.TopNode">
+            <summary>
+            Gets the TopNode. Set is through constructor.
+            </summary>
+        </member>
+        <member name="P:TVGL.Trapezoid.BottomNode">
+            <summary>
+            Gets the BottomNode. Set is through constructor.
+            </summary>
+        </member>
+        <member name="P:TVGL.Trapezoid.LeftLine">
+            <summary>
+            Gets the left vertical line of the trapezoid. Set is through constructor.
+            </summary>
+        </member>
+        <member name="P:TVGL.Trapezoid.RightLine">
+            <summary>
+            Gets the right vertical line of the trapezoid. Set is through constructor.
+            </summary>
+        </member>
+        <member name="T:TVGL.PartialTrapezoid">
+            <summary>
+            Partial Trapezoid Class. Used to hold information to create Trapezoids.
+            </summary>
+        </member>
+        <member name="M:TVGL.PartialTrapezoid.#ctor(TVGL.Node,TVGL.Line,TVGL.Line)">
+            <summary>
+            Constructs a partial trapezoid
+            </summary>
+            <param name="topNode"></param>
+            <param name="leftLine"></param>
+            <param name="rightLine"></param>
+        </member>
+        <member name="M:TVGL.PartialTrapezoid.Contains(TVGL.Line,TVGL.Line)">
+            <summary>
+            Checks whether the partial trapezoid contains the two lines.
+            </summary>
+            <param name="line1"></param>
+            <param name="line2"></param>
+            <returns></returns>
+        </member>
+        <member name="P:TVGL.PartialTrapezoid.TopNode">
+            <summary>
+            Gets the TopNode. Set is through constructor.
+            </summary>
+        </member>
+        <member name="P:TVGL.PartialTrapezoid.LeftLine">
+            <summary>
+            Gets the left vertical line of the trapezoid. Set is through constructor.
+            </summary>
+        </member>
+        <member name="P:TVGL.PartialTrapezoid.RightLine">
+            <summary>
+            Gets the right vertical line of the trapezoid. Set is through constructor.
+            </summary>
+        </member>
+        <member name="T:TVGL.MonotonePolygon">
+            <summary>
+            Monotone Polygon, which consists of two ordered chains
+            The chains start and end at the same nodes
+            </summary>
+        </member>
+        <member name="M:TVGL.MonotonePolygon.#ctor(System.Collections.Generic.List{TVGL.Node},System.Collections.Generic.List{TVGL.Node},System.Collections.Generic.List{TVGL.Node})">
+            <summary>
+            Constructs a MonotonePolygon based on a list of nodes.
+            </summary>
+            <param name="leftChain"></param>
+            <param name="rightChain"></param>
+            <param name="sortedMonotonePolyNodesChain"></param>
+        </member>
+        <member name="P:TVGL.MonotonePolygon.LeftChain">
+            <summary>
+            Gets Monochain1. Set is through the constructor.
+            </summary>
+        </member>
+        <member name="P:TVGL.MonotonePolygon.RightChain">
+            <summary>
+            Gets Monochain2. Set is through the constructor.
+            </summary>
+        </member>
+        <member name="P:TVGL.MonotonePolygon.SortedNodes">
+            <summary>
+            Gets Monochain2. Set is through the constructor.
+            </summary>
+        </member>
+        <member name="T:TVGL.Line">
+            <summary>
+            Line
+            </summary>
+        </member>
+        <member name="M:TVGL.Line.#ctor(TVGL.Node,TVGL.Node)">
+            <summary>
+            Sets to and from nodes as well as slope and intercept of line.
+            </summary>
+            <param name="fromNode"></param>
+            <param name="toNode"></param>
+        </member>
+        <member name="M:TVGL.Line.Xintercept(System.Double)">
+            <summary>
+            Gets X intercept given Y
+            </summary>
+            <param name="y"></param>
+            <returns></returns>
+        </member>
+        <member name="P:TVGL.Line.ToNode">
+            <summary>
+            Gets the Node which the line is pointing to. Set is through the constructor.
+            </summary>
+        </member>
+        <member name="P:TVGL.Line.FromNode">
+            <summary>
+            Gets the Node which the line is pointing away from. Set is through the constructor.
+            </summary>
+        </member>
+        <member name="M:TVGL.TriangulatePolygon.Run(System.Collections.Generic.List{TVGL.Point[]},System.Boolean[])">
+            <summary>
+                Triangulates a Polygon into faces in O(n log n) time.
+            </summary>    
+            <References>
+                Trapezoidation algorithm heavily based on: 
+                "A Fast Trapezoidation Technique For Planar Polygons" by
+                Gian Paolo Lorenzetto, Amitava Datta, and Richard Thomas. 2000.
+                http://www.researchgate.net/publication/2547487_A_Fast_Trapezoidation_Technique_For_Planar_Polygons
+                This algorithm should run in O(n log n)  time.    
+            
+                Triangulation method based on Montuno's work, but referenced material and algorithm are from:
+                http://www.personal.kent.edu/~rmuhamma/Compgeometry/MyCG/PolyPart/polyPartition.htm
+                This algorithm should run in O(n) time.
+            </References>
+            <param name="points2D">The 2D points represented in loops.</param>
+            <param name="isPositive">Indicates whether the corresponding loop is positive or not.</param>
+            <returns>List&lt;Point[]&gt;, which represents vertices of new faces.</returns>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:TVGL.TriangulatePolygon.GetNodeType(TVGL.Point,TVGL.Point,TVGL.Point)" -->
         <member name="T:TVGL.Point">
             <summary>
             The Point class is used to indicate a 2D or 3D location that may be outside
@@ -1443,13 +1845,13 @@
             these Point objects around a vertex and then providing their new position. 
             </summary>
         </member>
-        <member name="M:TVGL.Point.#ctor(MIConvexHull.IVertex)">
+        <member name="M:TVGL.Point.#ctor(TVGL.Vertex)">
             <summary>
             Initializes a new instance of the <see cref="T:TVGL.Point"/> class.
             </summary>
             <param name="v">The v.</param>
         </member>
-        <member name="M:TVGL.Point.#ctor(MIConvexHull.IVertex,System.Double,System.Double)">
+        <member name="M:TVGL.Point.#ctor(TVGL.Vertex,System.Double,System.Double)">
             <summary>
             Initializes a new instance of the <see cref="T:TVGL.Point"/> class.
             </summary>
@@ -1457,7 +1859,7 @@
             <param name="x">The x.</param>
             <param name="y">The y.</param>
         </member>
-        <member name="M:TVGL.Point.#ctor(MIConvexHull.IVertex,System.Double,System.Double,System.Double)">
+        <member name="M:TVGL.Point.#ctor(TVGL.Vertex,System.Double,System.Double,System.Double)">
             <summary>
             Initializes a new instance of the <see cref="T:TVGL.Point"/> class.
             </summary>
@@ -1496,183 +1898,12 @@
             </summary>
             <value>The coordinates or position.</value>
         </member>
-        <member name="M:TVGL.Miscellaneous_Functions.TraingulatePolygon.Node.#ctor(TVGL.Point,System.Int32,System.Int32)">
+        <member name="P:TVGL.Point.Position2D">
             <summary>
-            Create a new node from a given point
-            /// </summary>
-            <param name="point"></param>
-        </member>
-        <member name="P:TVGL.Miscellaneous_Functions.TraingulatePolygon.Node.LoopID">
-            <summary>
-            Gets the loop ID that this node belongs to.
+            Gets or sets the coordinates or position.
             </summary>
+            <value>The coordinates or position.</value>
         </member>
-        <member name="P:TVGL.Miscellaneous_Functions.TraingulatePolygon.Node.StartLine">
-            <summary>
-            Gets the line that starts at this node.
-            </summary>
-        </member>
-        <member name="P:TVGL.Miscellaneous_Functions.TraingulatePolygon.Node.EndLine">
-            <summary>
-            Gets the line that ends at this node.
-            </summary>
-        </member>
-        <member name="P:TVGL.Miscellaneous_Functions.TraingulatePolygon.Node.Type">
-            <summary>
-            Gets the type of  node.
-            </summary>
-        </member>
-        <member name="P:TVGL.Miscellaneous_Functions.TraingulatePolygon.Node.Point">
-            <summary>
-            Gets the base class, Point of this node.
-            </summary>
-        </member>
-        <member name="T:TVGL.Miscellaneous_Functions.TraingulatePolygon.Trapezoid">
-            <summary>
-            Trapezoid Class
-            </summary>
-        </member>
-        <member name="M:TVGL.Miscellaneous_Functions.TraingulatePolygon.Trapezoid.#ctor(TVGL.Miscellaneous_Functions.TraingulatePolygon.Node,TVGL.Miscellaneous_Functions.TraingulatePolygon.Node,TVGL.Miscellaneous_Functions.TraingulatePolygon.Line,TVGL.Miscellaneous_Functions.TraingulatePolygon.Line)">
-            <summary>
-            Constructs a new trapezoid based on two nodes and two vertical lines.
-            </summary>
-            <param name="topNode"></param>
-            <param name="bottomNode"></param>
-            <param name="leftLine"></param>
-            <param name="rightLine"></param>
-        </member>
-        <member name="P:TVGL.Miscellaneous_Functions.TraingulatePolygon.Trapezoid.TopNode">
-            <summary>
-            Gets the TopNode. Set is through constructor.
-            </summary>
-        </member>
-        <member name="P:TVGL.Miscellaneous_Functions.TraingulatePolygon.Trapezoid.BottomNode">
-            <summary>
-            Gets the BottomNode. Set is through constructor.
-            </summary>
-        </member>
-        <member name="P:TVGL.Miscellaneous_Functions.TraingulatePolygon.Trapezoid.LeftLine">
-            <summary>
-            Gets the left vertical line of the trapezoid. Set is through constructor.
-            </summary>
-        </member>
-        <member name="P:TVGL.Miscellaneous_Functions.TraingulatePolygon.Trapezoid.RightLine">
-            <summary>
-            Gets the right vertical line of the trapezoid. Set is through constructor.
-            </summary>
-        </member>
-        <member name="T:TVGL.Miscellaneous_Functions.TraingulatePolygon.PartialTrapezoid">
-            <summary>
-            Partial Trapezoid Class. Used to hold information to create Trapezoids.
-            </summary>
-        </member>
-        <member name="M:TVGL.Miscellaneous_Functions.TraingulatePolygon.PartialTrapezoid.#ctor(TVGL.Miscellaneous_Functions.TraingulatePolygon.Node,TVGL.Miscellaneous_Functions.TraingulatePolygon.Line,TVGL.Miscellaneous_Functions.TraingulatePolygon.Line)">
-            <summary>
-            Constructs a partial trapezoid
-            </summary>
-            <param name="topNode"></param>
-            <param name="leftLine"></param>
-            <param name="rightLine"></param>
-        </member>
-        <member name="M:TVGL.Miscellaneous_Functions.TraingulatePolygon.PartialTrapezoid.Contains(TVGL.Miscellaneous_Functions.TraingulatePolygon.Line,TVGL.Miscellaneous_Functions.TraingulatePolygon.Line)">
-            <summary>
-            Checks whether the partial trapezoid contains the two lines.
-            </summary>
-            <param name="line1"></param>
-            <param name="line2"></param>
-            <returns></returns>
-        </member>
-        <member name="P:TVGL.Miscellaneous_Functions.TraingulatePolygon.PartialTrapezoid.TopNode">
-            <summary>
-            Gets the TopNode. Set is through constructor.
-            </summary>
-        </member>
-        <member name="P:TVGL.Miscellaneous_Functions.TraingulatePolygon.PartialTrapezoid.LeftLine">
-            <summary>
-            Gets the left vertical line of the trapezoid. Set is through constructor.
-            </summary>
-        </member>
-        <member name="P:TVGL.Miscellaneous_Functions.TraingulatePolygon.PartialTrapezoid.RightLine">
-            <summary>
-            Gets the right vertical line of the trapezoid. Set is through constructor.
-            </summary>
-        </member>
-        <member name="T:TVGL.Miscellaneous_Functions.TraingulatePolygon.MonotonePolygon">
-            <summary>
-            Monotone Polygon, which consists of two ordered chains
-            The chains start and end at the same nodes
-            </summary>
-        </member>
-        <member name="M:TVGL.Miscellaneous_Functions.TraingulatePolygon.MonotonePolygon.#ctor(System.Collections.Generic.List{TVGL.Miscellaneous_Functions.TraingulatePolygon.Node},System.Collections.Generic.List{TVGL.Miscellaneous_Functions.TraingulatePolygon.Node},System.Collections.Generic.List{TVGL.Miscellaneous_Functions.TraingulatePolygon.Node})">
-            <summary>
-            Constructs a MonotonePolygon based on a list of nodes.
-            </summary>
-            <param name="leftChain"></param>
-            <param name="rightChain"></param>
-            <param name="sortedMonotonePolyNodesChain"></param>
-        </member>
-        <member name="P:TVGL.Miscellaneous_Functions.TraingulatePolygon.MonotonePolygon.LeftChain">
-            <summary>
-            Gets Monochain1. Set is through the constructor.
-            </summary>
-        </member>
-        <member name="P:TVGL.Miscellaneous_Functions.TraingulatePolygon.MonotonePolygon.RightChain">
-            <summary>
-            Gets Monochain2. Set is through the constructor.
-            </summary>
-        </member>
-        <member name="P:TVGL.Miscellaneous_Functions.TraingulatePolygon.MonotonePolygon.SortedNodes">
-            <summary>
-            Gets Monochain2. Set is through the constructor.
-            </summary>
-        </member>
-        <member name="T:TVGL.Miscellaneous_Functions.TraingulatePolygon.Line">
-            <summary>
-            Line
-            </summary>
-        </member>
-        <member name="M:TVGL.Miscellaneous_Functions.TraingulatePolygon.Line.#ctor(TVGL.Miscellaneous_Functions.TraingulatePolygon.Node,TVGL.Miscellaneous_Functions.TraingulatePolygon.Node)">
-            <summary>
-            Sets to and from nodes as well as slope and intercept of line.
-            </summary>
-            <param name="fromNode"></param>
-            <param name="toNode"></param>
-        </member>
-        <member name="M:TVGL.Miscellaneous_Functions.TraingulatePolygon.Line.Xintercept(System.Double)">
-            <summary>
-            Gets X intercept given Y
-            </summary>
-            <param name="y"></param>
-            <returns></returns>
-        </member>
-        <member name="M:TVGL.Miscellaneous_Functions.TraingulatePolygon.Line.Yintercept(System.Double)">
-            <summary>
-              Gets Y intercept given X
-            </summary>
-            <param name="x"></param>
-            <returns></returns>
-        </member>
-        <member name="P:TVGL.Miscellaneous_Functions.TraingulatePolygon.Line.ToNode">
-            <summary>
-            Gets the Node which the line is pointing to. Set is through the constructor.
-            </summary>
-        </member>
-        <member name="P:TVGL.Miscellaneous_Functions.TraingulatePolygon.Line.FromNode">
-            <summary>
-            Gets the Node which the line is pointing away from. Set is through the constructor.
-            </summary>
-        </member>
-        <member name="M:TVGL.Miscellaneous_Functions.TraingulatePolygon.TriangulatePolygon.Run(TVGL.Point[][],System.Boolean[])">
-            <summary>
-                Triangulates a Polygon into faces.
-            </summary>
-            <param name="points2D">The 2D points represented in loops.</param>
-            <param name="isPositive">Indicates whether the corresponding loop is positive or not.</param>
-            <returns>List&lt;Point[]&gt;, which represents vertices of new faces.</returns>
-            <exception cref="T:System.NotImplementedException"></exception>
-        </member>
-        <!-- Badly formed XML comment ignored for member "M:TVGL.Miscellaneous_Functions.TraingulatePolygon.TriangulatePolygon.NodeType(TVGL.Point,TVGL.Point,TVGL.Point)" -->
-        <!-- Badly formed XML comment ignored for member "M:TVGL.Miscellaneous_Functions.TraingulatePolygon.TriangulatePolygon.GetAngle(TVGL.Point,TVGL.Point,TVGL.Point)" -->
         <member name="T:TVGL.Torus">
             <summary>
             Class Torus.
@@ -1683,7 +1914,7 @@
             Class PrimitiveSurface.
             </summary>
         </member>
-        <member name="M:TVGL.PrimitiveSurface.#ctor(System.Collections.Generic.IEnumerable{TVGL.Tessellation.PolygonalFace})">
+        <member name="M:TVGL.PrimitiveSurface.#ctor(System.Collections.Generic.IEnumerable{TVGL.PolygonalFace})">
             <summary>
             Initializes a new instance of the <see cref="T:TVGL.PrimitiveSurface"/> class.
             </summary>
@@ -1742,7 +1973,7 @@
             The vertices.
             </value>
         </member>
-        <member name="M:TVGL.Torus.#ctor(System.Collections.Generic.IEnumerable{TVGL.Tessellation.PolygonalFace})">
+        <member name="M:TVGL.Torus.#ctor(System.Collections.Generic.IEnumerable{TVGL.PolygonalFace})">
             <summary>
             Initializes a new instance of the <see cref="T:TVGL.PrimitiveSurface"/> class.
             </summary>
@@ -1753,7 +1984,7 @@
             Is the sphere positive? (false is negative)
             </summary>
         </member>
-        <member name="M:TVGL.Torus.IsNewMemberOf(TVGL.Tessellation.PolygonalFace)">
+        <member name="M:TVGL.Torus.IsNewMemberOf(TVGL.PolygonalFace)">
             <summary>
             Determines whether [is new member of] [the specified face].
             </summary>
@@ -1761,14 +1992,14 @@
             <returns>Boolean.</returns>
             <exception cref="T:System.NotImplementedException"></exception>
         </member>
-        <member name="M:TVGL.Torus.UpdateWith(TVGL.Tessellation.PolygonalFace)">
+        <member name="M:TVGL.Torus.UpdateWith(TVGL.PolygonalFace)">
             <summary>
             Updates the with.
             </summary>
             <param name="face">The face.</param>
             <exception cref="T:System.NotImplementedException"></exception>
         </member>
-        <member name="M:TVGL.Torus.BuildFromMultipleFaces(System.Collections.Generic.List{TVGL.Tessellation.PolygonalFace})">
+        <member name="M:TVGL.Torus.BuildFromMultipleFaces(System.Collections.Generic.List{TVGL.PolygonalFace})">
             <summary>
             Builds from multiple faces.
             </summary>
@@ -1800,7 +2031,27 @@
             </summary>
             <value>The minor radius.</value>
         </member>
-        <member name="M:TVGL.GeometryFunctions.DistancePointToLine(System.Double[],System.Double[],System.Double[])">
+        <member name="M:TVGL.MiscFunctions.Get2DProjectionPoints(System.Collections.Generic.IList{TVGL.Vertex},System.Double[])">
+            <summary>
+            Returns the positions (array of 3D arrays) of the vertices as that they would be represented in 
+            the x-y plane (although the z-values will be non-zero). This does not destructively alter
+            the vertices. 
+            </summary>
+            <param name="vertices">The vertices.</param>
+            <param name="direction">The direction.</param>
+            <returns>Point2D[].</returns>
+        </member>
+        <member name="M:TVGL.MiscFunctions.Get2DProjectionPoints(System.Collections.Generic.IList{TVGL.Vertex},System.Double[],System.Double[0:,0:]@)">
+            <summary>
+            Returns the positions (array of 3D arrays) of the vertices as that they would be represented in 
+            the x-y plane (although the z-values will be non-zero). This does not destructively alter
+            the vertices. 
+            </summary>
+            <param name="vertices">The vertices.</param>
+            <param name="direction">The direction.</param>
+            <returns>Point2D[].</returns>
+        </member>
+        <member name="M:TVGL.MiscFunctions.DistancePointToLine(System.Double[],System.Double[],System.Double[])">
             <summary>
             Returns the distance the point to line.
             </summary>
@@ -1809,7 +2060,7 @@
             <param name="lineVector">The line direction vector.</param>
             <returns></returns>
         </member>
-        <member name="M:TVGL.GeometryFunctions.DistancePointToLine(System.Double[],System.Double[],System.Double[],System.Double[]@)">
+        <member name="M:TVGL.MiscFunctions.DistancePointToLine(System.Double[],System.Double[],System.Double[],System.Double[]@)">
             <summary>
             Distances the point to line.
             </summary>
@@ -1819,13 +2070,55 @@
             <param name="pointOnLine">The point on line closest to point, q.</param>
             <returns></returns>
         </member>
-        <member name="M:TVGL.GeometryFunctions.DistancePointToPoint(System.Double[],System.Double[])">
+        <member name="M:TVGL.MiscFunctions.DistancePointToPoint(System.Double[],System.Double[])">
             <summary>
             Distances the point to point.
             </summary>
             <param name="p1">point, p1.</param>
             <param name="p2">point, p2.</param>
             <returns>the distance between the two 3D points.</returns>
+        </member>
+        <member name="M:TVGL.MiscFunctions.DistancePointToPlane(System.Double[],System.Double[],System.Double[])">
+            <summary>
+            Returns the signed distance of the point to the plane.
+            </summary>
+            <param name="point">The point.</param>
+            <param name="normalOfPlane">The normal of plane.</param>
+            <param name="positionOnPlane">The position on plane.</param>
+            <returns>the distance between the two 3D points.</returns>
+        </member>
+        <member name="M:TVGL.MiscFunctions.DistancePointToPlane(System.Double[],System.Double[],System.Double)">
+            <summary>
+            Returns the signed distance of the point to the plane. If the point is "above" the plane, then a positive
+            distance is return - if "below" then negative. This "above" means that the point is on the side of the
+            plane that the normal points towards.
+            </summary>
+            <param name="point">The point.</param>
+            <param name="normalOfPlane">The normal of plane.</param>
+            <param name="signedDistanceToPlane">The signed distance to plane.</param>
+            <returns>the distance between the two 3D points.</returns>
+        </member>
+        <member name="M:TVGL.MiscFunctions.PointOnPlaneFromIntersectingLine(System.Double[],System.Double,TVGL.Vertex,TVGL.Vertex)">
+            <summary>
+            Finds the point on the plane made by a line (which is described by connecting point1 and point2) intersecting
+            with that plane.
+            </summary>
+            <param name="normalOfPlane">The normal of plane.</param>
+            <param name="distOfPlane">The dist of plane.</param>
+            <param name="point1">The point1.</param>
+            <param name="point2">The point2.</param>
+            <returns>Vertex.</returns>
+        </member>
+        <member name="M:TVGL.MiscFunctions.PointOnPlaneFromRay(System.Double[],System.Double,System.Double[],System.Double[])">
+            <summary>
+            Finds the point on the plane made by a ray. If that ray is not going to pass through the 
+            that plane, then null is returned.
+            </summary>
+            <param name="normalOfPlane">The normal of plane.</param>
+            <param name="distOfPlane">The dist of plane.</param>
+            <param name="rayPosition">The ray position.</param>
+            <param name="rayDirection">The ray direction.</param>
+            <returns>Vertex.</returns>
         </member>
         <member name="T:TVGL.KnownColors">
             <summary>
@@ -2669,39 +2962,14 @@
                 The epsilon same angle
             </summary>
         </member>
-        <member name="F:TVGL.Constants.FloatSize">
-            <summary>
-                The float size
-            </summary>
-        </member>
-        <member name="F:TVGL.Constants.VertexSize">
-            <summary>
-                The vertex size
-            </summary>
-        </member>
         <member name="F:TVGL.Constants.LookUpStringFormat">
             <summary>
                 The look up string format
             </summary>
         </member>
-        <member name="F:TVGL.Constants.MinProbabilityForPrimitiveClassifer">
-            <summary>
-                The minimum probability for primitive classifier
-            </summary>
-        </member>
         <member name="F:TVGL.Constants.ErrorForFaceInSurface">
             <summary>
                 The error for face in surface
-            </summary>
-        </member>
-        <member name="F:TVGL.Constants.SurfaceAreaFractionForPrimitive">
-            <summary>
-                The surface area fraction for primitive
-            </summary>
-        </member>
-        <member name="F:TVGL.Constants.MinProbabilityForPrimitiveOfWingedEdge">
-            <summary>
-                The minimum probability for primitive of winged edge
             </summary>
         </member>
         <member name="F:TVGL.Constants.MaxNumberEdgesPerFace">
@@ -2791,7 +3059,7 @@
             Class DenseRegion.
             </summary>
         </member>
-        <member name="M:TVGL.DenseRegion.IsNewMemberOf(TVGL.Tessellation.PolygonalFace)">
+        <member name="M:TVGL.DenseRegion.IsNewMemberOf(TVGL.PolygonalFace)">
             <summary>
             Determines whether [is new member of] [the specified face].
             </summary>
@@ -2799,14 +3067,14 @@
             <returns><c>true</c> if [is new member of] [the specified face]; otherwise, <c>false</c>.</returns>
             <exception cref="T:System.NotImplementedException"></exception>
         </member>
-        <member name="M:TVGL.DenseRegion.UpdateWith(TVGL.Tessellation.PolygonalFace)">
+        <member name="M:TVGL.DenseRegion.UpdateWith(TVGL.PolygonalFace)">
             <summary>
             Updates the with.
             </summary>
             <param name="face">The face.</param>
             <exception cref="T:System.NotImplementedException"></exception>
         </member>
-        <member name="M:TVGL.DenseRegion.#ctor(System.Collections.Generic.List{TVGL.Tessellation.PolygonalFace})">
+        <member name="M:TVGL.DenseRegion.#ctor(System.Collections.Generic.List{TVGL.PolygonalFace})">
             <summary>
             Initializes a new instance of the <see cref="T:TVGL.DenseRegion"/> class.
             </summary>
@@ -2958,28 +3226,28 @@
             Is the cylinder positive? (false is negative)
             </summary>
         </member>
-        <member name="M:TVGL.Cylinder.#ctor(System.Collections.Generic.IEnumerable{TVGL.Tessellation.PolygonalFace},System.Double[])">
+        <member name="M:TVGL.Cylinder.#ctor(System.Collections.Generic.IEnumerable{TVGL.PolygonalFace},System.Double[])">
             <summary>
             Initializes a new instance of the <see cref="T:TVGL.Cylinder"/> class.
             </summary>
             <param name="facesAll">The faces all.</param>
             <param name="axis">The axis.</param>
         </member>
-        <member name="M:TVGL.Cylinder.#ctor(TVGL.Tessellation.Edge)">
+        <member name="M:TVGL.Cylinder.#ctor(TVGL.Edge)">
             <summary>
             Initializes a new instance of the <see cref="T:TVGL.Cylinder"/> class.
             </summary>
             <param name="edge">The edge.</param>
             <exception cref="T:System.Exception">Edge used to define cylinder is flat.</exception>
         </member>
-        <member name="M:TVGL.Cylinder.IsNewMemberOf(TVGL.Tessellation.PolygonalFace)">
+        <member name="M:TVGL.Cylinder.IsNewMemberOf(TVGL.PolygonalFace)">
             <summary>
             Determines whether [is new member of] [the specified face].
             </summary>
             <param name="face">The face.</param>
             <returns><c>true</c> if [is new member of] [the specified face]; otherwise, <c>false</c>.</returns>
         </member>
-        <member name="M:TVGL.Cylinder.UpdateWith(TVGL.Tessellation.PolygonalFace)">
+        <member name="M:TVGL.Cylinder.UpdateWith(TVGL.PolygonalFace)">
             <summary>
             Updates the with.
             </summary>
@@ -3008,7 +3276,7 @@
             Class Flat.
             </summary>
         </member>
-        <member name="M:TVGL.Flat.#ctor(System.Collections.Generic.IEnumerable{TVGL.Tessellation.PolygonalFace})">
+        <member name="M:TVGL.Flat.#ctor(System.Collections.Generic.IEnumerable{TVGL.PolygonalFace})">
             <summary>
             Initializes a new instance of the <see cref="T:TVGL.Flat"/> class.
             </summary>
@@ -3033,14 +3301,14 @@
             <param name="pointOnPlane">a point on plane.</param>
             <param name="normal">The normal.</param>
         </member>
-        <member name="M:TVGL.Flat.IsNewMemberOf(TVGL.Tessellation.PolygonalFace)">
+        <member name="M:TVGL.Flat.IsNewMemberOf(TVGL.PolygonalFace)">
             <summary>
             Determines whether [is new member of] [the specified face].
             </summary>
             <param name="face">The face.</param>
             <returns><c>true</c> if [is new member of] [the specified face]; otherwise, <c>false</c>.</returns>
         </member>
-        <member name="M:TVGL.Flat.UpdateWith(TVGL.Tessellation.PolygonalFace)">
+        <member name="M:TVGL.Flat.UpdateWith(TVGL.PolygonalFace)">
             <summary>
             Updates the with.
             </summary>
@@ -3135,100 +3403,6 @@
             <param name="volume">The volume.</param>
             <param name="extremeVertices">The extreme vertices.</param>
             <param name="directions">The directions.</param>
-        </member>
-        <member name="T:TVGL.MinimumEnclosure">
-            <summary>
-            The MinimumEnclosure class includes static functions for defining smallest enclosures for a 
-            tessellated solid. For example: convex hull, minimum bounding box, or minimum bounding sphere.
-            </summary>
-            <summary>
-            The MinimumEnclosure class includes static functions for defining smallest enclosures for a 
-            tesselated solid. For example: convex hull, minimum bounding box, or minimum bounding sphere.
-            </summary>
-        </member>
-        <member name="F:TVGL.MinimumEnclosure.MaxDeltaAngle">
-            <summary>
-            The maximum delta angle
-            </summary>
-        </member>
-        <member name="M:TVGL.MinimumEnclosure.ConvexHull2D(System.Collections.Generic.IList{MIConvexHull.IVertex},System.Double[])">
-            <summary>
-            Returns the 2D convex hull for the 3D vertices within the plane defined by the normal, direction.
-            The returned points are a List of points (3D double array) that represent the points as they have been
-            converted to the 2D plane. The vertices are not altered by this function. This is a simple two-line function
-            that first call the non-destructive "Get2DProjectionPoints" and then the overload of "ConvexHull2D".
-            </summary>
-            <param name="vertices">The vertices.</param>
-            <param name="direction">The direction.</param>
-            <returns>List&lt;System.Double[]&gt;.</returns>
-        </member>
-        <member name="M:TVGL.MinimumEnclosure.ConvexHull2D(System.Collections.Generic.IList{TVGL.Point})">
-            <summary>
-            Returns the 2D convex hull for the 3D vertices within the plane defined by the normal, direction.
-            The returned points are a List of points (3D double array) that represent the points as they have been
-            converted to the 2D plane. The vertices are not altered by this function. This is a simple two-line function
-            that first call the non-destructive "Get2DProjectionPoints" and then the overload of "ConvexHull2D".
-            </summary>
-            <param name="points">The points.</param>
-            <returns>List&lt;System.Double[]&gt;.</returns>
-        </member>
-        <member name="M:TVGL.MinimumEnclosure.OrientedBoundingBox(TVGL.Tessellation.TessellatedSolid)">
-            <summary>
-            Orienteds the bounding box.
-            </summary>
-            <param name="ts">The ts.</param>
-            <returns>BoundingBox.</returns>
-        </member>
-        <member name="M:TVGL.MinimumEnclosure.FindOBBAlongDirection(System.Collections.Generic.IList{MIConvexHull.IVertex},System.Double[])">
-            <summary>
-            Finds the minimum oriented bounding rectangle (2D). The 3D points of a tessellated solid
-            are projected to the plane defined by "direction". This returns a BoundingBox structure
-            where the first direction is the same as the prescribed direction and the other two are
-            in-plane unit vectors.
-            </summary>
-            <param name="vertices">The vertices.</param>
-            <param name="direction">The direction.</param>
-            <returns>BoundingBox.</returns>
-            <exception cref="T:System.Exception"></exception>
-        </member>
-        <member name="M:TVGL.MinimumEnclosure.Get2DProjectionPoints(System.Collections.Generic.IList{MIConvexHull.IVertex},System.Double[])">
-            <summary>
-            Returns the positions (array of 3D arrays) of the vertices as that they would be represented in 
-            the x-y plane (although the z-values will be non-zero). This does not destructively alter
-            the vertices. 
-            </summary>
-            <param name="vertices">The vertices.</param>
-            <param name="direction">The direction.</param>
-            <returns>Point2D[].</returns>
-        </member>
-        <member name="M:TVGL.MinimumEnclosure.Get2DProjectionPoints(System.Collections.Generic.IList{MIConvexHull.IVertex},System.Double[],System.Double[0:,0:]@)">
-            <summary>
-            Returns the positions (array of 3D arrays) of the vertices as that they would be represented in 
-            the x-y plane (although the z-values will be non-zero). This does not destructively alter
-            the vertices. 
-            </summary>
-            <param name="vertices">The vertices.</param>
-            <param name="direction">The direction.</param>
-            <returns>Point2D[].</returns>
-        </member>
-        <member name="M:TVGL.MinimumEnclosure.GetLengthAndExtremeVertices(System.Collections.Generic.IList{System.Double},System.Collections.Generic.IList{MIConvexHull.IVertex},MIConvexHull.IVertex@,MIConvexHull.IVertex@)">
-            <summary>
-            Given a direction, dir, this function returns the maximum length along this direction
-            for the provided vertices as well as the two vertices that represent the extremes.
-            </summary>
-            <param name="dir">The dir.</param>
-            <param name="vertices">The vertices.</param>
-            <param name="vLow">The v low.</param>
-            <param name="vHigh">The v high.</param>
-            <returns>System.Double.</returns>
-        </member>
-        <member name="M:TVGL.MinimumEnclosure.RotatingCalipers2DMethod(System.Collections.Generic.IList{TVGL.Point},System.Double@)">
-            <summary>
-            Rotatings the calipers2 d method.
-            </summary>
-            <param name="points">The points.</param>
-            <param name="minArea">The minimum area.</param>
-            <returns>System.Double.</returns>
         </member>
         <member name="T:TVGL.SortedList`2">
             <summary>
@@ -3496,14 +3670,14 @@
                 <paramref name="key" /> does not exist in the collection.
             </exception>
         </member>
-        <member name="T:TVGL.Tessellation.Edge">
+        <member name="T:TVGL.Edge">
             <summary>
                 The straight-line edge class. It connects to two nodes and lies between two faces.
             </summary>
         </member>
-        <member name="M:TVGL.Tessellation.Edge.#ctor(TVGL.Tessellation.Vertex,TVGL.Tessellation.Vertex,TVGL.Tessellation.PolygonalFace,TVGL.Tessellation.PolygonalFace,System.Boolean,System.Boolean)">
+        <member name="M:TVGL.Edge.#ctor(TVGL.Vertex,TVGL.Vertex,TVGL.PolygonalFace,TVGL.PolygonalFace,System.Boolean)">
             <summary>
-                Initializes a new instance of the <see cref="T:TVGL.Tessellation.Edge"/> class.
+                Initializes a new instance of the <see cref="T:TVGL.Edge"/> class.
             </summary>
             <param name="fromVertex">From vertex.</param>
             <param name="toVertex">To vertex.</param>
@@ -3512,7 +3686,18 @@
             <param name="doublyLinkedFaces"></param>
             <param name="doublyLinkedVertices"></param>
         </member>
-        <member name="M:TVGL.Tessellation.Edge.OtherVertex(TVGL.Tessellation.Vertex)">
+        <member name="M:TVGL.Edge.#ctor(TVGL.Vertex,TVGL.Vertex,System.Boolean)">
+            <summary>
+                Initializes a new instance of the <see cref="T:TVGL.Edge"/> class.
+            </summary>
+            <param name="fromVertex">From vertex.</param>
+            <param name="toVertex">To vertex.</param>
+            <param name="ownedFace">The face.</param>
+            <param name="otherFace">The other face.</param>
+            <param name="doublyLinkedFaces"></param>
+            <param name="doublyLinkedVertices"></param>
+        </member>
+        <member name="M:TVGL.Edge.OtherVertex(TVGL.Vertex)">
             <summary>
                 Others the vertex.
             </summary>
@@ -3520,23 +3705,7 @@
             <returns>Vertex.</returns>
             <exception cref="T:System.Exception">OtherVertex: Vertex thought to connect to edge, but it doesn't.</exception>
         </member>
-        <member name="F:TVGL.Tessellation.Edge.From">
-            <summary>
-                Gets the From Vertex.
-            </summary>
-            <value>
-                From.
-            </value>
-        </member>
-        <member name="F:TVGL.Tessellation.Edge.To">
-            <summary>
-                Gets the To Vertex.
-            </summary>
-            <value>
-                To.
-            </value>
-        </member>
-        <member name="F:TVGL.Tessellation.Edge.Length">
+        <member name="F:TVGL.Edge.Length">
             <summary>
                 Gets the length.
             </summary>
@@ -3544,7 +3713,7 @@
                 The length.
             </value>
         </member>
-        <member name="F:TVGL.Tessellation.Edge.Vector">
+        <member name="F:TVGL.Edge.Vector">
             <summary>
                 Gets the vector.
             </summary>
@@ -3552,13 +3721,29 @@
                 The vector.
             </value>
         </member>
-        <member name="M:TVGL.Tessellation.Edge.DefineInternalEdgeAngle">
+        <member name="M:TVGL.Edge.DefineInternalEdgeAngle">
             <summary>
                 Defines the edge angle.
             </summary>
             <param name="edges">The edges.</param>
         </member>
-        <member name="P:TVGL.Tessellation.Edge.OwnedFace">
+        <member name="P:TVGL.Edge.From">
+            <summary>
+                Gets the From Vertex.
+            </summary>
+            <value>
+                From.
+            </value>
+        </member>
+        <member name="P:TVGL.Edge.To">
+            <summary>
+                Gets the To Vertex.
+            </summary>
+            <value>
+                To.
+            </value>
+        </member>
+        <member name="P:TVGL.Edge.OwnedFace">
             <summary>
                 Gets the owned face (the face in which the from-to direction makes sense
                 - that is, produces the proper cross-product normal).
@@ -3567,7 +3752,7 @@
                 The owned face.
             </value>
         </member>
-        <member name="P:TVGL.Tessellation.Edge.OtherFace">
+        <member name="P:TVGL.Edge.OtherFace">
             <summary>
                 Gets the other face (the face in which the from-to direction doesn not
                 make sense- that is, produces the negative cross-product normal).
@@ -3576,7 +3761,7 @@
                 The other face.
             </value>
         </member>
-        <member name="P:TVGL.Tessellation.Edge.InternalAngle">
+        <member name="P:TVGL.Edge.InternalAngle">
             <summary>
                 Gets the internal angle in radians.
             </summary>
@@ -3584,7 +3769,7 @@
                 The internal angle.
             </value>
         </member>
-        <member name="P:TVGL.Tessellation.Edge.Curvature">
+        <member name="P:TVGL.Edge.Curvature">
             <summary>
                 Gets the curvature of the surface.
             </summary>
@@ -3592,7 +3777,7 @@
                 The curvature of the surface.
             </value>
         </member>
-        <member name="P:TVGL.Tessellation.Edge.PartofConvexHull">
+        <member name="P:TVGL.Edge.PartofConvexHull">
             <summary>
                 Gets a value indicating whether [is part of the convex hull].
             </summary>
@@ -3600,50 +3785,56 @@
                 <c>true</c> if [is part of the convex hull]; otherwise, <c>false</c>.
             </value>
         </member>
-        <member name="T:TVGL.Tessellation.PolygonalFace">
+        <member name="T:TVGL.PolygonalFace">
             <summary>
             This class defines a flat polygonal face. The implementation began with triangular faces in mind. 
             It should be double-checked for higher polygons.   It inherits from the ConvexFace class in 
             MIConvexHull
             </summary>
         </member>
-        <member name="M:TVGL.Tessellation.PolygonalFace.#ctor(System.Double[],TVGL.Color)">
+        <member name="M:TVGL.PolygonalFace.#ctor(System.Double[],TVGL.Color)">
             <summary>
-            Initializes a new instance of the <see cref="T:TVGL.Tessellation.PolygonalFace"/> class.
+            Initializes a new instance of the <see cref="T:TVGL.PolygonalFace"/> class.
             </summary>
             <param name="normal">The normal.</param>
             <param name="color">The color.</param>
         </member>
-        <member name="M:TVGL.Tessellation.PolygonalFace.#ctor(System.Double[])">
+        <member name="M:TVGL.PolygonalFace.#ctor(System.Double[])">
             <summary>
-            Initializes a new instance of the <see cref="T:TVGL.Tessellation.PolygonalFace"/> class.
+            Initializes a new instance of the <see cref="T:TVGL.PolygonalFace"/> class.
             </summary>
             <param name="normal">The normal.</param>
         </member>
-        <member name="M:TVGL.Tessellation.PolygonalFace.#ctor">
+        <member name="M:TVGL.PolygonalFace.#ctor">
             <summary>
-            Initializes a new instance of the <see cref="T:TVGL.Tessellation.PolygonalFace"/> class.
+            Initializes a new instance of the <see cref="T:TVGL.PolygonalFace"/> class.
             </summary>
         </member>
-        <member name="M:TVGL.Tessellation.PolygonalFace.#ctor(System.Collections.Generic.IList{TVGL.Tessellation.Vertex})">
+        <member name="M:TVGL.PolygonalFace.#ctor(System.Collections.Generic.IList{TVGL.Vertex},System.Double[])">
             <summary>
-            Initializes a new instance of the <see cref="T:TVGL.Tessellation.PolygonalFace"/> class.
+            Initializes a new instance of the <see cref="T:TVGL.PolygonalFace"/> class.
             </summary>
             <param name="vertices">The vertices.</param>
         </member>
-        <member name="M:TVGL.Tessellation.PolygonalFace.Copy">
+        <member name="M:TVGL.PolygonalFace.#ctor(System.Collections.Generic.IList{TVGL.Vertex})">
+            <summary>
+            Initializes a new instance of the <see cref="T:TVGL.PolygonalFace"/> class.
+            </summary>
+            <param name="vertices">The vertices.</param>
+        </member>
+        <member name="M:TVGL.PolygonalFace.Copy">
             <summary>
             Copies this instance.
             </summary>
             <returns>PolygonalFace.</returns>
         </member>
-        <member name="P:TVGL.Tessellation.PolygonalFace.IsConvex">
+        <member name="P:TVGL.PolygonalFace.IsConvex">
             <summary>
             Gets the is convex.
             </summary>
             <value>The is convex.</value>
         </member>
-        <member name="P:TVGL.Tessellation.PolygonalFace.Normal">
+        <member name="P:TVGL.PolygonalFace.Normal">
             <summary>
             Gets the normal.
             </summary>
@@ -3651,7 +3842,7 @@
             The normal.
             </value>
         </member>
-        <member name="P:TVGL.Tessellation.PolygonalFace.Vertices">
+        <member name="P:TVGL.PolygonalFace.Vertices">
             <summary>
             Gets the vertices.
             </summary>
@@ -3659,7 +3850,7 @@
             The vertices.
             </value>
         </member>
-        <member name="P:TVGL.Tessellation.PolygonalFace.Edges">
+        <member name="P:TVGL.PolygonalFace.Edges">
             <summary>
             Gets the edges.
             </summary>
@@ -3667,7 +3858,7 @@
             The edges.
             </value>
         </member>
-        <member name="P:TVGL.Tessellation.PolygonalFace.Center">
+        <member name="P:TVGL.PolygonalFace.Center">
             <summary>
             Gets the center.
             </summary>
@@ -3675,7 +3866,7 @@
             The center.
             </value>
         </member>
-        <member name="P:TVGL.Tessellation.PolygonalFace.Area">
+        <member name="P:TVGL.PolygonalFace.Area">
             <summary>
             Gets the area.
             </summary>
@@ -3683,13 +3874,13 @@
             The area.
             </value>
         </member>
-        <member name="P:TVGL.Tessellation.PolygonalFace.color">
+        <member name="P:TVGL.PolygonalFace.color">
             <summary>
             Gets or sets the color.
             </summary>
             <value>The color.</value>
         </member>
-        <member name="P:TVGL.Tessellation.PolygonalFace.Curvature">
+        <member name="P:TVGL.PolygonalFace.Curvature">
             <summary>
             Gets the curvature.
             </summary>
@@ -3697,7 +3888,7 @@
             The curvature.
             </value>
         </member>
-        <member name="P:TVGL.Tessellation.PolygonalFace.PartofConvexHull">
+        <member name="P:TVGL.PolygonalFace.PartofConvexHull">
             <summary>
             Gets a value indicating whether [it is part of the convex hull].
             </summary>
@@ -3705,13 +3896,13 @@
               <c>true</c> if [it is part of the convex hull]; otherwise, <c>false</c>.
             </value>
         </member>
-        <member name="P:TVGL.Tessellation.PolygonalFace.AdjacentFaces">
+        <member name="P:TVGL.PolygonalFace.AdjacentFaces">
             <summary>
             Gets the adjacent faces.
             </summary>
             <value>The adjacent faces.</value>
         </member>
-        <member name="T:TVGL.Tessellation.TessellatedSolid">
+        <member name="T:TVGL.TessellatedSolid">
             <tags>help</tags>             
             <summary>
                 Class TessellatedSolid.
@@ -3719,29 +3910,29 @@
             <remarks>This is the currently the <strong>main</strong> class within TVGL all filetypes are read in as a TessellatedSolid, and
             all interesting operations work on the TessellatedSolid.</remarks>
         </member>
-        <member name="F:TVGL.Tessellation.TessellatedSolid._bounds">
+        <member name="F:TVGL.TessellatedSolid._bounds">
             <summary>
                 The _bounds
             </summary>
         </member>
-        <member name="F:TVGL.Tessellation.TessellatedSolid.HasUniformColor">
+        <member name="F:TVGL.TessellatedSolid.HasUniformColor">
             <summary>
             The has uniform color
             </summary>
         </member>
-        <member name="F:TVGL.Tessellation.TessellatedSolid.SolidColor">
+        <member name="F:TVGL.TessellatedSolid.SolidColor">
             <summary>
             The solid color
             </summary>
         </member>
-        <member name="M:TVGL.Tessellation.TessellatedSolid.#ctor">
+        <member name="M:TVGL.TessellatedSolid.#ctor">
             <summary>
-                Prevents a default instance of the <see cref="T:TVGL.Tessellation.TessellatedSolid"/> class from being created.
+                Prevents a default instance of the <see cref="T:TVGL.TessellatedSolid"/> class from being created.
             </summary>
         </member>
-        <member name="M:TVGL.Tessellation.TessellatedSolid.#ctor(System.String,System.Collections.Generic.List{System.Double[]},System.Collections.Generic.List{System.Collections.Generic.List{System.Double[]}},System.Collections.Generic.List{TVGL.Color},System.Boolean)">
+        <member name="M:TVGL.TessellatedSolid.#ctor(System.String,System.Collections.Generic.List{System.Double[]},System.Collections.Generic.List{System.Collections.Generic.List{System.Double[]}},System.Collections.Generic.List{TVGL.Color},System.Boolean)">
             <summary>
-                Initializes a new instance of the <see cref="T:TVGL.Tessellation.TessellatedSolid"/> class.
+                Initializes a new instance of the <see cref="T:TVGL.TessellatedSolid"/> class.
             </summary>
             <param name="name">The name.</param>
             <param name="normals">The normals.</param>
@@ -3749,9 +3940,9 @@
             <param name="colors">The colors.</param>
             <param name="performInParallel">The perform in parallel.</param>
         </member>
-        <member name="M:TVGL.Tessellation.TessellatedSolid.#ctor(System.String,System.Collections.Generic.List{System.Double[]},System.Collections.Generic.List{System.Collections.Generic.List{System.Int32}},System.Collections.Generic.List{TVGL.Color},System.Boolean)">
+        <member name="M:TVGL.TessellatedSolid.#ctor(System.String,System.Collections.Generic.List{System.Double[]},System.Collections.Generic.List{System.Collections.Generic.List{System.Int32}},System.Collections.Generic.List{TVGL.Color},System.Boolean)">
             <summary>
-                Initializes a new instance of the <see cref="T:TVGL.Tessellation.TessellatedSolid"/> class.
+                Initializes a new instance of the <see cref="T:TVGL.TessellatedSolid"/> class.
             </summary>
             <param name="name">The name.</param>
             <param name="vertices">The vertices.</param>
@@ -3759,13 +3950,13 @@
             <param name="colors">The colors.</param>
             <param name="performInParallel">if set to <c>true</c> [perform in parallel].</param>
         </member>
-        <member name="M:TVGL.Tessellation.TessellatedSolid.MakeFaces(System.Collections.Generic.IList{System.Double[]})">
+        <member name="M:TVGL.TessellatedSolid.MakeFaces(System.Collections.Generic.IList{System.Double[]})">
             <summary>
             Makes the faces.
             </summary>
             <param name="normals">The normals.</param>
         </member>
-        <member name="M:TVGL.Tessellation.TessellatedSolid.MakeVertices(System.Collections.Generic.ICollection{System.Collections.Generic.List{System.Double[]}},System.Collections.Generic.List{System.Collections.Generic.List{System.Int32}},System.Collections.Generic.List{System.Int32}@)">
+        <member name="M:TVGL.TessellatedSolid.MakeVertices(System.Collections.Generic.ICollection{System.Collections.Generic.List{System.Double[]}},System.Collections.Generic.List{System.Collections.Generic.List{System.Int32}},System.Collections.Generic.List{System.Int32}@)">
             <summary>
             Makes the vertices.
             </summary>
@@ -3773,270 +3964,270 @@
             <param name="faceToVertexIndices">The face to vertex indices.</param>
             <param name="indicesToRemove">The indices to remove.</param>
         </member>
-        <member name="M:TVGL.Tessellation.TessellatedSolid.MakeVertices(System.Collections.Generic.IList{System.Double[]})">
+        <member name="M:TVGL.TessellatedSolid.MakeVertices(System.Collections.Generic.IList{System.Double[]})">
             <summary>
                 Makes the vertices.
             </summary>
             <param name="listOfVertices">The list of vertices.</param>
         </member>
-        <member name="M:TVGL.Tessellation.TessellatedSolid.DefineFaceCentersAndColors(System.Collections.Generic.List{TVGL.Color})">
+        <member name="M:TVGL.TessellatedSolid.DefineFaceCentersAndColors(System.Collections.Generic.List{TVGL.Color})">
             <summary>
                 Defines the face centers.
             </summary>
         </member>
-        <member name="M:TVGL.Tessellation.TessellatedSolid.DefineVolumeAndAreas">
+        <member name="M:TVGL.TessellatedSolid.DefineVolumeAndAreas">
             <summary>
                 Defines the volume and areas.
-            </summary>
+            </summary>    
         </member>
-        <member name="M:TVGL.Tessellation.TessellatedSolid.DefineBoundingBoxAndCenter">
+        <member name="M:TVGL.TessellatedSolid.DefineBoundingBoxAndCenter">
             <summary>
                 Defines the bounding box and center.
             </summary>
         </member>
-        <member name="M:TVGL.Tessellation.TessellatedSolid.RemoveDuplicateFacesAndLinkToVertices(System.Collections.Generic.List{System.Collections.Generic.List{System.Int32}})">
+        <member name="M:TVGL.TessellatedSolid.RemoveDuplicateFacesAndLinkToVertices(System.Collections.Generic.List{System.Collections.Generic.List{System.Int32}})">
             <summary>
                 Removes the duplicate faces and link to vertices.
             </summary>
         </member>
-        <member name="M:TVGL.Tessellation.TessellatedSolid.ContainsDuplicateIndices(System.Collections.Generic.List{System.Int32})">
+        <member name="M:TVGL.TessellatedSolid.ContainsDuplicateIndices(System.Collections.Generic.List{System.Int32})">
             <summary>
                 Duplicates the vertices.
             </summary>
             <param name="orderedIndices">The ordered indices.</param>
             <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         </member>
-        <member name="M:TVGL.Tessellation.TessellatedSolid.Copy">
+        <member name="M:TVGL.TessellatedSolid.Copy">
             <summary>
                 Copies this instance.
             </summary>
             <returns>TessellatedSolid.</returns>
         </member>
-        <member name="M:TVGL.Tessellation.TessellatedSolid.DefineVertexCurvature">
+        <member name="M:TVGL.TessellatedSolid.DefineVertexCurvature">
             <summary>
                 Defines the vertex curvature.
             </summary>
         </member>
-        <member name="M:TVGL.Tessellation.TessellatedSolid.ConnectConvexHullToObjects">
+        <member name="M:TVGL.TessellatedSolid.ConnectConvexHullToObjects">
             <summary>
                 Connects the convex hull to objects.
             </summary>
         </member>
-        <member name="M:TVGL.Tessellation.TessellatedSolid.CreateConvexHull">
+        <member name="M:TVGL.TessellatedSolid.CreateConvexHull">
             <summary>
                 Creates the convex hull.
             </summary>
         </member>
-        <member name="M:TVGL.Tessellation.TessellatedSolid.DefineFaceCurvature">
+        <member name="M:TVGL.TessellatedSolid.DefineFaceCurvature">
             <summary>
                 Defines the face curvature. Depends on DefineEdgeAngle
             </summary>
         </member>
-        <member name="P:TVGL.Tessellation.TessellatedSolid.Center">
+        <member name="P:TVGL.TessellatedSolid.Center">
             <summary>
                 Gets the center.
             </summary>
             <value>The center.</value>
         </member>
-        <member name="P:TVGL.Tessellation.TessellatedSolid.ZMax">
+        <member name="P:TVGL.TessellatedSolid.ZMax">
             <summary>
                 Gets the z maximum.
             </summary>
             <value>The z maximum.</value>
         </member>
-        <member name="P:TVGL.Tessellation.TessellatedSolid.YMax">
+        <member name="P:TVGL.TessellatedSolid.YMax">
             <summary>
                 Gets the y maximum.
             </summary>
             <value>The y maximum.</value>
         </member>
-        <member name="P:TVGL.Tessellation.TessellatedSolid.XMax">
+        <member name="P:TVGL.TessellatedSolid.XMax">
             <summary>
                 Gets the x maximum.
             </summary>
             <value>The x maximum.</value>
         </member>
-        <member name="P:TVGL.Tessellation.TessellatedSolid.ZMin">
+        <member name="P:TVGL.TessellatedSolid.ZMin">
             <summary>
                 Gets the z minimum.
             </summary>
             <value>The z minimum.</value>
         </member>
-        <member name="P:TVGL.Tessellation.TessellatedSolid.YMin">
+        <member name="P:TVGL.TessellatedSolid.YMin">
             <summary>
                 Gets the y minimum.
             </summary>
             <value>The y minimum.</value>
         </member>
-        <member name="P:TVGL.Tessellation.TessellatedSolid.XMin">
+        <member name="P:TVGL.TessellatedSolid.XMin">
             <summary>
                 Gets the x minimum.
             </summary>
             <value>The x minimum.</value>
         </member>
-        <member name="P:TVGL.Tessellation.TessellatedSolid.Bounds">
+        <member name="P:TVGL.TessellatedSolid.Bounds">
             <summary>
                 Gets the bounds.
             </summary>
             <value>The bounds.</value>
         </member>
-        <member name="P:TVGL.Tessellation.TessellatedSolid.Volume">
+        <member name="P:TVGL.TessellatedSolid.Volume">
             <summary>
                 Gets the volume.
             </summary>
             <value>The volume.</value>
         </member>
-        <member name="P:TVGL.Tessellation.TessellatedSolid.SurfaceArea">
+        <member name="P:TVGL.TessellatedSolid.SurfaceArea">
             <summary>
                 Gets the surface area.
             </summary>
             <value>The surface area.</value>
         </member>
-        <member name="P:TVGL.Tessellation.TessellatedSolid.Name">
+        <member name="P:TVGL.TessellatedSolid.Name">
             <summary>
                 The name of solid
             </summary>
             <value>The name.</value>
         </member>
-        <member name="P:TVGL.Tessellation.TessellatedSolid.Faces">
+        <member name="P:TVGL.TessellatedSolid.Faces">
             <summary>
                 Gets the faces.
             </summary>
             <value>The faces.</value>
         </member>
-        <member name="P:TVGL.Tessellation.TessellatedSolid.Edges">
+        <member name="P:TVGL.TessellatedSolid.Edges">
             <summary>
                 Gets the edges.
             </summary>
             <value>The edges.</value>
         </member>
-        <member name="P:TVGL.Tessellation.TessellatedSolid.Vertices">
+        <member name="P:TVGL.TessellatedSolid.Vertices">
             <summary>
                 Gets the vertices.
             </summary>
             <value>The vertices.</value>
         </member>
-        <member name="P:TVGL.Tessellation.TessellatedSolid.NumberOfFaces">
+        <member name="P:TVGL.TessellatedSolid.NumberOfFaces">
             <summary>
                 Gets the number of faces.
             </summary>
             <value>The number of faces.</value>
         </member>
-        <member name="P:TVGL.Tessellation.TessellatedSolid.NumberOfVertices">
+        <member name="P:TVGL.TessellatedSolid.NumberOfVertices">
             <summary>
                 Gets the number of vertices.
             </summary>
             <value>The number of vertices.</value>
         </member>
-        <member name="P:TVGL.Tessellation.TessellatedSolid.NumberOfEdges">
+        <member name="P:TVGL.TessellatedSolid.NumberOfEdges">
             <summary>
                 Gets the number of edges.
             </summary>
             <value>The number of edges.</value>
         </member>
-        <member name="P:TVGL.Tessellation.TessellatedSolid.ConvexHullFaces">
+        <member name="P:TVGL.TessellatedSolid.ConvexHullFaces">
             <summary>
                 Gets the convex hull faces.
             </summary>
             <value>The convex hull faces.</value>
         </member>
-        <member name="P:TVGL.Tessellation.TessellatedSolid.ConvexHullEdges">
+        <member name="P:TVGL.TessellatedSolid.ConvexHullEdges">
             <summary>
                 Gets the convex hull edges.
             </summary>
             <value>The convex hull edges.</value>
         </member>
-        <member name="P:TVGL.Tessellation.TessellatedSolid.ConvexHullVertices">
+        <member name="P:TVGL.TessellatedSolid.ConvexHullVertices">
             <summary>
                 Gets the convex hull vertices.
             </summary>
             <value>The convex hull vertices.</value>
         </member>
-        <member name="T:TVGL.Tessellation.Vertex">
+        <member name="T:TVGL.Vertex">
             <summary>
             The 3D vertex can connect to any number of faces and edges. It inherits from the
             MIConvexhull IVertex interface.
             </summary>
         </member>
-        <member name="M:TVGL.Tessellation.Vertex.#ctor(System.Double[],System.Int32)">
+        <member name="M:TVGL.Vertex.#ctor(System.Double[],System.Int32)">
             <summary>
-            Initializes a new instance of the <see cref="T:TVGL.Tessellation.Vertex"/> class.
+            Initializes a new instance of the <see cref="T:TVGL.Vertex"/> class.
             </summary>
             <param name="position">The position.</param>
             <param name="indexInListOfVertices">The index in list of vertices.</param>
         </member>
-        <member name="M:TVGL.Tessellation.Vertex.#ctor(System.Double[])">
+        <member name="M:TVGL.Vertex.#ctor(System.Double[])">
             <summary>
-            Initializes a new instance of the <see cref="T:TVGL.Tessellation.Vertex"/> class.
+            Initializes a new instance of the <see cref="T:TVGL.Vertex"/> class.
             </summary>
             <param name="position">The position.</param>
         </member>
-        <member name="M:TVGL.Tessellation.Vertex.#ctor">
+        <member name="M:TVGL.Vertex.#ctor">
             <summary>
-            Prevents a default instance of the <see cref="T:TVGL.Tessellation.Vertex"/> class from being created.
+            Prevents a default instance of the <see cref="T:TVGL.Vertex"/> class from being created.
             </summary>
         </member>
-        <member name="M:TVGL.Tessellation.Vertex.Copy">
+        <member name="M:TVGL.Vertex.Copy">
             <summary>
             Copies this instance.
             </summary>
             <returns>Vertex.</returns>
         </member>
-        <member name="P:TVGL.Tessellation.Vertex.Position">
+        <member name="P:TVGL.Vertex.Position">
             <summary>
             Gets the position.
             </summary>
             <value>The position.</value>
         </member>
-        <member name="P:TVGL.Tessellation.Vertex.X">
+        <member name="P:TVGL.Vertex.X">
             <summary>
             Gets the x.
             </summary>
             <value>The x.</value>
         </member>
-        <member name="P:TVGL.Tessellation.Vertex.Y">
+        <member name="P:TVGL.Vertex.Y">
             <summary>
             Gets the y.
             </summary>
             <value>The y.</value>
         </member>
-        <member name="P:TVGL.Tessellation.Vertex.Z">
+        <member name="P:TVGL.Vertex.Z">
             <summary>
             Gets the z.
             </summary>
             <value>The z.</value>
         </member>
-        <member name="P:TVGL.Tessellation.Vertex.Edges">
+        <member name="P:TVGL.Vertex.Edges">
             <summary>
             Gets the edges.
             </summary>
             <value>The edges.</value>
         </member>
-        <member name="P:TVGL.Tessellation.Vertex.Faces">
+        <member name="P:TVGL.Vertex.Faces">
             <summary>
             Gets the faces.
             </summary>
             <value>The faces.</value>
         </member>
-        <member name="P:TVGL.Tessellation.Vertex.PointCurvature">
+        <member name="P:TVGL.Vertex.PointCurvature">
             <summary>
             Gets the curvature at the point.
             </summary>
             <value>The point curvature.</value>
         </member>
-        <member name="P:TVGL.Tessellation.Vertex.EdgeCurvature">
+        <member name="P:TVGL.Vertex.EdgeCurvature">
             <summary>
             Gets the curvature by considering the connecting edges.
             </summary>
             <value>The global curve.</value>
         </member>
-        <member name="P:TVGL.Tessellation.Vertex.PartofConvexHull">
+        <member name="P:TVGL.Vertex.PartofConvexHull">
             <summary>
             Gets a value indicating whether [it is part of the convex hull].
             </summary>
             <value><c>true</c> if [it is part of the convex hull]; otherwise, <c>false</c>.</value>
         </member>
-        <member name="P:TVGL.Tessellation.Vertex.IndexInList">
+        <member name="P:TVGL.Vertex.IndexInList">
             <summary>
             Gets the index in list.
             </summary>

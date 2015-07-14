@@ -5,7 +5,7 @@ using System.IO;
 using System.Threading.Tasks;
 using GraphSynth.Representation;
 using TVGL.IOFunctions;
-using TVGL.Tessellation;
+using TVGL;
 
 namespace Assembly_Planner
 {

@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using StarMathLib;
 using TVGL;
-using TVGL.Tessellation;
 
 namespace Assembly_Planner
 {

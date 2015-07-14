@@ -48,24 +48,29 @@
     <Reference Include="System.Xml" />
     <Reference Include="TessellationAndVoxelizationGeometryLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\TVGL.1.0.15.0624\lib\portable-net45+sl5+wp8+win8\TessellationAndVoxelizationGeometryLibrary.dll</HintPath>
+      <HintPath>..\packages\TVGL.1.0.15.0714\lib\portable-net45+sl5+wp8+win8\TessellationAndVoxelizationGeometryLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DisassemblyProcess\BeamSearch.cs" />
     <Compile Include="DisassemblyProcess\DBG.cs" />
+    <Compile Include="DisassemblyProcess\DBGBinary.cs" />
     <Compile Include="DisassemblyProcess\DisConstants.cs" />
     <Compile Include="DisassemblyProcess\BoostedSCC.cs" />
     <Compile Include="DisassemblyProcess\OptionGenerator.cs" />
     <Compile Include="DisassemblyProcess\OptionGeneratorPro.cs" />
+    <Compile Include="DisassemblyProcess\OptionGeneratorProBinary.cs" />
     <Compile Include="DisassemblyProcess\OrderedDFS.cs" />
+    <Compile Include="DisassemblyProcess\RecursiveOptimizedSearch.cs" />
     <Compile Include="DisassemblyProcess\SCC.cs" />
+    <Compile Include="DisassemblyProcess\SCCBinary.cs" />
     <Compile Include="DisassemblyProcess\Updates.cs" />
     <Compile Include="Evaluation\AssemblyEvaluator.cs" />
     <Compile Include="Evaluation\Constants.cs" />
     <Compile Include="Evaluation\ConvexHullEvaluator.cs" />
     <Compile Include="Evaluation\EvaluatePath.cs" />
     <Compile Include="Evaluation\EvaluatePathPINVOKE.cs" />
+    <Compile Include="Evaluation\EvaluationForBinaryTree.cs" />
     <Compile Include="Evaluation\FeasibilityEvaluator.cs" />
     <Compile Include="Evaluation\FootprintFace.cs" />
     <Compile Include="Evaluation\Math.cs" />
@@ -92,14 +97,13 @@
     <Compile Include="InitialGraphMaker\BoltAndGearDetector\ClusteringDenseAndSparseEdges.cs" />
     <Compile Include="InitialGraphMaker\ConstantsPrimitiveOverlap.cs" />
     <Compile Include="InitialGraphMaker\DisassemblyDirections.cs" />
-    <Compile Include="DisassemblyProcess\GraphConstants.cs" />
     <Compile Include="InitialGraphMaker\BoltAndGearDetector\GearEdge.cs" />
     <Compile Include="InitialGraphMaker\DisassemblyDirectionsWithFastener.cs" />
     <Compile Include="InitialGraphMaker\Fastener.cs" />
     <Compile Include="InitialGraphMaker\Icosahedron.cs" />
     <Compile Include="InitialGraphMaker\IcosahedronPro.cs" />
+    <Compile Include="InitialGraphMaker\NonadjacentBlockingDetermination.cs" />
     <Compile Include="InitialGraphMaker\PrimitivePrimitiveInteractions.cs" />
-    <Compile Include="MotionPlanning\UnconnectedBlockingDetermination.cs" />
     <Compile Include="PostProcessor\OptimalOrientation.cs" />
     <Compile Include="PostProcessor\PostProcessingConstnts.cs" />
     <Compile Include="PostProcessor\Scheduling.cs" />
@@ -119,7 +123,7 @@
     <Content Include="TessellationAndVoxelizationGeometryLibrary.XML" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\GraphSynth\GraphSynthSourceFiles\GraphSynth.BaseClasses\GraphSynth.BaseClasses.csproj">
+    <ProjectReference Include="..\..\..\..\GitHub\GraphSynth\GraphSynthSourceFiles\GraphSynth.BaseClasses\GraphSynth.BaseClasses.csproj">
       <Project>{d679f4e2-fd18-48ac-9c0c-b60155a61d37}</Project>
       <Name>GraphSynth.BaseClasses</Name>
     </ProjectReference>
@@ -128,7 +132,9 @@
       <Name>PrimitiveClassificationOfTessellatedSolids</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="MotionPlanning\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

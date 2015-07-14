@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using GraphSynth.Representation;
 using StarMathLib;
 using TVGL;
-using TVGL.Tessellation;
+using TVGL;
 using PrimitiveClassificationOfTessellatedSolids;
 
 namespace Assembly_Planner
@@ -31,16 +31,16 @@ namespace Assembly_Planner
 
             foreach (var solid in parts)
             {
-            //    if (solid.Faces.Count() == 2098 || solid.Faces.Count() == 896 || solid.Faces.Count() == 2096) continue;
+                //    if (solid.Faces.Count() == 2098 || solid.Faces.Count() == 896 || solid.Faces.Count() == 2096) continue;
                 var solidPrim = TesselationToPrimitives.Run(solid);
                 partPrimitive.Add(solid, solidPrim);
-           //     var cones = solidPrim.Where(p => p is Cone).ToList();
-           //     double coneFacesCount = cones.Sum(c => c.Faces.Count);
-           //     var cylinder = solidPrim.Where(p => p is Cylinder).ToList();
-           //     var flat = solidPrim.Where(p => p is Flat).ToList();
-           //     var coneAndCylinderArea = cones.Sum(c => c.Area) + cylinder.Sum(c => c.Area);
-           //     var flatArea = flat.Sum(c => c.Area);
-           //     output.Add(new[] {(solid.Faces.Count()/solid.SurfaceArea).ToString()}); //(coneFacesCount / solid.Faces.Count()).ToString(), 
+                //     var cones = solidPrim.Where(p => p is Cone).ToList();
+                //     double coneFacesCount = cones.Sum(c => c.Faces.Count);
+                //     var cylinder = solidPrim.Where(p => p is Cylinder).ToList();
+                //     var flat = solidPrim.Where(p => p is Flat).ToList();
+                //     var coneAndCylinderArea = cones.Sum(c => c.Area) + cylinder.Sum(c => c.Area);
+                //     var flatArea = flat.Sum(c => c.Area);
+                //     output.Add(new[] {(solid.Faces.Count()/solid.SurfaceArea).ToString()}); //(coneFacesCount / solid.Faces.Count()).ToString(), 
                 //(coneAndCylinderArea/solid.SurfaceArea).ToString(), (flatArea/solid.SurfaceArea).ToString() });
             }
 
@@ -69,7 +69,7 @@ namespace Assembly_Planner
                 {
                     //if (GearGear(assemblyGraph, solid1, solid2))
                     //{
-                        // one more condition to check. If Gear-Gear, check and see if the normals of the solids are parallel
+                    // one more condition to check. If Gear-Gear, check and see if the normals of the solids are parallel
                     //    if (!ParallelNormals(assemblyGraph, solid1, solid2))
                     //    {
                     //        dirInd = null;
@@ -111,7 +111,7 @@ namespace Assembly_Planner
         private static double[] VariableOfTheIndex(double p, List<double> vars)
         {
             var ind = vars.IndexOf(p);
-            return new[] {vars[ind + 1], vars[ind + 2], vars[ind + 3]};
+            return new[] { vars[ind + 1], vars[ind + 2], vars[ind + 3] };
 
         }
 
@@ -132,7 +132,7 @@ namespace Assembly_Planner
             foreach (var f in a.ConvexHullFaces)
             {
                 var dStar = f.Normal.dotProduct(f.Vertices[0].Position);
-                if (b.ConvexHullVertices.All(pt => (f.Normal.dotProduct(pt.Position)) > dStar+0.1))
+                if (b.ConvexHullVertices.All(pt => (f.Normal.dotProduct(pt.Position)) > dStar + 0.1))
                     return false;
             }
             foreach (var f in b.ConvexHullFaces)
@@ -146,10 +146,18 @@ namespace Assembly_Planner
 
         internal static bool BoundingBoxOverlap(TessellatedSolid a, TessellatedSolid b)
         {
+            var aveXLength = ((a.XMax - a.XMin) + (b.XMax - b.XMin)) / 2.0;
+            var aveYLength = ((a.YMax - a.YMin) + (b.YMax - b.YMin)) / 2.0;
+            var aveZLength = ((a.ZMax - a.ZMin) + (b.ZMax - b.ZMin)) / 2.0;
             // There are some cases that two boxes are touching each other. So the bounding box or the CVH must not
             // return false. Define a threshold:
-            if (a.XMin > b.XMax + 0.1 || a.YMin > b.YMax + 0.1 || a.ZMin > b.ZMax + 0.1
-                || b.XMin > a.XMax + 0.1 || b.YMin > a.YMax + 0.1 || b.ZMin > a.ZMax + 0.1) return false;
+            if (a.XMin > b.XMax + ConstantsPrimitiveOverlap.FractionIncreaseForAABBIntersect * aveXLength
+                || a.YMin > b.YMax + ConstantsPrimitiveOverlap.FractionIncreaseForAABBIntersect * aveYLength
+                || a.ZMin > b.ZMax + ConstantsPrimitiveOverlap.FractionIncreaseForAABBIntersect * aveZLength
+                || b.XMin > a.XMax + ConstantsPrimitiveOverlap.FractionIncreaseForAABBIntersect * aveXLength
+                || b.YMin > a.YMax + ConstantsPrimitiveOverlap.FractionIncreaseForAABBIntersect * aveYLength
+                || b.ZMin > a.ZMax + ConstantsPrimitiveOverlap.FractionIncreaseForAABBIntersect * aveZLength)
+                return false;
             return true;
         }
 

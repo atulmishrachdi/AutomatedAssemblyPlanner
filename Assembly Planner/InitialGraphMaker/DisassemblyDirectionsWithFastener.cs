@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using GraphSynth.Representation;
 using StarMathLib;
 using TVGL;
-using TVGL.Tessellation;
+using TVGL;
 
 namespace Assembly_Planner
 {

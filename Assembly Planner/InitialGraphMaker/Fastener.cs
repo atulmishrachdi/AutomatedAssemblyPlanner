@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TVGL;
-using TVGL.Tessellation;
+using TVGL;
 using GraphSynth.Representation;
 using PrimitiveClassificationOfTessellatedSolids;
 using StarMathLib;
