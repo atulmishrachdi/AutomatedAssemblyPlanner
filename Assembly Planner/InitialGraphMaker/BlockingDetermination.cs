@@ -14,6 +14,7 @@ namespace Assembly_Planner
 {
     internal class BlockingDetermination
     {
+        public static List<OverlappedSurfaces> OverlappingSurfaces = new List<OverlappedSurfaces>();
         internal static Dictionary<TessellatedSolid, List<PrimitiveSurface>> PrimitiveMaker(List<TessellatedSolid> parts)
         {
             var partPrimitive = new Dictionary<TessellatedSolid, List<PrimitiveSurface>>();
@@ -81,8 +82,11 @@ namespace Assembly_Planner
                     var localDirInd = new List<int>();
                     for (var i = 0; i < DisassemblyDirections.Directions.Count; i++)
                         localDirInd.Add(i);
-                    if (PrimitivePrimitiveInteractions.PrimitiveOverlap(solid1P, solid2P, localDirInd))
+                    var overlappedPrimitives = new List<PrimitiveSurface[]>();
+                    if (PrimitivePrimitiveInteractions.PrimitiveOverlap(solid1P, solid2P, localDirInd, out overlappedPrimitives))
                     {
+                        var overlappingSurface = new OverlappedSurfaces { Solid1 = solid1, Solid2 = solid2, Overlappings = overlappedPrimitives };
+                        OverlappingSurfaces.Add(overlappingSurface);
                         // dirInd is the list of directions that must be added to the arc between part1 and part2
                         Console.WriteLine(@"An overlap is detected between   " + solid1.Name + "   and   " + solid2.Name);
                         globalDirPool.AddRange(localDirInd.Where(d => !globalDirPool.Contains(d)));
@@ -169,5 +173,29 @@ namespace Assembly_Planner
                     .ToList();
             return dirs.Select(dir => DisassemblyDirections.Directions.IndexOf(dir)).ToList();
         }
+    }
+
+    internal class OverlappedSurfaces
+    {
+        // This class is written for Weifeng's stability code
+        /// <summary>
+        /// Gets or sets the Solid1.
+        /// </summary>
+        /// <value>The Solid1.</value>
+        internal TessellatedSolid Solid1 { set; get; }
+
+        /// <summary>
+        /// Gets or sets the Solid2.
+        /// </summary>
+        /// <value>The Solid2.</value>
+        internal TessellatedSolid Solid2 { set; get; }
+
+        /// <summary>
+        /// The first element of array is surface of the Solid1 and
+        /// the second one is surface of Solid2
+        /// </summary>
+        /// <value>The Overlapping surfaces</value>
+        internal List<PrimitiveSurface[]> Overlappings {set; get;} 
+
     }
 }

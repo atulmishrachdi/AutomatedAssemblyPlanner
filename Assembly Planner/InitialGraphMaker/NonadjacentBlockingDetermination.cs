@@ -9,6 +9,7 @@ using GraphSynth.Representation;
 using MIConvexHull;
 using StarMathLib;
 using TVGL;
+using Constants = AssemblyEvaluation.Constants;
 
 namespace Assembly_Planner
 {
@@ -26,12 +27,12 @@ namespace Assembly_Planner
         internal static void Run(designGraph graph,
             List<TessellatedSolid> solids, List<int> gDir)
         {
-
+            
             foreach (var dir in gDir)
             {
                 var direction = DisassemblyDirections.Directions[dir];
                 var blockingsForDirection = new List<NonAdjacentBlockings>();
-                foreach (var solid in solids.Where(s => graph.nodes.Any(n => n.name == s.Name)))
+                foreach (var solid in solids.Where(s=> graph.nodes.Any(n=>n.name == s.Name)))
                 {
                     // now find the blocking parts
                     var rays = new List<Ray>();
@@ -39,7 +40,7 @@ namespace Assembly_Planner
                         rays.Add(new Ray(new AssemblyEvaluation.Vertex(vertex.Position[0], vertex.Position[1], vertex.Position[2]),
                                         new Vector(direction[0], direction[1], direction[2])));
 
-                    foreach (var solidBlocking in
+                    foreach (var solidBlocking in 
                         solids.Where(s => graph.nodes.Any(n => n.name == s.Name) // it is not fastener
                                           && s != solid // it is not the same as current solid 
                                           &&
@@ -50,10 +51,9 @@ namespace Assembly_Planner
                         if (!BoundingBoxBlocking(direction, solidBlocking, solid)) continue; //there is a problem with this code
                         var distanceToTheClosestFace = double.PositiveInfinity;
                         var overlap = false;
-                        foreach (var ray in rays)
+                        if (BlockingDetermination.ConvexHullOverlap(solid, solidBlocking))
                         {
-                            if (solidBlocking.ConvexHullFaces.Any(f => RayIntersectsWithFace(ray, f)))
-                            //now find the faces that intersect with the ray and find the distance between them
+                            foreach (var ray in rays)
                             {
                                 foreach (
                                     var blockingPolygonalFace in
@@ -62,6 +62,24 @@ namespace Assembly_Planner
                                     overlap = true;
                                     var d = DistanceToTheFace(ray.Position, blockingPolygonalFace);
                                     if (d < distanceToTheClosestFace) distanceToTheClosestFace = d;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            foreach (var ray in rays)
+                            {
+                                if (solidBlocking.ConvexHullFaces.Any(f => RayIntersectsWithFace(ray, f)))
+                                //now find the faces that intersect with the ray and find the distance between them
+                                {
+                                    foreach (
+                                        var blockingPolygonalFace in
+                                            solidBlocking.Faces.Where(f => RayIntersectsWithFace(ray, f)).ToList())
+                                    {
+                                        overlap = true;
+                                        var d = DistanceToTheFace(ray.Position, blockingPolygonalFace);
+                                        if (d < distanceToTheClosestFace) distanceToTheClosestFace = d;
+                                    }
                                 }
                             }
                         }
@@ -170,6 +188,46 @@ namespace Assembly_Planner
 
         public static bool RayIntersectsWithFace(Ray ray, PolygonalFace face)
         {
+            if (Math.Abs(ray.Direction.dotProduct(face.Normal)) < Constants.NearlyParallelFace) return false;
+            var inPlaneVerts = new AssemblyEvaluation.Vertex[3];
+            var negativeDirCounter = 3;
+            for (var i = 0; i < 3; i++)
+            {
+                var vectFromRayToFacePt = new Vector(ray.Position);
+                vectFromRayToFacePt = vectFromRayToFacePt.MakeVectorTo(face.Vertices[i]); // Interesting
+                var dxtoPlane = ray.Direction.dotProduct(vectFromRayToFacePt.Position);
+                if (dxtoPlane < 0) negativeDirCounter--;
+                if (negativeDirCounter == 0) return false;
+                inPlaneVerts[i] = new AssemblyEvaluation.Vertex(face.Vertices[i].Position.add(StarMath.multiply(-dxtoPlane, ray.Direction)));
+            }
+            if (inPlaneVerts.Min(v => v.Position[0]) > ray.Position[0]) return false;
+            if (inPlaneVerts.Max(v => v.Position[0]) < ray.Position[0]) return false;
+            if (inPlaneVerts.Min(v => v.Position[1]) > ray.Position[1]) return false;
+            if (inPlaneVerts.Max(v => v.Position[1]) < ray.Position[1]) return false;
+            if (inPlaneVerts.Min(v => v.Position[2]) > ray.Position[2]) return false;
+            if (inPlaneVerts.Max(v => v.Position[2]) < ray.Position[2]) return false;
+            if (inPlaneVerts.GetLength(0) > 3) return true;
+            var crossProductsToCorners = new List<double[]>();
+            for (int i = 0; i < 3; i++)
+            {
+                var j = (i == 2) ? 0 : i + 1;
+                var crossProductsFrom_i_To_j =
+                    inPlaneVerts[i].Position.subtract(ray.Position)
+                        .normalizeInPlace(3)
+                        .crossProduct(inPlaneVerts[j].Position.subtract(ray.Position).normalizeInPlace(3));
+                if (crossProductsFrom_i_To_j.norm2(true) < Constants.NearlyOnLine) return false;
+                crossProductsToCorners.Add(crossProductsFrom_i_To_j);
+            }
+            for (int i = 0; i < 3; i++)
+            {
+                var j = (i == 2) ? 0 : i + 1;
+                if (crossProductsToCorners[i].dotProduct(crossProductsToCorners[j], 3) <= 0) return false; // 0.15
+            }
+            return true;
+        }
+
+        public static bool RayIntersectsWithFace2(Ray ray, PolygonalFace face)
+        {
             var raysPointOnFacePlane = MiscFunctions.PointOnPlaneFromRay(face.Normal,
                 face.Center.dotProduct(face.Normal), ray.Position, ray.Direction);
             if (raysPointOnFacePlane == null) return false;
@@ -181,7 +239,7 @@ namespace Assembly_Planner
                 var crossProductsFrom_i_To_j =
                     face.Vertices[i].Position.subtract(raysPointOnFacePlane).normalize()
                         .crossProduct(face.Vertices[j].Position.subtract(ray.Position).normalize());
-                if (crossProductsFrom_i_To_j.norm2(true) < AssemblyEvaluation.Constants.NearlyOnLine) return false;
+                if (crossProductsFrom_i_To_j.norm2(true) < Constants.NearlyOnLine) return false;
                 crossProductsToCorners.Add(crossProductsFrom_i_To_j);
             }
             for (int i = 0; i < 3; i++)
@@ -191,6 +249,7 @@ namespace Assembly_Planner
             }
             return true;
         }
+
 
         private static double DistanceToTheFace(double[] p, PolygonalFace blockingPolygonalFace)
         {
@@ -239,21 +298,21 @@ namespace Assembly_Planner
 
     internal class NonAdjacentBlockings
     {
-        /// <summary>
-        /// blockingSolids[0] is blocked by blockingSolids[1]
-        /// </summary>
-        /// <value>
-        /// blockingSolids
-        /// </value>
-        internal TessellatedSolid[] blockingSolids { get; set; }
-        /// <summary>
-        /// for each blockingSolids[], a double is added to this list. So, 
-        /// blockingDistance is the distance between blockingSolids[0]
-        /// and blockingSolids[1]
-        /// </summary>
-        /// <value>
-        /// blockingDistance
-        /// </value>
-        internal double blockingDistance { get; set; }
+      /// <summary>
+      /// blockingSolids[0] is blocked by blockingSolids[1]
+      /// </summary>
+      /// <value>
+      /// blockingSolids
+      /// </value>
+      internal TessellatedSolid[] blockingSolids { get; set; }
+      /// <summary>
+      /// for each blockingSolids[], a double is added to this list. So, 
+      /// blockingDistance is the distance between blockingSolids[0]
+      /// and blockingSolids[1]
+      /// </summary>
+      /// <value>
+      /// blockingDistance
+      /// </value>
+      internal double blockingDistance { get; set; }
     }
 }

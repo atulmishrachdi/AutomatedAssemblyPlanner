@@ -87,11 +87,32 @@ namespace Assembly_Planner
             }
         }
 
-        private static List<double[]> FreeDirectionFinder(node node)
+        private static List<double[]> FreeGlobalDirectionFinder(node node)
         {
             var dirsG = new List<List<double[]>>();
             foreach (arc arc in node.arcs.Where(a => a is arc))
             {
+                var iniDirs = new List<double[]>();
+                var indexL0 = arc.localVariables.IndexOf(DisConstants.DirIndLowerBound);
+                var indexU0 = arc.localVariables.IndexOf(DisConstants.DirIndUpperBound);
+                if (node == arc.From)
+                    for (var i = indexL0 + 1; i < indexU0; i++)
+                        iniDirs.Add(Directions[(int)arc.localVariables[i]]);
+                else
+                    for (var i = indexL0 + 1; i < indexU0; i++)
+                        iniDirs.Add((Directions[(int)arc.localVariables[i]]).multiply(-1));
+                dirsG.Add(iniDirs);
+            }
+            return dirsG[0].Where(dir => dirsG.All(dirs => dirs.Any(d => Math.Abs(1 - d.dotProduct(dir)) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall))).ToList();
+        }
+        
+        private static List<double[]> FreeLocalDirectionFinder(node node, List<node> subgraph)
+        {
+            if (!subgraph.Contains(node)) return null;
+            var dirsG = new List<List<double[]>>();
+            foreach (arc arc in node.arcs.Where(a => a is arc))
+            {
+                if (!subgraph.Contains(arc.From) || !subgraph.Contains(arc.To)) continue;
                 var iniDirs = new List<double[]>();
                 var indexL0 = arc.localVariables.IndexOf(DisConstants.DirIndLowerBound);
                 var indexU0 = arc.localVariables.IndexOf(DisConstants.DirIndUpperBound);
