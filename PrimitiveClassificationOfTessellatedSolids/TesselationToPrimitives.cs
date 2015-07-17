@@ -132,11 +132,11 @@ namespace PrimitiveClassificationOfTessellatedSolids
                 }
                 else
                 {
-                    if (primitive.Area < maxFaceArea / 70) //12
-                    {
-                        primitives.Remove(primitive);
-                        i--;
-                    }
+                    //if (primitive.Area < maxFaceArea / 70) //12
+                    //{
+                     //   primitives.Remove(primitive);
+                      //  i--;
+                    //}
 
                 }
             }

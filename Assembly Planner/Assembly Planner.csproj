@@ -32,12 +32,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MIConvexHull, Version=1.0.10.1021, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\tvgl\packages\MIConvexHull.1.0.10.1021\lib\portable-net4+sl4+wp7+win8\MIConvexHull.dll</HintPath>
+    <Reference Include="MIConvexHull">
+      <HintPath>..\packages\MIConvexHull.1.0.10.1021\lib\portable-net4+sl4+wp7+win8\MIConvexHull.dll</HintPath>
     </Reference>
     <Reference Include="StarMath">
-      <HintPath>..\packages\StarMath.2.0.15.0217\lib\portable-net4+sl5+wp8+win8\StarMath.dll</HintPath>
+      <HintPath>..\packages\StarMath.2.0.15.0707\lib\portable-net4+sl5+wp8+win8\StarMath.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -90,6 +89,7 @@
     <Compile Include="GeometryReasoning\LiaisonGraphCreator.cs" />
     <Compile Include="GeometryReasoning\STLGeometryFunctions.cs" />
     <Compile Include="GeometryReasoning\StLReader.cs" />
+    <Compile Include="InitialGraphMaker\3Dto2D.cs" />
     <Compile Include="InitialGraphMaker\BlockingDetermination.cs" />
     <Compile Include="InitialGraphMaker\BoltAndGearDetector\BoltAndGearConstants.cs" />
     <Compile Include="InitialGraphMaker\BoltAndGearDetector\BoltAndGearDetection.cs" />
@@ -103,6 +103,7 @@
     <Compile Include="InitialGraphMaker\Icosahedron.cs" />
     <Compile Include="InitialGraphMaker\IcosahedronPro.cs" />
     <Compile Include="InitialGraphMaker\NonadjacentBlockingDetermination.cs" />
+    <Compile Include="InitialGraphMaker\NonadjacentBlockingDeterminationPro.cs" />
     <Compile Include="InitialGraphMaker\PrimitivePrimitiveInteractions.cs" />
     <Compile Include="PostProcessor\OptimalOrientation.cs" />
     <Compile Include="PostProcessor\PostProcessingConstnts.cs" />
@@ -123,7 +124,7 @@
     <Content Include="TessellationAndVoxelizationGeometryLibrary.XML" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\GitHub\GraphSynth\GraphSynthSourceFiles\GraphSynth.BaseClasses\GraphSynth.BaseClasses.csproj">
+    <ProjectReference Include="..\..\GraphSynth\GraphSynthSourceFiles\GraphSynth.BaseClasses\GraphSynth.BaseClasses.csproj">
       <Project>{d679f4e2-fd18-48ac-9c0c-b60155a61d37}</Project>
       <Name>GraphSynth.BaseClasses</Name>
     </ProjectReference>
@@ -132,9 +133,7 @@
       <Name>PrimitiveClassificationOfTessellatedSolids</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="MotionPlanning\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

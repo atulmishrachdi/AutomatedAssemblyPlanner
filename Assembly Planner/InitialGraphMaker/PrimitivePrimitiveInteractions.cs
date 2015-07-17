@@ -11,16 +11,21 @@ namespace Assembly_Planner
     internal class PrimitivePrimitiveInteractions
     {
         public static int c1;
-        internal static bool PrimitiveOverlap(List<PrimitiveSurface> solid1P, List<PrimitiveSurface> solid2P, List<int> dirInd)
+        internal static bool PrimitiveOverlap(List<PrimitiveSurface> solid1P, List<PrimitiveSurface> solid2P, List<int> dirInd, out List<PrimitiveSurface[]> overlappedPrimitives)
         {
             var overlap = false;
             var globlOverlappingCheck = dirInd.Count();
             c1 = 0;
             var c2 = 0;
+            var lastCheck = new PrimitiveSurface[2];
+            overlappedPrimitives = new List<PrimitiveSurface[]>();
             foreach (var primitiveA in solid1P)
             {
                 foreach (var primitiveB in solid2P)
                 {
+                    if (overlap)
+                        overlappedPrimitives.Add(lastCheck);
+                    lastCheck = new[] { primitiveA, primitiveB };
                     overlap = false;
                     c2++;
                     // 1=flat, 2 =cylinder, 3 = sphere, 4= cone
@@ -317,9 +322,9 @@ namespace Assembly_Planner
         public static bool CylinderCylinderOverlappingCheck(Cylinder primitiveA, Cylinder primitiveB, List<int> dirInd)
         {
             if (!primitiveA.IsPositive && primitiveB.IsPositive)
-                return NegCylinderPosCylinderOverlappingCheck(primitiveA, primitiveB, dirInd); 
+                return NegCylinderPosCylinderOverlappingCheck(primitiveA, primitiveB, dirInd,1); 
             if (primitiveA.IsPositive && !primitiveB.IsPositive)
-                return NegCylinderPosCylinderOverlappingCheck(primitiveB, primitiveA, dirInd);
+                return NegCylinderPosCylinderOverlappingCheck(primitiveB, primitiveA, dirInd,2);
             if (primitiveA.IsPositive && primitiveB.IsPositive)
                 return PosCylinderPosCylinderOverlappingCheck(primitiveA, primitiveB, dirInd);
             if (!primitiveA.IsPositive && !primitiveB.IsPositive) return false;
@@ -535,13 +540,17 @@ namespace Assembly_Planner
             return true;
         }
 
-        private static bool NegCylinderPosCylinderOverlappingCheck(Cylinder cylinder1, Cylinder cylinder2, List<int> dirInd)
+        private static bool NegCylinderPosCylinderOverlappingCheck(Cylinder cylinder1, Cylinder cylinder2, List<int> dirInd, int reference)
         {
             // this is actually positive cylinder with negative cylinder. primitiveA is negative cylinder and 
             // primitiveB is positive cylinder. Like a normal 
             // check the centerlines. Is the vector of the center lines the same? 
             // now check the radius. 
+
+            // Update: I need to consider one more case: half cylinders
             var overlap = true;
+            var partialCylinder1 = false;
+            var partialCylinder2 = false;
             if (Math.Abs(cylinder1.Axis.dotProduct(cylinder2.Axis)) - 1 < ConstantsPrimitiveOverlap.ParralelLines)
             {
                 // now centerlines are either parallel or the same. Now check and see if they are exactly the same
@@ -553,7 +562,7 @@ namespace Assembly_Planner
                     var axis = cylinder2.Axis[i];
                     if (Math.Abs(axis) < ConstantsPrimitiveOverlap.EqualToZero) // if a, b or c is zero
                     {
-                        if (Math.Abs(cylinder1.Anchor[i] - cylinder2.Anchor[i]) > ConstantsPrimitiveOverlap.EqualToZero)
+                        if (Math.Abs(cylinder1.Anchor[i] - cylinder2.Anchor[i]) > ConstantsPrimitiveOverlap.EqualToZero2)
                         {
                             overlap = false;
                             break;
@@ -593,14 +602,58 @@ namespace Assembly_Planner
                 }
             }
             if (!overlap) return false;
+            // is cylinder1 (negative) half? 
+            var sum = new double[] {0.0, 0.0, 0.0};
+            sum = cylinder1.Faces.Aggregate(sum, (current, face) => face.Normal.add(current));
+            if (Math.Sqrt((Math.Pow(sum[0], 2.0)) + (Math.Pow(sum[1], 2.0)) + (Math.Pow(sum[2], 2.0))) > 6)
+                partialCylinder1 = true;
             // only keep the directions along the axis of the cylinder. Keep the ones with the angle close to zero.
-            for (var i = 0; i < dirInd.Count; i++)
+            if (!partialCylinder1)
             {
-                var dir = DisassemblyDirections.Directions[dirInd[i]];
-                if (1 - Math.Abs(cylinder1.Axis.normalize().dotProduct(dir)) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall) 
-                    continue;
-                dirInd.Remove(dirInd[i]);
-                i--;
+                for (var i = 0; i < dirInd.Count; i++)
+                {
+                    var dir = DisassemblyDirections.Directions[dirInd[i]];
+                    if (1 - Math.Abs(cylinder1.Axis.normalize().dotProduct(dir)) <
+                        ConstantsPrimitiveOverlap.CheckWithGlobDirsParall)
+                        continue;
+                    dirInd.Remove(dirInd[i]);
+                    i--;
+                }
+            }
+            else
+            {
+                if (reference == 1) // cylinder1(negative) is reference
+                {
+                    for (var i = 0; i < dirInd.Count; i++)
+                    {
+                        var dir = DisassemblyDirections.Directions[dirInd[i]];
+                        if ((1 - Math.Abs(cylinder1.Axis.normalize().dotProduct(dir)) >
+                             ConstantsPrimitiveOverlap.CheckWithGlobDirsParall) &&
+                            cylinder1.Faces.All(
+                                f => ( Math.Abs(1 -dir.dotProduct(f.Normal))) > ConstantsPrimitiveOverlap.ParralelLines2))
+                        {
+                            dirInd.Remove(dirInd[i]);
+                            i--;
+                        }
+
+                    }
+                }
+                else // cylinder2(positive) is reference
+                {
+                    for (var i = 0; i < dirInd.Count; i++)
+                    {
+                        var dir = DisassemblyDirections.Directions[dirInd[i]];
+                        if ((1 - Math.Abs(cylinder1.Axis.normalize().dotProduct(dir)) >
+                             ConstantsPrimitiveOverlap.CheckWithGlobDirsParall) &&
+                            cylinder1.Faces.All(
+                                f => (Math.Abs(1 + dir.dotProduct(f.Normal))) > ConstantsPrimitiveOverlap.ParralelLines2))
+                        {
+                            dirInd.Remove(dirInd[i]);
+                            i--;
+                        }
+                    }
+                }
+
             }
             return true;
         }

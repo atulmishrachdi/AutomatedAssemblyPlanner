@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -15,7 +16,7 @@ namespace Assembly_Planner
             Dictionary<hyperarc, List<hyperarc>> blockingDic, List<option> gOptions)
         {
             var freeSCCs = blockingDic.Keys.Where(k => blockingDic[k].Count == 0).ToList();
-            var combinations = CombinationsCreator(freeSCCs);
+            var combinations = CombinationsCreatorPro(assemblyGraph, freeSCCs);
             var options = new List<option>();
             //AddingOptionsToGraph(assemblyGraph, combinations, seperate.nodes.Count);
             options.AddRange(AddingOptionsToGraph(combinations, seperate, options, gOptions));
@@ -33,7 +34,7 @@ namespace Assembly_Planner
                     freeSCCs.Clear();
                     foreach (var key in blockingDic.Keys)
                     {
-                        if (opt.Contains(key)) continue;
+                        if (opt.Contains(key) || blockingDic[key].Count==0) continue;
                         if (!blockingDic[key].All(bl => opt.Contains(bl))) continue;
                         var newOp = new HashSet<hyperarc>(opt) { key };
                         if (!cp1.Where(cp => cp.All(hy => newOp.Contains(hy))).Any(cp => newOp.All(cp.Contains)))
@@ -43,7 +44,6 @@ namespace Assembly_Planner
                     if (freeSCCs.Count == 0) continue;
                     combinations = CombinationsCreator(freeSCCs);
                     var combAndPar = AddingParents(opt, combinations);
-                    //AddingOptionsToGraph(assemblyGraph, combAndPar, seperate.nodes.Count);
                     options.AddRange(AddingOptionsToGraph(combAndPar, seperate, options, gOptions));
                     cp2.UnionWith(combAndPar);
                 }
@@ -58,7 +58,6 @@ namespace Assembly_Planner
 
             return options;
         }
-
 
         private static HashSet<option> AddingOptionsToGraph(HashSet<HashSet<hyperarc>> combAndPar, hyperarc seperate,
             List<option> options, List<option> gOptions)
@@ -135,5 +134,61 @@ namespace Assembly_Planner
             }
             return comb;
         }
+
+        private static HashSet<HashSet<hyperarc>> CombinationsCreatorPro(designGraph assemblyGraph, List<hyperarc> freeSCCs)
+        {
+            // The combinations must meet these two conditions:
+            //   1. The SCCs in the combinations must be physically connected to each other and connected to their parent.
+            //   2. or if they are not connected to each other, each of them individually needs to be connected to the parent.
+            var combinationsHash = new HashSet<HashSet<hyperarc>>();
+            var combinations = new List<List<hyperarc>>();
+            combinations.AddRange(freeSCCs.Select(ini => new List<hyperarc> {ini}));
+            
+            var doubleConnected = new List<List<hyperarc>>();
+            for (var i = 0; i < freeSCCs.Count - 1; i++)
+            {
+                for (var j = i + 1; j < freeSCCs.Count; j++)
+                {
+                    if (
+                        !assemblyGraph.arcs.Any(
+                            a =>
+                                (freeSCCs[i].nodes.Contains(a.From) && freeSCCs[j].nodes.Contains(a.To)) ||
+                                (freeSCCs[j].nodes.Contains(a.From) && freeSCCs[i].nodes.Contains(a.To)))) 
+                        continue;
+                    doubleConnected.Add(new List<hyperarc>{freeSCCs[i], freeSCCs[j]});
+                }
+            }
+            combinations.AddRange(doubleConnected);
+            var merged = MergeConnectedListOfHyperarcs(doubleConnected);
+            while (merged.Any())
+            {
+                combinations.AddRange(new List<List<hyperarc>>(merged));
+                merged = MergeConnectedListOfHyperarcs(merged);
+            }
+            foreach (var com in combinations)
+                combinationsHash.Add(new HashSet<hyperarc>(com));
+
+            return combinationsHash;
+        }
+
+        private static List<List<hyperarc>> MergeConnectedListOfHyperarcs(List<List<hyperarc>> groupsOfHyperarcs)
+        {
+            var merged = new List<List<hyperarc>>();
+            for (var i = 0; i < groupsOfHyperarcs.Count - 1; i++)
+            {
+                for (var j = i+1; j < groupsOfHyperarcs.Count; j++)
+                {
+                    if (!groupsOfHyperarcs[i].Any(hy => groupsOfHyperarcs[j].Contains(hy)))
+                        continue;
+                    // Merge them:
+                    var n = new List<hyperarc>(groupsOfHyperarcs[i]);
+                    n.AddRange(groupsOfHyperarcs[j].Where(hy=>!n.Contains(hy)));
+                    if (merged.Any(g => g.All(n.Contains) && n.All(g.Contains))) continue;
+                    merged.Add(n);
+                }
+            }
+            return merged;
+        }
+
     }
 }

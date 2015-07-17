@@ -16,11 +16,21 @@ namespace Assembly_Planner
         internal static List<TessellatedSolid> ScrewAndBoltDetector(
             Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive)
         {
-            var bolts = new List<TessellatedSolid>();
+            var fastener = new List<TessellatedSolid>();
             foreach (var solid in solidPrimitive.Keys)
-                if (solid.Name.Contains("Screw")) 
-                    bolts.Add(solid);
-            return bolts;
+                if (solid.Name.Contains("Screw"))
+                    fastener.Add(solid);
+                else
+                    if (solid.Name.Contains("ShaftCollar"))
+                        fastener.Add(solid);
+                    else
+                        if (solid.Name.Contains("DowellGrooved"))
+                            //if (solid.Name.Contains("-5") || solid.Name.Contains("-14")||solid.Name.Contains("-27")||solid.Name.Contains("-30"))
+                                //continue;
+                            //else
+                                fastener.Add(solid);
+            
+            return fastener;
             // Here are my thoughts about a bolt:
             // Since all of the threads are classified as cone, 
             //    if the number of cones are more than 30 percent of the total number of primitives
@@ -35,10 +45,10 @@ namespace Assembly_Planner
                 var read = Convert.ToString(Console.ReadLine());
                 if (read == "y")
                 {
-                    bolts.Add(solid);
+                    fastener.Add(solid);
                 }
             }
-            return bolts;
+            return fastener;
         }
 
         private static double[] BoltCenterLine(List<PrimitiveSurface> primitiveSurfaces)
