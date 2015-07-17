@@ -77,7 +77,7 @@ namespace AssemblyEvaluation
         public const double MaxPathForInfeasibleInstall = 999999.99999;
         public const double SameWithinError = 1e-9;
         public static double MinInterfaceSuccessRate = 0.8;
-        public static double boltinsertSpeed = 1; // just a guess. the unit is mm/s
+        public static double boltinsertSpeed = 2; // just a guess. the unit is mm/s
 
 
     }

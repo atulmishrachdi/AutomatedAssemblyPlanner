@@ -5,6 +5,7 @@ namespace AssemblyEvaluation
     public class Action
     {
         public double Time;
+        public double TimeSD;
         public List<Tool> Tools;
     }
     public class Secure : Action

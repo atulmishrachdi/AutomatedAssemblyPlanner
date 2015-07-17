@@ -9,73 +9,71 @@ namespace AssemblyEvaluation
     class TimeEvaluator
     {
         public const double TRANSFERSPEED = 0.8; // Transfer Speed: 0.1 (m/sec)
-
-        public double EvaluateTimeForInstall(List<arc> connectingArcs, double travelDistance, double insertionDistance,
-            SubAssembly newSubAsm)
+        
+        public List<double> EvaluateTimeAndSDForInstall(List<arc> connectingArcs, double travelDistance, double insertionDistance, SubAssembly newSubAsm)
         {
-            // get travel time
+            // 1. Install          units are in kg and m 
+            // a. travel time
+
+            var TimeAndSD = new List<double>();
             var movingMass = newSubAsm.Install.Moving.Mass/1000;
-            if (movingMass == 0.0) movingMass = 10.0;
-            // what's the most you can accelerate or decelerate this mass?
-            var maxAcceleration = Constants.MaxForce/movingMass;
-            // assuming that the moving subassembly should be stoppable within a small distance (e.g. 10mm), we can find the time to stop
-            // x - x_0 = (1/2)*a*t^2
-            var timeToStop = Math.Sqrt(Constants.StoppingDistance*2.0/maxAcceleration);
-            var travelSpeed = maxAcceleration*timeToStop;
-            if (travelSpeed > Constants.MaxTravelSpeed) travelSpeed = Constants.MaxTravelSpeed;
-            //return insertionDistance / insertionSpeed
-            //    + travelDistance / travelSpeed;
-
-            // weifeng
-            var traveltime = travelDistance/travelSpeed + 2*timeToStop;
-
-            // get oriantation time 
-            // need works
-
-            // get installation time
-            double installationTime = 0;
-            var listOfbots = new List<object>();
+            var movingVol = newSubAsm.Install.Moving.Volume/1000000;
             
+            //var movingVol = 1;
+            var movingSpeed = new double();
+            //var movingSpeed = 15.0;
+            if (movingMass <= 1)
+                movingSpeed = 1;
+            else if (movingSpeed > 1 && movingSpeed <= 15)
+                movingSpeed = movingMass * (-8.0 / 140000.0) + 148.0 / 140.0;
+            else movingSpeed = 0.2;
+            var traveltime = travelDistance/movingSpeed ;
+            var DisTraveltime = 0.05;
+
+            // b. contact info 
+            var insertiontime = new double();
+            var aligmentime = new double();
+            var DisAligmentime = new double();
+            if (movingVol <= 0.000001)
+            {
+                aligmentime = -4008 * movingVol + 5;
+                DisAligmentime = 1;
+            }
+            else if (movingVol <= 0.001)
+            {       
+                aligmentime = 3;
+                DisAligmentime = 1;
+            }
+                else
+            {
+                aligmentime = 54.1 * movingVol + 2.95;
+                DisAligmentime = movingVol*50+movingMass/100;
+            }
+
+            if (insertionDistance != 0)
+                insertiontime = (insertionDistance / 1000) / Constants.MaxInsertionSpeed;
+
+            double installationTime = traveltime + aligmentime + insertiontime;
+            double Disinstalltime = DisTraveltime + DisAligmentime;
+
+            // c. still need statbility
+
+
+            //2. Secure:
+            var bolttime = new double();
+            var DisBolttime = new double();
             foreach (var a in connectingArcs.Where(a=>a.localVariables.Contains(DisConstants.BoltDepth)))
             {
                 var boltLength = a.localVariables[a.localVariables.IndexOf(DisConstants.BoltDepth)+1];
-                installationTime = installationTime + boltLength / Constants.boltinsertSpeed;
-            }          
-            installationTime = installationTime + (insertionDistance / 1000) / Constants.MaxInsertionSpeed;
+                bolttime = bolttime + boltLength / Constants.boltinsertSpeed;
+                DisBolttime = DisBolttime + bolttime-boltLength / (Constants.boltinsertSpeed + 0.2);
+            }
 
-            // get handing time 
-            // Empirical data from: 
-            // Z. Yoosufani, M. Ruddy, G. Boothroyd, "Effect of part symmetry on manual assembly times", 
-            // Journal of Manufacturing Systems VOL. 2, No. 2
-
-            // Don't know the code for OOBB, I use the covxhul to get the size.
-            double handlingTimePenalty = 1;
-            var aa = newSubAsm.Install.Moving.CVXHull.Points;
-            double maxX = aa.Max(v => v.Position[0]);
-            double minX = aa.Min(v => v.Position[0]);
-            double maxY = aa.Max(v => v.Position[1]);
-            double minY = aa.Min(v => v.Position[1]);
-            double maxZ = aa.Max(v => v.Position[2]);
-            double minZ = aa.Min(v => v.Position[2]);
-            var lenths = new List<double>();
-            lenths.Add(Math.Abs(maxX - minX));
-            lenths.Add(Math.Abs(maxY - minY)); 
-            lenths.Add(Math.Abs(maxZ - minZ));
-            if (lenths.Max() >= 0 && lenths.Max() < 1)
-                handlingTimePenalty = 2;
-            else if (lenths.Max() >= 1 && lenths.Max() < 5)
-                handlingTimePenalty = 1.13;
-            else if (lenths.Max() >= 5 && lenths.Max() < 10)
-                handlingTimePenalty = 0.3;
-            else if (lenths.Max() >= 10 && lenths.Max() < 15)
-                handlingTimePenalty = 0.15;
-            else if (lenths.Max() >= 15 && lenths.Max() < 20)
-                handlingTimePenalty = 0.1;
-            else
-                handlingTimePenalty = 1;
-            var handlingTime = newSubAsm.Install.Moving.Mass * 0.0022 * (0.125 + 0.011 * handlingTimePenalty);//mass unit is in g(?), multiply 0.0022 to lb.
-            var totaltime = traveltime + installationTime + handlingTime;
-            return totaltime;
+            installationTime = installationTime + bolttime;
+            Disinstalltime = Disinstalltime + DisBolttime;
+            TimeAndSD.Add(installationTime);
+            TimeAndSD.Add(Disinstalltime);
+            return TimeAndSD;
         }
 
 

@@ -36,7 +36,7 @@ namespace Assembly_Planner
             NonadjacentBlockingDetermination.Run(assemblyGraph, solids, globalDirPool);
             
             //var solutions = RecursiveOptimizedSearch.Run(inputData, globalDirPool);
-            var solutions = OrderedDFS.Run(inputData, globalDirPool); // the output is the assembly sequence
+            var solutions = OrderedDFS.Run(inputData, globalDirPool,solids); // the output is the assembly sequence
             //var solutions = BeamSearch.Run(inputData, globalDirPool);
            
             //var reorientation = OptimalOrientation.Run(solutions);

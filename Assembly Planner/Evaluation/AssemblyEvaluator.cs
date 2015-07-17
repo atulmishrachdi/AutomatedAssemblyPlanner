@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using StarMathLib;
+using TVGL.IOFunctions;
 using TVGL;
 
 namespace AssemblyEvaluation
@@ -19,12 +20,14 @@ namespace AssemblyEvaluation
         private Dictionary<string, ConvexHull<Vertex, DefaultConvexFace<Vertex>>> convexHullForParts;
         private int Iterations;
         private readonly TimeEvaluator timeEvaluator;
+        private  Statblity subMovingPartFinder;
 
         #region Constructor
         public AssemblyEvaluator(Dictionary<string, ConvexHull<Vertex, DefaultConvexFace<Vertex>>> convexHullForParts)
         {
             //feasibility = new FeasibilityEvaluator();
             timeEvaluator = new TimeEvaluator();
+            subMovingPartFinder = new Statblity();
             this.convexHullForParts = convexHullForParts;
             //    reOrientations = new ReOrientations();
         }
@@ -32,21 +35,20 @@ namespace AssemblyEvaluation
         #endregion
 
 
-        public double Evaluate(AssemblyCandidate c, option opt, List<node> rest)
+        public double Evaluate(AssemblyCandidate c, option opt, List<node> rest, List<TessellatedSolid> solides)
         {
             // Set up moving and reference subassemblies
             var newSubAsm = c.Sequence.Update(opt, rest, convexHullForParts);
             var refNodes = newSubAsm.Install.Reference.PartNodes.Select(n => (node)c.graph[n]).ToList();
             var movingNodes = newSubAsm.Install.Moving.PartNodes.Select(n => (node)c.graph[n]).ToList();
             var install = new[] { refNodes, movingNodes };
-            
             var connectingArcs = c.graph.arcs.Where(a => ((movingNodes.Contains(a.To) && refNodes.Contains(a.From))
                                                          || (movingNodes.Contains(a.From) && refNodes.Contains(a.To)))).ToList();
             //if (connectingArcs.Count == 0) return -1;
             foreach (var a in connectingArcs)
             {
                 Updates.RemoveRepeatedFastenersMain(a, c.graph);
-                c.graph.removeArc(a);
+                c.graph.removeArc(a);    
             }
             if (Updates.EitherRefOrMovHasSeperatedSubassemblies(install))
                 return -1;
@@ -64,10 +66,20 @@ namespace AssemblyEvaluation
             newSubAsm.Install.InstallPoint = insertionPoint.Position;
 
             var travelDistance = 1;//m
+            var numofmovingdire = subMovingPartFinder.NumOfMovalbeDire(newSubAsm,c,solides);
+                                
             //PathDeterminationEvaluator.FindTravelDistance(newSubAsm, insertionDirection, insertionPoint);
+                      
             newSubAsm.Install.Time =
-                timeEvaluator.EvaluateTimeForInstall(connectingArcs, travelDistance, insertionDistance, newSubAsm);
+                timeEvaluator.EvaluateTimeAndSDForInstall(connectingArcs, travelDistance, insertionDistance, newSubAsm)[0];
+            newSubAsm.Install.TimeSD =
+                timeEvaluator.EvaluateTimeAndSDForInstall(connectingArcs, travelDistance, insertionDistance, newSubAsm)[1];
             c.f3 += newSubAsm.Install.Time;
+                                                
+            var movableparts = new List<node>();
+            //movableparts = 
+            
+            //c.f4 += newSubAsm.Install.TimeSD;
             //c.f4 = timeEvaluator.EvaluateTimeOfLongestBranch(c.Sequence);
             if (double.IsNaN(insertionDirection.Position[0])) Console.WriteLine();
 

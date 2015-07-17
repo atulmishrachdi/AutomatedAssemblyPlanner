@@ -7,14 +7,17 @@ using AssemblyEvaluation;
 using GraphSynth;
 using GraphSynth.Representation;
 using GraphSynth.Search;
+using TVGL.IOFunctions;
+using TVGL;
 
 namespace Assembly_Planner
 {
     class OrderedDFS
     {
+        private TessellatedSolid tessellatedSolid;
         public static Dictionary<int, List<List<node>>> SccTracker = new Dictionary<int, List<List<node>>>();
         protected static AssemblyEvaluator assemblyEvaluator;
-        internal static List<AssemblyCandidate> Run(ConvexHullAndBoundingBox inputData, List<int> globalDirPool)
+        internal static List<AssemblyCandidate> Run(ConvexHullAndBoundingBox inputData, List<int> globalDirPool,List<TessellatedSolid> solides )
         {
             var assemblyGraph = inputData.graphAssembly;
             //DisassemblyDirections.Directions = TemporaryDirections();
@@ -61,7 +64,7 @@ namespace Assembly_Planner
                     SearchProcess.transferLmappingToChild(child.graph, current.graph, opt);
                     var rest = Updates.AddSecondHyperToOption(child, opt);
                     Updates.ApplyChild(child, opt);
-                    if (assemblyEvaluator.Evaluate(child, opt, rest) > 0)
+                    if (assemblyEvaluator.Evaluate(child, opt, rest,solides) > 0)
                         //lock (candidates)
                             candidates.Add(child.performanceParams, child);
                     child.addToRecipe(opt);
@@ -89,7 +92,7 @@ namespace Assembly_Planner
 
         protected static bool isCurrentTheGoal(AssemblyCandidate current)
         {
-            return current.graph.hyperarcs.Where(h => h.localLabels.Contains("Done")).Count() == 5;
+            return current.graph.hyperarcs.Where(h => h.localLabels.Contains("Done")).Count() == 3;
         }
 
         private static void TemporaryFixingSequence(AssemblyCandidate goal)

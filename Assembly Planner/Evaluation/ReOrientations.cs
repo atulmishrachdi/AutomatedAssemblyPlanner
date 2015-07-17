@@ -19,6 +19,7 @@ namespace AssemblyEvaluation
                                           prevArc.localVariables[i + 2],
                                           prevArc.localVariables[i + 3]);
             return insertionAxis1 != insertionAxis2;
+
         }
     }
 }

@@ -87,7 +87,7 @@ namespace Assembly_Planner
             }
         }
 
-        private static List<double[]> FreeGlobalDirectionFinder(node node)
+        public static List<double[]> FreeGlobalDirectionFinder(node node)
         {
             var dirsG = new List<List<double[]>>();
             foreach (arc arc in node.arcs.Where(a => a is arc))
@@ -106,7 +106,7 @@ namespace Assembly_Planner
             return dirsG[0].Where(dir => dirsG.All(dirs => dirs.Any(d => Math.Abs(1 - d.dotProduct(dir)) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall))).ToList();
         }
         
-        private static List<double[]> FreeLocalDirectionFinder(node node, List<node> subgraph)
+        public static List<double[]> FreeLocalDirectionFinder(node node, List<node> subgraph)
         {
             if (!subgraph.Contains(node)) return null;
             var dirsG = new List<List<double[]>>();
