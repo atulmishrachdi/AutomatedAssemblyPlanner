@@ -64,6 +64,7 @@ namespace AssemblyEvaluation
         public const int BOXDIMENSIONS = -5000; //??
         public const int WEIGHT = -6000;
         public const int VOLUME = -6001;
+        public const int CENTEROFMASS = -6005;
         public const int TRANSLATION = -7000;
         public const int ORDERSCORE = -8000;
 

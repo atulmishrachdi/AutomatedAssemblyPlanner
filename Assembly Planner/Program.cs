@@ -17,9 +17,11 @@ namespace Assembly_Planner
         {
             var inputDir =
                 //"../../../Test/Cube";
-                //"../../../Test/Pump Assembly";
+                "../../../Test/Pump Assembly";
+              // "../../../Test/3-parts-statbility";
+            
                 //"../../../Test/Double";
-                "../../../Test/PumpWExtention";
+                //"../../../Test/PumpWExtention";
                 //"../../../Test/FoodPackagingMachine";
                 //"../../../Test/FPM2";
             var solids = GetSTLs(inputDir);
@@ -31,7 +33,7 @@ namespace Assembly_Planner
             //SaveTheGraph(assemblyGraph);
 
             var inputData = new ConvexHullAndBoundingBox(inputDir, assemblyGraph);
-            //Updates.AddPartsProperties(inputDir, assemblyGraph);
+            Updates.AddPartsProperties(inputDir, assemblyGraph);
             //NonadjacentBlockingDeterminationPro.Run(assemblyGraph, solids, globalDirPool);
             NonadjacentBlockingDetermination.Run(assemblyGraph, solids, globalDirPool);
             
