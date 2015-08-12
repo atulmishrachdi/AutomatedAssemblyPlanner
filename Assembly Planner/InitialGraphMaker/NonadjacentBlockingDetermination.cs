@@ -27,10 +27,13 @@ namespace Assembly_Planner
             List<TessellatedSolid> solids, List<int> gDir)
         {
 
-            foreach (var dir in gDir)
+            Parallel.ForEach(gDir, dir =>
+            //foreach (var dir in gDir)
             {
                 var direction = DisassemblyDirections.Directions[dir];
                 var blockingsForDirection = new List<NonAdjacentBlockings>();
+
+                //Parallel.ForEach(solids.Where(s => graph.nodes.Any(n => n.name == s.Name)), solid =>
                 foreach (var solid in solids.Where(s => graph.nodes.Any(n => n.name == s.Name)))
                 {
                     // now find the blocking parts
@@ -41,7 +44,7 @@ namespace Assembly_Planner
                                 new AssemblyEvaluation.Vertex(vertex.Position[0], vertex.Position[1], vertex.Position[2]),
                                 new Vector(direction[0], direction[1], direction[2])));
 
-                    foreach (var solidBlocking in 
+                    foreach (var solidBlocking in
                         solids.Where(s => graph.nodes.Any(n => n.name == s.Name) // it is not fastener
                                           && s != solid // it is not the same as current solid 
                                           &&
@@ -77,7 +80,7 @@ namespace Assembly_Planner
                     }
                 }
                 NonAdjacentBlocking.Add(dir, blockingsForDirection);*/
-                if (!BoundingBoxBlocking(direction, solidBlocking, solid)) continue; //there is a problem with this code
+                        if (!BoundingBoxBlocking(direction, solidBlocking, solid)) continue; //there is a problem with this code
                         var distanceToTheClosestFace = double.PositiveInfinity;
                         var overlap = false;
                         if (BlockingDetermination.ConvexHullOverlap(solid, solidBlocking))
@@ -136,8 +139,11 @@ namespace Assembly_Planner
                             });
                     }
                 }
+                //);
+                lock (NonAdjacentBlocking)
                 NonAdjacentBlocking.Add(dir, blockingsForDirection);
             }
+            );
         }
 
 
