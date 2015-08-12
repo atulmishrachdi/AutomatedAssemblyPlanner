@@ -73,8 +73,8 @@ namespace AssemblyEvaluation
         public const double StoppingDistance = 0.01; // in m (or 10 mm) distance to stop any object
         public const double MaxTravelSpeed = 1.0; // 1 meter per second
         public const double MaxInsertionSpeed = 0.2; // m per second
-        public const double NearlyParallelFace = 0.02; //equivalent to 88.85 degrees
-        public const double NearlyOnLine = 0.0005; // about 178.8 degrees
+        public const double NearlyParallelFace = 0.03; //equivalent to 88.85 degrees //0.02
+        public const double NearlyOnLine = 0.005; // about 178.8 degrees  0.0005
         public const double MaxPathForInfeasibleInstall = 999999.99999;
         public const double SameWithinError = 1e-9;
         public static double MinInterfaceSuccessRate = 0.8;

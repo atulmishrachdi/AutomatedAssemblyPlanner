@@ -17,12 +17,12 @@ namespace Assembly_Planner
         {
             var inputDir =
                 //"../../../Test/Cube";
-                "../../../Test/Pump Assembly";
-              // "../../../Test/3-parts-statbility";
-            
-                //"../../../Test/Double";
+                //"../../../Test/Pump Assembly";
+                // "../../../Test/3-parts-statbility";
+                //"../../../Test/Double"
+                //"../../../Test/Simple-Test";
                 //"../../../Test/PumpWExtention";
-                //"../../../Test/FoodPackagingMachine";
+                "../../../Test/FoodPackagingMachine";
                 //"../../../Test/FPM2";
             var solids = GetSTLs(inputDir);
             var assemblyGraph = new designGraph();
@@ -33,7 +33,7 @@ namespace Assembly_Planner
             //SaveTheGraph(assemblyGraph);
 
             var inputData = new ConvexHullAndBoundingBox(inputDir, assemblyGraph);
-            Updates.AddPartsProperties(inputDir, assemblyGraph);
+            //Updates.AddPartsProperties(inputDir, assemblyGraph);
             //NonadjacentBlockingDeterminationPro.Run(assemblyGraph, solids, globalDirPool);
             NonadjacentBlockingDetermination.Run(assemblyGraph, solids, globalDirPool);
             
@@ -53,7 +53,7 @@ namespace Assembly_Planner
             var setting = new GlobalSettings();
             var sa = new BasicFiler(setting.InputDir, setting.OutputDir, setting.RulesDir);
             sa.outputDirectory = outputDirectory;
-            sa.Save("graph.gxml", assemblyGraph, false);
+            sa.Save("SimpleTestGraph.gxml", assemblyGraph, false);
         }
 
         private static List<TessellatedSolid> GetSTLs(string InputDir)

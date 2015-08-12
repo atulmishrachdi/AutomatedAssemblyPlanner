@@ -18,7 +18,7 @@ namespace Assembly_Planner
         {
             var fastener = new List<TessellatedSolid>();
             foreach (var solid in solidPrimitive.Keys)
-                if (solid.Name.Contains("Screw"))
+                if (solid.Name.Contains("Screw") || solid.Name.Contains("Test - Part-S"))
                     fastener.Add(solid);
                 else
                     if (solid.Name.Contains("ShaftCollar"))

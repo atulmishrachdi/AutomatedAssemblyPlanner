@@ -44,10 +44,16 @@ namespace Assembly_Planner
                     depth = 27;
                     radius = 6;
                 }
+                else if (fastener.Name.Contains("S1") || fastener.Name.Contains("S2"))
+                {
+                    RD = 38;
+                    depth = 47;
+                    radius = 4;
+                }
                 else
                 {
-                    RD = 316;
-                    depth = 23;
+                    RD = 38;
+                    depth = 17;
                     radius = 2.5;
                 }
                 AddRemovalInformationToArcs(assemblyGraph, lockedByTheFastener, RD, depth, radius);

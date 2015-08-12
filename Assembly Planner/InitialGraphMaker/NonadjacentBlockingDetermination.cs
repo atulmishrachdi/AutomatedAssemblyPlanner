@@ -26,18 +26,20 @@ namespace Assembly_Planner
         internal static void Run(designGraph graph,
             List<TessellatedSolid> solids, List<int> gDir)
         {
-            
+
             foreach (var dir in gDir)
             {
                 var direction = DisassemblyDirections.Directions[dir];
                 var blockingsForDirection = new List<NonAdjacentBlockings>();
-                foreach (var solid in solids.Where(s=> graph.nodes.Any(n=>n.name == s.Name)))
+                foreach (var solid in solids.Where(s => graph.nodes.Any(n => n.name == s.Name)))
                 {
                     // now find the blocking parts
                     var rays = new List<Ray>();
                     foreach (var vertex in solid.ConvexHullVertices)
-                        rays.Add(new Ray(new AssemblyEvaluation.Vertex(vertex.Position[0], vertex.Position[1], vertex.Position[2]),
-                                        new Vector(direction[0], direction[1], direction[2])));
+                        rays.Add(
+                            new Ray(
+                                new AssemblyEvaluation.Vertex(vertex.Position[0], vertex.Position[1], vertex.Position[2]),
+                                new Vector(direction[0], direction[1], direction[2])));
 
                     foreach (var solidBlocking in 
                         solids.Where(s => graph.nodes.Any(n => n.name == s.Name) // it is not fastener
@@ -47,16 +49,18 @@ namespace Assembly_Planner
                                               (a.From.name == solid.Name && a.To.name == s.Name) ||
                                               (a.From.name == s.Name && a.To.name == solid.Name))))
                     {
-                        if (!BoundingBoxBlocking(direction, solidBlocking, solid)) continue; //there is a problem with this code
+                        /*if (!BoundingBoxBlocking(direction, solidBlocking, solid))
+                            continue; //there is a problem with this code
                         var distanceToTheClosestFace = double.PositiveInfinity;
                         var overlap = false;
-                        if (BlockingDetermination.ConvexHullOverlap(solid, solidBlocking))
+                        foreach (var ray in rays)
                         {
-                            foreach (var ray in rays)
+                            if (solidBlocking.ConvexHullFaces.Any(f => RayIntersectsWithFace2(ray, f)))
+                                //now find the faces that intersect with the ray and find the distance between them
                             {
                                 foreach (
                                     var blockingPolygonalFace in
-                                        solidBlocking.Faces.Where(f => RayIntersectsWithFace(ray, f)).ToList())
+                                        solidBlocking.Faces.Where(f => RayIntersectsWithFace2(ray, f)).ToList())
                                 {
                                     overlap = true;
                                     var d = DistanceToTheFace(ray.Position, blockingPolygonalFace);
@@ -64,20 +68,62 @@ namespace Assembly_Planner
                                 }
                             }
                         }
+                        if (overlap)
+                            blockingsForDirection.Add(new NonAdjacentBlockings
+                            {
+                                blockingSolids = new[] {solid, solidBlocking},
+                                blockingDistance = distanceToTheClosestFace
+                            });
+                    }
+                }
+                NonAdjacentBlocking.Add(dir, blockingsForDirection);*/
+                if (!BoundingBoxBlocking(direction, solidBlocking, solid)) continue; //there is a problem with this code
+                        var distanceToTheClosestFace = double.PositiveInfinity;
+                        var overlap = false;
+                        if (BlockingDetermination.ConvexHullOverlap(solid, solidBlocking))
+                        {
+                            foreach (var ray in rays)
+                            {
+                                //var m = solidBlocking.Faces.Where(f => RayIntersectsWithFace3(ray, f)).ToList();
+                                //var f55 = new List<double>();
+                                //foreach (var d in m)
+                                //{
+                                //    f55.Add(ray.Direction.dotProduct(d.Normal));
+                                //}
+                                foreach (
+                                    var blockingPolygonalFace in
+                                        solidBlocking.Faces.Where(f => RayIntersectsWithFace3(ray, f)).ToList())
+                                {
+                                    var d = DistanceToTheFace(ray.Position, blockingPolygonalFace);
+                                    //if (d < distanceToTheClosestFace) distanceToTheClosestFace = d;
+                                    if (d < 0) continue;
+                                    overlap = true;
+                                    break;
+                                }
+                            }
+                        }
                         else
                         {
                             foreach (var ray in rays)
                             {
-                                if (solidBlocking.ConvexHullFaces.Any(f => RayIntersectsWithFace(ray, f)))
+                                if (solidBlocking.ConvexHullFaces.Any(f => RayIntersectsWithFace3(ray, f)))
                                 //now find the faces that intersect with the ray and find the distance between them
                                 {
+                                    //var m = solidBlocking.Faces.Where(f => RayIntersectsWithFace3(ray, f)).ToList();
+                                    //var f55 = new List<double>();
+                                    //foreach (var d in m)
+                                    //{
+                                    //    f55.Add(ray.Direction.dotProduct(d.Normal));
+                                    //}
                                     foreach (
                                         var blockingPolygonalFace in
-                                            solidBlocking.Faces.Where(f => RayIntersectsWithFace(ray, f)).ToList())
+                                            solidBlocking.Faces.Where(f => RayIntersectsWithFace3(ray, f)).ToList())
                                     {
-                                        overlap = true;
                                         var d = DistanceToTheFace(ray.Position, blockingPolygonalFace);
-                                        if (d < distanceToTheClosestFace) distanceToTheClosestFace = d;
+                                        //if (d < distanceToTheClosestFace) distanceToTheClosestFace = d;
+                                        if (d < 0) continue;
+                                        overlap = true;
+                                        break;
                                     }
                                 }
                             }
@@ -237,8 +283,9 @@ namespace Assembly_Planner
 
         public static bool RayIntersectsWithFace2(Ray ray, PolygonalFace face)
         {
+            if (ray.Direction.dotProduct(face.Normal) > -0.06) return false;
             var raysPointOnFacePlane = MiscFunctions.PointOnPlaneFromRay(face.Normal,
-                face.Center.dotProduct(face.Normal), ray.Position, ray.Direction);
+                face.Vertices[0].Position.dotProduct(face.Normal), ray.Position, ray.Direction);
             if (raysPointOnFacePlane == null) return false;
 
             var crossProductsToCorners = new List<double[]>();
@@ -259,11 +306,36 @@ namespace Assembly_Planner
             return true;
         }
 
+        public static bool RayIntersectsWithFace3(Ray ray, PolygonalFace face)
+        {
+            if (ray.Direction.dotProduct(face.Normal) > -0.04) return false;
+            //var point = new double[] { (face.Vertices[0].Position[0] + face.Vertices[1].Position[0] + face.Vertices[2].Position[0]) / 3.0, 
+            //    (face.Vertices[0].Position[1] + face.Vertices[1].Position[1] + face.Vertices[2].Position[2]) / 3.0, 
+            //    (face.Vertices[0].Position[2] + face.Vertices[1].Position[2] + face.Vertices[2].Position[2]) / 3.0 };
+            var point = face.Vertices[0].Position;
+            var w = new double[] { ray.Position[0] - point[0], ray.Position[1] - point[1], ray.Position[2] - point[2] };
+            var s1 = (face.Normal.dotProduct(w)) / (face.Normal.dotProduct(ray.Direction));
+            //var v = new double[] { w[0] + s1 * ray.Direction[0] + point[0], w[1] + s1 * ray.Direction[1] + point[1], w[2] + s1 * ray.Direction[2] + point[2] };
+            var v = new double[] { ray.Position[0] - s1 * ray.Direction[0], ray.Position[1] - s1 * ray.Direction[1], ray.Position[2] - s1 * ray.Direction[2] };
+            
+            if (v == null) return false;
+            foreach (var corner in face.Vertices)
+            {
+                var otherCorners = face.Vertices.Where(ver => ver != corner).ToList();
+                var v1 = otherCorners[0].Position.subtract(corner.Position);
+                var v2 = otherCorners[1].Position.subtract(corner.Position);
+                var v0 = v.subtract(corner.Position);
+                if (v1.crossProduct(v0).dotProduct(v2.crossProduct(v0)) > -0.09)
+                    return false;
+            }
+            return true;
+
+        }
 
         private static double DistanceToTheFace(double[] p, PolygonalFace blockingPolygonalFace)
         {
             return
-                Math.Abs(blockingPolygonalFace.Normal.dotProduct(p.subtract(blockingPolygonalFace.Vertices[0].Position)));
+                blockingPolygonalFace.Normal.dotProduct(p.subtract(blockingPolygonalFace.Vertices[0].Position));
         }
 
 
@@ -273,33 +345,19 @@ namespace Assembly_Planner
             // solid1 is Reference and solid2 is Moving
             finDirs = new List<int>();
             infDirs = new List<int>();
-
-            var aa = new List<double>();
             foreach (var dir in localDirInd)
             {
                 var direction = DisassemblyDirections.Directions[dir];
                 var rays = new List<Ray>();
-                foreach (var vertex in solid2.Vertices)
+                foreach (var vertex in solid2.ConvexHullVertices)
                     rays.Add(new Ray(new AssemblyEvaluation.Vertex(vertex.Position[0], vertex.Position[1], vertex.Position[2]),
                                     new Vector(direction[0], direction[1], direction[2])));
-                //if (rays.Any(ray => solid1.Faces.Any(f => RayIntersectsWithFace(ray, f))))
-                foreach (var ray in rays)
+                if (rays.Any(ray => solid1.Faces.Any(f => RayIntersectsWithFace3(ray, f) && DistanceToTheFace(ray.Position, f) > 0)))
                 {
-                    foreach (var f in solid1.Faces)
-                    {
-                        if (RayIntersectsWithFace(ray, f))
-                        {
-                            finDirs.Add(dir);
-                            aa.Add(DistanceToTheFace(ray.Position, f));
-                        }
-                    }
+                   finDirs.Add(dir);
                 }
-                //{
-                //   finDirs.Add(dir);
-                //    var a = DistanceToTheFace()
-                // }
-                // else
-                //    infDirs.Add(dir);
+                else
+                    infDirs.Add(dir);
             }
         }
     }
