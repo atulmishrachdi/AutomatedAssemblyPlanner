@@ -12,7 +12,7 @@ namespace Assembly_Planner
     {
         static List<hyperarc> Preceedings = new List<hyperarc>();
         private static int co;
-
+        private static List<hyperarc> visited = new List<hyperarc>();
         internal static Dictionary<hyperarc, List<hyperarc>> DirectionalBlockingGraph(designGraph assemblyGraph, hyperarc seperate, int cndDirInd)
         {
             // So, I am trying to make the DBG for for each seperate hyperarc. 
@@ -219,6 +219,7 @@ namespace Assembly_Planner
                 co = 0;
                 PreceedingFinder(sccHy, blockingDic);
                 Preceedings = Updates.UpdatePreceedings(Preceedings);
+                visited.Clear();
                 var cpy = new List<hyperarc>(Preceedings);
                 newBlocking.Add(sccHy, cpy);
             }
@@ -230,7 +231,11 @@ namespace Assembly_Planner
             if (co != 1)
                 Preceedings.Add(sccHy);
             foreach (var value in blockingDic[sccHy])
+            {
+                if (visited.Contains(value)) continue;
+                visited.Add(value);
                 PreceedingFinder(value, blockingDic);
+            }
         }
     }
 }

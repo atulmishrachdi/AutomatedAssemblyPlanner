@@ -80,7 +80,7 @@ namespace Assembly_Planner
                     }
                 }
                 NonAdjacentBlocking.Add(dir, blockingsForDirection);*/
-                        if (!BoundingBoxBlocking(direction, solidBlocking, solid)) continue; //there is a problem with this code
+                        if (!BoundingBoxBlocking(direction, solidBlocking, solid)) continue;
                         var distanceToTheClosestFace = double.PositiveInfinity;
                         var overlap = false;
                         if (BlockingDetermination.ConvexHullOverlap(solid, solidBlocking))
@@ -355,10 +355,16 @@ namespace Assembly_Planner
             {
                 var direction = DisassemblyDirections.Directions[dir];
                 var rays = new List<Ray>();
-                foreach (var vertex in solid2.ConvexHullVertices)
+                foreach (var vertex in solid2.Vertices)
                     rays.Add(new Ray(new AssemblyEvaluation.Vertex(vertex.Position[0], vertex.Position[1], vertex.Position[2]),
                                     new Vector(direction[0], direction[1], direction[2])));
-                if (rays.Any(ray => solid1.Faces.Any(f => RayIntersectsWithFace3(ray, f) && DistanceToTheFace(ray.Position, f) > 0)))
+                var direction2 = DisassemblyDirections.Directions[dir].multiply(-1.0);
+                var rays2 = new List<Ray>();
+                foreach (var vertex in solid1.Vertices)
+                    rays2.Add(new Ray(new AssemblyEvaluation.Vertex(vertex.Position[0], vertex.Position[1], vertex.Position[2]),
+                                    new Vector(direction2[0], direction2[1], direction2[2])));
+                if (rays.Any(ray => solid1.Faces.Any(f => RayIntersectsWithFace3(ray, f) && DistanceToTheFace(ray.Position, f) > 0))||
+                    rays2.Any(ray => solid2.Faces.Any(f => RayIntersectsWithFace3(ray, f) && DistanceToTheFace(ray.Position, f) > 0)))
                 {
                    finDirs.Add(dir);
                 }

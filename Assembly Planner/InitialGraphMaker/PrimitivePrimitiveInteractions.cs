@@ -494,8 +494,9 @@ namespace Assembly_Planner
             // if there is any triangle on the cylinder with a parralel normal to the flat patch (and opposite direction). And then
             // if the distance between them is close to zero, then, check if they overlap o not.
             if (!cylinder.IsPositive) return false;
-            var r = new Random();
-            var rndFaceB = flat.Faces[r.Next(flat.Faces.Count)];
+            //var r = new Random();
+            //var rndFaceB = flat.Faces[r.Next(flat.Faces.Count)];
+            var rndFaceB = flat.Faces[0];
             var overlap = false;
             foreach (var cylFace in cylinder.Faces)
             {
@@ -517,7 +518,7 @@ namespace Assembly_Planner
                 for (var i = 0; i < dirInd.Count; i++)
                 {
                     var dir = DisassemblyDirections.Directions[dirInd[i]];
-                    if (flat.Normal.dotProduct(dir) < ConstantsPrimitiveOverlap.CheckWithGlobDirs)
+                    if (flat.Normal.dotProduct(dir) < 0.0)//ConstantsPrimitiveOverlap.CheckWithGlobDirs)
                     {
                         dirInd.Remove(dirInd[i]);
                         i--;
@@ -529,7 +530,7 @@ namespace Assembly_Planner
                 for (var i = 0; i < dirInd.Count; i++)
                 {
                     var dir = DisassemblyDirections.Directions[dirInd[i]];
-                    if (flat.Normal.dotProduct(dir) > ConstantsPrimitiveOverlap.CheckWithGlobDirs)
+                    if (flat.Normal.dotProduct(dir) > 0.0)//ConstantsPrimitiveOverlap.CheckWithGlobDirs)
                     {
                         dirInd.Remove(dirInd[i]);
                         i--;
