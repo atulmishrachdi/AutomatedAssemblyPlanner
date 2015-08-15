@@ -314,17 +314,12 @@ namespace Assembly_Planner
 
         public static bool RayIntersectsWithFace3(Ray ray, PolygonalFace face)
         {
-            if (ray.Direction.dotProduct(face.Normal) > -0.04) return false;
-            //var point = new double[] { (face.Vertices[0].Position[0] + face.Vertices[1].Position[0] + face.Vertices[2].Position[0]) / 3.0, 
-            //    (face.Vertices[0].Position[1] + face.Vertices[1].Position[1] + face.Vertices[2].Position[2]) / 3.0, 
-            //    (face.Vertices[0].Position[2] + face.Vertices[1].Position[2] + face.Vertices[2].Position[2]) / 3.0 };
+            if (ray.Direction.dotProduct(face.Normal) > -0.06) return false;
             var point = face.Vertices[0].Position;
             var w = new double[] { ray.Position[0] - point[0], ray.Position[1] - point[1], ray.Position[2] - point[2] };
             var s1 = (face.Normal.dotProduct(w)) / (face.Normal.dotProduct(ray.Direction));
             //var v = new double[] { w[0] + s1 * ray.Direction[0] + point[0], w[1] + s1 * ray.Direction[1] + point[1], w[2] + s1 * ray.Direction[2] + point[2] };
             var v = new double[] { ray.Position[0] - s1 * ray.Direction[0], ray.Position[1] - s1 * ray.Direction[1], ray.Position[2] - s1 * ray.Direction[2] };
-            
-            if (v == null) return false;
             foreach (var corner in face.Vertices)
             {
                 var otherCorners = face.Vertices.Where(ver => ver != corner).ToList();
@@ -355,12 +350,12 @@ namespace Assembly_Planner
             {
                 var direction = DisassemblyDirections.Directions[dir];
                 var rays = new List<Ray>();
-                foreach (var vertex in solid2.Vertices)
+                foreach (var vertex in solid2.ConvexHullVertices)
                     rays.Add(new Ray(new AssemblyEvaluation.Vertex(vertex.Position[0], vertex.Position[1], vertex.Position[2]),
                                     new Vector(direction[0], direction[1], direction[2])));
                 var direction2 = DisassemblyDirections.Directions[dir].multiply(-1.0);
                 var rays2 = new List<Ray>();
-                foreach (var vertex in solid1.Vertices)
+                foreach (var vertex in solid1.ConvexHullVertices)
                     rays2.Add(new Ray(new AssemblyEvaluation.Vertex(vertex.Position[0], vertex.Position[1], vertex.Position[2]),
                                     new Vector(direction2[0], direction2[1], direction2[2])));
                 if (rays.Any(ray => solid1.Faces.Any(f => RayIntersectsWithFace3(ray, f) && DistanceToTheFace(ray.Position, f) > 0))||

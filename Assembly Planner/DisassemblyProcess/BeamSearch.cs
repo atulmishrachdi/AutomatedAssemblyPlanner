@@ -57,7 +57,7 @@ namespace Assembly_Planner
                         SearchProcess.transferLmappingToChild(child.graph, current.graph, opt);
                         var rest = Updates.AddSecondHyperToOption(child,opt);
                         Updates.ApplyChild(child, opt);
-                        if (assemblyEvaluator.Evaluate(child, opt,rest) > 0)
+                        //if (assemblyEvaluator.Evaluate(child, opt,rest) > 0)
                             lock (candidates)
                                 candidates.Add(child.performanceParams, child);
                         child.addToRecipe(opt);

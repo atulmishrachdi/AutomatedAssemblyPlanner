@@ -30,10 +30,12 @@ namespace Assembly_Planner
 
 
 
+            //Parallel.ForEach(parts, solid =>
             foreach (var solid in parts)
             {
                 //    if (solid.Faces.Count() == 2098 || solid.Faces.Count() == 896 || solid.Faces.Count() == 2096) continue;
                 var solidPrim = TesselationToPrimitives.Run(solid);
+                //lock (partPrimitive)
                 partPrimitive.Add(solid, solidPrim);
                 //     var cones = solidPrim.Where(p => p is Cone).ToList();
                 //     double coneFacesCount = cones.Sum(c => c.Faces.Count);
@@ -44,7 +46,7 @@ namespace Assembly_Planner
                 //     output.Add(new[] {(solid.Faces.Count()/solid.SurfaceArea).ToString()}); //(coneFacesCount / solid.Faces.Count()).ToString(), 
                 //(coneAndCylinderArea/solid.SurfaceArea).ToString(), (flatArea/solid.SurfaceArea).ToString() });
             }
-
+                //);
 
 
             /*int length = output.Count;
@@ -136,13 +138,13 @@ namespace Assembly_Planner
             foreach (var f in a.ConvexHullFaces)
             {
                 var dStar = f.Normal.dotProduct(f.Vertices[0].Position);
-                if (b.ConvexHullVertices.All(pt => (f.Normal.dotProduct(pt.Position)) > dStar))
+                if (b.ConvexHullVertices.All(pt => (f.Normal.dotProduct(pt.Position)) > dStar+0.00001))
                     return false;
             }
             foreach (var f in b.ConvexHullFaces)
             {
                 var dStar = f.Normal.dotProduct(f.Vertices[0].Position);
-                if (a.ConvexHullVertices.All(pt => (f.Normal.dotProduct(pt.Position)) > dStar))
+                if (a.ConvexHullVertices.All(pt => (f.Normal.dotProduct(pt.Position)) > dStar + 0.00001))
                     return false;
             }
             return true;
