@@ -46,6 +46,19 @@ namespace Assembly_Planner
             return edges2D;
         }
 
+        public static List<Point[]> Get2DEdges2(List<Edge> edges3D, List<TVGL.Vertex> vertices, TVGL.Point[] points2D)
+        {
+            var edges2D = new List<Point[]>();
+            foreach (var edge in edges3D)
+            {
+                var edge2D = new Point[2];
+                edge2D[0] = points2D[vertices.IndexOf(edge.From)];
+                edge2D[1] = points2D[vertices.IndexOf(edge.To)];
+                edges2D.Add(edge2D);
+            }
+            return edges2D;
+        }
+
         public static Point[] Get2DProjectionPoints(IList<Vertex> vertices, double[] direction,
             Boolean MergeDuplicateReferences = false)
         {

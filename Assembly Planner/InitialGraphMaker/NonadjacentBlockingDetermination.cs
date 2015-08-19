@@ -9,6 +9,7 @@ using GraphSynth.Representation;
 using MIConvexHull;
 using StarMathLib;
 using TVGL;
+using Vertex = TVGL.Vertex;
 
 namespace Assembly_Planner
 {
@@ -41,8 +42,13 @@ namespace Assembly_Planner
                     foreach (var vertex in solid.ConvexHullVertices)
                         rays.Add(
                             new Ray(
-                                new AssemblyEvaluation.Vertex(vertex.Position[0], vertex.Position[1], vertex.Position[2]),
+                                new AssemblyEvaluation.Vertex(vertex.Position[0], vertex.Position[1],
+                                    vertex.Position[2]),
                                 new Vector(direction[0], direction[1], direction[2])));
+                    // add more vertices to the ray
+                    rays.AddRange(
+                        AddingMoreRays(solid.ConvexHullEdges.Where(e => e != null && e.Length > 2).ToArray(),
+                            direction));
 
                     foreach (var solidBlocking in
                         solids.Where(s => graph.nodes.Any(n => n.name == s.Name) // it is not fastener
@@ -52,37 +58,11 @@ namespace Assembly_Planner
                                               (a.From.name == solid.Name && a.To.name == s.Name) ||
                                               (a.From.name == s.Name && a.To.name == solid.Name))))
                     {
-                        /*if (!BoundingBoxBlocking(direction, solidBlocking, solid))
-                            continue; //there is a problem with this code
-                        var distanceToTheClosestFace = double.PositiveInfinity;
-                        var overlap = false;
-                        foreach (var ray in rays)
-                        {
-                            if (solidBlocking.ConvexHullFaces.Any(f => RayIntersectsWithFace2(ray, f)))
-                                //now find the faces that intersect with the ray and find the distance between them
-                            {
-                                foreach (
-                                    var blockingPolygonalFace in
-                                        solidBlocking.Faces.Where(f => RayIntersectsWithFace2(ray, f)).ToList())
-                                {
-                                    overlap = true;
-                                    var d = DistanceToTheFace(ray.Position, blockingPolygonalFace);
-                                    if (d < distanceToTheClosestFace) distanceToTheClosestFace = d;
-                                }
-                            }
-                        }
-                        if (overlap)
-                            blockingsForDirection.Add(new NonAdjacentBlockings
-                            {
-                                blockingSolids = new[] {solid, solidBlocking},
-                                blockingDistance = distanceToTheClosestFace
-                            });
-                    }
-                }
-                NonAdjacentBlocking.Add(dir, blockingsForDirection);*/
+
                         if (!BoundingBoxBlocking(direction, solidBlocking, solid)) continue;
                         var distanceToTheClosestFace = double.PositiveInfinity;
                         var overlap = false;
+
                         if (BlockingDetermination.ConvexHullOverlap(solid, solidBlocking))
                         {
                             foreach (var ray in rays)
@@ -103,6 +83,31 @@ namespace Assembly_Planner
                                     overlap = true;
                                     break;
                                 }
+                                if (overlap)
+                                {
+                                    var movingProj = _3Dto2D.Get2DProjectionPoints(solid.Vertices, direction);
+                                    var moving2D = new _3Dto2D
+                                    {
+                                        ThreeD = solid,
+                                        Points = movingProj,
+                                        Edges = _3Dto2D.Get2DEdges(solid, movingProj)
+                                    };
+                                    var referenceProj = _3Dto2D.Get2DProjectionPoints(solidBlocking.Vertices, direction);
+                                    var reference2D = new _3Dto2D
+                                    {
+                                        ThreeD = solidBlocking,
+                                        Points = referenceProj,
+                                        Edges = _3Dto2D.Get2DEdges(solidBlocking, referenceProj)
+                                    };
+                                    var blocked =
+                                        moving2D.Edges.Any(
+                                            movEdge =>
+                                                reference2D.Edges.Any(
+                                                    refEdge =>
+                                                        NonadjacentBlockingDeterminationPro.DoIntersect(movEdge, refEdge)));
+                                    if (!blocked) overlap = false;
+                                    break;
+                                }
                             }
                         }
                         else
@@ -110,7 +115,7 @@ namespace Assembly_Planner
                             foreach (var ray in rays)
                             {
                                 if (solidBlocking.ConvexHullFaces.Any(f => RayIntersectsWithFace3(ray, f)))
-                                //now find the faces that intersect with the ray and find the distance between them
+                                    //now find the faces that intersect with the ray and find the distance between them
                                 {
                                     //var m = solidBlocking.Faces.Where(f => RayIntersectsWithFace3(ray, f)).ToList();
                                     //var f55 = new List<double>();
@@ -128,22 +133,48 @@ namespace Assembly_Planner
                                         overlap = true;
                                         break;
                                     }
+                                    if (overlap) break;
                                 }
                             }
                         }
                         if (overlap)
                             blockingsForDirection.Add(new NonAdjacentBlockings
                             {
-                                blockingSolids = new[] { solid, solidBlocking },
+                                blockingSolids = new[] {solid, solidBlocking},
                                 blockingDistance = distanceToTheClosestFace
                             });
                     }
                 }
                 //);
                 lock (NonAdjacentBlocking)
-                NonAdjacentBlocking.Add(dir, blockingsForDirection);
+                    NonAdjacentBlocking.Add(dir, blockingsForDirection);
             }
-            );
+                );
+        }
+
+        private static IEnumerable<Ray> AddingMoreRays(Edge[] edges, double[] dir)
+        {
+            //For the case that two objects are nonadacently blocking each other but the rays shot from the corner
+            //vertices cannot detect them, we will add more vertices here to solve this issue.
+            var sections = edges.Select(edge => new[] {new AssemblyEvaluation.Vertex(edge.From.Position), new AssemblyEvaluation.Vertex(edge.To.Position)}).ToList();
+            var newRays = new List<Ray>();
+            var counter = 0;
+            while (counter < 1)
+            {
+                counter++;
+                var section2 = new List<AssemblyEvaluation.Vertex[]>();
+                foreach (var sec in sections)
+                {
+                    var aP = sec[0];
+                    var bP = sec[1];
+                    var midPoint = new AssemblyEvaluation.Vertex((aP.Position[0] + bP.Position[0]) / 2.0, (aP.Position[1] + bP.Position[1]) / 2.0, (aP.Position[2] + bP.Position[2]) / 2.0);
+                    newRays.Add(new Ray(midPoint, new Vector(dir)));
+                    section2.Add(new[] { aP, midPoint });
+                    section2.Add(new[] { midPoint, bP });
+                }
+                sections = new List<AssemblyEvaluation.Vertex[]>(section2);
+            }
+            return newRays;
         }
 
 
@@ -171,8 +202,8 @@ namespace Assembly_Planner
                         return false;  // if sign of x (or y or z) is negative and moving is already on the
                     // negative side of reference then there is no way to interact
                     if (signOfElement > 0) facingCornerIndices[i] = 1;      // put a one in the spot if the direction is positive.
-                    
                 }
+                return newApproachBoundingBox(v,blockingBox,movingPartBox);
                 // the complementaryCornerIndices is the opposite corner if facingCornerIndices = {0,1,0} then 
                 // complementaryCornerIndices = {1,0,1}
                 var complementaryCornerIndices = new[] { (1 - facingCornerIndices[0]), (1 - facingCornerIndices[1]), (1 - facingCornerIndices[2]) };
@@ -245,6 +276,61 @@ namespace Assembly_Planner
                 }
                 return false;
             }
+        }
+
+        private static bool newApproachBoundingBox(double[] v, double[] bB, double[] mB)
+        {
+            var mV1 = new TVGL.Vertex(new[] { mB[0], mB[2], mB[4] });
+            var mV2 = new TVGL.Vertex(new[] { mB[0], mB[3], mB[4] });
+            var mV3 = new TVGL.Vertex(new[] { mB[1], mB[3], mB[4] });
+            var mV4 = new TVGL.Vertex(new[] { mB[1], mB[2], mB[4] });
+            var mV5 = new TVGL.Vertex(new[] { mB[0], mB[2], mB[5] });
+            var mV6 = new TVGL.Vertex(new[] { mB[0], mB[3], mB[5] });
+            var mV7 = new TVGL.Vertex(new[] { mB[1], mB[3], mB[5] });
+            var mV8 = new TVGL.Vertex(new[] { mB[1], mB[2], mB[5] });
+            var movingVer = new List<Vertex> {mV1, mV2, mV3, mV4, mV5, mV6, mV7, mV8};
+            var mE1 = new Edge(mV1, mV2, true);
+            var mE2 = new Edge(mV1, mV4, true);
+            var mE3 = new Edge(mV1, mV5, true);
+            var mE4 = new Edge(mV2, mV3, true);
+            var mE5 = new Edge(mV2, mV6, true);
+            var mE6 = new Edge(mV7, mV6, true);
+            var mE7 = new Edge(mV7, mV3, true);
+            var mE8 = new Edge(mV7, mV8, true);
+            var mE9 = new Edge(mV5, mV6, true);
+            var mE10 = new Edge(mV5, mV8, true);
+            var mE11 = new Edge(mV4, mV3, true);
+            var mE12 = new Edge(mV4, mV8, true);
+            var movingEdg = new List<Edge> { mE1, mE2, mE3, mE4, mE5, mE6, mE7, mE8, mE9, mE10, mE11, mE12 };
+
+            var bV1 = new TVGL.Vertex(new[] { bB[0], bB[2], bB[4] });
+            var bV2 = new TVGL.Vertex(new[] { bB[0], bB[3], bB[4] });
+            var bV3 = new TVGL.Vertex(new[] { bB[1], bB[3], bB[4] });
+            var bV4 = new TVGL.Vertex(new[] { bB[1], bB[2], bB[4] });
+            var bV5 = new TVGL.Vertex(new[] { bB[0], bB[2], bB[5] });
+            var bV6 = new TVGL.Vertex(new[] { bB[0], bB[3], bB[5] });
+            var bV7 = new TVGL.Vertex(new[] { bB[1], bB[3], bB[5] });
+            var bV8 = new TVGL.Vertex(new[] { bB[1], bB[2], bB[5] });
+            var blockingVer = new List<Vertex> {bV1, bV2, bV3, bV4, bV5, bV6, bV7, bV8};
+            var bE1 = new Edge(bV1, bV2, true);
+            var bE2 = new Edge(bV1, bV4, true);
+            var bE3 = new Edge(bV1, bV5, true);
+            var bE4 = new Edge(bV2, bV3, true);
+            var bE5 = new Edge(bV2, bV6, true);
+            var bE6 = new Edge(bV7, bV6, true);
+            var bE7 = new Edge(bV7, bV3, true);
+            var bE8 = new Edge(bV7, bV8, true);
+            var bE9 = new Edge(bV5, bV6, true);
+            var bE10 = new Edge(bV5, bV8, true);
+            var bE11 = new Edge(bV4, bV3, true);
+            var bE12 = new Edge(bV4, bV8, true);
+            var blockingEdg = new List<Edge> { bE1, bE2, bE3, bE4, bE5, bE6, bE7, bE8, bE9, bE10, bE11, bE12 };
+
+            var movingProj = _3Dto2D.Get2DProjectionPoints(movingVer, v);
+            var blockingProj = _3Dto2D.Get2DProjectionPoints(blockingVer, v);
+            var moving2D = new _3Dto2D { Points = movingProj, Edges = _3Dto2D.Get2DEdges2(movingEdg,movingVer, movingProj) };
+            var blocking2D = new _3Dto2D { Points = blockingProj, Edges = _3Dto2D.Get2DEdges2(blockingEdg, blockingVer, movingProj) };
+            return moving2D.Edges.Any(movEdge => blocking2D.Edges.Any(refEdge => NonadjacentBlockingDeterminationPro.DoIntersect(movEdge, refEdge)));
         }
 
         public static bool RayIntersectsWithFace(Ray ray, PolygonalFace face)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Net.Security;
 using System.Threading.Tasks;
 using GraphSynth;
 using GraphSynth.Representation;
@@ -21,8 +22,10 @@ namespace Assembly_Planner
                 // "../../../Test/3-parts-statbility";
                 //"../../../Test/Double"
                 //"../../../Test/Simple-Test";
+                //"../../../Test/simple";
                 //"../../../Test/PumpWExtention";
                 "../../../Test/FoodPackagingMachine";
+                //"../../../../";
                 //"../../../Test/FPM2";
             var solids = GetSTLs(inputDir);
             var assemblyGraph = new designGraph();

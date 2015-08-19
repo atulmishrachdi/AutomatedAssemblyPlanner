@@ -22,6 +22,14 @@ namespace Assembly_Planner
                 foreach (var solid in solids.Where(s => graph.nodes.Any(n => n.name == s.Name)))
                 {
                     var movingProj = _3Dto2D.Get2DProjectionPoints(solid.Vertices, direction);
+                    /*var edgeList1 = new List<double[]>();
+                    foreach (var edge in solid.Edges)
+                    {
+                        var edge2D = new double[][2];
+                        edge2D[0] = edge.From.Position;
+                        edge2D[1] = edge.To.Position;
+                        edgeList1.Add(edge2D);
+                    }*/
                     var moving2D = new _3Dto2D { ThreeD = solid, Points = movingProj, Edges = _3Dto2D.Get2DEdges(solid, movingProj) };
                     foreach (var solidBlocking in 
                         solids.Where(s => graph.nodes.Any(n => n.name == s.Name) // it is not fastener
@@ -47,7 +55,7 @@ namespace Assembly_Planner
             }
         }
 
-        private static bool DoIntersect(Point[] movEdge, Point[] refEdge)
+        public static bool DoIntersect(Point[] movEdge, Point[] refEdge)
         {
             var p1 = movEdge[0];
             var q1 = movEdge[1];
