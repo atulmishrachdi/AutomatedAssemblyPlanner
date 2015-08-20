@@ -64,9 +64,46 @@ namespace Assembly_Planner
                 //connectedButUnblocked.Add(sccHy,notBlockedWith);
             }
             dbgDictionary = CombineWithNonAdjacentBlockings2(dbgDictionary, cndDirInd);
-            if (MutualBlocking(assemblyGraph, dbgDictionary))
-                dbgDictionary = DirectionalBlockingGraph(assemblyGraph, seperate, cndDirInd);
-            dbgDictionary = UpdateBlockingDic(dbgDictionary);
+            //if (MutualBlocking(assemblyGraph, dbgDictionary))
+            //    dbgDictionary = DirectionalBlockingGraph(assemblyGraph, seperate, cndDirInd); // This is expensive. Get rid of it.
+            dbgDictionary = SolveMutualBlocking(assemblyGraph, dbgDictionary);
+            if (MutualBlocking2(assemblyGraph, dbgDictionary))
+            {
+                var df = 2;
+            }
+            return dbgDictionary;
+        }
+
+        private static Dictionary<hyperarc, List<hyperarc>> SolveMutualBlocking(designGraph assemblyGraph, Dictionary<hyperarc, List<hyperarc>> dbgDictionary)
+        {
+            for (var i = 0; i < dbgDictionary.Count - 1; i++)
+            {
+                var iKey = dbgDictionary.Keys.ToList()[i];
+                for (var j = i + 1; j < dbgDictionary.Count; j++)
+                {
+                    var jKey = dbgDictionary.Keys.ToList()[j];
+                    if (dbgDictionary[iKey].Contains(jKey) && dbgDictionary[jKey].Contains(iKey))
+                    {
+                        var nodes = new List<node>();
+                        nodes.AddRange(iKey.nodes);
+                        nodes.AddRange(jKey.nodes);
+                        var nodes2 = new List<node>(nodes);
+                        var last = assemblyGraph.addHyperArc(nodes2);
+                        last.localLabels.Add(DisConstants.SCC);
+                        var updatedBlocking = new List<hyperarc>();
+                        updatedBlocking.AddRange(dbgDictionary[iKey].Where(hy => hy != jKey));
+                        updatedBlocking.AddRange(dbgDictionary[jKey].Where(hy => hy != iKey && !updatedBlocking.Contains(hy)));
+                        var updatedBlocking2 = new List<hyperarc>(updatedBlocking);
+                        dbgDictionary.Remove(iKey);
+                        dbgDictionary.Remove(jKey);
+                        assemblyGraph.removeHyperArc(iKey);
+                        assemblyGraph.removeHyperArc(jKey);
+                        dbgDictionary.Add(last, updatedBlocking2);
+                        i--;
+                        break;
+                    }
+                }
+            }
             return dbgDictionary;
         }
 
@@ -94,6 +131,22 @@ namespace Assembly_Planner
             return false;
         }
 
+        private static bool MutualBlocking2(designGraph assemblyGraph, Dictionary<hyperarc, List<hyperarc>> dbgDictionary)
+        {
+            for (var i = 0; i < dbgDictionary.Count - 1; i++)
+            {
+                var iKey = dbgDictionary.Keys.ToList()[i];
+                for (var j = i + 1; j < dbgDictionary.Count; j++)
+                {
+                    var jKey = dbgDictionary.Keys.ToList()[j];
+                    if (dbgDictionary[iKey].Contains(jKey) && dbgDictionary[jKey].Contains(iKey))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
 
         private static Dictionary<hyperarc, List<hyperarc>> CombineWithNonAdjacentBlockings2(Dictionary<hyperarc, List<hyperarc>> dbgDictionary, int cndDirInd)
         {

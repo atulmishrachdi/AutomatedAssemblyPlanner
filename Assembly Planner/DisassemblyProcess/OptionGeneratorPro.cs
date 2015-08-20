@@ -42,7 +42,7 @@ namespace Assembly_Planner
                     }
 
                     if (freeSCCs.Count == 0) continue;
-                    combinations = CombinationsCreatorPro3(assemblyGraph, freeSCCs, opt);
+                    combinations = CombinationsCreatorPro2(assemblyGraph, freeSCCs, opt);
                     var combAndPar = AddingParents(opt, combinations);
                     options.AddRange(AddingOptionsToGraph(combAndPar, seperate, options, gOptions));
                     cp2.AddRange(combAndPar);
@@ -171,7 +171,7 @@ namespace Assembly_Planner
             return combinationsHash;
         }
 
-        private static List<List<hyperarc>> CombinationsCreatorPro3(designGraph assemblyGraph, List<hyperarc> freeSCCs, List<hyperarc> parents)
+        private static List<List<hyperarc>> CombinationsCreatorPro2(designGraph assemblyGraph, List<hyperarc> freeSCCs, List<hyperarc> parents)
         {
             // ACCEPTABLE COMBINATIONS:
             // 
