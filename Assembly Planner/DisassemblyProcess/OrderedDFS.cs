@@ -23,7 +23,7 @@ namespace Assembly_Planner
             //DisassemblyDirections.Directions = TemporaryDirections();
             var solutions = new List<AssemblyCandidate>();
             assemblyEvaluator = new AssemblyEvaluator(inputData.ConvexHullDictionary);
-            Updates.UpdateGlobalDirections(globalDirPool);
+            //Updates.UpdateGlobalDirections(globalDirPool);
             assemblyGraph.addHyperArc(assemblyGraph.nodes);
             var iniHy = assemblyGraph.hyperarcs[assemblyGraph.hyperarcs.Count - 1];
             iniHy.localLabels.Add(DisConstants.SeperateHyperarcs);

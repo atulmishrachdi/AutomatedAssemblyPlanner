@@ -152,8 +152,8 @@ namespace Assembly_Planner
                     if (
                         !assemblyGraph.arcs.Any(
                             a =>
-                                (freeSCCs[i].nodes.Contains(a.From) && freeSCCs[j].nodes.Contains(a.To)) ||
-                                (freeSCCs[j].nodes.Contains(a.From) && freeSCCs[i].nodes.Contains(a.To)))) 
+                                ((freeSCCs[i].nodes.Contains(a.From) && freeSCCs[j].nodes.Contains(a.To)) ||
+                                (freeSCCs[j].nodes.Contains(a.From) && freeSCCs[i].nodes.Contains(a.To))) && (a.localVariables.Contains(DisConstants.BoltDirectionOfFreedom)))) 
                         continue;
                     doubleConnected.Add(new List<hyperarc>{freeSCCs[i], freeSCCs[j]});
                 }
@@ -174,7 +174,7 @@ namespace Assembly_Planner
         private static List<List<hyperarc>> CombinationsCreatorPro2(designGraph assemblyGraph, List<hyperarc> freeSCCs, List<hyperarc> parents)
         {
             // ACCEPTABLE COMBINATIONS:
-            // 
+            // Screwed to each other
             var finalCombination = new List<List<hyperarc>>();
             var dic = new Dictionary<hyperarc,List<hyperarc>>();
             foreach (var scc in freeSCCs)

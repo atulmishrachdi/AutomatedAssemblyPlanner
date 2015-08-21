@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using AssemblyEvaluation;
 using GeometryReasoning;
 using GraphSynth.Representation;
@@ -15,8 +16,8 @@ namespace Assembly_Planner
 {
     internal class NonadjacentBlockingDetermination
     {
-        internal static Dictionary<int, List<NonAdjacentBlockings>> NonAdjacentBlocking =
-            new Dictionary<int, List<NonAdjacentBlockings>>();
+        internal static Serializing.SerializableDictionary<int, List<NonAdjacentBlockings>> NonAdjacentBlocking =
+            new Serializing.SerializableDictionary<int, List<NonAdjacentBlockings>>();
 
         static readonly List<int[]> binaryFaceIndices = new List<int[]>
         {
@@ -455,8 +456,9 @@ namespace Assembly_Planner
         }
     }
 
-
-    internal class NonAdjacentBlockings
+    [Serializable]
+    [XmlRoot("NonAdjacent")]
+    public class NonAdjacentBlockings
     {
       /// <summary>
       /// blockingSolids[0] is blocked by blockingSolids[1]
@@ -464,7 +466,7 @@ namespace Assembly_Planner
       /// <value>
       /// blockingSolids
       /// </value>
-      internal TessellatedSolid[] blockingSolids { get; set; }
+        public TessellatedSolid[] blockingSolids { get; set; }
       /// <summary>
       /// for each blockingSolids[], a double is added to this list. So, 
       /// blockingDistance is the distance between blockingSolids[0]
@@ -473,6 +475,6 @@ namespace Assembly_Planner
       /// <value>
       /// blockingDistance
       /// </value>
-      internal double blockingDistance { get; set; }
+        public double blockingDistance { get; set; }
     }
 }
