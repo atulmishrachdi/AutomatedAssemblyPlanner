@@ -16,8 +16,8 @@ namespace Assembly_Planner
 {
     internal class NonadjacentBlockingDetermination
     {
-        internal static Serializing.SerializableDictionary<int, List<NonAdjacentBlockings>> NonAdjacentBlocking =
-            new Serializing.SerializableDictionary<int, List<NonAdjacentBlockings>>();
+        internal static Dictionary<int, List<NonAdjacentBlockings>> NonAdjacentBlocking =
+            new Dictionary<int, List<NonAdjacentBlockings>>();
 
         static readonly List<int[]> binaryFaceIndices = new List<int[]>
         {
