@@ -84,6 +84,43 @@
     <Compile Include="GeometryReasoning\LiaisonGraphCreator.cs" />
     <Compile Include="GeometryReasoning\STLGeometryFunctions.cs" />
     <Compile Include="GeometryReasoning\StLReader.cs" />
+    <Compile Include="GraphSynth.BaseClasses\BasicGraphClasses\arc.cs" />
+    <Compile Include="GraphSynth.BaseClasses\BasicGraphClasses\candidate.cs" />
+    <Compile Include="GraphSynth.BaseClasses\BasicGraphClasses\designGraph.cs" />
+    <Compile Include="GraphSynth.BaseClasses\BasicGraphClasses\graphElement.cs" />
+    <Compile Include="GraphSynth.BaseClasses\BasicGraphClasses\hyperarc.cs" />
+    <Compile Include="GraphSynth.BaseClasses\BasicGraphClasses\node.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\BasicFiler.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\ComparerAndEnumerators.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\Converters\DoubleCollectionConverter.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\Converters\IntCollectionConverter.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\Converters\StringCollectionConverter.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\ErrorLogger.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\GlobalSettings.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\IMainWindow.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\MatrixMathFunctions.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\MyIOPath.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\SearchIO.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\SearchIOToTextWriter.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\ShapeData.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\embeddingRule.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\grammarRule.Basic.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\grammarRule.MatchingMethods.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\grammarRule.NegativeRecognize.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\grammarRule.RecognizeApply.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\grammarRule.ShapeMethods.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\option.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\Relaxation.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\ruleArc.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\ruleHyperarc.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\ruleNode.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\ruleSet.Basic.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\ruleSet.File.cs" />
+    <Compile Include="GraphSynth.BaseClasses\SearchProcess\LindenmayerChoose.cs" />
+    <Compile Include="GraphSynth.BaseClasses\SearchProcess\RandomChoose.cs" />
+    <Compile Include="GraphSynth.BaseClasses\SearchProcess\RandomChooseWithUndo.cs" />
+    <Compile Include="GraphSynth.BaseClasses\SearchProcess\RecognizeChooseApply.cs" />
+    <Compile Include="GraphSynth.BaseClasses\SearchProcess\SearchProcess.cs" />
     <Compile Include="InitialGraphMaker\BlockingDetermination.cs" />
     <Compile Include="InitialGraphMaker\BoltAndGearDetector\BoltAndGearConstants.cs" />
     <Compile Include="InitialGraphMaker\BoltAndGearDetector\BoltAndGearDetection.cs" />
@@ -112,8 +149,6 @@
     <Compile Include="DisassemblyProcess\OptionGeneratorProBinary.cs" />
     <Compile Include="DisassemblyProcess\SCCBinary.cs" />
     <Compile Include="InitialGraphMaker\NonadjacentBlockingDetermination.cs" />
-    <Compile Include="EmptyClass.cs" />
-    <Compile Include="DisassemblyProcess\Heap.cs" />
     <Compile Include="Evaluation\Statblity.cs" />
     <Compile Include="InitialGraphMaker\NonadjacentBlockingDeterminationPro.cs" />
     <Compile Include="InitialGraphMaker\3Dto2D.cs" />
@@ -127,10 +162,6 @@
     <Content Include="TessellationAndVoxelizationGeometryLibrary.XML" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\GraphSynth\GraphSynthSourceFiles\GraphSynth.BaseClasses\GraphSynth.BaseClasses.csproj">
-      <Project>{D679F4E2-FD18-48AC-9C0C-B60155A61D37}</Project>
-      <Name>GraphSynth.BaseClasses</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PrimitiveClassificationOfTessellatedSolids\PrimitiveClassificationOfTessellatedSolids.csproj">
       <Project>{59F5FE35-E4B0-4C0C-8405-9E314CF48298}</Project>
       <Name>PrimitiveClassificationOfTessellatedSolids</Name>

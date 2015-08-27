@@ -49,3 +49,15 @@ D:\Nima-Project\AssemblyPlanning\Assembly Planner\bin\Debug\MIConvexHull.pdb
 D:\Nima-Project\AssemblyPlanning\Assembly Planner\bin\Debug\StarMath.pdb
 D:\Nima-Project\AssemblyPlanning\Assembly Planner\bin\Debug\TessellationAndVoxelizationGeometryLibrary.pdb
 D:\Nima-Project\AssemblyPlanning\Assembly Planner\obj\Debug\Assembly Planner.csprojResolveAssemblyReference.cache
+C:\Users\Matt\Documents\Visual Studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\Assembly Planner.exe.config
+C:\Users\Matt\Documents\Visual Studio 2013\Projects\Assembly Planner\Assembly Planner\obj\Debug\Assembly Planner.exe
+C:\Users\Matt\Documents\Visual Studio 2013\Projects\Assembly Planner\Assembly Planner\obj\Debug\Assembly Planner.pdb
+C:\Users\Matt\Documents\Visual Studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\Assembly Planner.exe
+C:\Users\Matt\Documents\Visual Studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\Assembly Planner.pdb
+C:\Users\Matt\Documents\Visual Studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\MIConvexHull.dll
+C:\Users\Matt\Documents\Visual Studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\PrimitiveClassificationOfTessellatedSolids.dll
+C:\Users\Matt\Documents\Visual Studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\TessellationAndVoxelizationGeometryLibrary.dll
+C:\Users\Matt\Documents\Visual Studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\PrimitiveClassificationOfTessellatedSolids.pdb
+C:\Users\Matt\Documents\Visual Studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\MIConvexHull.pdb
+C:\Users\Matt\Documents\Visual Studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\TessellationAndVoxelizationGeometryLibrary.pdb
+C:\Users\Matt\Documents\Visual Studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\StarMath.pdb
