@@ -110,8 +110,11 @@ namespace Assembly_Planner
 			Tree.Install.Reference = BestReference;
 			Tree.Install.Moving = BestMoving;
 
-			MemoData D = new MemoData (Best, Bestsa);
-			Memo.Add(A, D);
+			if(!Estimate)
+			{
+				MemoData D = new MemoData(Best, Bestsa);
+				Memo.Add(A, D);
+			}
 
 			return Best;
 		}
@@ -180,8 +183,7 @@ namespace Assembly_Planner
 
 			var L = Math.Log (A.Count, 2);
 			double MinTreeDepth = Math.Ceiling(L);
-			Graph.addHyperArc(A.ToList());
-			var hy = Graph.hyperarcs[Graph.hyperarcs.Count - 1];
+			var hy = Graph.addHyperArc(A.ToList());
 			List<double> Values = new List<double>();
 			foreach(Connection arc in hy.IntraArcs)
 			{
@@ -195,7 +197,7 @@ namespace Assembly_Planner
 			for(int x=0;x<MinTreeDepth;x++)
 				total = total + Values[x];
 
-			return total;
+			return Math.Max(total,Values.Last());
 /*
             var intraArcs = new List<arc>();
             foreach (var node in subassemblyNodes)
