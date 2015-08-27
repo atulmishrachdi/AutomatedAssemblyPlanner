@@ -84,12 +84,14 @@
     <Compile Include="GeometryReasoning\LiaisonGraphCreator.cs" />
     <Compile Include="GeometryReasoning\STLGeometryFunctions.cs" />
     <Compile Include="GeometryReasoning\StLReader.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Connection.cs" />
     <Compile Include="GraphSynth.BaseClasses\BasicGraphClasses\arc.cs" />
     <Compile Include="GraphSynth.BaseClasses\BasicGraphClasses\candidate.cs" />
     <Compile Include="GraphSynth.BaseClasses\BasicGraphClasses\designGraph.cs" />
     <Compile Include="GraphSynth.BaseClasses\BasicGraphClasses\graphElement.cs" />
     <Compile Include="GraphSynth.BaseClasses\BasicGraphClasses\hyperarc.cs" />
     <Compile Include="GraphSynth.BaseClasses\BasicGraphClasses\node.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Fastener.cs" />
     <Compile Include="GraphSynth.BaseClasses\Logistics\BasicFiler.cs" />
     <Compile Include="GraphSynth.BaseClasses\Logistics\ComparerAndEnumerators.cs" />
     <Compile Include="GraphSynth.BaseClasses\Logistics\Converters\DoubleCollectionConverter.cs" />

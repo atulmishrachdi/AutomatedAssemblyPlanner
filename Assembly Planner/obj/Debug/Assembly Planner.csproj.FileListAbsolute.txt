@@ -60,4 +60,3 @@ C:\Users\Matt\Documents\Visual Studio 2013\Projects\Assembly Planner\Assembly Pl
 C:\Users\Matt\Documents\Visual Studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\PrimitiveClassificationOfTessellatedSolids.pdb
 C:\Users\Matt\Documents\Visual Studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\MIConvexHull.pdb
 C:\Users\Matt\Documents\Visual Studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\TessellationAndVoxelizationGeometryLibrary.pdb
-C:\Users\Matt\Documents\Visual Studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\StarMath.pdb
