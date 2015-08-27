@@ -23,7 +23,7 @@ namespace Assembly_Planner
             Directions = IcosahedronPro.DirectionGeneration();
             var globalDirPool = new List<int>();
             var solidPrimitive = BlockingDetermination.PrimitiveMaker(solids);
-            
+
             //var gears = BoltAndGearDetection.GearDetector(solidPrimitive);
 
             AddingNodesToGraph(assemblyGraph, solids);//, gears, screwsAndBolts);
@@ -45,8 +45,8 @@ namespace Assembly_Planner
                         //UnconnectedBlockingDetermination.FiniteDirectionsBetweenConnectedParts(solid1, solid2, localDirInd, out finDirs, out infDirs);
                         var from = assemblyGraph[solid2.Name]; // Moving
                         var to = assemblyGraph[solid1.Name];   // Reference
-                        assemblyGraph.addArc((node) from, (node) to);
-                        var a = assemblyGraph.arcs.Last();
+                        assemblyGraph.addArc((node)from, (node)to);
+                        var a = (Connection)assemblyGraph.arcs.Last();
                         AddInformationToArc(a, localDirInd);
                     }
                 }
@@ -54,7 +54,7 @@ namespace Assembly_Planner
             return globalDirPool;
         }
 
-        private static void AddInformationToArc(arc a, IEnumerable<int> localDirInd)
+        private static void AddInformationToArc(Connection a, IEnumerable<int> localDirInd)
         {
             a.localVariables.Add(DisConstants.DirIndLowerBound);
             foreach (var dir in localDirInd)
@@ -65,7 +65,7 @@ namespace Assembly_Planner
         }
 
         private static void AddingNodesToGraph(designGraph assemblyGraph, List<TessellatedSolid> solids)//,
-            //Dictionary<TessellatedSolid, double[]> gears)
+                                                                                                        //Dictionary<TessellatedSolid, double[]> gears)
         {
             foreach (var solid in solids)
             {
@@ -82,7 +82,7 @@ namespace Assembly_Planner
         private static List<double[]> FreeDirectionFinder(node node)
         {
             var dirsG = new List<List<double[]>>();
-            foreach (arc arc in node.arcs.Where(a => a is arc))
+            foreach (Connection arc in node.arcs.Where(a => a is Connection))
             {
                 var iniDirs = new List<double[]>();
                 var indexL0 = arc.localVariables.IndexOf(DisConstants.DirIndLowerBound);

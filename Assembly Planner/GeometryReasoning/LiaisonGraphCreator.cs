@@ -47,7 +47,7 @@ namespace GeometryReasoning
                         if (n1 == null) n1 = addNodeFromXML(graph, part1, path, ns);
                         node n2 = graph.nodes.Find(n => n.name == part2);
                         if (n2 == null) n2 = addNodeFromXML(graph, part2, path, ns);
-                        var a1 = new arc();
+                        var a1 = new Connection();
 
                         //if there is not an arc between n1 and n2 add an arc
                         if (!(n1.arcsFrom.Exists(a => a.To == n2) || n1.arcsTo.Exists(a => a.From == n2)))

@@ -6,7 +6,7 @@ namespace AssemblyEvaluation
 {
     class ReOrientations
     {
-        public Boolean Evaluate(List<arc> arcs_old, List<arc> arcs_new)
+        public Boolean Evaluate(List<Connection> arcs_old, List<Connection> arcs_new)
         {
             var newArc = arcs_new[0];
             var prevArc = arcs_old != null ? arcs_old[0] : arcs_new[0];

@@ -10,7 +10,7 @@ namespace AssemblyEvaluation
     {
         public const double TRANSFERSPEED = 0.8; // Transfer Speed: 0.1 (m/sec)
         
-        public List<double> EvaluateTimeAndSDForInstall(List<arc> connectingArcs, double travelDistance, double insertionDistance, SubAssembly newSubAsm)
+        public List<double> EvaluateTimeAndSDForInstall(List<Connection> connectingArcs, double travelDistance, double insertionDistance, SubAssembly newSubAsm)
         {
             // 1. Install          units are in kg and m 
             // a. travel time

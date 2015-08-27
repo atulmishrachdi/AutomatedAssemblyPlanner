@@ -37,24 +37,33 @@ namespace GraphSynth.Representation
         // just a brainstorm right now...
     }
 
-    public class connection : arc
+    public class Connection : arc
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="edge"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
-        public connection(string name = "e") : base(name) { }
+        public Connection(string name, node fromNode, node toNode) : base(name)
+        {
+            From = fromNode;
+            To = toNode;
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="edge"/> class.
         /// </summary>
-        public connection() { }
+        /// <param name="name">The name.</param>
+        public Connection(string name) : base(name) { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="edge"/> class.
+        /// </summary>
+        public Connection() { }
         /// <summary>
         ///   Copies this instance of an arc and returns the copy.
         /// </summary>
         /// <returns>the copy of the arc.</returns>
         public override arc copy()
         {
-            var copyOfEdge = new connection();
+            var copyOfEdge = new Connection();
             base.copy(copyOfEdge);
 
             return copyOfEdge;

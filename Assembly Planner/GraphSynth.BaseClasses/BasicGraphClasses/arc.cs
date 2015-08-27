@@ -33,6 +33,7 @@ namespace GraphSynth.Representation
     ///   One of the two basic classes for a graph is the arc or edge that connects
     ///   two and only two elements of the node class.
     /// </summary>
+    [XmlInclude(typeof(Connection))]
     [XmlInclude(typeof(edge))]
     [XmlInclude(typeof(ruleArc))]
     public class arc : graphElement

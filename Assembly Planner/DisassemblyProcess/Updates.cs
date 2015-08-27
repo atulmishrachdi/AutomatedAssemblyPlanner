@@ -140,7 +140,7 @@ namespace Assembly_Planner
                         visited.Add(pNode);
                         globalVisited.Add(pNode);
 
-                        foreach (arc pNodeArc in pNode.arcs.Where(a => a.GetType() == typeof (arc)))
+                        foreach (Connection pNodeArc in pNode.arcs.Where(a => a.GetType() == typeof (Connection)))
                         {
                             var otherNode = pNodeArc.From == pNode ? pNodeArc.To : pNodeArc.From;
                             if (visited.Contains(otherNode))
@@ -155,7 +155,7 @@ namespace Assembly_Planner
             return false;
         }
 
-        internal static void RemoveRepeatedFastenersMain(arc a, designGraph graph)
+        internal static void RemoveRepeatedFastenersMain(Connection a, designGraph graph)
         {
             if (!a.localVariables.Contains(DisConstants.IndexOfNodesLockedByFastenerL)) return;
             var counter = a.localVariables.IndexOf(DisConstants.DirIndUpperBound) + 1;
@@ -182,9 +182,9 @@ namespace Assembly_Planner
                 for (var i = l + 1; i < u; i++)
                     nodes.Add(graph.nodes[(int)oneBoltInfo[i]]);
                 foreach (
-                    arc arc in
+                    Connection arc in
                         graph.arcs.Where(
-                            arc => arc is arc && arc != a && (nodes.Contains(arc.From) && nodes.Contains(arc.To))))
+                            arc => arc is Connection && arc != a && (nodes.Contains(arc.From) && nodes.Contains(arc.To))))
                 {
                     var counter2 = arc.localVariables.IndexOf(DisConstants.DirIndUpperBound) + 1;
                     while (counter2 < arc.localVariables.Count)

@@ -29,7 +29,7 @@ namespace Assembly_Planner
                     visited.Add(pNode);
                     globalVisited.Add(pNode);
 
-                    foreach (arc pNodeArc in pNode.arcs.Where(a => a.GetType() == typeof(arc)))
+                    foreach (Connection pNodeArc in pNode.arcs.Where(a => a.GetType() == typeof(Connection)))
                     {
                         if (Removable(pNodeArc, cndDir))
                             continue;
@@ -49,7 +49,7 @@ namespace Assembly_Planner
 
         }
 
-        public static bool Removable(arc pNodeArc, int cndDirInd)
+        public static bool Removable(Connection pNodeArc, int cndDirInd)
         {
             // The function returns "true" if the local variables of the"pNodeArc" 
             // contains a direction that is parralel to the candidate direction. 

@@ -43,9 +43,10 @@ namespace AssemblyEvaluation
             var movingNodes = newSubAsm.Install.Moving.PartNodes.Select(n => (node)c.graph[n]).ToList();
             var install = new[] { refNodes, movingNodes };
             var connectingArcs = c.graph.arcs.Where(a => ((movingNodes.Contains(a.To) && refNodes.Contains(a.From))
-                                                         || (movingNodes.Contains(a.From) && refNodes.Contains(a.To)))).ToList();
+                                                         || (movingNodes.Contains(a.From) && refNodes.Contains(a.To))))
+                                                        .Cast<Connection>().ToList();
             //if (connectingArcs.Count == 0) return -1;
-            foreach (var a in connectingArcs)
+            foreach (Connection a in connectingArcs)
             {
                 Updates.RemoveRepeatedFastenersMain(a, c.graph);
                 c.graph.removeArc(a);    
@@ -103,7 +104,7 @@ namespace AssemblyEvaluation
             return c.TimeScore + c.AccessibilityScore + c.StabilityScore;
         }
 
-        private Vector FindPartDisconnectMovement(IEnumerable<arc> connectingArcs, List<node> refNodes, out double insertionDistance)
+        private Vector FindPartDisconnectMovement(IEnumerable<Connection> connectingArcs, List<node> refNodes, out double insertionDistance)
         {
             var installDirection = new Vector(0, 0, 0);
             // find install direction by averaging all visible_DOF

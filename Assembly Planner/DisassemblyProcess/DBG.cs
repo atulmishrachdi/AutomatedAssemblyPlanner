@@ -206,7 +206,7 @@ namespace Assembly_Planner
             return dbgDictionary;
         }
 
-        internal static int Parallel(arc borderArc, int cndDirInd)
+        internal static int Parallel(Connection borderArc, int cndDirInd)
         {
             //  1: parallel and same direction
             // -1: parallel but opposite direction
@@ -231,7 +231,7 @@ namespace Assembly_Planner
             return 0;
         }
 
-        private static hyperarc BlockingSccFinder(designGraph graph, hyperarc sccHy, arc arc)
+        private static hyperarc BlockingSccFinder(designGraph graph, hyperarc sccHy, Connection arc)
         {
             if (sccHy.nodes.Contains(arc.From))
             {
@@ -249,12 +249,12 @@ namespace Assembly_Planner
             return null;
         }
 
-        internal static List<arc> HyperarcBorderArcsFinder(hyperarc sccHy)
+        internal static List<Connection> HyperarcBorderArcsFinder(hyperarc sccHy)
         {
-            var borders = new List<arc>();
+            var borders = new List<Connection>();
             foreach (node node in sccHy.nodes)
             {
-                foreach (arc arc in node.arcs.Where(a => a.GetType() == typeof(arc)))
+                foreach (Connection arc in node.arcs.Where(a => a.GetType() == typeof(Connection)))
                 {
                     var otherNode = arc.From == node ? arc.To : arc.From;
                     if (sccHy.nodes.Contains(otherNode)) continue;

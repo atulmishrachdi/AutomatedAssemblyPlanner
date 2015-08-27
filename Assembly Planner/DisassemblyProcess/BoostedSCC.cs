@@ -55,7 +55,7 @@ namespace Assembly_Planner
                     visited.Add(pNode);
                     globalVisited.Add(pNode);
 
-                    foreach (arc pNodeArc in pNode.arcs.Where(a => a.GetType() == typeof(arc)))
+                    foreach (Connection pNodeArc in pNode.arcs.Where(a => a.GetType() == typeof(Connection)))
                     {
                         if (SCC.Removable(pNodeArc, cndDir))
                             continue;

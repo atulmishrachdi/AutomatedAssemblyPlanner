@@ -69,7 +69,7 @@ namespace Assembly_Planner
         {
             var partsName = lockedByTheFastener.Select(part => part.Name).ToList();
             foreach (
-                arc arc in
+                Connection arc in
                     graph.arcs.Where(a => partsName.Contains(a.From.name) && partsName.Contains(a.To.name))
                         .ToList())
             {

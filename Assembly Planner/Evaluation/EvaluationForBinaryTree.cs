@@ -69,7 +69,7 @@ namespace Assembly_Planner
                         visited.Add(pNode);
                         globalVisited.Add(pNode);
 
-                        foreach (arc arc in pNode.arcs.Where(a => a.GetType() == typeof (arc)))
+                        foreach (Connection arc in pNode.arcs.Where(a => a.GetType() == typeof (Connection)))
                         {
                             if (!A.Contains(arc.From) || !A.Contains(arc.To) ||
                                 !subAsm.Contains(arc.From) || !subAsm.Contains(arc.To)) continue;
