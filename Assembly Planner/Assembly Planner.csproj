@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A7045F03-81DA-4784-A287-DD7C81EEF4E0}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Assembly_Planner</RootNamespace>
+    <AssemblyName>Assembly Planner</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Externalconsole>true</Externalconsole>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="MIConvexHull">
+      <HintPath>..\packages\MIConvexHull.1.0.10.1021\lib\portable-net4+sl4+wp7+win8\MIConvexHull.dll</HintPath>
+    </Reference>
+    <Reference Include="TessellationAndVoxelizationGeometryLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\TVGL.1.0.15.0714\lib\portable-net45+sl5+wp8+win8\TessellationAndVoxelizationGeometryLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="StarMath">
+      <HintPath>..\packages\StarMath.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DisassemblyProcess\BeamSearch.cs" />
+    <Compile Include="DisassemblyProcess\DBG.cs" />
+    <Compile Include="DisassemblyProcess\DisConstants.cs" />
+    <Compile Include="DisassemblyProcess\BoostedSCC.cs" />
+    <Compile Include="DisassemblyProcess\OptionGenerator.cs" />
+    <Compile Include="DisassemblyProcess\OptionGeneratorPro.cs" />
+    <Compile Include="DisassemblyProcess\OrderedDFS.cs" />
+    <Compile Include="DisassemblyProcess\SCC.cs" />
+    <Compile Include="DisassemblyProcess\Updates.cs" />
+    <Compile Include="Evaluation\AssemblyEvaluator.cs" />
+    <Compile Include="Evaluation\Constants.cs" />
+    <Compile Include="Evaluation\ConvexHullEvaluator.cs" />
+    <Compile Include="Evaluation\EvaluatePath.cs" />
+    <Compile Include="Evaluation\EvaluatePathPINVOKE.cs" />
+    <Compile Include="Evaluation\FeasibilityEvaluator.cs" />
+    <Compile Include="Evaluation\FootprintFace.cs" />
+    <Compile Include="Evaluation\Math.cs" />
+    <Compile Include="Evaluation\MultiObj_optimizeSort.cs" />
+    <Compile Include="Evaluation\OutputXML\Action.cs" />
+    <Compile Include="Evaluation\OutputXML\AssemblyCandidate.cs" />
+    <Compile Include="Evaluation\OutputXML\AssemblySequence.cs" />
+    <Compile Include="Evaluation\OutputXML\Enumerators.cs" />
+    <Compile Include="Evaluation\OutputXML\Part_and_Subassembly.cs" />
+    <Compile Include="Evaluation\PathDeterminationEvaluator.cs" />
+    <Compile Include="Evaluation\ReOrientations.cs" />
+    <Compile Include="Evaluation\TimeEvaluator.cs" />
+    <Compile Include="Evaluation\_AbstractAssemblySearch.cs" />
+    <Compile Include="GeometryReasoning\ConvexHullAndBoundingBox.cs" />
+    <Compile Include="GeometryReasoning\DataInterfaceWithCPP.cs" />
+    <Compile Include="GeometryReasoning\InputData.cs" />
+    <Compile Include="GeometryReasoning\LiaisonGraphCreator.cs" />
+    <Compile Include="GeometryReasoning\STLGeometryFunctions.cs" />
+    <Compile Include="GeometryReasoning\StLReader.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Component.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Connection.cs" />
+    <Compile Include="GraphSynth.BaseClasses\BasicGraphClasses\arc.cs" />
+    <Compile Include="GraphSynth.BaseClasses\BasicGraphClasses\candidate.cs" />
+    <Compile Include="GraphSynth.BaseClasses\BasicGraphClasses\designGraph.cs" />
+    <Compile Include="GraphSynth.BaseClasses\BasicGraphClasses\graphElement.cs" />
+    <Compile Include="GraphSynth.BaseClasses\BasicGraphClasses\hyperarc.cs" />
+    <Compile Include="GraphSynth.BaseClasses\BasicGraphClasses\node.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Fastener.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\BasicFiler.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\ComparerAndEnumerators.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\Converters\DoubleCollectionConverter.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\Converters\IntCollectionConverter.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\Converters\StringCollectionConverter.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\ErrorLogger.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\GlobalSettings.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\IMainWindow.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\MatrixMathFunctions.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\MyIOPath.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\SearchIO.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\SearchIOToTextWriter.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\ShapeData.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\embeddingRule.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\grammarRule.Basic.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\grammarRule.MatchingMethods.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\grammarRule.NegativeRecognize.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\grammarRule.RecognizeApply.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\grammarRule.ShapeMethods.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\option.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\Relaxation.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\ruleArc.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\ruleHyperarc.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\ruleNode.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\ruleSet.Basic.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\ruleSet.File.cs" />
+    <Compile Include="GraphSynth.BaseClasses\SearchProcess\LindenmayerChoose.cs" />
+    <Compile Include="GraphSynth.BaseClasses\SearchProcess\RandomChoose.cs" />
+    <Compile Include="GraphSynth.BaseClasses\SearchProcess\RandomChooseWithUndo.cs" />
+    <Compile Include="GraphSynth.BaseClasses\SearchProcess\RecognizeChooseApply.cs" />
+    <Compile Include="GraphSynth.BaseClasses\SearchProcess\SearchProcess.cs" />
+    <Compile Include="InitialGraphMaker\BlockingDetermination.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\BoltAndGearConstants.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\BoltAndGearDetection.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\BoltAndGearUpdateFunctions.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\ClusteringDenseAndSparseEdges.cs" />
+    <Compile Include="InitialGraphMaker\ConstantsPrimitiveOverlap.cs" />
+    <Compile Include="InitialGraphMaker\DisassemblyDirections.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\GearEdge.cs" />
+    <Compile Include="InitialGraphMaker\DisassemblyDirectionsWithFastener.cs" />
+    <Compile Include="InitialGraphMaker\Fastener.cs" />
+    <Compile Include="InitialGraphMaker\Icosahedron.cs" />
+    <Compile Include="InitialGraphMaker\IcosahedronPro.cs" />
+    <Compile Include="InitialGraphMaker\PrimitivePrimitiveInteractions.cs" />
+    <Compile Include="PostProcessor\OptimalOrientation.cs" />
+    <Compile Include="PostProcessor\PostProcessingConstnts.cs" />
+    <Compile Include="PostProcessor\Scheduling.cs" />
+    <Compile Include="PostProcessor\TasksClass.cs" />
+    <Compile Include="PostProcessor\UpdatePostProcessor.cs" />
+    <Compile Include="PostProcessor\WorkerAllocation.cs" />
+    <Compile Include="PostProcessor\WorkersClass.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DisassemblyProcess\RecursiveOptimizedSearch.cs" />
+    <Compile Include="Evaluation\EvaluationForBinaryTree.cs" />
+    <Compile Include="DisassemblyProcess\DBGBinary.cs" />
+    <Compile Include="DisassemblyProcess\OptionGeneratorProBinary.cs" />
+    <Compile Include="DisassemblyProcess\SCCBinary.cs" />
+    <Compile Include="InitialGraphMaker\NonadjacentBlockingDetermination.cs" />
+    <Compile Include="Evaluation\Statblity.cs" />
+    <Compile Include="InitialGraphMaker\NonadjacentBlockingDeterminationPro.cs" />
+    <Compile Include="InitialGraphMaker\3Dto2D.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="StarMath.XML" />
+    <Content Include="TessellationAndVoxelizationGeometryLibrary.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PrimitiveClassificationOfTessellatedSolids\PrimitiveClassificationOfTessellatedSolids.csproj">
+      <Project>{59F5FE35-E4B0-4C0C-8405-9E314CF48298}</Project>
+      <Name>PrimitiveClassificationOfTessellatedSolids</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
