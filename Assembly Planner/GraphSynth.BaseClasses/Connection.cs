@@ -78,17 +78,17 @@ namespace Assembly_Planner.GraphSynth.BaseClasses
         /// <summary>
         /// The infinite directions
         /// </summary>
-        public List<int> InfiniteDirections;
+        public List<int> InfiniteDirections = new List<int>();
 
         /// <summary>
         /// The finite directions
         /// </summary>
-        public List<int> FiniteDirections;
+        public List<int> FiniteDirections = new List<int>();
 
         /// <summary>
         /// The fasteners
         /// </summary>
-        public List<Fastener> Fasteners;
+        public List<Fastener> Fasteners = new List<Fastener>();
 
         /// <summary>
         /// The certainty

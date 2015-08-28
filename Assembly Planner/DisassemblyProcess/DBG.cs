@@ -14,7 +14,7 @@ namespace Assembly_Planner
         static List<hyperarc> Preceedings = new List<hyperarc>();
         private static int co;
         private static List<hyperarc> visited = new List<hyperarc>();
-        internal static Dictionary<hyperarc, List<hyperarc>> DirectionalBlockingGraph(designGraph assemblyGraph, hyperarc seperate, int cndDirInd)
+        internal static Dictionary<hyperarc, List<hyperarc>> DirectionalBlockingGraph(designGraph assemblyGraph, int cndDirInd)
         {
             // So, I am trying to make the DBG for for each seperate hyperarc. 
             // This hyperarc includes small hyperarcs with the lable  "SCC"
@@ -65,6 +65,8 @@ namespace Assembly_Planner
                 //connectedButUnblocked.Add(sccHy,notBlockedWith);
             }
             dbgDictionary = CombineWithNonAdjacentBlockings2(dbgDictionary, cndDirInd);
+            dbgDictionary = SolveMutualBlocking(assemblyGraph, dbgDictionary);
+            dbgDictionary = UpdateBlockingDic(dbgDictionary);
             //if (MutualBlocking(assemblyGraph, dbgDictionary))
             //    dbgDictionary = DirectionalBlockingGraph(assemblyGraph, seperate, cndDirInd); // This is expensive. Get rid of it.
             dbgDictionary = SolveMutualBlocking(assemblyGraph, dbgDictionary);
@@ -75,7 +77,7 @@ namespace Assembly_Planner
             return dbgDictionary;
         }
 
-        private static Dictionary<hyperarc, List<hyperarc>> SolveMutualBlocking(designGraph assemblyGraph, Dictionary<hyperarc, List<hyperarc>> dbgDictionary)
+        internal static Dictionary<hyperarc, List<hyperarc>> SolveMutualBlocking(designGraph assemblyGraph, Dictionary<hyperarc, List<hyperarc>> dbgDictionary)
         {
             for (var i = 0; i < dbgDictionary.Count - 1; i++)
             {
@@ -97,6 +99,15 @@ namespace Assembly_Planner
                         var updatedBlocking2 = new List<hyperarc>(updatedBlocking);
                         dbgDictionary.Remove(iKey);
                         dbgDictionary.Remove(jKey);
+                        foreach (var key in dbgDictionary.Keys.ToList())
+                        {
+                            if (dbgDictionary[key].Contains(iKey) || dbgDictionary[key].Contains(jKey))
+                            {
+                                dbgDictionary[key].Add(last);
+                                dbgDictionary[key].Remove(iKey);
+                                dbgDictionary[key].Remove(jKey);
+                            }
+                        }
                         assemblyGraph.removeHyperArc(iKey);
                         assemblyGraph.removeHyperArc(jKey);
                         dbgDictionary.Add(last, updatedBlocking2);
@@ -214,13 +225,11 @@ namespace Assembly_Planner
             //  0: not parallel. 
             //  2: parralel same direction and opposite direction
             var cndDir = DisassemblyDirections.Directions[cndDirInd];
-            var indexL = borderArc.localVariables.IndexOf(DisConstants.DirIndLowerBound);
-            var indexU = borderArc.localVariables.IndexOf(DisConstants.DirIndUpperBound);
             var paralAndSame = false;
             var paralButOppose = false;
-            for (var i = indexL + 1; i < indexU; i++)
+            foreach(var dirInd in borderArc.InfiniteDirections)
             {
-                var arcDisDir = DisassemblyDirections.Directions[(int)borderArc.localVariables[i]];
+                var arcDisDir = DisassemblyDirections.Directions[dirInd];
                 if (Math.Abs(1 - arcDisDir.dotProduct(cndDir)) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall)
                     paralAndSame = true;
                 if (Math.Abs(1 + arcDisDir.dotProduct(cndDir)) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall)

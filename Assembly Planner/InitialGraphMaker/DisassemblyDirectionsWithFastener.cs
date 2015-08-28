@@ -18,12 +18,13 @@ namespace Assembly_Planner
         public static List<double[]> Directions = new List<double[]>();
         internal static List<TessellatedSolid> Solids;
         internal static Dictionary<int, List<Component[]>> NonAdjacentBlocking = new Dictionary<int, List<Component[]>>(); //Component[0] is blocked by Component[1]
+
         internal static List<int> Run(designGraph assemblyGraph, List<TessellatedSolid> solids)
         {
             Solids = new List<TessellatedSolid>(solids);
             Directions = IcosahedronPro.DirectionGeneration();
             DisassemblyDirections.Directions = new List<double[]>(Directions);
-            
+
             var globalDirPool = new List<int>();
             var solidPrimitive = BlockingDetermination.PrimitiveMaker(solids);
             var screwsAndBolts = BoltAndGearDetection.ScrewAndBoltDetector(solidPrimitive);
@@ -33,7 +34,7 @@ namespace Assembly_Planner
             foreach (var bolt in screwsAndBolts)
                 solidsNoFastener.Remove(bolt);
             DisassemblyDirections.Solids = new List<TessellatedSolid>(solidsNoFastener);
-            AddingNodesToGraph(assemblyGraph, solidsNoFastener);//, gears, screwsAndBolts);
+            AddingNodesToGraph(assemblyGraph, solidsNoFastener); //, gears, screwsAndBolts);
 
             for (var i = 0; i < solidsNoFastener.Count - 1; i++)
             {
@@ -44,33 +45,30 @@ namespace Assembly_Planner
                     var solid2 = solidsNoFastener[j];
                     var solid2Primitives = solidPrimitive[solid2];
                     List<int> localDirInd;
-                    if (BlockingDetermination.DefineBlocking(assemblyGraph, solid1, solid2, solid1Primitives, solid2Primitives,
+                    if (BlockingDetermination.DefineBlocking(assemblyGraph, solid1, solid2, solid1Primitives,
+                        solid2Primitives,
                         globalDirPool, out localDirInd))
                     {
                         // I wrote the code in a way that "solid1" is always "Reference" and "solid2" is always "Moving".
-                        //List<int> finDirs, infDirs;
+                        List<int> finDirs, infDirs;
                         //NonadjacentBlockingDetermination.FiniteDirectionsBetweenConnectedParts(solid1, solid2,
                         //    localDirInd, out finDirs, out infDirs);
                         var from = assemblyGraph[solid2.Name]; // Moving
-                        var to = assemblyGraph[solid1.Name];   // Reference
-                        assemblyGraph.addArc((node)from, (node)to,"", typeof(Connection));
-                        var a = (Connection)assemblyGraph.arcs.Last();
-						AddInformationToArc(a, localDirInd);
+                        var to = assemblyGraph[solid1.Name]; // Reference
+                        assemblyGraph.addArc((node) from, (node) to, "", typeof (Connection));
+                        var a = (Connection) assemblyGraph.arcs.Last();
+                        AddInformationToArc(a, new List<int>(), localDirInd);
                     }
                 }
             }
-           Fastener.AddFastenersInformation(assemblyGraph, screwsAndBolts, solidsNoFastener, solidPrimitive);
+            Fastener.AddFastenersInformation(assemblyGraph, screwsAndBolts, solidsNoFastener, solidPrimitive);
             return globalDirPool;
         }
 
-        private static void AddInformationToArc(Connection a, IEnumerable<int> localDirInd)
+        private static void AddInformationToArc(Connection a, List<int> finDirs, List<int> infDirs)
         {
-            a.localVariables.Add(DisConstants.DirIndLowerBound);
-            foreach (var dir in localDirInd)
-            {
-                a.localVariables.Add(dir);
-            }
-            a.localVariables.Add(DisConstants.DirIndUpperBound);
+            a.FiniteDirections.AddRange(finDirs);
+            a.InfiniteDirections.AddRange(infDirs);
         }
 
         private static void AddingNodesToGraph(designGraph assemblyGraph, List<TessellatedSolid> solids)//,

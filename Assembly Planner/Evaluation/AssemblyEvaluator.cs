@@ -43,13 +43,13 @@ namespace AssemblyEvaluation
             var refNodes = newSubAsm.Install.Reference.PartNodes.Select(n => (Component)c.graph[n]).ToList();
             var movingNodes = newSubAsm.Install.Moving.PartNodes.Select(n => (Component)c.graph[n]).ToList();
             var install = new[] { refNodes, movingNodes };
-            var connectingArcs = c.graph.arcs.Where(a => ((movingNodes.Contains(a.To) && refNodes.Contains(a.From))
+            var connectingArcs = c.graph.arcs.Cast<Connection>().Where(a => ((movingNodes.Contains(a.To) && refNodes.Contains(a.From))
                                                          || (movingNodes.Contains(a.From) && refNodes.Contains(a.To))))
-                                                        .Cast<Connection>().ToList();
+                                                        .ToList();
             //if (connectingArcs.Count == 0) return -1;
             foreach (Connection a in connectingArcs)
             {
-                Updates.RemoveRepeatedFastenersMain(a, c.graph);
+                Updates.RemoveRepeatedFasteners2(a, c.graph);
                 c.graph.removeArc(a);    
             }
             if (Updates.EitherRefOrMovHasSeperatedSubassemblies(install))

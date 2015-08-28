@@ -6,6 +6,7 @@ using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Assembly_Planner.GraphSynth.BaseClasses;
 using GraphSynth.Representation;
 
 namespace Assembly_Planner
@@ -135,7 +136,7 @@ namespace Assembly_Planner
             return comb;
         }
 
-        private static List<List<hyperarc>> CombinationsCreatorPro(designGraph assemblyGraph, List<hyperarc> freeSCCs)
+        internal static List<List<hyperarc>> CombinationsCreatorPro(designGraph assemblyGraph, List<hyperarc> freeSCCs)
         {
             // The combinations must meet these two conditions:
             //   1. The SCCs in the combinations must be physically connected to each other and connected to their parent.
@@ -150,10 +151,11 @@ namespace Assembly_Planner
                 for (var j = i + 1; j < freeSCCs.Count; j++)
                 {
                     if (
-                        !assemblyGraph.arcs.Any(
+                        !assemblyGraph.arcs.Cast<Connection>().Any(
                             a =>
                                 ((freeSCCs[i].nodes.Contains(a.From) && freeSCCs[j].nodes.Contains(a.To)) ||
-                                (freeSCCs[j].nodes.Contains(a.From) && freeSCCs[i].nodes.Contains(a.To))) && (a.localVariables.Contains(DisConstants.BoltDirectionOfFreedom)))) 
+                                (freeSCCs[j].nodes.Contains(a.From) && freeSCCs[i].nodes.Contains(a.To))) && 
+                                (a.Fasteners.Count>0))) 
                         continue;
                     doubleConnected.Add(new List<hyperarc>{freeSCCs[i], freeSCCs[j]});
                 }
@@ -171,7 +173,7 @@ namespace Assembly_Planner
             return combinationsHash;
         }
 
-        private static List<List<hyperarc>> CombinationsCreatorPro2(designGraph assemblyGraph, List<hyperarc> freeSCCs, List<hyperarc> parents)
+        internal static List<List<hyperarc>> CombinationsCreatorPro2(designGraph assemblyGraph, List<hyperarc> freeSCCs, List<hyperarc> parents)
         {
             // ACCEPTABLE COMBINATIONS:
             // Screwed to each other
@@ -229,10 +231,11 @@ namespace Assembly_Planner
             foreach (var scc in freeSccs)
             {
                 if (
-                    assemblyGraph.arcs.Any(
+                    assemblyGraph.arcs.Cast<Connection>().Any(
                         a =>
                             ((hy.nodes.Contains(a.From) && scc.nodes.Contains(a.To)) ||
-                            (scc.nodes.Contains(a.From) && hy.nodes.Contains(a.To))) && (a.localVariables.Contains(DisConstants.BoltDirectionOfFreedom))))
+                            (scc.nodes.Contains(a.From) && hy.nodes.Contains(a.To))) && 
+                            (a.Fasteners.Count>0)))
                     screwed.Add(scc);
             }
             return screwed;

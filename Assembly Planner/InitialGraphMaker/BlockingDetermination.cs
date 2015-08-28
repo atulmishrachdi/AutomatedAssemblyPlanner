@@ -33,24 +33,44 @@ namespace Assembly_Planner
             //Parallel.ForEach(parts, solid =>
             foreach (var solid in parts)
             {
-                //    if (solid.Faces.Count() == 2098 || solid.Faces.Count() == 896 || solid.Faces.Count() == 2096) continue;
+                if (solid.Faces.Count() == 2098 || solid.Faces.Count() == 896 || solid.Faces.Count() == 2096) continue;
                 var solidPrim = TesselationToPrimitives.Run(solid);
                 //lock (partPrimitive)
                 partPrimitive.Add(solid, solidPrim);
-                //     var cones = solidPrim.Where(p => p is Cone).ToList();
-                //     double coneFacesCount = cones.Sum(c => c.Faces.Count);
-                //     var cylinder = solidPrim.Where(p => p is Cylinder).ToList();
-                //     var flat = solidPrim.Where(p => p is Flat).ToList();
-                //     var coneAndCylinderArea = cones.Sum(c => c.Area) + cylinder.Sum(c => c.Area);
-                //     var flatArea = flat.Sum(c => c.Area);
-                //     output.Add(new[] {(solid.Faces.Count()/solid.SurfaceArea).ToString()}); //(coneFacesCount / solid.Faces.Count()).ToString(), 
+
+                /*var cones = solidPrim.Where(p => p is Cone).ToList();
+                var flat = solidPrim.Where(p => p is Flat).ToList();
+                var cylinder = solidPrim.Where(p => p is Cylinder).ToList();
+
+                double coneFacesCount = cones.Sum(c => c.Faces.Count);
+                double flatFacesCount = flat.Sum(f => f.Faces.Count);
+                double cylinderFacesCount = cylinder.Sum(c => c.Faces.Count);
+
+                var coneArea = cones.Sum(c => c.Area);
+                var flatArea = flat.Sum(c => c.Area);
+                var cylinderArea = cylinder.Sum(c => c.Area);
+
+                var feature1 = flatFacesCount/(flatArea/solid.SurfaceArea);
+                var feature2 = coneFacesCount/(coneArea/solid.SurfaceArea);
+                var feature3 = cylinderFacesCount/(cylinderArea/solid.SurfaceArea);
+                var feature4 = coneFacesCount/solid.Faces.Count();
+                var feature5 = flatFacesCount/solid.Faces.Count();
+                var feature6 = cylinderFacesCount/solid.Faces.Count();
+                var feature7 = (coneArea + cylinderArea)/solid.SurfaceArea;
+                //lock (output)
+                output.Add(new[]
+                {
+                    feature1.ToString(), feature2.ToString(), feature3.ToString(), feature4.ToString(),
+                    feature5.ToString(), feature6.ToString(), feature7.ToString()
+                });*/
+                //(coneFacesCount / solid.Faces.Count()).ToString(), 
                 //(coneAndCylinderArea/solid.SurfaceArea).ToString(), (flatArea/solid.SurfaceArea).ToString() });
             }
-                //);
+            // );
 
 
             /*int length = output.Count;
-            using (System.IO.TextWriter writer = File.CreateText(filePath))
+            using (TextWriter writer = File.CreateText(filePath))
             {
 
                 for (int index = 0; index < length; index++)

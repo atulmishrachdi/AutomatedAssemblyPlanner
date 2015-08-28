@@ -32,7 +32,8 @@ namespace Assembly_Planner
                 }
                 // now find the removal direction of the fastener.
                 //var RD = BoltRemovalDirection(fastener);
-                double RD, depth, radius;
+                double depth, radius;
+                int RD;
                 if (fastener.Name.Contains("LargeScrew"))
                 {
                     RD = 1;
@@ -66,27 +67,22 @@ namespace Assembly_Planner
         }
 
         private static void AddRemovalInformationToArcs(designGraph graph,
-            List<TessellatedSolid> lockedByTheFastener, double RD, double depth, double radius)
+            List<TessellatedSolid> lockedByTheFastener, int RD, double depth, double radius)
         {
             var partsName = lockedByTheFastener.Select(part => part.Name).ToList();
             foreach (
-                Connection arc in
+                Connection connection in
                     graph.arcs.Where(a => partsName.Contains(a.From.name) && partsName.Contains(a.To.name))
                         .ToList())
             {
-                arc.localVariables.Add(DisConstants.BoltDirectionOfFreedom);
-                arc.localVariables.Add(RD);
-                arc.localVariables.Add(DisConstants.BoltDepth);
-                arc.localVariables.Add(depth);
-                arc.localVariables.Add(DisConstants.BoltRadius);
-                arc.localVariables.Add(radius);
-                
-                if (lockedByTheFastener.Count < 3) continue;
-                arc.localVariables.Add(DisConstants.IndexOfNodesLockedByFastenerL);
-                foreach (var solid in lockedByTheFastener)
-                    arc.localVariables.Add(graph.nodes.IndexOf(graph.nodes.Where(n => n.name == solid.Name).ToList()[0]));
-                arc.localVariables.Add(DisConstants.IndexOfNodesLockedByFastenerU);
-
+                var fasten = new GraphSynth.BaseClasses.Fastener();
+                fasten.RemovalDirection = RD;
+                fasten.Diameter = radius*2;
+                fasten.EngagedLength = depth;
+                if (lockedByTheFastener.Count > 2)
+                    foreach (var solid in lockedByTheFastener)
+                        fasten.PartsLockedByFastener.Add(graph.nodes.IndexOf(graph.nodes.Where(n => n.name == solid.Name).ToList()[0]));
+                connection.Fasteners.Add(fasten);
             }
         }
 

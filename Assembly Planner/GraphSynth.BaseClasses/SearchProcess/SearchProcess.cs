@@ -194,6 +194,11 @@ namespace GraphSynth.Search
                 var Larc = LMappedArcs[i];
                 LMappedArcs[i] = (Larc == null) ? null : child.arcs[current.arcs.IndexOf(Larc)];
             }
+            for (var i = 0; i != LMappedArcs.Count; i++)
+            {
+                var Larc = LMappedArcs[i];
+                LMappedArcs[i] = (Larc == null) ? null : child.arcs[current.arcs.IndexOf(Larc)];
+            }
             for (var i = 0; i != LMappedNodes.Count; i++)
             {
                 var Lnode = LMappedNodes[i];

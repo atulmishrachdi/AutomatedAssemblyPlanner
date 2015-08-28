@@ -86,11 +86,27 @@ namespace Assembly_Planner
                 var line = reader.ReadLine();
                 var values = line.Split(',');
                 var i = 1;
-                var node = assemblyGraph.nodes.Where(n => n.name == Convert.ToString(values[0])).ToList()[0];
+                var node = assemblyGraph.nodes.Cast<Component>().Where(n => n.name == Convert.ToString(values[0])).ToList()[0];
                 while (i < 9)
                 {
-                    node.localVariables.Add(Convert.ToDouble(values[i]));
-                    i++;
+                    if (Convert.ToDouble(values[i]) == Constants.WEIGHT)
+                    {
+                        node.Mass = Convert.ToDouble(values[i + 1]);
+                        i+=2;
+                        continue;
+                    }
+                    if (Convert.ToDouble(values[i]) == Constants.VOLUME)
+                    {
+                        node.Volume = Convert.ToDouble(values[i + 1]);
+                        i += 2;
+                        continue;
+                    }
+                    if (Convert.ToDouble(values[i]) == Constants.CENTEROFMASS)
+                    {
+                        node.CenterOfMass = new[] { Convert.ToDouble(values[i + 1]), Convert.ToDouble(values[i + 2]), Convert.ToDouble(values[i + 3]) };
+                        i += 4;
+                        continue;
+                    }
                 }
             }
         }
@@ -152,9 +168,27 @@ namespace Assembly_Planner
             return false;
         }
 
+        internal static void RemoveRepeatedFasteners2(Connection a, designGraph graph)
+        {
+            //if (a.Fasteners.All(f => f.PartsLockedByFastener.Count < 3)) return;
+            for (var i = 0; i < a.Fasteners.Count; i++)
+            {
+                var fastener = a.Fasteners[i];
+                if (fastener.PartsLockedByFastener.Count < 2) continue;
+                var nodes = fastener.PartsLockedByFastener.Select(ind => graph.nodes[ind]).ToList();
+                foreach (
+                    Connection connection in
+                        graph.arcs.Cast<Connection>().Where(
+                            arc => arc != a && (nodes.Contains(arc.From) && nodes.Contains(arc.To))))
+                {
+                    connection.Fasteners.Remove(fastener);
+                }
+            }
+        }
+
         internal static void RemoveRepeatedFastenersMain(Connection a, designGraph graph)
         {
-            if (!a.localVariables.Contains(DisConstants.IndexOfNodesLockedByFastenerL)) return;
+            if (a.Fasteners.All(f => f.PartsLockedByFastener.Count < 3)) return;
             var counter = a.localVariables.IndexOf(DisConstants.DirIndUpperBound) + 1;
             var boltsInformation = new List<List<double>>();
             while (counter < a.localVariables.Count)

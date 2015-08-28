@@ -4,6 +4,7 @@ using System;
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using StarMathLib;
 using Assembly_Planner.GraphSynth.BaseClasses;
 
@@ -266,16 +267,18 @@ namespace AssemblyEvaluation
 
         private double GetPartMass(Component n)
         {
-            var j = n.localVariables.IndexOf(-6000);
-            if (j == -1) return 0.0; //in case we don't have a weight tag, treat the part as zero instead
-            else return n.localVariables[j + 1];
+            //var j = n.localVariables.IndexOf(-6000);
+            //if (j == -1) return 0.0; //in case we don't have a weight tag, treat the part as zero instead
+            //else return n.localVariables[j + 1];
+            return n.Mass;
         }
 
         private Vertex GetPartCenterOfMass(Component n)
         {
-            var j = n.localVariables.IndexOf(-6005);
-            if (j == -1) return null; //in case we don't have a center of mass tag, treat the part as zero instead
-            else return new Vertex(n.localVariables[j + 1], n.localVariables[j + 2], n.localVariables[j + 3]);
+            //var j = n.localVariables.IndexOf(-6005);
+            //if (j == -1) return null; //in case we don't have a center of mass tag, treat the part as zero instead
+            //else return new Vertex(n.localVariables[j + 1], n.localVariables[j + 2], n.localVariables[j + 3]);
+            return new Vertex(n.CenterOfMass[0], n.CenterOfMass[1], n.CenterOfMass[2]);
         }
 
         private double GetSubassemblyVolume(List<Component> Nodes)
@@ -283,9 +286,10 @@ namespace AssemblyEvaluation
         
         private double GetPartVolume(Component n)
         {
-            var j = n.localVariables.IndexOf(-6001);
-            if (j == -1) return 0.0; //in case we don't have a volume tag, treat the part as zero instead
-            else return n.localVariables[j + 1];
+            //var j = n.localVariables.IndexOf(-6001);
+            //if (j == -1) return 0.0; //in case we don't have a volume tag, treat the part as zero instead
+            //else return n.localVariables[j + 1];
+            return n.Volume;
         }
 
 

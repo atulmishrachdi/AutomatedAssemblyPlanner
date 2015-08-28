@@ -53,11 +53,9 @@ namespace Assembly_Planner
             // The function returns "true" if the local variables of the"pNodeArc" 
             // contains a direction that is parralel to the candidate direction. 
 
-            var indexL = pNodeArc.localVariables.IndexOf(DisConstants.DirIndLowerBound);
-            var indexU = pNodeArc.localVariables.IndexOf(DisConstants.DirIndUpperBound);
-            for (var i = indexL + 1; i < indexU; i++)
+            foreach (var rd in pNodeArc.InfiniteDirections)
             {
-                var arcDisDir = DisassemblyDirections.Directions[(int)pNodeArc.localVariables[i]];
+                var arcDisDir = DisassemblyDirections.Directions[rd];
                 if (Math.Abs(1 - Math.Abs(arcDisDir.dotProduct(DisassemblyDirections.Directions[cndDirInd]))) <
                     ConstantsPrimitiveOverlap.CheckWithGlobDirsParall ||
                     Math.Abs(1 + Math.Abs(arcDisDir.dotProduct(DisassemblyDirections.Directions[cndDirInd]))) <

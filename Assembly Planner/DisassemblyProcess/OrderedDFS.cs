@@ -55,7 +55,7 @@ namespace Assembly_Planner
                     {
                         SCC.StronglyConnectedComponents(current.graph, seperateHy, cndDirInd);
                         //BoostedSCC.StronglyConnectedComponents(current.graph, seperateHy, cndDirInd);
-                        var blockingDic = DBG.DirectionalBlockingGraph(current.graph, seperateHy, cndDirInd);
+                        var blockingDic = DBG.DirectionalBlockingGraph(current.graph, cndDirInd);
                         options.AddRange(OptionGeneratorPro.GenerateOptions(current.graph, seperateHy, blockingDic, options));
                     }
                 }
@@ -65,9 +65,8 @@ namespace Assembly_Planner
                     SearchProcess.transferLmappingToChild(child.graph, current.graph, opt);
                     var rest = Updates.AddSecondHyperToOption(child, opt);
                     Updates.ApplyChild(child, opt);
-                    if (assemblyEvaluator.Evaluate(child, opt, rest,solides) > 0)
-                        //lock (candidates)
-                            candidates.Add(child.performanceParams, child);
+                    if (assemblyEvaluator.Evaluate(child, opt, rest, solides) > 0)
+                        candidates.Add(child.performanceParams, child);
                     child.addToRecipe(opt);
                 }
             }
@@ -93,7 +92,7 @@ namespace Assembly_Planner
 
         protected static bool isCurrentTheGoal(AssemblyCandidate current)
         {
-            return current.graph.hyperarcs.Where(h => h.localLabels.Contains("Done")).Count() == 3;
+            return current.graph.hyperarcs.Where(h => h.localLabels.Contains("Done")).Count() == 12;
         }
 
         private static void TemporaryFixingSequence(AssemblyCandidate goal)

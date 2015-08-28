@@ -14,6 +14,9 @@
 /// <summary>
 /// The BaseClasses namespace.
 /// </summary>
+
+using System.Collections.Generic;
+
 namespace Assembly_Planner.GraphSynth.BaseClasses
 {
     /// <summary>
@@ -95,5 +98,10 @@ namespace Assembly_Planner.GraphSynth.BaseClasses
         /// The fastener type
         /// </summary>
         public FastenerTypeEnum FastenerType;
+                /// <summary>
+        /// The fastener type
+        /// </summary>
+        public List<int> PartsLockedByFastener = new List<int>();
+        
     }
 }

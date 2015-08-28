@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Assembly_Planner.GraphSynth.BaseClasses
 {
-      public class Component : node
+    public class Component : node
     {
         /// <summary>
         ///   Initializes a new instance of the <see cref = "Component" /> class.
@@ -35,5 +35,25 @@ namespace Assembly_Planner.GraphSynth.BaseClasses
             base.copy(copyOfVertex);
             return copyOfVertex;
         }
+
+        /// <summary>
+        /// The mass
+        /// </summary>
+        public double Mass;
+
+        /// <summary>
+        /// The volume
+        /// </summary>
+        public double Volume;
+
+        /// <summary>
+        /// The center of mass
+        /// </summary>
+        public double[] CenterOfMass;
+        
+        /// <summary>
+        /// The rotational inertia
+        /// </summary>
+        public double RotationalInertia;
     }
 }

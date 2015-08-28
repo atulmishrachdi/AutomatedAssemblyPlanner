@@ -466,6 +466,7 @@ namespace Assembly_Planner
       /// <value>
       /// blockingSolids
       /// </value>
+      [XmlIgnore]
         public TessellatedSolid[] blockingSolids { get; set; }
       /// <summary>
       /// for each blockingSolids[], a double is added to this list. So, 
@@ -476,5 +477,7 @@ namespace Assembly_Planner
       /// blockingDistance
       /// </value>
         public double blockingDistance { get; set; }
+
+        //public int[] blockingSolidIndices { get; set; }
     }
 }

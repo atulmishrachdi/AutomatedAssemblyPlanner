@@ -46,7 +46,7 @@ namespace Assembly_Planner
                         {
                             SCC.StronglyConnectedComponents(current.graph, seperateHy, cndDirInd);
                             //OptimizedSCC.StronglyConnectedComponents(current.graph, seperateHy, cndDirInd);
-                            var blockingDic = DBG.DirectionalBlockingGraph(current.graph, seperateHy, cndDirInd);
+                            var blockingDic = DBG.DirectionalBlockingGraph(current.graph, cndDirInd);
                             //OptionGeneratorPro.GenerateOptions(current.graph, seperateHy, blockingDic);
                             options.AddRange(OptionGeneratorPro.GenerateOptions(current.graph, seperateHy, blockingDic, options));
                         }

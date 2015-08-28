@@ -52,7 +52,7 @@ namespace Assembly_Planner
         {
             Graph = inputData.graphAssembly;
             DirPool = globalDirPool;
-            Updates.UpdateGlobalDirections(DirPool);
+            //Updates.UpdateGlobalDirections(DirPool);
             assemblyEvaluator = new EvaluationForBinaryTree();//inputData.ConvexHullDictionary);
             Estimate = DoEstimate;
 
@@ -123,11 +123,13 @@ namespace Assembly_Planner
         protected static List<TreeCandidate> GetCandidates(List<Component> A, double G = 0)
         {
             var Candidates = new List<TreeCandidate>();
+            var gOptions = new List<option>();
             foreach (var cndDirInd in DirPool)
             {
                 SCCBinary.StronglyConnectedComponents(Graph, A, cndDirInd);
-                var blockingDic = DBGBinary.DirectionalBlockingGraph(Graph, A, cndDirInd);
-                var options = OptionGeneratorProBinary.GenerateOptions(Graph, A, blockingDic);
+                var blockingDic = DBGBinary.DirectionalBlockingGraph(Graph, cndDirInd);
+                var options = OptionGeneratorProBinary.GenerateOptions(Graph, A, blockingDic, gOptions);
+                gOptions.AddRange(options);
 
                 foreach (var opt in options)
                 {
