@@ -152,7 +152,8 @@ namespace Assembly_Planner
                     NonAdjacentBlocking.Add(dir, blockingsForDirection);
             }
                 );
-
+            // To be fixed later:
+            //    This ConvertToSecondary can be later added directly after generation.
             //ConvertToSecondaryArc(graph, NonAdjacentBlocking);
         }
 
@@ -160,14 +161,53 @@ namespace Assembly_Planner
         {
             foreach (var key in NonAdjacentBlocking.Keys.ToList())
             {
+                var dirs = (from gDir in DisassemblyDirections.Directions
+                    where
+                        1 - Math.Abs(gDir.dotProduct(DisassemblyDirections.Directions[key])) <
+                        ConstantsPrimitiveOverlap.CheckWithGlobDirsParall
+                    select DisassemblyDirections.Directions.IndexOf(gDir)).ToList();
+                var oppositeDir = dirs.Where(d => d != key).ToList();
                 foreach (var blockings in NonAdjacentBlocking[key])
                 {
                     var from = graph.nodes.Where(n => n.name == blockings.blockingSolids[0].Name).Cast<Component>().ToList()[0]; // blocked
                     var to = graph.nodes.Where(n => n.name == blockings.blockingSolids[1].Name).Cast<Component>().ToList()[0];  // blocking
-                    graph.addArc(from, to, "", typeof(SecondaryConnection));
-                    var a = (SecondaryConnection)graph.arcs.Last();
-                    a.Directions.Add(key);
-                    a.Distance = blockings.blockingDistance;
+                    
+                    // if the opprosite direction exists for to and from instead of from and to, do not add the arc.
+                    // if a is blocked by b in z direction, b is blocked by a in -z direction. So no need to add an additional arc.
+
+                    if (dirs.Count > 1)
+                    {
+                        if (
+                            graph.arcs.Where(arc => arc is SecondaryConnection)
+                                .Cast<SecondaryConnection>()
+                                .Any(SC => SC.From == to && SC.To == from && SC.Directions.Contains(oppositeDir[0])))
+                            continue;
+                    }
+
+                    var existing = graph.arcs.OfType<SecondaryConnection>()
+                        .Where(exist => (exist.From == from && exist.To == to) || (exist.To == from && exist.From == to))
+                        .ToList();
+                    if (existing.Any())
+                    {
+                        if (existing[0].From == from && existing[0].To == to && !existing[0].Directions.Contains(key))
+                        {
+                            existing[0].Directions.Add(key);
+                        }
+                        else
+                        {
+                            if (oppositeDir.Any() && !existing[0].Directions.Contains(oppositeDir[0]))
+                            {
+                                existing[0].Directions.Add(oppositeDir[0]);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        graph.addArc(from, to, "", typeof(SecondaryConnection));
+                        var a = (SecondaryConnection)graph.arcs.Last();
+                        a.Directions.Add(key);
+                        //a.Distance = blockings.blockingDistance;
+                    }
                 }
             }
         }

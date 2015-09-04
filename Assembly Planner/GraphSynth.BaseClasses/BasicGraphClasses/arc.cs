@@ -35,6 +35,7 @@ namespace GraphSynth.Representation
     ///   two and only two elements of the node class.
     /// </summary>
     [XmlInclude(typeof(Connection))]
+    [XmlInclude(typeof(SecondaryConnection))]
     [XmlInclude(typeof(edge))]
     [XmlInclude(typeof(ruleArc))]
     public class arc : graphElement
