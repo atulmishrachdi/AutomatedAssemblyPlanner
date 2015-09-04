@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using AssemblyEvaluation;
+using Assembly_Planner.GraphSynth.BaseClasses;
 using GeometryReasoning;
 using GraphSynth.Representation;
 using MIConvexHull;
@@ -151,6 +152,24 @@ namespace Assembly_Planner
                     NonAdjacentBlocking.Add(dir, blockingsForDirection);
             }
                 );
+
+            //ConvertToSecondaryArc(graph, NonAdjacentBlocking);
+        }
+
+        private static void ConvertToSecondaryArc(designGraph graph, Dictionary<int, List<NonAdjacentBlockings>> NonAdjacentBlocking)
+        {
+            foreach (var key in NonAdjacentBlocking.Keys.ToList())
+            {
+                foreach (var blockings in NonAdjacentBlocking[key])
+                {
+                    var from = graph.nodes.Where(n => n.name == blockings.blockingSolids[0].Name).Cast<Component>().ToList()[0]; // blocked
+                    var to = graph.nodes.Where(n => n.name == blockings.blockingSolids[1].Name).Cast<Component>().ToList()[0];  // blocking
+                    graph.addArc(from, to, "", typeof(SecondaryConnection));
+                    var a = (SecondaryConnection)graph.arcs.Last();
+                    a.Directions.Add(key);
+                    a.Distance = blockings.blockingDistance;
+                }
+            }
         }
 
         private static IEnumerable<Ray> AddingMoreRays(Edge[] edges, double[] dir)
@@ -413,7 +432,7 @@ namespace Assembly_Planner
                 var v1 = otherCorners[0].Position.subtract(corner.Position);
                 var v2 = otherCorners[1].Position.subtract(corner.Position);
                 var v0 = v.subtract(corner.Position);
-                if (v1.crossProduct(v0).dotProduct(v2.crossProduct(v0)) > -0.09)
+                if (v1.crossProduct(v0).dotProduct(v2.crossProduct(v0)) > -0.15) // -0.09
                     return false;
             }
             return true;

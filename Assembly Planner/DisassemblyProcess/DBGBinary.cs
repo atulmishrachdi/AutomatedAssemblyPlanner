@@ -255,6 +255,7 @@ namespace Assembly_Planner
                     if (hy.nodes.Contains(arc.To))
                         return hy;
                 }
+                return null;
             }
             foreach (var hy in graph.hyperarcs.Where(h => h.localLabels.Contains(DisConstants.SCC)))
             {

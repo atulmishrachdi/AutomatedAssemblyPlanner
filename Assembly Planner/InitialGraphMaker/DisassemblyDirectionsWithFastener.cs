@@ -51,13 +51,13 @@ namespace Assembly_Planner
                     {
                         // I wrote the code in a way that "solid1" is always "Reference" and "solid2" is always "Moving".
                         List<int> finDirs, infDirs;
-                        //NonadjacentBlockingDetermination.FiniteDirectionsBetweenConnectedParts(solid1, solid2,
-                        //    localDirInd, out finDirs, out infDirs);
+                        NonadjacentBlockingDetermination.FiniteDirectionsBetweenConnectedParts(solid1, solid2,
+                            localDirInd, out finDirs, out infDirs);
                         var from = assemblyGraph[solid2.Name]; // Moving
                         var to = assemblyGraph[solid1.Name]; // Reference
                         assemblyGraph.addArc((node) from, (node) to, "", typeof (Connection));
                         var a = (Connection) assemblyGraph.arcs.Last();
-                        AddInformationToArc(a, new List<int>(), localDirInd);
+                        AddInformationToArc(a, finDirs, infDirs);
                     }
                 }
             }

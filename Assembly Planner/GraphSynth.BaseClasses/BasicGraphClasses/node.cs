@@ -28,6 +28,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
+using Assembly_Planner.GraphSynth.BaseClasses;
 
 namespace GraphSynth.Representation
 {
@@ -41,6 +42,7 @@ namespace GraphSynth.Representation
     /// <summary>
     ///   One of the two basic classes for a graph is the node or vertex.
     /// </summary>
+    [XmlInclude(typeof(Component))]
     [XmlInclude(typeof(vertex))]
     [XmlInclude(typeof(ruleNode))]
     public class node : graphElement

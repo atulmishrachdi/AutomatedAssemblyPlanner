@@ -16,7 +16,7 @@ namespace Assembly_Planner
             var setting = new GlobalSettings();
             var sa = new BasicFiler(setting.InputDir, setting.OutputDir, setting.RulesDir);
             sa.outputDirectory = outputDirectory;
-            sa.Save("SimpleTestGraph.gxml", assemblyGraph, false);
+            sa.Save("bighbigh.gxml", assemblyGraph, false);
         }
     }
 }
