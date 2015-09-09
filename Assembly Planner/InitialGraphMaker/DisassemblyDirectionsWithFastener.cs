@@ -24,7 +24,6 @@ namespace Assembly_Planner
             Solids = new List<TessellatedSolid>(solids);
             Directions = IcosahedronPro.DirectionGeneration();
             DisassemblyDirections.Directions = new List<double[]>(Directions);
-
             var globalDirPool = new List<int>();
             var solidPrimitive = BlockingDetermination.PrimitiveMaker(solids);
             var screwsAndBolts = BoltAndGearDetection.ScrewAndBoltDetector(solidPrimitive);
@@ -76,7 +75,11 @@ namespace Assembly_Planner
         {
             foreach (var solid in solids)
             {
-                var Component = assemblyGraph.addNode(solid.Name, typeof(Component));
+                assemblyGraph.addNode(solid.Name, typeof(Component));
+                var c = (Component)assemblyGraph.nodes.Last();
+                c.CenterOfMass = solid.Center;
+                c.Volume = solid.Volume;
+                c.Mass = solid.Volume;
                 //if (gears.Keys.Contains(solid))
                 //{
                 //    Component.localLabels.Add(DisConstants.Gear);

@@ -155,7 +155,7 @@ namespace Assembly_Planner
         //initialize memoization with 2-Component (i.e., arc) subassemblies so heuristic works
         protected static void InitializeMemo()
         {
-            foreach (Connection arc in Graph.arcs)
+            foreach (Connection arc in Graph.arcs.Where(a=> a is Connection))
             {
                 List<Component> Asm = new List<Component>(new Component[] { (Component)arc.From, (Component)arc.To });
                 List<Component> Fr = new List<Component>(new Component[] { (Component)arc.From });
@@ -192,7 +192,7 @@ namespace Assembly_Planner
             var hy = Graph.addHyperArc(A.Cast<node>().ToList());
 
             List<double> Values = new List<double>();
-            foreach (Connection arc in hy.IntraArcs)
+            foreach (Connection arc in hy.IntraArcs.Where(a=> a is Connection))
             {
                 HashSet<Component> arcnodes = new HashSet<Component>(new Component[] { (Component)arc.From, (Component)arc.To });
                 Values.Add(Memo[arcnodes].Value);

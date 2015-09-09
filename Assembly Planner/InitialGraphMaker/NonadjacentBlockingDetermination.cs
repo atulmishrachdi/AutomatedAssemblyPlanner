@@ -154,7 +154,7 @@ namespace Assembly_Planner
                 );
             // To be fixed later:
             //    This ConvertToSecondary can be later added directly after generation.
-            //ConvertToSecondaryArc(graph, NonAdjacentBlocking);
+            ConvertToSecondaryArc(graph, NonAdjacentBlocking);
         }
 
         private static void ConvertToSecondaryArc(designGraph graph, Dictionary<int, List<NonAdjacentBlockings>> NonAdjacentBlocking)
@@ -180,7 +180,10 @@ namespace Assembly_Planner
                         if (
                             graph.arcs.Where(arc => arc is SecondaryConnection)
                                 .Cast<SecondaryConnection>()
-                                .Any(SC => SC.From == to && SC.To == from && SC.Directions.Contains(oppositeDir[0])))
+                                .Any(
+                                    SC =>
+                                        (SC.From == to && SC.To == from && SC.Directions.Contains(oppositeDir[0])) ||
+                                        (SC.From == from && SC.To == to && SC.Directions.Contains(key))))
                             continue;
                     }
 

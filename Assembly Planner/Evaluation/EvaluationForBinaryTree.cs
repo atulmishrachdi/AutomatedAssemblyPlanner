@@ -18,8 +18,8 @@ namespace Assembly_Planner
             var rest = subassemblyNodes.Where(n => !optNodes.Contains(n)).ToList();
             sub = Update(optNodes, rest);
             var install = new[] { rest, optNodes };
-            if (EitherRefOrMovHasSeperatedSubassemblies(install, subassemblyNodes))
-                return -1;
+            //if (EitherRefOrMovHasSeperatedSubassemblies(install, subassemblyNodes))
+            //    return -1;
             sub.Install.Time = 10;
             return 1;
         }

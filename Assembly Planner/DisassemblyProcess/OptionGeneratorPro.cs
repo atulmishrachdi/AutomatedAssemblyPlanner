@@ -151,7 +151,7 @@ namespace Assembly_Planner
                 for (var j = i + 1; j < freeSCCs.Count; j++)
                 {
                     if (
-                        !assemblyGraph.arcs.Cast<Connection>().Any(
+                        !assemblyGraph.arcs.Where(a=>a is Connection).Cast<Connection>().Any(
                             a =>
                                 ((freeSCCs[i].nodes.Contains(a.From) && freeSCCs[j].nodes.Contains(a.To)) ||
                                 (freeSCCs[j].nodes.Contains(a.From) && freeSCCs[i].nodes.Contains(a.To))) && 
@@ -231,7 +231,7 @@ namespace Assembly_Planner
             foreach (var scc in freeSccs)
             {
                 if (
-                    assemblyGraph.arcs.Cast<Connection>().Any(
+                    assemblyGraph.arcs.Where(a=> a is Connection).Cast<Connection>().Any(
                         a =>
                             ((hy.nodes.Contains(a.From) && scc.nodes.Contains(a.To)) ||
                             (scc.nodes.Contains(a.From) && hy.nodes.Contains(a.To))) && 

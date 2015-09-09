@@ -64,7 +64,8 @@ namespace Assembly_Planner
                 dbgDictionary.Add(sccHy,blockedWith);
                 //connectedButUnblocked.Add(sccHy,notBlockedWith);
             }
-            dbgDictionary = CombineWithNonAdjacentBlockings2(dbgDictionary, cndDirInd);
+            //dbgDictionary = CombineWithNonAdjacentBlockings2(dbgDictionary, cndDirInd);
+            dbgDictionary = CombineWithNonAdjacentBlockingsUsingSecondaryConnections(dbgDictionary, assemblyGraph, cndDirInd);
             dbgDictionary = SolveMutualBlocking(assemblyGraph, dbgDictionary);
             dbgDictionary = UpdateBlockingDic(dbgDictionary);
             //if (MutualBlocking(assemblyGraph, dbgDictionary))
@@ -73,6 +74,74 @@ namespace Assembly_Planner
             if (MutualBlocking2(assemblyGraph, dbgDictionary))
             {
                 var df = 2;
+            }
+            return dbgDictionary;
+        }
+
+        private static Dictionary<hyperarc, List<hyperarc>> CombineWithNonAdjacentBlockingsUsingSecondaryConnections(
+            Dictionary<hyperarc, List<hyperarc>> dbgDictionary, designGraph assemblyGraph, int cndDirInd)
+        {
+            var direction = DisassemblyDirections.Directions[cndDirInd];
+            var dirs = (from gDir in DisassemblyDirections.Directions
+                where 1 - Math.Abs(gDir.dotProduct(direction)) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall
+                select DisassemblyDirections.Directions.IndexOf(gDir)).ToList();
+            var oppositeDir = dirs.Where(d => d != cndDirInd).ToList();
+            foreach (SecondaryConnection SC in assemblyGraph.arcs.Where(a => a is SecondaryConnection))
+            {
+                var blockedScc = dbgDictionary.Keys.ToList().Where(scc => scc.nodes.Contains(SC.From));
+                var blockingScc = dbgDictionary.Keys.ToList().Where(scc => scc.nodes.Contains(SC.To));
+                if (!blockedScc.Any() || !blockingScc.Any()) 
+                    continue;
+                if (oppositeDir.Any())
+                {
+                    if (SC.Directions.Contains(cndDirInd) && SC.Directions.Contains(oppositeDir[0]))
+                    {
+                        foreach (var blocked in blockedScc)
+                        {
+                            foreach (var blocking in blockingScc.Where(b => b != blocked))
+                            {
+                                if (!dbgDictionary[blocked].Contains(blocking))
+                                    dbgDictionary[blocked].Add(blocking);
+                                if (!dbgDictionary[blocking].Contains(blocked))
+                                    dbgDictionary[blocking].Add(blocked);
+                            }
+                        }
+                    }
+                    else if (SC.Directions.Contains(cndDirInd))
+                    {
+                        foreach (var blocked in blockedScc)
+                        {
+                            foreach (var blocking in blockingScc.Where(b => b != blocked))
+                            {
+                                if (!dbgDictionary[blocked].Contains(blocking))
+                                    dbgDictionary[blocked].Add(blocking);
+                            }
+                        }
+                    }
+                    else if (SC.Directions.Contains(oppositeDir[0]))
+                    {
+                        foreach (var blocked in blockedScc)
+                        {
+                            foreach (var blocking in blockingScc.Where(b => b != blocked))
+                            {
+                                if (!dbgDictionary[blocking].Contains(blocked))
+                                    dbgDictionary[blocking].Add(blocked);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (!SC.Directions.Contains(cndDirInd)) continue;
+                    foreach (var blocked in blockedScc)
+                    {
+                        foreach (var blocking in blockingScc.Where(b => b != blocked))
+                        {
+                            if (!dbgDictionary[blocked].Contains(blocking))
+                                dbgDictionary[blocked].Add(blocking);
+                        }
+                    }
+                }
             }
             return dbgDictionary;
         }

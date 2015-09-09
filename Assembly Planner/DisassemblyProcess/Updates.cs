@@ -8,6 +8,8 @@ using AssemblyEvaluation;
 using GraphSynth.Representation;
 using StarMathLib;
 using Assembly_Planner.GraphSynth.BaseClasses;
+using TVGL;
+using Constants = AssemblyEvaluation.Constants;
 
 namespace Assembly_Planner
 {
