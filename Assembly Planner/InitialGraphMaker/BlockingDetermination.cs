@@ -157,14 +157,14 @@ namespace Assembly_Planner
         {
             foreach (var f in a.ConvexHullFaces)
             {
-                var dStar = f.Normal.dotProduct(f.Vertices[0].Position);
-                if (b.ConvexHullVertices.All(pt => (f.Normal.dotProduct(pt.Position)) > dStar+0.00001))
+                var dStar = (f.Normal.dotProduct(f.Vertices[0].Position));
+                if (b.ConvexHullVertices.All(pt => (f.Normal.dotProduct(pt.Position)) > dStar + 0.001))
                     return false;
             }
             foreach (var f in b.ConvexHullFaces)
             {
-                var dStar = f.Normal.dotProduct(f.Vertices[0].Position);
-                if (a.ConvexHullVertices.All(pt => (f.Normal.dotProduct(pt.Position)) > dStar + 0.00001))
+                var dStar = (f.Normal.dotProduct(f.Vertices[0].Position));
+                if (a.ConvexHullVertices.All(pt => (f.Normal.dotProduct(pt.Position)) > dStar + 0.001))
                     return false;
             }
             return true;
@@ -172,9 +172,9 @@ namespace Assembly_Planner
 
         internal static bool BoundingBoxOverlap(TessellatedSolid a, TessellatedSolid b)
         {
-            var aveXLength = ((a.XMax - a.XMin) + (b.XMax - b.XMin)) / 2.0;
-            var aveYLength = ((a.YMax - a.YMin) + (b.YMax - b.YMin)) / 2.0;
-            var aveZLength = ((a.ZMax - a.ZMin) + (b.ZMax - b.ZMin)) / 2.0;
+            var aveXLength = (Math.Abs(a.XMax - a.XMin) + Math.Abs(b.XMax - b.XMin)) / 2.0;
+            var aveYLength = (Math.Abs(a.YMax - a.YMin) + Math.Abs(b.YMax - b.YMin)) / 2.0;
+            var aveZLength = (Math.Abs(a.ZMax - a.ZMin) + Math.Abs(b.ZMax - b.ZMin)) / 2.0;
             // There are some cases that two boxes are touching each other. So the bounding box or the CVH must not
             // return false. Define a threshold:
             if (a.XMin > b.XMax + ConstantsPrimitiveOverlap.FractionIncreaseForAABBIntersect * aveXLength

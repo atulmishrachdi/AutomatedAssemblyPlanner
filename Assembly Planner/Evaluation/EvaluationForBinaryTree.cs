@@ -18,8 +18,8 @@ namespace Assembly_Planner
             var rest = subassemblyNodes.Where(n => !optNodes.Contains(n)).ToList();
             sub = Update(optNodes, rest);
             var install = new[] { rest, optNodes };
-            //if (EitherRefOrMovHasSeperatedSubassemblies(install, subassemblyNodes))
-            //    return -1;
+            if (EitherRefOrMovHasSeperatedSubassemblies(install, subassemblyNodes))
+                return -1;
             sub.Install.Time = 10;
             return 1;
         }
@@ -69,8 +69,8 @@ namespace Assembly_Planner
                         var pNode = stack.Pop();
                         visited.Add(pNode);
                         globalVisited.Add(pNode);
-
-                        foreach (Connection arc in pNode.arcs.Where(a => a.GetType() == typeof (Connection)))
+                        var a2 = pNode.arcs.Where(a => a.GetType() == typeof (Connection)).ToList();
+                        foreach (Connection arc in a2)
                         {
                             if (!A.Contains(arc.From) || !A.Contains(arc.To) ||
                                 !subAsm.Contains(arc.From) || !subAsm.Contains(arc.To)) continue;

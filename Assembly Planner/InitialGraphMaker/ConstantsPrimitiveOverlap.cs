@@ -19,6 +19,6 @@ namespace Assembly_Planner
         public const double CheckWithGlobDirs = -0.00001;//0.0;
         public const double EqualToZero = 5e-4;
         public const double EqualToZero2 = 0.15;
-        public const double FractionIncreaseForAABBIntersect = 0.005;
+        public const double FractionIncreaseForAABBIntersect = 0.05;
     }
 }

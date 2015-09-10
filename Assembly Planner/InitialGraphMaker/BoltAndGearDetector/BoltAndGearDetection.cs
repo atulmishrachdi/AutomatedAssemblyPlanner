@@ -25,9 +25,9 @@ namespace Assembly_Planner
                         fastener.Add(solid);
                     else
                         if (solid.Name.Contains("DowellGrooved"))
-                            //if (solid.Name.Contains("-5") || solid.Name.Contains("-14")||solid.Name.Contains("-27")||solid.Name.Contains("-30"))
-                                //continue;
-                            //else
+                            if (solid.Name.Contains("-5") || solid.Name.Contains("-14")||solid.Name.Contains("-27")||solid.Name.Contains("-30"))
+                                continue;
+                            else
                                 fastener.Add(solid);
             
             return fastener;

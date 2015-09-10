@@ -34,12 +34,12 @@ namespace Assembly_Planner
                 solidsNoFastener.Remove(bolt);
             DisassemblyDirections.Solids = new List<TessellatedSolid>(solidsNoFastener);
             AddingNodesToGraph(assemblyGraph, solidsNoFastener); //, gears, screwsAndBolts);
-
+            //var aaa = new List<TessellatedSolid>(solidsNoFastener.Where(s=>s.Name.Contains("DowellGrooved")));
             for (var i = 0; i < solidsNoFastener.Count - 1; i++)
             {
                 var solid1 = solidsNoFastener[i];
                 var solid1Primitives = solidPrimitive[solid1];
-                for (var j = i + 1; j < solidsNoFastener.Count; j++)
+                for (var j = i+1; j < solidsNoFastener.Count; j++)
                 {
                     var solid2 = solidsNoFastener[j];
                     var solid2Primitives = solidPrimitive[solid2];

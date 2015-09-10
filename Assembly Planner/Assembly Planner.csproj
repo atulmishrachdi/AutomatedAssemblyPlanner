@@ -124,6 +124,7 @@
     <Compile Include="GraphSynth.BaseClasses\SearchProcess\RandomChooseWithUndo.cs" />
     <Compile Include="GraphSynth.BaseClasses\SearchProcess\RecognizeChooseApply.cs" />
     <Compile Include="GraphSynth.BaseClasses\SearchProcess\SearchProcess.cs" />
+    <Compile Include="GraphSynth.BaseClasses\SecondaryConnection.cs" />
     <Compile Include="InitialGraphMaker\BlockingDetermination.cs" />
     <Compile Include="InitialGraphMaker\BoltAndGearDetector\BoltAndGearConstants.cs" />
     <Compile Include="InitialGraphMaker\BoltAndGearDetector\BoltAndGearDetection.cs" />
@@ -137,6 +138,7 @@
     <Compile Include="InitialGraphMaker\Icosahedron.cs" />
     <Compile Include="InitialGraphMaker\IcosahedronPro.cs" />
     <Compile Include="InitialGraphMaker\PrimitivePrimitiveInteractions.cs" />
+    <Compile Include="Output\GraphSaving.cs" />
     <Compile Include="PostProcessor\OptimalOrientation.cs" />
     <Compile Include="PostProcessor\PostProcessingConstnts.cs" />
     <Compile Include="PostProcessor\Scheduling.cs" />

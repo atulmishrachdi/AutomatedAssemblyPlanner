@@ -26,7 +26,7 @@ namespace Assembly_Planner
                 //"../../../Test/Simple-Test";
                 //"../../../Test/simple";
                 //"../../../Test/PumpWExtention";
-                "../../../Test/FoodPackagingMachine";
+                "../../../Test/FoodPackagingMachine/FPMSTL2";
                 // "C:\\DMDII Project\\GearAndFastener Detection\\TrainingData\\not-screw";
                 //"../../../Test/FPM2";
             var solids = GetSTLs(inputDir);
