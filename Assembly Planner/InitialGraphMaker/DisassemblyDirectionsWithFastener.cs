@@ -56,6 +56,7 @@ namespace Assembly_Planner
                         var to = assemblyGraph[solid1.Name]; // Reference
                         assemblyGraph.addArc((node) from, (node) to, "", typeof (Connection));
                         var a = (Connection) assemblyGraph.arcs.Last();
+                        a.Certainty = (!infDirs.Any() || infDirs.Count == Directions.Count) ? 0.0 : 1.0;
                         AddInformationToArc(a, finDirs, infDirs);
                     }
                 }
