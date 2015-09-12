@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using Assembly_Planner.GeometryReasoning;
 using GraphSynth.Representation;
 using StarMathLib;
 using TVGL;
@@ -15,19 +17,12 @@ namespace Assembly_Planner
     internal class BlockingDetermination
     {
         public static List<OverlappedSurfaces> OverlappingSurfaces = new List<OverlappedSurfaces>();
+
         internal static Dictionary<TessellatedSolid, List<PrimitiveSurface>> PrimitiveMaker(List<TessellatedSolid> parts)
         {
+            var classification = true;
             var partPrimitive = new Dictionary<TessellatedSolid, List<PrimitiveSurface>>();
-            //string pathDesktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            //string filePath = pathDesktop + "\\mycsvfile.csv";
-
-            //if (!File.Exists(filePath))
-            //{
-            //    File.Create(filePath).Close();
-            //}
-            //string delimter = ",";
-            //List<string[]> output = new List<string[]>();
-
+            var partSize = new Dictionary<TessellatedSolid, double>();
 
 
             //Parallel.ForEach(parts, solid =>
@@ -37,8 +32,63 @@ namespace Assembly_Planner
                 var solidPrim = TesselationToPrimitives.Run(solid);
                 //lock (partPrimitive)
                 partPrimitive.Add(solid, solidPrim);
+                if (!classification) continue;
+                var solidObb = OBB.BuildUsingPoints(solid.Vertices.ToList());
+                var shortestObbEdge = double.PositiveInfinity;
+                var longestObbEdge = double.NegativeInfinity;
+                for (var i = 1; i < solidObb.Count(); i++)
+                {
+                    var dis =
+                        Math.Sqrt(Math.Pow(solidObb[0][0] - solidObb[i][0], 2.0) +
+                                  Math.Pow(solidObb[0][1] - solidObb[i][1], 2.0) +
+                                  Math.Pow(solidObb[0][2] - solidObb[i][2], 2.0));
+                    if (dis < shortestObbEdge) shortestObbEdge = dis;
+                    if (dis > longestObbEdge) longestObbEdge = dis;
+                }
+                var sizeMetric = solid.Volume*(longestObbEdge/shortestObbEdge);
+                partSize.Add(solid, sizeMetric);
+            }
+            // );
+            if (!classification) return partPrimitive;
+            
+            // if removing the first 10 percent drops the max size by 95 percent, consider them as noise: 
+            var maxSize = partSize.Values.Max();
+            var sortedPartSize = partSize.ToList();
+            sortedPartSize.Sort((x, y) => y.Value.CompareTo(x.Value));
+            
+            var noise = new List<TessellatedSolid>();
+            for (var i = 0; i < Math.Ceiling(partSize.Count * 5 / 100.0); i++)
+                noise.Add(sortedPartSize[i].Key);
+            var approvedNoise = new List<TessellatedSolid>();
+            for (var i = 0; i < noise.Count; i++)
+            {
+                var newList = new List<TessellatedSolid>();
+                for (var j = 0; j < i+1; j++)
+                    newList.Add(noise[j]);
+                var max =
+                    partSize.Where(a => !newList.Contains(a.Key))
+                        .ToDictionary(key => key.Key, value => value.Value)
+                        .Values.Max();
+                if (max > maxSize*5.0/100.0) continue;
+                approvedNoise = newList;
+                break;
+            }
+            maxSize = partSize.Where(a => !approvedNoise.Contains(a.Key))
+                        .ToDictionary(key => key.Key, value => value.Value)
+                        .Values.Max();
+            //string pathDesktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            //string filePath = pathDesktop + "\\mycsvfile.csv";
 
-                /*var cones = solidPrim.Where(p => p is Cone).ToList();
+            //if (!File.Exists(filePath))
+            //{
+            //    File.Create(filePath).Close();
+            //}
+            //string delimter = ",";
+            //List<string[]> output = new List<string[]>();
+            foreach (var solid in parts.Where(s=>!approvedNoise.Contains(s)))
+            {
+                /*var solidPrim = partPrimitive[solid];
+                var cones = solidPrim.Where(p => p is Cone).ToList();
                 var flat = solidPrim.Where(p => p is Flat).ToList();
                 var cylinder = solidPrim.Where(p => p is Cylinder).ToList();
 
@@ -56,29 +106,92 @@ namespace Assembly_Planner
                 var feature4 = coneFacesCount/solid.Faces.Count();
                 var feature5 = flatFacesCount/solid.Faces.Count();
                 var feature6 = cylinderFacesCount/solid.Faces.Count();
-                var feature7 = (coneArea + cylinderArea)/solid.SurfaceArea;
+                var feature7 = (coneArea + cylinderArea)/solid.SurfaceArea;*/
+                var feature8 = partSize[solid]/maxSize;
+                //Console.WriteLine(solid.Name + "   " + feature8);
                 //lock (output)
-                output.Add(new[]
-                {
-                    feature1.ToString(), feature2.ToString(), feature3.ToString(), feature4.ToString(),
-                    feature5.ToString(), feature6.ToString(), feature7.ToString()
-                });*/
-                //(coneFacesCount / solid.Faces.Count()).ToString(), 
-                //(coneAndCylinderArea/solid.SurfaceArea).ToString(), (flatArea/solid.SurfaceArea).ToString() });
+                //output.Add(new[]
+               // {
+                //    feature1.ToString(), feature2.ToString(), feature3.ToString(), feature4.ToString(),
+               //     feature5.ToString(), feature6.ToString(), feature7.ToString()
+               // });
             }
-            // );
 
-
-            /*int length = output.Count;
+           /* int length = output.Count;
             using (TextWriter writer = File.CreateText(filePath))
-            {
-
                 for (int index = 0; index < length; index++)
-                {
                     writer.WriteLine(string.Join(delimter, output[index]));
-                }
-            }*/
+*/
 
+
+
+
+
+
+
+
+
+
+
+
+            // creating the dictionary:
+            var n = 99.0; // number of classes
+            var dic = new Dictionary<double, List<TessellatedSolid>>();
+
+
+
+            // Filling up the keys
+            var minSize = partSize.Where(a => !approvedNoise.Contains(a.Key))
+                        .ToDictionary(key => key.Key, value => value.Value)
+                        .Values.Min();
+            var smallestSolid = partSize.Keys.Where(s=> partSize[s] == minSize).ToList();
+            var largestSolid = partSize.Keys.Where(s => partSize[s] == maxSize).ToList();
+
+            for (var i = 0; i < n; i++)
+            {
+                var ini = new List<TessellatedSolid>();
+                var key = minSize + (i / (n - 1)) * (maxSize - minSize);
+                dic.Add(key, ini);
+            }
+
+            dic[minSize].AddRange(smallestSolid);
+            dic[maxSize].AddRange(approvedNoise);
+
+            // Filling up the values
+            var keys = dic.Keys.ToList();
+            foreach (var f in parts.Where(a => !approvedNoise.Contains(a)))
+            {
+                for (var i = 0; i < n - 2; i++)
+                {
+                    if (partSize[f] >= keys[i] && partSize[f] <= keys[i + 1])
+                    {
+                        if (Math.Abs(partSize[f] - keys[i]) > Math.Abs(partSize[f] - keys[i + 1]))
+                            dic[keys[i + 1]].Add(f);
+                        else dic[keys[i]].Add(f);
+                    }
+                }
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            foreach (var v in dic[minSize])
+                Console.WriteLine(v.Name);
             return partPrimitive;
         }
 

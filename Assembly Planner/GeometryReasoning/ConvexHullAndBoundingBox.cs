@@ -26,7 +26,7 @@ namespace Assembly_Planner
             LoadAndSaveTesselatedPartFiles(); 
             MakeBBDictionaryFromCVXHullDictionary();
         }
-
+        
         private void LoadAndSaveTesselatedPartFiles()
         {
             ConvexHullDictionary = new Dictionary<string, ConvexHull<Vertex, DefaultConvexFace<Vertex>>>();
