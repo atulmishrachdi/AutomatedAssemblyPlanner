@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Security;
 using System.Threading.Tasks;
+using Assembly_Planner.GeometryReasoning;
 using Assembly_Planner.GraphSynth.BaseClasses;
 using GraphSynth.Representation;
 using TVGL;
@@ -17,7 +18,7 @@ namespace Assembly_Planner
     {
         private static void Main(string[] args)
         {
-            var graphExists = true;
+            var graphExists = false;
             var inputDir =
                 //"../../../Test/Cube";
                 //"../../../Test/Pump Assembly";
@@ -27,11 +28,16 @@ namespace Assembly_Planner
                 //"../../../Test/simple";
                 //"../../../Test/PumpWExtention";
                 "../../../Test/FoodPackagingMachine/FPMSTL2";
-                // "C:\\DMDII Project\\GearAndFastener Detection\\TrainingData\\not-screw";
-                //"../../../Test/FPM2";
+                //"C:\\DMDII Project\\GearAndFastener Detection\\TrainingData\\not-screw";
+                //"../../../Test/test";
             var solids = GetSTLs(inputDir);
             designGraph assemblyGraph;
             List<int> globalDirPool = new List<int>();
+            foreach (var s in solids)
+            {
+                //var a = OBB.BuildUsingPoints(s.Vertices.ToList());
+                //var aa = TVGL.MinimumEnclosure.OrientedBoundingBox(s);
+            }
             if (graphExists)
             {
                 var fileName = "../../../Test/PremadeGraphs/FPM.gxml";
@@ -48,7 +54,7 @@ namespace Assembly_Planner
                 //Updates.AddPartsProperties(inputDir, assemblyGraph);
                 //NonadjacentBlockingDeterminationPro.Run(assemblyGraph, solids, globalDirPool);
                 NonadjacentBlockingDetermination.Run(assemblyGraph, solids, globalDirPool);
-                GraphSaving.SaveTheGraph(assemblyGraph);
+                //GraphSaving.SaveTheGraph(assemblyGraph);
             }
             var inputData = new ConvexHullAndBoundingBox(inputDir, assemblyGraph);
             var solutions = RecursiveOptimizedSearch.Run(inputData, globalDirPool);
