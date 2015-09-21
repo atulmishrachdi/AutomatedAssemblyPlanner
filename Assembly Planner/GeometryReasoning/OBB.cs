@@ -14,7 +14,7 @@ namespace Assembly_Planner.GeometryReasoning
         //   3. Using convex hull
         // I will only implement the "using points" method here.
 
-        internal static double[][] BuildUsingPoints(List<Vertex> points)
+        internal static double[][] BuildUsingPoints(List<Vertex> points, out double[][] dir)
         {
             var mu = new[] {0.0, 0.0, 0.0};
             var C = new double[3, 3];
@@ -45,13 +45,11 @@ namespace Assembly_Planner.GeometryReasoning
             C[2, 0] = cxz;
             C[2, 1] = cyz;
             C[2, 2] = czz;
-
-            return BuildFromCovarianceMatrix(C, points);
+            return BuildFromCovarianceMatrix(C, points, out dir);
         }
 
-        internal static double[][] BuildFromCovarianceMatrix(double[,] C, List<Vertex> points)
+        internal static double[][] BuildFromCovarianceMatrix(double[,] C, List<Vertex> points, out double[][] eigenVecs)
         {
-            double[][] eigenVecs;
             var eugVal = C.GetEigenValuesAndVectors(out eigenVecs);
             var r = eigenVecs[0];
             var u = eigenVecs[1];

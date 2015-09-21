@@ -20,20 +20,21 @@ namespace Assembly_Planner
 
         internal static Dictionary<TessellatedSolid, List<PrimitiveSurface>> PrimitiveMaker(List<TessellatedSolid> parts)
         {
-            var classification = true;
+            var classification = false;
             var partPrimitive = new Dictionary<TessellatedSolid, List<PrimitiveSurface>>();
             var partSize = new Dictionary<TessellatedSolid, double>();
-
 
             //Parallel.ForEach(parts, solid =>
             foreach (var solid in parts)
             {
-                if (solid.Faces.Count() == 2098 || solid.Faces.Count() == 896 || solid.Faces.Count() == 2096) continue;
+                var obb = MinimumEnclosure.OrientedBoundingBox(solid);
+                //if (solid.Faces.Count() == 2098 || solid.Faces.Count() == 896 || solid.Faces.Count() == 2096) continue;
                 var solidPrim = TesselationToPrimitives.Run(solid);
                 //lock (partPrimitive)
                 partPrimitive.Add(solid, solidPrim);
                 if (!classification) continue;
-                var solidObb = OBB.BuildUsingPoints(solid.Vertices.ToList());
+                double[][] dir;
+                var solidObb = OBB.BuildUsingPoints(solid.Vertices.ToList(), out dir);
                 var shortestObbEdge = double.PositiveInfinity;
                 var longestObbEdge = double.NegativeInfinity;
                 for (var i = 1; i < solidObb.Count(); i++)
@@ -50,12 +51,12 @@ namespace Assembly_Planner
             }
             // );
             if (!classification) return partPrimitive;
-            
+
             // if removing the first 10 percent drops the max size by 95 percent, consider them as noise: 
             var maxSize = partSize.Values.Max();
             var sortedPartSize = partSize.ToList();
             sortedPartSize.Sort((x, y) => y.Value.CompareTo(x.Value));
-            
+
             var noise = new List<TessellatedSolid>();
             for (var i = 0; i < Math.Ceiling(partSize.Count * 5 / 100.0); i++)
                 noise.Add(sortedPartSize[i].Key);
@@ -63,19 +64,22 @@ namespace Assembly_Planner
             for (var i = 0; i < noise.Count; i++)
             {
                 var newList = new List<TessellatedSolid>();
-                for (var j = 0; j < i+1; j++)
+                for (var j = 0; j < i + 1; j++)
                     newList.Add(noise[j]);
                 var max =
                     partSize.Where(a => !newList.Contains(a.Key))
                         .ToDictionary(key => key.Key, value => value.Value)
                         .Values.Max();
-                if (max > maxSize*5.0/100.0) continue;
+                if (max > maxSize * 5.0 / 100.0) continue;
                 approvedNoise = newList;
                 break;
             }
             maxSize = partSize.Where(a => !approvedNoise.Contains(a.Key))
                         .ToDictionary(key => key.Key, value => value.Value)
                         .Values.Max();
+
+            // If I have detected a portion of the fasteners (a very good number of them possibly) by this point,
+            // it can accellerate the primitive classification. If it is fastener, it doesn't need to be classified?
             //string pathDesktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             //string filePath = pathDesktop + "\\mycsvfile.csv";
 
@@ -135,7 +139,7 @@ namespace Assembly_Planner
 
 
             // creating the dictionary:
-            var n = 99.0; // number of classes
+            var n = 151.0; // number of classes
             var dic = new Dictionary<double, List<TessellatedSolid>>();
 
 
@@ -191,7 +195,7 @@ namespace Assembly_Planner
 
 
             foreach (var v in dic[minSize])
-                Console.WriteLine(v.Name);
+                Console.WriteLine(partSize[v]/maxSize);
             return partPrimitive;
         }
 

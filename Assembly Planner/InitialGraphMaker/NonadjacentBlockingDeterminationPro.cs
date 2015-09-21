@@ -41,7 +41,7 @@ namespace Assembly_Planner
                     {
                         var referenceProj = _3Dto2D.Get2DProjectionPoints(solidBlocking.Vertices, direction);
                         var reference2D = new _3Dto2D { ThreeD = solidBlocking, Points = referenceProj, Edges = _3Dto2D.Get2DEdges(solidBlocking, referenceProj) };
-                        var blocked = moving2D.Edges.Any(movEdge => reference2D.Edges.Any(refEdge => DoIntersect(movEdge, refEdge)));
+                        var blocked = IsItBlocked(moving2D,reference2D);
                         if (blocked)
                         {
                             blockingsForDirection.Add(new NonAdjacentBlockings
@@ -53,6 +53,11 @@ namespace Assembly_Planner
                 }
                 NonadjacentBlockingDetermination.NonAdjacentBlocking.Add(dir, blockingsForDirection);
             }
+        }
+
+        internal static bool IsItBlocked(_3Dto2D moving2D, _3Dto2D reference2D)
+        {
+            return moving2D.Edges.Any(movEdge => reference2D.Edges.Any(refEdge => DoIntersect(movEdge, refEdge)));
         }
 
         public static bool DoIntersect(Point[] movEdge, Point[] refEdge)

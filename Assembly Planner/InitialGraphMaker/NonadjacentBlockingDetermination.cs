@@ -30,8 +30,8 @@ namespace Assembly_Planner
             List<TessellatedSolid> solids, List<int> gDir)
         {
 
-            Parallel.ForEach(gDir, dir =>
-            //foreach (var dir in gDir)
+            //Parallel.ForEach(gDir, dir =>
+            foreach (var dir in gDir)
             {
                 var direction = DisassemblyDirections.Directions[dir];
                 var blockingsForDirection = new List<NonAdjacentBlockings>();
@@ -67,77 +67,11 @@ namespace Assembly_Planner
 
                         if (BlockingDetermination.ConvexHullOverlap(solid, solidBlocking))
                         {
-                            foreach (var ray in rays)
-                            {
-                                //var m = solidBlocking.Faces.Where(f => RayIntersectsWithFace3(ray, f)).ToList();
-                                //var f55 = new List<double>();
-                                //foreach (var d in m)
-                                //{
-                                //    f55.Add(ray.Direction.dotProduct(d.Normal));
-                                //}
-                                foreach (
-                                    var blockingPolygonalFace in
-                                        solidBlocking.Faces.Where(f => RayIntersectsWithFace3(ray, f)).ToList())
-                                {
-                                    var d = DistanceToTheFace(ray.Position, blockingPolygonalFace);
-                                    //if (d < distanceToTheClosestFace) distanceToTheClosestFace = d;
-                                    if (d < 0) continue;
-                                    overlap = true;
-                                    break;
-                                }
-                                if (overlap)
-                                {
-                                    var movingProj = _3Dto2D.Get2DProjectionPoints(solid.Vertices, direction);
-                                    var moving2D = new _3Dto2D
-                                    {
-                                        ThreeD = solid,
-                                        Points = movingProj,
-                                        Edges = _3Dto2D.Get2DEdges(solid, movingProj)
-                                    };
-                                    var referenceProj = _3Dto2D.Get2DProjectionPoints(solidBlocking.Vertices, direction);
-                                    var reference2D = new _3Dto2D
-                                    {
-                                        ThreeD = solidBlocking,
-                                        Points = referenceProj,
-                                        Edges = _3Dto2D.Get2DEdges(solidBlocking, referenceProj)
-                                    };
-                                    var blocked =
-                                        moving2D.Edges.Any(
-                                            movEdge =>
-                                                reference2D.Edges.Any(
-                                                    refEdge =>
-                                                        NonadjacentBlockingDeterminationPro.DoIntersect(movEdge, refEdge)));
-                                    if (!blocked) overlap = false;
-                                    break;
-                                }
-                            }
+                            overlap = ConvexHullOverlappNonAdjacent(rays, solid, solidBlocking, direction);
                         }
                         else
                         {
-                            foreach (var ray in rays)
-                            {
-                                if (solidBlocking.ConvexHullFaces.Any(f => RayIntersectsWithFace3(ray, f)))
-                                    //now find the faces that intersect with the ray and find the distance between them
-                                {
-                                    //var m = solidBlocking.Faces.Where(f => RayIntersectsWithFace3(ray, f)).ToList();
-                                    //var f55 = new List<double>();
-                                    //foreach (var d in m)
-                                    //{
-                                    //    f55.Add(ray.Direction.dotProduct(d.Normal));
-                                    //}
-                                    foreach (
-                                        var blockingPolygonalFace in
-                                            solidBlocking.Faces.Where(f => RayIntersectsWithFace3(ray, f)).ToList())
-                                    {
-                                        var d = DistanceToTheFace(ray.Position, blockingPolygonalFace);
-                                        //if (d < distanceToTheClosestFace) distanceToTheClosestFace = d;
-                                        if (d < 0) continue;
-                                        overlap = true;
-                                        break;
-                                    }
-                                    if (overlap) break;
-                                }
-                            }
+                            overlap = DontConcexHullsOverlapNonAdjacent(rays, solidBlocking);
                         }
                         if (overlap)
                             blockingsForDirection.Add(new NonAdjacentBlockings
@@ -148,13 +82,87 @@ namespace Assembly_Planner
                     }
                 }
                 //);
-                lock (NonAdjacentBlocking)
+              //  lock (NonAdjacentBlocking)
                     NonAdjacentBlocking.Add(dir, blockingsForDirection);
             }
-                );
+            //    );
             // To be fixed later:
             //    This ConvertToSecondary can be later added directly after generation.
-            ConvertToSecondaryArc(graph, NonAdjacentBlocking);
+            //ConvertToSecondaryArc(graph, NonAdjacentBlocking);
+        }
+
+        private static bool DontConcexHullsOverlapNonAdjacent(List<Ray> rays, TessellatedSolid solidBlocking)
+        {
+            var overlap = false;
+            foreach (var ray in rays)
+            {
+                if (solidBlocking.ConvexHullFaces.Any(f => RayIntersectsWithFace3(ray, f)))
+                //now find the faces that intersect with the ray and find the distance between them
+                {
+                    foreach (
+                        var blockingPolygonalFace in
+                            solidBlocking.Faces.Where(f => RayIntersectsWithFace3(ray, f)).ToList())
+                    {
+                        var d = DistanceToTheFace(ray.Position, blockingPolygonalFace);
+                        //if (d < distanceToTheClosestFace) distanceToTheClosestFace = d;
+                        if (d < 0) continue;
+                        overlap = true;
+                        break;
+                    }
+                    if (overlap) break;
+                }
+            }
+            return overlap;
+        }
+
+        private static bool ConvexHullOverlappNonAdjacent(List<Ray> rays, TessellatedSolid solid, TessellatedSolid solidBlocking, double[] direction)
+        {
+            var boo = false;
+            foreach (var ray in rays)
+            {
+                foreach (
+                    var blockingPolygonalFace in
+                        solidBlocking.Faces.Where(f => RayIntersectsWithFace3(ray, f)).ToList())
+                {
+                    var d = DistanceToTheFace(ray.Position, blockingPolygonalFace);
+                    //if (d < distanceToTheClosestFace) distanceToTheClosestFace = d;
+                    if (d < 0) continue;
+                    boo = true;
+                    break;
+                }
+                if (boo)
+                {
+                    var blocked = _2DProjectionCheck(solid, solidBlocking, direction);
+                    if (!blocked) boo = false;
+                    break;
+                }
+            }
+            return boo;
+        }
+
+        private static bool _2DProjectionCheck(TessellatedSolid solid, TessellatedSolid solidBlocking, double[] direction)
+        {
+            var movingProj = _3Dto2D.Get2DProjectionPoints(solid.Vertices, direction);
+            var moving2D = new _3Dto2D
+            {
+                ThreeD = solid,
+                Points = movingProj,
+                Edges = _3Dto2D.Get2DEdges(solid, movingProj)
+            };
+            var referenceProj = _3Dto2D.Get2DProjectionPoints(solidBlocking.Vertices, direction);
+            var reference2D = new _3Dto2D
+            {
+                ThreeD = solidBlocking,
+                Points = referenceProj,
+                Edges = _3Dto2D.Get2DEdges(solidBlocking, referenceProj)
+            };
+            var blocked =
+                moving2D.Edges.Any(
+                    movEdge =>
+                        reference2D.Edges.Any(
+                            refEdge =>
+                                NonadjacentBlockingDeterminationPro.DoIntersect(movEdge, refEdge)));
+            return blocked;
         }
 
         private static void ConvertToSecondaryArc(designGraph graph, Dictionary<int, List<NonAdjacentBlockings>> NonAdjacentBlocking)
@@ -475,7 +483,7 @@ namespace Assembly_Planner
                 var v1 = otherCorners[0].Position.subtract(corner.Position);
                 var v2 = otherCorners[1].Position.subtract(corner.Position);
                 var v0 = v.subtract(corner.Position);
-                if (v1.crossProduct(v0).dotProduct(v2.crossProduct(v0)) > -0.15) // -0.09
+                if (v1.crossProduct(v0).dotProduct(v2.crossProduct(v0)) > -0.15) //   -0.09 
                     return false;
             }
             return true;
@@ -507,11 +515,12 @@ namespace Assembly_Planner
                 foreach (var vertex in solid1.ConvexHullVertices)
                     rays2.Add(new Ray(new AssemblyEvaluation.Vertex(vertex.Position[0], vertex.Position[1], vertex.Position[2]),
                                     new Vector(direction2[0], direction2[1], direction2[2])));
-                if (rays.Any(ray => solid1.Faces.Any(f => RayIntersectsWithFace3(ray, f) && DistanceToTheFace(ray.Position, f) > 0))||
-                    rays2.Any(ray => solid2.Faces.Any(f => RayIntersectsWithFace3(ray, f) && DistanceToTheFace(ray.Position, f) > 0)))
+                if (rays.Any(ray => solid1.Faces.Any(f => RayIntersectsWithFace3(ray, f) && DistanceToTheFace(ray.Position, f) > 0)))
                 {
                    finDirs.Add(dir);
                 }
+                else if (rays2.Any(ray => solid2.Faces.Any(f => RayIntersectsWithFace3(ray, f) && DistanceToTheFace(ray.Position, f) > 0)))
+                    finDirs.Add(dir);
                 else
                     infDirs.Add(dir);
             }

@@ -21,7 +21,7 @@ namespace Assembly_Planner
             for (var thetaD = 0; thetaD <= 180; thetaD+=stepSize)
             {
                 var thetaR = (thetaD * Math.PI) / 180;
-                for (var phiD = 0; phiD < 360; phiD+=stepSize)
+                for (var phiD = 0; phiD < 180; phiD+=stepSize)
                 {
                     var phiR = (phiD * Math.PI) / 180;
                     var x = Math.Round(Math.Sin(thetaR) * Math.Cos(phiR),4);
@@ -32,6 +32,8 @@ namespace Assembly_Planner
                     directions.Add(new[]{x,y,z});
                 }
             }
+            var directions2 = (from dir in directions where !directions.Contains(dir.multiply(-1.0)) select dir.multiply(-1.0)).ToList();
+            directions.AddRange(directions2);
             if (!directions.Any(d => d[0] == 1 && d[1] == 0 && d[2] == 0))
                 directions.Add(new[] { 1, 0.0, 0 });
             if (!directions.Any(d => d[0] == 0 && d[1] == 1 && d[2] == 0))
