@@ -60,14 +60,15 @@ namespace Assembly_Planner
                                               (a.From.name == solid.Name && a.To.name == s.Name) ||
                                               (a.From.name == s.Name && a.To.name == solid.Name))))
                     {
-
+                         
                         if (!BoundingBoxBlocking(direction, solidBlocking, solid)) continue;
                         var distanceToTheClosestFace = double.PositiveInfinity;
                         var overlap = false;
 
                         if (BlockingDetermination.ConvexHullOverlap(solid, solidBlocking))
                         {
-                            overlap = ConvexHullOverlappNonAdjacent(rays, solid, solidBlocking, direction);
+                            //overlap = ConvexHullOverlappNonAdjacent(rays, solid, solidBlocking, direction);
+                            continue;
                         }
                         else
                         {
@@ -223,7 +224,7 @@ namespace Assembly_Planner
             }
         }
 
-        private static IEnumerable<Ray> AddingMoreRays(Edge[] edges, double[] dir)
+        internal static IEnumerable<Ray> AddingMoreRays(Edge[] edges, double[] dir)
         {
             //For the case that two objects are nonadacently blocking each other but the rays shot from the corner
             //vertices cannot detect them, we will add more vertices here to solve this issue.
@@ -249,7 +250,7 @@ namespace Assembly_Planner
         }
 
 
-        private static bool BoundingBoxBlocking(double[] v, TessellatedSolid partBlo, TessellatedSolid partMov)
+        internal static bool BoundingBoxBlocking(double[] v, TessellatedSolid partBlo, TessellatedSolid partMov)
         {
             if (BlockingDetermination.BoundingBoxOverlap(partBlo, partMov)) return true;
             var blockingBoundingBox = new[] { partBlo.XMin, partBlo.XMax, partBlo.YMin, partBlo.YMax, partBlo.ZMin, partBlo.ZMax };

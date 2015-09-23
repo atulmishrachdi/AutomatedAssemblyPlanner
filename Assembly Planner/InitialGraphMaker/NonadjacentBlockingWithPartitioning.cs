@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
+using AssemblyEvaluation;
 using GraphSynth.Representation;
 using StarMathLib;
 using TVGL;
@@ -12,6 +13,7 @@ namespace Assembly_Planner
 {
     class NonadjacentBlockingWithPartitioning
     {
+        internal static Dictionary<TessellatedSolid, Partition[]> Partitions = new Dictionary<TessellatedSolid, Partition[]>();
         // This class is added as an alternative for current Nonadjacent blocking determination approach.
         // The overal approach is the same as before (ray shooting), but number of both rays and blocking 
         // triangles are droped to speedup the function.
@@ -25,29 +27,118 @@ namespace Assembly_Planner
         internal static void Run(designGraph graph,
             List<TessellatedSolid> solids, List<int> gDir)
         {
-            for (var i = 0; i < solids.Count; i++)
+            foreach (var s in solids)
+                Partitions.Add(s, PartitioningSolid.Run2(s));
+            var solidsL = solids.Where(s => graph.nodes.Any(n => n.name == s.Name)).ToList();
+            for (var i = 0; i < solidsL.Count; i++)
             {
-                if (graph.nodes.All(n => n.name != solids[i].Name)) continue;
-                var solid1 = solids[i];
-                for (var j = i+1; j < solids.Count; j++)
+                //if (graph.nodes.All(n => n.name != solids[i].Name)) continue;
+                var solidMoving = solidsL[i];
+                for (var j = i + 1; j < solidsL.Count; j++)
                 {
-                    if (graph.nodes.All(n => n.name != solids[j].Name)) continue;
+                    //if (graph.nodes.All(n => n.name != solids[j].Name)) continue;
                     // check the convex hull of these two solids to find the planes tha can linearly seperate them
                     // solid1 is moving and solid2 is blocking
-                    var solid2 = solids[j];
-                    var filteredDirections = FilterGlobalDirections(solid1,solid2,gDir);
+                    var solidBlocking = solidsL[j];
+                    var filteredDirections = FilterGlobalDirections(solidMoving,solidBlocking,gDir);
                     // remember this: if solid2 is not blocking solid1, we need to check if solid1 is blocking 2 in the opposite direction.
                     // if filteredDirections.Count == gDir.Count then the CVHs overlap
                     if (filteredDirections.Count == gDir.Count)
                     {
-                        
+                        continue;
                     }
                     else
                     {
-                        
+                        foreach (var filtDir in filteredDirections)
+                        {
+                            var direction = DisassemblyDirections.Directions[filtDir];
+                            var rays =
+                                solidMoving.ConvexHullVertices.Select(
+                                    vertex =>
+                                        new Ray(
+                                            new AssemblyEvaluation.Vertex(vertex.Position[0], vertex.Position[1],
+                                                vertex.Position[2]),
+                                            new Vector(direction[0], direction[1], direction[2]))).ToList();
+                            // add more vertices to the ray
+                            rays.AddRange(
+                                NonadjacentBlockingDetermination.AddingMoreRays(
+                                    solidMoving.ConvexHullEdges.Where(e => e != null && e.Length > 2).ToArray(),direction));
+                            var blocked = false;
+                            foreach (var ray in rays)
+                            {
+                                if (!NonadjacentBlockingDetermination.BoundingBoxBlocking(direction, solidBlocking, solidMoving)) continue;
+                                var memoFace = new List<PolygonalFace>();
+                                if (solidBlocking.ConvexHullFaces.Any(
+                                        f => NonadjacentBlockingDetermination.RayIntersectsWithFace3(ray, f)))
+                                {
+                                    var affectedPartitions = AffectedPartitionsWithRay(solidBlocking,ray);
+                                    foreach (var prtn in affectedPartitions)
+                                    {
+                                        foreach (var tri in prtn.SolidTriangles.Where(t=>!memoFace.Contains(t)))
+                                        {
+                                            memoFace.Add(tri);
+                                            if (!NonadjacentBlockingDetermination.RayIntersectsWithFace3(ray, tri))
+                                                continue;
+                                            blocked = true;
+                                            break;
+                                        }
+                                        if (blocked) break;
+                                    }
+                                }
+                                if (blocked) break;
+                            }
+                            if (!blocked)
+                            {
+                                // now check solid 1 is blocking solid 2 in opposite direction or not.
+                                var direction2 = DisassemblyDirections.Directions[filtDir].multiply(-1);
+                                var rays2 =
+                                    solidBlocking.ConvexHullVertices.Select(
+                                        vertex =>
+                                            new Ray(
+                                                new AssemblyEvaluation.Vertex(vertex.Position[0], vertex.Position[1],
+                                                    vertex.Position[2]),
+                                                new Vector(direction2[0], direction2[1], direction2[2]))).ToList();
+                                // add more vertices to the ray
+                                rays.AddRange(
+                                    NonadjacentBlockingDetermination.AddingMoreRays(
+                                        solidBlocking.ConvexHullEdges.Where(e => e != null && e.Length > 2).ToArray(), direction2));
+                                var blocked2 = false;
+                                foreach (var ray in rays2)
+                                {
+                                    if (!NonadjacentBlockingDetermination.BoundingBoxBlocking(direction, solidMoving,solidBlocking)) continue;
+                                    var memoFace = new List<PolygonalFace>();
+                                    if (solidMoving.ConvexHullFaces.Any(
+                                            f => NonadjacentBlockingDetermination.RayIntersectsWithFace3(ray, f)))
+                                    {
+                                        var affectedPartitions = AffectedPartitionsWithRay(solidMoving, ray);
+                                        foreach (var prtn in affectedPartitions)
+                                        {
+                                            foreach (var tri in prtn.SolidTriangles.Where(t => !memoFace.Contains(t)))
+                                            {
+                                                memoFace.Add(tri);
+                                                if (!NonadjacentBlockingDetermination.RayIntersectsWithFace3(ray, tri))
+                                                    continue;
+                                                blocked = true;
+                                                break;
+                                            }
+                                            if (blocked) break;
+                                        }
+                                    }
+                                    if (blocked) break;
+                                }
+                            }
+                        }
                     }
                 }
             }
+        }
+
+        private static List<Partition> AffectedPartitionsWithRay(TessellatedSolid solidBlocking, Ray ray)
+        {
+            return
+                Partitions[solidBlocking].Where(
+                    prtn => prtn.Faces.Any(f => NonadjacentBlockingDetermination.RayIntersectsWithFace3(ray, f)))
+                    .ToList();
         }
 
         private static List<int> FilterGlobalDirections(TessellatedSolid solid1, TessellatedSolid solid2, List<int> gDir)
