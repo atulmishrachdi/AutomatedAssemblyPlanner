@@ -10,8 +10,18 @@ using Assembly_Planner.GraphSynth.BaseClasses;
 
 namespace Assembly_Planner
 {
+    /// <summary>
+    /// Class EvaluationForBinaryTree - this is a stub for evaluating a particular install step
+    /// </summary>
     class EvaluationForBinaryTree
     {
+        /// <summary>
+        /// Evaluates the subassemly.
+        /// </summary>
+        /// <param name="subassemblyNodes">The subassembly nodes - all the nodes in the combined install action.</param>
+        /// <param name="optNodes">The subset of nodes that represent one of the two parts in the install step.</param>
+        /// <param name="sub">The sub is the class that is then tied into the treequence.</param>
+        /// <returns>System.Double.</returns>
         public double EvaluateSub(List<Component> subassemblyNodes, List<Component> optNodes, out SubAssembly sub)
         {
 
@@ -24,8 +34,15 @@ namespace Assembly_Planner
             return 1;
         }
 
+        /// <summary>
+        /// returns the subassembly class given the two lists of components
+        /// </summary>
+        /// <param name="opt">The opt.</param>
+        /// <param name="rest">The rest.</param>
+        /// <returns>SubAssembly.</returns>
         public SubAssembly Update(List<Component> opt, List<Component> rest)
         {
+            //todo: change List to HashSet
             Part refAssembly, movingAssembly;
             var movingNodes = opt;
             var newSubAsmNodes = rest;
@@ -51,6 +68,13 @@ namespace Assembly_Planner
             return newSubassembly;
         }
 
+        /// <summary>
+        /// if either part is really non-contiguous then return true. We do NOT want to adress
+        /// these cases - they should be viewed as two separate install steps.
+        /// </summary>
+        /// <param name="install">The install.</param>
+        /// <param name="A">a.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         internal static bool EitherRefOrMovHasSeperatedSubassemblies(List<Component>[] install, 
             List<Component> A)
         {

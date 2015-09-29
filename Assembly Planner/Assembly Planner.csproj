@@ -51,6 +51,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DisassemblyProcess\AStarInspiredRecursiveOptimizedSearch.cs" />
     <Compile Include="DisassemblyProcess\BeamSearch.cs" />
     <Compile Include="DisassemblyProcess\DBG.cs" />
     <Compile Include="DisassemblyProcess\DisConstants.cs" />
@@ -82,6 +83,7 @@
     <Compile Include="GeometryReasoning\DataInterfaceWithCPP.cs" />
     <Compile Include="GeometryReasoning\InputData.cs" />
     <Compile Include="GeometryReasoning\LiaisonGraphCreator.cs" />
+    <Compile Include="GeometryReasoning\OBB.cs" />
     <Compile Include="GeometryReasoning\STLGeometryFunctions.cs" />
     <Compile Include="GeometryReasoning\StLReader.cs" />
     <Compile Include="GraphSynth.BaseClasses\Component.cs" />
@@ -137,6 +139,8 @@
     <Compile Include="InitialGraphMaker\Fastener.cs" />
     <Compile Include="InitialGraphMaker\Icosahedron.cs" />
     <Compile Include="InitialGraphMaker\IcosahedronPro.cs" />
+    <Compile Include="InitialGraphMaker\NonadjacentBlockingWithPartitioning.cs" />
+    <Compile Include="InitialGraphMaker\PartitioningSolid.cs" />
     <Compile Include="InitialGraphMaker\PrimitivePrimitiveInteractions.cs" />
     <Compile Include="Output\GraphSaving.cs" />
     <Compile Include="PostProcessor\OptimalOrientation.cs" />
