@@ -67,7 +67,7 @@ namespace Assembly_Planner
 
                         if (BlockingDetermination.ConvexHullOverlap(solid, solidBlocking))
                         {
-                            //overlap = ConvexHullOverlappNonAdjacent(rays, solid, solidBlocking, direction);
+                            overlap = ConvexHullOverlappNonAdjacent(rays, solid, solidBlocking, direction);
                             continue;
                         }
                         else
@@ -86,7 +86,7 @@ namespace Assembly_Planner
               //  lock (NonAdjacentBlocking)
                     NonAdjacentBlocking.Add(dir, blockingsForDirection);
             }
-            //    );
+             //   );
             // To be fixed later:
             //    This ConvertToSecondary can be later added directly after generation.
             //ConvertToSecondaryArc(graph, NonAdjacentBlocking);
@@ -134,14 +134,15 @@ namespace Assembly_Planner
                 if (boo)
                 {
                     var blocked = _2DProjectionCheck(solid, solidBlocking, direction);
-                    if (!blocked) boo = false;
+                    if (!blocked) 
+                        boo = false;
                     break;
                 }
             }
             return boo;
         }
 
-        private static bool _2DProjectionCheck(TessellatedSolid solid, TessellatedSolid solidBlocking, double[] direction)
+        internal static bool _2DProjectionCheck(TessellatedSolid solid, TessellatedSolid solidBlocking, double[] direction)
         {
             var movingProj = _3Dto2D.Get2DProjectionPoints(solid.Vertices, direction);
             var moving2D = new _3Dto2D
@@ -476,6 +477,7 @@ namespace Assembly_Planner
             var w = ray.Position.subtract(face.Vertices[0].Position);
             var s1 = (face.Normal.dotProduct(w)) / (face.Normal.dotProduct(ray.Direction));
             //var v = new double[] { w[0] + s1 * ray.Direction[0] + point[0], w[1] + s1 * ray.Direction[1] + point[1], w[2] + s1 * ray.Direction[2] + point[2] };
+            //var v = new double[] { ray.Position[0] - s1 * ray.Direction[0], ray.Position[1] - s1 * ray.Direction[1], ray.Position[2] - s1 * ray.Direction[2] };
             var pointOnTrianglesPlane = new [] { ray.Position[0] - s1 * ray.Direction[0], ray.Position[1] - s1 * ray.Direction[1], ray.Position[2] - s1 * ray.Direction[2] };
             var v0 = face.Vertices[0].Position.subtract(pointOnTrianglesPlane);
             var v1 = face.Vertices[1].Position.subtract(pointOnTrianglesPlane);
@@ -487,20 +489,20 @@ namespace Assembly_Planner
             var crossv2v0 = v2.crossProduct(v0);
             dot = crossv1v2.dotProduct(crossv2v0);
             return (dot >= 0.0);
-            //foreach (var corner in face.Vertices)
-            //{
-            //    var otherCorners = face.Vertices.Where(ver => ver != corner).ToList();
-            //    var v1 = otherCorners[0].Position.subtract(corner.Position);
-            //    var v2 = otherCorners[1].Position.subtract(corner.Position);
-            //    var v0 = v.subtract(corner.Position);
-            //    if (v1.crossProduct(v0).dotProduct(v2.crossProduct(v0)) > -0.15) //   -0.09 
-            //        return false;
-            //}
-            //return true;
+            /*foreach (var corner in face.Vertices)
+            {
+                var otherCorners = face.Vertices.Where(ver => ver != corner).ToList();
+                var v1 = otherCorners[0].Position.subtract(corner.Position);
+                var v2 = otherCorners[1].Position.subtract(corner.Position);
+                var v0 = v.subtract(corner.Position);
+                if (v1.crossProduct(v0).dotProduct(v2.crossProduct(v0)) > -0.15) //   -0.09 
+                    return false;
+            }
+            return true;*/
 
         }
 
-        private static double DistanceToTheFace(double[] p, PolygonalFace blockingPolygonalFace)
+        internal static double DistanceToTheFace(double[] p, PolygonalFace blockingPolygonalFace)
         {
             return
                 blockingPolygonalFace.Normal.dotProduct(p.subtract(blockingPolygonalFace.Vertices[0].Position));

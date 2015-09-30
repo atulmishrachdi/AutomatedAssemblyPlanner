@@ -42,8 +42,8 @@ namespace Assembly_Planner
                 }
                 prtn.CornerVertices = cornerVer.ToArray();
 
-                var visVer = new List<Vertex>();
-                var faces = new List<PolygonalFace>();
+                var visVer = new HashSet<Vertex>();
+                var faces = new HashSet<PolygonalFace>();
                 foreach (var ver1 in cornerVer.Where(v => !visVer.Contains(v)))
                 {
                     var otherVers = new List<Vertex>();
@@ -90,18 +90,18 @@ namespace Assembly_Planner
                         }
                     }
                 }
-                prtn.Faces = faces.ToArray();
-                prtn.SolidVertices = solid.Vertices.Where(vertex => IsVertexInsidePartition(prtn, vertex)).ToArray();
+                prtn.Faces = faces;
+                prtn.SolidVertices = new HashSet<Vertex>(solid.Vertices.Where(vertex => IsVertexInsidePartition(prtn, vertex)));
                 partitions.Add(prtn);
             }
             return partitions.ToArray();
         }
-        internal static Partition[] Run2(TessellatedSolid solid)
+        internal static Partition[] Run2(TessellatedSolid solid, BoundingBox obb)
         {
+            var aaaa = new List<PolygonalFace>();
             //var obb = OBB.BuildUsingPoints(solid.Vertices.ToList(), out direction);
-            var obb = MinimumEnclosure.OrientedBoundingBox(solid);
             var partitions = new List<Partition>();
-            var ddds = solid.Vertices.Max(v => v.Position[1]);
+            //var ddds = solid.Vertices.Max(v => v.Position[1]);
             for (var k = 0; k < obb.CornerVertices.Length; k++) //obb.CornerVertices)
             {
                 var verK = new Vertex(obb.CornerVertices[k].Position); //cVer;
@@ -114,7 +114,21 @@ namespace Assembly_Planner
                     cornerVer.Add(midVer);
                 }
                 prtn.CornerVertices = cornerVer.ToArray();
-                var faces = new List<PolygonalFace>
+                var faces = TwelveFaceGenerator(prtn.CornerVertices);
+                prtn.Faces = faces;
+                prtn.SolidVertices = new HashSet<Vertex>(solid.Vertices.Where(vertex => IsVertexInsidePartition(prtn, vertex)));
+                prtn.SolidTriangles = PartitionTriangles(prtn,solid.Faces);
+                partitions.Add(prtn);
+                aaaa.AddRange(prtn.SolidTriangles.Where(sssss=> !aaaa.Contains(sssss)));
+            }
+            var s = partitions.Sum(a => a.SolidVertices.Count())-solid.Vertices.Count();
+            var s2 = aaaa.Count - solid.Faces.Count();
+            return partitions.ToArray();
+        }
+
+        internal static HashSet<PolygonalFace> TwelveFaceGenerator(Vertex[] cornerVer)
+        {
+            return new HashSet<PolygonalFace>
                 {
                     new PolygonalFace(new[] {cornerVer[0], cornerVer[1], cornerVer[2]},
                         ((cornerVer[2].Position.subtract(cornerVer[0].Position)).crossProduct(
@@ -163,23 +177,44 @@ namespace Assembly_Planner
                         ((cornerVer[7].Position.subtract(cornerVer[3].Position)).crossProduct(
                             cornerVer[1].Position.subtract(cornerVer[3].Position))).normalize())
                 };
-
-                prtn.Faces = faces.ToArray();
-                prtn.SolidVertices = solid.Vertices.Where(vertex => IsVertexInsidePartition(prtn, vertex)).ToArray();
-                var tris = new List<PolygonalFace>();
-                foreach (var ver in prtn.SolidVertices)
-                {
-                    tris.AddRange(ver.Faces.Where(f => !tris.Contains(f)));
-                }
-                prtn.SolidTriangles = tris.ToArray();
-                partitions.Add(prtn);
-            }
-            //var s = partitions.Sum(a => a.SolidVertices.Count())-solid.Vertices.Count();
-            return partitions.ToArray();
         }
         internal static bool IsVertexInsidePartition(Partition partition, Vertex ver)
         {
-            return partition.Faces.All(pFace => !(pFace.Normal.dotProduct(pFace.Vertices[0].Position.subtract(ver.Position)) < -0.00000001));
+            return
+                //partition.Faces.All(
+                 //   pFace => !(pFace.Normal.dotProduct(pFace.Vertices[0].Position.subtract(ver.Position)) <0));
+                //-0.00000001));
+            partition.Faces.All(pFace => pFace.Normal.dotProduct(ver.Position.subtract(pFace.Vertices[0].Position)) < 0);
+        }
+
+        internal static HashSet<PolygonalFace> PartitionTriangles(Partition partition, PolygonalFace[] solidTrgs)
+        {
+            var trigs = new HashSet<PolygonalFace>();
+            foreach (var ver in partition.SolidVertices)
+                trigs.UnionWith(ver.Faces.Where(f => !trigs.Contains(f)));
+            foreach (var pF in solidTrgs.Where(t=>!trigs.Contains(t)))
+            {
+                var sign = 0;
+                foreach (var corVer in partition.CornerVertices)
+                {
+                    sign = Math.Sign((corVer.Position.subtract(pF.Vertices[0].Position)).dotProduct(pF.Normal));
+                    if (sign == 0) continue;
+                    break;
+                }
+                if (sign == 1)
+                {
+                    if (partition.CornerVertices.Any(
+                            c => Math.Sign((c.Position.subtract(pF.Vertices[0].Position)).dotProduct(pF.Normal)) == -1))
+                        trigs.Add(pF);
+                }
+                else
+                {
+                    if (partition.CornerVertices.Any(
+                        c => Math.Sign((c.Position.subtract(pF.Vertices[0].Position)).dotProduct(pF.Normal)) == 1))
+                        trigs.Add(pF);
+                }
+            }
+            return trigs;
         }
     }
 
@@ -187,8 +222,8 @@ namespace Assembly_Planner
     {
         public Vertex[] CornerVertices;
         public Edge[] Edges;
-        public PolygonalFace[] Faces;
-        public Vertex[] SolidVertices;
-        public PolygonalFace[] SolidTriangles;
+        public HashSet<PolygonalFace> Faces;
+        public HashSet<Vertex> SolidVertices;
+        public HashSet<PolygonalFace> SolidTriangles;
     }
 }
