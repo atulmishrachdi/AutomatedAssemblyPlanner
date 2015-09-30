@@ -34,6 +34,9 @@ namespace Assembly_Planner
                 solidsNoFastener.Remove(bolt);
             DisassemblyDirections.Solids = new List<TessellatedSolid>(solidsNoFastener);
             AddingNodesToGraph(assemblyGraph, solidsNoFastener); //, gears, screwsAndBolts);
+            foreach (var solid in solidsNoFastener)
+                PartitioningSolid.CreatePartitions(solid);
+
             //var aaa = new List<TessellatedSolid>(solidsNoFastener.Where(s=>s.Name.Contains("DowellGrooved")));
             for (var i = 0; i < solidsNoFastener.Count - 1; i++)
             {
@@ -50,7 +53,7 @@ namespace Assembly_Planner
                     {
                         // I wrote the code in a way that "solid1" is always "Reference" and "solid2" is always "Moving".
                         List<int> finDirs, infDirs;
-                        NonadjacentBlockingDetermination.FiniteDirectionsBetweenConnectedParts(solid1, solid2,
+                        NonadjacentBlockingDetermination.FiniteDirectionsBetweenConnectedPartsWithPartitioning(solid1, solid2,
                             localDirInd, out finDirs, out infDirs);
                         var from = assemblyGraph[solid2.Name]; // Moving
                         var to = assemblyGraph[solid1.Name]; // Reference

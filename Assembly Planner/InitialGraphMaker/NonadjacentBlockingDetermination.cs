@@ -537,6 +537,60 @@ namespace Assembly_Planner
                     infDirs.Add(dir);
             }
         }
+
+        internal static void FiniteDirectionsBetweenConnectedPartsWithPartitioning(TessellatedSolid solid1,
+            TessellatedSolid solid2, List<int> localDirInd, out List<int> finDirs, out List<int> infDirs)
+        {
+            // solid1 is Reference and solid2 is Moving
+            finDirs = new List<int>();
+            infDirs = new List<int>();
+            var boo = false;
+
+            foreach (var dir in localDirInd)
+            {
+                var finite = false;
+                
+                var direction = DisassemblyDirections.Directions[dir];
+                var rays = new List<Ray>();
+                foreach (var vertex in solid2.ConvexHullVertices)
+                    rays.Add(new Ray(new AssemblyEvaluation.Vertex(vertex.Position[0], vertex.Position[1], vertex.Position[2]),
+                                    new Vector(direction[0], direction[1], direction[2])));
+                finite = IsTheLocalDirectionFinite(solid1, rays);
+                
+                if (finite)
+                {
+                    finDirs.Add(dir);
+                    continue;
+                }
+                
+                var direction2 = DisassemblyDirections.Directions[dir].multiply(-1.0);
+                var rays2 = new List<Ray>();
+                foreach (var vertex in solid1.ConvexHullVertices)
+                    rays2.Add(new Ray(new AssemblyEvaluation.Vertex(vertex.Position[0], vertex.Position[1], vertex.Position[2]),
+                                    new Vector(direction2[0], direction2[1], direction2[2])));
+                finite = IsTheLocalDirectionFinite(solid2, rays2);
+
+                if (finite)
+                    finDirs.Add(dir);
+                else 
+                    infDirs.Add(dir);
+            }
+        }
+
+        private static bool IsTheLocalDirectionFinite(TessellatedSolid blockingSolid, List<Ray> rays)
+        {
+            foreach (var ray in rays)
+            {
+                var memoFace = new HashSet<PolygonalFace>();
+                var affectedPartitions = NonadjacentBlockingWithPartitioning.AffectedPartitionsWithRayCvhOverlaps(blockingSolid, ray);
+                foreach (var prtn in affectedPartitions)
+                {
+                    if (prtn.SolidTriangles.Where(t => !memoFace.Contains(t)).Any(tri => RayIntersectsWithFace3(ray, tri)))
+                        return true;
+                }
+            }
+            return false;
+        }
     }
 
     [Serializable]

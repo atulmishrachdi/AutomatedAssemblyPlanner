@@ -4,25 +4,34 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AssemblyEvaluation;
+using Assembly_Planner.GraphSynth.BaseClasses;
 using GraphSynth.Representation;
 
 namespace Assembly_Planner.DisassemblyProcess
 {
-    class AStarInspiredRecursiveOptimizedSearch
+    internal class AStarInspiredRecursiveOptimizedSearch
     {
         protected static EvaluationForBinaryTree assemblyEvaluator;
         protected static int[] Count = new int[100];
         protected static designGraph Graph;
         protected static List<int> DirPool;
-        protected static Dictionary<HashSet<node>, MemoData> Memo = new Dictionary<HashSet<node>, MemoData>(HashSet<node>.CreateSetComparer());
+
+        protected static Dictionary<HashSet<Component>, MemoData> Memo =
+            new Dictionary<HashSet<Component>, MemoData>(HashSet<Component>.CreateSetComparer());
+
         //protected static MinHeap<TreeCandidate> OpenSet;
         //protected static Dictionary<HashSet<node>, TreeCandidate> TreeCandidates = new Dictionary<HashSet<node>, TreeCandidate>(HashSet<node>.CreateSetComparer());
-        protected static Dictionary<HashSet<node>, Dictionary<HashSet<node>, TreeCandidate>> TreeCandidates =
-            new Dictionary<HashSet<node>,
-            Dictionary<HashSet<node>, TreeCandidate>>
-            (HashSet<node>.CreateSetComparer());
-        protected static SortedDictionary<TreeCandidate, int> OpenSet = new SortedDictionary<TreeCandidate, int>();//new sortTreeCandidates());
-        protected static Dictionary<HashSet<node>, MemoData> Guesses = new Dictionary<HashSet<node>, MemoData>(HashSet<node>.CreateSetComparer());
+        protected static Dictionary<HashSet<Component>, Dictionary<HashSet<Component>, TreeCandidate>> TreeCandidates =
+            new Dictionary<HashSet<Component>,
+                Dictionary<HashSet<Component>, TreeCandidate>>
+                (HashSet<Component>.CreateSetComparer());
+
+        protected static SortedDictionary<TreeCandidate, int> OpenSet = new SortedDictionary<TreeCandidate, int>();
+            //new sortTreeCandidates());
+
+        protected static Dictionary<HashSet<Component>, MemoData> Guesses =
+            new Dictionary<HashSet<Component>, MemoData>(HashSet<Component>.CreateSetComparer());
+
         protected static Dictionary<string, int> Node2Int = new Dictionary<string, int>();
         protected static bool Estimate;
 
@@ -31,7 +40,7 @@ namespace Assembly_Planner.DisassemblyProcess
             Graph = inputData.graphAssembly;
             DirPool = globalDirPool;
             Updates.UpdateGlobalDirections(DirPool);
-            assemblyEvaluator = new EvaluationForBinaryTree();//inputData.ConvexHullDictionary);
+            assemblyEvaluator = new EvaluationForBinaryTree(); //inputData.ConvexHullDictionary);
 
             InitializeMemo();
 
@@ -45,7 +54,7 @@ namespace Assembly_Planner.DisassemblyProcess
                         Console.WriteLine("min " + minHeap.ExtractDominating());
                         Console.WriteLine("heap size: " + minHeap.Count());
             */
-            var Candidates = GetCandidates(Graph.nodes, 0);
+            var Candidates = GetCandidates(Graph.nodes.Cast<Component>().ToList(), 0);
             //OpenSet = new MinHeap<TreeCandidate>(Candidates);
             AddToOpenSet(Candidates);
             /*
@@ -80,7 +89,7 @@ namespace Assembly_Planner.DisassemblyProcess
                 PrintSet(current.MovNodes);
                 Console.WriteLine(" with G: " + current.G + " and H: " + current.H + ".");
 
-                var A = new HashSet<node>(current.RefNodes.Union(current.MovNodes));
+                var A = new HashSet<Component>(current.RefNodes.Union(current.MovNodes));
                 MemoData D;
                 if (Memo.ContainsKey(A))
                 {
@@ -126,7 +135,7 @@ namespace Assembly_Planner.DisassemblyProcess
                 }
             }
 
-            SubAssembly Tree = Memo[new HashSet<node>(Graph.nodes)].sa;
+            SubAssembly Tree = Memo[new HashSet<Component>(Graph.nodes.Cast<Component>())].sa;
             PrintTree(Tree);
             return Tree;
         }
@@ -150,7 +159,8 @@ namespace Assembly_Planner.DisassemblyProcess
                     return;
             }
             else
-                TreeCandidates[TC.RefNodes] = new Dictionary<HashSet<node>, TreeCandidate>(HashSet<node>.CreateSetComparer());
+                TreeCandidates[TC.RefNodes] =
+                    new Dictionary<HashSet<Component>, TreeCandidate>(HashSet<Component>.CreateSetComparer());
 
             TreeCandidates[TC.RefNodes][TC.MovNodes] = TC;
         }
@@ -173,7 +183,7 @@ namespace Assembly_Planner.DisassemblyProcess
             }
         }
 
-        internal static double GetValue(out SubAssembly Tree, TreeCandidate Parent, HashSet<node> A, double G)
+        internal static double GetValue(out SubAssembly Tree, TreeCandidate Parent, HashSet<Component> A, double G)
         {
             //			if (A.Count <= 1) {
             //				Tree = null;
@@ -280,9 +290,9 @@ namespace Assembly_Planner.DisassemblyProcess
             Console.WriteLine("");
 
             if (Tree.Install.Reference.PartNodes.Count > 1)
-                PrintTree((SubAssembly)Tree.Install.Reference, Level + 1);
+                PrintTree((SubAssembly) Tree.Install.Reference, Level + 1);
             if (Tree.Install.Moving.PartNodes.Count > 1)
-                PrintTree((SubAssembly)Tree.Install.Moving, Level + 1);
+                PrintTree((SubAssembly) Tree.Install.Moving, Level + 1);
         }
 
         internal static void PrintSet(IEnumerable<node> A)
@@ -293,12 +303,14 @@ namespace Assembly_Planner.DisassemblyProcess
             Console.Write("] (" + A.Count() + ")");
         }
 
-        internal static SubAssembly Run(ConvexHullAndBoundingBox inputData, List<int> globalDirPool, bool DoEstimate = false)
-        { // same as REcursiveOptimizedSearch
+        internal static SubAssembly Run(ConvexHullAndBoundingBox inputData, List<int> globalDirPool,
+            bool DoEstimate = false)
+        {
+            // same as REcursiveOptimizedSearch
             Graph = inputData.graphAssembly;
             DirPool = globalDirPool;
             Updates.UpdateGlobalDirections(DirPool);
-            assemblyEvaluator = new EvaluationForBinaryTree();//inputData.ConvexHullDictionary);
+            assemblyEvaluator = new EvaluationForBinaryTree(); //inputData.ConvexHullDictionary);
             Estimate = DoEstimate;
 
             InitializeMemo();
@@ -308,7 +320,7 @@ namespace Assembly_Planner.DisassemblyProcess
                 Node2Int[node.name] = index++;
 
             SubAssembly Tree;
-            var Best = F(out Tree, new HashSet<node>(Graph.nodes));
+            var Best = F(out Tree, new HashSet<Component>(Graph.nodes.Cast<Component>()));
 
             Console.WriteLine("Best assembly time found: " + Best);
             //for (int i = 1; i <= Graph.nodes.Count; i++)
@@ -318,8 +330,8 @@ namespace Assembly_Planner.DisassemblyProcess
             return Tree;
         }
 
-        protected static double F(out SubAssembly Tree, HashSet<node> A)
-        // same as RecursiveOptimizedSearch.cs 
+        protected static double F(out SubAssembly Tree, HashSet<Component> A)
+            // same as RecursiveOptimizedSearch.cs 
         {
             Count[A.Count]++;
 
@@ -334,7 +346,7 @@ namespace Assembly_Planner.DisassemblyProcess
                 return Memo[A].Value;
             }
 
-            var Candidates = GetCandidates(A.ToList());
+            var Candidates = GetCandidates(A.Cast<Component>().ToList());
             Candidates.Sort();
 
             double Best = double.PositiveInfinity;
@@ -369,26 +381,27 @@ namespace Assembly_Planner.DisassemblyProcess
             return Best;
         }
 
-        protected static List<TreeCandidate> GetCandidates(List<node> A, double G = 0)
-        // same as RecursiveOptimizedSearch.cs 
+        protected static List<TreeCandidate> GetCandidates(List<Component> A, double G = 0)
+            // same as RecursiveOptimizedSearch.cs 
         {
             var Candidates = new List<TreeCandidate>();
+            var gOptions = new List<option>();
             foreach (var cndDirInd in DirPool)
             {
+                // these four lines of code generate the valid options for the given direction, cndDirInd.
                 SCCBinary.StronglyConnectedComponents(Graph, A, cndDirInd);
-                var blockingDic = DBGBinary.DirectionalBlockingGraph(Graph, A, cndDirInd);
-                //options.AddRange(OptionGeneratorProBinary.GenerateOptions(Graph, A, blockingDic));
-                var options = OptionGeneratorProBinary.GenerateOptions(Graph, A, blockingDic);
-
+                Dictionary<hyperarc, List<hyperarc>> blockingDic = DBGBinary.DirectionalBlockingGraph(Graph, cndDirInd);
+                var options = OptionGeneratorProBinary.GenerateOptions(Graph, A, blockingDic, gOptions);
+                gOptions.AddRange(options);
                 foreach (var opt in options)
                 {
                     TreeCandidate TC = new TreeCandidate();
-                    if (assemblyEvaluator.EvaluateSub(A, opt.nodes, out TC.sa) > 0)
+                    if (assemblyEvaluator.EvaluateSub(A, opt.nodes.Cast<Component>().ToList(), out TC.sa) > 0)
                     {
                         //TC.RefNodes = TC.sa.Install.Reference.PartNodes.Select (n => (node)Graph [n]).ToList ();
                         //TC.MovNodes = TC.sa.Install.Moving.PartNodes.Select (n => (node)Graph [n]).ToList ();
-                        TC.RefNodes = new HashSet<node>(TC.sa.Install.Reference.PartNodes.Select(n => (node)Graph[n]));
-                        TC.MovNodes = new HashSet<node>(TC.sa.Install.Moving.PartNodes.Select(n => (node)Graph[n]));
+                        TC.RefNodes = new HashSet<Component>(TC.sa.Install.Reference.PartNodes.Select(n => (Component)Graph[n]));
+                        TC.MovNodes = new HashSet<Component>(TC.sa.Install.Moving.PartNodes.Select(n => (Component)Graph[n]));
                         //if (Math.Min (TC.RefNodes.Count, TC.MovNodes.Count) > 21)	//example constraint
                         //	continue;
 
@@ -405,25 +418,25 @@ namespace Assembly_Planner.DisassemblyProcess
 
         //initialize memoization with 2-node (i.e., arc) subassemblies so heuristic works
         protected static void InitializeMemo()
-        // same as RecursiveOptimizedSearch.cs 
+            // same as RecursiveOptimizedSearch.cs 
         {
             foreach (arc arc in Graph.arcs)
             {
-                List<node> Asm = new List<node>(new node[] { arc.From, arc.To });
-                List<node> Fr = new List<node>(new node[] { arc.From });
+                List<Component> Asm = new List<Component>(new [] { (Component)arc.From, (Component)arc.To });
+                List<Component> Fr = new List<Component>(new[] { (Component)arc.From });
                 SubAssembly sa;
-                if (assemblyEvaluator.EvaluateSub(Asm, Fr, out sa) > 0)
+                if (assemblyEvaluator.EvaluateSub(Asm.Cast<Component>().ToList(), Fr.Cast<Component>().ToList(), out sa) > 0)
                 {
-                    HashSet<node> A = new HashSet<node>(Asm);
+                    HashSet<Component> A = new HashSet<Component>(Asm);
                     MemoData D = new MemoData(sa.Install.Time, sa);
                     Memo.Add(A, D);
                 }
             }
 
-            foreach (var node in Graph.nodes)
+            foreach (var node in Graph.nodes.Cast<Component>())
             {
-                List<node> N = new List<node>(new node[] { node });
-                HashSet<node> A = new HashSet<node>(N);
+                List<Component> N = new List<Component>(new[] { node });
+                HashSet<Component> A = new HashSet<Component>(N);
                 //var P = new Part(node.name, 0, 0,null, null);
                 var sa = new SubAssembly(N, null, 0, 0, null);
                 MemoData D = new MemoData(0, sa);
@@ -432,8 +445,8 @@ namespace Assembly_Planner.DisassemblyProcess
         }
 
         //Calculate the heuristic value of a given assembly A
-        protected static double H(HashSet<node> A)
-        // same as RecursiveOptimizedSearch.cs 
+        protected static double H(HashSet<Component> A)
+            // same as RecursiveOptimizedSearch.cs 
         {
             if (A.Count <= 1)
                 return 0;
@@ -443,12 +456,12 @@ namespace Assembly_Planner.DisassemblyProcess
 
             var L = Math.Log(A.Count, 2);
             double MinTreeDepth = Math.Ceiling(L);
-            Graph.addHyperArc(A.ToList());
+            Graph.addHyperArc(A.Cast<node>().ToList());
             var hy = Graph.hyperarcs[Graph.hyperarcs.Count - 1];
             List<double> Values = new List<double>();
             foreach (arc arc in hy.IntraArcs)
             {
-                HashSet<node> arcnodes = new HashSet<node>(new node[] { arc.From, arc.To });
+                HashSet<Component> arcnodes = new HashSet<Component>(new[] { (Component)arc.From, (Component)arc.To });
                 Values.Add(Memo[arcnodes].Value);
             }
             Graph.removeHyperArc(hy);
@@ -481,7 +494,7 @@ namespace Assembly_Planner.DisassemblyProcess
 
     //stores memoization information
     // same as RecursiveOptimizedSearch.cs except for Parents and Children comment
-    class MemoData
+    internal class MemoData
     {
         public double Value;
         public SubAssembly sa;
@@ -496,10 +509,10 @@ namespace Assembly_Planner.DisassemblyProcess
     }
 
     //Stores information about a candidate option
-    class TreeCandidate : IComparable<TreeCandidate>
+    internal class TreeCandidate : IComparable<TreeCandidate>
     {
         public SubAssembly sa;
-        public HashSet<node> RefNodes, MovNodes;
+        public HashSet<Component> RefNodes, MovNodes;
         public double G, H; //G-score and heuristic value
         public List<TreeCandidate> Parents = new List<TreeCandidate>();
         public List<TreeCandidate> Options = new List<TreeCandidate>();
@@ -509,7 +522,7 @@ namespace Assembly_Planner.DisassemblyProcess
             var F = G + H;
             var otherF = other.G + other.H;
             if (F != otherF)
-                return F.CompareTo(otherF);     //first try to sort on heuristic values
+                return F.CompareTo(otherF); //first try to sort on heuristic values
 
             var MaxNodes = Math.Max(RefNodes.Count, MovNodes.Count);
             var OtherMaxNodes = Math.Max(other.RefNodes.Count, other.MovNodes.Count);
@@ -522,6 +535,7 @@ namespace Assembly_Planner.DisassemblyProcess
             return MovNodes.GetHashCode().CompareTo(other.MovNodes.GetHashCode());
         }
     }
+
     /*
 	class sortTreeCandidates:IComparer<TreeCandidate>
 	{
@@ -540,4 +554,4 @@ namespace Assembly_Planner.DisassemblyProcess
 */
 }
 
-}
+

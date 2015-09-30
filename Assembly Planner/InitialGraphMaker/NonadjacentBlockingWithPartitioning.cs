@@ -15,8 +15,6 @@ namespace Assembly_Planner
 {
     class NonadjacentBlockingWithPartitioning
     {
-        internal static Dictionary<TessellatedSolid, Partition[]> Partitions =
-            new Dictionary<TessellatedSolid, Partition[]>();
         internal static Dictionary<TessellatedSolid, HashSet<PolygonalFace>> CvhHashSet =
             new Dictionary<TessellatedSolid, HashSet<PolygonalFace>>();
         internal static Dictionary<TessellatedSolid, HashSet<PolygonalFace>> ObbFacesHashSet =
@@ -34,14 +32,14 @@ namespace Assembly_Planner
         internal static void Run(designGraph graph,
             List<TessellatedSolid> solids, List<int> gDir)
         {
-            foreach (var s in solids)
+            var solidsL = solids.Where(s => graph.nodes.Any(n => n.name == s.Name)).ToList();
+            foreach (var s in solidsL)
             {
-                var obb = MinimumEnclosure.OrientedBoundingBox(s);
-                Partitions.Add(s, PartitioningSolid.Run2(s,obb));
                 //CvhHashSet.Add(s, new HashSet<PolygonalFace>(s.ConvexHullFaces));
-                ObbFacesHashSet.Add(s, PartitioningSolid.TwelveFaceGenerator(obb.CornerVertices));
+                ObbFacesHashSet.Add(s,
+                    PartitioningSolid.TwelveFaceGenerator(PartitioningSolid.OrientedBoundingBoxDic[s].CornerVertices));
             }
-            var solidsL = solids.Where(s => graph.nodes.Any(n => n.name == s.Name) ).ToList(); //solids.Where(s => s.Name.Contains("Interroll-3")).ToList();
+            //solids.Where(s => s.Name.Contains("Interroll-3")).ToList();
             //solidsL.AddRange(solids.Where(s => s.Name.Contains("LexanSide")));
             for (var i = 0; i < solidsL.Count; i++)
             {
@@ -188,18 +186,18 @@ namespace Assembly_Planner
         private static List<Partition> AffectedPartitionsWithRay(TessellatedSolid solidBlocking, Ray ray)
         {
             return
-                Partitions[solidBlocking].Where(
+                PartitioningSolid.Partitions[solidBlocking].Where(
                     prtn => prtn.Faces.Any(f => NonadjacentBlockingDetermination.RayIntersectsWithFace3(ray, f)))
                     .ToList();
         }
 
-        private static List<Partition> AffectedPartitionsWithRayCvhOverlaps(TessellatedSolid solidBlocking, Ray ray)
+        internal static List<Partition> AffectedPartitionsWithRayCvhOverlaps(TessellatedSolid solidBlocking, Ray ray)
         {
-            var affected = Partitions[solidBlocking].Where(
+            var affected = PartitioningSolid.Partitions[solidBlocking].Where(
                     prtn => prtn.Faces.Any(f => NonadjacentBlockingDetermination.RayIntersectsWithFace3(ray, f)))
                     .ToList();
             var currentPartition =
-                Partitions[solidBlocking].Where(
+                PartitioningSolid.Partitions[solidBlocking].Where(
                     p => PartitioningSolid.IsVertexInsidePartition(p, new TVGL.Vertex(ray.Position)));
             affected.AddRange(currentPartition);
             return affected;

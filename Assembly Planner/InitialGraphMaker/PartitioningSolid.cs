@@ -17,6 +17,10 @@ namespace Assembly_Planner
         // into "K" number of partitionas, then for ray casting, we don't need 
         // to check every triangle. We can only the triangles that are inside 
         // of the affected partitions. 
+        internal static Dictionary<TessellatedSolid, BoundingBox> OrientedBoundingBoxDic =
+            new Dictionary<TessellatedSolid, BoundingBox>();
+        internal static Dictionary<TessellatedSolid, Partition[]> Partitions =
+            new Dictionary<TessellatedSolid, Partition[]>();
         public static int ccc = 0;
         internal static Partition[] Run(TessellatedSolid solid)
         {
@@ -215,6 +219,12 @@ namespace Assembly_Planner
                 }
             }
             return trigs;
+        }
+
+        internal static void CreatePartitions(TessellatedSolid solid)
+        {
+            OrientedBoundingBoxDic.Add(solid, MinimumEnclosure.OrientedBoundingBox(solid));
+            Partitions.Add(solid, Run2(solid, OrientedBoundingBoxDic[solid]));
         }
     }
 
