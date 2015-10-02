@@ -20,6 +20,7 @@ namespace Assembly_Planner
             new Dictionary<TessellatedSolid, HashSet<PolygonalFace>>();
         internal static Dictionary<TessellatedSolid, HashSet<PolygonalFace>> ObbFacesHashSet =
             new Dictionary<TessellatedSolid, HashSet<PolygonalFace>>();
+        internal static HashSet<PolygonalFace> MemoFace;
         // This class is added as an alternative for current Nonadjacent blocking determination approach.
         // The overal approach is the same as before (ray shooting), but number of both rays and blocking 
         // triangles are droped to speedup the function.
@@ -130,12 +131,13 @@ namespace Assembly_Planner
             var rays = RayGenerator(solidMoving, direction);
             foreach (var ray in rays)
             {
-                var memoFace = new HashSet<PolygonalFace>();
+                MemoFace = new HashSet<PolygonalFace>();
                 var affectedPartitions = AffectedPartitionsWithRayCvhOverlaps(solidBlocking, ray);
                 foreach (var prtn in affectedPartitions)
                 {
-                    foreach (var tri in prtn.SolidTriangles.Where(t => !memoFace.Contains(t)))
+                    foreach (var tri in prtn.SolidTriangles.Where(t => !MemoFace.Contains(t)))
                     {
+                        MemoFace.Add(tri);
                         if (!NonadjacentBlockingDetermination.RayIntersectsWithFace3(ray, tri))
                             continue;
                         if (NonadjacentBlockingDetermination.DistanceToTheFace(ray.Position, tri) < 0)
@@ -167,23 +169,24 @@ namespace Assembly_Planner
                 //    f => NonadjacentBlockingDetermination.RayIntersectsWithFace3(ray, f))) continue;
                 if (!ObbFacesHashSet[solidBlocking].Any(
                     f => RayIntersectsForObb(ray, f))) continue;
-                if (RayIntersects(solidBlocking, ray))
-                {
-                    
-                }
+                MemoFace = new HashSet<PolygonalFace>();
+                if (RayIntersects(PartitioningSolid.Partitions[solidBlocking], ray))
+                    return true;
             }
             return false;
         }
 
-        private static bool RayIntersects(TessellatedSolid solidBlocking, Ray ray)
+        private static bool RayIntersects(Partition[] partition, Ray ray)
         {
-            var memoFace = new HashSet<PolygonalFace>();
-            
-            var affectedPartitions = AffectedPartitionsWithRay(solidBlocking, ray);
+            var affectedPartitions = AffectedPartitionsWithRay(partition, ray);
+            // I can have a sorting command here to sort affected partitions based on the number of faces they have(?)
             foreach (var prtn in affectedPartitions)
             {
-                foreach (var tri in prtn.SolidTriangles.Where(t => !memoFace.Contains(t)))
+                if (prtn.InnerPartition != null)
+                    RayIntersects(prtn.InnerPartition,ray);
+                foreach (var tri in prtn.SolidTriangles.Where(t => !MemoFace.Contains(t)))
                 {
+                    MemoFace.Add(tri);
                     if (!NonadjacentBlockingDetermination.RayIntersectsWithFace3(ray, tri))
                         continue;
                     if (NonadjacentBlockingDetermination.DistanceToTheFace(ray.Position, tri) < 0)
@@ -193,10 +196,10 @@ namespace Assembly_Planner
             }
         }
 
-        private static List<Partition> AffectedPartitionsWithRay(TessellatedSolid solidBlocking, Ray ray)
+        private static List<Partition> AffectedPartitionsWithRay(Partition[] partition, Ray ray)
         {
             return
-                PartitioningSolid.Partitions[solidBlocking].Where(
+               partition.Where(
                     prtn => prtn.Faces.Any(f => NonadjacentBlockingDetermination.RayIntersectsWithFace3(ray, f)))
                     .ToList();
         }
