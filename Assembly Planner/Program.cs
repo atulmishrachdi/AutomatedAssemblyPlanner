@@ -30,6 +30,8 @@ namespace Assembly_Planner
                 "../../../Test/FoodPackagingMachine/FPMSTL2";
                 //"C:\\DMDII Project\\GearAndFastener Detection\\TrainingData\\not-screw";
                 //"../../../Test/test";
+            var s = Stopwatch.StartNew();
+            s.Start();
             var solids = GetSTLs(inputDir);
             designGraph assemblyGraph;
             List<int> globalDirPool = new List<int>();
@@ -49,7 +51,7 @@ namespace Assembly_Planner
                 //Updates.AddPartsProperties(inputDir, assemblyGraph);
                 //NonadjacentBlockingDeterminationPro.Run(assemblyGraph, solids, globalDirPool);
                 NonadjacentBlockingWithPartitioning.Run(assemblyGraph, solids, globalDirPool);
-                NonadjacentBlockingDetermination.Run(assemblyGraph, solids, globalDirPool);
+                //NonadjacentBlockingDetermination.Run(assemblyGraph, solids, globalDirPool);
                 //GraphSaving.SaveTheGraph(assemblyGraph);
             }
             //var inputData = new ConvexHullAndBoundingBox(inputDir, assemblyGraph);
@@ -59,8 +61,9 @@ namespace Assembly_Planner
            
             //var reorientation = OptimalOrientation.Run(solutions);
             //WorkerAllocation.Run(solutions, reorientation);
-            
-            //Console.ReadLine();
+            s.Stop();
+            Console.WriteLine(s.Elapsed);
+            Console.ReadLine();
         }
 
         private static List<TessellatedSolid> GetSTLs(string InputDir)

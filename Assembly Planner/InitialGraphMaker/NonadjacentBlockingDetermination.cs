@@ -585,8 +585,11 @@ namespace Assembly_Planner
                 var affectedPartitions = NonadjacentBlockingWithPartitioning.AffectedPartitionsWithRayCvhOverlaps(blockingSolid, ray);
                 foreach (var prtn in affectedPartitions)
                 {
-                    if (prtn.SolidTriangles.Where(t => !memoFace.Contains(t)).Any(tri => RayIntersectsWithFace3(ray, tri)))
-                        return true;
+                    foreach (var t in prtn.SolidTriangles.Where(t=>!memoFace.Contains(t)))
+                    {
+                        memoFace.Add(t);
+                        if (RayIntersectsWithFace3(ray, t)) return true;
+                    }
                 }
             }
             return false;

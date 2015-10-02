@@ -194,6 +194,7 @@ namespace Assembly_Planner
                     return true;
                 }
             }
+            return false;
         }
 
         private static List<Partition> AffectedPartitionsWithRay(Partition[] partition, Ray ray)
