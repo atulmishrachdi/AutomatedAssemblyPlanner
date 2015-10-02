@@ -1,6 +1,7 @@
 ﻿using System;
 using System.CodeDom;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -21,14 +22,17 @@ namespace Assembly_Planner
 
         internal static List<int> Run(designGraph assemblyGraph, List<TessellatedSolid> solids)
         {
+            //var s = Stopwatch.StartNew();
+            //s.Start();
             Solids = new List<TessellatedSolid>(solids);
             Directions = IcosahedronPro.DirectionGeneration();
             DisassemblyDirections.Directions = new List<double[]>(Directions);
             var globalDirPool = new List<int>();
             var solidPrimitive = BlockingDetermination.PrimitiveMaker(solids);
+            //s.Stop();
+            //Console.WriteLine(s.Elapsed);
             var screwsAndBolts = BoltAndGearDetection.ScrewAndBoltDetector(solidPrimitive);
             //var gears = BoltAndGearDetection.GearDetector(solidPrimitive);
-
             var solidsNoFastener = new List<TessellatedSolid>(solids);
             foreach (var bolt in screwsAndBolts)
                 solidsNoFastener.Remove(bolt);

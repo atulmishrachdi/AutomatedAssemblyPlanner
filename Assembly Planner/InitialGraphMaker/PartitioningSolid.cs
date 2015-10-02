@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -100,34 +101,41 @@ namespace Assembly_Planner
             }
             return partitions.ToArray();
         }
-        internal static Partition[] Run2(TessellatedSolid solid, BoundingBox obb)
+        internal static Partition[] Run2(HashSet<Vertex> solidVerts, HashSet<PolygonalFace> solidFaces, Vertex[] obbCorverVts)
         {
-            var aaaa = new List<PolygonalFace>();
             //var obb = OBB.BuildUsingPoints(solid.Vertices.ToList(), out direction);
             var partitions = new List<Partition>();
             //var ddds = solid.Vertices.Max(v => v.Position[1]);
-            for (var k = 0; k < obb.CornerVertices.Length; k++) //obb.CornerVertices)
+            for (var k = 0; k < obbCorverVts.Length; k++) //obb.CornerVertices)
             {
-                var verK = new Vertex(obb.CornerVertices[k].Position); //cVer;
+                var verK = new Vertex(obbCorverVts[k].Position); //cVer;
                 var prtn = new Partition();
                 var cornerVer = new List<Vertex>();
-                for (var j = 0; j < obb.CornerVertices.Length; j++)
+                for (var j = 0; j < obbCorverVts.Length; j++)
                 {
-                    var verJ = new Vertex(obb.CornerVertices[j].Position); //cVer;
+                    var verJ = new Vertex(obbCorverVts[j].Position); //cVer;
                     var midVer = new Vertex((verJ.Position.add(verK.Position)).divide(2.0));
                     cornerVer.Add(midVer);
                 }
                 prtn.CornerVertices = cornerVer.ToArray();
                 var faces = TwelveFaceGenerator(prtn.CornerVertices);
                 prtn.Faces = faces;
-                prtn.SolidVertices = new HashSet<Vertex>(solid.Vertices.Where(vertex => IsVertexInsidePartition(prtn, vertex)));
-                prtn.SolidTriangles = PartitionTriangles(prtn,solid.Faces);
+                prtn.SolidVertices = new HashSet<Vertex>(solidVerts.Where(vertex => IsVertexInsidePartition(prtn, vertex)));
+                prtn.SolidTriangles = PartitionTriangles(prtn, solidFaces);
+                // continue the octree or not?
+                if (IsItWorthGoingDownTheOctree(prtn.SolidTriangles))
+                {
+                    prtn.InnerPartition = Run2(prtn.SolidVertices, prtn.SolidTriangles, prtn.CornerVertices);
+                }
                 partitions.Add(prtn);
-                aaaa.AddRange(prtn.SolidTriangles.Where(sssss=> !aaaa.Contains(sssss)));
             }
-            var s = partitions.Sum(a => a.SolidVertices.Count())-solid.Vertices.Count();
-            var s2 = aaaa.Count - solid.Faces.Count();
             return partitions.ToArray();
+        }
+
+        private static bool IsItWorthGoingDownTheOctree(HashSet<PolygonalFace> faces)
+        {
+            if (faces.Count == 0) return false;
+            return ((faces.Count/2.0 - 96)*(7e-5)) - ((2.35e-5)*faces.Count + 0.0012) > 0;
         }
 
         internal static HashSet<PolygonalFace> TwelveFaceGenerator(Vertex[] cornerVer)
@@ -191,7 +199,7 @@ namespace Assembly_Planner
             partition.Faces.All(pFace => pFace.Normal.dotProduct(ver.Position.subtract(pFace.Vertices[0].Position)) < 0);
         }
 
-        internal static HashSet<PolygonalFace> PartitionTriangles(Partition partition, PolygonalFace[] solidTrgs)
+        internal static HashSet<PolygonalFace> PartitionTriangles(Partition partition, HashSet<PolygonalFace> solidTrgs)
         {
             var trigs = new HashSet<PolygonalFace>();
             foreach (var ver in partition.SolidVertices)
@@ -224,12 +232,15 @@ namespace Assembly_Planner
         internal static void CreatePartitions(TessellatedSolid solid)
         {
             OrientedBoundingBoxDic.Add(solid, MinimumEnclosure.OrientedBoundingBox(solid));
-            Partitions.Add(solid, Run2(solid, OrientedBoundingBoxDic[solid]));
+            Partitions.Add(solid,
+                Run2(new HashSet<Vertex>(solid.Vertices), new HashSet<PolygonalFace>(solid.Faces),
+                    OrientedBoundingBoxDic[solid].CornerVertices));
         }
     }
 
     internal class Partition
     {
+        public Partition[] InnerPartition;
         public Vertex[] CornerVertices;
         public Edge[] Edges;
         public HashSet<PolygonalFace> Faces;

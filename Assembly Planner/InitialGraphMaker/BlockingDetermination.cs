@@ -24,15 +24,15 @@ namespace Assembly_Planner
             var partPrimitive = new Dictionary<TessellatedSolid, List<PrimitiveSurface>>();
             var partSize = new Dictionary<TessellatedSolid, double>();
 
-            //Parallel.ForEach(parts, solid =>
-            foreach (var solid in parts)
+            Parallel.ForEach(parts, solid =>
+            //foreach (var solid in parts)
             {
-                var obb = MinimumEnclosure.OrientedBoundingBox(solid);
+                //var obb = MinimumEnclosure.OrientedBoundingBox(solid);
                 //if (solid.Faces.Count() == 2098 || solid.Faces.Count() == 896 || solid.Faces.Count() == 2096) continue;
                 var solidPrim = TesselationToPrimitives.Run(solid);
-                //lock (partPrimitive)
-                partPrimitive.Add(solid, solidPrim);
-                if (!classification) continue;
+                lock (partPrimitive)
+                    partPrimitive.Add(solid, solidPrim);
+                /*if (!classification) continue;
                 double[][] dir;
                 var solidObb = OBB.BuildUsingPoints(solid.Vertices.ToList(), out dir);
                 var shortestObbEdge = double.PositiveInfinity;
@@ -47,9 +47,9 @@ namespace Assembly_Planner
                     if (dis > longestObbEdge) longestObbEdge = dis;
                 }
                 var sizeMetric = solid.Volume*(longestObbEdge/shortestObbEdge);
-                partSize.Add(solid, sizeMetric);
+                partSize.Add(solid, sizeMetric);*/
             }
-            // );
+             );
             if (!classification) return partPrimitive;
 
             // if removing the first 10 percent drops the max size by 95 percent, consider them as noise: 

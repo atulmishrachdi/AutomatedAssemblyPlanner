@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Dynamic;
 using System.Linq;
 using Assembly_Planner.GraphSynth.BaseClasses;
@@ -162,25 +163,34 @@ namespace Assembly_Planner
             {
                 //if (!NonadjacentBlockingDetermination.BoundingBoxBlocking(direction, solidBlocking, solidMoving))
                 //    continue;
-                var memoFace = new HashSet<PolygonalFace>();
                 //if (!CvhHashSet[solidBlocking].Any(
                 //    f => NonadjacentBlockingDetermination.RayIntersectsWithFace3(ray, f))) continue;
                 if (!ObbFacesHashSet[solidBlocking].Any(
                     f => RayIntersectsForObb(ray, f))) continue;
-                var affectedPartitions = AffectedPartitionsWithRay(solidBlocking, ray);
-                foreach (var prtn in affectedPartitions)
+                if (RayIntersects(solidBlocking, ray))
                 {
-                    foreach (var tri in prtn.SolidTriangles.Where(t => !memoFace.Contains(t)))
-                    {
-                        if (!NonadjacentBlockingDetermination.RayIntersectsWithFace3(ray, tri))
-                            continue;
-                        if (NonadjacentBlockingDetermination.DistanceToTheFace(ray.Position, tri) < 0)
-                            continue;
-                        return true;
-                    }
+                    
                 }
             }
             return false;
+        }
+
+        private static bool RayIntersects(TessellatedSolid solidBlocking, Ray ray)
+        {
+            var memoFace = new HashSet<PolygonalFace>();
+            
+            var affectedPartitions = AffectedPartitionsWithRay(solidBlocking, ray);
+            foreach (var prtn in affectedPartitions)
+            {
+                foreach (var tri in prtn.SolidTriangles.Where(t => !memoFace.Contains(t)))
+                {
+                    if (!NonadjacentBlockingDetermination.RayIntersectsWithFace3(ray, tri))
+                        continue;
+                    if (NonadjacentBlockingDetermination.DistanceToTheFace(ray.Position, tri) < 0)
+                        continue;
+                    return true;
+                }
+            }
         }
 
         private static List<Partition> AffectedPartitionsWithRay(TessellatedSolid solidBlocking, Ray ray)
