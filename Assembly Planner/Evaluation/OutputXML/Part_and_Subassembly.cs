@@ -67,12 +67,15 @@ namespace AssemblyEvaluation
         public Part()
         {
         }
+
+        private TVGL.BoundingBox OBB;
     }
 
     public class SubAssembly : Part
     {
         public InstallAction Install;
-        public List<Action> Actions;
+        public SecureAction Secure;
+        public RotateAction Rotate;
         public InstallCharacterType InstallCharacter;
         private List<DefaultConvexFace<Vertex>> refFacesInCombined;
 
