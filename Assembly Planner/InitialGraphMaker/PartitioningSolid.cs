@@ -235,6 +235,12 @@ namespace Assembly_Planner
             Partitions.Add(solid,
                 Run2(new HashSet<Vertex>(solid.Vertices), new HashSet<PolygonalFace>(solid.Faces),
                     OrientedBoundingBoxDic[solid].CornerVertices));
+
+            Vertex midpoint;
+            var contactData =
+                TVGL.Boolean_Operations.Slice.DefineContact(
+                    new Flat(midpoint, OrientedBoundingBoxDic["dummy"].Directions[0]), solid, false);
+            contactData.AllLoops[0][0].
         }
     }
 

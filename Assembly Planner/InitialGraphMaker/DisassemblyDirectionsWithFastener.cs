@@ -28,6 +28,7 @@ namespace Assembly_Planner
             Directions = IcosahedronPro.DirectionGeneration();
             DisassemblyDirections.Directions = new List<double[]>(Directions);
             var globalDirPool = new List<int>();
+
             var solidPrimitive = BlockingDetermination.PrimitiveMaker(solids);
             //s.Stop();
             //Console.WriteLine(s.Elapsed);
@@ -38,6 +39,7 @@ namespace Assembly_Planner
                 solidsNoFastener.Remove(bolt);
             DisassemblyDirections.Solids = new List<TessellatedSolid>(solidsNoFastener);
             AddingNodesToGraph(assemblyGraph, solidsNoFastener); //, gears, screwsAndBolts);
+
             foreach (var solid in solidsNoFastener)
                 PartitioningSolid.CreatePartitions(solid);
 

@@ -8,10 +8,10 @@ namespace AssemblyEvaluation
         public double TimeSD;
         public List<Tool> Tools;
     }
-    public class Secure : Action
+    public class SecureAction : Action
     {
     }
-    public class Rotate : Action
+    public class RotateAction : Action
     {
         public double[] RotationTransform;
     }
