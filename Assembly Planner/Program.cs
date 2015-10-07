@@ -25,8 +25,8 @@ namespace Assembly_Planner
                 // "../../../Test/3-parts-statbility";
                 //"../../../Test/Double";
                 //"../../../Test/Simple-Test";
-                //"../../../Test/McCormik/STL";
-                //"../../../Test/PumpWExtention";
+                //"../../../Test/Mc Cormik/STL2";
+                //"../../../Test/Truck -TXT-1/STL";
                 "../../../Test/FoodPackagingMachine/FPMSTL2";
                 //"C:\\DMDII Project\\GearAndFastener Detection\\TrainingData\\not-screw";
                 //"../../../Test/test";
@@ -47,7 +47,7 @@ namespace Assembly_Planner
             {
                 assemblyGraph = new designGraph();
                 //var globalDirPool = DisassemblyDirections.Run(assemblyGraph, solids);
-                globalDirPool = DisassemblyDirectionsWithFastener.Run(assemblyGraph, solids);
+                globalDirPool = DisassemblyDirectionsWithFastener.Run(assemblyGraph, solids, true);
                 //Updates.AddPartsProperties(inputDir, assemblyGraph);
                 //NonadjacentBlockingDeterminationPro.Run(assemblyGraph, solids, globalDirPool);
                 NonadjacentBlockingWithPartitioning.Run(assemblyGraph, solids, globalDirPool);
@@ -62,7 +62,7 @@ namespace Assembly_Planner
             //var reorientation = OptimalOrientation.Run(solutions);
             //WorkerAllocation.Run(solutions, reorientation);
             s.Stop();
-            Console.WriteLine(s.Elapsed);
+            Console.WriteLine("TOTAL TIME:" + "     " + s.Elapsed);
             Console.ReadLine();
         }
 
@@ -71,15 +71,15 @@ namespace Assembly_Planner
             var parts = new List<TessellatedSolid>();
             var di = new DirectoryInfo(InputDir);
             var fis = di.EnumerateFiles("*.STL");
-            //Parallel.ForEach(fis, fileInfo =>
-                foreach (var fileInfo in fis)
+            // Parallel.ForEach(fis, fileInfo =>
+               foreach (var fileInfo in fis)
             {
                 var ts = IO.Open(fileInfo.Open(FileMode.Open), fileInfo.Name);
                 //ts.Name = ts.Name.Remove(0, 1);
-               // lock (parts) 
+                //lock (parts) 
                     parts.Add(ts[0]);
             }
-               // );
+                //);
             return parts;
         }
     }

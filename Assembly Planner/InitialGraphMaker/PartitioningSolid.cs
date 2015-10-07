@@ -48,7 +48,7 @@ namespace Assembly_Planner
                 prtn.CornerVertices = cornerVer.ToArray();
 
                 var visVer = new HashSet<Vertex>();
-                var faces = new HashSet<PolygonalFace>();
+                var faces = new List<PolygonalFace>();
                 foreach (var ver1 in cornerVer.Where(v => !visVer.Contains(v)))
                 {
                     var otherVers = new List<Vertex>();
@@ -121,7 +121,7 @@ namespace Assembly_Planner
                 var faces = TwelveFaceGenerator(prtn.CornerVertices);
                 prtn.Faces = faces;
                 prtn.SolidVertices = new HashSet<Vertex>(solidVerts.Where(vertex => IsVertexInsidePartition(prtn, vertex)));
-                prtn.SolidTriangles = PartitionTriangles(prtn, solidFaces);
+                prtn.SolidTriangles = PartitionTrianglesPro(prtn, solidFaces);
                 // continue the octree or not?
                 if (IsItWorthGoingDownTheOctree(prtn.SolidTriangles))
                 {
@@ -138,9 +138,9 @@ namespace Assembly_Planner
             return ((faces.Count/2.0 - 96)*(7e-5)) - ((2.35e-5)*faces.Count + 0.0012) > 0;
         }
 
-        internal static HashSet<PolygonalFace> TwelveFaceGenerator(Vertex[] cornerVer)
+        internal static List<PolygonalFace> TwelveFaceGenerator(Vertex[] cornerVer)
         {
-            return new HashSet<PolygonalFace>
+            return new List<PolygonalFace>
                 {
                     new PolygonalFace(new[] {cornerVer[0], cornerVer[1], cornerVer[2]},
                         ((cornerVer[2].Position.subtract(cornerVer[0].Position)).crossProduct(
@@ -199,6 +199,38 @@ namespace Assembly_Planner
             partition.Faces.All(pFace => pFace.Normal.dotProduct(ver.Position.subtract(pFace.Vertices[0].Position)) < 0);
         }
 
+        private static HashSet<PolygonalFace> PartitionTrianglesPro(Partition partition, HashSet<PolygonalFace> solidTrgs)
+        {
+            var trigs = new HashSet<PolygonalFace>();
+            foreach (var ver in partition.SolidVertices)
+                trigs.UnionWith(ver.Faces.Where(f => !trigs.Contains(f)));
+            // using seperating axis theorem (SAT). Among 6 faces of the box and the triangle candidate from the solid
+            //    if any of them can seperate the 
+            foreach (var pF in solidTrgs.Where(t => !trigs.Contains(t)))
+            {
+                var overlap = true;
+                var dots =
+                    partition.CornerVertices.Select(
+                        corVer => (corVer.Position.subtract(pF.Vertices[0].Position)).dotProduct(pF.Normal)).ToList();
+                if (dots.All(d => d >= 0) || dots.All(d => d <= 0))
+                    continue;
+                for (var i = 0; i < 12; i += 2)
+                {
+                    if (
+                        pF.Vertices.All(
+                            v =>
+                                partition.Faces[i].Normal.dotProduct(
+                                    v.Position.subtract(partition.Faces[i].Vertices[0].Position)) >= 0))
+                    {
+                        overlap = false;
+                        break;
+                    }
+                }
+                if (overlap) trigs.Add(pF);
+            }
+            return trigs;
+        }
+
         internal static HashSet<PolygonalFace> PartitionTriangles(Partition partition, HashSet<PolygonalFace> solidTrgs)
         {
             var trigs = new HashSet<PolygonalFace>();
@@ -231,16 +263,21 @@ namespace Assembly_Planner
 
         internal static void CreatePartitions(TessellatedSolid solid)
         {
-            OrientedBoundingBoxDic.Add(solid, MinimumEnclosure.OrientedBoundingBox(solid));
-            Partitions.Add(solid,
-                Run2(new HashSet<Vertex>(solid.Vertices), new HashSet<PolygonalFace>(solid.Faces),
-                    OrientedBoundingBoxDic[solid].CornerVertices));
-
+            lock (Partitions)
+                Partitions.Add(solid,
+                    Run2(new HashSet<Vertex>(solid.Vertices), new HashSet<PolygonalFace>(solid.Faces),
+                        OrientedBoundingBoxDic[solid].CornerVertices));
+            /*
             Vertex midpoint;
             var contactData =
                 TVGL.Boolean_Operations.Slice.DefineContact(
                     new Flat(midpoint, OrientedBoundingBoxDic["dummy"].Directions[0]), solid, false);
-            contactData.AllLoops[0][0].
+            contactData.AllLoops[0][0].*/
+        }
+        internal static void CreateOBB(TessellatedSolid solid)
+        {
+            lock (OrientedBoundingBoxDic)
+                OrientedBoundingBoxDic.Add(solid, MinimumEnclosure.OrientedBoundingBox(solid));
         }
     }
 
@@ -249,7 +286,7 @@ namespace Assembly_Planner
         public Partition[] InnerPartition;
         public Vertex[] CornerVertices;
         public Edge[] Edges;
-        public HashSet<PolygonalFace> Faces;
+        public List<PolygonalFace> Faces;
         public HashSet<Vertex> SolidVertices;
         public HashSet<PolygonalFace> SolidTriangles;
     }

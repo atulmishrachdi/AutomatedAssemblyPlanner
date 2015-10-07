@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.Linq;
 using System.Security;
@@ -13,10 +14,10 @@ namespace Assembly_Planner
 {
     class BoltAndGearDetection
     {
-        internal static List<TessellatedSolid> ScrewAndBoltDetector(
+        internal static HashSet<TessellatedSolid> ScrewAndBoltDetector(
             Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive)
         {
-            var fastener = new List<TessellatedSolid>();
+            var fastener = new HashSet<TessellatedSolid>();
             foreach (var solid in solidPrimitive.Keys)
                 if (solid.Name.Contains("Screw") || solid.Name.Contains("Test - Part-S"))
                     fastener.Add(solid);
@@ -29,7 +30,9 @@ namespace Assembly_Planner
                                 continue;
                             else
                                 fastener.Add(solid);
-            
+
+            //var smallObjects = SmallObjectsDetector(solidPrimitive);
+            //fastener.UnionWith(smallObjects);
             return fastener;
             // Here are my thoughts about a bolt:
             // Since all of the threads are classified as cone, 
@@ -49,6 +52,141 @@ namespace Assembly_Planner
                 }
             }
             return fastener;
+        }
+
+        private static List<TessellatedSolid> SmallObjectsDetector(Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive)
+        {
+            var partSize = new Dictionary<TessellatedSolid, double>();
+            var parts = solidPrimitive.Keys.ToList();
+            foreach (var solid in solidPrimitive.Keys.ToList())
+            {
+                var shortestObbEdge = double.PositiveInfinity;
+                var longestObbEdge = double.NegativeInfinity;
+                var solidObb = PartitioningSolid.OrientedBoundingBoxDic[solid];
+                for (var i = 1; i < solidObb.CornerVertices.Count(); i++)
+                {
+                    var dis =
+                        Math.Sqrt(Math.Pow(solidObb.CornerVertices[0].Position[0] - solidObb.CornerVertices[i].Position[0], 2.0) +
+                                  Math.Pow(solidObb.CornerVertices[0].Position[1] - solidObb.CornerVertices[i].Position[1], 2.0) +
+                                  Math.Pow(solidObb.CornerVertices[0].Position[2] - solidObb.CornerVertices[i].Position[2], 2.0));
+                    if (dis < shortestObbEdge) shortestObbEdge = dis;
+                    if (dis > longestObbEdge) longestObbEdge = dis;
+                }
+                var sizeMetric = solid.Volume * (longestObbEdge / shortestObbEdge);
+                partSize.Add(solid, sizeMetric);
+            }
+            // if removing the first 10 percent drops the max size by 95 percent, consider them as noise: 
+            var maxSize = partSize.Values.Max();
+            var sortedPartSize = partSize.ToList();
+            sortedPartSize.Sort((x, y) => y.Value.CompareTo(x.Value));
+
+            var noise = new List<TessellatedSolid>();
+            for (var i = 0; i < Math.Ceiling(partSize.Count * 5 / 100.0); i++)
+                noise.Add(sortedPartSize[i].Key);
+            var approvedNoise = new List<TessellatedSolid>();
+            for (var i = 0; i < noise.Count; i++)
+            {
+                var newList = new List<TessellatedSolid>();
+                for (var j = 0; j < i + 1; j++)
+                    newList.Add(noise[j]);
+                var max =
+                    partSize.Where(a => !newList.Contains(a.Key))
+                        .ToDictionary(key => key.Key, value => value.Value)
+                        .Values.Max();
+                if (max > maxSize * 10.0 / 100.0) continue;
+                approvedNoise = newList;
+                break;
+            }
+            maxSize = partSize.Where(a => !approvedNoise.Contains(a.Key))
+                        .ToDictionary(key => key.Key, value => value.Value)
+                        .Values.Max();
+
+            // If I have detected a portion of the fasteners (a very good number of them possibly) by this point,
+            // it can accellerate the primitive classification. If it is fastener, it doesn't need to be classified?
+            //string pathDesktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            //string filePath = pathDesktop + "\\mycsvfile.csv";
+
+            //if (!File.Exists(filePath))
+            //{
+            //    File.Create(filePath).Close();
+            //}
+            //string delimter = ",";
+            //List<string[]> output = new List<string[]>();
+            //foreach (var solid in parts.Where(s=>!approvedNoise.Contains(s)))
+            //{
+            /*var solidPrim = partPrimitive[solid];
+            var cones = solidPrim.Where(p => p is Cone).ToList();
+            var flat = solidPrim.Where(p => p is Flat).ToList();
+            var cylinder = solidPrim.Where(p => p is Cylinder).ToList();
+
+            double coneFacesCount = cones.Sum(c => c.Faces.Count);
+            double flatFacesCount = flat.Sum(f => f.Faces.Count);
+            double cylinderFacesCount = cylinder.Sum(c => c.Faces.Count);
+
+            var coneArea = cones.Sum(c => c.Area);
+            var flatArea = flat.Sum(c => c.Area);
+            var cylinderArea = cylinder.Sum(c => c.Area);
+
+            var feature1 = flatFacesCount/(flatArea/solid.SurfaceArea);
+            var feature2 = coneFacesCount/(coneArea/solid.SurfaceArea);
+            var feature3 = cylinderFacesCount/(cylinderArea/solid.SurfaceArea);
+            var feature4 = coneFacesCount/solid.Faces.Count();
+            var feature5 = flatFacesCount/solid.Faces.Count();
+            var feature6 = cylinderFacesCount/solid.Faces.Count();
+            var feature7 = (coneArea + cylinderArea)/solid.SurfaceArea;*/
+            //var feature8 = partSize[solid]/maxSize;
+            //Console.WriteLine(solid.Name + "   " + feature8);
+            //lock (output)
+            //output.Add(new[]
+            // {
+            //    feature1.ToString(), feature2.ToString(), feature3.ToString(), feature4.ToString(),
+            //     feature5.ToString(), feature6.ToString(), feature7.ToString()
+            // });
+            //}
+
+            /* int length = output.Count;
+             using (TextWriter writer = File.CreateText(filePath))
+                 for (int index = 0; index < length; index++)
+                     writer.WriteLine(string.Join(delimter, output[index]));*/
+
+
+            // creating the dictionary:
+            var n = 1001.0; // number of classes
+            var dic = new Dictionary<double, List<TessellatedSolid>>();
+
+            // Filling up the keys
+            var minSize = partSize.Where(a => !approvedNoise.Contains(a.Key))
+                        .ToDictionary(key => key.Key, value => value.Value)
+                        .Values.Min();
+            var smallestSolid = partSize.Keys.Where(s => partSize[s] == minSize).ToList();
+
+            for (var i = 0; i < n; i++)
+            {
+                var ini = new List<TessellatedSolid>();
+                var key = minSize + (i / (n - 1)) * (maxSize - minSize);
+                dic.Add(key, ini);
+            }
+
+            dic[minSize].AddRange(smallestSolid);
+            dic[maxSize].AddRange(approvedNoise);
+
+            // Filling up the values
+            var keys = dic.Keys.ToList();
+            foreach (var f in parts.Where(a => !approvedNoise.Contains(a)))
+            {
+                for (var i = 0; i < n - 2; i++)
+                {
+                    if (partSize[f] >= keys[i] && partSize[f] <= keys[i + 1])
+                    {
+                        if (Math.Abs(partSize[f] - keys[i]) > Math.Abs(partSize[f] - keys[i + 1]))
+                            dic[keys[i + 1]].Add(f);
+                        else dic[keys[i]].Add(f);
+                    }
+                }
+            }
+            //foreach (var v in dic[minSize])
+            //    Console.WriteLine(v.Name);//partSize[v]/maxSize);
+            return dic[minSize];
         }
 
         private static double[] BoltCenterLine(List<PrimitiveSurface> primitiveSurfaces)

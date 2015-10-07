@@ -20,188 +20,22 @@ namespace Assembly_Planner
 
         internal static Dictionary<TessellatedSolid, List<PrimitiveSurface>> PrimitiveMaker(List<TessellatedSolid> parts)
         {
-            var classification = false;
             var partPrimitive = new Dictionary<TessellatedSolid, List<PrimitiveSurface>>();
-            var partSize = new Dictionary<TessellatedSolid, double>();
 
             Parallel.ForEach(parts, solid =>
             //foreach (var solid in parts)
             {
-                //var obb = MinimumEnclosure.OrientedBoundingBox(solid);
-                //if (solid.Faces.Count() == 2098 || solid.Faces.Count() == 896 || solid.Faces.Count() == 2096) continue;
                 var solidPrim = TesselationToPrimitives.Run(solid);
                 lock (partPrimitive)
                     partPrimitive.Add(solid, solidPrim);
-                /*if (!classification) continue;
-                double[][] dir;
-                var solidObb = OBB.BuildUsingPoints(solid.Vertices.ToList(), out dir);
-                var shortestObbEdge = double.PositiveInfinity;
-                var longestObbEdge = double.NegativeInfinity;
-                for (var i = 1; i < solidObb.Count(); i++)
-                {
-                    var dis =
-                        Math.Sqrt(Math.Pow(solidObb[0][0] - solidObb[i][0], 2.0) +
-                                  Math.Pow(solidObb[0][1] - solidObb[i][1], 2.0) +
-                                  Math.Pow(solidObb[0][2] - solidObb[i][2], 2.0));
-                    if (dis < shortestObbEdge) shortestObbEdge = dis;
-                    if (dis > longestObbEdge) longestObbEdge = dis;
-                }
-                var sizeMetric = solid.Volume*(longestObbEdge/shortestObbEdge);
-                partSize.Add(solid, sizeMetric);*/
             }
-             );
-            if (!classification) return partPrimitive;
-
-            // if removing the first 10 percent drops the max size by 95 percent, consider them as noise: 
-            var maxSize = partSize.Values.Max();
-            var sortedPartSize = partSize.ToList();
-            sortedPartSize.Sort((x, y) => y.Value.CompareTo(x.Value));
-
-            var noise = new List<TessellatedSolid>();
-            for (var i = 0; i < Math.Ceiling(partSize.Count * 5 / 100.0); i++)
-                noise.Add(sortedPartSize[i].Key);
-            var approvedNoise = new List<TessellatedSolid>();
-            for (var i = 0; i < noise.Count; i++)
-            {
-                var newList = new List<TessellatedSolid>();
-                for (var j = 0; j < i + 1; j++)
-                    newList.Add(noise[j]);
-                var max =
-                    partSize.Where(a => !newList.Contains(a.Key))
-                        .ToDictionary(key => key.Key, value => value.Value)
-                        .Values.Max();
-                if (max > maxSize * 5.0 / 100.0) continue;
-                approvedNoise = newList;
-                break;
-            }
-            maxSize = partSize.Where(a => !approvedNoise.Contains(a.Key))
-                        .ToDictionary(key => key.Key, value => value.Value)
-                        .Values.Max();
-
-            // If I have detected a portion of the fasteners (a very good number of them possibly) by this point,
-            // it can accellerate the primitive classification. If it is fastener, it doesn't need to be classified?
-            //string pathDesktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            //string filePath = pathDesktop + "\\mycsvfile.csv";
-
-            //if (!File.Exists(filePath))
-            //{
-            //    File.Create(filePath).Close();
-            //}
-            //string delimter = ",";
-            //List<string[]> output = new List<string[]>();
-            foreach (var solid in parts.Where(s=>!approvedNoise.Contains(s)))
-            {
-                /*var solidPrim = partPrimitive[solid];
-                var cones = solidPrim.Where(p => p is Cone).ToList();
-                var flat = solidPrim.Where(p => p is Flat).ToList();
-                var cylinder = solidPrim.Where(p => p is Cylinder).ToList();
-
-                double coneFacesCount = cones.Sum(c => c.Faces.Count);
-                double flatFacesCount = flat.Sum(f => f.Faces.Count);
-                double cylinderFacesCount = cylinder.Sum(c => c.Faces.Count);
-
-                var coneArea = cones.Sum(c => c.Area);
-                var flatArea = flat.Sum(c => c.Area);
-                var cylinderArea = cylinder.Sum(c => c.Area);
-
-                var feature1 = flatFacesCount/(flatArea/solid.SurfaceArea);
-                var feature2 = coneFacesCount/(coneArea/solid.SurfaceArea);
-                var feature3 = cylinderFacesCount/(cylinderArea/solid.SurfaceArea);
-                var feature4 = coneFacesCount/solid.Faces.Count();
-                var feature5 = flatFacesCount/solid.Faces.Count();
-                var feature6 = cylinderFacesCount/solid.Faces.Count();
-                var feature7 = (coneArea + cylinderArea)/solid.SurfaceArea;*/
-                var feature8 = partSize[solid]/maxSize;
-                //Console.WriteLine(solid.Name + "   " + feature8);
-                //lock (output)
-                //output.Add(new[]
-               // {
-                //    feature1.ToString(), feature2.ToString(), feature3.ToString(), feature4.ToString(),
-               //     feature5.ToString(), feature6.ToString(), feature7.ToString()
-               // });
-            }
-
-           /* int length = output.Count;
-            using (TextWriter writer = File.CreateText(filePath))
-                for (int index = 0; index < length; index++)
-                    writer.WriteLine(string.Join(delimter, output[index]));
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-            // creating the dictionary:
-            var n = 151.0; // number of classes
-            var dic = new Dictionary<double, List<TessellatedSolid>>();
-
-
-
-            // Filling up the keys
-            var minSize = partSize.Where(a => !approvedNoise.Contains(a.Key))
-                        .ToDictionary(key => key.Key, value => value.Value)
-                        .Values.Min();
-            var smallestSolid = partSize.Keys.Where(s=> partSize[s] == minSize).ToList();
-            var largestSolid = partSize.Keys.Where(s => partSize[s] == maxSize).ToList();
-
-            for (var i = 0; i < n; i++)
-            {
-                var ini = new List<TessellatedSolid>();
-                var key = minSize + (i / (n - 1)) * (maxSize - minSize);
-                dic.Add(key, ini);
-            }
-
-            dic[minSize].AddRange(smallestSolid);
-            dic[maxSize].AddRange(approvedNoise);
-
-            // Filling up the values
-            var keys = dic.Keys.ToList();
-            foreach (var f in parts.Where(a => !approvedNoise.Contains(a)))
-            {
-                for (var i = 0; i < n - 2; i++)
-                {
-                    if (partSize[f] >= keys[i] && partSize[f] <= keys[i + 1])
-                    {
-                        if (Math.Abs(partSize[f] - keys[i]) > Math.Abs(partSize[f] - keys[i + 1]))
-                            dic[keys[i + 1]].Add(f);
-                        else dic[keys[i]].Add(f);
-                    }
-                }
-            }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            foreach (var v in dic[minSize])
-                Console.WriteLine(partSize[v]/maxSize);
+             );//
             return partPrimitive;
         }
 
         internal static bool DefineBlocking(designGraph assemblyGraph, TessellatedSolid solid1, TessellatedSolid solid2,
             List<PrimitiveSurface> solid1P, List<PrimitiveSurface> solid2P, List<int> globalDirPool,
-            out List<int> dirInd)
+            out List<int> dirInd, bool printResults = false)
         {
             if (BoundingBoxOverlap(solid1, solid2))
             {
@@ -222,18 +56,28 @@ namespace Assembly_Planner
                     for (var i = 0; i < DisassemblyDirections.Directions.Count; i++)
                         localDirInd.Add(i);
                     var overlappedPrimitives = new List<PrimitiveSurface[]>();
-                    if (PrimitivePrimitiveInteractions.PrimitiveOverlap(solid1P, solid2P, localDirInd, out overlappedPrimitives))
+                    if (PrimitivePrimitiveInteractions.PrimitiveOverlap(solid1P, solid2P, localDirInd,
+                        out overlappedPrimitives))
                     {
-                        var overlappingSurface = new OverlappedSurfaces { Solid1 = solid1, Solid2 = solid2, Overlappings = overlappedPrimitives };
+                        var overlappingSurface = new OverlappedSurfaces
+                        {
+                            Solid1 = solid1,
+                            Solid2 = solid2,
+                            Overlappings = overlappedPrimitives
+                        };
                         OverlappingSurfaces.Add(overlappingSurface);
                         // dirInd is the list of directions that must be added to the arc between part1 and part2
-                        Console.WriteLine(@"An overlap is detected between   " + solid1.Name + "   and   " + solid2.Name);
                         globalDirPool.AddRange(localDirInd.Where(d => !globalDirPool.Contains(d)));
-                        foreach (var i in localDirInd)
+                        if (printResults)
                         {
-                            Console.WriteLine(DisassemblyDirections.Directions[i][0] + " " +
-                                              DisassemblyDirections.Directions[i][1] + " " +
-                                              DisassemblyDirections.Directions[i][2]);
+                            Console.WriteLine(@"An overlap is detected between   " + solid1.Name + "   and   " +
+                                              solid2.Name);
+                            foreach (var i in localDirInd)
+                            {
+                                Console.WriteLine(DisassemblyDirections.Directions[i][0] + " " +
+                                                  DisassemblyDirections.Directions[i][1] + " " +
+                                                  DisassemblyDirections.Directions[i][2]);
+                            }
                         }
                         dirInd = localDirInd;
                         return true;

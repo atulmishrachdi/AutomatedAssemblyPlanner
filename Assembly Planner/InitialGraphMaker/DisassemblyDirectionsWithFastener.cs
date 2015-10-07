@@ -20,30 +20,64 @@ namespace Assembly_Planner
         internal static List<TessellatedSolid> Solids;
         internal static Dictionary<int, List<Component[]>> NonAdjacentBlocking = new Dictionary<int, List<Component[]>>(); //Component[0] is blocked by Component[1]
 
-        internal static List<int> Run(designGraph assemblyGraph, List<TessellatedSolid> solids)
+        internal static List<int> Run(designGraph assemblyGraph, List<TessellatedSolid> solids, bool classifyFastener = false)
         {
-            //var s = Stopwatch.StartNew();
-            //s.Start();
+            var s = Stopwatch.StartNew();
+            s.Start();
             Solids = new List<TessellatedSolid>(solids);
+
+            // Generate a good number of directions on the surface of a sphere
+            //------------------------------------------------------------------------------------------
             Directions = IcosahedronPro.DirectionGeneration();
             DisassemblyDirections.Directions = new List<double[]>(Directions);
             var globalDirPool = new List<int>();
+            
+            // From repeated parts take only one of them, and do the primitive classification on that:
+            //------------------------------------------------------------------------------------------
+            var multipleRefs = DuplicatePartsDetector(solids);
+            var solidPrimitive = BlockingDetermination.PrimitiveMaker(multipleRefs.Keys.ToList());
+            foreach (var mRef in multipleRefs.Keys)
+                foreach (var duplicated in multipleRefs[mRef])
+                    solidPrimitive.Add(duplicated, solidPrimitive[mRef]);
 
-            var solidPrimitive = BlockingDetermination.PrimitiveMaker(solids);
-            //s.Stop();
-            //Console.WriteLine(s.Elapsed);
-            var screwsAndBolts = BoltAndGearDetection.ScrewAndBoltDetector(solidPrimitive);
+            s.Stop();
+            Console.WriteLine("Primitive classification:" + "     " + s.Elapsed);
+            
+            // Creating OBB for every solid
+            //------------------------------------------------------------------------------------------
+            s.Restart();
+            Parallel.ForEach(solids, PartitioningSolid.CreateOBB);
+            s.Stop();
+            Console.WriteLine("OBB Creation:" + "     " + s.Elapsed);
+            
+            // Detect fasteners and gear mates
+            //------------------------------------------------------------------------------------------
+            s.Restart();
+            var screwsAndBolts = new HashSet<TessellatedSolid>();
+            if (classifyFastener)
+                screwsAndBolts = BoltAndGearDetection.ScrewAndBoltDetector(solidPrimitive);
             //var gears = BoltAndGearDetection.GearDetector(solidPrimitive);
+            s.Stop();
+            Console.WriteLine("Gear and Fastener Detection:" + "     " + s.Elapsed);
+            
+            // Add the solids as nodes to the graph. Excluede the fasteners 
+            //------------------------------------------------------------------------------------------
             var solidsNoFastener = new List<TessellatedSolid>(solids);
             foreach (var bolt in screwsAndBolts)
                 solidsNoFastener.Remove(bolt);
             DisassemblyDirections.Solids = new List<TessellatedSolid>(solidsNoFastener);
             AddingNodesToGraph(assemblyGraph, solidsNoFastener); //, gears, screwsAndBolts);
 
-            foreach (var solid in solidsNoFastener)
-                PartitioningSolid.CreatePartitions(solid);
-
-            //var aaa = new List<TessellatedSolid>(solidsNoFastener.Where(s=>s.Name.Contains("DowellGrooved")));
+            // Implementing region octree for every solid
+            //------------------------------------------------------------------------------------------
+            s.Restart();
+            Parallel.ForEach(solidsNoFastener, PartitioningSolid.CreatePartitions);
+            s.Stop();
+            Console.WriteLine("Octree Generation:" + "     " + s.Elapsed);
+            
+            // Part to part interaction to obtain removal directions between every connected pair
+            //------------------------------------------------------------------------------------------
+            s.Restart();
             for (var i = 0; i < solidsNoFastener.Count - 1; i++)
             {
                 var solid1 = solidsNoFastener[i];
@@ -71,7 +105,32 @@ namespace Assembly_Planner
                 }
             }
             Fastener.AddFastenersInformation(assemblyGraph, screwsAndBolts, solidsNoFastener, solidPrimitive);
+            s.Stop();
+            Console.WriteLine("Blocking Determination:" + "     " + s.Elapsed);
             return globalDirPool;
+        }
+
+        private static Dictionary<TessellatedSolid, List<TessellatedSolid>> DuplicatePartsDetector(List<TessellatedSolid> solids)
+        {
+            // If the number of vertcies and number of faces are exactly the same and also the volumes are equal.
+            var multipleRefs = new Dictionary<TessellatedSolid, List<TessellatedSolid>>();
+            foreach (var solid in solids)
+            {
+                var exist = multipleRefs.Keys.Where(
+                    k =>
+                        k.Vertices.Count() == solid.Vertices.Count() && k.Faces.Count() == solid.Faces.Count() &&
+                        Math.Abs(k.Volume - solid.Volume) < 0.001).ToList();
+                if (exist.Count == 0)
+                {
+                    var d = new List<TessellatedSolid>();
+                    multipleRefs.Add(solid,d);
+                }
+                else
+                {
+                    multipleRefs[exist[0]].Add(solid);
+                }
+            }
+            return multipleRefs;
         }
 
         private static void AddInformationToArc(Connection a, List<int> finDirs, List<int> infDirs)

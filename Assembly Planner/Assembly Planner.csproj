@@ -41,7 +41,7 @@
     </Reference>
     <Reference Include="StarMath, Version=2.0.14.1114, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\StarMath.2.0.15.9088\lib\portable-net4+sl5+wp8+win8\StarMath.dll</HintPath>
+      <HintPath>..\packages\StarMath.2.0.15.9091\lib\portable-net4+sl5+wp8+win8\StarMath.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -52,7 +52,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="TessellationAndVoxelizationGeometryLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\TVGL.1.0.15.0928\lib\portable-net45+sl5+wp8+win8\TessellationAndVoxelizationGeometryLibrary.dll</HintPath>
+      <HintPath>..\packages\TVGL.1.0.15.0930\lib\portable-net45+sl5+wp8+win8\TessellationAndVoxelizationGeometryLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
