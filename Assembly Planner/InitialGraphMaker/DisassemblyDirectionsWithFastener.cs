@@ -22,8 +22,6 @@ namespace Assembly_Planner
 
         internal static List<int> Run(designGraph assemblyGraph, List<TessellatedSolid> solids, bool classifyFastener = false)
         {
-            var s = Stopwatch.StartNew();
-            s.Start();
             Solids = new List<TessellatedSolid>(solids);
 
             // Generate a good number of directions on the surface of a sphere
@@ -34,31 +32,23 @@ namespace Assembly_Planner
             
             // From repeated parts take only one of them, and do the primitive classification on that:
             //------------------------------------------------------------------------------------------
-            var multipleRefs = DuplicatePartsDetector(solids);
-            var solidPrimitive = BlockingDetermination.PrimitiveMaker(multipleRefs.Keys.ToList());
-            foreach (var mRef in multipleRefs.Keys)
-                foreach (var duplicated in multipleRefs[mRef])
-                    solidPrimitive.Add(duplicated, solidPrimitive[mRef]);
-
-            s.Stop();
-            Console.WriteLine("Primitive classification:" + "     " + s.Elapsed);
+            //var multipleRefs = DuplicatePartsDetector(solids);
+            var solidPrimitive = BlockingDetermination.PrimitiveMaker(solids);//multipleRefs.Keys.ToList());
+            //foreach (var mRef in multipleRefs.Keys)
+            //    foreach (var duplicated in multipleRefs[mRef])
+            //        solidPrimitive.Add(duplicated, solidPrimitive[mRef]);
             
             // Creating OBB for every solid
             //------------------------------------------------------------------------------------------
-            s.Restart();
-            Parallel.ForEach(solids, PartitioningSolid.CreateOBB);
-            s.Stop();
-            Console.WriteLine("OBB Creation:" + "     " + s.Elapsed);
+            PartitioningSolid.CreateOBB(solids);
             
             // Detect fasteners and gear mates
             //------------------------------------------------------------------------------------------
-            s.Restart();
             var screwsAndBolts = new HashSet<TessellatedSolid>();
             if (classifyFastener)
                 screwsAndBolts = BoltAndGearDetection.ScrewAndBoltDetector(solidPrimitive);
             //var gears = BoltAndGearDetection.GearDetector(solidPrimitive);
-            s.Stop();
-            Console.WriteLine("Gear and Fastener Detection:" + "     " + s.Elapsed);
+
             
             // Add the solids as nodes to the graph. Excluede the fasteners 
             //------------------------------------------------------------------------------------------
@@ -70,14 +60,15 @@ namespace Assembly_Planner
 
             // Implementing region octree for every solid
             //------------------------------------------------------------------------------------------
-            s.Restart();
-            Parallel.ForEach(solidsNoFastener, PartitioningSolid.CreatePartitions);
-            s.Stop();
-            Console.WriteLine("Octree Generation:" + "     " + s.Elapsed);
+            PartitioningSolid.CreatePartitions(solidsNoFastener);
+
             
             // Part to part interaction to obtain removal directions between every connected pair
             //------------------------------------------------------------------------------------------
-            s.Restart();
+            var s = Stopwatch.StartNew();
+            s.Start();
+            Console.WriteLine();
+            Console.WriteLine("Blocking Determination is running ....");
             for (var i = 0; i < solidsNoFastener.Count - 1; i++)
             {
                 var solid1 = solidsNoFastener[i];
@@ -88,8 +79,7 @@ namespace Assembly_Planner
                     var solid2Primitives = solidPrimitive[solid2];
                     List<int> localDirInd;
                     if (BlockingDetermination.DefineBlocking(assemblyGraph, solid1, solid2, solid1Primitives,
-                        solid2Primitives,
-                        globalDirPool, out localDirInd))
+                        solid2Primitives, globalDirPool, out localDirInd))
                     {
                         // I wrote the code in a way that "solid1" is always "Reference" and "solid2" is always "Moving".
                         List<int> finDirs, infDirs;
@@ -106,7 +96,7 @@ namespace Assembly_Planner
             }
             Fastener.AddFastenersInformation(assemblyGraph, screwsAndBolts, solidsNoFastener, solidPrimitive);
             s.Stop();
-            Console.WriteLine("Blocking Determination:" + "     " + s.Elapsed);
+            Console.WriteLine("Blocking Determination is done in:" + "     " + s.Elapsed);
             return globalDirPool;
         }
 
@@ -118,8 +108,10 @@ namespace Assembly_Planner
             {
                 var exist = multipleRefs.Keys.Where(
                     k =>
-                        k.Vertices.Count() == solid.Vertices.Count() && k.Faces.Count() == solid.Faces.Count() &&
-                        Math.Abs(k.Volume - solid.Volume) < 0.001).ToList();
+                        k.Faces.Count() == solid.Faces.Count() &&
+                        Math.Abs(k.Vertices.Count() - solid.Vertices.Count()) < 2 &&
+                        (Math.Max(k.SurfaceArea, solid.SurfaceArea) - Math.Min(k.SurfaceArea, solid.SurfaceArea))/
+                        Math.Max(k.SurfaceArea, solid.SurfaceArea) < 0.001).ToList();
                 if (exist.Count == 0)
                 {
                     var d = new List<TessellatedSolid>();

@@ -582,7 +582,9 @@ namespace Assembly_Planner
             foreach (var ray in rays)
             {
                 var memoFace = new HashSet<PolygonalFace>();
-                var affectedPartitions = NonadjacentBlockingWithPartitioning.AffectedPartitionsWithRayCvhOverlaps(blockingSolid, ray);
+                var affectedPartitions =
+                    NonadjacentBlockingWithPartitioning.AffectedPartitionsWithRayCvhOverlaps(
+                        PartitioningSolid.Partitions[blockingSolid], ray);
                 foreach (var prtn in affectedPartitions)
                 {
                     foreach (var t in prtn.SolidTriangles.Where(t=>!memoFace.Contains(t)))

@@ -261,23 +261,38 @@ namespace Assembly_Planner
             return trigs;
         }
 
-        internal static void CreatePartitions(TessellatedSolid solid)
+        internal static void CreatePartitions(List<TessellatedSolid> solids)
         {
-            lock (Partitions)
-                Partitions.Add(solid,
-                    Run2(new HashSet<Vertex>(solid.Vertices), new HashSet<PolygonalFace>(solid.Faces),
-                        OrientedBoundingBoxDic[solid].CornerVertices));
-            /*
-            Vertex midpoint;
-            var contactData =
-                TVGL.Boolean_Operations.Slice.DefineContact(
-                    new Flat(midpoint, OrientedBoundingBoxDic["dummy"].Directions[0]), solid, false);
-            contactData.AllLoops[0][0].*/
+            var s = new Stopwatch();
+            s.Start();
+            Console.WriteLine();
+            Console.WriteLine("Octree is being generated ....");
+            Parallel.ForEach(solids, solid =>
+            {
+                lock (Partitions)
+                    Partitions.Add(solid,
+                        Run2(new HashSet<Vertex>(solid.Vertices), new HashSet<PolygonalFace>(solid.Faces),
+                            OrientedBoundingBoxDic[solid].CornerVertices));
+            });
+            s.Stop();
+            Console.WriteLine("Octree Generation is done in:" + "     " + s.Elapsed);
+
         }
-        internal static void CreateOBB(TessellatedSolid solid)
+ 
+        internal static void CreateOBB(List<TessellatedSolid> solids)
         {
-            lock (OrientedBoundingBoxDic)
-                OrientedBoundingBoxDic.Add(solid, MinimumEnclosure.OrientedBoundingBox(solid));
+            var s = new Stopwatch();
+            s.Start();
+            Console.WriteLine();
+            Console.WriteLine("OBBs are being Created ...");
+            Parallel.ForEach(solids, solid =>
+            {
+                lock (OrientedBoundingBoxDic)
+                    OrientedBoundingBoxDic.Add(solid, MinimumEnclosure.OrientedBoundingBox(solid));
+            }
+                );
+            s.Stop();
+            Console.WriteLine("OBB Creation is done in:" + "     " + s.Elapsed);
         }
     }
 

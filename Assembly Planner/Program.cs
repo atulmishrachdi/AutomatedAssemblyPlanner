@@ -62,12 +62,14 @@ namespace Assembly_Planner
             //var reorientation = OptimalOrientation.Run(solutions);
             //WorkerAllocation.Run(solutions, reorientation);
             s.Stop();
+            Console.WriteLine();
             Console.WriteLine("TOTAL TIME:" + "     " + s.Elapsed);
             Console.ReadLine();
         }
 
         private static List<TessellatedSolid> GetSTLs(string InputDir)
         {
+            Console.WriteLine("Loading STLs ....");
             var parts = new List<TessellatedSolid>();
             var di = new DirectoryInfo(InputDir);
             var fis = di.EnumerateFiles("*.STL");
@@ -80,6 +82,9 @@ namespace Assembly_Planner
                     parts.Add(ts[0]);
             }
                 //);
+            Console.WriteLine("All the files are loaded successfully");
+            Console.WriteLine("    * Number of tessellated solids:   " + parts.Count );
+            Console.WriteLine("    * Total Number of Triangles:   " + parts.Sum(s => s.Faces.Count()));
             return parts;
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -20,8 +21,11 @@ namespace Assembly_Planner
 
         internal static Dictionary<TessellatedSolid, List<PrimitiveSurface>> PrimitiveMaker(List<TessellatedSolid> parts)
         {
+            var s = Stopwatch.StartNew();
+            s.Start();
+            Console.WriteLine();
+            Console.WriteLine("Classifying Primitives for " + parts.Count + " unique parts ....");
             var partPrimitive = new Dictionary<TessellatedSolid, List<PrimitiveSurface>>();
-
             Parallel.ForEach(parts, solid =>
             //foreach (var solid in parts)
             {
@@ -30,6 +34,9 @@ namespace Assembly_Planner
                     partPrimitive.Add(solid, solidPrim);
             }
              );//
+
+            s.Stop();
+            Console.WriteLine("Primitive classification is done in:" + "     " + s.Elapsed);
             return partPrimitive;
         }
 

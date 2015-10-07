@@ -34,6 +34,8 @@ namespace Assembly_Planner
         internal static void Run(designGraph graph,
             List<TessellatedSolid> solids, List<int> gDir)
         {
+            Console.WriteLine();
+            Console.WriteLine("Nonadjacent Blocking Determination is running ....");
             var stopWat = Stopwatch.StartNew();
             stopWat.Start();
             var solidsL = solids.Where(s => graph.nodes.Any(n => n.name == s.Name)).ToList();
@@ -120,7 +122,7 @@ namespace Assembly_Planner
                 }
             }
             stopWat.Stop();
-            Console.WriteLine("Nonadjacent Blocking Determination:" + "     " + stopWat.Elapsed);
+            Console.WriteLine("Nonadjacent Blocking Determination is done in:" + "     " + stopWat.Elapsed);
         }
 
         private static node GetNode(designGraph graph, TessellatedSolid solid)
@@ -131,36 +133,36 @@ namespace Assembly_Planner
         private static bool BlockingDeterminationWithCvhOverlapping(double[] direction, TessellatedSolid solidMoving,
             TessellatedSolid solidBlocking)
         {
-            var boo = false;
             var rays = RayGenerator(solidMoving, direction);
             foreach (var ray in rays)
             {
-                var memoFace = new HashSet<PolygonalFace>();
-                var affectedPartitions = AffectedPartitionsWithRayCvhOverlaps(solidBlocking, ray);
-                //if ()
-                //{
-                    
-                //}
-                foreach (var prtn in affectedPartitions)
-                {
-                    foreach (var tri in prtn.SolidTriangles.Where(t => !memoFace.Contains(t)))
-                    {
-                        memoFace.Add(tri);
-                        if (!NonadjacentBlockingDetermination.RayIntersectsWithFace3(ray, tri))
-                            continue;
-                        if (NonadjacentBlockingDetermination.DistanceToTheFace(ray.Position, tri) < 0)
-                            continue;
-                        boo = true;
-                        break;
-                    }
-                    if (boo) break;
-                }
-                if (!boo) continue;
-                //if (!NonadjacentBlockingDetermination._2DProjectionCheck(solidMoving, solidBlocking, direction))
-                //    boo = false;
-                break;
+                if (RayIntersectsCVHOverlap(PartitioningSolid.Partitions[solidBlocking], ray))
+                    return true;
             }
-            return boo;
+            return false;
+        }
+
+        private static bool RayIntersectsCVHOverlap(Partition[] partitions, Ray ray)
+        {
+            var memoFace = new HashSet<PolygonalFace>();
+            var affectedPartitions = AffectedPartitionsWithRayCvhOverlaps(partitions, ray);
+            foreach (var prtn in affectedPartitions)
+            {
+                if (prtn.InnerPartition != null)
+                    RayIntersectsCVHOverlap(prtn.InnerPartition, ray);
+                foreach (var tri in prtn.SolidTriangles.Where(t => !memoFace.Contains(t)))
+                {
+                    memoFace.Add(tri);
+                    if (!NonadjacentBlockingDetermination.RayIntersectsWithFace3(ray, tri))
+                        continue;
+                    if (NonadjacentBlockingDetermination.DistanceToTheFace(ray.Position, tri) < 0)
+                        continue;
+                    return true;
+                }
+            }
+            return false;
+            //if (!NonadjacentBlockingDetermination._2DProjectionCheck(solidMoving, solidBlocking, direction))
+            //    boo = false;
         }
 
 
@@ -171,10 +173,6 @@ namespace Assembly_Planner
             var rays = RayGenerator(solidMoving, direction);
             foreach (var ray in rays)
             {
-                //if (!NonadjacentBlockingDetermination.BoundingBoxBlocking(direction, solidBlocking, solidMoving))
-                //    continue;
-                //if (!CvhHashSet[solidBlocking].Any(
-                //    f => NonadjacentBlockingDetermination.RayIntersectsWithFace3(ray, f))) continue;
                 if (!ObbFacesHashSet[solidBlocking].Any(
                     f => RayIntersectsForObb(ray, f))) continue;
                 if (RayIntersects(PartitioningSolid.Partitions[solidBlocking], ray))
@@ -208,19 +206,20 @@ namespace Assembly_Planner
         private static List<Partition> AffectedPartitionsWithRay(Partition[] partition, Ray ray)
         {
             return
-               partition.Where(
-                    prtn => prtn.Faces.Any(f => NonadjacentBlockingDetermination.RayIntersectsWithFace3(ray, f)))
-                    .ToList();
+                partition.Where(
+                    prtn =>
+                        prtn.SolidTriangles.Count > 0 &&
+                        prtn.Faces.Any(f => NonadjacentBlockingDetermination.RayIntersectsWithFace3(ray, f))).ToList();
         }
 
-        internal static List<Partition> AffectedPartitionsWithRayCvhOverlaps(TessellatedSolid solidBlocking, Ray ray)
+        internal static List<Partition> AffectedPartitionsWithRayCvhOverlaps(Partition[] partitions, Ray ray)
         {
-            var affected = PartitioningSolid.Partitions[solidBlocking].Where(
-                    prtn => prtn.Faces.Any(f => NonadjacentBlockingDetermination.RayIntersectsWithFace3(ray, f)))
-                    .ToList();
+            var affected = partitions.Where(
+                prtn =>
+                    prtn.SolidTriangles.Count > 0 &&
+                    prtn.Faces.Any(f => NonadjacentBlockingDetermination.RayIntersectsWithFace3(ray, f))).ToList();
             var currentPartition =
-                PartitioningSolid.Partitions[solidBlocking].Where(
-                    p => PartitioningSolid.IsVertexInsidePartition(p, new TVGL.Vertex(ray.Position)));
+                partitions.Where(p => PartitioningSolid.IsVertexInsidePartition(p, new TVGL.Vertex(ray.Position)));
             affected.AddRange(currentPartition);
             return affected;
         }

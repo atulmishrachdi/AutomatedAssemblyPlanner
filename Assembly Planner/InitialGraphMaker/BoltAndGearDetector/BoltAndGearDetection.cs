@@ -17,6 +17,10 @@ namespace Assembly_Planner
         internal static HashSet<TessellatedSolid> ScrewAndBoltDetector(
             Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive)
         {
+            var s = Stopwatch.StartNew();
+            s.Start();
+            Console.WriteLine();
+            Console.WriteLine("Detecting Gears and Fasteners ....");
             var fastener = new HashSet<TessellatedSolid>();
             foreach (var solid in solidPrimitive.Keys)
                 if (solid.Name.Contains("Screw") || solid.Name.Contains("Test - Part-S"))
@@ -33,6 +37,8 @@ namespace Assembly_Planner
 
             //var smallObjects = SmallObjectsDetector(solidPrimitive);
             //fastener.UnionWith(smallObjects);
+            s.Stop();
+            Console.WriteLine("Gear and Fastener Detection:" + "     " + s.Elapsed);
             return fastener;
             // Here are my thoughts about a bolt:
             // Since all of the threads are classified as cone, 
