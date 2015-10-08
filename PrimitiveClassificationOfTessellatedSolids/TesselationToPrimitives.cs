@@ -177,7 +177,6 @@ namespace PrimitiveClassificationOfTessellatedSolids
             var SMid = CatAndProbFinder(SM, listOfLimitsSM);
             if (ABNid.Count == 2 && ABNid[0].SequenceEqual(ABNid[1]))
                 ABNid.RemoveAt(0);
-
             e.CatProb = new Dictionary<int, double>();
             foreach (var ABNprobs in ABNid)
                 foreach (var MCMProbs in MCMid)
@@ -195,7 +194,7 @@ namespace PrimitiveClassificationOfTessellatedSolids
 
         internal static double AbnCalculator(EdgeWithScores eachEdge)
         {
-            var ABN = eachEdge.Edge.InternalAngle * 180 / Math.PI;
+            var ABN = (Math.PI-eachEdge.Edge.InternalAngle) * 180 / Math.PI;
             if (ABN >= 180)
                 ABN -= 180;
 

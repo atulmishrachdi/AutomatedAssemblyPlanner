@@ -8,7 +8,7 @@ namespace Assembly_Planner
 {
     class OverlappingFuzzification
     {
-        internal double FuzzyProbabilityCalculator(double lowerBound, double upperBound, double clcultdDble)
+        internal static double FuzzyProbabilityCalculator(double lowerBound, double upperBound, double clcultdDble)
         {
             // So, it is basically a case like this:    Ow my God, see how creative I am :D
             //              ^

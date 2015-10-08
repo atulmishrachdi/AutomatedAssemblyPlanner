@@ -136,14 +136,22 @@ namespace Assembly_Planner
             var t1 = (sphere.Center[0] - cone.Apex[0]) / (cone.Axis[0]);
             var t2 = (sphere.Center[1] - cone.Apex[1]) / (cone.Axis[1]);
             var t3 = (sphere.Center[2] - cone.Apex[2]) / (cone.Axis[2]);
-            if (Math.Abs(t1 - t2) < ConstantsPrimitiveOverlap.PointOnLine &&
+            var p0 = OverlappingFuzzification.FuzzyProbabilityCalculator(ConstantsPrimitiveOverlap.PointOnLine,
+                ConstantsPrimitiveOverlap.PointOnLine, Math.Abs(t1 - t2));
+            var p1 = OverlappingFuzzification.FuzzyProbabilityCalculator(ConstantsPrimitiveOverlap.PointOnLine,
+                ConstantsPrimitiveOverlap.PointOnLine, Math.Abs(t1 - t3));
+            var p2 = OverlappingFuzzification.FuzzyProbabilityCalculator(ConstantsPrimitiveOverlap.PointOnLine,
+                ConstantsPrimitiveOverlap.PointOnLine, Math.Abs(t3 - t2));
+
+            if (p0 > 0 && p1 > 0 && p2 > 0)
+                /*if (Math.Abs(t1 - t2) < ConstantsPrimitiveOverlap.PointOnLine &&
                 Math.Abs(t1 - t3) < ConstantsPrimitiveOverlap.PointOnLine &&
-                Math.Abs(t3 - t2) < ConstantsPrimitiveOverlap.PointOnLine)
+                Math.Abs(t3 - t2) < ConstantsPrimitiveOverlap.PointOnLine)*/
             {
                 foreach (var f1 in cone.Faces)
                 {
-                    foreach (var f2 in sphere.Faces.Where(f2 => TwoTrianglesParallelCheck(f1.Normal, f2.Normal)
-                                                                && TwoTrianglesSamePlaneCheck(f1, f2)))
+                    foreach (var f2 in sphere.Faces.Where(f2 => TwoTrianglesParallelCheck(f1.Normal, f2.Normal) > 0
+                                                                && TwoTrianglesSamePlaneCheck(f1, f2) > 0))
                     {
                         overlap = TwoTriangleOverlapCheck(f1, f2);
                         if (overlap)
@@ -222,13 +230,12 @@ namespace Assembly_Planner
 
         private static bool PosConePosCylinderOverlappingCheck(Cone cone, Cylinder cylinder, List<int> dirInd, int re)
         {
-            var overlap = false;
             foreach (var fA in cone.Faces)
             {
-                foreach (var fB in cylinder.Faces.Where(fB => TwoTrianglesParallelCheck(fA.Normal, fB.Normal) &&
-                    TwoTrianglesSamePlaneCheck(fA, fB)))
+                foreach (var fB in cylinder.Faces.Where(fB => TwoTrianglesParallelCheck(fA.Normal, fB.Normal) > 0 &&
+                                                              TwoTrianglesSamePlaneCheck(fA, fB) > 0))
                 {
-                    overlap = TwoTriangleOverlapCheck(fA, fB);
+                    var overlap = TwoTriangleOverlapCheck(fA, fB);
 
                     if (!overlap) continue;
                     if (re == 2)
@@ -241,7 +248,7 @@ namespace Assembly_Planner
                                 dirInd.Remove(dirInd[i]);
                                 i--;
                             }
-                                    
+
                         }
                         return true;
                     }
@@ -268,17 +275,17 @@ namespace Assembly_Planner
             var overlap = false;
             foreach (var coneFace in cone.Faces)
             {
-                if (TwoTrianglesParallelCheck(coneFace.Normal, flat.Normal))
+                if (TwoTrianglesParallelCheck(coneFace.Normal, flat.Normal) > 0 &&
+                    TwoTrianglesSamePlaneCheck(coneFace, rndFaceB) > 0)
                 {
-                    if (TwoTrianglesSamePlaneCheck(coneFace, rndFaceB))
+                    // now check if they overlap or not
+                    foreach (var fFace in flat.Faces)
                     {
-                        // now check if they overlap or not
-                        foreach (var fFace in flat.Faces)
-                        {
-                            overlap = TwoTriangleOverlapCheck(coneFace, fFace);
-                        }
+                        overlap = TwoTriangleOverlapCheck(coneFace, fFace);
+                        if (overlap) break;
                     }
                 }
+                if (overlap) break;
             }
             if (!overlap) return false;
             // exactly like flat-flat
@@ -346,14 +353,12 @@ namespace Assembly_Planner
 
         private static bool PosConePosConeOverlappingCheck(Cone cone1, Cone cone2, List<int> dirInd)
         {
-            var overlap = false;
             foreach (var fA in cone1.Faces)
             {
-                foreach (var fB in cone2.Faces.Where(fB => TwoTrianglesParallelCheck(fA.Normal, fB.Normal) &&
-                    TwoTrianglesSamePlaneCheck(fA, fB)))
+                foreach (var fB in cone2.Faces.Where(fB => TwoTrianglesParallelCheck(fA.Normal, fB.Normal)>0 &&
+                    TwoTrianglesSamePlaneCheck(fA, fB)>0))
                 {
-                    overlap = TwoTriangleOverlapCheck(fA, fB);
-                    if (!overlap) continue;
+                    if (!TwoTriangleOverlapCheck(fA, fB)) continue;
                     for (var i = 0; i < dirInd.Count; i++)
                     {
                         var dir = DisassemblyDirections.Directions[dirInd[i]];
@@ -378,13 +383,13 @@ namespace Assembly_Planner
             {
                 foreach (var f1 in cone1.Faces)
                 {
-                    foreach (var f2 in cone2.Faces.Where(f2=>TwoTrianglesParallelCheck(f1.Normal, f2.Normal) 
-                        && TwoTrianglesSamePlaneCheck(f1, f2) && TwoTriangleOverlapCheck(f1, f2)))
+                    if (cone2.Faces.Any(f2 => TwoTrianglesParallelCheck(f1.Normal, f2.Normal) > 0
+                                                && TwoTrianglesSamePlaneCheck(f1, f2) > 0 &&
+                                                TwoTriangleOverlapCheck(f1, f2)))
                     {
                         overlap = true;
                         break;
                     }
-                    if (overlap) break;
                 }
             }
             if (!overlap) return false;
@@ -451,24 +456,17 @@ namespace Assembly_Planner
             var rndFaceA = aFaces[r.Next(aFaces.Count)];
             var rndFaceB = bFaces[r.Next(bFaces.Count)];
             var c = 0;
-            if (TwoTrianglesParallelCheck(primitiveA.Normal, primitiveB.Normal))
+            if (TwoTrianglesParallelCheck(primitiveA.Normal, primitiveB.Normal) > 0 &&
+                TwoTrianglesSamePlaneCheck(rndFaceA, rndFaceB) > 0)
             {
-                bool samePlane = TwoTrianglesSamePlaneCheck(rndFaceA, rndFaceB);
-                if (samePlane)
+                // now check and see if any area of a is inside the boundaries of b or vicee versa
+                foreach (var f1 in primitiveA.Faces)
                 {
-                    // now check and see if any area of a is inside the boundaries of b or vicee versa
-                    foreach (var f1 in primitiveA.Faces)
+                    if (primitiveB.Faces.Any(f2 => TwoTriangleOverlapCheck(f1, f2)))
                     {
-                        foreach (var f2 in primitiveB.Faces)
-                        {
-                            if (TwoTriangleOverlapCheck(f1, f2))
-                            {
-                                overlap = true;
-                                break;
-                            }
-                        }
-                        if (overlap) break;
+                        overlap = true;
                     }
+                    if (overlap) break;
                 }
             }
             // if they overlap, update the directions
@@ -500,17 +498,17 @@ namespace Assembly_Planner
             var overlap = false;
             foreach (var cylFace in cylinder.Faces)
             {
-                if (TwoTrianglesParallelCheck(cylFace.Normal, flat.Normal))
+                if (TwoTrianglesParallelCheck(cylFace.Normal, flat.Normal) > 0 &&
+                    TwoTrianglesSamePlaneCheck(cylFace, rndFaceB) > 0)
                 {
-                    if (TwoTrianglesSamePlaneCheck(cylFace, rndFaceB))
+                    // now check if they overlap or not
+                    foreach (var fFace in flat.Faces)
                     {
-                        // now check if they overlap or not
-                        foreach (var fFace in flat.Faces)
-                        {
-                            overlap = TwoTriangleOverlapCheck(cylFace, fFace);
-                        }
+                        overlap = TwoTriangleOverlapCheck(cylFace, fFace);
+                        if (overlap) break;
                     }
                 }
+                if (overlap) break;
             }
             if (!overlap) return false;
             if (re == 1)
@@ -551,7 +549,6 @@ namespace Assembly_Planner
             // Update: I need to consider one more case: half cylinders
             var overlap = true;
             var partialCylinder1 = false;
-            var partialCylinder2 = false;
             if (Math.Abs(cylinder1.Axis.dotProduct(cylinder2.Axis)) - 1 < ConstantsPrimitiveOverlap.ParralelLines)
             {
                 // now centerlines are either parallel or the same. Now check and see if they are exactly the same
@@ -661,14 +658,12 @@ namespace Assembly_Planner
 
         private static bool PosCylinderPosCylinderOverlappingCheck(Cylinder cylinder1, Cylinder cylinder2, List<int> dirInd)
         {
-            var overlap = false;
             foreach (var fA in cylinder1.Faces)
             {
-                foreach (var fB in cylinder2.Faces.Where(fB => TwoTrianglesParallelCheck(fA.Normal, fB.Normal) &&
-                    TwoTrianglesSamePlaneCheck(fA, fB)))
+                foreach (var fB in cylinder2.Faces.Where(fB => TwoTrianglesParallelCheck(fA.Normal, fB.Normal)>0 &&
+                    TwoTrianglesSamePlaneCheck(fA, fB)>0))
                 {
-                    overlap = TwoTriangleOverlapCheck(fA, fB);
-                    if (!overlap) continue;
+                    if (!TwoTriangleOverlapCheck(fA, fB)) continue;
                     for (var i = 0; i < dirInd.Count; i++)
                     {
                         var dir = DisassemblyDirections.Directions[dirInd[i]];
@@ -689,11 +684,10 @@ namespace Assembly_Planner
             //postive(A)-negative(B)
             // if their centers are the same or really close
             // if their radius is equal or close
-            double[] centerA = primitiveA.Center;
-            double[] centerB = primitiveB.Center;
-            if (Math.Abs(centerA[0] - centerB[0]) < ConstantsPrimitiveOverlap.PointPoint &&
-                Math.Abs(centerA[1] - centerB[1]) < ConstantsPrimitiveOverlap.PointPoint &&
-                Math.Abs(centerA[2] - centerB[2]) < ConstantsPrimitiveOverlap.PointPoint)
+            var centerDif = primitiveA.Center.subtract(primitiveB.Center);
+            if (Math.Abs(centerDif[0]) < ConstantsPrimitiveOverlap.PointPoint &&
+                Math.Abs(centerDif[1]) < ConstantsPrimitiveOverlap.PointPoint &&
+                Math.Abs(centerDif[2]) < ConstantsPrimitiveOverlap.PointPoint)
             {
                 if (Math.Abs(primitiveA.Radius - primitiveB.Radius) < 0.001)
                     return true;
@@ -708,8 +702,8 @@ namespace Assembly_Planner
             var overlap = false;
             foreach (var fA in sphere1.Faces)
             {
-                foreach (var fB in sphere2.Faces.Where(fB => TwoTrianglesParallelCheck(fA.Normal, fB.Normal) &&
-                    TwoTrianglesSamePlaneCheck(fA, fB)))
+                foreach (var fB in sphere2.Faces.Where(fB => TwoTrianglesParallelCheck(fA.Normal, fB.Normal)>0 &&
+                    TwoTrianglesSamePlaneCheck(fA, fB)>0))
                 {
                     if (!TwoTriangleOverlapCheck(fA, fB)) continue;
                     for (var i = 0; i < dirInd.Count; i++)
@@ -735,8 +729,8 @@ namespace Assembly_Planner
             var overlap = false;
             var r = new Random();
             var rndFaceB = flat.Faces[r.Next(flat.Faces.Count)];
-            foreach (var sophFace in sphere.Faces.Where(sophFace => TwoTrianglesParallelCheck(sophFace.Normal, flat.Normal))
-                                                     .Where(sophFace => TwoTrianglesSamePlaneCheck(sophFace, rndFaceB)))
+            foreach (var sophFace in sphere.Faces.Where(sophFace => TwoTrianglesParallelCheck(sophFace.Normal, flat.Normal)>0)
+                                                     .Where(sophFace => TwoTrianglesSamePlaneCheck(sophFace, rndFaceB)>0))
             {
                 foreach (var fFace in flat.Faces)
                 {
@@ -783,8 +777,8 @@ namespace Assembly_Planner
                 {
                     foreach (var f1 in cylinder.Faces)
                     {
-                        foreach (var f2 in sphere.Faces.Where(f2 => TwoTrianglesParallelCheck(f1.Normal, f2.Normal)
-                                                                        && TwoTrianglesSamePlaneCheck(f1, f2)))
+                        foreach (var f2 in sphere.Faces.Where(f2 => TwoTrianglesParallelCheck(f1.Normal, f2.Normal)>0
+                                                                        && TwoTrianglesSamePlaneCheck(f1, f2)>0))
                         {
                             overlap = TwoTriangleOverlapCheck(f1, f2);
                         }
@@ -804,41 +798,39 @@ namespace Assembly_Planner
         }
 
 
-        private static bool TwoTrianglesSamePlaneCheck(PolygonalFace rndFaceA, PolygonalFace rndFaceB)
+        private static double TwoTrianglesSamePlaneCheck(PolygonalFace rndFaceA, PolygonalFace rndFaceB)
         {
             var q = rndFaceA.Center;
             var p = rndFaceB.Center;
-
             var pq = new[] { q[0] - p[0], q[1] - p[1], q[2] - p[2] };
-            var d = Math.Abs(pq.dotProduct(rndFaceA.Normal));
-            return d < ConstantsPrimitiveOverlap.PlaneDist;
+            return OverlappingFuzzification.FuzzyProbabilityCalculator(ConstantsPrimitiveOverlap.PlaneDist,
+                ConstantsPrimitiveOverlap.PlaneDist, Math.Abs(pq.dotProduct(rndFaceA.Normal)));
         }
 
-        private static bool TwoTrianglesParallelCheck(double[] aNormal, double[] bNormal)
+        private static double TwoTrianglesParallelCheck(double[] aNormal, double[] bNormal)
         {
             // they must be parralel but in the opposite direction.
             // This function can be fuzzified in order to give a certainty to the connection
-            return Math.Abs(bNormal.dotProduct(aNormal) + 1) < ConstantsPrimitiveOverlap.ParralelLines;
+            return OverlappingFuzzification.FuzzyProbabilityCalculator(ConstantsPrimitiveOverlap.ParralelLines,
+                ConstantsPrimitiveOverlap.ParralelLines, Math.Abs(bNormal.dotProduct(aNormal) + 1));
+
         }
 
         private static bool TwoTriangleOverlapCheck(PolygonalFace fA, PolygonalFace fB)
         {
+            // this function is not really fuzziabled
             foreach (var edge in fA.Edges)
             {
                 var edgeVector = edge.Vector;
                 var third = fA.Vertices.Where(a => a != edge.From && a != edge.To).ToList()[0].Position;
-                var checkVec = new[] {third[0] - edge.From.Position[0], third[1] - edge.From.Position[1], 
-              third[2] - edge.From.Position[2]};
+                var checkVec = new[]
+                {third[0] - edge.From.Position[0], third[1] - edge.From.Position[1], third[2] - edge.From.Position[2]};
                 double[] cross1 = edgeVector.crossProduct(checkVec);
                 var c = 0;
                 foreach (var vertexB in fB.Vertices)
                 {
-                    var newVec = new[]
-                    {
-                        vertexB.Position[0] - edge.From.Position[0], vertexB.Position[1] - edge.From.Position[1],
-                        vertexB.Position[2] - edge.From.Position[2]
-                    };
-                    double[] cross2 = edgeVector.crossProduct(newVec);
+                    var newVec = vertexB.Position.subtract(edge.From.Position);
+                    var cross2 = edgeVector.crossProduct(newVec);
                     if ((Math.Sign(cross1[0]) != Math.Sign(cross2[0]) ||
                          (Math.Sign(cross1[0]) == 0 && Math.Sign(cross2[0]) == 0)) &&
                         (Math.Sign(cross1[1]) != Math.Sign(cross2[1]) ||
@@ -850,9 +842,7 @@ namespace Assembly_Planner
                     }
                 }
                 if (c == 3)
-                {
                     return false;
-                }
             }
             return true;
         }
