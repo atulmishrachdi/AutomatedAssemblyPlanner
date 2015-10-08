@@ -52,7 +52,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="TessellationAndVoxelizationGeometryLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\TVGL.1.0.15.0930\lib\portable-net45+sl5+wp8+win8\TessellationAndVoxelizationGeometryLibrary.dll</HintPath>
+      <HintPath>..\packages\TVGL.1.0.15.1008\lib\portable-net45+sl5+wp8+win8\TessellationAndVoxelizationGeometryLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -145,6 +145,7 @@
     <Compile Include="InitialGraphMaker\Icosahedron.cs" />
     <Compile Include="InitialGraphMaker\IcosahedronPro.cs" />
     <Compile Include="InitialGraphMaker\NonadjacentBlockingWithPartitioning.cs" />
+    <Compile Include="InitialGraphMaker\OverlappingFuzzification.cs" />
     <Compile Include="InitialGraphMaker\PartitioningSolid.cs" />
     <Compile Include="InitialGraphMaker\PrimitivePrimitiveInteractions.cs" />
     <Compile Include="Output\GraphSaving.cs" />

@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using StarMathLib;
 using TVGL;
-using TVGL;
 
 namespace PrimitiveClassificationOfTessellatedSolids
 {

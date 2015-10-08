@@ -817,6 +817,7 @@ namespace Assembly_Planner
         private static bool TwoTrianglesParallelCheck(double[] aNormal, double[] bNormal)
         {
             // they must be parralel but in the opposite direction.
+            // This function can be fuzzified in order to give a certainty to the connection
             return Math.Abs(bNormal.dotProduct(aNormal) + 1) < ConstantsPrimitiveOverlap.ParralelLines;
         }
 
