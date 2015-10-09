@@ -12,11 +12,11 @@ namespace Assembly_Planner
         {
             // So, it is basically a case like this:    Ow my God, see how creative I am :D
             //              ^
-            //              |__________   __________
-            //              |          \ /
-            //              |  Overlap  \   Dont Overlap
-            //              |          / \
-            //              |_________/___\________________>
+            //              |__________    __________
+            //              |          \  /
+            //              |  Overlap  \/   Dont Overlap
+            //              |           /\
+            //              |__________/__\________________>
             //
             if (clcultdDble < lowerBound) return 1;
             if (clcultdDble > upperBound) return 0;

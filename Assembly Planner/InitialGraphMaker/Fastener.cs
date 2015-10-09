@@ -88,16 +88,15 @@ namespace Assembly_Planner
 
         private static bool FastenerPrimitiveOverlap(List<PrimitiveSurface> fastenertPrimitives, List<PrimitiveSurface> solidPrimitives)
         {
-            var dirInd = new List<int>();
             foreach (var primitiveA in fastenertPrimitives)
             {
                 foreach (var primitiveB in solidPrimitives)
                 {
                     if (primitiveA is Cylinder && primitiveB is Cylinder)
-                        if (PrimitivePrimitiveInteractions.CylinderCylinderOverlappingCheck((Cylinder)primitiveA, (Cylinder)primitiveB, dirInd))
+                        if (PrimitivePrimitiveInteractions.CylinderCylinderOverlappingCheck((Cylinder)primitiveA, (Cylinder)primitiveB))
                             return true;
                     if (primitiveA is Cone && primitiveB is Cone)
-                        if (PrimitivePrimitiveInteractions.ConeConeOverlappingCheck((Cone)primitiveA, (Cone)primitiveB, dirInd))
+                        if (PrimitivePrimitiveInteractions.ConeConeOverlappingCheck((Cone)primitiveA, (Cone)primitiveB))
                             return true;
                 }
             }

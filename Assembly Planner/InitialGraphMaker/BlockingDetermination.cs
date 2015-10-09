@@ -42,7 +42,7 @@ namespace Assembly_Planner
 
         internal static bool DefineBlocking(designGraph assemblyGraph, TessellatedSolid solid1, TessellatedSolid solid2,
             List<PrimitiveSurface> solid1P, List<PrimitiveSurface> solid2P, List<int> globalDirPool,
-            out List<int> dirInd, bool printResults = false)
+            out List<int> dirInd, out double certainty, bool printResults = false)
         {
             if (BoundingBoxOverlap(solid1, solid2))
             {
@@ -64,7 +64,7 @@ namespace Assembly_Planner
                         localDirInd.Add(i);
                     var overlappedPrimitives = new List<PrimitiveSurface[]>();
                     if (PrimitivePrimitiveInteractions.PrimitiveOverlap(solid1P, solid2P, localDirInd,
-                        out overlappedPrimitives))
+                        out overlappedPrimitives, out certainty))
                     {
                         var overlappingSurface = new OverlappedSurfaces
                         {
@@ -91,6 +91,7 @@ namespace Assembly_Planner
                     }
                 }
             }
+            certainty = 1.0;
             dirInd = null;
             return false;
         }

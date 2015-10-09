@@ -38,8 +38,9 @@ namespace Assembly_Planner
                     var solid2 = solids[j];
                     var solid2Primitives = solidPrimitive[solid2];
                     List<int> localDirInd;
+                    double cert;
                     if (BlockingDetermination.DefineBlocking(assemblyGraph, solid1, solid2, solid1Primitives, solid2Primitives,
-                        globalDirPool, out localDirInd))
+                        globalDirPool, out localDirInd, out cert))
                     {
                         // I wrote the code in a way that "solid1" is always "Reference" and "solid2" is always "Moving".
                         //List<int> finDirs, infDirs;
@@ -48,6 +49,7 @@ namespace Assembly_Planner
                         var to = assemblyGraph[solid1.Name];   // Reference
                         assemblyGraph.addArc((Component)from, (Component)to);
                         var a = (Connection)assemblyGraph.arcs.Last();
+                        a.Certainty = cert;
                         AddInformationToArc(a, localDirInd);
                     }
                 }
