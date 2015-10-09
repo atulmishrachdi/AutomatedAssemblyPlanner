@@ -174,7 +174,7 @@ namespace Assembly_Planner
                 var dirs = (from gDir in DisassemblyDirections.Directions
                     where
                         1 - Math.Abs(gDir.dotProduct(DisassemblyDirections.Directions[key])) <
-                        ConstantsPrimitiveOverlap.CheckWithGlobDirsParall
+                        OverlappingFuzzification.CheckWithGlobDirsParall
                     select DisassemblyDirections.Directions.IndexOf(gDir)).ToList();
                 var oppositeDir = dirs.Where(d => d != key).ToList();
                 foreach (var blockings in NonAdjacentBlocking[key])

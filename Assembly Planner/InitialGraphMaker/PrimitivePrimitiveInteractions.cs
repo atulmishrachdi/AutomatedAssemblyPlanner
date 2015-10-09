@@ -136,12 +136,12 @@ namespace Assembly_Planner
             var t1 = (sphere.Center[0] - cone.Apex[0]) / (cone.Axis[0]);
             var t2 = (sphere.Center[1] - cone.Apex[1]) / (cone.Axis[1]);
             var t3 = (sphere.Center[2] - cone.Apex[2]) / (cone.Axis[2]);
-            var p0 = OverlappingFuzzification.FuzzyProbabilityCalculator(ConstantsPrimitiveOverlap.PointOnLine,
-                ConstantsPrimitiveOverlap.PointOnLine, Math.Abs(t1 - t2));
-            var p1 = OverlappingFuzzification.FuzzyProbabilityCalculator(ConstantsPrimitiveOverlap.PointOnLine,
-                ConstantsPrimitiveOverlap.PointOnLine, Math.Abs(t1 - t3));
-            var p2 = OverlappingFuzzification.FuzzyProbabilityCalculator(ConstantsPrimitiveOverlap.PointOnLine,
-                ConstantsPrimitiveOverlap.PointOnLine, Math.Abs(t3 - t2));
+            var p0 = OverlappingFuzzification.FuzzyProbabilityCalculator(OverlappingFuzzification.PointOnLineL,
+                OverlappingFuzzification.PointOnLineU, Math.Abs(t1 - t2));
+            var p1 = OverlappingFuzzification.FuzzyProbabilityCalculator(OverlappingFuzzification.PointOnLineL,
+                OverlappingFuzzification.PointOnLineU, Math.Abs(t1 - t3));
+            var p2 = OverlappingFuzzification.FuzzyProbabilityCalculator(OverlappingFuzzification.PointOnLineL,
+                OverlappingFuzzification.PointOnLineU, Math.Abs(t3 - t2));
             // min of p0, p1 and p2
             var maxOverlappingProb = Math.Min(Math.Min(p0, p1), p2);
 
@@ -192,7 +192,7 @@ namespace Assembly_Planner
                     for (var i = 0; i < DirInd.Count; i++)
                     {
                         var dir = DisassemblyDirections.Directions[DirInd[i]];
-                        if (1 + cone.Axis.normalize().dotProduct(dir) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall) continue;
+                        if (1 + cone.Axis.normalize().dotProduct(dir) < OverlappingFuzzification.CheckWithGlobDirsParall) continue;
                         DirInd.Remove(DirInd[i]);
                         i--;
                     }
@@ -202,7 +202,7 @@ namespace Assembly_Planner
                     for (var i = 0; i < DirInd.Count; i++)
                     {
                         var dir = DisassemblyDirections.Directions[DirInd[i]];
-                        if (1 - cone.Axis.normalize().dotProduct(dir) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall) continue;
+                        if (1 - cone.Axis.normalize().dotProduct(dir) < OverlappingFuzzification.CheckWithGlobDirsParall) continue;
                         DirInd.Remove(DirInd[i]);
                         i--;
                     }
@@ -215,7 +215,7 @@ namespace Assembly_Planner
                 for (var i = 0; i < DirInd.Count; i++)
                 {
                     var dir = DisassemblyDirections.Directions[DirInd[i]];
-                    if (1 - cone.Axis.normalize().dotProduct(dir) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall) continue;
+                    if (1 - cone.Axis.normalize().dotProduct(dir) < OverlappingFuzzification.CheckWithGlobDirsParall) continue;
                     DirInd.Remove(DirInd[i]);
                     i--;
                 }
@@ -225,7 +225,7 @@ namespace Assembly_Planner
                 for (var i = 0; i < DirInd.Count; i++)
                 {
                     var dir = DisassemblyDirections.Directions[DirInd[i]];
-                    if (1 + cone.Axis.normalize().dotProduct(dir) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall) continue;
+                    if (1 + cone.Axis.normalize().dotProduct(dir) < OverlappingFuzzification.CheckWithGlobDirsParall) continue;
                     DirInd.Remove(DirInd[i]);
                     i--;
                 }
@@ -272,7 +272,7 @@ namespace Assembly_Planner
                 for (var i = 0; i < DirInd.Count; i++)
                 {
                     var dir = DisassemblyDirections.Directions[DirInd[i]];
-                    if (closestFace.Normal.dotProduct(dir) < ConstantsPrimitiveOverlap.CheckWithGlobDirs)
+                    if (closestFace.Normal.dotProduct(dir) < OverlappingFuzzification.CheckWithGlobDirs)
                     {
                         DirInd.Remove(DirInd[i]);
                         i--;
@@ -284,7 +284,7 @@ namespace Assembly_Planner
             for (var i = 0; i < DirInd.Count; i++)
             {
                 var dir = DisassemblyDirections.Directions[DirInd[i]];
-                if (closestFace.Normal.dotProduct(dir) > ConstantsPrimitiveOverlap.CheckWithGlobDirs)
+                if (closestFace.Normal.dotProduct(dir) > OverlappingFuzzification.CheckWithGlobDirs)
                 {
                     DirInd.Remove(DirInd[i]);
                     i--;
@@ -324,7 +324,7 @@ namespace Assembly_Planner
                 for (var i = 0; i < DirInd.Count; i++)
                 {
                     var dir = DisassemblyDirections.Directions[DirInd[i]];
-                    if (flat.Normal.dotProduct(dir) < ConstantsPrimitiveOverlap.CheckWithGlobDirs)
+                    if (flat.Normal.dotProduct(dir) < OverlappingFuzzification.CheckWithGlobDirs)
                         DirInd.Remove(DirInd[i]);
                 }
             }
@@ -333,7 +333,7 @@ namespace Assembly_Planner
                 for (var i = 0; i < DirInd.Count; i++)
                 {
                     var dir = DisassemblyDirections.Directions[DirInd[i]];
-                    if (flat.Normal.dotProduct(dir) > ConstantsPrimitiveOverlap.CheckWithGlobDirs)
+                    if (flat.Normal.dotProduct(dir) > OverlappingFuzzification.CheckWithGlobDirs)
                         DirInd.Remove(DirInd[i]);
                 }
             }
@@ -411,7 +411,7 @@ namespace Assembly_Planner
             for (var i = 0; i < DirInd.Count; i++)
             {
                 var dir = DisassemblyDirections.Directions[DirInd[i]];
-                if (closestFace.Normal.dotProduct(dir) > ConstantsPrimitiveOverlap.CheckWithGlobDirs)
+                if (closestFace.Normal.dotProduct(dir) > OverlappingFuzzification.CheckWithGlobDirs)
                 {
                     DirInd.Remove(DirInd[i]);
                     i--;
@@ -424,18 +424,20 @@ namespace Assembly_Planner
         {
             var localProb = 0.0;
             // cone1 is negative cone and cone2 is positive cone.
-            if (Math.Abs(cone1.Axis.normalize().dotProduct(cone2.Axis.normalize())) - 1 < ConstantsPrimitiveOverlap.ParralelLines)
+            var p0 = OverlappingFuzzification.FuzzyProbabilityCalculator(OverlappingFuzzification.ParralelLinesL,
+                OverlappingFuzzification.ParralelLinesU,
+                Math.Abs(cone1.Axis.normalize().dotProduct(cone2.Axis.normalize())) - 1);
+            if (p0 > 0)
             {
                 foreach (var f1 in cone1.Faces)
                 {
-                    bool any = false;
                     foreach (var f2 in cone2.Faces)
                     {
                         var pP = TwoTrianglesParallelCheck(f1.Normal, f2.Normal);
                         var sP = TwoTrianglesSamePlaneCheck(f1, f2);
                         if (pP == 0 || sP == 0 || !TwoTriangleOverlapCheck(f1, f2)) continue;
 
-                        var p = Math.Min(pP, sP);
+                        var p = Math.Min(Math.Min(pP, sP),p0);
                         if (p > localProb)
                         {
                             localProb = p;
@@ -541,7 +543,7 @@ namespace Assembly_Planner
             for (var i = 0; i < DirInd.Count; i++)
             {
                 var dir = DisassemblyDirections.Directions[DirInd[i]];
-                if (primitiveA.Normal.dotProduct(dir) < ConstantsPrimitiveOverlap.CheckWithGlobDirs)
+                if (primitiveA.Normal.dotProduct(dir) < OverlappingFuzzification.CheckWithGlobDirs)
                 {
                     DirInd.Remove(DirInd[i]);
                     i--;
@@ -623,8 +625,8 @@ namespace Assembly_Planner
             // Update: I need to consider one more case: half cylinders : it's already considered
             var partialCylinder1 = false;
             var localProb = 0.0;
-            var p0 = OverlappingFuzzification.FuzzyProbabilityCalculator(ConstantsPrimitiveOverlap.ParralelLines,
-                ConstantsPrimitiveOverlap.ParralelLines, Math.Abs(cylinder1.Axis.dotProduct(cylinder2.Axis)) - 1);
+            var p0 = OverlappingFuzzification.FuzzyProbabilityCalculator(OverlappingFuzzification.ParralelLinesL,
+                OverlappingFuzzification.ParralelLinesU, Math.Abs(cylinder1.Axis.dotProduct(cylinder2.Axis)) - 1);
             if (p0 > 0)
             {
                 // now centerlines are either parallel or the same. Now check and see if they are exactly the same
@@ -634,9 +636,9 @@ namespace Assembly_Planner
                 for (var  i = 0; i < 3; i++)
                 {
                     var axis = cylinder2.Axis[i];
-                    if (Math.Abs(axis) < ConstantsPrimitiveOverlap.EqualToZero) // if a, b or c is zero
+                    if (Math.Abs(axis) < OverlappingFuzzification.EqualToZeroL) // if a, b or c is zero
                     {
-                        if (Math.Abs(cylinder1.Anchor[i] - cylinder2.Anchor[i]) > ConstantsPrimitiveOverlap.EqualToZero2)
+                        if (Math.Abs(cylinder1.Anchor[i] - cylinder2.Anchor[i]) > OverlappingFuzzification.EqualToZero2L)
                             return false;
                     }
                     else
@@ -646,13 +648,13 @@ namespace Assembly_Planner
                 {
                     for (var j = i+1; j < t.Count; j++)
                     {
-                        if (Math.Abs(t[i] - t[j]) > ConstantsPrimitiveOverlap.PointOnLine)
+                        if (Math.Abs(t[i] - t[j]) > OverlappingFuzzification.PointOnLineL)
                             return false;
                     }
                 }
                 // Now check the radius
-                var p1 = OverlappingFuzzification.FuzzyProbabilityCalculator(ConstantsPrimitiveOverlap.RadiusDifs,
-                    ConstantsPrimitiveOverlap.RadiusDifs, Math.Abs(cylinder1.Radius - cylinder2.Radius));
+                var p1 = OverlappingFuzzification.FuzzyProbabilityCalculator(OverlappingFuzzification.RadiusDifsL,
+                    OverlappingFuzzification.RadiusDifsU, Math.Abs(cylinder1.Radius - cylinder2.Radius));
                 if (p1 > 0)
                 {
                     localProb = Math.Min(p0, p1);
@@ -668,9 +670,6 @@ namespace Assembly_Planner
                     }
                 }
             }
-            else
-                return false;
-
             if (localProb == 0) return false;
             if (localProb > MaxProb)
                 MaxProb = localProb;
@@ -687,7 +686,7 @@ namespace Assembly_Planner
                 {
                     var dir = DisassemblyDirections.Directions[DirInd[i]];
                     if (1 - Math.Abs(cylinder1.Axis.normalize().dotProduct(dir)) <
-                        ConstantsPrimitiveOverlap.CheckWithGlobDirsParall)
+                        OverlappingFuzzification.CheckWithGlobDirsParall)
                         continue;
                     DirInd.Remove(DirInd[i]);
                     i--;
@@ -701,9 +700,9 @@ namespace Assembly_Planner
                     {
                         var dir = DisassemblyDirections.Directions[DirInd[i]];
                         if ((1 - Math.Abs(cylinder1.Axis.normalize().dotProduct(dir)) >
-                             ConstantsPrimitiveOverlap.CheckWithGlobDirsParall) &&
+                             OverlappingFuzzification.CheckWithGlobDirsParall) &&
                             cylinder1.Faces.All(
-                                f => ( Math.Abs(1 -dir.dotProduct(f.Normal))) > ConstantsPrimitiveOverlap.ParralelLines2))
+                                f => (Math.Abs(1 - dir.dotProduct(f.Normal))) > OverlappingFuzzification.ParralelLines2L))
                         {
                             DirInd.Remove(DirInd[i]);
                             i--;
@@ -717,9 +716,9 @@ namespace Assembly_Planner
                     {
                         var dir = DisassemblyDirections.Directions[DirInd[i]];
                         if ((1 - Math.Abs(cylinder1.Axis.normalize().dotProduct(dir)) >
-                             ConstantsPrimitiveOverlap.CheckWithGlobDirsParall) &&
+                             OverlappingFuzzification.CheckWithGlobDirsParall) &&
                             cylinder1.Faces.All(
-                                f => (Math.Abs(1 + dir.dotProduct(f.Normal))) > ConstantsPrimitiveOverlap.ParralelLines2))
+                                f => (Math.Abs(1 + dir.dotProduct(f.Normal))) > OverlappingFuzzification.ParralelLines2L))
                         {
                             DirInd.Remove(DirInd[i]);
                             i--;
@@ -761,7 +760,7 @@ namespace Assembly_Planner
             for (var i = 0; i < DirInd.Count; i++)
             {
                 var dir = DisassemblyDirections.Directions[DirInd[i]];
-                if (closestFace.Normal.dotProduct(dir) > ConstantsPrimitiveOverlap.CheckWithGlobDirs)
+                if (closestFace.Normal.dotProduct(dir) > OverlappingFuzzification.CheckWithGlobDirs)
                 {
                     DirInd.Remove(DirInd[i]);
                     i--;
@@ -776,12 +775,12 @@ namespace Assembly_Planner
             // if their centers are the same or really close
             // if their radius is equal or close
             var centerDif = primitiveA.Center.subtract(primitiveB.Center);
-            var p0 = OverlappingFuzzification.FuzzyProbabilityCalculator(ConstantsPrimitiveOverlap.PointPoint,
-                ConstantsPrimitiveOverlap.PointPoint, Math.Abs(centerDif[0]));
-            var p1 = OverlappingFuzzification.FuzzyProbabilityCalculator(ConstantsPrimitiveOverlap.PointPoint,
-                ConstantsPrimitiveOverlap.PointPoint, Math.Abs(centerDif[1]));
-            var p2 = OverlappingFuzzification.FuzzyProbabilityCalculator(ConstantsPrimitiveOverlap.PointPoint,
-                ConstantsPrimitiveOverlap.PointPoint, Math.Abs(centerDif[2]));
+            var p0 = OverlappingFuzzification.FuzzyProbabilityCalculator(OverlappingFuzzification.PointPointL,
+                OverlappingFuzzification.PointPointU, Math.Abs(centerDif[0]));
+            var p1 = OverlappingFuzzification.FuzzyProbabilityCalculator(OverlappingFuzzification.PointPointL,
+                OverlappingFuzzification.PointPointU, Math.Abs(centerDif[1]));
+            var p2 = OverlappingFuzzification.FuzzyProbabilityCalculator(OverlappingFuzzification.PointPointL,
+                OverlappingFuzzification.PointPointU, Math.Abs(centerDif[2]));
             if (p0 > 0 && p1 > 0 && p2 < 0)
             {
                 if (Math.Abs(primitiveA.Radius - primitiveB.Radius) < 0.001)
@@ -822,7 +821,7 @@ namespace Assembly_Planner
             for (var i = 0; i < DirInd.Count; i++)
             {
                 var dir = DisassemblyDirections.Directions[DirInd[i]];
-                if (closestFace.Normal.dotProduct(dir) > ConstantsPrimitiveOverlap.CheckWithGlobDirs)
+                if (closestFace.Normal.dotProduct(dir) > OverlappingFuzzification.CheckWithGlobDirs)
                 {
                     DirInd.Remove(DirInd[i]);
                     i--;
@@ -865,7 +864,7 @@ namespace Assembly_Planner
                 for (var i = 0; i < DirInd.Count; i++)
                 {
                     var dir = DisassemblyDirections.Directions[DirInd[i]];
-                    if (flat.Normal.dotProduct(dir) < ConstantsPrimitiveOverlap.CheckWithGlobDirs)
+                    if (flat.Normal.dotProduct(dir) < OverlappingFuzzification.CheckWithGlobDirs)
                         DirInd.Remove(DirInd[i]);
                 }
             }
@@ -874,7 +873,7 @@ namespace Assembly_Planner
                 for (var i = 0; i < DirInd.Count; i++)
                 {
                     var dir = DisassemblyDirections.Directions[DirInd[i]];
-                    if (flat.Normal.dotProduct(dir) > ConstantsPrimitiveOverlap.CheckWithGlobDirs)
+                    if (flat.Normal.dotProduct(dir) > OverlappingFuzzification.CheckWithGlobDirs)
                         DirInd.Remove(DirInd[i]);
                 }
             }
@@ -888,37 +887,33 @@ namespace Assembly_Planner
             var t1 = (sphere.Center[0] - cylinder.Anchor[0]) / (cylinder.Axis[0]);
             var t2 = (sphere.Center[1] - cylinder.Anchor[1]) / (cylinder.Axis[1]);
             var t3 = (sphere.Center[2] - cylinder.Anchor[2]) / (cylinder.Axis[2]);
-            var p0 = OverlappingFuzzification.FuzzyProbabilityCalculator(ConstantsPrimitiveOverlap.PointOnLine,
-                ConstantsPrimitiveOverlap.PointOnLine, Math.Abs(t1 - t2));
-            var p1 = OverlappingFuzzification.FuzzyProbabilityCalculator(ConstantsPrimitiveOverlap.PointOnLine,
-                ConstantsPrimitiveOverlap.PointOnLine, Math.Abs(t1 - t3));
-            var p2 = OverlappingFuzzification.FuzzyProbabilityCalculator(ConstantsPrimitiveOverlap.PointOnLine,
-                ConstantsPrimitiveOverlap.PointOnLine, Math.Abs(t3 - t2));
-            var pRadius = OverlappingFuzzification.FuzzyProbabilityCalculator(ConstantsPrimitiveOverlap.RadiusDifs,
-                ConstantsPrimitiveOverlap.RadiusDifs, Math.Abs(cylinder.Radius - cylinder.Radius));
+            var p0 = OverlappingFuzzification.FuzzyProbabilityCalculator(OverlappingFuzzification.PointOnLineL,
+                OverlappingFuzzification.PointOnLineU, Math.Abs(t1 - t2));
+            var p1 = OverlappingFuzzification.FuzzyProbabilityCalculator(OverlappingFuzzification.PointOnLineL,
+                OverlappingFuzzification.PointOnLineU, Math.Abs(t1 - t3));
+            var p2 = OverlappingFuzzification.FuzzyProbabilityCalculator(OverlappingFuzzification.PointOnLineL,
+                OverlappingFuzzification.PointOnLineU, Math.Abs(t3 - t2));
+            var pRadius = OverlappingFuzzification.FuzzyProbabilityCalculator(OverlappingFuzzification.RadiusDifsL,
+                OverlappingFuzzification.RadiusDifsU, Math.Abs(cylinder.Radius - cylinder.Radius));
             var maxOverlappingProb = Math.Min(Math.Min(Math.Min(p0, p1), p2), pRadius);
             if (maxOverlappingProb > 0)
             {
                 var localProb = 0.0;
-                // Now check the radius
-                if (Math.Abs(cylinder.Radius - cylinder.Radius) < ConstantsPrimitiveOverlap.RadiusDifs)
+                foreach (var f1 in cylinder.Faces)
                 {
-                    foreach (var f1 in cylinder.Faces)
+                    foreach (var f2 in sphere.Faces)
                     {
-                        foreach (var f2 in sphere.Faces)
-                        {
-                            var pP = TwoTrianglesParallelCheck(f1.Normal, f2.Normal);
-                            var sP = TwoTrianglesSamePlaneCheck(f1, f2);
-                            if (pP == 0 || sP == 0 || !TwoTriangleOverlapCheck(f1, f2)) continue;
+                        var pP = TwoTrianglesParallelCheck(f1.Normal, f2.Normal);
+                        var sP = TwoTrianglesSamePlaneCheck(f1, f2);
+                        if (pP == 0 || sP == 0 || !TwoTriangleOverlapCheck(f1, f2)) continue;
 
-                            var p = Math.Min(pP, sP);
-                            if (p > localProb) localProb = p;
-                            if (localProb == 1)
-                                break;
-                        }
+                        var p = Math.Min(pP, sP);
+                        if (p > localProb) localProb = p;
                         if (localProb == 1)
                             break;
                     }
+                    if (localProb == 1)
+                        break;
                 }
                 maxOverlappingProb = Math.Min(maxOverlappingProb, localProb);
             }
@@ -929,7 +924,7 @@ namespace Assembly_Planner
             for (var i = 0; i < DirInd.Count; i++)
             {
                 var dir = DisassemblyDirections.Directions[DirInd[i]];
-                if (1 - Math.Abs(cylinder.Axis.normalize().dotProduct(dir)) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall) continue;
+                if (1 - Math.Abs(cylinder.Axis.normalize().dotProduct(dir)) < OverlappingFuzzification.CheckWithGlobDirsParall) continue;
                 DirInd.Remove(DirInd[i]);
                 i--;
             }
@@ -942,16 +937,16 @@ namespace Assembly_Planner
             var q = rndFaceA.Center;
             var p = rndFaceB.Center;
             var pq = new[] { q[0] - p[0], q[1] - p[1], q[2] - p[2] };
-            return OverlappingFuzzification.FuzzyProbabilityCalculator(ConstantsPrimitiveOverlap.PlaneDist,
-                ConstantsPrimitiveOverlap.PlaneDist, Math.Abs(pq.dotProduct(rndFaceA.Normal)));
+            return OverlappingFuzzification.FuzzyProbabilityCalculator(OverlappingFuzzification.PlaneDistL,
+                OverlappingFuzzification.PlaneDistU, Math.Abs(pq.dotProduct(rndFaceA.Normal)));
         }
 
         private static double TwoTrianglesParallelCheck(double[] aNormal, double[] bNormal)
         {
             // they must be parralel but in the opposite direction.
             // This function can be fuzzified in order to give a certainty to the connection
-            return OverlappingFuzzification.FuzzyProbabilityCalculator(ConstantsPrimitiveOverlap.ParralelLines,
-                ConstantsPrimitiveOverlap.ParralelLines, Math.Abs(bNormal.dotProduct(aNormal) + 1));
+            return OverlappingFuzzification.FuzzyProbabilityCalculator(OverlappingFuzzification.ParralelLinesL,
+                OverlappingFuzzification.ParralelLinesU, Math.Abs(bNormal.dotProduct(aNormal) + 1));
 
         }
 

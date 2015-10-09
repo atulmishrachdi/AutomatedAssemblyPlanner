@@ -83,7 +83,7 @@ namespace Assembly_Planner
         {
             var direction = DisassemblyDirections.Directions[cndDirInd];
             var dirs = (from gDir in DisassemblyDirections.Directions
-                        where 1 - Math.Abs(gDir.dotProduct(direction)) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall
+                        where 1 - Math.Abs(gDir.dotProduct(direction)) < OverlappingFuzzification.CheckWithGlobDirsParall
                         select DisassemblyDirections.Directions.IndexOf(gDir)).ToList();
             var oppositeDir = dirs.Where(d => d != cndDirInd).ToList();
             foreach (SecondaryConnection SC in assemblyGraph.arcs.Where(a => a is SecondaryConnection))
@@ -238,7 +238,7 @@ namespace Assembly_Planner
         {
             var direction = DisassemblyDirections.Directions[cndDirInd];
             var dirs = (from gDir in DisassemblyDirections.Directions
-                        where 1 - Math.Abs(gDir.dotProduct(direction)) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall
+                        where 1 - Math.Abs(gDir.dotProduct(direction)) < OverlappingFuzzification.CheckWithGlobDirsParall
                         select DisassemblyDirections.Directions.IndexOf(gDir)).ToList();
             if (NonadjacentBlockingDetermination.NonAdjacentBlocking.Count == 0) return dbgDictionary;
             foreach (var dir in dirs)
@@ -304,9 +304,9 @@ namespace Assembly_Planner
             foreach (var dirInd in borderArc.InfiniteDirections)
             {
                 var arcDisDir = DisassemblyDirections.Directions[dirInd];
-                if (Math.Abs(1 - arcDisDir.dotProduct(cndDir)) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall)
+                if (Math.Abs(1 - arcDisDir.dotProduct(cndDir)) < OverlappingFuzzification.CheckWithGlobDirsParall)
                     paralAndSame = true;
-                if (Math.Abs(1 + arcDisDir.dotProduct(cndDir)) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall)
+                if (Math.Abs(1 + arcDisDir.dotProduct(cndDir)) < OverlappingFuzzification.CheckWithGlobDirsParall)
                     paralButOppose = true;
             }
             if (paralAndSame && paralButOppose) return 2;

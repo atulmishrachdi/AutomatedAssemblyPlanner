@@ -167,7 +167,7 @@ namespace Assembly_Planner
                         iniDirs.Add((Directions[(int)arc.localVariables[i]]).multiply(-1));
                 dirsG.Add(iniDirs);
             }
-            return dirsG[0].Where(dir => dirsG.All(dirs => dirs.Any(d => Math.Abs(1 - d.dotProduct(dir)) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall))).ToList();
+            return dirsG[0].Where(dir => dirsG.All(dirs => dirs.Any(d => Math.Abs(1 - d.dotProduct(dir)) < OverlappingFuzzification.CheckWithGlobDirsParall))).ToList();
         }
         
         public static List<double[]> FreeLocalDirectionFinder(Component Component, List<Component> subgraph)
@@ -188,7 +188,7 @@ namespace Assembly_Planner
                         iniDirs.Add((Directions[(int)arc.localVariables[i]]).multiply(-1));
                 dirsG.Add(iniDirs);
             }
-            return dirsG[0].Where(dir => dirsG.All(dirs => dirs.Any(d => Math.Abs(1 - d.dotProduct(dir)) < ConstantsPrimitiveOverlap.CheckWithGlobDirsParall))).ToList();
+            return dirsG[0].Where(dir => dirsG.All(dirs => dirs.Any(d => Math.Abs(1 - d.dotProduct(dir)) < OverlappingFuzzification.CheckWithGlobDirsParall))).ToList();
         }
 
     }

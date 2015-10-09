@@ -59,9 +59,9 @@ namespace Assembly_Planner
             {
                 var arcDisDir = DisassemblyDirections.Directions[dir];
                 if (Math.Abs(1 - Math.Abs(arcDisDir.dotProduct(DisassemblyDirections.Directions[cndDirInd]))) <
-                    ConstantsPrimitiveOverlap.CheckWithGlobDirsParall ||
+                    OverlappingFuzzification.CheckWithGlobDirsParall ||
                     Math.Abs(1 + Math.Abs(arcDisDir.dotProduct(DisassemblyDirections.Directions[cndDirInd]))) <
-                    ConstantsPrimitiveOverlap.CheckWithGlobDirsParall)
+                    OverlappingFuzzification.CheckWithGlobDirsParall)
                     //var dirInd = pNodeArc.localVariables[i];
                     //if (dirInd == cndDirInd)
                     return true;

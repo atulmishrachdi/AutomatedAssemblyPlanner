@@ -100,7 +100,7 @@ namespace Assembly_Planner
         {
             var dir1 = VariableOfTheIndex(DisConstants.GearNormal, assemblyGraph[solid1.Name].localVariables);
             var dir2 = VariableOfTheIndex(DisConstants.GearNormal, assemblyGraph[solid1.Name].localVariables);
-            return 1 - Math.Abs(dir1.dotProduct(dir2)) < ConstantsPrimitiveOverlap.EqualToZero;
+            return 1 - Math.Abs(dir1.dotProduct(dir2)) < OverlappingFuzzification.EqualToZeroL;
         }
 
         private static double[] VariableOfTheIndex(double p, List<double> vars)
@@ -146,12 +146,12 @@ namespace Assembly_Planner
             var aveZLength = (Math.Abs(a.ZMax - a.ZMin) + Math.Abs(b.ZMax - b.ZMin)) / 2.0;
             // There are some cases that two boxes are touching each other. So the bounding box or the CVH must not
             // return false. Define a threshold:
-            if (a.XMin > b.XMax + ConstantsPrimitiveOverlap.FractionIncreaseForAABBIntersect * aveXLength
-                || a.YMin > b.YMax + ConstantsPrimitiveOverlap.FractionIncreaseForAABBIntersect * aveYLength
-                || a.ZMin > b.ZMax + ConstantsPrimitiveOverlap.FractionIncreaseForAABBIntersect * aveZLength
-                || b.XMin > a.XMax + ConstantsPrimitiveOverlap.FractionIncreaseForAABBIntersect * aveXLength
-                || b.YMin > a.YMax + ConstantsPrimitiveOverlap.FractionIncreaseForAABBIntersect * aveYLength
-                || b.ZMin > a.ZMax + ConstantsPrimitiveOverlap.FractionIncreaseForAABBIntersect * aveZLength)
+            if (a.XMin > b.XMax + OverlappingFuzzification.FractionIncreaseForAABBIntersect * aveXLength
+                || a.YMin > b.YMax + OverlappingFuzzification.FractionIncreaseForAABBIntersect * aveYLength
+                || a.ZMin > b.ZMax + OverlappingFuzzification.FractionIncreaseForAABBIntersect * aveZLength
+                || b.XMin > a.XMax + OverlappingFuzzification.FractionIncreaseForAABBIntersect * aveXLength
+                || b.YMin > a.YMax + OverlappingFuzzification.FractionIncreaseForAABBIntersect * aveYLength
+                || b.ZMin > a.ZMax + OverlappingFuzzification.FractionIncreaseForAABBIntersect * aveZLength)
                 return false;
             return true;
         }
@@ -160,7 +160,7 @@ namespace Assembly_Planner
         {
             var dirs =
                 DisassemblyDirections.Directions.Where(
-                    globalDirn => 1 - Math.Abs(p.dotProduct(globalDirn)) < ConstantsPrimitiveOverlap.EqualToZero)
+                    globalDirn => 1 - Math.Abs(p.dotProduct(globalDirn)) < OverlappingFuzzification.EqualToZeroL)
                     .ToList();
             return dirs.Select(dir => DisassemblyDirections.Directions.IndexOf(dir)).ToList();
         }
