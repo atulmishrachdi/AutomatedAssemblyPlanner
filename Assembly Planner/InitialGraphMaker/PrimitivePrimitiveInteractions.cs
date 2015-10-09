@@ -11,9 +11,11 @@ namespace Assembly_Planner
     internal class PrimitivePrimitiveInteractions
     {
         public static int c1;
+        internal static double MaxProb;
         internal static bool PrimitiveOverlap(List<PrimitiveSurface> solid1P, List<PrimitiveSurface> solid2P, List<int> dirInd, out List<PrimitiveSurface[]> overlappedPrimitives)
         {
             var overlap = false;
+            MaxProb = 0.0;
             var globlOverlappingCheck = dirInd.Count();
             c1 = 0;
             var c2 = 0;
@@ -156,14 +158,12 @@ namespace Assembly_Planner
                     {
                         var pP = TwoTrianglesParallelCheck(f1.Normal, f2.Normal);
                         var sP = TwoTrianglesSamePlaneCheck(f1, f2);
-                        if (pP == 0 || sP == 0) continue;
-                        if (TwoTriangleOverlapCheck(f1, f2))
-                        {
-                            var p = Math.Min(p0, p1);
-                            if (p > localProb) localProb = p;
-                            if (localProb == 1)
-                                break;
-                        }
+                        if (pP == 0 || sP == 0 || !TwoTriangleOverlapCheck(f1, f2)) continue;
+
+                        var p = Math.Min(pP, sP);
+                        if (p > localProb) localProb = p;
+                        if (localProb == 1)
+                            break;
                     }
                     if (localProb == 1)
                         break;
@@ -171,7 +171,8 @@ namespace Assembly_Planner
                 maxOverlappingProb = Math.Min(maxOverlappingProb, localProb);
             }
             if (maxOverlappingProb == 0) return false;
-            // if maxOverlappingProb is less than 1, needs to be checked with the user
+            if (maxOverlappingProb > MaxProb) 
+                MaxProb = maxOverlappingProb;
 
             // For a sphere inside of a cone:
             //    if sphere is reference:
@@ -241,64 +242,83 @@ namespace Assembly_Planner
 
         private static bool PosConePosCylinderOverlappingCheck(Cone cone, Cylinder cylinder, List<int> dirInd, int re)
         {
+            var localProb = 0.0;
+            PolygonalFace closestFace = new PolygonalFace();
             foreach (var fA in cone.Faces)
             {
-                foreach (var fB in cylinder.Faces.Where(fB => TwoTrianglesParallelCheck(fA.Normal, fB.Normal) > 0 &&
-                                                              TwoTrianglesSamePlaneCheck(fA, fB) > 0))
+                foreach (var fB in cylinder.Faces)
                 {
-                    var overlap = TwoTriangleOverlapCheck(fA, fB);
-
-                    if (!overlap) continue;
-                    if (re == 2)
+                    var pP = TwoTrianglesParallelCheck(fA.Normal, fB.Normal);
+                    var sP = TwoTrianglesSamePlaneCheck(fA, fB);
+                    if (pP == 0 || sP == 0 || !TwoTriangleOverlapCheck(fA, fB)) continue;
+                    var p = Math.Min(pP, sP);
+                    if (p > localProb)
                     {
-                        for (var i = 0; i < dirInd.Count; i++)
-                        {
-                            var dir = DisassemblyDirections.Directions[dirInd[i]];
-                            if (fB.Normal.dotProduct(dir) < ConstantsPrimitiveOverlap.CheckWithGlobDirs)
-                            {
-                                dirInd.Remove(dirInd[i]);
-                                i--;
-                            }
+                        localProb = p;
+                        closestFace = fB;
+                    }
+                    
+                    if (localProb == 1)
+                        break;
+                }
+                if (localProb == 1)
+                    break;
+            }
+            if (localProb == 0) return false;
+            if (localProb > MaxProb)
+                MaxProb = localProb;
 
-                        }
-                        return true;
-                    }
-                    for (var i = 0; i < dirInd.Count; i++)
+            if (re == 2)
+            {
+                for (var i = 0; i < dirInd.Count; i++)
+                {
+                    var dir = DisassemblyDirections.Directions[dirInd[i]];
+                    if (closestFace.Normal.dotProduct(dir) < ConstantsPrimitiveOverlap.CheckWithGlobDirs)
                     {
-                        var dir = DisassemblyDirections.Directions[dirInd[i]];
-                        if (fB.Normal.dotProduct(dir) > ConstantsPrimitiveOverlap.CheckWithGlobDirs)
-                        {
-                            dirInd.Remove(dirInd[i]);
-                            i--;
-                        }
+                        dirInd.Remove(dirInd[i]);
+                        i--;
                     }
-                    return true;
+
+                }
+                return true;
+            }
+            for (var i = 0; i < dirInd.Count; i++)
+            {
+                var dir = DisassemblyDirections.Directions[dirInd[i]];
+                if (closestFace.Normal.dotProduct(dir) > ConstantsPrimitiveOverlap.CheckWithGlobDirs)
+                {
+                    dirInd.Remove(dirInd[i]);
+                    i--;
                 }
             }
-            return false;
+            return true;
         }
 
         public static bool FlatConeOverlappingCheck(Cone cone, Flat flat, List<int> dirInd, int re)
         {
             if (!cone.IsPositive) return false;
+            var localProb = 0.0;
             var r = new Random();
             var rndFaceB = flat.Faces[r.Next(flat.Faces.Count)];
-            var overlap = false;
             foreach (var coneFace in cone.Faces)
             {
-                if (TwoTrianglesParallelCheck(coneFace.Normal, flat.Normal) > 0 &&
-                    TwoTrianglesSamePlaneCheck(coneFace, rndFaceB) > 0)
+                var pP = TwoTrianglesParallelCheck(coneFace.Normal, flat.Normal);
+                var sP = TwoTrianglesSamePlaneCheck(coneFace, rndFaceB);
+                if (pP == 0 || sP == 0) continue;
+                // now check if they overlap or not
+                foreach (var fFace in flat.Faces)
                 {
-                    // now check if they overlap or not
-                    foreach (var fFace in flat.Faces)
-                    {
-                        overlap = TwoTriangleOverlapCheck(coneFace, fFace);
-                        if (overlap) break;
-                    }
+                    if (!TwoTriangleOverlapCheck(coneFace, fFace)) continue;
+                    var p = Math.Min(pP, sP);
+                    if (p > localProb) localProb = p;
+                    if (localProb == 1)
+                        break;
                 }
-                if (overlap) break;
+                if (localProb == 1) break;
             }
-            if (!overlap) return false;
+            if (localProb == 0) return false;
+            if (localProb > MaxProb)
+                MaxProb = localProb;
             // exactly like flat-flat
             if (re == 1)
             {
@@ -364,47 +384,73 @@ namespace Assembly_Planner
 
         private static bool PosConePosConeOverlappingCheck(Cone cone1, Cone cone2, List<int> dirInd)
         {
+            var localProb = 0.0;
+            PolygonalFace closestFace = new PolygonalFace();
             foreach (var fA in cone1.Faces)
             {
-                foreach (var fB in cone2.Faces.Where(fB => TwoTrianglesParallelCheck(fA.Normal, fB.Normal)>0 &&
-                    TwoTrianglesSamePlaneCheck(fA, fB)>0))
+                foreach (var fB in cone2.Faces)
                 {
-                    if (!TwoTriangleOverlapCheck(fA, fB)) continue;
-                    for (var i = 0; i < dirInd.Count; i++)
+                    var pP = TwoTrianglesParallelCheck(fA.Normal, fB.Normal);
+                    var sP = TwoTrianglesSamePlaneCheck(fA, fB);
+                    if (pP == 0 || sP == 0 || !TwoTriangleOverlapCheck(fA, fB)) continue;
+
+                    var p = Math.Min(pP, sP);
+                    if (p > localProb)
                     {
-                        var dir = DisassemblyDirections.Directions[dirInd[i]];
-                        if (fB.Normal.dotProduct(dir) > ConstantsPrimitiveOverlap.CheckWithGlobDirs)
-                        {
-                            dirInd.Remove(dirInd[i]);
-                            i--;
-                        }
+                        localProb = p;
+                        closestFace = fB;
                     }
-                    return true;
+                    if (localProb == 1)
+                        break;
+                }
+                if (localProb == 1)
+                    break;
+            }
+            if (localProb == 0) return false;
+            if (localProb > MaxProb)
+                MaxProb = localProb;
+            for (var i = 0; i < dirInd.Count; i++)
+            {
+                var dir = DisassemblyDirections.Directions[dirInd[i]];
+                if (closestFace.Normal.dotProduct(dir) > ConstantsPrimitiveOverlap.CheckWithGlobDirs)
+                {
+                    dirInd.Remove(dirInd[i]);
+                    i--;
                 }
             }
-            return false;
+            return true;
         }
 
         private static bool NegConePosConeOverlappingCheck(Cone cone1, Cone cone2, List<int> dirInd, int re)
         {
-
+            var localProb = 0.0;
             // cone1 is negative cone and cone2 is positive cone.
-            var overlap = false;
             if (Math.Abs(cone1.Axis.normalize().dotProduct(cone2.Axis.normalize())) - 1 < ConstantsPrimitiveOverlap.ParralelLines)
             {
                 foreach (var f1 in cone1.Faces)
                 {
-                    if (cone2.Faces.Any(f2 => TwoTrianglesParallelCheck(f1.Normal, f2.Normal) > 0
-                                                && TwoTrianglesSamePlaneCheck(f1, f2) > 0 &&
-                                                TwoTriangleOverlapCheck(f1, f2)))
+                    bool any = false;
+                    foreach (var f2 in cone2.Faces)
                     {
-                        overlap = true;
-                        break;
+                        var pP = TwoTrianglesParallelCheck(f1.Normal, f2.Normal);
+                        var sP = TwoTrianglesSamePlaneCheck(f1, f2);
+                        if (pP == 0 || sP == 0 || !TwoTriangleOverlapCheck(f1, f2)) continue;
+
+                        var p = Math.Min(pP, sP);
+                        if (p > localProb)
+                        {
+                            localProb = p;
+                        }
+                        if (localProb == 1)
+                            break;
                     }
+                    if (localProb == 1)
+                        break;
                 }
             }
-            if (!overlap) return false;
-            
+            if (localProb == 0) return false;
+            if (localProb > MaxProb)
+                MaxProb = localProb;
             // work with cone1: negative
             if (re == 20)
             {
@@ -459,42 +505,50 @@ namespace Assembly_Planner
             // Find the equation of a plane and see if all of the vertices of another primitive are in the plane or not (with a delta).
             // if yes, now check and see if these primitives overlapp or not.
             //primitiveA.Normal;
-            bool overlap = false;
-            var aFaces = primitiveA.Faces;
-            var bFaces = primitiveB.Faces;
             // Take a random face and make a plane.
+            var localProb = 0.0;
             var r = new Random();
-            var rndFaceA = aFaces[r.Next(aFaces.Count)];
-            var rndFaceB = bFaces[r.Next(bFaces.Count)];
-            var c = 0;
-            if (TwoTrianglesParallelCheck(primitiveA.Normal, primitiveB.Normal) > 0 &&
-                TwoTrianglesSamePlaneCheck(rndFaceA, rndFaceB) > 0)
+            var rndFaceA = primitiveA.Faces[r.Next(primitiveA.Faces.Count)];
+            var rndFaceB = primitiveB.Faces[r.Next(primitiveB.Faces.Count)];
+
+            var pP = TwoTrianglesParallelCheck(primitiveA.Normal, primitiveB.Normal);
+            var sP = TwoTrianglesSamePlaneCheck(rndFaceA, rndFaceB);
+            if (pP > 0 && sP > 0)
             {
                 // now check and see if any area of a is inside the boundaries of b or vicee versa
                 foreach (var f1 in primitiveA.Faces)
                 {
-                    if (primitiveB.Faces.Any(f2 => TwoTriangleOverlapCheck(f1, f2)))
+                    foreach (var f2 in primitiveB.Faces)
                     {
-                        overlap = true;
+                        if (!TwoTriangleOverlapCheck(f1, f2)) continue;
+                        var p = Math.Min(pP, sP);
+                        if (p > localProb)
+                        {
+                            localProb = p;
+                        }
+                        if (localProb == 1)
+                            break;
                     }
-                    if (overlap) break;
+                    if (localProb == 1)
+                        break;
                 }
             }
             // if they overlap, update the directions
-            if (overlap)
+            if (localProb == 0) return false;
+            if (localProb > MaxProb)
+                MaxProb = localProb;
+
+            // take one of the parts, for example A, then in the directions, remove the ones which make a positive dot product with the normal
+            for (var i = 0; i < dirInd.Count; i++)
             {
-                // take one of the parts, for example A, then in the directions, remove the ones which make a positive dot product with the normal
-                for (var i = 0; i < dirInd.Count; i++)
+                var dir = DisassemblyDirections.Directions[dirInd[i]];
+                if (primitiveA.Normal.dotProduct(dir) < ConstantsPrimitiveOverlap.CheckWithGlobDirs)
                 {
-                    var dir = DisassemblyDirections.Directions[dirInd[i]];
-                    if (primitiveA.Normal.dotProduct(dir) < ConstantsPrimitiveOverlap.CheckWithGlobDirs)
-                    {
-                        dirInd.Remove(dirInd[i]);
-                        i--;
-                    }
+                    dirInd.Remove(dirInd[i]);
+                    i--;
                 }
             }
-            return overlap;
+            return true;
         }
 
         public static bool FlatCylinderOverlappingCheck(Cylinder cylinder, Flat flat, List<int> dirInd, int re)
@@ -503,25 +557,35 @@ namespace Assembly_Planner
             // if there is any triangle on the cylinder with a parralel normal to the flat patch (and opposite direction). And then
             // if the distance between them is close to zero, then, check if they overlap o not.
             if (!cylinder.IsPositive) return false;
+            var localProb = 0.0;
             //var r = new Random();
             //var rndFaceB = flat.Faces[r.Next(flat.Faces.Count)];
             var rndFaceB = flat.Faces[0];
-            var overlap = false;
             foreach (var cylFace in cylinder.Faces)
             {
-                if (TwoTrianglesParallelCheck(cylFace.Normal, flat.Normal) > 0 &&
-                    TwoTrianglesSamePlaneCheck(cylFace, rndFaceB) > 0)
+                var pP = TwoTrianglesParallelCheck(cylFace.Normal, flat.Normal);
+                var sP = TwoTrianglesSamePlaneCheck(cylFace, rndFaceB);
+                if (pP > 0 && sP > 0)
                 {
                     // now check if they overlap or not
                     foreach (var fFace in flat.Faces)
                     {
-                        overlap = TwoTriangleOverlapCheck(cylFace, fFace);
-                        if (overlap) break;
+                        if (!TwoTriangleOverlapCheck(cylFace, fFace)) continue;
+                        var p = Math.Min(pP, sP);
+                        if (p > localProb)
+                        {
+                            localProb = p;
+                        }
+                        if (localProb == 1)
+                            break;
                     }
                 }
-                if (overlap) break;
+                if (localProb == 1)
+                    break;
             }
-            if (!overlap) return false;
+            if (localProb == 0) return false;
+            if (localProb > MaxProb)
+                MaxProb = localProb;
             if (re == 1)
             {
                 for (var i = 0; i < dirInd.Count; i++)
@@ -557,10 +621,12 @@ namespace Assembly_Planner
             // check the centerlines. Is the vector of the center lines the same? 
             // now check the radius. 
 
-            // Update: I need to consider one more case: half cylinders
-            var overlap = true;
+            // Update: I need to consider one more case: half cylinders : it's already considered
             var partialCylinder1 = false;
-            if (Math.Abs(cylinder1.Axis.dotProduct(cylinder2.Axis)) - 1 < ConstantsPrimitiveOverlap.ParralelLines)
+            var localProb = 0.0;
+            var p0 = OverlappingFuzzification.FuzzyProbabilityCalculator(ConstantsPrimitiveOverlap.ParralelLines,
+                ConstantsPrimitiveOverlap.ParralelLines, Math.Abs(cylinder1.Axis.dotProduct(cylinder2.Axis)) - 1);
+            if (p0 > 0)
             {
                 // now centerlines are either parallel or the same. Now check and see if they are exactly the same
                 // Take the anchor of B, using the axis of B, write the equation of the line. Check and see if 
@@ -572,47 +638,46 @@ namespace Assembly_Planner
                     if (Math.Abs(axis) < ConstantsPrimitiveOverlap.EqualToZero) // if a, b or c is zero
                     {
                         if (Math.Abs(cylinder1.Anchor[i] - cylinder2.Anchor[i]) > ConstantsPrimitiveOverlap.EqualToZero2)
-                        {
-                            overlap = false;
-                            break;
-                        }
+                            return false;
                     }
                     else
                         t.Add((cylinder1.Anchor[i] - cylinder2.Anchor[i]) / axis);
                 }
-                if (overlap)
+                for (var i = 0; i < t.Count-1; i++)
                 {
-                    for (var i = 0; i < t.Count-1; i++)
+                    for (var j = i+1; j < t.Count; j++)
                     {
-                        for (var j = i+1; j < t.Count; j++)
-                        {
-                            if (Math.Abs(t[i] - t[j]) > ConstantsPrimitiveOverlap.PointOnLine)
-                                overlap = false;
-                        }
+                        if (Math.Abs(t[i] - t[j]) > ConstantsPrimitiveOverlap.PointOnLine)
+                            return false;
                     }
                 }
-                if (overlap)
+                // Now check the radius
+                var p1 = OverlappingFuzzification.FuzzyProbabilityCalculator(ConstantsPrimitiveOverlap.RadiusDifs,
+                    ConstantsPrimitiveOverlap.RadiusDifs, Math.Abs(cylinder1.Radius - cylinder2.Radius));
+                if (p1 > 0)
                 {
-                    overlap = false;
-                    // Now check the radius
-                    if (Math.Abs(cylinder1.Radius - cylinder2.Radius) < ConstantsPrimitiveOverlap.RadiusDifs)
+                    localProb = Math.Min(p0, p1);
+                    foreach (var f1 in cylinder1.Faces)
                     {
-                        foreach (var f1 in cylinder1.Faces)
+                        foreach (var f2 in cylinder2.Faces.Where(f2=>TwoTriangleOverlapCheck(f1, f2)))
                         {
-                            foreach (var f2 in cylinder2.Faces.Where(f2=>TwoTriangleOverlapCheck(f1, f2)))
-                            {
-                                overlap = true;
-                                break;
-                            }
-                            if (overlap)
+                            if (localProb == 1)
                                 break;
                         }
+                        if (localProb == 1)
+                            break;
                     }
                 }
             }
-            if (!overlap) return false;
+            else
+                return false;
+
+            if (localProb == 0) return false;
+            if (localProb > MaxProb)
+                MaxProb = localProb;
             // is cylinder1 (negative) half? 
-            var sum = new double[] {0.0, 0.0, 0.0};
+            
+            var sum = new [] {0.0, 0.0, 0.0};
             sum = cylinder1.Faces.Aggregate(sum, (current, face) => face.Normal.add(current));
             if (Math.Sqrt((Math.Pow(sum[0], 2.0)) + (Math.Pow(sum[1], 2.0)) + (Math.Pow(sum[2], 2.0))) > 6)
                 partialCylinder1 = true;
@@ -669,25 +734,41 @@ namespace Assembly_Planner
 
         private static bool PosCylinderPosCylinderOverlappingCheck(Cylinder cylinder1, Cylinder cylinder2, List<int> dirInd)
         {
+            var localProb = 0.0;
+            PolygonalFace closestFace = new PolygonalFace();
             foreach (var fA in cylinder1.Faces)
             {
-                foreach (var fB in cylinder2.Faces.Where(fB => TwoTrianglesParallelCheck(fA.Normal, fB.Normal)>0 &&
-                    TwoTrianglesSamePlaneCheck(fA, fB)>0))
+                foreach (var fB in cylinder2.Faces)
                 {
-                    if (!TwoTriangleOverlapCheck(fA, fB)) continue;
-                    for (var i = 0; i < dirInd.Count; i++)
+                    var pP = TwoTrianglesParallelCheck(fA.Normal, fB.Normal);
+                    var sP = TwoTrianglesSamePlaneCheck(fA, fB);
+                    if (pP == 0 || sP == 0 || !TwoTriangleOverlapCheck(fA, fB)) continue;
+
+                    var p = Math.Min(pP, sP);
+                    if (p > localProb)
                     {
-                        var dir = DisassemblyDirections.Directions[dirInd[i]];
-                        if (fB.Normal.dotProduct(dir) > ConstantsPrimitiveOverlap.CheckWithGlobDirs)
-                        {
-                            dirInd.Remove(dirInd[i]);
-                            i--;
-                        }
+                        localProb = p;
+                        closestFace = fB;
                     }
-                    return true;
+                    if (localProb == 1)
+                        break;
+                }
+                if (localProb == 1)
+                    break;
+            }
+            if (localProb == 0) return false;
+            if (localProb > MaxProb)
+                MaxProb = localProb;
+            for (var i = 0; i < dirInd.Count; i++)
+            {
+                var dir = DisassemblyDirections.Directions[dirInd[i]];
+                if (closestFace.Normal.dotProduct(dir) > ConstantsPrimitiveOverlap.CheckWithGlobDirs)
+                {
+                    dirInd.Remove(dirInd[i]);
+                    i--;
                 }
             }
-            return false;
+            return true;
         }
 
         private static bool PosSphereNegSphereOverlappingCheck(Sphere primitiveA, Sphere primitiveB, List<int> dirInd)
@@ -696,9 +777,13 @@ namespace Assembly_Planner
             // if their centers are the same or really close
             // if their radius is equal or close
             var centerDif = primitiveA.Center.subtract(primitiveB.Center);
-            if (Math.Abs(centerDif[0]) < ConstantsPrimitiveOverlap.PointPoint &&
-                Math.Abs(centerDif[1]) < ConstantsPrimitiveOverlap.PointPoint &&
-                Math.Abs(centerDif[2]) < ConstantsPrimitiveOverlap.PointPoint)
+            var p0 = OverlappingFuzzification.FuzzyProbabilityCalculator(ConstantsPrimitiveOverlap.PointPoint,
+                ConstantsPrimitiveOverlap.PointPoint, Math.Abs(centerDif[0]));
+            var p1 = OverlappingFuzzification.FuzzyProbabilityCalculator(ConstantsPrimitiveOverlap.PointPoint,
+                ConstantsPrimitiveOverlap.PointPoint, Math.Abs(centerDif[1]));
+            var p2 = OverlappingFuzzification.FuzzyProbabilityCalculator(ConstantsPrimitiveOverlap.PointPoint,
+                ConstantsPrimitiveOverlap.PointPoint, Math.Abs(centerDif[2]));
+            if (p0 > 0 && p1 > 0 && p2 < 0)
             {
                 if (Math.Abs(primitiveA.Radius - primitiveB.Radius) < 0.001)
                     return true;
@@ -710,46 +795,72 @@ namespace Assembly_Planner
         {
             //postive(A)-Positive(B)
             // Seems to be really time consuming
+            var localProb = 0.0;
+            PolygonalFace closestFace = new PolygonalFace();
             var overlap = false;
             foreach (var fA in sphere1.Faces)
             {
-                foreach (var fB in sphere2.Faces.Where(fB => TwoTrianglesParallelCheck(fA.Normal, fB.Normal)>0 &&
-                    TwoTrianglesSamePlaneCheck(fA, fB)>0))
+                foreach (var fB in sphere2.Faces)
                 {
-                    if (!TwoTriangleOverlapCheck(fA, fB)) continue;
-                    for (var i = 0; i < dirInd.Count; i++)
+                    var pP = TwoTrianglesParallelCheck(fA.Normal, fB.Normal);
+                    var sP = TwoTrianglesSamePlaneCheck(fA, fB);
+                    if (pP == 0 || sP == 0 || !TwoTriangleOverlapCheck(fA, fB)) continue;
+                    var p = Math.Min(pP, sP);
+                    if (p > localProb)
                     {
-                        var dir = DisassemblyDirections.Directions[dirInd[i]];
-                        if (fB.Normal.dotProduct(dir) > ConstantsPrimitiveOverlap.CheckWithGlobDirs)
-                        {
-                            dirInd.Remove(dirInd[i]);
-                            i--;
-                        }
+                        localProb = p;
+                        closestFace = fB;
                     }
-                    return true;
+                    if (localProb == 1)
+                        break;
+                }
+                if (localProb == 1)
+                    break;
+            }
+            if (localProb == 0) return false;
+            if (localProb > MaxProb)
+                MaxProb = localProb;
+            for (var i = 0; i < dirInd.Count; i++)
+            {
+                var dir = DisassemblyDirections.Directions[dirInd[i]];
+                if (closestFace.Normal.dotProduct(dir) > ConstantsPrimitiveOverlap.CheckWithGlobDirs)
+                {
+                    dirInd.Remove(dirInd[i]);
+                    i--;
                 }
             }
-            return false;
+            return true;
         }
 
         public static bool FlatSphereOverlappingCheck(Sphere sphere, Flat flat, List<int> dirInd, int re)
         {
             if (!sphere.IsPositive) return false;
+            var localProb = 0.0;
             // Positive sphere (primitiveA) and primitiveB is flat.
             // similar to flat-cylinder
-            var overlap = false;
             var r = new Random();
             var rndFaceB = flat.Faces[r.Next(flat.Faces.Count)];
-            foreach (var sophFace in sphere.Faces.Where(sophFace => TwoTrianglesParallelCheck(sophFace.Normal, flat.Normal)>0)
-                                                     .Where(sophFace => TwoTrianglesSamePlaneCheck(sophFace, rndFaceB)>0))
+            foreach (var sophFace in sphere.Faces)
             {
+                var pP = TwoTrianglesParallelCheck(sophFace.Normal, flat.Normal);
+                var sP = TwoTrianglesSamePlaneCheck(sophFace, rndFaceB);
                 foreach (var fFace in flat.Faces)
                 {
-                    if (TwoTriangleOverlapCheck(sophFace, fFace))
-                        overlap = true;
+                    if (!TwoTriangleOverlapCheck(sophFace, fFace)) continue;
+                    var p = Math.Min(pP, sP);
+                    if (p > localProb)
+                    {
+                        localProb = p;
+                    }
+                    if (localProb == 1)
+                        break;
                 }
+                if (localProb == 1)
+                    break;
             }
-            if (!overlap) return false;
+            if (localProb == 0) return false;
+            if (localProb > MaxProb)
+                MaxProb = localProb;
             if (re == 1)
             {
                 for (var i = 0; i < dirInd.Count; i++)
@@ -775,7 +886,6 @@ namespace Assembly_Planner
         {
             // if the center of the sphere is on the cylinder centerline.
             // or again: two faces parralel, on the same plane and overlap
-            var overlap = false;
             var t1 = (sphere.Center[0] - cylinder.Anchor[0]) / (cylinder.Axis[0]);
             var t2 = (sphere.Center[1] - cylinder.Anchor[1]) / (cylinder.Axis[1]);
             var t3 = (sphere.Center[2] - cylinder.Anchor[2]) / (cylinder.Axis[2]);
@@ -785,22 +895,37 @@ namespace Assembly_Planner
                 ConstantsPrimitiveOverlap.PointOnLine, Math.Abs(t1 - t3));
             var p2 = OverlappingFuzzification.FuzzyProbabilityCalculator(ConstantsPrimitiveOverlap.PointOnLine,
                 ConstantsPrimitiveOverlap.PointOnLine, Math.Abs(t3 - t2));
-            if (p0 > 0 && p1 > 0 && p2 > 0)
+            var pRadius = OverlappingFuzzification.FuzzyProbabilityCalculator(ConstantsPrimitiveOverlap.RadiusDifs,
+                ConstantsPrimitiveOverlap.RadiusDifs, Math.Abs(cylinder.Radius - cylinder.Radius));
+            var maxOverlappingProb = Math.Min(Math.Min(Math.Min(p0, p1), p2), pRadius);
+            if (maxOverlappingProb > 0)
             {
+                var localProb = 0.0;
                 // Now check the radius
                 if (Math.Abs(cylinder.Radius - cylinder.Radius) < ConstantsPrimitiveOverlap.RadiusDifs)
                 {
                     foreach (var f1 in cylinder.Faces)
                     {
-                        foreach (var f2 in sphere.Faces.Where(f2 => TwoTrianglesParallelCheck(f1.Normal, f2.Normal) > 0
-                                                                    && TwoTrianglesSamePlaneCheck(f1, f2) > 0))
+                        foreach (var f2 in sphere.Faces)
                         {
-                            overlap = TwoTriangleOverlapCheck(f1, f2);
+                            var pP = TwoTrianglesParallelCheck(f1.Normal, f2.Normal);
+                            var sP = TwoTrianglesSamePlaneCheck(f1, f2);
+                            if (pP == 0 || sP == 0 || !TwoTriangleOverlapCheck(f1, f2)) continue;
+
+                            var p = Math.Min(pP, sP);
+                            if (p > localProb) localProb = p;
+                            if (localProb == 1)
+                                break;
                         }
+                        if (localProb == 1)
+                            break;
                     }
                 }
+                maxOverlappingProb = Math.Min(maxOverlappingProb, localProb);
             }
-            if (!overlap) return false;
+            if (maxOverlappingProb == 0) return false;
+            if (maxOverlappingProb > MaxProb)
+                MaxProb = maxOverlappingProb;
             // the axis of the cylinder is the removal direction
             for (var i = 0; i < dirInd.Count; i++)
             {
