@@ -42,8 +42,9 @@ namespace Assembly_Planner
 
         internal static bool DefineBlocking(designGraph assemblyGraph, TessellatedSolid solid1, TessellatedSolid solid2,
             List<PrimitiveSurface> solid1P, List<PrimitiveSurface> solid2P, List<int> globalDirPool,
-            out List<int> dirInd, out double certainty, bool printResults = false)
+            out List<int> dirInd, out double certainty, int printResults = 0)
         {
+
             if (BoundingBoxOverlap(solid1, solid2))
             {
                 if (ConvexHullOverlap(solid1, solid2))
@@ -75,16 +76,23 @@ namespace Assembly_Planner
                         OverlappingSurfaces.Add(overlappingSurface);
                         // dirInd is the list of directions that must be added to the arc between part1 and part2
                         globalDirPool.AddRange(localDirInd.Where(d => !globalDirPool.Contains(d)));
-                        if (printResults)
+                        if (printResults > 0)
                         {
-                            Console.WriteLine(@"An overlap is detected between   " + solid1.Name + "   and   " +
-                                              solid2.Name);
-                            foreach (var i in localDirInd)
+                            if (printResults == 1)
+                                Console.WriteLine(@"An overlap is detected between   " + solid1.Name + "   and   " +
+                                                  solid2.Name);
+                            else
                             {
-                                Console.WriteLine(DisassemblyDirections.Directions[i][0] + " " +
-                                                  DisassemblyDirections.Directions[i][1] + " " +
-                                                  DisassemblyDirections.Directions[i][2]);
+                                Console.WriteLine(@"An overlap is detected between   " + solid1.Name + "   and   " +
+                                                  solid2.Name);
+                                foreach (var i in localDirInd)
+                                {
+                                    Console.WriteLine(DisassemblyDirections.Directions[i][0] + " " +
+                                                      DisassemblyDirections.Directions[i][1] + " " +
+                                                      DisassemblyDirections.Directions[i][2]);
+                                }
                             }
+
                         }
                         dirInd = localDirInd;
                         return true;
