@@ -132,7 +132,6 @@ namespace Assembly_Planner
 
         private static bool NegConePosSphereOverlappingCheck(Cone cone, Sphere sphere, List<int> dirInd, int re)
         {
-            var overlap = false;
             var t1 = (sphere.Center[0] - cone.Apex[0]) / (cone.Axis[0]);
             var t2 = (sphere.Center[1] - cone.Apex[1]) / (cone.Axis[1]);
             var t3 = (sphere.Center[2] - cone.Apex[2]) / (cone.Axis[2]);
@@ -142,26 +141,38 @@ namespace Assembly_Planner
                 ConstantsPrimitiveOverlap.PointOnLine, Math.Abs(t1 - t3));
             var p2 = OverlappingFuzzification.FuzzyProbabilityCalculator(ConstantsPrimitiveOverlap.PointOnLine,
                 ConstantsPrimitiveOverlap.PointOnLine, Math.Abs(t3 - t2));
+            // min of p0, p1 and p2
+            var maxOverlappingProb = Math.Min(Math.Min(p0, p1), p2);
 
-            if (p0 > 0 && p1 > 0 && p2 > 0)
+            if (maxOverlappingProb > 0)
                 /*if (Math.Abs(t1 - t2) < ConstantsPrimitiveOverlap.PointOnLine &&
                 Math.Abs(t1 - t3) < ConstantsPrimitiveOverlap.PointOnLine &&
                 Math.Abs(t3 - t2) < ConstantsPrimitiveOverlap.PointOnLine)*/
             {
+                var localProb = 0.0;
                 foreach (var f1 in cone.Faces)
                 {
-                    foreach (var f2 in sphere.Faces.Where(f2 => TwoTrianglesParallelCheck(f1.Normal, f2.Normal) > 0
-                                                                && TwoTrianglesSamePlaneCheck(f1, f2) > 0))
+                    foreach (var f2 in sphere.Faces)
                     {
-                        overlap = TwoTriangleOverlapCheck(f1, f2);
-                        if (overlap)
-                            break;
+                        var pP = TwoTrianglesParallelCheck(f1.Normal, f2.Normal);
+                        var sP = TwoTrianglesSamePlaneCheck(f1, f2);
+                        if (pP == 0 || sP == 0) continue;
+                        if (TwoTriangleOverlapCheck(f1, f2))
+                        {
+                            var p = Math.Min(p0, p1);
+                            if (p > localProb) localProb = p;
+                            if (localProb == 1)
+                                break;
+                        }
                     }
-                    if (overlap)
+                    if (localProb == 1)
                         break;
                 }
+                maxOverlappingProb = Math.Min(maxOverlappingProb, localProb);
             }
-            if (!overlap) return false;
+            if (maxOverlappingProb == 0) return false;
+            // if maxOverlappingProb is less than 1, needs to be checked with the user
+
             // For a sphere inside of a cone:
             //    if sphere is reference:
             //       if the angle between axis and the normal of one of the faces is less than 90 (dot is pos)
@@ -768,17 +779,21 @@ namespace Assembly_Planner
             var t1 = (sphere.Center[0] - cylinder.Anchor[0]) / (cylinder.Axis[0]);
             var t2 = (sphere.Center[1] - cylinder.Anchor[1]) / (cylinder.Axis[1]);
             var t3 = (sphere.Center[2] - cylinder.Anchor[2]) / (cylinder.Axis[2]);
-            if (Math.Abs(t1 - t2) < ConstantsPrimitiveOverlap.PointOnLine &&
-                Math.Abs(t1 - t3) < ConstantsPrimitiveOverlap.PointOnLine &&
-                Math.Abs(t3 - t2) < ConstantsPrimitiveOverlap.PointOnLine)
+            var p0 = OverlappingFuzzification.FuzzyProbabilityCalculator(ConstantsPrimitiveOverlap.PointOnLine,
+                ConstantsPrimitiveOverlap.PointOnLine, Math.Abs(t1 - t2));
+            var p1 = OverlappingFuzzification.FuzzyProbabilityCalculator(ConstantsPrimitiveOverlap.PointOnLine,
+                ConstantsPrimitiveOverlap.PointOnLine, Math.Abs(t1 - t3));
+            var p2 = OverlappingFuzzification.FuzzyProbabilityCalculator(ConstantsPrimitiveOverlap.PointOnLine,
+                ConstantsPrimitiveOverlap.PointOnLine, Math.Abs(t3 - t2));
+            if (p0 > 0 && p1 > 0 && p2 > 0)
             {
                 // Now check the radius
                 if (Math.Abs(cylinder.Radius - cylinder.Radius) < ConstantsPrimitiveOverlap.RadiusDifs)
                 {
                     foreach (var f1 in cylinder.Faces)
                     {
-                        foreach (var f2 in sphere.Faces.Where(f2 => TwoTrianglesParallelCheck(f1.Normal, f2.Normal)>0
-                                                                        && TwoTrianglesSamePlaneCheck(f1, f2)>0))
+                        foreach (var f2 in sphere.Faces.Where(f2 => TwoTrianglesParallelCheck(f1.Normal, f2.Normal) > 0
+                                                                    && TwoTrianglesSamePlaneCheck(f1, f2) > 0))
                         {
                             overlap = TwoTriangleOverlapCheck(f1, f2);
                         }
