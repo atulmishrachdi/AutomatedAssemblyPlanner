@@ -133,8 +133,8 @@ namespace PrimitiveClassificationOfTessellatedSolids
                 {
                     //if (primitive.Area < maxFaceArea / 70) //12
                     //{
-                     //   primitives.Remove(primitive);
-                      //  i--;
+                    //   primitives.Remove(primitive);
+                    //  i--;
                     //}
 
                 }
@@ -194,7 +194,11 @@ namespace PrimitiveClassificationOfTessellatedSolids
 
         internal static double AbnCalculator(EdgeWithScores eachEdge)
         {
-            var ABN = (Math.PI-eachEdge.Edge.InternalAngle) * 180 / Math.PI;
+            double ABN;
+            if (eachEdge.Edge.InternalAngle < Math.PI)
+                ABN = (Math.PI - eachEdge.Edge.InternalAngle) * 180 / Math.PI;
+            else ABN = eachEdge.Edge.InternalAngle * 180 / Math.PI;
+
             if (ABN >= 180)
                 ABN -= 180;
 
@@ -840,7 +844,7 @@ namespace PrimitiveClassificationOfTessellatedSolids
             if (distance < 0)
             {
                 axis = normalOfGaussPlane.multiply(-1);
-                distance = -distance/n;
+                distance = -distance / n;
             }
             else
             {
