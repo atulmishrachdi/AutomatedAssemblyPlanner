@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,25 +16,32 @@ namespace Assembly_Planner
     class BoltAndGearDetection
     {
         internal static HashSet<TessellatedSolid> ScrewAndBoltDetector(
-            Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive)
+            Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive,
+            Dictionary<TessellatedSolid, List<TessellatedSolid>> multipleRefs, bool autoDetection = false)
         {
             var s = Stopwatch.StartNew();
             s.Start();
             Console.WriteLine();
             Console.WriteLine("Detecting Gears and Fasteners ....");
             var fastener = new HashSet<TessellatedSolid>();
-            foreach (var solid in solidPrimitive.Keys)
-                if (solid.Name.Contains("Screw") || solid.Name.Contains("Test - Part-S"))
-                    fastener.Add(solid);
-                else
-                    if (solid.Name.Contains("ShaftCollar"))
+            if (!autoDetection)
+            {
+                foreach (var solid in solidPrimitive.Keys)
+                    if (solid.Name.Contains("Screw") || solid.Name.Contains("Test - Part-S"))
                         fastener.Add(solid);
-                    else
-                        if (solid.Name.Contains("DowellGrooved"))
-                            if (solid.Name.Contains("-5") || solid.Name.Contains("-14")||solid.Name.Contains("-27")||solid.Name.Contains("-30"))
-                                continue;
-                            else
-                                fastener.Add(solid);
+                    else if (solid.Name.Contains("ShaftCollar"))
+                        fastener.Add(solid);
+                    else if (solid.Name.Contains("DowellGrooved"))
+                        if (solid.Name.Contains("-5") || solid.Name.Contains("-14") || solid.Name.Contains("-27") ||
+                            solid.Name.Contains("-30"))
+                            continue;
+                        else
+                            fastener.Add(solid);
+            }
+            else
+            {
+                fastener = AutoFastenerDetection(solidPrimitive, multipleRefs);
+            }
 
             //var smallObjects = SmallObjectsDetector(solidPrimitive);
             //fastener.UnionWith(smallObjects);
@@ -47,8 +55,8 @@ namespace Assembly_Planner
             foreach (var solid in solidPrimitive.Keys)
             {
                 var cones = solidPrimitive[solid].Where(p => p is Cone).ToList();
-                if (cones.Count < BoltAndGearConstants.ConePortion * solidPrimitive[solid].Count ||
-                    cones.Sum(p => p.Area) < BoltAndGearConstants.ConeAreaPortion * solid.SurfaceArea)
+                if (cones.Count < BoltAndGearConstants.ConePortion*solidPrimitive[solid].Count ||
+                    cones.Sum(p => p.Area) < BoltAndGearConstants.ConeAreaPortion*solid.SurfaceArea)
                     continue;
                 Console.WriteLine("Is " + solid.Name + " a Bolt or Screw? 'y' or 'n'");
                 var read = Convert.ToString(Console.ReadLine());
@@ -60,11 +68,78 @@ namespace Assembly_Planner
             return fastener;
         }
 
-        private static List<TessellatedSolid> SmallObjectsDetector(Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive)
+        private static HashSet<TessellatedSolid> AutoFastenerDetection(
+            Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive,
+            Dictionary<TessellatedSolid, List<TessellatedSolid>> multipleRefs)
+        {
+            var fastener = new HashSet<TessellatedSolid>();
+            var firstFilter = multipleRefs.Keys.ToList();//SmallObjectsDetector(multipleRefs);
+            var equalPrimittivesForEverySolid = EqualPrimitiveAreaFinder(firstFilter, solidPrimitive);
+            var hexAndAllen = HexAndAllenBoltDetector(firstFilter, equalPrimittivesForEverySolid);
+
+            return fastener;
+        }
+
+        private static HashSet<TessellatedSolid> HexAndAllenBoltDetector(List<TessellatedSolid> firstFilter,
+            Dictionary<TessellatedSolid, Dictionary<PrimitiveSurface, List<PrimitiveSurface>>>
+                equalPrimittivesForEverySolid)
+        {
+            var hexAndAllen = new HashSet<TessellatedSolid>();
+            foreach (var solid in firstFilter)
+            {
+                var sixFlat =
+                    equalPrimittivesForEverySolid[solid].Keys.Where(
+                        k => equalPrimittivesForEverySolid[solid][k].Count == 6).ToList();
+                if (!sixFlat.Any())continue;
+                foreach (var candidateHex in sixFlat)
+                {
+                    var candidateHexVal = equalPrimittivesForEverySolid[solid][candidateHex];
+                    var cos = new List<double>();
+                    var firstPrimNormal = ((Flat)candidateHexVal[0]).Normal;
+                    for (var i = 1; i < candidateHexVal.Count; i++)
+                        cos.Add(firstPrimNormal.dotProduct(((Flat) candidateHexVal[i]).Normal));
+                    // if it is a hex or allen bolt, the cos list must have two 1/2, two -1/2 and one -1
+                    if (cos.Count(c => Math.Abs(0.5 - c) < 0.0001) == 2 &&
+                        cos.Count(c => Math.Abs(-0.5 - c) < 0.0001) == 2 &&
+                        cos.Count(c => Math.Abs(-1 - c) < 0.0001) == 1)
+                        hexAndAllen.Add(solid);
+                }
+            }
+            return hexAndAllen;
+        }
+
+        private static Dictionary<TessellatedSolid, Dictionary<PrimitiveSurface, List<PrimitiveSurface>>>
+            EqualPrimitiveAreaFinder(List<TessellatedSolid> firstFilter,
+                Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive)
+        {
+            var equalPrim = new Dictionary<TessellatedSolid, Dictionary<PrimitiveSurface, List<PrimitiveSurface>>>();
+            foreach (var solid in firstFilter)
+            {
+                var primEqualArea = new Dictionary<PrimitiveSurface, List<PrimitiveSurface>>();
+                foreach (var prim in solidPrimitive[solid].Where(p => p is Flat))
+                {
+                    var equalExist = primEqualArea.Keys.Where(p =>Math.Abs(p.Area - prim.Area) < 0.01).ToList();
+                    if (!equalExist.Any()) primEqualArea.Add(prim, new List<PrimitiveSurface> { prim });
+                    else
+                    {
+                        foreach (var equal in equalExist)
+                        {
+                            primEqualArea[equal].Add(prim);
+                            break;
+                        }
+                    }
+                }
+                equalPrim.Add(solid, primEqualArea);
+            }
+            return equalPrim;
+        }
+
+
+        private static List<TessellatedSolid> SmallObjectsDetector(Dictionary<TessellatedSolid, List<TessellatedSolid>> solidRepeated)
         {
             var partSize = new Dictionary<TessellatedSolid, double>();
-            var parts = solidPrimitive.Keys.ToList();
-            foreach (var solid in solidPrimitive.Keys.ToList())
+            var parts = solidRepeated.Keys.ToList();
+            foreach (var solid in solidRepeated.Keys.ToList())
             {
                 var shortestObbEdge = double.PositiveInfinity;
                 var longestObbEdge = double.NegativeInfinity;
@@ -157,7 +232,7 @@ namespace Assembly_Planner
 
 
             // creating the dictionary:
-            var n = 1001.0; // number of classes
+            var n = 99.0; // number of classes
             var dic = new Dictionary<double, List<TessellatedSolid>>();
 
             // Filling up the keys

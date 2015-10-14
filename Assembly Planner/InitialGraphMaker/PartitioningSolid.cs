@@ -192,11 +192,10 @@ namespace Assembly_Planner
         }
         internal static bool IsVertexInsidePartition(Partition partition, Vertex ver)
         {
-            return
-                //partition.Faces.All(
-                 //   pFace => !(pFace.Normal.dotProduct(pFace.Vertices[0].Position.subtract(ver.Position)) <0));
-                //-0.00000001));
-            partition.Faces.All(pFace => pFace.Normal.dotProduct(ver.Position.subtract(pFace.Vertices[0].Position)) < 0);
+            return partition.Faces.All(pFace => pFace.Normal.dotProduct(ver.Position.subtract(pFace.Vertices[0].Position)) < 0);
+            //partition.Faces.All(
+            //   pFace => !(pFace.Normal.dotProduct(pFace.Vertices[0].Position.subtract(ver.Position)) <0));
+            //-0.00000001));
         }
 
         private static HashSet<PolygonalFace> PartitionTrianglesPro(Partition partition, HashSet<PolygonalFace> solidTrgs)
@@ -267,13 +266,14 @@ namespace Assembly_Planner
             s.Start();
             Console.WriteLine();
             Console.WriteLine("Octree is being generated ....");
+            //foreach(var solid in solids)
             Parallel.ForEach(solids, solid =>
             {
                 lock (Partitions)
                     Partitions.Add(solid,
                         Run2(new HashSet<Vertex>(solid.Vertices), new HashSet<PolygonalFace>(solid.Faces),
                             OrientedBoundingBoxDic[solid].CornerVertices));
-            });
+            });//
             s.Stop();
             Console.WriteLine("Octree Generation is done in:" + "     " + s.Elapsed);
 

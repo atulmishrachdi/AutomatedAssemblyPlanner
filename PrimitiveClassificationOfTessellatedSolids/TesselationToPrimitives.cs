@@ -1,9 +1,6 @@
-﻿using System.Diagnostics;
-using System.IO;
-using System.Runtime.InteropServices;
-using StarMathLib;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using StarMathLib;
 using TVGL;
@@ -129,15 +126,6 @@ namespace PrimitiveClassificationOfTessellatedSolids
                     primitives.Remove(primitive);
                     i--;
                 }
-                else
-                {
-                    //if (primitive.Area < maxFaceArea / 70) //12
-                    //{
-                    //   primitives.Remove(primitive);
-                    //  i--;
-                    //}
-
-                }
             }
 
             return primitives;
@@ -195,7 +183,7 @@ namespace PrimitiveClassificationOfTessellatedSolids
         internal static double AbnCalculator(EdgeWithScores eachEdge)
         {
             double ABN;
-            if (eachEdge.Edge.InternalAngle < Math.PI)
+            if (eachEdge.Edge.InternalAngle <= Math.PI)
                 ABN = (Math.PI - eachEdge.Edge.InternalAngle) * 180 / Math.PI;
             else ABN = eachEdge.Edge.InternalAngle * 180 / Math.PI;
 
@@ -221,8 +209,8 @@ namespace PrimitiveClassificationOfTessellatedSolids
             var cenMass2 = eachEdge.Edge.OtherFace.Center;
             var vector1 = new[] { cenMass1[0] - eachEdge.Edge.From.Position[0], cenMass1[1] - eachEdge.Edge.From.Position[1], cenMass1[2] - eachEdge.Edge.From.Position[2] };
             var vector2 = new[] { cenMass2[0] - eachEdge.Edge.From.Position[0], cenMass2[1] - eachEdge.Edge.From.Position[1], cenMass2[2] - eachEdge.Edge.From.Position[2] };
-            var distance1 = StarMath.dotProduct(StarMath.normalize(eachEdge.Edge.Vector), vector1);
-            var distance2 = StarMath.dotProduct(StarMath.normalize(eachEdge.Edge.Vector), vector2);
+            var distance1 = eachEdge.Edge.Vector.normalize().dotProduct(vector1);
+            var distance2 = eachEdge.Edge.Vector.normalize().dotProduct(vector2);
             //Mapped Center of Mass
             var MCM = (Math.Abs(distance1 - distance2)) / eachEdge.Edge.Length;
             return MCM;
@@ -344,13 +332,13 @@ namespace PrimitiveClassificationOfTessellatedSolids
             var prob2 = ((1 - 0) / (p4 - p3)) * (metric - p3) + 1;
             if (Case == 2)
             {
-                catAndProb.Add(new double[] { 0, prob1 });
-                catAndProb.Add(new double[] { 1, prob2 });
+                catAndProb.Add(new[] { 0, prob1 });
+                catAndProb.Add(new[] { 1, prob2 });
             }
             if (Case == 4)
             {
-                catAndProb.Add(new double[] { 1, prob1 });
-                catAndProb.Add(new double[] { 2, prob2 });
+                catAndProb.Add(new[] { 1, prob1 });
+                catAndProb.Add(new[] { 2, prob2 });
             }
             return catAndProb;
         }

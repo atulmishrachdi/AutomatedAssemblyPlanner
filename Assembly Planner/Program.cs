@@ -21,13 +21,13 @@ namespace Assembly_Planner
             var graphExists = false;
             var inputDir =
                 //"../../../Test/Cube";
-                //"../../../Test/Pump Assembly";
-                // "../../../Test/3-parts-statbility";
+                //"../../../Test/PumpWExtention";
+                "../../../Test/FastenerTest";
                 //"../../../Test/Double";
                 //"../../../Test/Simple-Test";
                 //"../../../Test/Mc Cormik/STL2";
                 //"../../../Test/Truck -TXT-1/STL";
-                "../../../Test/FoodPackagingMachine/FPMSTL2";
+                //"../../../Test/FoodPackagingMachine/FPMSTL2";
                 //"C:\\DMDII Project\\GearAndFastener Detection\\TrainingData\\not-screw";
                 //"../../../Test/test";
             var s = Stopwatch.StartNew();
