@@ -78,30 +78,30 @@ namespace Assembly_Planner
         {
             var fastener = new HashSet<TessellatedSolid>();
             var firstFilter = multipleRefs.Keys.ToList();//SmallObjectsDetector(multipleRefs);
-            var equalPrimittivesForEverySolid = EqualPrimitiveAreaFinder(firstFilter, solidPrimitive);
+            var equalPrimitivesForEverySolid = EqualPrimitiveAreaFinder(firstFilter, solidPrimitive);
             foreach (var solid in firstFilter)
             {
-                if (HexBoltNutAllen(solid, solidPrimitive[solid], equalPrimittivesForEverySolid[solid]))
+                if (HexBoltNutAllen(solid, solidPrimitive[solid], equalPrimitivesForEverySolid[solid]))
                     continue;
-                if (PhilipsHeadBolt(solid, solidPrimitive[solid], equalPrimittivesForEverySolid[solid]))
+                if (PhillipsHeadBolt(solid, solidPrimitive[solid], equalPrimitivesForEverySolid[solid]))
                     continue;
-                if (SlotHeadBolt(solid, solidPrimitive[solid], equalPrimittivesForEverySolid[solid]))
+                if (SlotHeadBolt(solid, solidPrimitive[solid], equalPrimitivesForEverySolid[solid]))
+                    continue;
+                if (PhillipsSlotComboHeadBolt(solid, solidPrimitive[solid], equalPrimitivesForEverySolid[solid]))
                     continue;
             }
-            
-
-
             return fastener;
         }
 
+
         private static bool HexBoltNutAllen(TessellatedSolid solid, List<PrimitiveSurface> solidPrim,
-            Dictionary<PrimitiveSurface, List<PrimitiveSurface>> equalPrimittives)
+            Dictionary<PrimitiveSurface, List<PrimitiveSurface>> equalPrimitives)
         {
-            var sixFlat = EqualPrimitivesFinder(equalPrimittives, 6);
+            var sixFlat = EqualPrimitivesFinder(equalPrimitives, 6);
             if (!sixFlat.Any()) return false;
             foreach (var candidateHex in sixFlat)
             {
-                var candidateHexVal = equalPrimittives[candidateHex];
+                var candidateHexVal = equalPrimitives[candidateHex];
                 var cos = new List<double>();
                 var firstPrimNormal = ((Flat)candidateHexVal[0]).Normal;
                 for (var i = 1; i < candidateHexVal.Count; i++)
@@ -151,14 +151,14 @@ namespace Assembly_Planner
             return false;
         }
 
-        private static bool PhilipsHeadBolt(TessellatedSolid solid, List<PrimitiveSurface> solidPrim,
-            Dictionary<PrimitiveSurface, List<PrimitiveSurface>> equalPrimittives)
+        private static bool PhillipsHeadBolt(TessellatedSolid solid, List<PrimitiveSurface> solidPrim,
+            Dictionary<PrimitiveSurface, List<PrimitiveSurface>> equalPrimitives)
         {
-            var eightFlat = EqualPrimitivesFinder(equalPrimittives, 8);
+            var eightFlat = EqualPrimitivesFinder(equalPrimitives, 8);
             if (!eightFlat.Any()) return false;
             foreach (var candidateHex in eightFlat)
             {
-                var candidateHexVal = equalPrimittives[candidateHex];
+                var candidateHexVal = equalPrimitives[candidateHex];
                 var cos = new List<double>();
                 var firstPrimNormal = ((Flat) candidateHexVal[0]).Normal;
                 for (var i = 1; i < candidateHexVal.Count; i++)
@@ -171,7 +171,7 @@ namespace Assembly_Planner
                 {
                     Solid = solid,
                     FastenerType = FastenerTypeEnum.Bolt,
-                    Tool = Tool.PhilipsBlade
+                    Tool = Tool.PhillipsBlade
                 };
                 Fasteners.Add(fastener);
                 return true;
@@ -181,13 +181,13 @@ namespace Assembly_Planner
 
 
         private static bool SlotHeadBolt(TessellatedSolid solid, List<PrimitiveSurface> solidPrim,
-            Dictionary<PrimitiveSurface, List<PrimitiveSurface>> equalPrimittives)
+            Dictionary<PrimitiveSurface, List<PrimitiveSurface>> equalPrimitives)
         {
-            var twoFlat = EqualPrimitivesFinder(equalPrimittives, 2);
+            var twoFlat = EqualPrimitivesFinder(equalPrimitives, 2);
             if (!twoFlat.Any()) return false;
             foreach (var candidateHex in twoFlat)
             {
-                var candidateHexVal = equalPrimittives[candidateHex];
+                var candidateHexVal = equalPrimitives[candidateHex];
                 var cos = ((Flat) candidateHexVal[0]).Normal.dotProduct(((Flat) candidateHexVal[1]).Normal);
                 if (!(Math.Abs(-1 - cos) < 0.0001)) continue;
                 // I will add couple of conditions here:
@@ -196,7 +196,7 @@ namespace Assembly_Planner
                 //    3. and I also need to add some constraints for the for eample the area of the cylinder
                 var leftVerts = VertsInfrontOfFlat(solid, (Flat)candidateHexVal[0]);
                 var rightVerts = VertsInfrontOfFlat(solid, (Flat)candidateHexVal[1]);
-                if (Math.Abs(leftVerts - rightVerts) > 2) return false;
+                if (Math.Abs(leftVerts - rightVerts) > 2 || leftVerts + rightVerts <= solid.Vertices.Length) return false;
                 if (!solidPrim.Where(p => p is Cylinder).Cast<Cylinder>().Any(c => c.IsPositive)) return false;
                 var fastener = new Fastener
                 {
@@ -209,6 +209,30 @@ namespace Assembly_Planner
             }
             return false;
         }
+
+        private static bool PhillipsSlotComboHeadBolt(TessellatedSolid solid, List<PrimitiveSurface> solidPrim,
+            Dictionary<PrimitiveSurface, List<PrimitiveSurface>> equalPrimitives)
+        {
+            var fourFlat = EqualPrimitivesFinder(equalPrimitives, 4);
+            if (fourFlat.Count < 2) return false;
+            var eachSlot = 0;
+            foreach (var candidateHex in fourFlat)
+            {
+                var candidateHexVal = equalPrimitives[candidateHex];
+                var cos = new List<double>();
+                var firstPrimNormal = ((Flat) candidateHexVal[0]).Normal;
+                for (var i = 1; i < candidateHexVal.Count; i++)
+                    cos.Add(firstPrimNormal.dotProduct(((Flat) candidateHexVal[i]).Normal));
+                // if it is a slot and phillips combo the cos list must have two -1 and one 1
+                // and this needs to appear 2 times.
+                if (cos.Count(c => Math.Abs(-1 - c) < 0.0001) != 2 ||
+                    cos.Count(c => Math.Abs(1 - c) < 0.0001) != 1) continue;
+                if (!solidPrim.Where(p => p is Cylinder).Cast<Cylinder>().Any(c => c.IsPositive)) return false;
+                eachSlot++;
+            }
+            return eachSlot == 2;
+        }
+
 
         private static Dictionary<TessellatedSolid, Dictionary<PrimitiveSurface, List<PrimitiveSurface>>>
             EqualPrimitiveAreaFinder(List<TessellatedSolid> firstFilter,

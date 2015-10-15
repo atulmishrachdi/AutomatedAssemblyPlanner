@@ -32,7 +32,7 @@ namespace Assembly_Planner
             
             // From repeated parts take only one of them, and do the primitive classification on that:
             //------------------------------------------------------------------------------------------
-            //var multipleRefs = DuplicatePartsDetector(solids);
+            var multipleRefs = DuplicatePartsDetector(solids);
             var solidPrimitive = BlockingDetermination.PrimitiveMaker(solids);//multipleRefs.Keys.ToList());
             //foreach (var mRef in multipleRefs.Keys)
             //    foreach (var duplicated in multipleRefs[mRef])
@@ -46,7 +46,7 @@ namespace Assembly_Planner
             //------------------------------------------------------------------------------------------
             var screwsAndBolts = new HashSet<TessellatedSolid>();
             if (classifyFastener)
-                screwsAndBolts = BoltAndGearDetection.ScrewAndBoltDetector(solidPrimitive);
+                screwsAndBolts = BoltAndGearDetection.ScrewAndBoltDetector(solidPrimitive, multipleRefs,true);
             //var gears = BoltAndGearDetection.GearDetector(solidPrimitive);
 
             
@@ -104,6 +104,10 @@ namespace Assembly_Planner
         private static Dictionary<TessellatedSolid, List<TessellatedSolid>> DuplicatePartsDetector(List<TessellatedSolid> solids)
         {
             // If the number of vertcies and number of faces are exactly the same and also the volumes are equal.
+            // Not only we need to detect the repeated parts, but also we need to store their transformation matrix
+            // We need the transformatiuon matrix to transform information we get from primitive classification.
+            // Is it really worth it? yes. Because we will most likely detect fasteners after this step, so we will
+            // have a lot of similar parts.
             var multipleRefs = new Dictionary<TessellatedSolid, List<TessellatedSolid>>();
             foreach (var solid in solids)
             {

@@ -87,9 +87,9 @@ namespace Assembly_Planner.GraphSynth.BaseClasses
         /// </summary>
         FlatBlade ,
         /// <summary>
-        /// The philips blade screw driver, 4 sided
+        /// The phillips blade screw driver, 4 sided
         /// </summary>
-        PhilipsBlade
+        PhillipsBlade
     }
     /// <summary>
     /// Class Fastener.
@@ -139,7 +139,7 @@ namespace Assembly_Planner.GraphSynth.BaseClasses
         /// <summary>
         /// The size of the tool if identified
         /// </summary>
-        public string ToolSize;
+        public double ToolSize;
         /// <summary>
         /// The nut if available
         /// </summary>
@@ -294,7 +294,7 @@ namespace Assembly_Planner.GraphSynth.BaseClasses
         /// <summary>
         /// The size of the tool if identified
         /// </summary>
-        public string ToolSize;
+        public double ToolSize;
 
     }
 

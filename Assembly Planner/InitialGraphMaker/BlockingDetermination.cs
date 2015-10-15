@@ -26,14 +26,14 @@ namespace Assembly_Planner
             Console.WriteLine();
             Console.WriteLine("Classifying Primitives for " + parts.Count + " unique parts ....");
             var partPrimitive = new Dictionary<TessellatedSolid, List<PrimitiveSurface>>();
-            Parallel.ForEach(parts, solid =>
-            //foreach (var solid in parts)
+            //Parallel.ForEach(parts, solid =>
+            foreach (var solid in parts)
             {
                 var solidPrim = TesselationToPrimitives.Run(solid);
                 lock (partPrimitive)
                     partPrimitive.Add(solid, solidPrim);
             }
-             );//
+             //);
 
             s.Stop();
             Console.WriteLine("Primitive classification is done in:" + "     " + s.Elapsed);
