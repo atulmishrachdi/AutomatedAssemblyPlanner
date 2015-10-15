@@ -79,104 +79,116 @@ namespace Assembly_Planner
             var fastener = new HashSet<TessellatedSolid>();
             var firstFilter = multipleRefs.Keys.ToList();//SmallObjectsDetector(multipleRefs);
             var equalPrimittivesForEverySolid = EqualPrimitiveAreaFinder(firstFilter, solidPrimitive);
-            HexAndAllenBoltDetector(firstFilter, solidPrimitive, equalPrimittivesForEverySolid);
+            foreach (var solid in firstFilter)
+            {
+                if (HexBoltNutAllen(solid, solidPrimitive[solid], equalPrimittivesForEverySolid[solid]))
+                    continue;
+                if (PhilipsHeadBolt(solid, solidPrimitive[solid], equalPrimittivesForEverySolid[solid]))
+                    continue;
+                if (SlotHeadBolt(solid, solidPrimitive[solid], equalPrimittivesForEverySolid[solid]))
+                    continue;
+            }
+            
+
 
             return fastener;
         }
 
-        private static void HexAndAllenBoltDetector(List<TessellatedSolid> firstFilter,
-            Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrim,
-            Dictionary<TessellatedSolid, Dictionary<PrimitiveSurface, List<PrimitiveSurface>>>
-                equalPrimittivesForEverySolid)
+        private static bool HexBoltNutAllen(TessellatedSolid solid, List<PrimitiveSurface> solidPrim,
+            Dictionary<PrimitiveSurface, List<PrimitiveSurface>> equalPrimittives)
         {
-            var hexAndNut = new HashSet<TessellatedSolid>();
-            foreach (var solid in firstFilter)
+            var sixFlat =
+                equalPrimittives.Keys.Where(
+                    k => equalPrimittives[k].Count == 6).ToList();
+            if (!sixFlat.Any()) return false;
+            foreach (var candidateHex in sixFlat)
             {
-                var sixFlat =
-                    equalPrimittivesForEverySolid[solid].Keys.Where(
-                        k => equalPrimittivesForEverySolid[solid][k].Count == 6).ToList();
-                if (!sixFlat.Any()) continue;
-                foreach (var candidateHex in sixFlat)
+                var candidateHexVal = equalPrimittives[candidateHex];
+                var cos = new List<double>();
+                var firstPrimNormal = ((Flat)candidateHexVal[0]).Normal;
+                for (var i = 1; i < candidateHexVal.Count; i++)
+                    cos.Add(firstPrimNormal.dotProduct(((Flat)candidateHexVal[i]).Normal));
+                // if it is a hex or allen bolt, the cos list must have two 1/2, two -1/2 and one -1
+                if (cos.Count(c => Math.Abs(0.5 - c) < 0.0001) == 2 &&
+                    cos.Count(c => Math.Abs(-0.5 - c) < 0.0001) == 2 &&
+                    cos.Count(c => Math.Abs(-1 - c) < 0.0001) == 1)
                 {
-                    var candidateHexVal = equalPrimittivesForEverySolid[solid][candidateHex];
-                    var cos = new List<double>();
-                    var firstPrimNormal = ((Flat) candidateHexVal[0]).Normal;
-                    for (var i = 1; i < candidateHexVal.Count; i++)
-                        cos.Add(firstPrimNormal.dotProduct(((Flat) candidateHexVal[i]).Normal));
-                    // if it is a hex or allen bolt, the cos list must have two 1/2, two -1/2 and one -1
-                    if (cos.Count(c => Math.Abs(0.5 - c) < 0.0001) == 2 &&
-                        cos.Count(c => Math.Abs(-0.5 - c) < 0.0001) == 2 &&
-                        cos.Count(c => Math.Abs(-1 - c) < 0.0001) == 1)
+                    if (candidateHexVal.Any(p => p.OuterEdges.Any(e => e.Curvature == CurvatureType.Concave)))
                     {
-                        if (candidateHexVal.Any(p => p.OuterEdges.Any(e => e.Curvature == CurvatureType.Concave)))
+                        // this is a socket bolt (allen)
+                        var fastener = new Fastener
                         {
-                            // this is a socket bolt (allen)
-                            var fastener = new Fastener
-                            {
-                                Solid = solid,
-                                FastenerType = FastenerTypeEnum.Bolt,
-                                Tool = Tool.Allen
-                            };
-                            Fasteners.Add(fastener);
-                        }
-                        else
-                            hexAndNut.Add(solid);
+                            Solid = solid,
+                            FastenerType = FastenerTypeEnum.Bolt,
+                            Tool = Tool.Allen
+                        };
+                        Fasteners.Add(fastener);
+                        return true;
                     }
-                }
-            }
-            // hexAndNut by this point can also include hex nuts. 
-            // nuts dont have positive cylinder, or even if they do, the area in really small
-            foreach (var boltOrNut in hexAndNut)
-            {
-                if (IsItNut(solidPrim[boltOrNut].Where(p => p is Cylinder).Cast<Cylinder>().ToList(), boltOrNut))
-                {
-                    var nut = new Nut {NutType = NutType.Hex, Solid = boltOrNut};
-                    Nuts.Add(nut);
-                    continue;
-                }
-                Fasteners.Add(new Fastener
-                {
-                    Solid = boltOrNut,
-                    FastenerType = FastenerTypeEnum.Bolt,
-                    Tool = Tool.HexWrench
-                });
-            }
-
-            var philipsHead = new HashSet<TessellatedSolid>();
-            foreach (var solid in firstFilter)
-            {
-                var eightFlat =
-                    equalPrimittivesForEverySolid[solid].Keys.Where(
-                        k => equalPrimittivesForEverySolid[solid][k].Count == 8).ToList();
-                if (!eightFlat.Any()) continue;
-                foreach (var candidateHex in eightFlat)
-                {
-                    var candidateHexVal = equalPrimittivesForEverySolid[solid][candidateHex];
-                    var cos = new List<double>();
-                    var firstPrimNormal = ((Flat)candidateHexVal[0]).Normal;
-                    for (var i = 1; i < candidateHexVal.Count; i++)
-                        cos.Add(firstPrimNormal.dotProduct(((Flat)candidateHexVal[i]).Normal));
-                    // if it is philips head, the cos list must have four 0, two -1 and one 1
-                    if (cos.Count(c => Math.Abs(0.0 - c) < 0.0001) == 4 &&
-                        cos.Count(c => Math.Abs(-1 - c) < 0.0001) == 2 &&
-                        cos.Count(c => Math.Abs(1 - c) < 0.0001) == 1)
+                    // else: it is a hex bolt or nut
+                    if (IsItNut(solidPrim.Where(p => p is Cylinder).Cast<Cylinder>().ToList(), solid))
                     {
-                        philipsHead.Add(solid);
+                        var nut = new Nut { NutType = NutType.Hex, Solid = solid };
+                        Nuts.Add(nut);
+                        return true;
                     }
+                    Fasteners.Add(new Fastener
+                    {
+                        Solid = solid,
+                        FastenerType = FastenerTypeEnum.Bolt,
+                        Tool = Tool.HexWrench
+                    });
+                    return true;
                 }
             }
-
-
+            return false;
         }
 
         private static bool IsItNut(List<Cylinder> cylinders, TessellatedSolid boltOrNut)
         {
             if (cylinders.Any(p => !p.IsPositive))
                 if (cylinders.Where(c => c.IsPositive).Sum(pC => pC.Area) <
-                    0.05*boltOrNut.SurfaceArea)
+                    0.05 * boltOrNut.SurfaceArea)
                     // this is a nut. Because it has negative cylinders and positive cylinders that it has
                     // are minor
                     return true;
+            return false;
+        }
+
+        private static bool PhilipsHeadBolt(TessellatedSolid solid, List<PrimitiveSurface> solidPrim,
+            Dictionary<PrimitiveSurface, List<PrimitiveSurface>> equalPrimittives)
+        {
+            var eightFlat =
+                equalPrimittives.Keys.Where(
+                    k => equalPrimittives[k].Count == 8).ToList();
+            if (!eightFlat.Any()) return false;
+            foreach (var candidateHex in eightFlat)
+            {
+                var candidateHexVal = equalPrimittives[candidateHex];
+                var cos = new List<double>();
+                var firstPrimNormal = ((Flat) candidateHexVal[0]).Normal;
+                for (var i = 1; i < candidateHexVal.Count; i++)
+                    cos.Add(firstPrimNormal.dotProduct(((Flat) candidateHexVal[i]).Normal));
+                // if it is philips head, the cos list must have four 0, two -1 and one 1
+                if (cos.Count(c => Math.Abs(0.0 - c) < 0.0001) == 4 &&
+                    cos.Count(c => Math.Abs(-1 - c) < 0.0001) == 2 &&
+                    cos.Count(c => Math.Abs(1 - c) < 0.0001) == 1)
+                {
+                    var fastener = new Fastener
+                    {
+                        Solid = solid,
+                        FastenerType = FastenerTypeEnum.Bolt,
+                        Tool = Tool.PhilipsBlade
+                    };
+                    Fasteners.Add(fastener);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private static bool SlotHeadBolt(TessellatedSolid solid, List<PrimitiveSurface> list, Dictionary<PrimitiveSurface, List<PrimitiveSurface>> dictionary)
+        {
             return false;
         }
 
