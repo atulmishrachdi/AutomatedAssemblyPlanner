@@ -140,7 +140,6 @@
     <Compile Include="InitialGraphMaker\DisassemblyDirections.cs" />
     <Compile Include="InitialGraphMaker\BoltAndGearDetector\GearEdge.cs" />
     <Compile Include="InitialGraphMaker\DisassemblyDirectionsWithFastener.cs" />
-    <Compile Include="InitialGraphMaker\Fastener.cs" />
     <Compile Include="InitialGraphMaker\Icosahedron.cs" />
     <Compile Include="InitialGraphMaker\IcosahedronPro.cs" />
     <Compile Include="InitialGraphMaker\NonadjacentBlockingWithPartitioning.cs" />

@@ -22,7 +22,7 @@ namespace Assembly_Planner
             var inputDir =
                 //"../../../Test/Cube";
                 //"../../../Test/PumpWExtention";
-                "../../../Test/FastenerTest";
+                "../../../Test/FastenerTest/new";
                 //"../../../Test/Double";
                 //"../../../Test/Simple-Test";
                 //"../../../Test/Mc Cormik/STL2";
