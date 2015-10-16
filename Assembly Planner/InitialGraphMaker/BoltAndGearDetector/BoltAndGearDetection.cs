@@ -117,7 +117,8 @@ namespace Assembly_Planner
                     {
                         Solid = solid,
                         FastenerType = FastenerTypeEnum.Bolt,
-                        Tool = Tool.Allen
+                        Tool = Tool.Allen,
+                        ToolSize = ToolSizeFinder(candidateHexVal)
                     };
                     Fasteners.Add(fastener);
                     return true;
@@ -125,15 +126,20 @@ namespace Assembly_Planner
                 // else: it is a hex bolt or nut
                 if (IsItNut(solidPrim.Where(p => p is Cylinder).Cast<Cylinder>().ToList(), solid))
                 {
-                    var nut = new Nut { NutType = NutType.Hex, Solid = solid };
-                    Nuts.Add(nut);
+                    Nuts.Add(new Nut
+                    {
+                        NutType = NutType.Hex, 
+                        Solid = solid, 
+                        ToolSize = ToolSizeFinder(candidateHexVal)
+                    });
                     return true;
                 }
                 Fasteners.Add(new Fastener
                 {
                     Solid = solid,
                     FastenerType = FastenerTypeEnum.Bolt,
-                    Tool = Tool.HexWrench
+                    Tool = Tool.HexWrench,
+                    ToolSize = ToolSizeFinder(candidateHexVal)
                 });
                 return true;
             }
@@ -273,6 +279,19 @@ namespace Assembly_Planner
             return
                 solid.Vertices.Count(
                     v => flat.Normal.dotProduct(v.Position.subtract(flat.Faces[0].Vertices[0].Position)) > 0);
+        }
+
+        private static double ToolSizeFinder(List<PrimitiveSurface> candidateHexVal)
+        {
+            var firstPrimNormal = ((Flat)candidateHexVal[0]).Normal;
+            for (var i = 1; i < candidateHexVal.Count; i++)
+            {
+                if(Math.Abs(firstPrimNormal.dotProduct(((Flat)candidateHexVal[i]).Normal) + 1) > 0.0001) continue;
+                return
+                    Math.Abs(Math.Abs(candidateHexVal[0].Vertices[0].Position.dotProduct(firstPrimNormal)) -
+                             Math.Abs(candidateHexVal[i].Vertices[0].Position.dotProduct(firstPrimNormal)));
+            }
+            return 0.0;
         }
 
         private static List<TessellatedSolid> SmallObjectsDetector(Dictionary<TessellatedSolid, List<TessellatedSolid>> solidRepeated)
