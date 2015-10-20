@@ -21,8 +21,8 @@ namespace Assembly_Planner
             var graphExists = false;
             var inputDir =
                 //"../../../Test/Cube";
-                //"../../../Test/PumpWExtention";
-                "../../../Test/FastenerTest/new";
+                "../../../Test/PumpWExtention";
+                //"../../../Test/FastenerTest/new";
                 //"../../../Test/Double";
                 //"../../../Test/Simple-Test";
                 //"../../../Test/Mc Cormik/STL2";

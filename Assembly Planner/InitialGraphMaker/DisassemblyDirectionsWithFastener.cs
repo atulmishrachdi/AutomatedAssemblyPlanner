@@ -20,7 +20,7 @@ namespace Assembly_Planner
         internal static List<TessellatedSolid> Solids;
         internal static Dictionary<int, List<Component[]>> NonAdjacentBlocking = new Dictionary<int, List<Component[]>>(); //Component[0] is blocked by Component[1]
 
-        internal static List<int> Run(designGraph assemblyGraph, List<TessellatedSolid> solids, bool classifyFastener = false)
+        internal static List<int> Run(designGraph assemblyGraph, List<TessellatedSolid> solids, bool classifyFastener = false, bool threaded = false)
         {
             Solids = new List<TessellatedSolid>(solids);
 
@@ -46,7 +46,7 @@ namespace Assembly_Planner
             //------------------------------------------------------------------------------------------
             var screwsAndBolts = new HashSet<TessellatedSolid>();
             if (classifyFastener)
-                screwsAndBolts = BoltAndGearDetection.ScrewAndBoltDetector(solidPrimitive, multipleRefs,true);
+                screwsAndBolts = BoltAndGearDetection.ScrewAndBoltDetector(solidPrimitive, multipleRefs,true, threaded);
             //var gears = BoltAndGearDetection.GearDetector(solidPrimitive);
 
             

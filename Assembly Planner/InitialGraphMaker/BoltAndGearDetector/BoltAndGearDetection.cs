@@ -18,10 +18,11 @@ namespace Assembly_Planner
     class BoltAndGearDetection
     {
         internal static List<Fastener>  Fasteners= new List<Fastener>();
-        internal static List<Nut> Nuts = new List<Nut>(); 
+        internal static List<Nut> Nuts = new List<Nut>();
+
         internal static HashSet<TessellatedSolid> ScrewAndBoltDetector(
             Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive,
-            Dictionary<TessellatedSolid, List<TessellatedSolid>> multipleRefs, bool autoDetection = false)
+            Dictionary<TessellatedSolid, List<TessellatedSolid>> multipleRefs, bool autoDetection, bool threaded)
         {
             var s = Stopwatch.StartNew();
             s.Start();
@@ -44,7 +45,12 @@ namespace Assembly_Planner
             }
             else
             {
-                fastener = AutoFastenerDetection(solidPrimitive, multipleRefs);
+                if (!threaded)
+                    fastener = AutoFastenerDetectionNoThread(solidPrimitive, multipleRefs);
+                else
+                {
+                    fastener = AutoFastenerDetectionThreaded(solidPrimitive, multipleRefs);
+                }
             }
 
             //var smallObjects = SmallObjectsDetector(solidPrimitive);
@@ -72,10 +78,14 @@ namespace Assembly_Planner
             return fastener;
         }
 
-        private static HashSet<TessellatedSolid> AutoFastenerDetection(
+
+        private static HashSet<TessellatedSolid> AutoFastenerDetectionNoThread(
             Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive,
             Dictionary<TessellatedSolid, List<TessellatedSolid>> multipleRefs)
         {
+            // This approach will use the symmetric shape of the fasteners' heads. If there is no thread,
+            // we willl consider the area of the positive culinders for bolts and negative cylinder for 
+            // nuts. 
             var fastener = new HashSet<TessellatedSolid>();
             var firstFilter = multipleRefs.Keys.ToList();//SmallObjectsDetector(multipleRefs);
             var equalPrimitivesForEverySolid = EqualPrimitiveAreaFinder(firstFilter, solidPrimitive);
@@ -93,6 +103,31 @@ namespace Assembly_Planner
             return fastener;
         }
 
+        private static HashSet<TessellatedSolid> AutoFastenerDetectionThreaded(
+            Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive,
+            Dictionary<TessellatedSolid, List<TessellatedSolid>> multipleRefs)
+        {
+            // This is mostly similar to the auto fastener detection with no thread, but instead of learning
+            // from the area of the cylinder and for example flat, we will learn from the number of faces.
+            // why? because if we have thread, we will have too many triangles. And this can be useful.
+            // I can also detect helix and use this to detect the threaded fasteners
+
+            var fastener = new HashSet<TessellatedSolid>();
+            var firstFilter = multipleRefs.Keys.ToList(); //SmallObjectsDetector(multipleRefs);
+            var equalPrimitivesForEverySolid = EqualPrimitiveAreaFinder(firstFilter, solidPrimitive);
+            foreach (var solid in firstFilter.Where(s=> SolidHasHelix(s)))
+            {
+                if (HexBoltNutAllen(solid, solidPrimitive[solid], equalPrimitivesForEverySolid[solid]))
+                    continue;
+                if (PhillipsHeadBolt(solid, solidPrimitive[solid], equalPrimitivesForEverySolid[solid]))
+                    continue;
+                if (SlotHeadBolt(solid, solidPrimitive[solid], equalPrimitivesForEverySolid[solid]))
+                    continue;
+                if (PhillipsSlotComboHeadBolt(solid, solidPrimitive[solid], equalPrimitivesForEverySolid[solid]))
+                    continue;
+            }
+            return fastener;
+        }
 
         private static bool HexBoltNutAllen(TessellatedSolid solid, List<PrimitiveSurface> solidPrim,
             Dictionary<PrimitiveSurface, List<PrimitiveSurface>> equalPrimitives)
@@ -237,6 +272,58 @@ namespace Assembly_Planner
                 eachSlot++;
             }
             return eachSlot == 2;
+        }
+
+
+        private static bool SolidHasHelix(TessellatedSolid s)
+        {
+            // Idea: find an edge which has an internal angle equal to one of the following cases.
+            // This only works if at least one of outer or inner threads have a sharo edge.
+            // take the connected edges (from both sides) which have the same feature.
+            // If it rotates couple of times, it is a helix.
+            // It seems to be expensive. Let's see how it goes.
+            // Standard thread angles:
+            //       60     55     29     45     30    80 
+            foreach (var edge in s.Edges.Where(e=> Math.Abs(e.InternalAngle - 2.0943951) < 0.000001 ))  // 2.0943951 is equal to 120 degree
+            {
+                // To every side of the edge if there is one edge with the IA of 120, this edge is unique and we dcannot find the second one. 
+                var visited = new HashSet<Edge> { edge };
+                var stack = new Stack<Edge>();
+                Edge[] helixEdges = FindHelixEdgesConnectedToAnEdge(s.Edges, edge, visited);
+                if (!e1.Any() && !e2.Any()) continue;
+                if (e1.Any()) stack.Push(e1[0]);
+                if (e2.Any()) stack.Push(e2[0]);
+                while (stack.Any())
+                {
+                    var e = stack.Pop();
+                    visited.Add(e);
+                    var cand =
+                        s.Edges.Where(
+                            ed =>
+                                (edge.From == ed.From || edge.From == ed.To) &&
+                                Math.Abs(e.InternalAngle - 2.0943951) < 0.000001).ToList();
+                }
+            }
+   
+        }
+
+        private static Edge[] FindHelixEdgesConnectedToAnEdge(Edge[] edges, Edge edge, HashSet<Edge> visited)
+        {
+
+            var e1 =
+                edges.Where(
+                    e =>
+                        (edge.From == e.From || edge.From == e.To) &&
+                        Math.Abs(e.InternalAngle - 2.0943951) < 0.000001 && !visited.Contains(e)).ToList();
+            var e2 =
+                edges.Where(
+                    e =>
+                        (edge.To == e.From || edge.To == e.To) &&
+                        Math.Abs(e.InternalAngle - 2.0943951) < 0.000001 && !visited.Contains(e)).ToList();
+                            if (!e1.Any() && !e2.Any()) continue;
+            if (e1.Any()) stack.Push(e1[0]);
+            if (e2.Any()) stack.Push(e2[0]);
+            return new []{}    
         }
 
 
