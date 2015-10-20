@@ -289,27 +289,30 @@ namespace Assembly_Planner
                 // To every side of the edge if there is one edge with the IA of 120, this edge is unique and we dcannot find the second one. 
                 var visited = new HashSet<Edge> { edge };
                 var stack = new Stack<Edge>();
-                Edge[] helixEdges = FindHelixEdgesConnectedToAnEdge(s.Edges, edge, visited);
-                if (!e1.Any() && !e2.Any()) continue;
-                if (e1.Any()) stack.Push(e1[0]);
-                if (e2.Any()) stack.Push(e2[0]);
+                var possibleHelixEdges = FindHelixEdgesConnectedToAnEdge(s.Edges, edge, visited); // It can have 0, 1 or 2 edges
+                if (possibleHelixEdges == null) continue;
+                foreach (var e in possibleHelixEdges)
+                    stack.Push(e);
+
                 while (stack.Any())
                 {
                     var e = stack.Pop();
                     visited.Add(e);
-                    var cand =
-                        s.Edges.Where(
-                            ed =>
-                                (edge.From == ed.From || edge.From == ed.To) &&
-                                Math.Abs(e.InternalAngle - 2.0943951) < 0.000001).ToList();
+                    var cand = FindHelixEdgesConnectedToAnEdge(s.Edges, e, visited); // if yes, it will only have one edge.
+                    if (cand == null) continue;
+                    stack.Push(cand[0]);
                 }
+                // if the visited.Length is larger than a number, this is a helix
+                if (visited.Count > 1000) // Is it very big?
+                    return true;
             }
-   
+            return false;
         }
 
         private static Edge[] FindHelixEdgesConnectedToAnEdge(Edge[] edges, Edge edge, HashSet<Edge> visited)
         {
 
+            var m = new List<Edge>();
             var e1 =
                 edges.Where(
                     e =>
@@ -320,10 +323,10 @@ namespace Assembly_Planner
                     e =>
                         (edge.To == e.From || edge.To == e.To) &&
                         Math.Abs(e.InternalAngle - 2.0943951) < 0.000001 && !visited.Contains(e)).ToList();
-                            if (!e1.Any() && !e2.Any()) continue;
-            if (e1.Any()) stack.Push(e1[0]);
-            if (e2.Any()) stack.Push(e2[0]);
-            return new []{}    
+            if (!e1.Any() && !e2.Any()) return null;
+            if (e1.Any()) m.Add(e1[0]);
+            if (e2.Any()) m.Add(e2[0]);
+            return m.ToArray();
         }
 
 
