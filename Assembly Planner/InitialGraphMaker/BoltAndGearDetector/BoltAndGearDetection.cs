@@ -284,7 +284,7 @@ namespace Assembly_Planner
             // It seems to be expensive. Let's see how it goes.
             // Standard thread angles:
             //       60     55     29     45     30    80 
-            foreach (var edge in s.Edges.Where(e=> Math.Abs(e.InternalAngle - 2.0943951) < 0.000001 ))  // 2.0943951 is equal to 120 degree
+            foreach (var edge in s.Edges.Where(e => Math.Abs(e.InternalAngle - 2.08566845) < 0.04))  // 2.0943951 is equal to 120 degree
             {
                 // To every side of the edge if there is one edge with the IA of 120, this edge is unique and we dcannot find the second one. 
                 var visited = new HashSet<Edge> { edge };
@@ -317,12 +317,12 @@ namespace Assembly_Planner
                 edges.Where(
                     e =>
                         (edge.From == e.From || edge.From == e.To) &&
-                        Math.Abs(e.InternalAngle - 2.0943951) < 0.000001 && !visited.Contains(e)).ToList();
+                        Math.Abs(e.InternalAngle - 2.08566845) < 0.04 && !visited.Contains(e)).ToList();
             var e2 =
                 edges.Where(
                     e =>
                         (edge.To == e.From || edge.To == e.To) &&
-                        Math.Abs(e.InternalAngle - 2.0943951) < 0.000001 && !visited.Contains(e)).ToList();
+                        Math.Abs(e.InternalAngle - 2.08566845) < 0.04 && !visited.Contains(e)).ToList();
             if (!e1.Any() && !e2.Any()) return null;
             if (e1.Any()) m.Add(e1[0]);
             if (e2.Any()) m.Add(e2[0]);
