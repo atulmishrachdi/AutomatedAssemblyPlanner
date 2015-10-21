@@ -48,9 +48,7 @@ namespace Assembly_Planner
                 if (!threaded)
                     fastener = AutoFastenerDetectionNoThread(solidPrimitive, multipleRefs);
                 else
-                {
                     fastener = AutoFastenerDetectionThreaded(solidPrimitive, multipleRefs);
-                }
             }
 
             //var smallObjects = SmallObjectsDetector(solidPrimitive);
@@ -88,7 +86,7 @@ namespace Assembly_Planner
             // nuts. 
             var fastener = new HashSet<TessellatedSolid>();
             var firstFilter = multipleRefs.Keys.ToList();//SmallObjectsDetector(multipleRefs);
-            var equalPrimitivesForEverySolid = EqualPrimitiveAreaFinder(firstFilter, solidPrimitive);
+            var equalPrimitivesForEverySolid = EqualFlatPrimitiveAreaFinder(firstFilter, solidPrimitive);
             foreach (var solid in firstFilter)
             {
                 if (HexBoltNutAllen(solid, solidPrimitive[solid], equalPrimitivesForEverySolid[solid]))
@@ -112,11 +110,16 @@ namespace Assembly_Planner
             // why? because if we have thread, we will have too many triangles. And this can be useful.
             // I can also detect helix and use this to detect the threaded fasteners
 
+            // Important: if the fasteners are threaded using solidworks Fastener toolbox, it will not
+            //            have helix. The threads will be small cones with the same axis and equal area.
+
             var fastener = new HashSet<TessellatedSolid>();
             var firstFilter = multipleRefs.Keys.ToList(); //SmallObjectsDetector(multipleRefs);
-            var equalPrimitivesForEverySolid = EqualPrimitiveAreaFinder(firstFilter, solidPrimitive);
-            foreach (var solid in firstFilter.Where(s=> SolidHasHelix(s)))
+            var equalPrimitivesForEverySolid = EqualFlatPrimitiveAreaFinder(firstFilter, solidPrimitive);
+
+            foreach (var solid in firstFilter)
             {
+                var threaded = ThreadDetector(solid, solidPrimitive[solid]);
                 if (HexBoltNutAllen(solid, solidPrimitive[solid], equalPrimitivesForEverySolid[solid]))
                     continue;
                 if (PhillipsHeadBolt(solid, solidPrimitive[solid], equalPrimitivesForEverySolid[solid]))
@@ -275,6 +278,35 @@ namespace Assembly_Planner
         }
 
 
+        private static bool ThreadDetector(TessellatedSolid solid, List<PrimitiveSurface> primitiveSurfaces)
+        {
+            // Consider these two cases:
+            //      1. Threads are helix
+            //      2. Threads are seperate cones
+            if (ThreadsAreSeperateCones(solid, primitiveSurfaces))
+                return true;
+            return SolidHasHelix(solid);
+
+        }
+
+        private static bool ThreadsAreSeperateCones(TessellatedSolid solid, List<PrimitiveSurface> primitiveSurfaces)
+        {
+            var cones = primitiveSurfaces.Where(p => p is Cone).Cast<Cone>().ToList();
+            foreach (var cone in cones.Where(c => c.Faces.Count > 30))
+            {
+                var threads =
+                    cones.Count(
+                        c =>
+                            (Math.Abs(c.Axis.dotProduct(cone.Axis) - 1) < 0.001 ||
+                             Math.Abs(c.Axis.dotProduct(cone.Axis) + 1) < 0.001) &&
+                            (Math.Abs(c.Faces.Count - cone.Faces.Count) < 3) && 
+                            (Math.Abs(c.Area - cone.Area) < 0.001) &&
+                            (Math.Abs(c.Aperture - cone.Aperture) < 0.001));
+                if (threads > 10) return true;
+            }
+            return false;
+        }
+
         private static bool SolidHasHelix(TessellatedSolid s)
         {
             // Idea: find an edge which has an internal angle equal to one of the following cases.
@@ -294,7 +326,7 @@ namespace Assembly_Planner
                 foreach (var e in possibleHelixEdges)
                     stack.Push(e);
 
-                while (stack.Any())
+                while (stack.Any() && visited.Count < 1000)
                 {
                     var e = stack.Pop();
                     visited.Add(e);
@@ -302,9 +334,9 @@ namespace Assembly_Planner
                     if (cand == null) continue;
                     stack.Push(cand[0]);
                 }
-                // if the visited.Length is larger than a number, this is a helix
-                if (visited.Count > 1000) // Is it very big?
+                if (visited.Count >= 1000) // Is it very big?
                     return true;
+                // if the visited.Length is larger than a number, this is a helix
             }
             return false;
         }
@@ -331,7 +363,7 @@ namespace Assembly_Planner
 
 
         private static Dictionary<TessellatedSolid, Dictionary<PrimitiveSurface, List<PrimitiveSurface>>>
-            EqualPrimitiveAreaFinder(List<TessellatedSolid> firstFilter,
+            EqualFlatPrimitiveAreaFinder(List<TessellatedSolid> firstFilter,
                 Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive)
         {
             var equalPrim = new Dictionary<TessellatedSolid, Dictionary<PrimitiveSurface, List<PrimitiveSurface>>>();
