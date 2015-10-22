@@ -113,13 +113,19 @@ namespace Assembly_Planner
             // Important: if the fasteners are threaded using solidworks Fastener toolbox, it will not
             //            have helix. The threads will be small cones with the same axis and equal area.
 
-            var fastener = new HashSet<TessellatedSolid>();
             var firstFilter = multipleRefs.Keys.ToList(); //SmallObjectsDetector(multipleRefs);
             var equalPrimitivesForEverySolid = EqualFlatPrimitiveAreaFinder(firstFilter, solidPrimitive);
-
+            var groupedPotentialFasteners = GroupingSmallParts(firstFilter);
             foreach (var solid in firstFilter)
             {
                 var threaded = ThreadDetector(solid, solidPrimitive[solid]);
+                if (threaded)
+                {
+                    var fastener = new Fastener { Solid = solid };
+                    Fasteners.Add(fastener);
+                }
+                // We may still have some threaded fasteners that could not be recognized the in 
+                // "ThreadDetector" function.
                 if (HexBoltNutAllen(solid, solidPrimitive[solid], equalPrimitivesForEverySolid[solid]))
                     continue;
                 if (PhillipsHeadBolt(solid, solidPrimitive[solid], equalPrimitivesForEverySolid[solid]))
@@ -129,7 +135,27 @@ namespace Assembly_Planner
                 if (PhillipsSlotComboHeadBolt(solid, solidPrimitive[solid], equalPrimitivesForEverySolid[solid]))
                     continue;
             }
-            return fastener;
+            return null;
+        }
+
+        private static List<List<TessellatedSolid>> GroupingSmallParts(List<TessellatedSolid> firstFilter)
+        {
+            var groups = new List<List<TessellatedSolid>>();
+            for (var i = 0; i < firstFilter.Count - 1; i++)
+            {
+                for (var j = i + 1; j < firstFilter.Count; j++)
+                {
+                    if (!BlockingDetermination.BoundingBoxOverlap(firstFilter[i], firstFilter[j])) continue;
+                    if (!BlockingDetermination.ConvexHullOverlap(firstFilter[i], firstFilter[j])) continue;
+                    var exist = groups.Where(group => @group.Contains(firstFilter[i]) ||
+                                                      @group.Contains(firstFilter[j])).ToList();
+                    if (exist.Any())
+                        exist[0].Add(exist[0].Contains(firstFilter[i]) ? firstFilter[j] : firstFilter[i]);
+                    else
+                        groups.Add(new List<TessellatedSolid> { firstFilter[i], firstFilter[j] });
+                }
+            }
+            return groups;
         }
 
         private static bool HexBoltNutAllen(TessellatedSolid solid, List<PrimitiveSurface> solidPrim,
@@ -148,7 +174,7 @@ namespace Assembly_Planner
                 if (cos.Count(c => Math.Abs(0.5 - c) < 0.0001) != 2 || 
                     cos.Count(c => Math.Abs(-0.5 - c) < 0.0001) != 2 ||
                     cos.Count(c => Math.Abs(-1 - c) < 0.0001) != 1) continue;
-                if (candidateHexVal.Any(p => p.OuterEdges.Any(e => e.Curvature == CurvatureType.Concave)))
+                if (IsItAllen(candidateHexVal))
                 {
                     // this is a socket bolt (allen)
                     var fastener = new Fastener
@@ -182,6 +208,11 @@ namespace Assembly_Planner
                 return true;
             }
             return false;
+        }
+
+        private static bool IsItAllen(List<PrimitiveSurface> candidateHexVal)
+        {
+            return candidateHexVal.Any(p => p.OuterEdges.Any(e => e.Curvature == CurvatureType.Concave));
         }
 
         private static bool IsItNut(List<Cylinder> cylinders, TessellatedSolid boltOrNut)
