@@ -21,8 +21,8 @@ namespace Assembly_Planner
             var graphExists = false;
             var inputDir =
                 //"../../../Test/Cube";
-                "../../../Test/PumpWExtention";
-                //"../../../Test/FastenerTest/new";
+                //"../../../Test/PumpWExtention";
+                "../../../Test/FastenerTest/new/test";
                 //"../../../Test/Double";
                 //"../../../Test/Simple-Test";
                 //"../../../Test/Mc Cormik/STL2";
@@ -47,7 +47,7 @@ namespace Assembly_Planner
             {
                 assemblyGraph = new designGraph();
                 //var globalDirPool = DisassemblyDirections.Run(assemblyGraph, solids);
-                globalDirPool = DisassemblyDirectionsWithFastener.Run(assemblyGraph, solids, true);
+                globalDirPool = DisassemblyDirectionsWithFastener.Run(assemblyGraph, solids, true,true);
                 //Updates.AddPartsProperties(inputDir, assemblyGraph);
                 //NonadjacentBlockingDeterminationPro.Run(assemblyGraph, solids, globalDirPool);
                 NonadjacentBlockingWithPartitioning.Run(assemblyGraph, solids, globalDirPool);

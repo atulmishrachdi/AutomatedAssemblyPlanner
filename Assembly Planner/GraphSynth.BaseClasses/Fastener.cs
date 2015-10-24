@@ -133,6 +133,10 @@ namespace Assembly_Planner.GraphSynth.BaseClasses
         /// </summary>
         public FastenerTypeEnum FastenerType;
         /// <summary>
+        /// The certainity of this classification
+        /// </summary>
+        public double Certainty;
+        /// <summary>
         /// The tool if identified
         /// </summary>
         public Tool Tool;

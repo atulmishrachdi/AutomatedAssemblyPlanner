@@ -76,6 +76,36 @@ namespace Assembly_Planner
             return fastener;
         }
 
+        private static int HasHexagon(TessellatedSolid solid, List<PrimitiveSurface> solidPrim,
+            Dictionary<PrimitiveSurface, List<PrimitiveSurface>> equalPrimitives)
+        {
+            // 0: false (doesnt have hexagon)
+            // 1: HexBolt
+            // 2: HexNut
+            // 3: Allen
+            var sixFlat = EqualPrimitivesFinder(equalPrimitives, 6);
+            if (!sixFlat.Any()) return 0;
+            foreach (var candidateHex in sixFlat)
+            {
+                var candidateHexVal = equalPrimitives[candidateHex];
+                var cos = new List<double>();
+                var firstPrimNormal = ((Flat) candidateHexVal[0]).Normal;
+                for (var i = 1; i < candidateHexVal.Count; i++)
+                    cos.Add(firstPrimNormal.dotProduct(((Flat) candidateHexVal[i]).Normal));
+                // if it is a hex or allen bolt, the cos list must have two 1/2, two -1/2 and one -1
+                if (cos.Count(c => Math.Abs(0.5 - c) < 0.0001) != 2 ||
+                    cos.Count(c => Math.Abs(-0.5 - c) < 0.0001) != 2 ||
+                    cos.Count(c => Math.Abs(-1 - c) < 0.0001) != 1) continue;
+                if (IsItAllen(candidateHexVal))
+                    return 3;
+                // else: it is a hex bolt or nut
+                if (IsItNut(solidPrim.Where(p => p is Cylinder).Cast<Cylinder>().ToList(), solid))
+                    return 2;
+                return 1;
+            }
+            return 0;
+        }
+
 
         private static HashSet<TessellatedSolid> AutoFastenerDetectionNoThread(
             Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive,
@@ -86,18 +116,23 @@ namespace Assembly_Planner
             // nuts. 
             var fastener = new HashSet<TessellatedSolid>();
             var firstFilter = multipleRefs.Keys.ToList();//SmallObjectsDetector(multipleRefs);
-            var equalPrimitivesForEverySolid = EqualFlatPrimitiveAreaFinder(firstFilter, solidPrimitive);
+            var equalFlatPrimitivesForEverySolid = EqualFlatPrimitiveAreaFinder(firstFilter, solidPrimitive);
+            var groupedPotentialFasteners = GroupingSmallParts(firstFilter);
             foreach (var solid in firstFilter)
             {
-                if (HexBoltNutAllen(solid, solidPrimitive[solid], equalPrimitivesForEverySolid[solid]))
+                if (HexBoltNutAllen(solid, solidPrimitive[solid], equalFlatPrimitivesForEverySolid[solid]))
                     continue;
-                if (PhillipsHeadBolt(solid, solidPrimitive[solid], equalPrimitivesForEverySolid[solid]))
+                if (PhillipsHeadBolt(solid, solidPrimitive[solid], equalFlatPrimitivesForEverySolid[solid]))
                     continue;
-                if (SlotHeadBolt(solid, solidPrimitive[solid], equalPrimitivesForEverySolid[solid]))
+                if (SlotHeadBolt(solid, solidPrimitive[solid], equalFlatPrimitivesForEverySolid[solid]))
                     continue;
-                if (PhillipsSlotComboHeadBolt(solid, solidPrimitive[solid], equalPrimitivesForEverySolid[solid]))
+                if (PhillipsSlotComboHeadBolt(solid, solidPrimitive[solid], equalFlatPrimitivesForEverySolid[solid]))
                     continue;
             }
+            // when all of the fasteners are recognized, it's time to check the third level filter:
+            // something is not acceptable: nut without fastener. If there is a nut without fastener,
+            // I will try to look for that.
+            //var
             return fastener;
         }
 
@@ -118,14 +153,6 @@ namespace Assembly_Planner
             var groupedPotentialFasteners = GroupingSmallParts(firstFilter);
             foreach (var solid in firstFilter)
             {
-                var threaded = ThreadDetector(solid, solidPrimitive[solid]);
-                if (threaded)
-                {
-                    var fastener = new Fastener { Solid = solid };
-                    Fasteners.Add(fastener);
-                }
-                // We may still have some threaded fasteners that could not be recognized the in 
-                // "ThreadDetector" function.
                 if (HexBoltNutAllen(solid, solidPrimitive[solid], equalPrimitivesForEverySolid[solid]))
                     continue;
                 if (PhillipsHeadBolt(solid, solidPrimitive[solid], equalPrimitivesForEverySolid[solid]))
@@ -134,6 +161,10 @@ namespace Assembly_Planner
                     continue;
                 if (PhillipsSlotComboHeadBolt(solid, solidPrimitive[solid], equalPrimitivesForEverySolid[solid]))
                     continue;
+                // if it is not any of those, we can still give it another chance:
+                var threaded = ThreadDetector(solid, solidPrimitive[solid]);
+                // We may still have some threaded fasteners that could not be recognized by the 
+                // "ThreadDetector" function.
             }
             return null;
         }
@@ -326,19 +357,23 @@ namespace Assembly_Planner
             foreach (var cone in cones.Where(c => c.Faces.Count > 30))
             {
                 var threads =
-                    cones.Count(
+                    cones.Where(
                         c =>
                             (Math.Abs(c.Axis.dotProduct(cone.Axis) - 1) < 0.001 ||
                              Math.Abs(c.Axis.dotProduct(cone.Axis) + 1) < 0.001) &&
                             (Math.Abs(c.Faces.Count - cone.Faces.Count) < 3) && 
                             (Math.Abs(c.Area - cone.Area) < 0.001) &&
-                            (Math.Abs(c.Aperture - cone.Aperture) < 0.001));
-                if (threads > 10) return true;
+                            (Math.Abs(c.Aperture - cone.Aperture) < 0.001)).ToList();
+                if (threads.Count < 10) continue;
+                if (ConeThreadIsInternal(threads))
+                    Nuts.Add(new Nut { Solid = solid });
+                Fasteners.Add(new Fastener { Solid = solid });
+                return true;
             }
             return false;
         }
 
-        private static bool SolidHasHelix(TessellatedSolid s)
+        private static bool SolidHasHelix(TessellatedSolid solid)
         {
             // Idea: find an edge which has an internal angle equal to one of the following cases.
             // This only works if at least one of outer or inner threads have a sharo edge.
@@ -347,12 +382,12 @@ namespace Assembly_Planner
             // It seems to be expensive. Let's see how it goes.
             // Standard thread angles:
             //       60     55     29     45     30    80 
-            foreach (var edge in s.Edges.Where(e => Math.Abs(e.InternalAngle - 2.08566845) < 0.04))  // 2.0943951 is equal to 120 degree
+            foreach (var edge in solid.Edges.Where(e => Math.Abs(e.InternalAngle - 2.08566845) < 0.04))  // 2.0943951 is equal to 120 degree
             {
                 // To every side of the edge if there is one edge with the IA of 120, this edge is unique and we dcannot find the second one. 
                 var visited = new HashSet<Edge> { edge };
                 var stack = new Stack<Edge>();
-                var possibleHelixEdges = FindHelixEdgesConnectedToAnEdge(s.Edges, edge, visited); // It can have 0, 1 or 2 edges
+                var possibleHelixEdges = FindHelixEdgesConnectedToAnEdge(solid.Edges, edge, visited); // It can have 0, 1 or 2 edges
                 if (possibleHelixEdges == null) continue;
                 foreach (var e in possibleHelixEdges)
                     stack.Push(e);
@@ -361,15 +396,34 @@ namespace Assembly_Planner
                 {
                     var e = stack.Pop();
                     visited.Add(e);
-                    var cand = FindHelixEdgesConnectedToAnEdge(s.Edges, e, visited); // if yes, it will only have one edge.
+                    var cand = FindHelixEdgesConnectedToAnEdge(solid.Edges, e, visited); // if yes, it will only have one edge.
                     if (cand == null) continue;
                     stack.Push(cand[0]);
                 }
-                if (visited.Count >= 1000) // Is it very big?
-                    return true;
-                // if the visited.Length is larger than a number, this is a helix
+                if (visited.Count < 1000) // Is it very big?
+                    continue;
+                // if the thread is internal, classify it as nut, else fastener
+                if (HelixThreadIsInternal())
+                    Nuts.Add(new Nut {Solid = solid});
+                Fasteners.Add(new Fastener {Solid = solid});
+                return true;
             }
             return false;
+        }
+
+
+        private static bool ConeThreadIsInternal(List<Cone> threads)
+        {
+            // If it is seperated cones, it's easy: negative cones make internal thread
+            // To make it robust, if 70 percent of the cones are negative, it is internal
+            var neg = threads.Count(cone => !cone.IsPositive);
+            if (neg >= 0.7*threads.Count) return true;
+            return false;
+        }
+
+        private static bool HelixThreadIsInternal()
+        {
+            // But what about the helix:
         }
 
         private static Edge[] FindHelixEdgesConnectedToAnEdge(Edge[] edges, Edge edge, HashSet<Edge> visited)
