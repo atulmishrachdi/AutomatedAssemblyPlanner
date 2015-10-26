@@ -30,10 +30,10 @@ namespace Assembly_Planner
             //Parallel.ForEach(parts, solid =>
             foreach (var solid in parts)
             {
-                foreach (var edge in solid.Edges)
-                {
-                    Debug.WriteLine(edge.InternalAngle);
-                }
+                //foreach (var edge in solid.Edges)
+                //{
+                //    Debug.WriteLine(edge.InternalAngle);
+                //}
                 var solidPrim = TesselationToPrimitives.Run(solid);
                 lock (partPrimitive)
                     partPrimitive.Add(solid, solidPrim);

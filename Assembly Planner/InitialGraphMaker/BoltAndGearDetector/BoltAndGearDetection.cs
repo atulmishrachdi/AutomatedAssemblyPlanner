@@ -403,7 +403,7 @@ namespace Assembly_Planner
                 if (visited.Count < 1000) // Is it very big?
                     continue;
                 // if the thread is internal, classify it as nut, else fastener
-                if (HelixThreadIsInternal())
+                //if (HelixThreadIsInternal(visited))
                     Nuts.Add(new Nut {Solid = solid});
                 Fasteners.Add(new Fastener {Solid = solid});
                 return true;
@@ -421,10 +421,10 @@ namespace Assembly_Planner
             return false;
         }
 
-        private static bool HelixThreadIsInternal()
-        {
+        //private static bool HelixThreadIsInternal(HashSet<Edge> helixEdges)
+        //{
             // But what about the helix:
-        }
+        //}
 
         private static Edge[] FindHelixEdgesConnectedToAnEdge(Edge[] edges, Edge edge, HashSet<Edge> visited)
         {

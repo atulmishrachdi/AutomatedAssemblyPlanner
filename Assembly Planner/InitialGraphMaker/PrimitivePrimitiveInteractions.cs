@@ -18,7 +18,7 @@ namespace Assembly_Planner
         {
             var overlap = false;
             MaxProb = 0.0;
-            DirInd = new List<int>(dirInd);
+            DirInd = dirInd;
             var lastCheck = new PrimitiveSurface[2];
             overlappedPrimitives = new List<PrimitiveSurface[]>();
             foreach (var primitiveA in solid1P)
