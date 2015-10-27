@@ -213,7 +213,8 @@ namespace Assembly_Planner
                         Solid = solid,
                         FastenerType = FastenerTypeEnum.Bolt,
                         Tool = Tool.Allen,
-                        ToolSize = ToolSizeFinder(candidateHexVal)
+                        ToolSize = ToolSizeFinder(candidateHexVal),
+                        RemovalDirection = RemovalDirectionFinderForAllen(candidateHexVal.Cast<Flat>().ToList(), PartitioningSolid.OrientedBoundingBoxDic[solid])
                     };
                     Fasteners.Add(fastener);
                     return true;
@@ -239,6 +240,38 @@ namespace Assembly_Planner
                 return true;
             }
             return false;
+        }
+
+        private static int RemovalDirectionFinderForAllen(List<Flat> flatPrims, BoundingBox solid)
+        {
+            var normalGuess = flatPrims[0].Normal.crossProduct(flatPrims[1].Normal);
+            var equInDirections =
+                DisassemblyDirections.Directions.Where(d => Math.Abs(d.dotProduct(normalGuess) - 1) < 0.001).ToList()[0];
+            // find the furthest vertex (b) to a vertex (a) from allen faces. if
+            // Normal.dotproduct(a-b) must be positive. If it was negative, return 
+            // multiply(-1)
+            var a = flatPrims[0].Vertices[0];
+            TVGL.Vertex farthestVer = a;
+            var dist = 0.0;
+            foreach (var ver in solid.CornerVertices)
+            {
+                var locDist = DistanceBetweenTwoVertex(a, ver);
+                if (locDist <= dist) continue;
+                farthestVer = ver;
+                dist = locDist;
+            }
+            var reference = a.Position.subtract(farthestVer.Position);
+            if (normalGuess.dotProduct(reference) > 0)
+                return DisassemblyDirections.Directions.IndexOf(equInDirections);
+            return DisassemblyDirections.Directions.IndexOf(equInDirections.multiply(-1.0));
+        }
+
+        private static double DistanceBetweenTwoVertex(TVGL.Vertex a, TVGL.Vertex ver)
+        {
+            return
+                Math.Sqrt((Math.Pow((a.Position[0] - ver.Position[0]), 2)) +
+                          (Math.Pow((a.Position[1] - ver.Position[1]), 2)) +
+                          (Math.Pow((a.Position[2] - ver.Position[2]), 2)));
         }
 
         private static bool IsItAllen(List<PrimitiveSurface> candidateHexVal)
