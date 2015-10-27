@@ -214,7 +214,7 @@ namespace Assembly_Planner
                         FastenerType = FastenerTypeEnum.Bolt,
                         Tool = Tool.Allen,
                         ToolSize = ToolSizeFinder(candidateHexVal),
-                        RemovalDirection = RemovalDirectionFinderForAllen(candidateHexVal.Cast<Flat>().ToList(), PartitioningSolid.OrientedBoundingBoxDic[solid])
+                        RemovalDirection = RemovalDirectionFinderForAllenAndHexbolt(candidateHexVal.Cast<Flat>().ToList(), PartitioningSolid.OrientedBoundingBoxDic[solid])
                     };
                     Fasteners.Add(fastener);
                     return true;
@@ -235,23 +235,24 @@ namespace Assembly_Planner
                     Solid = solid,
                     FastenerType = FastenerTypeEnum.Bolt,
                     Tool = Tool.HexWrench,
-                    ToolSize = ToolSizeFinder(candidateHexVal)
+                    ToolSize = ToolSizeFinder(candidateHexVal),
+                    RemovalDirection = RemovalDirectionFinderForAllenAndHexbolt(candidateHexVal.Cast<Flat>().ToList(), PartitioningSolid.OrientedBoundingBoxDic[solid])
                 });
                 return true;
             }
             return false;
         }
 
-        private static int RemovalDirectionFinderForAllen(List<Flat> flatPrims, BoundingBox solid)
+        private static int RemovalDirectionFinderForAllenAndHexbolt(List<Flat> flatPrims, BoundingBox solid)
         {
-            var normalGuess = flatPrims[0].Normal.crossProduct(flatPrims[1].Normal);
+            var normalGuess = flatPrims[0].Normal.crossProduct(flatPrims[1].Normal).normalize();
             var equInDirections =
                 DisassemblyDirections.Directions.Where(d => Math.Abs(d.dotProduct(normalGuess) - 1) < 0.001).ToList()[0];
             // find the furthest vertex (b) to a vertex (a) from allen faces. if
             // Normal.dotproduct(a-b) must be positive. If it was negative, return 
             // multiply(-1)
             var a = flatPrims[0].Vertices[0];
-            TVGL.Vertex farthestVer = a;
+            var farthestVer = flatPrims[0].Vertices[0];
             var dist = 0.0;
             foreach (var ver in solid.CornerVertices)
             {
@@ -436,14 +437,13 @@ namespace Assembly_Planner
                 if (visited.Count < 1000) // Is it very big?
                     continue;
                 // if the thread is internal, classify it as nut, else fastener
-                //if (HelixThreadIsInternal(visited))
+                if (HelixThreadIsInternal(visited))
                     Nuts.Add(new Nut {Solid = solid});
                 Fasteners.Add(new Fastener {Solid = solid});
                 return true;
             }
             return false;
         }
-
 
         private static bool ConeThreadIsInternal(List<Cone> threads)
         {
@@ -454,10 +454,10 @@ namespace Assembly_Planner
             return false;
         }
 
-        //private static bool HelixThreadIsInternal(HashSet<Edge> helixEdges)
-        //{
-            // But what about the helix:
-        //}
+        private static bool HelixThreadIsInternal(HashSet<Edge> helixEdges)
+        {
+            return false;
+        }
 
         private static Edge[] FindHelixEdgesConnectedToAnEdge(Edge[] edges, Edge edge, HashSet<Edge> visited)
         {
