@@ -214,7 +214,9 @@ namespace Assembly_Planner
                         FastenerType = FastenerTypeEnum.Bolt,
                         Tool = Tool.Allen,
                         ToolSize = ToolSizeFinder(candidateHexVal),
-                        RemovalDirection = RemovalDirectionFinderForAllenAndHexbolt(candidateHexVal.Cast<Flat>().ToList(), PartitioningSolid.OrientedBoundingBoxDic[solid])
+                        RemovalDirection =
+                            RemovalDirectionFinderForAllenHexPhillips(candidateHexVal.Cast<Flat>().ToList(),
+                                PartitioningSolid.OrientedBoundingBoxDic[solid])
                     };
                     Fasteners.Add(fastener);
                     return true;
@@ -236,43 +238,13 @@ namespace Assembly_Planner
                     FastenerType = FastenerTypeEnum.Bolt,
                     Tool = Tool.HexWrench,
                     ToolSize = ToolSizeFinder(candidateHexVal),
-                    RemovalDirection = RemovalDirectionFinderForAllenAndHexbolt(candidateHexVal.Cast<Flat>().ToList(), PartitioningSolid.OrientedBoundingBoxDic[solid])
+                    RemovalDirection =
+                        RemovalDirectionFinderForAllenHexPhillips(candidateHexVal.Cast<Flat>().ToList(),
+                            PartitioningSolid.OrientedBoundingBoxDic[solid])
                 });
                 return true;
             }
             return false;
-        }
-
-        private static int RemovalDirectionFinderForAllenAndHexbolt(List<Flat> flatPrims, BoundingBox solid)
-        {
-            var normalGuess = flatPrims[0].Normal.crossProduct(flatPrims[1].Normal).normalize();
-            var equInDirections =
-                DisassemblyDirections.Directions.Where(d => Math.Abs(d.dotProduct(normalGuess) - 1) < 0.001).ToList()[0];
-            // find the furthest vertex (b) to a vertex (a) from allen faces. if
-            // Normal.dotproduct(a-b) must be positive. If it was negative, return 
-            // multiply(-1)
-            var a = flatPrims[0].Vertices[0];
-            var farthestVer = flatPrims[0].Vertices[0];
-            var dist = 0.0;
-            foreach (var ver in solid.CornerVertices)
-            {
-                var locDist = DistanceBetweenTwoVertex(a, ver);
-                if (locDist <= dist) continue;
-                farthestVer = ver;
-                dist = locDist;
-            }
-            var reference = a.Position.subtract(farthestVer.Position);
-            if (normalGuess.dotProduct(reference) > 0)
-                return DisassemblyDirections.Directions.IndexOf(equInDirections);
-            return DisassemblyDirections.Directions.IndexOf(equInDirections.multiply(-1.0));
-        }
-
-        private static double DistanceBetweenTwoVertex(TVGL.Vertex a, TVGL.Vertex ver)
-        {
-            return
-                Math.Sqrt((Math.Pow((a.Position[0] - ver.Position[0]), 2)) +
-                          (Math.Pow((a.Position[1] - ver.Position[1]), 2)) +
-                          (Math.Pow((a.Position[2] - ver.Position[2]), 2)));
         }
 
         private static bool IsItAllen(List<PrimitiveSurface> candidateHexVal)
@@ -311,14 +283,16 @@ namespace Assembly_Planner
                 {
                     Solid = solid,
                     FastenerType = FastenerTypeEnum.Bolt,
-                    Tool = Tool.PhillipsBlade
+                    Tool = Tool.PhillipsBlade,
+                    RemovalDirection =
+                        RemovalDirectionFinderForAllenHexPhillips(candidateHexVal.Cast<Flat>().ToList(),
+                            PartitioningSolid.OrientedBoundingBoxDic[solid])
                 };
                 Fasteners.Add(fastener);
                 return true;
             }
             return false;
         }
-
 
         private static bool SlotHeadBolt(TessellatedSolid solid, List<PrimitiveSurface> solidPrim,
             Dictionary<PrimitiveSurface, List<PrimitiveSurface>> equalPrimitives)
@@ -342,7 +316,11 @@ namespace Assembly_Planner
                 {
                     Solid = solid,
                     FastenerType = FastenerTypeEnum.Bolt,
-                    Tool = Tool.FlatBlade
+                    Tool = Tool.FlatBlade,
+                    RemovalDirection =
+                        RemovalDirectionFinderForSlot(candidateHexVal.Cast<Flat>().ToList(),
+                            solidPrim.Where(p => p is Flat).Cast<Flat>().ToList(),
+                            PartitioningSolid.OrientedBoundingBoxDic[solid])
                 };
                 Fasteners.Add(fastener);
                 return true;
@@ -356,6 +334,7 @@ namespace Assembly_Planner
             var fourFlat = EqualPrimitivesFinder(equalPrimitives, 4);
             if (fourFlat.Count < 2) return false;
             var eachSlot = 0;
+            var flats = new List<PrimitiveSurface>();
             foreach (var candidateHex in fourFlat)
             {
                 var candidateHexVal = equalPrimitives[candidateHex];
@@ -368,9 +347,21 @@ namespace Assembly_Planner
                 if (cos.Count(c => Math.Abs(-1 - c) < 0.0001) != 2 ||
                     cos.Count(c => Math.Abs(1 - c) < 0.0001) != 1) continue;
                 if (!solidPrim.Where(p => p is Cylinder).Cast<Cylinder>().Any(c => c.IsPositive)) return false;
+                flats.AddRange(candidateHexVal);
                 eachSlot++;
             }
-            return eachSlot == 2;
+            if (eachSlot != 2) return false;
+            var fastener = new Fastener
+            {
+                Solid = solid,
+                FastenerType = FastenerTypeEnum.Bolt,
+                Tool = Tool.PhillipsBlade,
+                RemovalDirection =
+                    RemovalDirectionFinderForAllenHexPhillips(flats.Cast<Flat>().ToList(),
+                        PartitioningSolid.OrientedBoundingBoxDic[solid])
+            };
+            Fasteners.Add(fastener);
+            return true;
         }
 
 
@@ -668,6 +659,77 @@ namespace Assembly_Planner
             //    Console.WriteLine(v.Name);//partSize[v]/maxSize);
             return dic[minSize];
         }
+
+        private static int RemovalDirectionFinderForSlot(List<Flat> equalFlats, List<Flat> flats, BoundingBox boundingBox)
+        {
+            // for the slot, there will be a flat that is prependicular to both equal flats.
+            // this can give mistakably the sides of the bolt head. 
+            // solution: both equal flats 2are on the opposite side of the flat
+            var prependicularFlats =
+                flats.Where(f => Math.Abs(f.Normal.dotProduct(equalFlats[0].Normal)) < 0.0001).ToList();
+            var equalFlatsVerts = equalFlats.SelectMany(f => f.Vertices).ToList();
+            double[] normal = null;
+            foreach (var prep in prependicularFlats)
+            {
+                if (equalFlatsVerts.Any(v=> prep.Normal.dotProduct(v.Position.subtract(prep.Vertices[0].Position)) < 0))
+                    continue;
+                normal = prep.Normal;
+                break;
+            }
+            var equInDirections =
+                DisassemblyDirections.Directions.Where(d => Math.Abs(d.dotProduct(normal) - 1) < 0.001).ToList()[0];
+            return DisassemblyDirections.Directions.IndexOf(equInDirections);
+        }
+        private static int RemovalDirectionFinderForAllenHexPhillips(List<Flat> flatPrims, BoundingBox solid)
+        {
+            // This function works for hex bolt, alle, philips and phillips and slot combo
+            // For slot, it will be different
+            var normalGuess = NormalGuessFinder(flatPrims);
+            var equInDirections =
+                DisassemblyDirections.Directions.Where(d => Math.Abs(d.dotProduct(normalGuess) - 1) < 0.001).ToList()[0];
+            // find the furthest vertex (b) to a vertex (a) from allen faces. if
+            // Normal.dotproduct(a-b) must be positive. If it was negative, return 
+            // multiply(-1)
+            var a = flatPrims[0].Vertices[0];
+            var farthestVer = flatPrims[0].Vertices[0];
+            var dist = 0.0;
+            foreach (var ver in solid.CornerVertices)
+            {
+                var locDist = DistanceBetweenTwoVertex(a, ver);
+                if (locDist <= dist) continue;
+                farthestVer = ver;
+                dist = locDist;
+            }
+            var reference = a.Position.subtract(farthestVer.Position);
+            if (normalGuess.dotProduct(reference) > 0)
+                return DisassemblyDirections.Directions.IndexOf(equInDirections);
+            return DisassemblyDirections.Directions.IndexOf(equInDirections.multiply(-1.0));
+        }
+
+        private static double[] NormalGuessFinder(List<Flat> flatPrims)
+        {
+            // We need two flats that are not parallel to each other.
+            // their dot is not 1 or -1
+            var reference = flatPrims[0];
+            var second = flatPrims[1];
+            for (var i = 1; i < flatPrims.Count; i++)
+            {
+                if (Math.Abs(Math.Abs(flatPrims[i].Normal.dotProduct(reference.Normal)) - 1) < 0.004)
+                    //equal to 6 degrees 
+                    continue;
+                second = flatPrims[i];
+            }
+            return reference.Normal.crossProduct(second.Normal).normalize();
+        }
+
+        private static double DistanceBetweenTwoVertex(TVGL.Vertex a, TVGL.Vertex ver)
+        {
+            return
+                Math.Sqrt((Math.Pow((a.Position[0] - ver.Position[0]), 2)) +
+                          (Math.Pow((a.Position[1] - ver.Position[1]), 2)) +
+                          (Math.Pow((a.Position[2] - ver.Position[2]), 2)));
+        }
+
 
         private static double[] BoltCenterLine(List<PrimitiveSurface> primitiveSurfaces)
         {
