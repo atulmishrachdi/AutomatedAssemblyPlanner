@@ -76,36 +76,6 @@ namespace Assembly_Planner
             return fastener;
         }
 
-        private static int HasHexagon(TessellatedSolid solid, List<PrimitiveSurface> solidPrim,
-            Dictionary<PrimitiveSurface, List<PrimitiveSurface>> equalPrimitives)
-        {
-            // 0: false (doesnt have hexagon)
-            // 1: HexBolt
-            // 2: HexNut
-            // 3: Allen
-            var sixFlat = EqualPrimitivesFinder(equalPrimitives, 6);
-            if (!sixFlat.Any()) return 0;
-            foreach (var candidateHex in sixFlat)
-            {
-                var candidateHexVal = equalPrimitives[candidateHex];
-                var cos = new List<double>();
-                var firstPrimNormal = ((Flat) candidateHexVal[0]).Normal;
-                for (var i = 1; i < candidateHexVal.Count; i++)
-                    cos.Add(firstPrimNormal.dotProduct(((Flat) candidateHexVal[i]).Normal));
-                // if it is a hex or allen bolt, the cos list must have two 1/2, two -1/2 and one -1
-                if (cos.Count(c => Math.Abs(0.5 - c) < 0.0001) != 2 ||
-                    cos.Count(c => Math.Abs(-0.5 - c) < 0.0001) != 2 ||
-                    cos.Count(c => Math.Abs(-1 - c) < 0.0001) != 1) continue;
-                if (IsItAllen(candidateHexVal))
-                    return 3;
-                // else: it is a hex bolt or nut
-                if (IsItNut(solidPrim.Where(p => p is Cylinder).Cast<Cylinder>().ToList(), solid))
-                    return 2;
-                return 1;
-            }
-            return 0;
-        }
-
 
         private static HashSet<TessellatedSolid> AutoFastenerDetectionNoThread(
             Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive,
@@ -168,7 +138,35 @@ namespace Assembly_Planner
             }
             return null;
         }
-
+        private static int HasHexagon(TessellatedSolid solid, List<PrimitiveSurface> solidPrim,
+    Dictionary<PrimitiveSurface, List<PrimitiveSurface>> equalPrimitives)
+        {
+            // 0: false (doesnt have hexagon)
+            // 1: HexBolt
+            // 2: HexNut
+            // 3: Allen
+            var sixFlat = EqualPrimitivesFinder(equalPrimitives, 6);
+            if (!sixFlat.Any()) return 0;
+            foreach (var candidateHex in sixFlat)
+            {
+                var candidateHexVal = equalPrimitives[candidateHex];
+                var cos = new List<double>();
+                var firstPrimNormal = ((Flat)candidateHexVal[0]).Normal;
+                for (var i = 1; i < candidateHexVal.Count; i++)
+                    cos.Add(firstPrimNormal.dotProduct(((Flat)candidateHexVal[i]).Normal));
+                // if it is a hex or allen bolt, the cos list must have two 1/2, two -1/2 and one -1
+                if (cos.Count(c => Math.Abs(0.5 - c) < 0.0001) != 2 ||
+                    cos.Count(c => Math.Abs(-0.5 - c) < 0.0001) != 2 ||
+                    cos.Count(c => Math.Abs(-1 - c) < 0.0001) != 1) continue;
+                if (IsItAllen(candidateHexVal))
+                    return 3;
+                // else: it is a hex bolt or nut
+                if (IsItNut(solidPrim.Where(p => p is Cylinder).Cast<Cylinder>().ToList(), solid))
+                    return 2;
+                return 1;
+            }
+            return 0;
+        }
         private static List<List<TessellatedSolid>> GroupingSmallParts(List<TessellatedSolid> firstFilter)
         {
             var groups = new List<List<TessellatedSolid>>();
@@ -392,7 +390,11 @@ namespace Assembly_Planner
                 if (threads.Count < 10) continue;
                 if (ConeThreadIsInternal(threads))
                     Nuts.Add(new Nut { Solid = solid });
-                Fasteners.Add(new Fastener { Solid = solid });
+                Fasteners.Add(new Fastener
+                {
+                    Solid = solid,
+                    //RemovalDirection = RemovalDirectionFinderForSeperateConesThread()
+                });
                 return true;
             }
             return false;
@@ -706,6 +708,53 @@ namespace Assembly_Planner
             return DisassemblyDirections.Directions.IndexOf(equInDirections.multiply(-1.0));
         }
 
+        private static int RemovalDirectionFinderForSeperateConesThread(TessellatedSolid solid, BoundingBox obb)
+        {
+            // this is hard. it can be a simple threaded rod,or it can be a standard
+            // bolt that could not be detected by other approaches.
+            // If it is a rod, the removal direction is not really important,
+            // but if not, it's important I still have no idea about how to detect it.
+            // Idea: find any of the 4 longest sides of the OBB.
+            //       find the closest vertex to this side. (if it's a rod,
+            //       the closest vertex can be everywhere, but in a regular bolt,
+            //       it's on the top (it's most definitely a vertex from the head))
+            PolygonalFace facePrepToRD1;
+            PolygonalFace facePrepToRD2;
+            var longestPlane = LongestPlaneOfObbDetector(obb);//, out facePrepToRD1, out facePrepToRD2);
+            TVGL.Vertex closestVerToPlane = null;
+            var minDist = double.PositiveInfinity;
+            foreach (var ver in solid.ConvexHullVertices)
+            {
+                var dis = DistanceBetweenVertexAndPlane(ver, longestPlane);
+                if (dis >= minDist)
+                    continue;
+                closestVerToPlane = ver;
+                minDist = dis;
+            }
+            return 0;
+        }
+
+        private static PolygonalFace LongestPlaneOfObbDetector(BoundingBox obb)//, out PolygonalFace facePrepToRD1, out PolygonalFace facePrepToRD2)
+        {
+            var dis1 = DistanceBetweenTwoVertex(obb.CornerVertices[0], obb.CornerVertices[1]);
+            var dis2 = DistanceBetweenTwoVertex(obb.CornerVertices[0], obb.CornerVertices[2]);
+            var dis3 = DistanceBetweenTwoVertex(obb.CornerVertices[0], obb.CornerVertices[4]);
+            if ((dis1 >= dis2 && dis1 >= dis3) || (dis2 >= dis1 && dis2 >= dis3))
+            {
+                
+                return new PolygonalFace(new[] {obb.CornerVertices[0], obb.CornerVertices[1], obb.CornerVertices[2]},
+                    ((obb.CornerVertices[2].Position.subtract(obb.CornerVertices[0].Position)).crossProduct(
+                        obb.CornerVertices[1].Position.subtract(obb.CornerVertices[0].Position))).normalize());
+            }
+            if (dis3 >= dis2 && dis3 >= dis1)
+            {
+                return new PolygonalFace(new[] { obb.CornerVertices[1], obb.CornerVertices[0], obb.CornerVertices[4] },
+                    ((obb.CornerVertices[1].Position.subtract(obb.CornerVertices[0].Position)).crossProduct(
+                        obb.CornerVertices[4].Position.subtract(obb.CornerVertices[0].Position))).normalize());
+            }
+            return null;
+        } 
+
         private static double[] NormalGuessFinder(List<Flat> flatPrims)
         {
             // We need two flats that are not parallel to each other.
@@ -720,6 +769,14 @@ namespace Assembly_Planner
                 second = flatPrims[i];
             }
             return reference.Normal.crossProduct(second.Normal).normalize();
+        }
+
+        private static double DistanceBetweenVertexAndPlane(TVGL.Vertex ver, PolygonalFace plane)
+        {
+            // create a vector from a vertex on plane to the ver
+            var vector = ver.Position.subtract(plane.Vertices[0].Position);
+            // distance is the dot product of the normal and the vector:
+            return Math.Abs(vector.dotProduct(plane.Normal));
         }
 
         private static double DistanceBetweenTwoVertex(TVGL.Vertex a, TVGL.Vertex ver)
