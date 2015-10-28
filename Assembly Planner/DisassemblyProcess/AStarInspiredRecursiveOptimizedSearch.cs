@@ -40,7 +40,7 @@ namespace Assembly_Planner.DisassemblyProcess
             Graph = inputData.graphAssembly;
             DirPool = globalDirPool;
             Updates.UpdateGlobalDirections(DirPool);
-            assemblyEvaluator = new EvaluationForBinaryTree(); //inputData.ConvexHullDictionary);
+            assemblyEvaluator = new EvaluationForBinaryTree(inputData.ConvexHullDictionary); //inputData.ConvexHullDictionary);
 
             InitializeMemo();
 
@@ -310,7 +310,7 @@ namespace Assembly_Planner.DisassemblyProcess
             Graph = inputData.graphAssembly;
             DirPool = globalDirPool;
             Updates.UpdateGlobalDirections(DirPool);
-            assemblyEvaluator = new EvaluationForBinaryTree(); //inputData.ConvexHullDictionary);
+            assemblyEvaluator = new EvaluationForBinaryTree(inputData.ConvexHullDictionary); //inputData.ConvexHullDictionary);
             Estimate = DoEstimate;
 
             InitializeMemo();

@@ -8,6 +8,7 @@ using GraphSynth;
 using GraphSynth.Representation;
 using GraphSynth.Search;
 using Assembly_Planner.GraphSynth.BaseClasses;
+using TVGL;
 
 namespace Assembly_Planner
 {
@@ -90,7 +91,7 @@ namespace Assembly_Planner
             Graph = inputData.graphAssembly;
             DirPool = globalDirPool;
             //Updates.UpdateGlobalDirections(DirPool);
-            assemblyEvaluator = new EvaluationForBinaryTree();//inputData.ConvexHullDictionary);
+            assemblyEvaluator = new EvaluationForBinaryTree(inputData.ConvexHullDictionary);//inputData.ConvexHullDictionary);
             Estimate = DoEstimate;
 
             InitializeMemo();
