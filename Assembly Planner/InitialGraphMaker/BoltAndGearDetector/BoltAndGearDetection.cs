@@ -720,7 +720,7 @@ namespace Assembly_Planner
             //       it's on the top (it's most definitely a vertex from the head))
             PolygonalFace facePrepToRD1;
             PolygonalFace facePrepToRD2;
-            var longestPlane = LongestPlaneOfObbDetector(obb);//, out facePrepToRD1, out facePrepToRD2);
+            var longestPlane = LongestPlaneOfObbDetector(obb, out facePrepToRD1, out facePrepToRD2);
             TVGL.Vertex closestVerToPlane = null;
             var minDist = double.PositiveInfinity;
             foreach (var ver in solid.ConvexHullVertices)
@@ -731,27 +731,67 @@ namespace Assembly_Planner
                 closestVerToPlane = ver;
                 minDist = dis;
             }
-            return 0;
+            // The closest vertex to plane is closer to which facePrepToRD?
+            double[] normalGuess = null;
+            if (DistanceBetweenVertexAndPlane(closestVerToPlane, facePrepToRD1) <
+                DistanceBetweenVertexAndPlane(closestVerToPlane, facePrepToRD2))
+                normalGuess = facePrepToRD1.Normal;
+            else
+                normalGuess = facePrepToRD2.Normal;
+            var equInDirections =
+                DisassemblyDirections.Directions.Where(d => Math.Abs(d.dotProduct(normalGuess) - 1) < 0.001).ToList()[0];
+            return DisassemblyDirections.Directions.IndexOf(equInDirections);
         }
 
-        private static PolygonalFace LongestPlaneOfObbDetector(BoundingBox obb)//, out PolygonalFace facePrepToRD1, out PolygonalFace facePrepToRD2)
+        private static PolygonalFace LongestPlaneOfObbDetector(BoundingBox obb, out PolygonalFace facePrepToRD1, out PolygonalFace facePrepToRD2)
         {
             var dis1 = DistanceBetweenTwoVertex(obb.CornerVertices[0], obb.CornerVertices[1]);
             var dis2 = DistanceBetweenTwoVertex(obb.CornerVertices[0], obb.CornerVertices[2]);
             var dis3 = DistanceBetweenTwoVertex(obb.CornerVertices[0], obb.CornerVertices[4]);
-            if ((dis1 >= dis2 && dis1 >= dis3) || (dis2 >= dis1 && dis2 >= dis3))
+            if (dis1 >= dis2 && dis1 >= dis3)
             {
-                
+                facePrepToRD1 =
+                    new PolygonalFace(new[] {obb.CornerVertices[0], obb.CornerVertices[2], obb.CornerVertices[4]},
+                        ((obb.CornerVertices[4].Position.subtract(obb.CornerVertices[0].Position)).crossProduct(
+                            obb.CornerVertices[2].Position.subtract(obb.CornerVertices[0].Position))).normalize());
+                facePrepToRD2 =
+                    new PolygonalFace(new[] {obb.CornerVertices[1], obb.CornerVertices[3], obb.CornerVertices[7]},
+                        ((obb.CornerVertices[7].Position.subtract(obb.CornerVertices[3].Position)).crossProduct(
+                            obb.CornerVertices[1].Position.subtract(obb.CornerVertices[3].Position))).normalize());
                 return new PolygonalFace(new[] {obb.CornerVertices[0], obb.CornerVertices[1], obb.CornerVertices[2]},
+                    ((obb.CornerVertices[2].Position.subtract(obb.CornerVertices[0].Position)).crossProduct(
+                        obb.CornerVertices[1].Position.subtract(obb.CornerVertices[0].Position))).normalize());
+            }
+            if (dis2 >= dis1 && dis2 >= dis3)
+            {
+                facePrepToRD1 =
+                    new PolygonalFace(new[] { obb.CornerVertices[1], obb.CornerVertices[0], obb.CornerVertices[4] },
+                        ((obb.CornerVertices[1].Position.subtract(obb.CornerVertices[0].Position)).crossProduct(
+                            obb.CornerVertices[4].Position.subtract(obb.CornerVertices[0].Position))).normalize());
+                facePrepToRD2 =
+                    new PolygonalFace(new[] { obb.CornerVertices[2], obb.CornerVertices[3], obb.CornerVertices[7] },
+                        ((obb.CornerVertices[2].Position.subtract(obb.CornerVertices[3].Position)).crossProduct(
+                            obb.CornerVertices[7].Position.subtract(obb.CornerVertices[3].Position))).normalize());
+                return new PolygonalFace(new[] { obb.CornerVertices[0], obb.CornerVertices[1], obb.CornerVertices[2] },
                     ((obb.CornerVertices[2].Position.subtract(obb.CornerVertices[0].Position)).crossProduct(
                         obb.CornerVertices[1].Position.subtract(obb.CornerVertices[0].Position))).normalize());
             }
             if (dis3 >= dis2 && dis3 >= dis1)
             {
+                facePrepToRD1 =
+                    new PolygonalFace(new[] { obb.CornerVertices[0], obb.CornerVertices[1], obb.CornerVertices[2] },
+                        ((obb.CornerVertices[2].Position.subtract(obb.CornerVertices[0].Position)).crossProduct(
+                            obb.CornerVertices[1].Position.subtract(obb.CornerVertices[0].Position))).normalize());
+                facePrepToRD2 =
+                    new PolygonalFace(new[] { obb.CornerVertices[4], obb.CornerVertices[5], obb.CornerVertices[6] },
+                        ((obb.CornerVertices[5].Position.subtract(obb.CornerVertices[4].Position)).crossProduct(
+                            obb.CornerVertices[6].Position.subtract(obb.CornerVertices[4].Position))).normalize());
                 return new PolygonalFace(new[] { obb.CornerVertices[1], obb.CornerVertices[0], obb.CornerVertices[4] },
                     ((obb.CornerVertices[1].Position.subtract(obb.CornerVertices[0].Position)).crossProduct(
                         obb.CornerVertices[4].Position.subtract(obb.CornerVertices[0].Position))).normalize());
             }
+            facePrepToRD1 = null;
+            facePrepToRD2 = null;
             return null;
         } 
 
