@@ -27,7 +27,15 @@ namespace Assembly_Planner
             bool regenerateTrainingData = false)
         {
             if (threaded)
-                FastenerLearner.TrainingDataGenerator(regenerateTrainingData);
+            {
+                FastenerLearner.RunPerecptronLearner(regenerateTrainingData);
+                // after training data is generated (or exists), now I should check and see
+                // if the csv containing weights and votes exists or not.
+                // Even if the trainingData csv doesnt exist but the csv of w and votes exist,
+                // we can run the classifier. 
+                // In TrainingDataGenerator, if user says dont regenerate the training data, now check and
+                // see if the WeightsAndVotes.csv exists or not.
+            }
             var s = Stopwatch.StartNew();
             s.Start();
             Console.WriteLine();
@@ -59,24 +67,6 @@ namespace Assembly_Planner
             //fastener.UnionWith(smallObjects);
             s.Stop();
             Console.WriteLine("Gear and Fastener Detection:" + "     " + s.Elapsed);
-            return fastener;
-            // Here are my thoughts about a bolt:
-            // Since all of the threads are classified as cone, 
-            //    if the number of cones are more than 30 percent of the total number of primitives
-            //    AND, the summation of area of cone primitivies are more than 30 percent of the solid surface area
-            foreach (var solid in solidPrimitive.Keys)
-            {
-                var cones = solidPrimitive[solid].Where(p => p is Cone).ToList();
-                if (cones.Count < BoltAndGearConstants.ConePortion*solidPrimitive[solid].Count ||
-                    cones.Sum(p => p.Area) < BoltAndGearConstants.ConeAreaPortion*solid.SurfaceArea)
-                    continue;
-                Console.WriteLine("Is " + solid.Name + " a Bolt or Screw? 'y' or 'n'");
-                var read = Convert.ToString(Console.ReadLine());
-                if (read == "y")
-                {
-                    fastener.Add(solid);
-                }
-            }
             return fastener;
         }
 
@@ -125,6 +115,8 @@ namespace Assembly_Planner
             var firstFilter = multipleRefs.Keys.ToList(); //SmallObjectsDetector(multipleRefs);
             var equalPrimitivesForEverySolid = EqualFlatPrimitiveAreaFinder(firstFilter, solidPrimitive);
             var groupedPotentialFasteners = GroupingSmallParts(firstFilter);
+            List<int> learnerVotes;
+            var learnerWeights = FastenerLearner.ReadingLearnerWeightsAndVotesFromCsv(out learnerVotes);
             foreach (var solid in firstFilter)
             {
                 if (HexBoltNutAllen(solid, solidPrimitive[solid], equalPrimitivesForEverySolid[solid]))
@@ -142,7 +134,7 @@ namespace Assembly_Planner
                 // "ThreadDetector" function.
                 // Solution: Voted Perceptron classifier
                 // run it here. How? 
-                if(FastenerLearner.FastenerPerceptronLearner(solidPrimitive[solid], solid))
+                if (FastenerLearner.FastenerPerceptronLearner(solidPrimitive[solid], solid, learnerWeights, learnerVotes))
                     continue;
             }
             return null;

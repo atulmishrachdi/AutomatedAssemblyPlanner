@@ -19,29 +19,25 @@ namespace Assembly_Planner
         private const int Test = 134;
         private static int Features = 3;
 
-        internal static bool FastenerPerceptronLearner(List<PrimitiveSurface> primitives, TessellatedSolid solid, bool runLearner = false)
+        internal static bool FastenerPerceptronLearner(List<PrimitiveSurface> primitives, TessellatedSolid solid,
+            List<double[]> learnerWeights, List<int> learnerVotes)
         {
-            var feature = FeatureArrayCreator(primitives,solid);
-            List<int> votes;
-            List<double[]> weights;
-            if (runLearner)
+            var localFeature = FeatureArrayCreator(primitives, solid);
+            var signVector = 0;
+            for (var k = 0; k < learnerVotes.Count; k++)
             {
-                // the very first time we run the code, this needs to be done. But after weights are created and stored
-                // in a csv file, then we can ask user if they want to run the learner to get a better results or not.
-                // We can run it again only if the training data is updated by user or by the experiments that the code 
-                // does.
-                // first create the csv from the training stls:
-                weights = Learner(out votes);
+                var dot = 0.0;
+                for (var l = 0; l < Features; l++)
+                    dot += learnerWeights[k][l] * localFeature[l];
+                signVector += learnerVotes[k] * Math.Sign(dot);
             }
-            else
-            {
-                // open existing votes from the CSV in the same folder that the .cs file exists
-                // this is a more common case.
-            }
+            var newY = Math.Sign(signVector);
+            // I need intervals to check for certainity
+            if (newY > 0) return true;
             return false;
         }
 
-        private static List<double[]> Learner(out List<int> votes, int interation = 2000)
+        private static void Learner(int interation = 2000)
         {
             // Reading CSV
             var Y = new List<double>();
@@ -106,10 +102,9 @@ namespace Assembly_Planner
                 error = 0;
                 index = 0;
             }
-            votes = c;
             for (var i = 0; i < classificationErros.Count; i++)
                 classificationErros[i] = classificationErros[i] / 5;
-            return W;
+            WritingWeightsAndVotesInCsv(W,c);
             //Console.WriteLine(classificationErros.Min());
             //Console.ReadLine();
         }
@@ -153,6 +148,32 @@ namespace Assembly_Planner
             }
         }
 
+        private static void WritingWeightsAndVotesInCsv(List<double[]> weights, List<int> vots)
+        {
+            // the first m columns are weights (with m features (real features+1))
+            // the last column is the vote
+            var path = "../../InitialGraphMaker/BoltAndGearDetector";
+
+            //Path to write the csv to:
+            var weightsAndVotesPath = path + "/WeightsAndVotes.csv";
+            if (!File.Exists(weightsAndVotesPath))
+                File.Create(weightsAndVotesPath).Close();
+            const string delimter = ",";
+            var output = new List<string[]>();
+            for (var i = 0; i < weights.Count; i++)
+            {
+                var array = new string[Features+1]; // if we have 2 features, Feature == 3, I added 1 for vote
+                for (var j = 0; j < Features; j++)
+                    array[j] = weights[i][j].ToString();
+                array[array.Length - 1] = vots[i].ToString();
+                output.Add(array);
+            }
+            var length = output.Count;
+            using (TextWriter writer = File.CreateText(weightsAndVotesPath))
+                for (int index = 0; index < length; index++)
+                    writer.WriteLine(string.Join(delimter, output[index]));
+        }
+
         private static double[] FeatureArrayCreator(List<PrimitiveSurface> primitives, TessellatedSolid solid)
         {
             var cones = primitives.Where(p => p is Cone).ToList();
@@ -179,7 +200,7 @@ namespace Assembly_Planner
             return parts;
         }
 
-        internal static void TrainingDataGenerator(bool regenerateTrainingData)
+        internal static void RunPerecptronLearner(bool regenerateTrainingData)
         {
             // this functions, finds the training stls, opens them,
             // read them and creates the csv file of the training data
@@ -194,11 +215,18 @@ namespace Assembly_Planner
             var path = "../../InitialGraphMaker/BoltAndGearDetector";
             
             //Path to write the csv to:
-            var filePath = path + "/TrainingData.csv";
-            if (!File.Exists(filePath) && !regenerateTrainingData)
-                Console.WriteLine("csv file doesn'e exist. We need to generate the training data");
-            if (File.Exists(filePath) && !regenerateTrainingData)
+            var trainingDataPath = path + "/TrainingData.csv";
+            var weightsAndVotesPath = path + "/WeightsAndVotes.csv";
+            if (!regenerateTrainingData && File.Exists(weightsAndVotesPath))
                 return;
+            if (!regenerateTrainingData && !File.Exists(weightsAndVotesPath) && File.Exists(trainingDataPath))
+            {
+                // CSV of the training data exists, but weights and votes, dont exist, therefore: run the Learner
+                Learner(); // this will automatically create the csv containing weights and votes
+                return;
+            }
+            if (!regenerateTrainingData && !File.Exists(weightsAndVotesPath) && !File.Exists(trainingDataPath))
+                Console.WriteLine("Sorry!! csv files don't exist. We need to generate the training data");
             //Path to read STLs from:
             var stlFastenerPath = path + "TrainingSTLs/Fastener";
             var fastenersTraining = StlToSolid(stlFastenerPath);
@@ -208,11 +236,12 @@ namespace Assembly_Planner
             var ntFastenersTraining = StlToSolid(stlNotFastenerPath);
             var notFastenerPrimitive = BlockingDetermination.PrimitiveMaker(ntFastenersTraining);
 
-            if (!File.Exists(filePath))
-                File.Create(filePath).Close();
+            if (!File.Exists(trainingDataPath))
+                File.Create(trainingDataPath).Close();
 
             // now fill the csv:
-            TrainingDataCsvFiller(filePath, fastenerPrimitive, notFastenerPrimitive);
+            TrainingDataCsvFiller(trainingDataPath, fastenerPrimitive, notFastenerPrimitive);
+            Learner();
         }
 
         private static void TrainingDataCsvFiller(string filePath,
@@ -272,6 +301,28 @@ namespace Assembly_Planner
                 Features = featureArray.Count + 1;
                 output.Add(featureArray.ToArray());
             }
+        }
+
+        internal static List<double[]> ReadingLearnerWeightsAndVotesFromCsv(out List<int> votes)
+        {
+            votes = new List<int>();
+            var weights = new List<double[]>();
+            var reader =
+                new StreamReader(
+                    File.OpenRead(
+                        "../../InitialGraphMaker/BoltAndGearDetector/TrainingData.csv"));
+            while (!reader.EndOfStream)
+            {
+                var line = reader.ReadLine();
+                var values = line.Split(',');
+
+                votes.Add(Convert.ToInt32(values[values.Length-1]));
+                var w = new double[values.Length - 1];
+                for (var i = 0; i < values.Length-1; i++)
+                    w[i] = Convert.ToDouble(values[i]);
+                weights.Add(w);
+            }
+            return weights;
         }
     }
 }
