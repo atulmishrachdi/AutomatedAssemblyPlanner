@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security;
@@ -15,15 +16,16 @@ using Tool = Assembly_Planner.GraphSynth.BaseClasses.Tool;
 
 namespace Assembly_Planner
 {
-    class BoltAndGearDetection
+    internal class BoltAndGearDetection
     {
-        internal static List<Fastener>  Fasteners= new List<Fastener>();
+        internal static List<Fastener> Fasteners = new List<Fastener>();
         internal static List<Nut> Nuts = new List<Nut>();
 
         internal static HashSet<TessellatedSolid> ScrewAndBoltDetector(
             Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive,
             Dictionary<TessellatedSolid, List<TessellatedSolid>> multipleRefs, bool autoDetection, bool threaded)
         {
+            FeatureFileCrator(solidPrimitive, multipleRefs);
             var s = Stopwatch.StartNew();
             s.Start();
             Console.WriteLine();
@@ -85,7 +87,7 @@ namespace Assembly_Planner
             // we willl consider the area of the positive culinders for bolts and negative cylinder for 
             // nuts. 
             var fastener = new HashSet<TessellatedSolid>();
-            var firstFilter = multipleRefs.Keys.ToList();//SmallObjectsDetector(multipleRefs);
+            var firstFilter = multipleRefs.Keys.ToList(); //SmallObjectsDetector(multipleRefs);
             var equalFlatPrimitivesForEverySolid = EqualFlatPrimitiveAreaFinder(firstFilter, solidPrimitive);
             var groupedPotentialFasteners = GroupingSmallParts(firstFilter);
             foreach (var solid in firstFilter)
@@ -132,14 +134,20 @@ namespace Assembly_Planner
                 if (PhillipsSlotComboHeadBolt(solid, solidPrimitive[solid], equalPrimitivesForEverySolid[solid]))
                     continue;
                 // if it is not any of those, we can still give it another chance:
-                var threaded = ThreadDetector(solid, solidPrimitive[solid]);
+                if (ThreadDetector(solid, solidPrimitive[solid]))
+                    continue;
                 // We may still have some threaded fasteners that could not be recognized by the 
                 // "ThreadDetector" function.
+                // Solution: Voted Perceptron classifier
+                // run it here. How? 
+                if(FastenerLearner.FastenerPerceptronLearner(solidPrimitive[solid], solid))
+                    continue;
             }
             return null;
         }
+
         private static int HasHexagon(TessellatedSolid solid, List<PrimitiveSurface> solidPrim,
-    Dictionary<PrimitiveSurface, List<PrimitiveSurface>> equalPrimitives)
+            Dictionary<PrimitiveSurface, List<PrimitiveSurface>> equalPrimitives)
         {
             // 0: false (doesnt have hexagon)
             // 1: HexBolt
@@ -151,9 +159,9 @@ namespace Assembly_Planner
             {
                 var candidateHexVal = equalPrimitives[candidateHex];
                 var cos = new List<double>();
-                var firstPrimNormal = ((Flat)candidateHexVal[0]).Normal;
+                var firstPrimNormal = ((Flat) candidateHexVal[0]).Normal;
                 for (var i = 1; i < candidateHexVal.Count; i++)
-                    cos.Add(firstPrimNormal.dotProduct(((Flat)candidateHexVal[i]).Normal));
+                    cos.Add(firstPrimNormal.dotProduct(((Flat) candidateHexVal[i]).Normal));
                 // if it is a hex or allen bolt, the cos list must have two 1/2, two -1/2 and one -1
                 if (cos.Count(c => Math.Abs(0.5 - c) < 0.0001) != 2 ||
                     cos.Count(c => Math.Abs(-0.5 - c) < 0.0001) != 2 ||
@@ -167,6 +175,7 @@ namespace Assembly_Planner
             }
             return 0;
         }
+
         private static List<List<TessellatedSolid>> GroupingSmallParts(List<TessellatedSolid> firstFilter)
         {
             var groups = new List<List<TessellatedSolid>>();
@@ -181,7 +190,7 @@ namespace Assembly_Planner
                     if (exist.Any())
                         exist[0].Add(exist[0].Contains(firstFilter[i]) ? firstFilter[j] : firstFilter[i]);
                     else
-                        groups.Add(new List<TessellatedSolid> { firstFilter[i], firstFilter[j] });
+                        groups.Add(new List<TessellatedSolid> {firstFilter[i], firstFilter[j]});
                 }
             }
             return groups;
@@ -196,11 +205,11 @@ namespace Assembly_Planner
             {
                 var candidateHexVal = equalPrimitives[candidateHex];
                 var cos = new List<double>();
-                var firstPrimNormal = ((Flat)candidateHexVal[0]).Normal;
+                var firstPrimNormal = ((Flat) candidateHexVal[0]).Normal;
                 for (var i = 1; i < candidateHexVal.Count; i++)
-                    cos.Add(firstPrimNormal.dotProduct(((Flat)candidateHexVal[i]).Normal));
+                    cos.Add(firstPrimNormal.dotProduct(((Flat) candidateHexVal[i]).Normal));
                 // if it is a hex or allen bolt, the cos list must have two 1/2, two -1/2 and one -1
-                if (cos.Count(c => Math.Abs(0.5 - c) < 0.0001) != 2 || 
+                if (cos.Count(c => Math.Abs(0.5 - c) < 0.0001) != 2 ||
                     cos.Count(c => Math.Abs(-0.5 - c) < 0.0001) != 2 ||
                     cos.Count(c => Math.Abs(-1 - c) < 0.0001) != 1) continue;
                 if (IsItAllen(candidateHexVal))
@@ -224,8 +233,8 @@ namespace Assembly_Planner
                 {
                     Nuts.Add(new Nut
                     {
-                        NutType = NutType.Hex, 
-                        Solid = solid, 
+                        NutType = NutType.Hex,
+                        Solid = solid,
                         ToolSize = ToolSizeFinder(candidateHexVal)
                     });
                     return true;
@@ -254,7 +263,7 @@ namespace Assembly_Planner
         {
             if (cylinders.Any(p => !p.IsPositive))
                 if (cylinders.Where(c => c.IsPositive).Sum(pC => pC.Area) <
-                    0.05 * boltOrNut.SurfaceArea)
+                    0.05*boltOrNut.SurfaceArea)
                     // this is a nut. Because it has negative cylinders and positive cylinders that it has
                     // are minor
                     return true;
@@ -274,7 +283,7 @@ namespace Assembly_Planner
                 for (var i = 1; i < candidateHexVal.Count; i++)
                     cos.Add(firstPrimNormal.dotProduct(((Flat) candidateHexVal[i]).Normal));
                 // if it is philips head, the cos list must have four 0, two -1 and one 1
-                if (cos.Count(c => Math.Abs(0.0 - c) < 0.0001) != 4 || 
+                if (cos.Count(c => Math.Abs(0.0 - c) < 0.0001) != 4 ||
                     cos.Count(c => Math.Abs(-1 - c) < 0.0001) != 2 ||
                     cos.Count(c => Math.Abs(1 - c) < 0.0001) != 1) continue;
                 var fastener = new Fastener
@@ -306,9 +315,10 @@ namespace Assembly_Planner
                 //    1. If the number of solid vertices in front of each flat is equal to another
                 //    2. If the summation of the vertices in 1 is greater than the total # of verts
                 //    3. and I also need to add some constraints for the for eample the area of the cylinder
-                var leftVerts = VertsInfrontOfFlat(solid, (Flat)candidateHexVal[0]);
-                var rightVerts = VertsInfrontOfFlat(solid, (Flat)candidateHexVal[1]);
-                if (Math.Abs(leftVerts - rightVerts) > 2 || leftVerts + rightVerts <= solid.Vertices.Length) return false;
+                var leftVerts = VertsInfrontOfFlat(solid, (Flat) candidateHexVal[0]);
+                var rightVerts = VertsInfrontOfFlat(solid, (Flat) candidateHexVal[1]);
+                if (Math.Abs(leftVerts - rightVerts) > 2 || leftVerts + rightVerts <= solid.Vertices.Length)
+                    return false;
                 if (!solidPrim.Where(p => p is Cylinder).Cast<Cylinder>().Any(c => c.IsPositive)) return false;
                 var fastener = new Fastener
                 {
@@ -384,16 +394,17 @@ namespace Assembly_Planner
                         c =>
                             (Math.Abs(c.Axis.dotProduct(cone.Axis) - 1) < 0.001 ||
                              Math.Abs(c.Axis.dotProduct(cone.Axis) + 1) < 0.001) &&
-                            (Math.Abs(c.Faces.Count - cone.Faces.Count) < 3) && 
+                            (Math.Abs(c.Faces.Count - cone.Faces.Count) < 3) &&
                             (Math.Abs(c.Area - cone.Area) < 0.001) &&
                             (Math.Abs(c.Aperture - cone.Aperture) < 0.001)).ToList();
                 if (threads.Count < 10) continue;
                 if (ConeThreadIsInternal(threads))
-                    Nuts.Add(new Nut { Solid = solid });
+                    Nuts.Add(new Nut {Solid = solid});
                 Fasteners.Add(new Fastener
                 {
                     Solid = solid,
-                    //RemovalDirection = RemovalDirectionFinderForSeperateConesThread()
+                    RemovalDirection =
+                        RemovalDirectionFinderUsingObb(solid, PartitioningSolid.OrientedBoundingBoxDic[solid])
                 });
                 return true;
             }
@@ -409,12 +420,14 @@ namespace Assembly_Planner
             // It seems to be expensive. Let's see how it goes.
             // Standard thread angles:
             //       60     55     29     45     30    80 
-            foreach (var edge in solid.Edges.Where(e => Math.Abs(e.InternalAngle - 2.08566845) < 0.04))  // 2.0943951 is equal to 120 degree
+            foreach (var edge in solid.Edges.Where(e => Math.Abs(e.InternalAngle - 2.08566845) < 0.04))
+                // 2.0943951 is equal to 120 degree
             {
                 // To every side of the edge if there is one edge with the IA of 120, this edge is unique and we dcannot find the second one. 
-                var visited = new HashSet<Edge> { edge };
+                var visited = new HashSet<Edge> {edge};
                 var stack = new Stack<Edge>();
-                var possibleHelixEdges = FindHelixEdgesConnectedToAnEdge(solid.Edges, edge, visited); // It can have 0, 1 or 2 edges
+                var possibleHelixEdges = FindHelixEdgesConnectedToAnEdge(solid.Edges, edge, visited);
+                // It can have 0, 1 or 2 edges
                 if (possibleHelixEdges == null) continue;
                 foreach (var e in possibleHelixEdges)
                     stack.Push(e);
@@ -423,7 +436,8 @@ namespace Assembly_Planner
                 {
                     var e = stack.Pop();
                     visited.Add(e);
-                    var cand = FindHelixEdgesConnectedToAnEdge(solid.Edges, e, visited); // if yes, it will only have one edge.
+                    var cand = FindHelixEdgesConnectedToAnEdge(solid.Edges, e, visited);
+                    // if yes, it will only have one edge.
                     if (cand == null) continue;
                     stack.Push(cand[0]);
                 }
@@ -432,7 +446,12 @@ namespace Assembly_Planner
                 // if the thread is internal, classify it as nut, else fastener
                 if (HelixThreadIsInternal(visited))
                     Nuts.Add(new Nut {Solid = solid});
-                Fasteners.Add(new Fastener {Solid = solid});
+                Fasteners.Add(new Fastener
+                {
+                    Solid = solid,
+                    RemovalDirection =
+                        RemovalDirectionFinderUsingObb(solid, PartitioningSolid.OrientedBoundingBoxDic[solid])
+                });
                 return true;
             }
             return false;
@@ -483,8 +502,8 @@ namespace Assembly_Planner
                 var primEqualArea = new Dictionary<PrimitiveSurface, List<PrimitiveSurface>>();
                 foreach (var prim in solidPrimitive[solid].Where(p => p is Flat))
                 {
-                    var equalExist = primEqualArea.Keys.Where(p =>Math.Abs(p.Area - prim.Area) < 0.01).ToList();
-                    if (!equalExist.Any()) primEqualArea.Add(prim, new List<PrimitiveSurface> { prim });
+                    var equalExist = primEqualArea.Keys.Where(p => Math.Abs(p.Area - prim.Area) < 0.01).ToList();
+                    if (!equalExist.Any()) primEqualArea.Add(prim, new List<PrimitiveSurface> {prim});
                     else
                     {
                         foreach (var equal in equalExist)
@@ -516,10 +535,10 @@ namespace Assembly_Planner
 
         private static double ToolSizeFinder(List<PrimitiveSurface> candidateHexVal)
         {
-            var firstPrimNormal = ((Flat)candidateHexVal[0]).Normal;
+            var firstPrimNormal = ((Flat) candidateHexVal[0]).Normal;
             for (var i = 1; i < candidateHexVal.Count; i++)
             {
-                if(Math.Abs(firstPrimNormal.dotProduct(((Flat)candidateHexVal[i]).Normal) + 1) > 0.0001) continue;
+                if (Math.Abs(firstPrimNormal.dotProduct(((Flat) candidateHexVal[i]).Normal) + 1) > 0.0001) continue;
                 return
                     Math.Abs(Math.Abs(candidateHexVal[0].Vertices[0].Position.dotProduct(firstPrimNormal)) -
                              Math.Abs(candidateHexVal[i].Vertices[0].Position.dotProduct(firstPrimNormal)));
@@ -527,7 +546,8 @@ namespace Assembly_Planner
             return 0.0;
         }
 
-        private static List<TessellatedSolid> SmallObjectsDetector(Dictionary<TessellatedSolid, List<TessellatedSolid>> solidRepeated)
+        private static List<TessellatedSolid> SmallObjectsDetector(
+            Dictionary<TessellatedSolid, List<TessellatedSolid>> solidRepeated)
         {
             var partSize = new Dictionary<TessellatedSolid, double>();
             var parts = solidRepeated.Keys.ToList();
@@ -539,13 +559,17 @@ namespace Assembly_Planner
                 for (var i = 1; i < solidObb.CornerVertices.Count(); i++)
                 {
                     var dis =
-                        Math.Sqrt(Math.Pow(solidObb.CornerVertices[0].Position[0] - solidObb.CornerVertices[i].Position[0], 2.0) +
-                                  Math.Pow(solidObb.CornerVertices[0].Position[1] - solidObb.CornerVertices[i].Position[1], 2.0) +
-                                  Math.Pow(solidObb.CornerVertices[0].Position[2] - solidObb.CornerVertices[i].Position[2], 2.0));
+                        Math.Sqrt(
+                            Math.Pow(solidObb.CornerVertices[0].Position[0] - solidObb.CornerVertices[i].Position[0],
+                                2.0) +
+                            Math.Pow(solidObb.CornerVertices[0].Position[1] - solidObb.CornerVertices[i].Position[1],
+                                2.0) +
+                            Math.Pow(solidObb.CornerVertices[0].Position[2] - solidObb.CornerVertices[i].Position[2],
+                                2.0));
                     if (dis < shortestObbEdge) shortestObbEdge = dis;
                     if (dis > longestObbEdge) longestObbEdge = dis;
                 }
-                var sizeMetric = solid.Volume * (longestObbEdge / shortestObbEdge);
+                var sizeMetric = solid.Volume*(longestObbEdge/shortestObbEdge);
                 partSize.Add(solid, sizeMetric);
             }
             // if removing the first 10 percent drops the max size by 95 percent, consider them as noise: 
@@ -554,7 +578,7 @@ namespace Assembly_Planner
             sortedPartSize.Sort((x, y) => y.Value.CompareTo(x.Value));
 
             var noise = new List<TessellatedSolid>();
-            for (var i = 0; i < Math.Ceiling(partSize.Count * 5 / 100.0); i++)
+            for (var i = 0; i < Math.Ceiling(partSize.Count*5/100.0); i++)
                 noise.Add(sortedPartSize[i].Key);
             var approvedNoise = new List<TessellatedSolid>();
             for (var i = 0; i < noise.Count; i++)
@@ -566,62 +590,16 @@ namespace Assembly_Planner
                     partSize.Where(a => !newList.Contains(a.Key))
                         .ToDictionary(key => key.Key, value => value.Value)
                         .Values.Max();
-                if (max > maxSize * 10.0 / 100.0) continue;
+                if (max > maxSize*10.0/100.0) continue;
                 approvedNoise = newList;
                 break;
             }
             maxSize = partSize.Where(a => !approvedNoise.Contains(a.Key))
-                        .ToDictionary(key => key.Key, value => value.Value)
-                        .Values.Max();
+                .ToDictionary(key => key.Key, value => value.Value)
+                .Values.Max();
 
             // If I have detected a portion of the fasteners (a very good number of them possibly) by this point,
             // it can accellerate the primitive classification. If it is fastener, it doesn't need to be classified?
-            //string pathDesktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            //string filePath = pathDesktop + "\\mycsvfile.csv";
-
-            //if (!File.Exists(filePath))
-            //{
-            //    File.Create(filePath).Close();
-            //}
-            //string delimter = ",";
-            //List<string[]> output = new List<string[]>();
-            //foreach (var solid in parts.Where(s=>!approvedNoise.Contains(s)))
-            //{
-            /*var solidPrim = partPrimitive[solid];
-            var cones = solidPrim.Where(p => p is Cone).ToList();
-            var flat = solidPrim.Where(p => p is Flat).ToList();
-            var cylinder = solidPrim.Where(p => p is Cylinder).ToList();
-
-            double coneFacesCount = cones.Sum(c => c.Faces.Count);
-            double flatFacesCount = flat.Sum(f => f.Faces.Count);
-            double cylinderFacesCount = cylinder.Sum(c => c.Faces.Count);
-
-            var coneArea = cones.Sum(c => c.Area);
-            var flatArea = flat.Sum(c => c.Area);
-            var cylinderArea = cylinder.Sum(c => c.Area);
-
-            var feature1 = flatFacesCount/(flatArea/solid.SurfaceArea);
-            var feature2 = coneFacesCount/(coneArea/solid.SurfaceArea);
-            var feature3 = cylinderFacesCount/(cylinderArea/solid.SurfaceArea);
-            var feature4 = coneFacesCount/solid.Faces.Count();
-            var feature5 = flatFacesCount/solid.Faces.Count();
-            var feature6 = cylinderFacesCount/solid.Faces.Count();
-            var feature7 = (coneArea + cylinderArea)/solid.SurfaceArea;*/
-            //var feature8 = partSize[solid]/maxSize;
-            //Console.WriteLine(solid.Name + "   " + feature8);
-            //lock (output)
-            //output.Add(new[]
-            // {
-            //    feature1.ToString(), feature2.ToString(), feature3.ToString(), feature4.ToString(),
-            //     feature5.ToString(), feature6.ToString(), feature7.ToString()
-            // });
-            //}
-
-            /* int length = output.Count;
-             using (TextWriter writer = File.CreateText(filePath))
-                 for (int index = 0; index < length; index++)
-                     writer.WriteLine(string.Join(delimter, output[index]));*/
-
 
             // creating the dictionary:
             var n = 99.0; // number of classes
@@ -629,14 +607,14 @@ namespace Assembly_Planner
 
             // Filling up the keys
             var minSize = partSize.Where(a => !approvedNoise.Contains(a.Key))
-                        .ToDictionary(key => key.Key, value => value.Value)
-                        .Values.Min();
+                .ToDictionary(key => key.Key, value => value.Value)
+                .Values.Min();
             var smallestSolid = partSize.Keys.Where(s => partSize[s] == minSize).ToList();
 
             for (var i = 0; i < n; i++)
             {
                 var ini = new List<TessellatedSolid>();
-                var key = minSize + (i / (n - 1)) * (maxSize - minSize);
+                var key = minSize + (i/(n - 1))*(maxSize - minSize);
                 dic.Add(key, ini);
             }
 
@@ -662,7 +640,8 @@ namespace Assembly_Planner
             return dic[minSize];
         }
 
-        private static int RemovalDirectionFinderForSlot(List<Flat> equalFlats, List<Flat> flats, BoundingBox boundingBox)
+        private static int RemovalDirectionFinderForSlot(List<Flat> equalFlats, List<Flat> flats,
+            BoundingBox boundingBox)
         {
             // for the slot, there will be a flat that is prependicular to both equal flats.
             // this can give mistakably the sides of the bolt head. 
@@ -673,7 +652,7 @@ namespace Assembly_Planner
             double[] normal = null;
             foreach (var prep in prependicularFlats)
             {
-                if (equalFlatsVerts.Any(v=> prep.Normal.dotProduct(v.Position.subtract(prep.Vertices[0].Position)) < 0))
+                if (equalFlatsVerts.Any(v => prep.Normal.dotProduct(v.Position.subtract(prep.Vertices[0].Position)) < 0))
                     continue;
                 normal = prep.Normal;
                 break;
@@ -682,6 +661,7 @@ namespace Assembly_Planner
                 DisassemblyDirections.Directions.Where(d => Math.Abs(d.dotProduct(normal) - 1) < 0.001).ToList()[0];
             return DisassemblyDirections.Directions.IndexOf(equInDirections);
         }
+
         private static int RemovalDirectionFinderForAllenHexPhillips(List<Flat> flatPrims, BoundingBox solid)
         {
             // This function works for hex bolt, alle, philips and phillips and slot combo
@@ -708,7 +688,7 @@ namespace Assembly_Planner
             return DisassemblyDirections.Directions.IndexOf(equInDirections.multiply(-1.0));
         }
 
-        private static int RemovalDirectionFinderForSeperateConesThread(TessellatedSolid solid, BoundingBox obb)
+        private static int RemovalDirectionFinderUsingObb(TessellatedSolid solid, BoundingBox obb)
         {
             // this is hard. it can be a simple threaded rod,or it can be a standard
             // bolt that could not be detected by other approaches.
@@ -743,7 +723,8 @@ namespace Assembly_Planner
             return DisassemblyDirections.Directions.IndexOf(equInDirections);
         }
 
-        private static PolygonalFace LongestPlaneOfObbDetector(BoundingBox obb, out PolygonalFace facePrepToRD1, out PolygonalFace facePrepToRD2)
+        private static PolygonalFace LongestPlaneOfObbDetector(BoundingBox obb, out PolygonalFace facePrepToRD1,
+            out PolygonalFace facePrepToRD2)
         {
             var dis1 = DistanceBetweenTwoVertex(obb.CornerVertices[0], obb.CornerVertices[1]);
             var dis2 = DistanceBetweenTwoVertex(obb.CornerVertices[0], obb.CornerVertices[2]);
@@ -765,35 +746,35 @@ namespace Assembly_Planner
             if (dis2 >= dis1 && dis2 >= dis3)
             {
                 facePrepToRD1 =
-                    new PolygonalFace(new[] { obb.CornerVertices[1], obb.CornerVertices[0], obb.CornerVertices[4] },
+                    new PolygonalFace(new[] {obb.CornerVertices[1], obb.CornerVertices[0], obb.CornerVertices[4]},
                         ((obb.CornerVertices[1].Position.subtract(obb.CornerVertices[0].Position)).crossProduct(
                             obb.CornerVertices[4].Position.subtract(obb.CornerVertices[0].Position))).normalize());
                 facePrepToRD2 =
-                    new PolygonalFace(new[] { obb.CornerVertices[2], obb.CornerVertices[3], obb.CornerVertices[7] },
+                    new PolygonalFace(new[] {obb.CornerVertices[2], obb.CornerVertices[3], obb.CornerVertices[7]},
                         ((obb.CornerVertices[2].Position.subtract(obb.CornerVertices[3].Position)).crossProduct(
                             obb.CornerVertices[7].Position.subtract(obb.CornerVertices[3].Position))).normalize());
-                return new PolygonalFace(new[] { obb.CornerVertices[0], obb.CornerVertices[1], obb.CornerVertices[2] },
+                return new PolygonalFace(new[] {obb.CornerVertices[0], obb.CornerVertices[1], obb.CornerVertices[2]},
                     ((obb.CornerVertices[2].Position.subtract(obb.CornerVertices[0].Position)).crossProduct(
                         obb.CornerVertices[1].Position.subtract(obb.CornerVertices[0].Position))).normalize());
             }
             if (dis3 >= dis2 && dis3 >= dis1)
             {
                 facePrepToRD1 =
-                    new PolygonalFace(new[] { obb.CornerVertices[0], obb.CornerVertices[1], obb.CornerVertices[2] },
+                    new PolygonalFace(new[] {obb.CornerVertices[0], obb.CornerVertices[1], obb.CornerVertices[2]},
                         ((obb.CornerVertices[2].Position.subtract(obb.CornerVertices[0].Position)).crossProduct(
                             obb.CornerVertices[1].Position.subtract(obb.CornerVertices[0].Position))).normalize());
                 facePrepToRD2 =
-                    new PolygonalFace(new[] { obb.CornerVertices[4], obb.CornerVertices[5], obb.CornerVertices[6] },
+                    new PolygonalFace(new[] {obb.CornerVertices[4], obb.CornerVertices[5], obb.CornerVertices[6]},
                         ((obb.CornerVertices[5].Position.subtract(obb.CornerVertices[4].Position)).crossProduct(
                             obb.CornerVertices[6].Position.subtract(obb.CornerVertices[4].Position))).normalize());
-                return new PolygonalFace(new[] { obb.CornerVertices[1], obb.CornerVertices[0], obb.CornerVertices[4] },
+                return new PolygonalFace(new[] {obb.CornerVertices[1], obb.CornerVertices[0], obb.CornerVertices[4]},
                     ((obb.CornerVertices[1].Position.subtract(obb.CornerVertices[0].Position)).crossProduct(
                         obb.CornerVertices[4].Position.subtract(obb.CornerVertices[0].Position))).normalize());
             }
             facePrepToRD1 = null;
             facePrepToRD2 = null;
             return null;
-        } 
+        }
 
         private static double[] NormalGuessFinder(List<Flat> flatPrims)
         {
@@ -842,7 +823,8 @@ namespace Assembly_Planner
             return finalCenterline;
         }
 
-        internal static Dictionary<TessellatedSolid, double[]> GearDetector(Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive)
+        internal static Dictionary<TessellatedSolid, double[]> GearDetector(
+            Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive)
         {
             var gears = new Dictionary<TessellatedSolid, double[]>();
             foreach (var solid in solidPrimitive.Keys)
@@ -851,7 +833,7 @@ namespace Assembly_Planner
                 var flats =
                     solidPrimitive[solid].Where(
                         p => p is Flat && p.Faces.Count > BoltAndGearConstants.TriabglesInTheGearSideFaces).ToList();
-                
+
                 foreach (var flatPrim in flats)
                 {
                     var outerGearEdges = GearEdge.FromTVGLEdgeClassToGearEdgeClass(flatPrim.OuterEdges);
@@ -868,7 +850,7 @@ namespace Assembly_Planner
                         if (newPatch.Count == 0) newPatch = patch;
                         for (var i = 0; i < newPatch.Count - 1; i++)
                         {
-                            var cross = new[] { 0.0, 0, 0 };
+                            var cross = new[] {0.0, 0, 0};
                             var vec1 = newPatch[i].Vector.normalize();
                             var vec2 = newPatch[i + 1].Vector.normalize();
                             if (SmoothAngle(vec1, vec2))
@@ -899,7 +881,7 @@ namespace Assembly_Planner
             var isGear = true;
             var counter = 0;
             var startInd = 0;
-            for (var i = 0; i < crossSign.Count;i++)
+            for (var i = 0; i < crossSign.Count; i++)
             {
                 if (crossSign[i] == crossSign[i + 1])
                 {
@@ -971,6 +953,59 @@ namespace Assembly_Planner
         private static bool SmoothAngle(double[] vec1, double[] vec2)
         {
             return Math.Abs(vec1.dotProduct(vec2)) > BoltAndGearConstants.SmoothAngle;
+        }
+
+        private static void FeatureFileCrator(Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive,
+            Dictionary<TessellatedSolid, List<TessellatedSolid>> multipleRefs)
+        {
+            string pathDesktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            string filePath = pathDesktop + "\\mycsvfile.csv";
+
+            if (!File.Exists(filePath))
+                File.Create(filePath).Close();
+            string delimter = ",";
+            List<string[]> output = new List<string[]>();
+            foreach (var solid in solidPrimitive.Keys) //.Where(s => !approvedNoise.Contains(s)))
+            {
+                var solidPrim = solidPrimitive[solid];
+                var cones = solidPrim.Where(p => p is Cone).ToList();
+                //var flat = solidPrim.Where(p => p is Flat).ToList();
+                var cylinder = solidPrim.Where(p => p is Cylinder).ToList();
+                var sphere = solidPrim.Where(p => p is Sphere).ToList();
+
+                double coneFacesCount = cones.Sum(c => c.Faces.Count);
+                //double flatFacesCount = flat.Sum(f => f.Faces.Count);
+                double cylinderFacesCount = cylinder.Sum(c => c.Faces.Count);
+                double sphereFacesCount = sphere.Sum(c => c.Faces.Count);
+
+                var coneArea = cones.Sum(c => c.Area);
+                //var flatArea = flat.Sum(c => c.Area);
+                var cylinderArea = cylinder.Sum(c => c.Area);
+                var sphereArea = sphere.Sum(c => c.Area);
+
+                //var feature1 = flatFacesCount/(flatArea/solid.SurfaceArea);
+                //var feature2 = coneFacesCount/(coneArea/solid.SurfaceArea);
+                //var feature3 = cylinderFacesCount/(cylinderArea/solid.SurfaceArea);
+                //var feature4 = coneFacesCount/solid.Faces.Count();
+                //var feature5 = flatFacesCount/solid.Faces.Count();
+                //var feature6 = cylinderFacesCount/solid.Faces.Count();
+                var feature7 = (coneArea + cylinderArea)/solid.SurfaceArea;
+                //var feature8 = partSize[solid]/maxSize;
+                var feature9 = cones.Count; //number of cone primitives
+
+                //Console.WriteLine(solid.Name + "   " + feature8);
+                lock (output)
+                    output.Add(new[]
+                    {
+                        //feature1.ToString(), feature2.ToString(), feature3.ToString(), feature4.ToString(),
+                        feature7.ToString(), feature9.ToString()
+                    });
+            }
+
+            int length = output.Count;
+            using (TextWriter writer = File.CreateText(filePath))
+                for (int index = 0; index < length; index++)
+                    writer.WriteLine(string.Join(delimter, output[index]));
         }
     }
 }

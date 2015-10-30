@@ -22,13 +22,13 @@ namespace Assembly_Planner
             var inputDir =
                 //"../../../Test/Cube";
                 //"../../../Test/PumpWExtention";
-                "../../../Test/FastenerTest/new/test";
+                //"../../../Test/FastenerTest/new/test";
                 //"../../../Test/Double";
                 //"../../../Test/Simple-Test";
                 //"../../../Test/Mc Cormik/STL2";
                 //"../../../Test/Truck -TXT-1/STL";
                 //"../../../Test/FoodPackagingMachine/FPMSTL2";
-                //"C:\\DMDII Project\\GearAndFastener Detection\\TrainingData\\not-screw";
+                "../../../../GearAndFastener Detection/NewTraining/notFastener";
                 //"../../../Test/test";
             var s = Stopwatch.StartNew();
             s.Start();
@@ -54,8 +54,8 @@ namespace Assembly_Planner
                 //NonadjacentBlockingDetermination.Run(assemblyGraph, solids, globalDirPool);
                 //GraphSaving.SaveTheGraph(assemblyGraph);
             }
-            //var inputData = new ConvexHullAndBoundingBox(inputDir, assemblyGraph);
-            //var solutions = RecursiveOptimizedSearch.Run(inputData, globalDirPool);
+            var inputData = new ConvexHullAndBoundingBox(inputDir, assemblyGraph);
+            var solutions = RecursiveOptimizedSearch.Run(inputData, globalDirPool);
             //var solutions = OrderedDFS.Run(inputData, globalDirPool,solids); // the output is the assembly sequence
             //var solutions = BeamSearch.Run(inputData, globalDirPool);
            

@@ -137,6 +137,7 @@
     <Compile Include="InitialGraphMaker\BoltAndGearDetector\BoltAndGearDetection.cs" />
     <Compile Include="InitialGraphMaker\BoltAndGearDetector\BoltAndGearUpdateFunctions.cs" />
     <Compile Include="InitialGraphMaker\BoltAndGearDetector\ClusteringDenseAndSparseEdges.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\FastenerLearner.cs" />
     <Compile Include="InitialGraphMaker\DisassemblyDirections.cs" />
     <Compile Include="InitialGraphMaker\BoltAndGearDetector\GearEdge.cs" />
     <Compile Include="InitialGraphMaker\DisassemblyDirectionsWithFastener.cs" />

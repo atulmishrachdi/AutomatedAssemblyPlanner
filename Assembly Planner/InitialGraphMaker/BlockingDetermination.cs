@@ -27,9 +27,15 @@ namespace Assembly_Planner
             Console.WriteLine("Classifying Primitives for " + parts.Count + " unique parts ....");
             var partPrimitive = new Dictionary<TessellatedSolid, List<PrimitiveSurface>>();
 
-            //Parallel.ForEach(parts, solid =>
-            foreach (var solid in parts)
+            var a =
+                parts.Where(
+                    p =>
+                        (!p.Name.Contains("HPI_Baja_5SS - Front_Suspension-1 85463-1 85463_1-1") && !p.Name.Contains("HPI_Baja_5SS - Front_Suspension-1 Front_Shock-1 Front_Shock_Upper-1 85410_") && !p.Name.Contains("HPI_Baja_5SS - Front_Suspension-1 Sway_Bar_Rear_Linkage_Left-1 85416_5-1") /*&& !p.Name.Contains("94309A150")*/)).ToList();
+            Parallel.ForEach(a, solid =>
+            //foreach (var solid in parts)
             {
+                //if ((solid.Faces.Length == 7276 && solid.Vertices.Length == 3641 && solid.Edges.Length == 10912) || solid.Name.Contains("92467A322") || solid.Name.Contains("92750A058") || solid.Name.Contains("98694A145"))
+                //    continue;
                 //foreach (var edge in solid.Edges)
                 //{
                 //    Debug.WriteLine(edge.InternalAngle);
@@ -38,7 +44,7 @@ namespace Assembly_Planner
                 lock (partPrimitive)
                     partPrimitive.Add(solid, solidPrim);
             }
-             //);
+             );//
 
             s.Stop();
             Console.WriteLine("Primitive classification is done in:" + "     " + s.Elapsed);

@@ -40,7 +40,7 @@ namespace Assembly_Planner
             
             // Creating OBB for every solid
             //------------------------------------------------------------------------------------------
-            PartitioningSolid.CreateOBB(solids);
+            //PartitioningSolid.CreateOBB(solids);
             
             // Detect fasteners and gear mates
             //------------------------------------------------------------------------------------------

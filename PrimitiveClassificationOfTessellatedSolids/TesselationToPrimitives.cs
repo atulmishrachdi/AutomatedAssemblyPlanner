@@ -27,14 +27,6 @@ namespace PrimitiveClassificationOfTessellatedSolids
 
         public static List<PrimitiveSurface> Run(TessellatedSolid ts)
         {
-            //foreach (var face in ts.Faces)
-            //{
-            //    Debug.WriteLine(face.Normal.MakePrintString());
-            //}
-            foreach (var edge in ts.Edges)
-            {
-                Debug.WriteLine(edge.InternalAngle);
-            }
             if (listOfLimitsABN == null || listOfLimitsMCM == null | listOfLimitsSM == null || edgeRules == null || faceRules == null)
                 InitializeFuzzinessRules();
             var allFacesWithScores = new List<FaceWithScores>(ts.Faces.Select(f => new FaceWithScores(f)));
