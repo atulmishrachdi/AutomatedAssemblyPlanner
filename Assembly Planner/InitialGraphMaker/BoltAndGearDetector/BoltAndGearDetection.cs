@@ -23,9 +23,11 @@ namespace Assembly_Planner
 
         internal static HashSet<TessellatedSolid> ScrewAndBoltDetector(
             Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive,
-            Dictionary<TessellatedSolid, List<TessellatedSolid>> multipleRefs, bool autoDetection, bool threaded)
+            Dictionary<TessellatedSolid, List<TessellatedSolid>> multipleRefs, bool autoDetection, bool threaded,
+            bool regenerateTrainingData = false)
         {
-            FeatureFileCrator(solidPrimitive, multipleRefs);
+            if (threaded)
+                FastenerLearner.TrainingDataGenerator(regenerateTrainingData);
             var s = Stopwatch.StartNew();
             s.Start();
             Console.WriteLine();
@@ -953,59 +955,6 @@ namespace Assembly_Planner
         private static bool SmoothAngle(double[] vec1, double[] vec2)
         {
             return Math.Abs(vec1.dotProduct(vec2)) > BoltAndGearConstants.SmoothAngle;
-        }
-
-        private static void FeatureFileCrator(Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive,
-            Dictionary<TessellatedSolid, List<TessellatedSolid>> multipleRefs)
-        {
-            string pathDesktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            string filePath = pathDesktop + "\\mycsvfile.csv";
-
-            if (!File.Exists(filePath))
-                File.Create(filePath).Close();
-            string delimter = ",";
-            List<string[]> output = new List<string[]>();
-            foreach (var solid in solidPrimitive.Keys) //.Where(s => !approvedNoise.Contains(s)))
-            {
-                var solidPrim = solidPrimitive[solid];
-                var cones = solidPrim.Where(p => p is Cone).ToList();
-                //var flat = solidPrim.Where(p => p is Flat).ToList();
-                var cylinder = solidPrim.Where(p => p is Cylinder).ToList();
-                var sphere = solidPrim.Where(p => p is Sphere).ToList();
-
-                double coneFacesCount = cones.Sum(c => c.Faces.Count);
-                //double flatFacesCount = flat.Sum(f => f.Faces.Count);
-                double cylinderFacesCount = cylinder.Sum(c => c.Faces.Count);
-                double sphereFacesCount = sphere.Sum(c => c.Faces.Count);
-
-                var coneArea = cones.Sum(c => c.Area);
-                //var flatArea = flat.Sum(c => c.Area);
-                var cylinderArea = cylinder.Sum(c => c.Area);
-                var sphereArea = sphere.Sum(c => c.Area);
-
-                //var feature1 = flatFacesCount/(flatArea/solid.SurfaceArea);
-                //var feature2 = coneFacesCount/(coneArea/solid.SurfaceArea);
-                //var feature3 = cylinderFacesCount/(cylinderArea/solid.SurfaceArea);
-                //var feature4 = coneFacesCount/solid.Faces.Count();
-                //var feature5 = flatFacesCount/solid.Faces.Count();
-                //var feature6 = cylinderFacesCount/solid.Faces.Count();
-                var feature7 = (coneArea + cylinderArea)/solid.SurfaceArea;
-                //var feature8 = partSize[solid]/maxSize;
-                var feature9 = cones.Count; //number of cone primitives
-
-                //Console.WriteLine(solid.Name + "   " + feature8);
-                lock (output)
-                    output.Add(new[]
-                    {
-                        //feature1.ToString(), feature2.ToString(), feature3.ToString(), feature4.ToString(),
-                        feature7.ToString(), feature9.ToString()
-                    });
-            }
-
-            int length = output.Count;
-            using (TextWriter writer = File.CreateText(filePath))
-                for (int index = 0; index < length; index++)
-                    writer.WriteLine(string.Join(delimter, output[index]));
         }
     }
 }

@@ -18,6 +18,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.AccessControl;
+using System.Xml.Serialization;
 using GraphSynth.Representation;
 using TVGL;
 
@@ -96,9 +97,11 @@ namespace Assembly_Planner.GraphSynth.BaseClasses
     /// </summary>
     public class Fastener
     {
+
         /// <summary>
         /// The tesselated solid
         /// </summary>
+        [XmlIgnore]
         public TessellatedSolid Solid;
         /// <summary>
         /// The removal direction
@@ -272,6 +275,7 @@ namespace Assembly_Planner.GraphSynth.BaseClasses
     public class Nut
     {
         /// <summary>
+        [XmlIgnore]
         /// The tesselated solid
         /// </summary>
         public TessellatedSolid Solid;
