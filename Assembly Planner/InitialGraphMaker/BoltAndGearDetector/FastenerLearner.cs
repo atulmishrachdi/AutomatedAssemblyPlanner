@@ -23,10 +23,17 @@ namespace Assembly_Planner
         {
             var feature = FeatureArrayCreator(primitives,solid);
             if (runLearner)
+            {
+                // the very first time we run the code, this needs to be done. But after weights are created and stored
+                // in a csv file, then we can ask user if they want to run the learner to get a better results or not.
+                // We can run it again only if the training data is updated by user or by the experiments that the code 
+                // does.
                 Learner();
+            }
             else
             {
                 // open existing votes from the CSV
+                // this is a more common case.
             }
             return false;
         }
@@ -36,7 +43,7 @@ namespace Assembly_Planner
             // Reading CSV
             var Y = new List<double>();
             var X = new double[Test, Features];
-            CSVReader(out X, out Y);
+            TrainingDataReader(out X, out Y);
 
             // Defining Variables
             var n = 0;
@@ -101,8 +108,8 @@ namespace Assembly_Planner
             Console.WriteLine(classificationErros.Min());
             Console.ReadLine();
         }
-        
-        private static void CSVReader(out double[,] X, out List<double> Y)
+
+        private static void TrainingDataReader(out double[,] X, out List<double> Y)
         {
             Y = new List<double>();
             X = new double[Test, Features];
