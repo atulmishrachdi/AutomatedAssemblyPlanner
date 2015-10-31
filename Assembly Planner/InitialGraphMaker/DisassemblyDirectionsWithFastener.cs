@@ -46,7 +46,7 @@ namespace Assembly_Planner
             //------------------------------------------------------------------------------------------
             var screwsAndBolts = new HashSet<TessellatedSolid>();
             if (classifyFastener)
-                screwsAndBolts = BoltAndGearDetection.ScrewAndBoltDetector(solidPrimitive, multipleRefs,false, threaded);
+                screwsAndBolts = BoltAndGearDetection.ScrewAndBoltDetector(solidPrimitive, multipleRefs,false, threaded,true);
             //var gears = BoltAndGearDetection.GearDetector(solidPrimitive);
 
             

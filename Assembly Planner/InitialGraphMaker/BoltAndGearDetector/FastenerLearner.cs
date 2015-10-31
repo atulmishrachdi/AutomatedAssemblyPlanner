@@ -16,7 +16,7 @@ namespace Assembly_Planner
         // and a list of Ws. Every w from the begining to the end is saved and a vote is 
         // assigned to each. What I need to do for the test data is to take these two lists,
         // and do the dot product on x, w and then c. 
-        private const int Test = 134;
+        private static int Test = 134;
         private static int Features = 3;
 
         internal static bool FastenerPerceptronLearner(List<PrimitiveSurface> primitives, TessellatedSolid solid,
@@ -116,7 +116,7 @@ namespace Assembly_Planner
             var reader =
                 new StreamReader(
                     File.OpenRead(
-                        "../../InitialGraphMaker/BoltAndGearDetector/TrainingData.csv"));
+                        "../../InitialGraphMaker/BoltAndGearDetector/ClassifierFiles/TrainingData.csv"));
             var counter = 0;
             while (!reader.EndOfStream)
             {
@@ -152,7 +152,7 @@ namespace Assembly_Planner
         {
             // the first m columns are weights (with m features (real features+1))
             // the last column is the vote
-            var path = "../../InitialGraphMaker/BoltAndGearDetector";
+            var path = "../../InitialGraphMaker/BoltAndGearDetector/ClassifierFiles";
 
             //Path to write the csv to:
             var weightsAndVotesPath = path + "/WeightsAndVotes.csv";
@@ -183,23 +183,6 @@ namespace Assembly_Planner
             return new[] { cones.Count, (coneArea + cylinderArea) / solid.SurfaceArea };
         }
 
-        private static List<TessellatedSolid> StlToSolid(string InputDir)
-        {
-            var parts = new List<TessellatedSolid>();
-            var di = new DirectoryInfo(InputDir);
-            var fis = di.EnumerateFiles("*.STL");
-            // Parallel.ForEach(fis, fileInfo =>
-            foreach (var fileInfo in fis)
-            {
-                var ts = IO.Open(fileInfo.Open(FileMode.Open), fileInfo.Name);
-                //ts.Name = ts.Name.Remove(0, 1);
-                //lock (parts) 
-                parts.Add(ts[0]);
-            }
-            //);
-            return parts;
-        }
-
         internal static void RunPerecptronLearner(bool regenerateTrainingData)
         {
             // this functions, finds the training stls, opens them,
@@ -215,8 +198,8 @@ namespace Assembly_Planner
             var path = "../../InitialGraphMaker/BoltAndGearDetector";
             
             //Path to write the csv to:
-            var trainingDataPath = path + "/TrainingData.csv";
-            var weightsAndVotesPath = path + "/WeightsAndVotes.csv";
+            var trainingDataPath = path + "/ClassifierFiles/TrainingData.csv";
+            var weightsAndVotesPath = path + "/ClassifierFiles/WeightsAndVotes.csv";
             if (!regenerateTrainingData && File.Exists(weightsAndVotesPath))
                 return;
             if (!regenerateTrainingData && !File.Exists(weightsAndVotesPath) && File.Exists(trainingDataPath))
@@ -228,11 +211,11 @@ namespace Assembly_Planner
             if (!regenerateTrainingData && !File.Exists(weightsAndVotesPath) && !File.Exists(trainingDataPath))
                 Console.WriteLine("Sorry!! csv files don't exist. We need to generate the training data");
             //Path to read STLs from:
-            var stlFastenerPath = path + "TrainingSTLs/Fastener";
+            var stlFastenerPath = path + "/TrainingSTLs/Fastener";
             var fastenersTraining = StlToSolid(stlFastenerPath);
             var fastenerPrimitive = BlockingDetermination.PrimitiveMaker(fastenersTraining);
 
-            var stlNotFastenerPath = path + "TrainingSTLs/notFastener";
+            var stlNotFastenerPath = path + "/TrainingSTLs/notFastener";
             var ntFastenersTraining = StlToSolid(stlNotFastenerPath);
             var notFastenerPrimitive = BlockingDetermination.PrimitiveMaker(ntFastenersTraining);
 
@@ -252,7 +235,7 @@ namespace Assembly_Planner
             var output = new List<string[]>();
             OutputFeatureArrayCreator(fastenerPrimitive, true, output);
             OutputFeatureArrayCreator(notFastenerPrimitive, false, output);
-
+            Test = output.Count;
             var length = output.Count;
             using (TextWriter writer = File.CreateText(filePath))
                 for (int index = 0; index < length; index++)
@@ -268,7 +251,7 @@ namespace Assembly_Planner
             {
                 var solidPrim = solidPrimitive[solid];
                 var cones = solidPrim.Where(p => p is Cone).ToList();
-                //var flat = solidPrim.Where(p => p is Flat).ToList();
+                var flat = solidPrim.Where(p => p is Flat).ToList();
                 var cylinder = solidPrim.Where(p => p is Cylinder).ToList();
                 var sphere = solidPrim.Where(p => p is Sphere).ToList();
 
@@ -278,7 +261,7 @@ namespace Assembly_Planner
                 //double sphereFacesCount = sphere.Sum(c => c.Faces.Count);
 
                 var coneArea = cones.Sum(c => c.Area);
-                //var flatArea = flat.Sum(c => c.Area);
+                var flatArea = flat.Sum(c => c.Area);
                 var cylinderArea = cylinder.Sum(c => c.Area);
                 //var sphereArea = sphere.Sum(c => c.Area);
 
@@ -297,8 +280,7 @@ namespace Assembly_Planner
                     feature7.ToString(),
                     feature9.ToString()
                 };
-
-                Features = featureArray.Count + 1;
+                Features = featureArray.Count;
                 output.Add(featureArray.ToArray());
             }
         }
@@ -310,7 +292,7 @@ namespace Assembly_Planner
             var reader =
                 new StreamReader(
                     File.OpenRead(
-                        "../../InitialGraphMaker/BoltAndGearDetector/TrainingData.csv"));
+                        "../../InitialGraphMaker/BoltAndGearDetector/ClassifierFiles/TrainingData.csv"));
             while (!reader.EndOfStream)
             {
                 var line = reader.ReadLine();
@@ -323,6 +305,26 @@ namespace Assembly_Planner
                 weights.Add(w);
             }
             return weights;
+        }
+
+        private static List<TessellatedSolid> StlToSolid(string InputDir)
+        {
+            var parts = new List<TessellatedSolid>();
+            var di = new DirectoryInfo(InputDir);
+            var fis = di.EnumerateFiles("*.STL");
+            Parallel.ForEach(fis, fileInfo =>
+            //foreach (var fileInfo in fis)
+            {
+                var ts = IO.Open(fileInfo.Open(FileMode.Open), fileInfo.Name);
+                //ts.Name = ts.Name.Remove(0, 1);
+                lock (parts)
+                    parts.Add(ts[0]);
+            }
+            );//
+            parts =
+                parts.Where(p => !p.Faces.Any(f => f.Edges.Any(e => e.OtherFace == null || e.OwnedFace == null)))
+                    .ToList();
+            return parts;
         }
     }
 }

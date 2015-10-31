@@ -40,7 +40,6 @@ namespace PrimitiveClassificationOfTessellatedSolids
             //SparseAndDenseClustering.Run(unassignedEdges, unassignedFaces, filteredOutEdges, filteredOutFaces);
             FilterOutBadFaces(unassignedEdges, unassignedFaces, filteredOutEdges, filteredOutFaces);
             Debug.WriteLine("Filtering is complete.");
-
             // Classify Edges
             foreach (var e in unassignedEdges)
                 EdgeFuzzyClassification(e);
