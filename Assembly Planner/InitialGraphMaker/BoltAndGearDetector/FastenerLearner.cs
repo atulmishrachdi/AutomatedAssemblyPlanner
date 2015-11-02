@@ -271,7 +271,7 @@ namespace Assembly_Planner
                 //var feature4 = coneFacesCount/solid.Faces.Count();
                 //var feature5 = flatFacesCount/solid.Faces.Count();
                 //var feature6 = cylinderFacesCount/solid.Faces.Count();
-                var feature7 = (coneArea + cylinderArea) / solid.SurfaceArea;
+                var feature7 = (coneArea+cylinderArea) / solid.SurfaceArea;
                 //var feature8 = partSize[solid]/maxSize;
                 var feature9 = cones.Count; //number of cone primitives
                 var featureArray = new List<string>

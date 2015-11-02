@@ -136,13 +136,13 @@ namespace Assembly_Planner
             foreach (var f in a.ConvexHullFaces)
             {
                 var dStar = (f.Normal.dotProduct(f.Vertices[0].Position));
-                if (b.ConvexHullVertices.All(pt => (f.Normal.dotProduct(pt.Position)) > dStar + 0.001))
+                if (b.ConvexHullVertices.All(pt => (f.Normal.dotProduct(pt.Position)) > dStar + 0.001)) // 0.001
                     return false;
             }
             foreach (var f in b.ConvexHullFaces)
             {
                 var dStar = (f.Normal.dotProduct(f.Vertices[0].Position));
-                if (a.ConvexHullVertices.All(pt => (f.Normal.dotProduct(pt.Position)) > dStar + 0.001))
+                if (a.ConvexHullVertices.All(pt => (f.Normal.dotProduct(pt.Position)) > dStar + 0.001)) // 0.001
                     return false;
             }
             return true;

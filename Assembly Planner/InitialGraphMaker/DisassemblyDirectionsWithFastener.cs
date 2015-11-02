@@ -40,13 +40,13 @@ namespace Assembly_Planner
             
             // Creating OBB for every solid
             //------------------------------------------------------------------------------------------
-            //PartitioningSolid.CreateOBB(solids);
+            PartitioningSolid.CreateOBB(solids);
             
             // Detect fasteners and gear mates
             //------------------------------------------------------------------------------------------
             var screwsAndBolts = new HashSet<TessellatedSolid>();
             if (classifyFastener)
-                screwsAndBolts = BoltAndGearDetection.ScrewAndBoltDetector(solidPrimitive, multipleRefs,false, threaded,true);
+                screwsAndBolts = BoltAndGearDetection.ScrewAndBoltDetector(solidPrimitive, multipleRefs,false, threaded,false);
             //var gears = BoltAndGearDetection.GearDetector(solidPrimitive);
 
             

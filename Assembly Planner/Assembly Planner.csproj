@@ -132,12 +132,14 @@
     <Compile Include="GraphSynth.BaseClasses\SearchProcess\RecognizeChooseApply.cs" />
     <Compile Include="GraphSynth.BaseClasses\SearchProcess\SearchProcess.cs" />
     <Compile Include="GraphSynth.BaseClasses\SecondaryConnection.cs" />
+    <Compile Include="InitialGraphMaker\BasicGeometryFunctions.cs" />
     <Compile Include="InitialGraphMaker\BlockingDetermination.cs" />
     <Compile Include="InitialGraphMaker\BoltAndGearDetector\BoltAndGearConstants.cs" />
     <Compile Include="InitialGraphMaker\BoltAndGearDetector\BoltAndGearDetection.cs" />
     <Compile Include="InitialGraphMaker\BoltAndGearDetector\BoltAndGearUpdateFunctions.cs" />
     <Compile Include="InitialGraphMaker\BoltAndGearDetector\ClusteringDenseAndSparseEdges.cs" />
     <Compile Include="InitialGraphMaker\BoltAndGearDetector\FastenerLearner.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\FastenerPolynomialTrend.cs" />
     <Compile Include="InitialGraphMaker\DisassemblyDirections.cs" />
     <Compile Include="InitialGraphMaker\BoltAndGearDetector\GearEdge.cs" />
     <Compile Include="InitialGraphMaker\DisassemblyDirectionsWithFastener.cs" />

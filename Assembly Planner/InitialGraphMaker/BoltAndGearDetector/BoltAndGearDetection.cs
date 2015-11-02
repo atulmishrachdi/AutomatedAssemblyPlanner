@@ -136,6 +136,12 @@ namespace Assembly_Planner
                 // run it here. How? 
                 if (FastenerLearner.FastenerPerceptronLearner(solidPrimitive[solid], solid, learnerWeights, learnerVotes))
                     continue;
+                // One more approach which actually turned out to be really interesting:
+                //    Create the OBB around the object. take any of the side faces. generate 
+                //    bunch of rays on the middle line of the side face. Shoot the ray and
+                //    find the smallest distance to the closest triangle. Plot these calculated
+                //    distances. Take a look at the trend and try to learn from it. 
+                if (FastenerPolynomialTrend.PolynomialTrendDetector(solid)) continue;
             }
             return null;
         }
@@ -717,9 +723,10 @@ namespace Assembly_Planner
             return DisassemblyDirections.Directions.IndexOf(equInDirections);
         }
 
-        private static PolygonalFace LongestPlaneOfObbDetector(BoundingBox obb, out PolygonalFace facePrepToRD1,
+        internal static PolygonalFace LongestPlaneOfObbDetector(BoundingBox obb, out PolygonalFace facePrepToRD1,
             out PolygonalFace facePrepToRD2)
         {
+            // it returns a triangle with normal parallel to the removal direction
             var dis1 = DistanceBetweenTwoVertex(obb.CornerVertices[0], obb.CornerVertices[1]);
             var dis2 = DistanceBetweenTwoVertex(obb.CornerVertices[0], obb.CornerVertices[2]);
             var dis3 = DistanceBetweenTwoVertex(obb.CornerVertices[0], obb.CornerVertices[4]);
