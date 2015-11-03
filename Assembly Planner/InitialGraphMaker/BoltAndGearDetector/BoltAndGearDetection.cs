@@ -705,7 +705,7 @@ namespace Assembly_Planner
             var minDist = double.PositiveInfinity;
             foreach (var ver in solid.ConvexHullVertices)
             {
-                var dis = DistanceBetweenVertexAndPlane(ver, longestPlane);
+                var dis = DistanceBetweenVertexAndPlane(ver, longestPlane[0]);
                 if (dis >= minDist)
                     continue;
                 closestVerToPlane = ver;
@@ -723,10 +723,10 @@ namespace Assembly_Planner
             return DisassemblyDirections.Directions.IndexOf(equInDirections);
         }
 
-        internal static PolygonalFace LongestPlaneOfObbDetector(BoundingBox obb, out PolygonalFace facePrepToRD1,
+        internal static PolygonalFace[] LongestPlaneOfObbDetector(BoundingBox obb, out PolygonalFace facePrepToRD1,
             out PolygonalFace facePrepToRD2)
         {
-            // it returns a triangle with normal parallel to the removal direction
+            // it returns longest side. (two adjacent triangles)
             var dis1 = DistanceBetweenTwoVertex(obb.CornerVertices[0], obb.CornerVertices[1]);
             var dis2 = DistanceBetweenTwoVertex(obb.CornerVertices[0], obb.CornerVertices[2]);
             var dis3 = DistanceBetweenTwoVertex(obb.CornerVertices[0], obb.CornerVertices[4]);
@@ -740,9 +740,15 @@ namespace Assembly_Planner
                     new PolygonalFace(new[] {obb.CornerVertices[1], obb.CornerVertices[3], obb.CornerVertices[7]},
                         ((obb.CornerVertices[7].Position.subtract(obb.CornerVertices[3].Position)).crossProduct(
                             obb.CornerVertices[1].Position.subtract(obb.CornerVertices[3].Position))).normalize());
-                return new PolygonalFace(new[] {obb.CornerVertices[0], obb.CornerVertices[1], obb.CornerVertices[2]},
-                    ((obb.CornerVertices[2].Position.subtract(obb.CornerVertices[0].Position)).crossProduct(
-                        obb.CornerVertices[1].Position.subtract(obb.CornerVertices[0].Position))).normalize());
+                return new[]
+                {
+                    new PolygonalFace(new[] {obb.CornerVertices[0], obb.CornerVertices[1], obb.CornerVertices[2]},
+                        ((obb.CornerVertices[2].Position.subtract(obb.CornerVertices[0].Position)).crossProduct(
+                            obb.CornerVertices[1].Position.subtract(obb.CornerVertices[0].Position))).normalize()),
+                    new PolygonalFace(new[] {obb.CornerVertices[1], obb.CornerVertices[2], obb.CornerVertices[3]},
+                        ((obb.CornerVertices[1].Position.subtract(obb.CornerVertices[3].Position)).crossProduct(
+                            obb.CornerVertices[2].Position.subtract(obb.CornerVertices[3].Position))).normalize())
+                };
             }
             if (dis2 >= dis1 && dis2 >= dis3)
             {
@@ -754,9 +760,15 @@ namespace Assembly_Planner
                     new PolygonalFace(new[] {obb.CornerVertices[2], obb.CornerVertices[3], obb.CornerVertices[7]},
                         ((obb.CornerVertices[2].Position.subtract(obb.CornerVertices[3].Position)).crossProduct(
                             obb.CornerVertices[7].Position.subtract(obb.CornerVertices[3].Position))).normalize());
-                return new PolygonalFace(new[] {obb.CornerVertices[0], obb.CornerVertices[1], obb.CornerVertices[2]},
-                    ((obb.CornerVertices[2].Position.subtract(obb.CornerVertices[0].Position)).crossProduct(
-                        obb.CornerVertices[1].Position.subtract(obb.CornerVertices[0].Position))).normalize());
+                return new[]
+                {
+                    new PolygonalFace(new[] {obb.CornerVertices[0], obb.CornerVertices[1], obb.CornerVertices[2]},
+                        ((obb.CornerVertices[2].Position.subtract(obb.CornerVertices[0].Position)).crossProduct(
+                            obb.CornerVertices[1].Position.subtract(obb.CornerVertices[0].Position))).normalize()),
+                    new PolygonalFace(new[] {obb.CornerVertices[1], obb.CornerVertices[2], obb.CornerVertices[3]},
+                        ((obb.CornerVertices[1].Position.subtract(obb.CornerVertices[3].Position)).crossProduct(
+                            obb.CornerVertices[2].Position.subtract(obb.CornerVertices[3].Position))).normalize())
+                };
             }
             if (dis3 >= dis2 && dis3 >= dis1)
             {
@@ -768,9 +780,15 @@ namespace Assembly_Planner
                     new PolygonalFace(new[] {obb.CornerVertices[4], obb.CornerVertices[5], obb.CornerVertices[6]},
                         ((obb.CornerVertices[5].Position.subtract(obb.CornerVertices[4].Position)).crossProduct(
                             obb.CornerVertices[6].Position.subtract(obb.CornerVertices[4].Position))).normalize());
-                return new PolygonalFace(new[] {obb.CornerVertices[1], obb.CornerVertices[0], obb.CornerVertices[4]},
-                    ((obb.CornerVertices[1].Position.subtract(obb.CornerVertices[0].Position)).crossProduct(
-                        obb.CornerVertices[4].Position.subtract(obb.CornerVertices[0].Position))).normalize());
+                return new[]
+                {
+                    new PolygonalFace(new[] {obb.CornerVertices[1], obb.CornerVertices[0], obb.CornerVertices[4]},
+                        ((obb.CornerVertices[1].Position.subtract(obb.CornerVertices[0].Position)).crossProduct(
+                            obb.CornerVertices[4].Position.subtract(obb.CornerVertices[0].Position))).normalize()),
+                    new PolygonalFace(new[] {obb.CornerVertices[1], obb.CornerVertices[5], obb.CornerVertices[4]},
+                        ((obb.CornerVertices[4].Position.subtract(obb.CornerVertices[5].Position)).crossProduct(
+                            obb.CornerVertices[1].Position.subtract(obb.CornerVertices[5].Position))).normalize())
+                };
             }
             facePrepToRD1 = null;
             facePrepToRD2 = null;

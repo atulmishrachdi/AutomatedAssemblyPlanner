@@ -32,6 +32,7 @@ namespace Assembly_Planner
             
             // From repeated parts take only one of them, and do the primitive classification on that:
             //------------------------------------------------------------------------------------------
+
             var multipleRefs = DuplicatePartsDetector(solids);
             var solidPrimitive = BlockingDetermination.PrimitiveMaker(solids);//multipleRefs.Keys.ToList());
             //foreach (var mRef in multipleRefs.Keys)
@@ -41,7 +42,12 @@ namespace Assembly_Planner
             // Creating OBB for every solid
             //------------------------------------------------------------------------------------------
             PartitioningSolid.CreateOBB(solids);
-            
+
+            foreach (var solid in solids)
+            {
+                FastenerPolynomialTrend.PolynomialTrendDetector(solid);
+            }
+
             // Detect fasteners and gear mates
             //------------------------------------------------------------------------------------------
             var screwsAndBolts = new HashSet<TessellatedSolid>();

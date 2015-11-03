@@ -18,20 +18,23 @@ namespace Assembly_Planner
             // Assumptions:
             //    1. In fasteners, length is longer than width. 
             var obb = PartitioningSolid.OrientedBoundingBoxDic[solid];
-            PolygonalFace triangle1;
-            PolygonalFace triangle2;
-            BoltAndGearDetection.LongestPlaneOfObbDetector(obb, out triangle1, out triangle2);
+            PolygonalFace f1;
+            PolygonalFace f2;
+            var longestSide = BoltAndGearDetection.LongestPlaneOfObbDetector(obb, out f1, out f2);
             // 1. Take the middle point of the smallest edge of each triangle. 
             // 2. Generate k points between them with equal distances. 
             // 3. Generate rays using generate points. 
-            var shortestEdgeMidPoint1 = ShortestEdgeMidPointOfTriangle(triangle1);
-            var shortestEdgeMidPoint2 = ShortestEdgeMidPointOfTriangle(triangle2);
+            var shortestEdgeMidPoint1 = ShortestEdgeMidPointOfTriangle(longestSide[0]);
+            var shortestEdgeMidPoint2 = ShortestEdgeMidPointOfTriangle(longestSide[1]);
             
-            var kPointsBetweenMidPoints = KpointBtwMidPointsGenerator(shortestEdgeMidPoint1, shortestEdgeMidPoint2, 100);
+            var kPointsBetweenMidPoints = KpointBtwMidPointsGenerator(shortestEdgeMidPoint1, shortestEdgeMidPoint2, 500);
 
             var distancePointToSolid = PointToSolidDistanceCalculator(solid, kPointsBetweenMidPoints,
-                triangle1.Normal.multiply(-1.0));
-
+                longestSide[0].Normal.multiply(-1.0));
+            var a = new List<double>();
+            for (var i = 0; i < distancePointToSolid.Count; i++)
+                a.Add(i);
+            Matlabplot.Displacements(a.ToArray(), distancePointToSolid.ToArray());
 
             return false;
         }
@@ -61,7 +64,7 @@ namespace Assembly_Planner
             var points =  new List<double[]>();
             var stepSize = (shortestEdgeMidPoint1.subtract(shortestEdgeMidPoint2)).divide(k + 1);
             for (var i = 0; i < k + 2; i++)
-                points.Add(shortestEdgeMidPoint1.add(stepSize.multiply(i)));
+                points.Add(shortestEdgeMidPoint2.add(stepSize.multiply(i)));
             return points;
         }
 
@@ -80,7 +83,7 @@ namespace Assembly_Planner
                     shortestEdge = new[] {triangle.Vertices[i], triangle.Vertices[j]};
                 }
             }
-            return (shortestEdge[1].Position.add(shortestEdge[2].Position)).divide(2.0);
+            return (shortestEdge[0].Position.add(shortestEdge[1].Position)).divide(2.0);
         }
     }
 }
