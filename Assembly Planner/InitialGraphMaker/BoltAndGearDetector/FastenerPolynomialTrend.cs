@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading.Tasks;
 using AssemblyEvaluation;
@@ -27,16 +28,42 @@ namespace Assembly_Planner
             var shortestEdgeMidPoint1 = ShortestEdgeMidPointOfTriangle(longestSide[0]);
             var shortestEdgeMidPoint2 = ShortestEdgeMidPointOfTriangle(longestSide[1]);
             
-            var kPointsBetweenMidPoints = KpointBtwMidPointsGenerator(shortestEdgeMidPoint1, shortestEdgeMidPoint2, 500);
+            var kPointsBetweenMidPoints = KpointBtwMidPointsGenerator(shortestEdgeMidPoint1, shortestEdgeMidPoint2, 2000);
 
             var distancePointToSolid = PointToSolidDistanceCalculator(solid, kPointsBetweenMidPoints,
                 longestSide[0].Normal.multiply(-1.0));
+
+            // one more step: Merge points with equal distances.
+            distancePointToSolid = MergingEqualDistances(distancePointToSolid,0.001);
             var a = new List<double>();
             for (var i = 0; i < distancePointToSolid.Count; i++)
                 a.Add(i);
             Matlabplot.Displacements(a.ToArray(), distancePointToSolid.ToArray());
 
             return false;
+        }
+
+        private static List<double> MergingEqualDistances(List<double> distancePointToSolid, double accuracy = 0.01)
+        {
+            // if the difference is less than 0.01 merge them
+            for (var i = 0; i < distancePointToSolid.Count-1; i++)
+            {
+                var equals = new List<double>();
+                for (var j = i + 1;
+                    Math.Abs(distancePointToSolid[j] - distancePointToSolid[i]) < accuracy; j++)
+                {
+                    equals.Add(distancePointToSolid[j]);
+                    if (j == distancePointToSolid.Count - 1)
+                        break;
+                }
+                if (!equals.Any())
+                    continue;
+                var averageValue = equals.Sum()/(double) equals.Count;
+                distancePointToSolid[i] = averageValue;
+                distancePointToSolid.RemoveRange(i + 1, equals.Count);
+                i--;
+            }
+            return distancePointToSolid;
         }
 
         private static List<double> PointToSolidDistanceCalculator(TessellatedSolid solid,
@@ -55,7 +82,9 @@ namespace Assembly_Planner
                     break;
                 }
             }
-            return distList;
+            // Normalizing:
+            var longestDis = distList.Max();
+            return distList.Select(d => d / longestDis).ToList();
         }
 
         private static List<double[]> KpointBtwMidPointsGenerator(double[] shortestEdgeMidPoint1, double[] shortestEdgeMidPoint2, int k)
