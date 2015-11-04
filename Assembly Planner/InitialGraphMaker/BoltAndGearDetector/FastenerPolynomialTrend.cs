@@ -29,7 +29,7 @@ namespace Assembly_Planner
             var shortestEdgeMidPoint1 = ShortestEdgeMidPointOfTriangle(longestSide[0]);
             var shortestEdgeMidPoint2 = ShortestEdgeMidPointOfTriangle(longestSide[1]);
             
-            var kPointsBetweenMidPoints = KpointBtwMidPointsGenerator(shortestEdgeMidPoint1, shortestEdgeMidPoint2, 2000);
+            var kPointsBetweenMidPoints = KpointBtwMidPointsGenerator(shortestEdgeMidPoint1, shortestEdgeMidPoint2, 1000);
 
             var distancePointToSolid = PointToSolidDistanceCalculator(solid, kPointsBetweenMidPoints,
                 longestSide[0].Normal.multiply(-1.0));
@@ -37,10 +37,12 @@ namespace Assembly_Planner
             // one more step: Merge points with equal distances.
             distancePointToSolid = MergingEqualDistances(distancePointToSolid,0.001);
             
+            var hasThread = ContainsThread(distancePointToSolid);
             // Plot:
-            PlotInMatlab(distancePointToSolid);
+            if (!hasThread)
+                PlotInMatlab(distancePointToSolid);
 
-            return ContainsThread(distancePointToSolid);
+            return hasThread;
         }
 
         private static bool ContainsThread(List<double> distancePointToSolid)
@@ -60,24 +62,41 @@ namespace Assembly_Planner
                 directionChange.Add(c);
                 i += (c - 1);
             }
-            return ContainsThreadSequence(directionChange);
+            return ContainsThreadSeries(directionChange);
         }
 
-        private static bool ContainsThreadSequence(List<double> directionChange)
+        private static bool ContainsThreadSeries(List<double> directionChange)
         {
+            // key: 2*number of threads. value: total number of the points of the series. 
             var thread = new List<double>();
+            var cumulativePoi = new List<double>();
             for (var i = 0; i < directionChange.Count - 1; i++)
             {
                 var c = 1;
-                for (var j = i + 1; Math.Abs(directionChange[j] - directionChange[j - 1]) < 4; j++)
+                var cumulativePoints = directionChange[i];
+                if (directionChange[i] == 1) continue;
+                for (var j = i + 1; Math.Abs(directionChange[j] - directionChange[j - 1]) < 10; j++)
                 {
+                    cumulativePoints += directionChange[j];
                     c++;
                     if (j == directionChange.Count - 1) break;
                 }
                 thread.Add(c);
+                cumulativePoi.Add(cumulativePoints);
                 i += (c - 1);
             }
-            return thread.Any(t => t > 10); // I can use minimum common number of threads for this * 2 
+            // I can use minimum common number of threads for this * 2 
+            // if it is 5 and less, cumulativePoints must be less than 90 of the total number of points
+            for (var i = 0; i < thread.Count; i++)
+            {
+                if (thread[i] > 3 && thread[i] < 6)
+                    if (cumulativePoi[i] < directionChange.Sum() * 0.9)
+                        return true;
+                    else
+                        continue;
+                if (thread[i] > 6) return true;
+            }
+            return false;
         }
 
         private static List<double> MergingEqualDistances(List<double> distancePointToSolid, double accuracy = 0.01)
