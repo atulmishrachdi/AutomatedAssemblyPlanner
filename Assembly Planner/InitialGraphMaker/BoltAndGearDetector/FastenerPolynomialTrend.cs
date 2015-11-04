@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.ExceptionServices;
 using System.Text;
@@ -24,7 +25,7 @@ namespace Assembly_Planner
             var longestSide = BoltAndGearDetection.LongestPlaneOfObbDetector(obb, out f1, out f2);
             // 1. Take the middle point of the smallest edge of each triangle. 
             // 2. Generate k points between them with equal distances. 
-            // 3. Generate rays using generate points. 
+            // 3. Generate rays using generated points. 
             var shortestEdgeMidPoint1 = ShortestEdgeMidPointOfTriangle(longestSide[0]);
             var shortestEdgeMidPoint2 = ShortestEdgeMidPointOfTriangle(longestSide[1]);
             
@@ -35,12 +36,48 @@ namespace Assembly_Planner
 
             // one more step: Merge points with equal distances.
             distancePointToSolid = MergingEqualDistances(distancePointToSolid,0.001);
-            var a = new List<double>();
-            for (var i = 0; i < distancePointToSolid.Count; i++)
-                a.Add(i);
-            Matlabplot.Displacements(a.ToArray(), distancePointToSolid.ToArray());
+            
+            // Plot:
+            PlotInMatlab(distancePointToSolid);
 
-            return false;
+            return ContainsThread(distancePointToSolid);
+        }
+
+        private static bool ContainsThread(List<double> distancePointToSolid)
+        {
+            var directionChange = new List<double>();
+            for (var i = 0; i < distancePointToSolid.Count-1; i++)
+            {
+                var c = 0;
+                for (var j = i + 1;
+                    Math.Sign(distancePointToSolid[j] - distancePointToSolid[j - 1]) ==
+                    Math.Sign(distancePointToSolid[i + 1] - distancePointToSolid[i]);
+                    j++)
+                {
+                    c++;
+                    if (j == distancePointToSolid.Count - 1) break;
+                }
+                directionChange.Add(c);
+                i += (c - 1);
+            }
+            return ContainsThreadSequence(directionChange);
+        }
+
+        private static bool ContainsThreadSequence(List<double> directionChange)
+        {
+            var thread = new List<double>();
+            for (var i = 0; i < directionChange.Count - 1; i++)
+            {
+                var c = 1;
+                for (var j = i + 1; Math.Abs(directionChange[j] - directionChange[j - 1]) < 4; j++)
+                {
+                    c++;
+                    if (j == directionChange.Count - 1) break;
+                }
+                thread.Add(c);
+                i += (c - 1);
+            }
+            return thread.Any(t => t > 10); // I can use minimum common number of threads for this * 2 
         }
 
         private static List<double> MergingEqualDistances(List<double> distancePointToSolid, double accuracy = 0.01)
@@ -113,6 +150,14 @@ namespace Assembly_Planner
                 }
             }
             return (shortestEdge[0].Position.add(shortestEdge[1].Position)).divide(2.0);
+        }
+
+        private static void PlotInMatlab(List<double> distancePointToSolid)
+        {
+            var a = new List<double>();
+            for (var i = 0; i < distancePointToSolid.Count; i++)
+                a.Add(i);
+            Matlabplot.Displacements(a.ToArray(), distancePointToSolid.ToArray());
         }
     }
 }
