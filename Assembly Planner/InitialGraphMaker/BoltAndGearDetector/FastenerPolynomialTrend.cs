@@ -110,14 +110,17 @@ namespace Assembly_Planner
             foreach (var point in kPointsBetweenMidPoints)
             {
                 var ray = new Ray(new AssemblyEvaluation.Vertex(point), new Vector(vector));
+                var minDis = double.PositiveInfinity;
                 foreach (var face in solid.Faces)
                 {
                     double[] hittingPoint;
                     if (!BasicGeometryFunctions.RayIntersectsWithFace(ray, face, out hittingPoint))
                         continue;
-                    distList.Add(BasicGeometryFunctions.DistanceBetweenTwoVertices(hittingPoint, point));
-                    break;
+                    var dis = BasicGeometryFunctions.DistanceBetweenTwoVertices(hittingPoint, point);
+                    if (dis < minDis) minDis = dis;
                 }
+                if (minDis != double.PositiveInfinity)
+                    distList.Add(minDis);
             }
             // Normalizing:
             var longestDis = distList.Max();

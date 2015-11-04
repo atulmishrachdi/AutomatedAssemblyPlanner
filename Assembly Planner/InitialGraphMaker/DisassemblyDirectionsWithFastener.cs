@@ -29,7 +29,22 @@ namespace Assembly_Planner
             Directions = IcosahedronPro.DirectionGeneration();
             DisassemblyDirections.Directions = new List<double[]>(Directions);
             var globalDirPool = new List<int>();
-            
+
+
+            // Creating OBB for every solid
+            //------------------------------------------------------------------------------------------
+            PartitioningSolid.CreateOBB(solids);
+            var tr = 0;
+            foreach (
+                var solid in
+                    solids.Where(
+                        sss =>
+                            sss.Name.Contains(
+                                "HPI_Baja_5SS - Front_Suspension-1 Front_Shock-1 Front_Shock_Lower-1 Shock_")))
+            {
+                FastenerPolynomialTrend.PolynomialTrendDetector(solid);
+            }
+
             // From repeated parts take only one of them, and do the primitive classification on that:
             //------------------------------------------------------------------------------------------
 
@@ -38,15 +53,6 @@ namespace Assembly_Planner
             //foreach (var mRef in multipleRefs.Keys)
             //    foreach (var duplicated in multipleRefs[mRef])
             //        solidPrimitive.Add(duplicated, solidPrimitive[mRef]);
-            
-            // Creating OBB for every solid
-            //------------------------------------------------------------------------------------------
-            PartitioningSolid.CreateOBB(solids);
-
-            foreach (var solid in solids)
-            {
-                FastenerPolynomialTrend.PolynomialTrendDetector(solid);
-            }
 
             // Detect fasteners and gear mates
             //------------------------------------------------------------------------------------------
