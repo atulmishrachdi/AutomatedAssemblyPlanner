@@ -27,8 +27,8 @@ namespace Assembly_Planner
                 //"../../../Test/Simple-Test";
                 //"../../../Test/Mc Cormik/STL2";
                 //"../../../Test/Truck -TXT-1/STL";
-                "../../../Test/FoodPackagingMachine/FPMSTL2";
-                //"../../../../GearAndFastener Detection/NewTraining/notFastener";
+                //"../../../Test/FoodPackagingMachine/FPMSTL2";
+                "../../../../GearAndFastener Detection/TrainingData/not-screw";
                 //"../../../Test/test";
             var s = Stopwatch.StartNew();
             s.Start();
@@ -47,12 +47,12 @@ namespace Assembly_Planner
             {
                 assemblyGraph = new designGraph();
                 //var globalDirPool = DisassemblyDirections.Run(assemblyGraph, solids);
-                globalDirPool = DisassemblyDirectionsWithFastener.Run(assemblyGraph, solids, true,true);
+                globalDirPool = DisassemblyDirectionsWithFastener.Run(assemblyGraph, solids,true, false);
                 //Updates.AddPartsProperties(inputDir, assemblyGraph);
                 //NonadjacentBlockingDeterminationPro.Run(assemblyGraph, solids, globalDirPool);
                 NonadjacentBlockingWithPartitioning.Run(assemblyGraph, solids, globalDirPool);
                 //NonadjacentBlockingDetermination.Run(assemblyGraph, solids, globalDirPool);
-                //GraphSaving.SaveTheGraph(assemblyGraph);
+                GraphSaving.SaveTheGraph(assemblyGraph);
             }
             var inputData = new ConvexHullAndBoundingBox(inputDir, assemblyGraph);
             var solutions = RecursiveOptimizedSearch.Run(inputData, globalDirPool);

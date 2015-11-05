@@ -33,17 +33,17 @@ namespace Assembly_Planner
 
             // Creating OBB for every solid
             //------------------------------------------------------------------------------------------
-            PartitioningSolid.CreateOBB(solids);
+            //PartitioningSolid.CreateOBB(solids);
             var tr = 0;
-            foreach (
-                var solid in
-                    solids.Where(
-                        sss =>
-                            sss.Name.Contains(
-                                "HPI_Baja_5SS - Front_Suspension-1 Front_Shock-1 Front_Shock_Lower-1 Shock_")))
+            //foreach (var solid in solids)
+            Parallel.ForEach(solids, solid =>
             {
-                FastenerPolynomialTrend.PolynomialTrendDetector(solid);
+                if (FastenerPolynomialTrend.PolynomialTrendDetector(solid))
+                    tr++;
             }
+            );//
+            //foreach (var solid in solids.Where())
+            //    tr++;
 
             // From repeated parts take only one of them, and do the primitive classification on that:
             //------------------------------------------------------------------------------------------

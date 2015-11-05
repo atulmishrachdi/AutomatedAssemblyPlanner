@@ -14,7 +14,7 @@ namespace Assembly_Planner.GeometryReasoning
         //   3. Using convex hull
         // I will only implement the "using points" method here.
 
-        internal static double[][] BuildUsingPoints(List<Vertex> points, out double[][] dir)
+        internal static double[][] BuildUsingPoints(List<Vertex> points, out double[][] dir, out bool clockWise)
         {
             var mu = new[] {0.0, 0.0, 0.0};
             var C = new double[3, 3];
@@ -45,10 +45,10 @@ namespace Assembly_Planner.GeometryReasoning
             C[2, 0] = cxz;
             C[2, 1] = cyz;
             C[2, 2] = czz;
-            return BuildFromCovarianceMatrix(C, points, out dir);
+            return BuildFromCovarianceMatrix(C, points, out dir, out clockWise);
         }
 
-        internal static double[][] BuildFromCovarianceMatrix(double[,] C, List<Vertex> points, out double[][] eigenVecs)
+        internal static double[][] BuildFromCovarianceMatrix(double[,] C, List<Vertex> points, out double[][] eigenVecs, out bool clockWise)
         {
             var eugVal = C.GetEigenValuesAndVectors(out eigenVecs);
             var r = eigenVecs[0];
@@ -103,6 +103,17 @@ namespace Assembly_Planner.GeometryReasoning
                 ((pos.add(r.multiply(extent[0]))).add(u.multiply(extent[1]))).add(f.multiply(extent[2])),
                 ((pos.subtract(r.multiply(extent[0]))).add(u.multiply(extent[1]))).add(f.multiply(extent[2]))
             };
+            if (
+                points.Any(
+                    p =>
+                        p.Position.subtract(orientedBoundingBox[0])
+                            .dotProduct(
+                                ((orientedBoundingBox[1].subtract(orientedBoundingBox[0])).crossProduct(
+                                    orientedBoundingBox[3].subtract(orientedBoundingBox[0]))).normalize()) > 0))
+                clockWise = true;
+            else
+                clockWise = false;
+
             var volume = 8 * extent[0] * extent[1] * extent[2];
             return orientedBoundingBox;
         }

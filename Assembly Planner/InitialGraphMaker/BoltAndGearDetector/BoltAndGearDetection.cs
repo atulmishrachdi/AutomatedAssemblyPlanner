@@ -677,7 +677,7 @@ namespace Assembly_Planner
             var dist = 0.0;
             foreach (var ver in solid.CornerVertices)
             {
-                var locDist = DistanceBetweenTwoVertex(a, ver);
+                var locDist = BasicGeometryFunctions.DistanceBetweenTwoVertices(a.Position, ver.Position);
                 if (locDist <= dist) continue;
                 farthestVer = ver;
                 dist = locDist;
@@ -727,9 +727,9 @@ namespace Assembly_Planner
             out PolygonalFace facePrepToRD2)
         {
             // it returns longest side. (two adjacent triangles)
-            var dis1 = DistanceBetweenTwoVertex(obb.CornerVertices[0], obb.CornerVertices[1]);
-            var dis2 = DistanceBetweenTwoVertex(obb.CornerVertices[0], obb.CornerVertices[2]);
-            var dis3 = DistanceBetweenTwoVertex(obb.CornerVertices[0], obb.CornerVertices[4]);
+            var dis1 = BasicGeometryFunctions.DistanceBetweenTwoVertices(obb.CornerVertices[0].Position, obb.CornerVertices[1].Position);
+            var dis2 = BasicGeometryFunctions.DistanceBetweenTwoVertices(obb.CornerVertices[0].Position, obb.CornerVertices[2].Position);
+            var dis3 = BasicGeometryFunctions.DistanceBetweenTwoVertices(obb.CornerVertices[0].Position, obb.CornerVertices[4].Position);
             if (dis1 >= dis2 && dis1 >= dis3)
             {
                 facePrepToRD1 =
@@ -795,6 +795,79 @@ namespace Assembly_Planner
             return null;
         }
 
+        internal static PolygonalFace[] LongestPlaneOfObbDetector(double[][] obb, bool clockWise, out PolygonalFace facePrepToRD1,
+            out PolygonalFace facePrepToRD2)
+        {
+            // it returns longest side. (two adjacent triangles)
+            var dis1 = BasicGeometryFunctions.DistanceBetweenTwoVertices(obb[0], obb[1]);
+            var dis2 = BasicGeometryFunctions.DistanceBetweenTwoVertices(obb[0], obb[3]);
+            var dis3 = BasicGeometryFunctions.DistanceBetweenTwoVertices(obb[0], obb[4]);
+            var a = clockWise ? 10 : 20;
+            if (dis1 >= dis2 && dis1 >= dis3)
+            {
+                var normal1 = ((obb[3].subtract(obb[0])).crossProduct(obb[4].subtract(obb[0]))).normalize();
+                facePrepToRD1 =
+                    new PolygonalFace(new[] {new TVGL.Vertex(obb[0]), new TVGL.Vertex(obb[3]), new TVGL.Vertex(obb[4])},
+                        clockWise ? normal1.multiply(-1.0) : normal1);
+                var normal2 = ((obb[5].subtract(obb[1])).crossProduct(obb[2].subtract(obb[1]))).normalize();
+                facePrepToRD2 =
+                    new PolygonalFace(new[] { new TVGL.Vertex(obb[1]), new TVGL.Vertex(obb[2]), new TVGL.Vertex(obb[5]) },
+                        clockWise ? normal2.multiply(-1.0) : normal2);
+                var normal3 = ((obb[1].subtract(obb[0])).crossProduct(obb[3].subtract(obb[0]))).normalize();
+                var normal4 = ((obb[3].subtract(obb[2])).crossProduct(obb[1].subtract(obb[2]))).normalize();
+                return new[]
+                {
+                    new PolygonalFace(new[] {new TVGL.Vertex(obb[0]), new TVGL.Vertex(obb[1]), new TVGL.Vertex(obb[3])},
+                        clockWise ? normal3.multiply(-1.0) : normal3),
+                    new PolygonalFace(new[] {new TVGL.Vertex(obb[1]), new TVGL.Vertex(obb[2]), new TVGL.Vertex(obb[3])},
+                        clockWise ? normal4.multiply(-1.0) : normal4)
+                };
+            }
+            if (dis2 >= dis1 && dis2 >= dis3)
+            {
+                var normal1 = ((obb[4].subtract(obb[0])).crossProduct(obb[1].subtract(obb[0]))).normalize();
+                facePrepToRD1 =
+                    new PolygonalFace(new[] { new TVGL.Vertex(obb[0]), new TVGL.Vertex(obb[1]), new TVGL.Vertex(obb[4]) },
+                        clockWise ? normal1.multiply(-1.0) : normal1);
+                var normal2 = ((obb[2].subtract(obb[3])).crossProduct(obb[7].subtract(obb[3]))).normalize();
+                facePrepToRD2 =
+                    new PolygonalFace(new[] { new TVGL.Vertex(obb[2]), new TVGL.Vertex(obb[3]), new TVGL.Vertex(obb[7]) },
+                        clockWise ? normal2.multiply(-1.0) : normal2);
+                var normal3 = ((obb[1].subtract(obb[0])).crossProduct(obb[3].subtract(obb[0]))).normalize();
+                var normal4 = ((obb[3].subtract(obb[2])).crossProduct(obb[1].subtract(obb[2]))).normalize();
+                return new[]
+                {
+                    new PolygonalFace(new[] {new TVGL.Vertex(obb[0]), new TVGL.Vertex(obb[1]), new TVGL.Vertex(obb[3])},
+                        clockWise ? normal3.multiply(-1.0) : normal3),
+                    new PolygonalFace(new[] {new TVGL.Vertex(obb[1]), new TVGL.Vertex(obb[2]), new TVGL.Vertex(obb[3])},
+                        clockWise ? normal4.multiply(-1.0) : normal4)
+                };
+            }
+            if (dis3 >= dis2 && dis3 >= dis1)
+            {
+                var normal1 = ((obb[1].subtract(obb[0])).crossProduct(obb[3].subtract(obb[0]))).normalize();
+                facePrepToRD1 =
+                    new PolygonalFace(new[] { new TVGL.Vertex(obb[0]), new TVGL.Vertex(obb[1]), new TVGL.Vertex(obb[3]) },
+                        clockWise ? normal1.multiply(-1.0) : normal1);
+                var normal2 = ((obb[7].subtract(obb[4])).crossProduct(obb[5].subtract(obb[4]))).normalize();
+                facePrepToRD2 =
+                    new PolygonalFace(new[] { new TVGL.Vertex(obb[5]), new TVGL.Vertex(obb[4]), new TVGL.Vertex(obb[7]) },
+                        clockWise ? normal2.multiply(-1.0) : normal2);
+                var normal3 =  ((obb[4].subtract(obb[0])).crossProduct(obb[1].subtract(obb[0]))).normalize();
+                var normal4 = ((obb[1].subtract(obb[5])).crossProduct(obb[4].subtract(obb[5]))).normalize();
+                return new[]
+                {
+                    new PolygonalFace(new[] {new TVGL.Vertex(obb[0]), new TVGL.Vertex(obb[1]), new TVGL.Vertex(obb[4])},
+                       clockWise ? normal3.multiply(-1.0) : normal3),
+                    new PolygonalFace(new[] {new TVGL.Vertex(obb[1]), new TVGL.Vertex(obb[4]), new TVGL.Vertex(obb[5])},
+                        clockWise ? normal4.multiply(-1.0) : normal4)
+                };
+            }
+            facePrepToRD1 = null;
+            facePrepToRD2 = null;
+            return null;
+        }
+
         private static double[] NormalGuessFinder(List<Flat> flatPrims)
         {
             // We need two flats that are not parallel to each other.
@@ -818,15 +891,6 @@ namespace Assembly_Planner
             // distance is the dot product of the normal and the vector:
             return Math.Abs(vector.dotProduct(plane.Normal));
         }
-
-        private static double DistanceBetweenTwoVertex(TVGL.Vertex a, TVGL.Vertex ver)
-        {
-            return
-                Math.Sqrt((Math.Pow((a.Position[0] - ver.Position[0]), 2)) +
-                          (Math.Pow((a.Position[1] - ver.Position[1]), 2)) +
-                          (Math.Pow((a.Position[2] - ver.Position[2]), 2)));
-        }
-
 
         private static double[] BoltCenterLine(List<PrimitiveSurface> primitiveSurfaces)
         {

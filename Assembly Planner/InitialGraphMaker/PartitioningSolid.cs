@@ -26,7 +26,8 @@ namespace Assembly_Planner
         internal static Partition[] Run(TessellatedSolid solid)
         {
             double[][] direction;
-            var obb = OBB.BuildUsingPoints(solid.Vertices.ToList(), out direction);
+            bool clockWise;
+            var obb = OBB.BuildUsingPoints(solid.Vertices.ToList(), out direction, out clockWise);
             var partitions = new List<Partition>();
             //var obb = MinimumEnclosure.OrientedBoundingBox(solid);
             foreach (var cVer in obb)//obb.CornerVertices)
@@ -292,6 +293,8 @@ namespace Assembly_Planner
             }
                 );
             s.Stop();
+            double[][] dir;
+            //var newobb = OBB.BuildUsingPoints(solids[0].Vertices.ToList(), out dir);
             Console.WriteLine("OBB Creation is done in:" + "     " + s.Elapsed);
         }
     }

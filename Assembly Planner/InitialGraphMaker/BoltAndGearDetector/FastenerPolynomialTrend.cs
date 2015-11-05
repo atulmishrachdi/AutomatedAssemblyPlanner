@@ -7,6 +7,7 @@ using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading.Tasks;
 using AssemblyEvaluation;
+using Assembly_Planner.GeometryReasoning;
 using StarMathLib;
 using TVGL;
 using Vertex = TVGL.Vertex;
@@ -19,17 +20,23 @@ namespace Assembly_Planner
         {
             // Assumptions:
             //    1. In fasteners, length is longer than width. 
-            var obb = PartitioningSolid.OrientedBoundingBoxDic[solid];
+            //var obb = PartitioningSolid.OrientedBoundingBoxDic[solid];
+            //if (!solid.Name.Contains("iston")) return true;
+            double[][] dir;
+            bool clockWise;
+            var myObb = OBB.BuildUsingPoints(solid.Vertices.ToList(), out dir, out clockWise);
+            
             PolygonalFace f1;
             PolygonalFace f2;
-            var longestSide = BoltAndGearDetection.LongestPlaneOfObbDetector(obb, out f1, out f2);
-            // 1. Take the middle point of the smallest edge of each triangle. 
+            //var longestSide = BoltAndGearDetection.LongestPlaneOfObbDetector(obb, out f1, out f2);
+            var longestSide = BoltAndGearDetection.LongestPlaneOfObbDetector(myObb, clockWise, out f1, out f2);
+            // 1. Take the middle point of the smallest edge of each triangle. Or the points of the 2nd longest edge of a side triangle
             // 2. Generate k points between them with equal distances. 
             // 3. Generate rays using generated points. 
-            var shortestEdgeMidPoint1 = ShortestEdgeMidPointOfTriangle(longestSide[0]);
-            var shortestEdgeMidPoint2 = ShortestEdgeMidPointOfTriangle(longestSide[1]);
-            
-            var kPointsBetweenMidPoints = KpointBtwMidPointsGenerator(shortestEdgeMidPoint1, shortestEdgeMidPoint2, 1000);
+            var midPoint1 = ShortestEdgeMidPointOfTriangle(longestSide[0]);
+            var midPoint2 = ShortestEdgeMidPointOfTriangle(longestSide[1]);
+
+            var kPointsBetweenMidPoints = KpointBtwPointsGenerator(midPoint1, midPoint2, 1000);
 
             var distancePointToSolid = PointToSolidDistanceCalculator(solid, kPointsBetweenMidPoints,
                 longestSide[0].Normal.multiply(-1.0));
@@ -39,7 +46,7 @@ namespace Assembly_Planner
             
             var hasThread = ContainsThread(distancePointToSolid);
             // Plot:
-            if (!hasThread)
+            if (hasThread)
                 PlotInMatlab(distancePointToSolid);
 
             return hasThread;
@@ -62,6 +69,7 @@ namespace Assembly_Planner
                 directionChange.Add(c);
                 i += (c - 1);
             }
+            //PlotInMatlab(directionChange);
             return ContainsThreadSeries(directionChange);
         }
 
@@ -72,14 +80,15 @@ namespace Assembly_Planner
             var cumulativePoi = new List<double>();
             for (var i = 0; i < directionChange.Count - 1; i++)
             {
+                if (directionChange[i] < 2) continue;
                 var c = 1;
                 var cumulativePoints = directionChange[i];
-                if (directionChange[i] == 1) continue;
                 for (var j = i + 1; Math.Abs(directionChange[j] - directionChange[j - 1]) < 10; j++)
                 {
+                    if (j == directionChange.Count - 1) break;
+                    if (directionChange[j] < 2) continue;
                     cumulativePoints += directionChange[j];
                     c++;
-                    if (j == directionChange.Count - 1) break;
                 }
                 thread.Add(c);
                 cumulativePoi.Add(cumulativePoints);
@@ -89,12 +98,13 @@ namespace Assembly_Planner
             // if it is 5 and less, cumulativePoints must be less than 90 of the total number of points
             for (var i = 0; i < thread.Count; i++)
             {
-                if (thread[i] > 3 && thread[i] < 6)
+                if (thread[i] > 4 && thread[i] < 6)
                     if (cumulativePoi[i] < directionChange.Sum() * 0.9)
                         return true;
                     else
                         continue;
-                if (thread[i] > 6) return true;
+                if (thread[i] >= 6) 
+                    return true;
             }
             return false;
         }
@@ -146,7 +156,7 @@ namespace Assembly_Planner
             return distList.Select(d => d / longestDis).ToList();
         }
 
-        private static List<double[]> KpointBtwMidPointsGenerator(double[] shortestEdgeMidPoint1, double[] shortestEdgeMidPoint2, int k)
+        private static List<double[]> KpointBtwPointsGenerator(double[] shortestEdgeMidPoint1, double[] shortestEdgeMidPoint2, int k)
         {
             // divide into k+1 equal sections
             var points =  new List<double[]>();
@@ -154,6 +164,22 @@ namespace Assembly_Planner
             for (var i = 0; i < k + 2; i++)
                 points.Add(shortestEdgeMidPoint2.add(stepSize.multiply(i)));
             return points;
+        }
+
+        private static Vertex[] CornerEdgeFinder(PolygonalFace polygonalFace)
+        {
+            // We want to find the second long edge:
+            var dist0 = BasicGeometryFunctions.DistanceBetweenTwoVertices(polygonalFace.Vertices[0].Position,
+                polygonalFace.Vertices[1].Position);
+            var dist1 = BasicGeometryFunctions.DistanceBetweenTwoVertices(polygonalFace.Vertices[0].Position,
+                polygonalFace.Vertices[2].Position);
+            var dist2 = BasicGeometryFunctions.DistanceBetweenTwoVertices(polygonalFace.Vertices[1].Position,
+                polygonalFace.Vertices[2].Position);
+            if ((dist0 > dist1 && dist0 < dist2) || (dist0 > dist2 && dist0 < dist1))
+                return new[] {polygonalFace.Vertices[0], polygonalFace.Vertices[1]};
+            if ((dist1 > dist0 && dist1 < dist2) || (dist1 > dist2 && dist1 < dist0))
+                return new[] { polygonalFace.Vertices[0], polygonalFace.Vertices[2] };
+            return new[] { polygonalFace.Vertices[1], polygonalFace.Vertices[2] };
         }
 
         private static double[] ShortestEdgeMidPointOfTriangle(PolygonalFace triangle)
