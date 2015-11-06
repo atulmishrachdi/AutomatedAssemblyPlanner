@@ -60,5 +60,11 @@ namespace Assembly_Planner
             dot = crossv1v2.dotProduct(crossv2v0);
             return (dot >= 0.0);
         }
+
+        internal static double DistanceBetweenLineAndPoint(double[] vector, double[] pointOnLine, double[] p)
+        {
+            var cross = vector.crossProduct(pointOnLine.subtract(p));
+            return Math.Sqrt(Math.Pow(cross[0], 2) + Math.Pow(cross[1], 2) + Math.Pow(cross[2], 2));
+        }
     }
 }

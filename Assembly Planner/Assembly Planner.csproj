@@ -84,6 +84,7 @@
     <Compile Include="Evaluation\ReOrientations.cs" />
     <Compile Include="Evaluation\TimeEvaluator.cs" />
     <Compile Include="Evaluation\_AbstractAssemblySearch.cs" />
+    <Compile Include="GeometryReasoning\BoundingCylinder.cs" />
     <Compile Include="GeometryReasoning\ConvexHullAndBoundingBox.cs" />
     <Compile Include="GeometryReasoning\DataInterfaceWithCPP.cs" />
     <Compile Include="GeometryReasoning\InputData.cs" />
