@@ -14,6 +14,7 @@ namespace Assembly_Planner
         public double[] CenterLineVector;
         public double[] PointOnTheCenterLine;
         public double Radius;
+        public double Length;
         public double Volume;
         // Idea:
         //   1. Take the OBB
@@ -22,7 +23,7 @@ namespace Assembly_Planner
         //   4. The distance of the farthest vertex from the center line is the radius. 
         //   5. Three different cylinders, with threee different volumes. The cylinder with  
         //      smallest volume is the bounding cylinder
-        public BoundingCylinder Run(TessellatedSolid solid)
+        public static BoundingCylinder Run(TessellatedSolid solid)
         {
             var threeSides = ThreeSidesOfTheObb(solid);
             var bC = new BoundingCylinder();
@@ -40,13 +41,15 @@ namespace Assembly_Planner
                 bC.CenterLineVector = side.Key.Normal;
                 bC.PointOnTheCenterLine = faceCenters;
                 bC.Radius = radius;
+                bC.Length = side.Value;
                 bC.Volume = volume;
             }
+            var secondpoint = bC.PointOnTheCenterLine.add(bC.CenterLineVector.multiply(-60.0));
             return bC;
         }
 
 
-        private Dictionary<PolygonalFace,double> ThreeSidesOfTheObb(TessellatedSolid solid)
+        private static Dictionary<PolygonalFace,double> ThreeSidesOfTheObb(TessellatedSolid solid)
         {
             // This is based on my own OBB function:
             // it returns a dictionary with size of three (3 sides). 
@@ -69,7 +72,7 @@ namespace Assembly_Planner
             return new Dictionary<PolygonalFace, double> {{face1, length1}, {face2, length2}, {face3, length3}};
         }
 
-        private double[] FaceCenterFinder(PolygonalFace side)
+        private static double[] FaceCenterFinder(PolygonalFace side)
         {
             var longestEdge = new Vertex[2];
             var maxLength = double.NegativeInfinity;
@@ -86,7 +89,7 @@ namespace Assembly_Planner
             return (longestEdge[0].Position.add(longestEdge[1].Position)).divide(2.0);
         }
 
-        private double RadiusOfBoundingCylinder(TessellatedSolid solid, double[] faceCenters, double[] vector)
+        private static double RadiusOfBoundingCylinder(TessellatedSolid solid, double[] faceCenters, double[] vector)
         {
             var maxDistance = double.NegativeInfinity;
             foreach (var vertex in solid.Vertices)
