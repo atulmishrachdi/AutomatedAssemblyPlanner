@@ -33,15 +33,15 @@ namespace Assembly_Planner
 
             // Creating OBB for every solid
             //------------------------------------------------------------------------------------------
-            //PartitioningSolid.CreateOBB(solids);
-            var tr = 0;
+            PartitioningSolid.CreateOBB(solids);
+            //var tr = 0;
             //foreach (var solid in solids)
-            Parallel.ForEach(solids, solid =>
-            {
-                if (FastenerPolynomialTrend.PolynomialTrendDetector(solid))
-                    tr++;
-            }
-            );//
+            //Parallel.ForEach(solids, solid =>
+            //{
+            //    if (FastenerPolynomialTrend.PolynomialTrendDetector(solid))
+            //        tr++;
+            //}
+            //);
             //foreach (var solid in solids.Where())
             //    tr++;
 
@@ -50,6 +50,7 @@ namespace Assembly_Planner
 
             var multipleRefs = DuplicatePartsDetector(solids);
             var solidPrimitive = BlockingDetermination.PrimitiveMaker(solids);//multipleRefs.Keys.ToList());
+            BoltAndGearDetection.GearDetector(solidPrimitive);
             //foreach (var mRef in multipleRefs.Keys)
             //    foreach (var duplicated in multipleRefs[mRef])
             //        solidPrimitive.Add(duplicated, solidPrimitive[mRef]);

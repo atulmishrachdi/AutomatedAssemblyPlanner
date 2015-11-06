@@ -270,6 +270,7 @@ namespace Assembly_Planner
             //foreach(var solid in solids)
             Parallel.ForEach(solids, solid =>
             {
+                solid.SimplifyByPercentage(0.5);
                 lock (Partitions)
                     Partitions.Add(solid,
                         Run2(new HashSet<Vertex>(solid.Vertices), new HashSet<PolygonalFace>(solid.Faces),

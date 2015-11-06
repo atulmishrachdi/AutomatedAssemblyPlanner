@@ -944,10 +944,10 @@ namespace Assembly_Planner
                         if (crossP.Count < 10) continue;
                         var crossSign = BoltAndGearUpdateFunctions.ConvertCrossToSign(crossP);
                         if (!IsGear(crossSign)) continue;
-                        Console.WriteLine("Is " + solid.Name + " a gear? 'y' or 'n'");
-                        var read = Convert.ToString(Console.ReadLine());
-                        if (read == "n")
-                            continue;
+                        //Console.WriteLine("Is " + solid.Name + " a gear? 'y' or 'n'");
+                        //var read = Convert.ToString(Console.ReadLine());
+                        //if (read == "n")
+                        //    continue;
                         gear = true;
                         gears.Add(solid, flatPrim.Faces[0].Normal);
                         break;

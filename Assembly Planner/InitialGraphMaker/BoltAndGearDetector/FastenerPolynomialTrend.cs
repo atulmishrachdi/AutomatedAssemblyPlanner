@@ -20,8 +20,8 @@ namespace Assembly_Planner
         {
             // Assumptions:
             //    1. In fasteners, length is longer than width. 
-            //var obb = PartitioningSolid.OrientedBoundingBoxDic[solid];
-            //if (!solid.Name.Contains("iston")) return true;
+            var obb = PartitioningSolid.OrientedBoundingBoxDic[solid];
+            //if (!solid.Name.Contains("STLB ASM")) return true;
             double[][] dir;
             bool clockWise;
             var myObb = OBB.BuildUsingPoints(solid.Vertices.ToList(), out dir, out clockWise);
