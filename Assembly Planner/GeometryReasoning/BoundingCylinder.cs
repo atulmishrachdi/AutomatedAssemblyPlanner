@@ -16,12 +16,13 @@ namespace Assembly_Planner
         public double Radius;
         public double Length;
         public double Volume;
+        public double[] PerpVector;
         // Idea:
         //   1. Take the OBB
         //   2. Take every side (3 sides)
         //   3. The center of each side with its normal, create the centerline of the cylinder. 
         //   4. The distance of the farthest vertex from the center line is the radius. 
-        //   5. Three different cylinders, with threee different volumes. The cylinder with  
+        //   5. Three different cylinders, with three different volumes. The cylinder with  
         //      smallest volume is the bounding cylinder
         public static BoundingCylinder Run(TessellatedSolid solid)
         {
@@ -40,11 +41,11 @@ namespace Assembly_Planner
                 minVolume = volume;
                 bC.CenterLineVector = side.Key.Normal;
                 bC.PointOnTheCenterLine = faceCenters;
+                bC.PerpVector = (side.Key.Vertices[0].Position.subtract(faceCenters)).normalize();
                 bC.Radius = radius;
                 bC.Length = side.Value;
                 bC.Volume = volume;
             }
-            var secondpoint = bC.PointOnTheCenterLine.add(bC.CenterLineVector.multiply(-60.0));
             return bC;
         }
 

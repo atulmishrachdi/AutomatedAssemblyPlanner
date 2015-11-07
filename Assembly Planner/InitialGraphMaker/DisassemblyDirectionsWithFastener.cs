@@ -30,7 +30,7 @@ namespace Assembly_Planner
             DisassemblyDirections.Directions = new List<double[]>(Directions);
             var globalDirPool = new List<int>();
 
-            var aaaaaa = BoundingCylinder.Run(solids[0]);
+            var aaaaaa = GearPolynomialTrend.PolynomialTrendDetector(solids[0]);
             // Creating OBB for every solid
             //------------------------------------------------------------------------------------------
             PartitioningSolid.CreateOBB(solids);

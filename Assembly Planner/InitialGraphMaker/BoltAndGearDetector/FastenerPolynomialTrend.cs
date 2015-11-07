@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.ExceptionServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using AssemblyEvaluation;
@@ -109,7 +110,7 @@ namespace Assembly_Planner
             return false;
         }
 
-        private static List<double> MergingEqualDistances(List<double> distancePointToSolid, double accuracy = 0.01)
+        public static List<double> MergingEqualDistances(List<double> distancePointToSolid, double accuracy = 0.01)
         {
             // if the difference is less than 0.01 merge them
             for (var i = 0; i < distancePointToSolid.Count-1; i++)
@@ -200,7 +201,7 @@ namespace Assembly_Planner
             return (shortestEdge[0].Position.add(shortestEdge[1].Position)).divide(2.0);
         }
 
-        private static void PlotInMatlab(List<double> distancePointToSolid)
+        public static void PlotInMatlab(List<double> distancePointToSolid)
         {
             var a = new List<double>();
             for (var i = 0; i < distancePointToSolid.Count; i++)
