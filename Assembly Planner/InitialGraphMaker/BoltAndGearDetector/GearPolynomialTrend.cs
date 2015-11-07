@@ -13,13 +13,20 @@ namespace Assembly_Planner
     {
         internal static bool PolynomialTrendDetector(TessellatedSolid solid)
         {
+            // Since gears have different shapes, we need to generate bounding circles in multiple locations
+            // around the gear (bounding cylinde). If any of them are showing a gear, return true. 
+            // This makes the code really slow.
+            var section = 5.0;
             var bC = BoundingCylinder.Run(solid);
             var kPointsOnSurface = KpointObMidSurfaceOfCylinderGenerator(bC, 2000);
-            var distancePointToSolid = PointToSolidDistanceCalculator(solid, kPointsOnSurface,
-                bC.PointOnTheCenterLine.add(bC.CenterLineVector.multiply(-bC.Length*1.0/4.0)));
-            // one more step: Merge points with equal distances.
-            distancePointToSolid = FastenerPolynomialTrend.MergingEqualDistances(distancePointToSolid, 0.001);
-            FastenerPolynomialTrend.PlotInMatlab(distancePointToSolid);
+            for (var i = 0.0; i <= 1; i+=1/section)
+            {
+                var distancePointToSolid = PointToSolidDistanceCalculator(solid, kPointsOnSurface, bC, i);
+                distancePointToSolid = FastenerPolynomialTrend.MergingEqualDistances(distancePointToSolid, 0.001);
+                FastenerPolynomialTrend.PlotInMatlab(distancePointToSolid);
+                if (IsGear(distancePointToSolid))
+                    return true;
+            }
             return false;
         }
 
@@ -34,17 +41,19 @@ namespace Assembly_Planner
             for (var i = 0.0; i < 2*Math.PI; i+=stepSize)
             {
                 points.Add((((u.multiply(r*Math.Cos(i))).add((n.crossProduct(u)).multiply(r*Math.Sin(i)))).add(
-                    bC.PointOnTheCenterLine)).add(n.multiply(-bC.Length*1.0/4.0)));
+                    bC.PointOnTheCenterLine)));
             }
             return points;
         }
 
-        private static List<double> PointToSolidDistanceCalculator(TessellatedSolid solid, List<double[]> kPointsOnSurface, double[] centerPoint)
+        private static List<double> PointToSolidDistanceCalculator(TessellatedSolid solid, List<double[]> kPointsOnSurface, BoundingCylinder bC, double section)
         {
             var distList = new List<double>();
+            kPointsOnSurface =
+                kPointsOnSurface.Select(p => p.add(bC.CenterLineVector.multiply(-bC.Length*section))).ToList();
             foreach (var point in kPointsOnSurface)
             {
-                var rayVector = centerPoint.subtract(point);
+                var rayVector = (bC.PointOnTheCenterLine.add(bC.CenterLineVector.multiply(-bC.Length*section))).subtract(point);
                 var ray = new Ray(new AssemblyEvaluation.Vertex(point), new Vector(rayVector));
                 var minDis = double.PositiveInfinity;
                 foreach (var face in solid.Faces)
@@ -61,6 +70,54 @@ namespace Assembly_Planner
             // Normalizing:
             var longestDis = distList.Max();
             return distList.Select(d => d / longestDis).ToList();
+        }
+
+
+        private static bool IsGear(List<double> distancePointToSolid)
+        {
+            var directionChange = new List<double>();
+            for (var i = 0; i < distancePointToSolid.Count - 1; i++)
+            {
+                var c = 0;
+                for (var j = i + 1;
+                    Math.Sign(distancePointToSolid[j] - distancePointToSolid[j - 1]) ==
+                    Math.Sign(distancePointToSolid[i + 1] - distancePointToSolid[i]);
+                    j++)
+                {
+                    c++;
+                    if (j == distancePointToSolid.Count - 1) break;
+                }
+                directionChange.Add(c);
+                i += (c - 1);
+            }
+            //PlotInMatlab(directionChange);
+            return ContainsTeethSeries(directionChange);
+        }
+
+        private static bool ContainsTeethSeries(List<double> directionChange)
+        {
+
+            var thread = new List<double>();
+            var cumulativePoi = new List<double>();
+            for (var i = 0; i < directionChange.Count - 1; i++)
+            {
+                if (directionChange[i] < 2) continue;
+                var c = 1;
+                var cumulativePoints = directionChange[i];
+                for (var j = i + 1; Math.Abs(directionChange[j] - directionChange[j - 1]) < 10; j++)
+                {
+                    if (j == directionChange.Count - 1) break;
+                    if (directionChange[j] < 2) continue;
+                    cumulativePoints += directionChange[j];
+                    c++;
+                }
+                thread.Add(c);
+                cumulativePoi.Add(cumulativePoints);
+                i += (c - 1);
+            }
+            // I can use minimum common number of threads for this * 2 
+            // if it is 5 and less, cumulativePoints must be less than 90 of the total number of points
+            return thread.Any(t => t > 20);
         }
     }
 }
