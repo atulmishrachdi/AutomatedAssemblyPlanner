@@ -28,8 +28,8 @@ namespace Assembly_Planner
                 //"../../../Test/Mc Cormik/STL2";
                 //"../../../Test/Truck -TXT-1/STL";
                 //"../../../Test/FoodPackagingMachine/FPMSTL2";
-                "../../../../GearAndFastener Detection/TrainingData/not-screw";
-                //"../../../Test/test";
+                //"../../../../GearAndFastener Detection/TrainingData/not-screw/Gear";
+                "../../../Test/test";
             var s = Stopwatch.StartNew();
             s.Start();
             var solids = GetSTLs(inputDir);
@@ -52,7 +52,7 @@ namespace Assembly_Planner
                 //NonadjacentBlockingDeterminationPro.Run(assemblyGraph, solids, globalDirPool);
                 NonadjacentBlockingWithPartitioning.Run(assemblyGraph, solids, globalDirPool);
                 //NonadjacentBlockingDetermination.Run(assemblyGraph, solids, globalDirPool);
-                GraphSaving.SaveTheGraph(assemblyGraph);
+                //GraphSaving.SaveTheGraph(assemblyGraph);
             }
             var inputData = new ConvexHullAndBoundingBox(inputDir, assemblyGraph);
             var solutions = RecursiveOptimizedSearch.Run(inputData, globalDirPool);

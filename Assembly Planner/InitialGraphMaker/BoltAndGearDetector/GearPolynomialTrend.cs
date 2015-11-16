@@ -11,7 +11,7 @@ namespace Assembly_Planner
 {
     class GearPolynomialTrend
     {
-        internal static bool PolynomialTrendDetector(TessellatedSolid solid)
+        internal static bool PolynomialTrendDetector(List<TessellatedSolid> solids)
         {
             // Since gears have different shapes, we need to generate bounding circles in multiple locations
             // around the gear (bounding cylinde). If any of them are showing a gear, return true. 

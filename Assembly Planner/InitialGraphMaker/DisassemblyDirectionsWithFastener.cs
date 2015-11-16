@@ -30,24 +30,12 @@ namespace Assembly_Planner
             DisassemblyDirections.Directions = new List<double[]>(Directions);
             var globalDirPool = new List<int>();
 
-            var aaaaaa = GearPolynomialTrend.PolynomialTrendDetector(solids[0]);
             // Creating OBB for every solid
             //------------------------------------------------------------------------------------------
-            PartitioningSolid.CreateOBB(solids);
-            //var tr = 0;
-            //foreach (var solid in solids)
-            //Parallel.ForEach(solids, solid =>
-            //{
-            //    if (FastenerPolynomialTrend.PolynomialTrendDetector(solid))
-            //        tr++;
-            //}
-            //);
-            //foreach (var solid in solids.Where())
-            //    tr++;
+            PartitioningSolid.CreateOBB2(solids);
 
             // From repeated parts take only one of them, and do the primitive classification on that:
             //------------------------------------------------------------------------------------------
-
             var multipleRefs = DuplicatePartsDetector(solids);
             var solidPrimitive = BlockingDetermination.PrimitiveMaker(solids);//multipleRefs.Keys.ToList());
             BoltAndGearDetection.GearDetector(solidPrimitive);

@@ -50,26 +50,24 @@ namespace Assembly_Planner
         }
 
 
-        private static Dictionary<PolygonalFace,double> ThreeSidesOfTheObb(TessellatedSolid solid)
+        private static Dictionary<PolygonalFace, double> ThreeSidesOfTheObb(TessellatedSolid solid)
         {
             // This is based on my own OBB function:
             // it returns a dictionary with size of three (3 sides). 
             //    Key: triangle, value: length of the potential cylinder 
-            double[][] dir;
-            bool clockWise;
-            var obb = OBB.BuildUsingPoints(solid.Vertices.ToList(), out dir, out clockWise);
-            var normal1 = ((obb[1].subtract(obb[0])).crossProduct(obb[3].subtract(obb[0]))).normalize(); // For 0,1,3
-            var normal2 = ((obb[4].subtract(obb[0])).crossProduct(obb[1].subtract(obb[0]))).normalize(); // For 0,1,4
-            var normal3 = ((obb[3].subtract(obb[0])).crossProduct(obb[4].subtract(obb[0]))).normalize(); // For 0,3,4
-            var face1 = new PolygonalFace(new[] {new Vertex(obb[0]), new Vertex(obb[1]), new Vertex(obb[3])},
-                clockWise ? normal1.multiply(-1.0) : normal1);
-            var length1 = BasicGeometryFunctions.DistanceBetweenTwoVertices(obb[0], obb[4]);
-            var face2 = new PolygonalFace(new[] {new Vertex(obb[0]), new Vertex(obb[1]), new Vertex(obb[4])},
-                clockWise ? normal2.multiply(-1.0) : normal2);
-            var length2 = BasicGeometryFunctions.DistanceBetweenTwoVertices(obb[0], obb[3]);
-            var face3 = new PolygonalFace(new[] {new Vertex(obb[0]), new Vertex(obb[3]), new Vertex(obb[4])},
-                clockWise ? normal3.multiply(-1.0) : normal3);
-            var length3 = BasicGeometryFunctions.DistanceBetweenTwoVertices(obb[0], obb[1]);
+            var cornerVer = PartitioningSolid.OrientedBoundingBoxDic[solid].CornerVertices;
+            var face1 = new PolygonalFace(new[] {cornerVer[0], cornerVer[1], cornerVer[3]},
+                ((cornerVer[3].Position.subtract(cornerVer[0].Position)).crossProduct(
+                    cornerVer[1].Position.subtract(cornerVer[0].Position))).normalize());
+            var length1 = BasicGeometryFunctions.DistanceBetweenTwoVertices(cornerVer[0].Position, cornerVer[4].Position);
+            var face2 = new PolygonalFace(new[] {cornerVer[1], cornerVer[0], cornerVer[4]},
+                ((cornerVer[1].Position.subtract(cornerVer[0].Position)).crossProduct(
+                    cornerVer[4].Position.subtract(cornerVer[0].Position))).normalize());
+            var length2 = BasicGeometryFunctions.DistanceBetweenTwoVertices(cornerVer[0].Position, cornerVer[3].Position);
+            var face3 = new PolygonalFace(new[] {cornerVer[0], cornerVer[3], cornerVer[7]},
+                ((cornerVer[0].Position.subtract(cornerVer[3].Position)).crossProduct(
+                    cornerVer[7].Position.subtract(cornerVer[3].Position))).normalize());
+            var length3 = BasicGeometryFunctions.DistanceBetweenTwoVertices(cornerVer[0].Position, cornerVer[1].Position);
             return new Dictionary<PolygonalFace, double> {{face1, length1}, {face2, length2}, {face3, length3}};
         }
 

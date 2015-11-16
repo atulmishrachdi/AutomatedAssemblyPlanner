@@ -23,7 +23,7 @@ namespace Assembly_Planner
         internal static Dictionary<TessellatedSolid, Partition[]> Partitions =
             new Dictionary<TessellatedSolid, Partition[]>();
         public static int ccc = 0;
-        internal static Partition[] Run(TessellatedSolid solid)
+        /*internal static Partition[] Run(TessellatedSolid solid)
         {
             double[][] direction;
             bool clockWise;
@@ -101,10 +101,11 @@ namespace Assembly_Planner
                 partitions.Add(prtn);
             }
             return partitions.ToArray();
-        }
-        internal static Partition[] Run2(HashSet<Vertex> solidVerts, HashSet<PolygonalFace> solidFaces, Vertex[] obbCorverVts)
+        }*/
+
+        internal static Partition[] Run(HashSet<Vertex> solidVerts, HashSet<PolygonalFace> solidFaces, Vertex[] obbCorverVts)
         {
-            //var obb = OBB.BuildUsingPoints(solid.Vertices.ToList(), out direction);
+            // the corner vertices are all clock wise now.
             var partitions = new List<Partition>();
             //var ddds = solid.Vertices.Max(v => v.Position[1]);
             for (var k = 0; k < obbCorverVts.Length; k++) //obb.CornerVertices)
@@ -119,19 +120,19 @@ namespace Assembly_Planner
                     cornerVer.Add(midVer);
                 }
                 prtn.CornerVertices = cornerVer.ToArray();
-                var faces = TwelveFaceGenerator(prtn.CornerVertices);
-                prtn.Faces = faces;
+                prtn.Faces = TwelveFaceGenerator(prtn.CornerVertices);
                 prtn.SolidVertices = new HashSet<Vertex>(solidVerts.Where(vertex => IsVertexInsidePartition(prtn, vertex)));
                 prtn.SolidTriangles = PartitionTrianglesPro(prtn, solidFaces);
                 // continue the octree or not?
                 if (IsItWorthGoingDownTheOctree(prtn.SolidTriangles))
                 {
-                    prtn.InnerPartition = Run2(prtn.SolidVertices, prtn.SolidTriangles, prtn.CornerVertices);
+                    prtn.InnerPartition = Run(prtn.SolidVertices, prtn.SolidTriangles, prtn.CornerVertices);
                 }
                 partitions.Add(prtn);
             }
             return partitions.ToArray();
         }
+        
 
         private static bool IsItWorthGoingDownTheOctree(HashSet<PolygonalFace> faces)
         {
@@ -141,6 +142,65 @@ namespace Assembly_Planner
 
         internal static List<PolygonalFace> TwelveFaceGenerator(Vertex[] cornerVer)
         {
+            return new List<PolygonalFace>
+            {
+                new PolygonalFace(new[] {cornerVer[0], cornerVer[1], cornerVer[3]},
+                    ((cornerVer[3].Position.subtract(cornerVer[0].Position)).crossProduct(
+                        cornerVer[1].Position.subtract(cornerVer[0].Position))).normalize()),
+
+                new PolygonalFace(new[] {cornerVer[1], cornerVer[2], cornerVer[3]},
+                    ((cornerVer[1].Position.subtract(cornerVer[2].Position)).crossProduct(
+                        cornerVer[3].Position.subtract(cornerVer[2].Position))).normalize()),
+
+                new PolygonalFace(new[] {cornerVer[1], cornerVer[0], cornerVer[4]},
+                    ((cornerVer[1].Position.subtract(cornerVer[0].Position)).crossProduct(
+                        cornerVer[4].Position.subtract(cornerVer[0].Position))).normalize()),
+
+                new PolygonalFace(new[] {cornerVer[1], cornerVer[5], cornerVer[4]},
+                    ((cornerVer[4].Position.subtract(cornerVer[5].Position)).crossProduct(
+                        cornerVer[1].Position.subtract(cornerVer[5].Position))).normalize()),
+
+                new PolygonalFace(new[] {cornerVer[2], cornerVer[3], cornerVer[7]},
+                    ((cornerVer[7].Position.subtract(cornerVer[3].Position)).crossProduct(
+                        cornerVer[2].Position.subtract(cornerVer[3].Position))).normalize()),
+
+                new PolygonalFace(new[] {cornerVer[2], cornerVer[6], cornerVer[7]},
+                    ((cornerVer[2].Position.subtract(cornerVer[6].Position)).crossProduct(
+                        cornerVer[7].Position.subtract(cornerVer[6].Position))).normalize()),
+
+                new PolygonalFace(new[] {cornerVer[5], cornerVer[6], cornerVer[7]},
+                    ((cornerVer[7].Position.subtract(cornerVer[6].Position)).crossProduct(
+                        cornerVer[5].Position.subtract(cornerVer[6].Position))).normalize()),
+
+                new PolygonalFace(new[] {cornerVer[4], cornerVer[5], cornerVer[7]},
+                    ((cornerVer[5].Position.subtract(cornerVer[4].Position)).crossProduct(
+                        cornerVer[7].Position.subtract(cornerVer[4].Position))).normalize()),
+
+                new PolygonalFace(new[] {cornerVer[1], cornerVer[2], cornerVer[6]},
+                    ((cornerVer[6].Position.subtract(cornerVer[2].Position)).crossProduct(
+                        cornerVer[1].Position.subtract(cornerVer[2].Position))).normalize()),
+
+                new PolygonalFace(new[] {cornerVer[1], cornerVer[5], cornerVer[6]},
+                    ((cornerVer[1].Position.subtract(cornerVer[5].Position)).crossProduct(
+                        cornerVer[6].Position.subtract(cornerVer[5].Position))).normalize()),
+
+                new PolygonalFace(new[] {cornerVer[0], cornerVer[3], cornerVer[7]},
+                    ((cornerVer[0].Position.subtract(cornerVer[3].Position)).crossProduct(
+                        cornerVer[7].Position.subtract(cornerVer[3].Position))).normalize()),
+
+                new PolygonalFace(new[] {cornerVer[0], cornerVer[4], cornerVer[7]},
+                    ((cornerVer[7].Position.subtract(cornerVer[4].Position)).crossProduct(
+                        cornerVer[0].Position.subtract(cornerVer[4].Position))).normalize())
+            };
+        }
+
+        internal static List<PolygonalFace> TwelveFaceGenerator2(Vertex[] cornerVer)
+        {
+            // this is the old function to create twelve triangles of the OBB generated
+            // using TVGL approach. I am trying not to use this function since I have changed
+            // the order of the corner vertices of the OBBs to clock wise, so it will be similar to
+            // my own OBB function.
+
             return new List<PolygonalFace>
                 {
                     new PolygonalFace(new[] {cornerVer[0], cornerVer[1], cornerVer[2]},
@@ -273,15 +333,14 @@ namespace Assembly_Planner
                 solid.SimplifyByPercentage(0.5);
                 lock (Partitions)
                     Partitions.Add(solid,
-                        Run2(new HashSet<Vertex>(solid.Vertices), new HashSet<PolygonalFace>(solid.Faces),
+                        Run(new HashSet<Vertex>(solid.Vertices), new HashSet<PolygonalFace>(solid.Faces),
                             OrientedBoundingBoxDic[solid].CornerVertices));
             });//
             s.Stop();
             Console.WriteLine("Octree Generation is done in:" + "     " + s.Elapsed);
-
         }
- 
-        internal static void CreateOBB(List<TessellatedSolid> solids)
+
+        internal static void CreateOBB1(List<TessellatedSolid> solids)
         {
             var s = new Stopwatch();
             s.Start();
@@ -289,13 +348,36 @@ namespace Assembly_Planner
             Console.WriteLine("OBBs are being Created ...");
             Parallel.ForEach(solids, solid =>
             {
+                var bb = MinimumEnclosure.OrientedBoundingBox(solid);
+                // change the orser of the corner vertices to clock wise:
+                bb.CornerVertices = new[]
+                {
+                    bb.CornerVertices[2], bb.CornerVertices[0], bb.CornerVertices[1], bb.CornerVertices[3],
+                    bb.CornerVertices[6], bb.CornerVertices[4], bb.CornerVertices[5], bb.CornerVertices[7]
+                };
                 lock (OrientedBoundingBoxDic)
                     OrientedBoundingBoxDic.Add(solid, MinimumEnclosure.OrientedBoundingBox(solid));
             }
                 );
             s.Stop();
-            double[][] dir;
-            //var newobb = OBB.BuildUsingPoints(solids[0].Vertices.ToList(), out dir);
+            Console.WriteLine("OBB Creation is done in:" + "     " + s.Elapsed);
+        }
+
+        internal static void CreateOBB2(List<TessellatedSolid> solids)
+        {
+            // This function uses my own OBB code not the one in TVGL
+            // It has more accurate results
+            var s = new Stopwatch();
+            s.Start();
+            Console.WriteLine();
+            Console.WriteLine("OBBs are being Created ...");
+            Parallel.ForEach(solids, solid =>
+            {
+                lock (OrientedBoundingBoxDic)
+                    OrientedBoundingBoxDic.Add(solid, OBB.BuildUsingPoints(solid.Vertices.ToList()));
+            }
+                );
+            s.Stop();
             Console.WriteLine("OBB Creation is done in:" + "     " + s.Elapsed);
         }
     }

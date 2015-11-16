@@ -14,7 +14,7 @@ namespace Assembly_Planner.GeometryReasoning
         //   3. Using convex hull
         // I will only implement the "using points" method here.
 
-        internal static double[][] BuildUsingPoints(List<Vertex> points, out double[][] dir, out bool clockWise)
+        internal static BoundingBox BuildUsingPoints(List<Vertex> points)
         {
             var mu = new[] {0.0, 0.0, 0.0};
             var C = new double[3, 3];
@@ -45,10 +45,13 @@ namespace Assembly_Planner.GeometryReasoning
             C[2, 0] = cxz;
             C[2, 1] = cyz;
             C[2, 2] = czz;
-            return BuildFromCovarianceMatrix(C, points, out dir, out clockWise);
+            double[][] dirs;
+            double volume;
+            var verts = BuildFromCovarianceMatrix(C, points, out dirs, out volume);
+            return new BoundingBox {CornerVertices = verts, Volume = volume, Directions = dirs};
         }
 
-        internal static double[][] BuildFromCovarianceMatrix(double[,] C, List<Vertex> points, out double[][] eigenVecs, out bool clockWise)
+        internal static Vertex[] BuildFromCovarianceMatrix(double[,] C, List<Vertex> points, out double[][] eigenVecs, out double volume)
         {
             var eugVal = C.GetEigenValuesAndVectors(out eigenVecs);
             var r = eigenVecs[0];
@@ -94,27 +97,32 @@ namespace Assembly_Planner.GeometryReasoning
             var extent = (maxVec.subtract(minVec)).divide(2.0);
             var orientedBoundingBox = new[]
             {
-                ((pos.subtract(r.multiply(extent[0]))).subtract(u.multiply(extent[1]))).subtract(f.multiply(extent[2])),
-                ((pos.add(r.multiply(extent[0]))).subtract(u.multiply(extent[1]))).subtract(f.multiply(extent[2])),
-                ((pos.add(r.multiply(extent[0]))).subtract(u.multiply(extent[1]))).add(f.multiply(extent[2])),
-                ((pos.subtract(r.multiply(extent[0]))).subtract(u.multiply(extent[1]))).add(f.multiply(extent[2])),
-                ((pos.subtract(r.multiply(extent[0]))).add(u.multiply(extent[1]))).subtract(f.multiply(extent[2])),
-                ((pos.add(r.multiply(extent[0]))).add(u.multiply(extent[1]))).subtract(f.multiply(extent[2])),
-                ((pos.add(r.multiply(extent[0]))).add(u.multiply(extent[1]))).add(f.multiply(extent[2])),
-                ((pos.subtract(r.multiply(extent[0]))).add(u.multiply(extent[1]))).add(f.multiply(extent[2]))
+                new Vertex(((pos.subtract(r.multiply(extent[0]))).subtract(u.multiply(extent[1]))).subtract(f.multiply(extent[2]))),
+                new Vertex(((pos.add(r.multiply(extent[0]))).subtract(u.multiply(extent[1]))).subtract(f.multiply(extent[2]))),
+                new Vertex(((pos.add(r.multiply(extent[0]))).subtract(u.multiply(extent[1]))).add(f.multiply(extent[2]))),
+                new Vertex(((pos.subtract(r.multiply(extent[0]))).subtract(u.multiply(extent[1]))).add(f.multiply(extent[2]))),
+                new Vertex(((pos.subtract(r.multiply(extent[0]))).add(u.multiply(extent[1]))).subtract(f.multiply(extent[2]))),
+                new Vertex(((pos.add(r.multiply(extent[0]))).add(u.multiply(extent[1]))).subtract(f.multiply(extent[2]))),
+                new Vertex(((pos.add(r.multiply(extent[0]))).add(u.multiply(extent[1]))).add(f.multiply(extent[2]))),
+                new Vertex(((pos.subtract(r.multiply(extent[0]))).add(u.multiply(extent[1]))).add(f.multiply(extent[2])))
+               
             };
-            if (
-                points.Any(
-                    p =>
-                        p.Position.subtract(orientedBoundingBox[0])
-                            .dotProduct(
-                                ((orientedBoundingBox[1].subtract(orientedBoundingBox[0])).crossProduct(
-                                    orientedBoundingBox[3].subtract(orientedBoundingBox[0]))).normalize()) > 0))
-                clockWise = true;
-            else
-                clockWise = false;
-
-            var volume = 8 * extent[0] * extent[1] * extent[2];
+            volume = 8 * extent[0] * extent[1] * extent[2];
+            var clockWise = points.Any(
+                p =>
+                    p.Position.subtract(orientedBoundingBox[0].Position)
+                        .dotProduct(
+                            ((orientedBoundingBox[1].Position.subtract(orientedBoundingBox[0].Position)).crossProduct(
+                                orientedBoundingBox[3].Position.subtract(orientedBoundingBox[0].Position))).normalize()) > 0);
+            if (!clockWise)
+            {
+                // Make it CW:
+                return new[]
+                {
+                    orientedBoundingBox[1], orientedBoundingBox[0], orientedBoundingBox[3], orientedBoundingBox[2],
+                    orientedBoundingBox[5], orientedBoundingBox[4], orientedBoundingBox[7], orientedBoundingBox[6]
+                };
+            }
             return orientedBoundingBox;
         }
 
