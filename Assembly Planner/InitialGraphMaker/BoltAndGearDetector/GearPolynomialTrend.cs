@@ -11,23 +11,71 @@ namespace Assembly_Planner
 {
     class GearPolynomialTrend
     {
-        internal static bool PolynomialTrendDetector(List<TessellatedSolid> solids)
+        internal static Gear PolynomialTrendDetector(TessellatedSolid solid)
         {
             // Since gears have different shapes, we need to generate bounding circles in multiple locations
             // around the gear (bounding cylinde). If any of them are showing a gear, return true. 
             // This makes the code really slow.
+            // To also find negative (internal) gears:
+            //   1. if the closest with negative dot product triangles to bounding cylinder points, it is a positive gear
+            //   2. if the closest with positive dot product triangles to bounding cylinder points, it is a negative gear
             var section = 5.0;
             var bC = BoundingCylinder.Run(solid);
             var kPointsOnSurface = KpointObMidSurfaceOfCylinderGenerator(bC, 2000);
-            for (var i = 0.0; i <= 1; i+=1/section)
+            for (var i = 0.0; i <= 1; i += 1/section)
             {
-                var distancePointToSolid = PointToSolidDistanceCalculator(solid, kPointsOnSurface, bC, i);
-                distancePointToSolid = FastenerPolynomialTrend.MergingEqualDistances(distancePointToSolid, 0.001);
-                FastenerPolynomialTrend.PlotInMatlab(distancePointToSolid);
-                if (IsGear(distancePointToSolid))
-                    return true;
+                var distancePointToSolidPositive = PointToSolidDistanceCalculator(solid, kPointsOnSurface, bC, i);
+                // in the distance point to solid array, first one  is for outer triangle (general case)
+                // the second one is for inner triangle (written for negative gears)
+                distancePointToSolidPositive[0] =
+                    FastenerPolynomialTrend.MergingEqualDistances(distancePointToSolidPositive[0], 0.001);
+                //FastenerPolynomialTrend.PlotInMatlab(distancePointToSolidPositive[0]);
+                if (IsGear(distancePointToSolidPositive[0]))
+                    return new Gear
+                    {
+                        Solid = solid,
+                        PointOnAxis = bC.PointOnTheCenterLine,
+                        Axis = bC.CenterLineVector,
+                        LargeCylinderRadius = bC.Radius,
+                        SmallCylinderRadius = bC.Radius - TeethDepthFinder(distancePointToSolidPositive[0])
+                    };
+                // check and see if it is an inner gear
+                distancePointToSolidPositive[1] =
+                    FastenerPolynomialTrend.MergingEqualDistances(distancePointToSolidPositive[1], 0.001);
+                if (IsGear(distancePointToSolidPositive[1]))
+                    return new Gear
+                    {
+                        Solid = solid,
+                        Type = GearType.Internal,
+                        PointOnAxis = bC.PointOnTheCenterLine,
+                        Axis = bC.CenterLineVector,
+                        LargeCylinderRadius = bC.Radius,
+                        SmallCylinderRadius = bC.Radius - TeethDepthFinder(distancePointToSolidPositive[0])
+                    };
+
             }
-            return false;
+            return null;
+        }
+
+        private static double TeethDepthFinder(List<double> distancePointToSolid)
+        {
+            // To consider the noise, I cannot simply say that the depth is equal to the 
+            // highest double in distancePointToSolid
+            distancePointToSolid.Sort();
+            // take the highest one if it is repeated more than 10 for example!
+            for (var i = distancePointToSolid.Count-1; i >= 0; i--)
+            {
+                var candidate = distancePointToSolid[i];
+                var r = 0;
+                for (var j = i-1; j >= 0; j--)
+                {
+                    if (Math.Abs(distancePointToSolid[i] - candidate) < 0.001)
+                        r++;
+                    if (r >= 10)
+                        return candidate;
+                }
+            }
+            return 0.0;
         }
 
         private static List<double[]> KpointObMidSurfaceOfCylinderGenerator(BoundingCylinder bC, int k)
@@ -46,30 +94,47 @@ namespace Assembly_Planner
             return points;
         }
 
-        private static List<double> PointToSolidDistanceCalculator(TessellatedSolid solid, List<double[]> kPointsOnSurface, BoundingCylinder bC, double section)
+        private static List<double>[] PointToSolidDistanceCalculator(TessellatedSolid solid, List<double[]> kPointsOnSurface, BoundingCylinder bC, double section)
         {
-            var distList = new List<double>();
+            var distListOuter = new List<double>();
+            var distListInner = new List<double>();
             kPointsOnSurface =
                 kPointsOnSurface.Select(p => p.add(bC.CenterLineVector.multiply(-bC.Length*section))).ToList();
             foreach (var point in kPointsOnSurface)
             {
                 var rayVector = (bC.PointOnTheCenterLine.add(bC.CenterLineVector.multiply(-bC.Length*section))).subtract(point);
                 var ray = new Ray(new AssemblyEvaluation.Vertex(point), new Vector(rayVector));
-                var minDis = double.PositiveInfinity;
+                var minDisOuter = double.PositiveInfinity;
+                var minDisInner = double.PositiveInfinity;
                 foreach (var face in solid.Faces)
                 {
                     double[] hittingPoint;
-                    if (!BasicGeometryFunctions.RayIntersectsWithFace(ray, face, out hittingPoint))
+                    bool outerTriangle;
+                    if (!BasicGeometryFunctions.RayIntersectsWithFace(ray, face, out hittingPoint, out outerTriangle))
                         continue;
                     var dis = BasicGeometryFunctions.DistanceBetweenTwoVertices(hittingPoint, point);
-                    if (dis < minDis) minDis = dis;
+                    if (outerTriangle)
+                    {
+                        if (dis < minDisOuter) 
+                            minDisOuter = dis;
+                    }
+                    else
+                    {
+                        if (dis < minDisInner)
+                            minDisInner = dis;
+                    }
                 }
-                if (minDis != double.PositiveInfinity)
-                    distList.Add(minDis);
+                if (!double.IsPositiveInfinity(minDisOuter))
+                    distListOuter.Add(minDisOuter);
+                if (!double.IsPositiveInfinity(minDisInner))
+                    distListInner.Add(minDisOuter);
             }
             // Normalizing:
-            var longestDis = distList.Max();
-            return distList.Select(d => d / longestDis).ToList();
+            var longestDis1 = distListOuter.Max();
+            var distanceToOuterTriangles = distListOuter.Select(d => d / longestDis1).ToList();
+            var longestDis2 = distListInner.Max();
+            var distanceToInnerTriangles = distListInner.Select(d => d / longestDis2).ToList();
+            return new[] {distanceToOuterTriangles, distanceToInnerTriangles};
         }
 
 

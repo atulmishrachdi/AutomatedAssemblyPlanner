@@ -16,12 +16,12 @@ using Tool = Assembly_Planner.GraphSynth.BaseClasses.Tool;
 
 namespace Assembly_Planner
 {
-    internal class BoltAndGearDetection
+    internal class FastenerDetector
     {
         internal static List<Fastener> Fasteners = new List<Fastener>();
         internal static List<Nut> Nuts = new List<Nut>();
 
-        internal static HashSet<TessellatedSolid> ScrewAndBoltDetector(
+        internal static HashSet<TessellatedSolid> Run(
             Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive,
             Dictionary<TessellatedSolid, List<TessellatedSolid>> multipleRefs, bool autoDetection, bool threaded,
             bool regenerateTrainingData = false)

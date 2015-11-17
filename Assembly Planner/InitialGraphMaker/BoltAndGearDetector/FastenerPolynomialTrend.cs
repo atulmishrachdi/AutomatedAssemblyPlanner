@@ -26,7 +26,7 @@ namespace Assembly_Planner
            
             PolygonalFace f1;
             PolygonalFace f2;
-            var longestSide = BoltAndGearDetection.LongestPlaneOfObbDetector(obb, out f1, out f2);
+            var longestSide = FastenerDetector.LongestPlaneOfObbDetector(obb, out f1, out f2);
             // 1. Take the middle point of the smallest edge of each triangle. Or the points of the 2nd longest edge of a side triangle
             // 2. Generate k points between them with equal distances. 
             // 3. Generate rays using generated points. 

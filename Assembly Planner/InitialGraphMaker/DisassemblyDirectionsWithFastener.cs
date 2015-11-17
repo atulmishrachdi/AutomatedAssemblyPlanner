@@ -38,24 +38,26 @@ namespace Assembly_Planner
             //------------------------------------------------------------------------------------------
             var multipleRefs = DuplicatePartsDetector(solids);
             var solidPrimitive = BlockingDetermination.PrimitiveMaker(solids);//multipleRefs.Keys.ToList());
-            BoltAndGearDetection.GearDetector(solidPrimitive);
             //foreach (var mRef in multipleRefs.Keys)
             //    foreach (var duplicated in multipleRefs[mRef])
             //        solidPrimitive.Add(duplicated, solidPrimitive[mRef]);
 
-            // Detect fasteners and gear mates
+            // Detect fasteners
             //------------------------------------------------------------------------------------------
             var screwsAndBolts = new HashSet<TessellatedSolid>();
             if (classifyFastener)
-                screwsAndBolts = BoltAndGearDetection.ScrewAndBoltDetector(solidPrimitive, multipleRefs,false, threaded,false);
-            //var gears = BoltAndGearDetection.GearDetector(solidPrimitive);
-
-            
-            // Add the solids as nodes to the graph. Excluede the fasteners 
-            //------------------------------------------------------------------------------------------
+                screwsAndBolts = FastenerDetector.Run(solidPrimitive, multipleRefs,false, threaded,false);
             var solidsNoFastener = new List<TessellatedSolid>(solids);
             foreach (var bolt in screwsAndBolts)
                 solidsNoFastener.Remove(bolt);
+
+            // Detect gear mates
+            //------------------------------------------------------------------------------------------
+            var gears = GearDetector.Run(solidsNoFastener);
+
+            
+            // Add the solids as nodes to the graph. Exclude the fasteners 
+            //------------------------------------------------------------------------------------------
             DisassemblyDirections.Solids = new List<TessellatedSolid>(solidsNoFastener);
             AddingNodesToGraph(assemblyGraph, solidsNoFastener); //, gears, screwsAndBolts);
 
@@ -63,7 +65,6 @@ namespace Assembly_Planner
             //------------------------------------------------------------------------------------------
             PartitioningSolid.CreatePartitions(solidsNoFastener);
 
-            
             // Part to part interaction to obtain removal directions between every connected pair
             //------------------------------------------------------------------------------------------
             var s = Stopwatch.StartNew();
@@ -84,6 +85,8 @@ namespace Assembly_Planner
                         solid2Primitives, globalDirPool, out localDirInd, out certainty))
                     {
                         // I wrote the code in a way that "solid1" is always "Reference" and "solid2" is always "Moving".
+                        // Update the romoval direction if it is a gear mate:
+                        localDirInd = GearDetector.UpdateRemovalDirectionsIfGearMate(solid1, solid2, gears, localDirInd);
                         List<int> finDirs, infDirs;
                         NonadjacentBlockingDetermination.FiniteDirectionsBetweenConnectedPartsWithPartitioning(solid1, solid2,
                            localDirInd, out finDirs, out infDirs);
