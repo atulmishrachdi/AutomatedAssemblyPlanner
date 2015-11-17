@@ -79,7 +79,7 @@ namespace Assembly_Planner
             // we willl consider the area of the positive culinders for bolts and negative cylinder for 
             // nuts. 
             var fastener = new HashSet<TessellatedSolid>();
-            var firstFilter = multipleRefs.Keys.ToList(); //SmallObjectsDetector(multipleRefs);
+            var firstFilter = SmallObjectsDetector(multipleRefs); //multipleRefs.Keys.ToList(); 
             var equalFlatPrimitivesForEverySolid = EqualFlatPrimitiveAreaFinder(firstFilter, solidPrimitive);
             var groupedPotentialFasteners = GroupingSmallParts(firstFilter);
             foreach (var solid in firstFilter)
@@ -212,6 +212,7 @@ namespace Assembly_Planner
                 if (cos.Count(c => Math.Abs(0.5 - c) < 0.0001) != 2 ||
                     cos.Count(c => Math.Abs(-0.5 - c) < 0.0001) != 2 ||
                     cos.Count(c => Math.Abs(-1 - c) < 0.0001) != 1) continue;
+                var lengthAndRadius = FastenerEngagedLengthAndRadiusNoThread(solidPrim);
                 if (IsItAllen(candidateHexVal))
                 {
                     // this is a socket bolt (allen)
@@ -223,7 +224,11 @@ namespace Assembly_Planner
                         ToolSize = ToolSizeFinder(candidateHexVal),
                         RemovalDirection =
                             RemovalDirectionFinderForAllenHexPhillips(candidateHexVal.Cast<Flat>().ToList(),
-                                PartitioningSolid.OrientedBoundingBoxDic[solid])
+                                PartitioningSolid.OrientedBoundingBoxDic[solid]),
+                        OverallLength =
+                            BasicGeometryFunctions.LongestLengthOfObb(PartitioningSolid.OrientedBoundingBoxDic[solid]),
+                        EngagedLength = lengthAndRadius[0],
+                        Diameter = lengthAndRadius[1]*2.0
                     };
                     Fasteners.Add(fastener);
                     return true;
@@ -235,7 +240,9 @@ namespace Assembly_Planner
                     {
                         NutType = NutType.Hex,
                         Solid = solid,
-                        ToolSize = ToolSizeFinder(candidateHexVal)
+                        ToolSize = ToolSizeFinder(candidateHexVal),
+                        OverallLength = lengthAndRadius[0],
+                        Diameter = lengthAndRadius[1] * 2.0
                     });
                     return true;
                 }
@@ -247,7 +254,11 @@ namespace Assembly_Planner
                     ToolSize = ToolSizeFinder(candidateHexVal),
                     RemovalDirection =
                         RemovalDirectionFinderForAllenHexPhillips(candidateHexVal.Cast<Flat>().ToList(),
-                            PartitioningSolid.OrientedBoundingBoxDic[solid])
+                            PartitioningSolid.OrientedBoundingBoxDic[solid]),
+                    OverallLength =
+                        BasicGeometryFunctions.LongestLengthOfObb(PartitioningSolid.OrientedBoundingBoxDic[solid]),
+                    EngagedLength = lengthAndRadius[0],
+                    Diameter = lengthAndRadius[1] * 2.0
                 });
                 return true;
             }
@@ -286,6 +297,7 @@ namespace Assembly_Planner
                 if (cos.Count(c => Math.Abs(0.0 - c) < 0.0001) != 4 ||
                     cos.Count(c => Math.Abs(-1 - c) < 0.0001) != 2 ||
                     cos.Count(c => Math.Abs(1 - c) < 0.0001) != 1) continue;
+                var lengthAndRadius = FastenerEngagedLengthAndRadiusNoThread(solidPrim);
                 var fastener = new Fastener
                 {
                     Solid = solid,
@@ -293,7 +305,11 @@ namespace Assembly_Planner
                     Tool = Tool.PhillipsBlade,
                     RemovalDirection =
                         RemovalDirectionFinderForAllenHexPhillips(candidateHexVal.Cast<Flat>().ToList(),
-                            PartitioningSolid.OrientedBoundingBoxDic[solid])
+                            PartitioningSolid.OrientedBoundingBoxDic[solid]),
+                    OverallLength =
+                        BasicGeometryFunctions.LongestLengthOfObb(PartitioningSolid.OrientedBoundingBoxDic[solid]),
+                    EngagedLength = lengthAndRadius[0],
+                    Diameter = lengthAndRadius[1] * 2.0
                 };
                 Fasteners.Add(fastener);
                 return true;
@@ -320,6 +336,7 @@ namespace Assembly_Planner
                 if (Math.Abs(leftVerts - rightVerts) > 2 || leftVerts + rightVerts <= solid.Vertices.Length)
                     return false;
                 if (!solidPrim.Where(p => p is Cylinder).Cast<Cylinder>().Any(c => c.IsPositive)) return false;
+                var lengthAndRadius = FastenerEngagedLengthAndRadiusNoThread(solidPrim);
                 var fastener = new Fastener
                 {
                     Solid = solid,
@@ -328,7 +345,11 @@ namespace Assembly_Planner
                     RemovalDirection =
                         RemovalDirectionFinderForSlot(candidateHexVal.Cast<Flat>().ToList(),
                             solidPrim.Where(p => p is Flat).Cast<Flat>().ToList(),
-                            PartitioningSolid.OrientedBoundingBoxDic[solid])
+                            PartitioningSolid.OrientedBoundingBoxDic[solid]),
+                    OverallLength =
+                        BasicGeometryFunctions.LongestLengthOfObb(PartitioningSolid.OrientedBoundingBoxDic[solid]),
+                    EngagedLength = lengthAndRadius[0],
+                    Diameter = lengthAndRadius[1]*2.0
                 };
                 Fasteners.Add(fastener);
                 return true;
@@ -359,6 +380,7 @@ namespace Assembly_Planner
                 eachSlot++;
             }
             if (eachSlot != 2) return false;
+            var lengthAndRadius = FastenerEngagedLengthAndRadiusNoThread(solidPrim);
             var fastener = new Fastener
             {
                 Solid = solid,
@@ -366,7 +388,11 @@ namespace Assembly_Planner
                 Tool = Tool.PhillipsBlade,
                 RemovalDirection =
                     RemovalDirectionFinderForAllenHexPhillips(flats.Cast<Flat>().ToList(),
-                        PartitioningSolid.OrientedBoundingBoxDic[solid])
+                        PartitioningSolid.OrientedBoundingBoxDic[solid]),
+                OverallLength =
+                    BasicGeometryFunctions.LongestLengthOfObb(PartitioningSolid.OrientedBoundingBoxDic[solid]),
+                EngagedLength = lengthAndRadius[0],
+                Diameter = lengthAndRadius[1]*2.0
             };
             Fasteners.Add(fastener);
             return true;
@@ -906,6 +932,36 @@ namespace Assembly_Planner
                     finalCenterline = cylinder.Axis;
             }
             return finalCenterline;
+        }
+
+
+        private static double[] FastenerEngagedLengthAndRadiusNoThread(List<PrimitiveSurface> solidPrim)
+        {
+            // the length and the radius of the longest cylinder
+            if (!solidPrim.Any(p=> p is Cylinder)) 
+                throw new Exception("the fastener does not have any cylinder");
+            //[0] = length, [1] = radius
+            Cylinder longestCyl = null;
+            var length = double.NegativeInfinity;
+            foreach (Cylinder cylinder in solidPrim.Where(p=> p is Cylinder))
+            {
+                var medLength = BasicGeometryFunctions.MediumEdgeLengthOfTriangle(cylinder.Faces[0]);
+                if (medLength <= length) continue;
+                length = medLength;
+                longestCyl = cylinder;
+            }
+            return new []{length, longestCyl.Radius};
+        }
+
+        private static double FastenerOveralLengthUsingObb(BoundingBox boundingBox)
+        {
+            var dist1 = BasicGeometryFunctions.DistanceBetweenTwoVertices(boundingBox.CornerVertices[0].Position,
+                boundingBox.CornerVertices[1].Position);
+            var dist2 = BasicGeometryFunctions.DistanceBetweenTwoVertices(boundingBox.CornerVertices[0].Position,
+                boundingBox.CornerVertices[3].Position);
+            var dist3 = BasicGeometryFunctions.DistanceBetweenTwoVertices(boundingBox.CornerVertices[0].Position,
+                boundingBox.CornerVertices[4].Position);
+            return Math.Max(Math.Max(dist1, dist2), dist3);
         }
 
     }

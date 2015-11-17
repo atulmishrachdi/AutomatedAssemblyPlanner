@@ -88,5 +88,28 @@ namespace Assembly_Planner
             }
             return signs;
         }
+
+        internal static double LongestLengthOfObb(BoundingBox boundingBox)
+        {
+            var dist1 = DistanceBetweenTwoVertices(boundingBox.CornerVertices[0].Position,
+                boundingBox.CornerVertices[1].Position);
+            var dist2 = DistanceBetweenTwoVertices(boundingBox.CornerVertices[0].Position,
+                boundingBox.CornerVertices[3].Position);
+            var dist3 = DistanceBetweenTwoVertices(boundingBox.CornerVertices[0].Position,
+                boundingBox.CornerVertices[4].Position);
+            return Math.Max(Math.Max(dist1, dist2), dist3);
+        }
+
+        internal static double MediumEdgeLengthOfTriangle(PolygonalFace triangle)
+        {
+            // shortest, medium, longest. this function returns the lenght of medium
+            var dist1 = DistanceBetweenTwoVertices(boundingBox.CornerVertices[0].Position,
+                boundingBox.CornerVertices[1].Position);
+            var dist2 = DistanceBetweenTwoVertices(boundingBox.CornerVertices[0].Position,
+                boundingBox.CornerVertices[3].Position);
+            var dist3 = DistanceBetweenTwoVertices(boundingBox.CornerVertices[0].Position,
+                boundingBox.CornerVertices[4].Position);
+            return Math.Max(Math.Max(dist1, dist2), dist3);
+        }
     }
 }
