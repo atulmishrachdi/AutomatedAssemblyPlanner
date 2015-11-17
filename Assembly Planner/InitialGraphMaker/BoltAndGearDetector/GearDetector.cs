@@ -8,19 +8,23 @@ using TVGL;
 
 namespace Assembly_Planner
 {
-    class GearDetector
+    internal class GearDetector
     {
-        public static List<Gear> Run(List<TessellatedSolid> solids, bool estimate = false)
+        public static List<Gear> Run(
+            List<TessellatedSolid> solids,
+            Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive, 
+            bool estimate = false)
         {
             // Fast and inaccurate results vs Slow but accurate
             // estimate: inaccurate but fast
             if (!estimate)
             {
-                var gears = solids.Select(GearPolynomialTrend.PolynomialTrendDetector).Where(gear => gear != null).ToList();
+                var gears =
+                    solids.Select(GearPolynomialTrend.PolynomialTrendDetector).Where(gear => gear != null).ToList();
                 return gears;
             }
             // This can be my old gear detector approach
-            return null;
+            return solids.Select(s => GearDetectorEstimate(s, solidPrimitive[s])).Where(gear => gear != null).ToList();
         }
 
 
@@ -58,12 +62,137 @@ namespace Assembly_Planner
             // if they are simple gears: spur:
             if (!localDirInd.Contains(ind1)) localDirInd.Add(ind1);
             if (!localDirInd.Contains(ind2)) localDirInd.Add(ind2);
+            if (gear1.PointOnAxis == null || gear2.PointOnAxis == null)
+                return localDirInd;
             var oneMore =
                 DisassemblyDirections.Directions.First(
                     d => Math.Abs(d.dotProduct(gear2.PointOnAxis.subtract(gear1.PointOnAxis)) - 1) < 0.01);
             var indOneMore = DisassemblyDirections.Directions.IndexOf(oneMore);
             if (!localDirInd.Contains(indOneMore)) localDirInd.Add(indOneMore);
             return localDirInd;
+        }
+
+        internal static Gear GearDetectorEstimate(TessellatedSolid solid, List<PrimitiveSurface> solidPrimitives)
+        {
+            var flats =
+                solidPrimitives.Where(
+                    p => p is Flat && p.Faces.Count > BoltAndGearConstants.TriabglesInTheGearSideFaces).ToList();
+
+            foreach (var flatPrim in flats)
+            {
+                var outerGearEdges = GearEdge.FromTVGLEdgeClassToGearEdgeClass(flatPrim.OuterEdges);
+                var patches = SortedConnectedPatches(outerGearEdges);
+                foreach (var patch in patches)
+                {
+                    var cluster = new List<GearEdge>[2];
+                    var newPatch = new List<GearEdge>();
+                    if (ClusteringDenseAndSparseEdges.ContainsDense(patch))
+                        cluster = ClusteringDenseAndSparseEdges.ClusteringDenseSparse(patch);
+                    if (cluster[0] != null && cluster[1].Count > BoltAndGearConstants.AcceptableNumberOfDenseEdges)
+                        newPatch = ClusteringDenseAndSparseEdges.ReplacingDenseEdges(patch, cluster);
+                    var crossP = new List<double[]>();
+                    if (newPatch.Count == 0) newPatch = patch;
+                    for (var i = 0; i < newPatch.Count - 1; i++)
+                    {
+                        var cross = new[] {0.0, 0, 0};
+                        var vec1 = newPatch[i].Vector.normalize();
+                        var vec2 = newPatch[i + 1].Vector.normalize();
+                        if (SmoothAngle(vec1, vec2))
+                            continue;
+                        cross = vec1.crossProduct(vec2);
+                        crossP.Add(cross);
+                    }
+                    if (crossP.Count < 10) continue;
+                    var crossSign = BasicGeometryFunctions.ConvertCrossToSign(crossP);
+                    if (!IsGear(crossSign)) continue;
+                    //Console.WriteLine("Is " + solid.Name + " a gear? 'y' or 'n'");
+                    //var read = Convert.ToString(Console.ReadLine());
+                    //if (read == "n")
+                    //    continue;
+                    return new Gear { Solid = solid, Axis = flatPrim.Faces[0].Normal};
+                }
+            }
+            return null;
+        }
+
+        private static bool IsGear(List<int> crossSign)
+        {
+            crossSign = BoltAndGearUpdateFunctions.CrossUpdate(crossSign);
+            var isGear = true;
+            var counter = 0;
+            var startInd = 0;
+            for (var i = 0; i < crossSign.Count; i++)
+            {
+                if (crossSign[i] == crossSign[i + 1])
+                {
+                    startInd = i;
+                    break;
+                }
+            }
+            for (var i = startInd; i < crossSign.Count - 5; i += 2)
+            {
+                if (crossSign[i] == crossSign[i + 1] && crossSign[i] != crossSign[i + 2])
+                {
+                    counter++;
+                    continue;
+                }
+                isGear = false;
+                break;
+            }
+            if (isGear && counter > BoltAndGearConstants.GearTeeth)
+                return true;
+            return false;
+        }
+
+        private static List<List<GearEdge>> SortedConnectedPatches(List<GearEdge> outerEdges)
+        {
+            var outer = new List<GearEdge>(outerEdges);
+            var patches = new List<List<GearEdge>>();
+            var c = -1;
+
+            while (outer.Count > 0)
+            {
+                c++;
+                patches.Add(new List<GearEdge>());
+                var ind = outerEdges.IndexOf(outer[0]);
+                patches[c].Add(outerEdges[ind]);
+                outer.Remove(outer[0]);
+                var count1 = patches[c].Count;
+                var count2 = 0;
+                while (count1 != count2)
+                {
+                    count1 = patches[c].Count;
+                    var ed1 = patches[c][patches[c].Count - 1];
+                    for (var j = 0; j < outer.Count; j++)
+                    {
+                        var ed2 = outer[j];
+                        //if (patches[c].Contains(ed2)) continue;
+                        if (ed1.To != ed2.From && ed1.To != ed2.To)
+                            continue;
+                        var copy = outerEdges.Where(e => e == ed2).ToList()[0];
+                        patches[c].Add(copy);
+                        count2 = patches[c].Count;
+                        outer.Remove(ed2);
+                        var last = patches[c][patches[c].Count - 1];
+                        if (ed1.To == last.To)
+                        {
+                            var tem = last.To;
+                            last.To = last.From;
+                            last.From = tem;
+                            last.Vector = last.Vector.multiply(-1);
+                        }
+
+                        break;
+                    }
+                    if (count2 == 0) break;
+                }
+            }
+            return patches;
+        }
+
+        private static bool SmoothAngle(double[] vec1, double[] vec2)
+        {
+            return Math.Abs(vec1.dotProduct(vec2)) > BoltAndGearConstants.SmoothAngle;
         }
     }
 }

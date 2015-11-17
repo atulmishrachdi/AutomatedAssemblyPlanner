@@ -67,5 +67,26 @@ namespace Assembly_Planner
             var cross = vector.crossProduct(pointOnLine.subtract(p));
             return Math.Sqrt(Math.Pow(cross[0], 2) + Math.Pow(cross[1], 2) + Math.Pow(cross[2], 2));
         }
+
+
+        internal static List<int> ConvertCrossToSign(List<double[]> crossP)
+        {
+            var signs = new List<int> { 1 };
+            var mainCross = crossP[0];
+            for (var i = 1; i < crossP.Count; i++)
+            {
+                var cross2 = crossP[i];
+                if ((Math.Sign(mainCross[0]) != Math.Sign(cross2[0]) ||
+                     (Math.Sign(mainCross[0]) == 0 && Math.Sign(cross2[0]) == 0)) &&
+                    (Math.Sign(mainCross[1]) != Math.Sign(cross2[1]) ||
+                     (Math.Sign(mainCross[1]) == 0 && Math.Sign(cross2[1]) == 0)) &&
+                    (Math.Sign(mainCross[2]) != Math.Sign(cross2[2]) ||
+                     (Math.Sign(mainCross[2]) == 0 && Math.Sign(cross2[2]) == 0)))
+                    signs.Add(-1);
+                else
+                    signs.Add(1);
+            }
+            return signs;
+        }
     }
 }

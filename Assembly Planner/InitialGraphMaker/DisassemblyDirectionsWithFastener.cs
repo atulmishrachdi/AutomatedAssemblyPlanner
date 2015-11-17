@@ -53,7 +53,7 @@ namespace Assembly_Planner
 
             // Detect gear mates
             //------------------------------------------------------------------------------------------
-            var gears = GearDetector.Run(solidsNoFastener);
+            var gears = GearDetector.Run(solidsNoFastener, solidPrimitive);
 
             
             // Add the solids as nodes to the graph. Exclude the fasteners 
