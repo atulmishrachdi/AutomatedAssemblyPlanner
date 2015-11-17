@@ -26,7 +26,7 @@ namespace Assembly_Planner
            
             PolygonalFace f1;
             PolygonalFace f2;
-            var longestSide = FastenerDetector.LongestPlaneOfObbDetector(obb, out f1, out f2);
+            var longestSide = GeometryFunctions.LongestPlaneOfObbDetector(obb, out f1, out f2);
             // 1. Take the middle point of the smallest edge of each triangle. Or the points of the 2nd longest edge of a side triangle
             // 2. Generate k points between them with equal distances. 
             // 3. Generate rays using generated points. 
@@ -140,9 +140,10 @@ namespace Assembly_Planner
                 foreach (var face in solid.Faces)
                 {
                     double[] hittingPoint;
-                    if (!BasicGeometryFunctions.RayIntersectsWithFace(ray, face, out hittingPoint))
+                    bool outer;
+                    if (!GeometryFunctions.RayIntersectsWithFace(ray, face, out hittingPoint, out outer) || !outer)
                         continue;
-                    var dis = BasicGeometryFunctions.DistanceBetweenTwoVertices(hittingPoint, point);
+                    var dis = GeometryFunctions.DistanceBetweenTwoVertices(hittingPoint, point);
                     if (dis < minDis) minDis = dis;
                 }
                 if (minDis != double.PositiveInfinity)
@@ -166,11 +167,11 @@ namespace Assembly_Planner
         private static Vertex[] CornerEdgeFinder(PolygonalFace polygonalFace)
         {
             // We want to find the second long edge:
-            var dist0 = BasicGeometryFunctions.DistanceBetweenTwoVertices(polygonalFace.Vertices[0].Position,
+            var dist0 = GeometryFunctions.DistanceBetweenTwoVertices(polygonalFace.Vertices[0].Position,
                 polygonalFace.Vertices[1].Position);
-            var dist1 = BasicGeometryFunctions.DistanceBetweenTwoVertices(polygonalFace.Vertices[0].Position,
+            var dist1 = GeometryFunctions.DistanceBetweenTwoVertices(polygonalFace.Vertices[0].Position,
                 polygonalFace.Vertices[2].Position);
-            var dist2 = BasicGeometryFunctions.DistanceBetweenTwoVertices(polygonalFace.Vertices[1].Position,
+            var dist2 = GeometryFunctions.DistanceBetweenTwoVertices(polygonalFace.Vertices[1].Position,
                 polygonalFace.Vertices[2].Position);
             if ((dist0 > dist1 && dist0 < dist2) || (dist0 > dist2 && dist0 < dist1))
                 return new[] {polygonalFace.Vertices[0], polygonalFace.Vertices[1]};
@@ -187,7 +188,7 @@ namespace Assembly_Planner
             {
                 for (var j = i + 1; j < triangle.Vertices.Count; j++)
                 {
-                    var dis = BasicGeometryFunctions.DistanceBetweenTwoVertices(triangle.Vertices[i].Position,
+                    var dis = GeometryFunctions.DistanceBetweenTwoVertices(triangle.Vertices[i].Position,
                         triangle.Vertices[j].Position);
                     if (dis >= shortestDist) continue;
                     shortestDist = dis;

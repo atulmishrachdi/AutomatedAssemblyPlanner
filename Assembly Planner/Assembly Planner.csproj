@@ -134,8 +134,10 @@
     <Compile Include="GraphSynth.BaseClasses\SearchProcess\RecognizeChooseApply.cs" />
     <Compile Include="GraphSynth.BaseClasses\SearchProcess\SearchProcess.cs" />
     <Compile Include="GraphSynth.BaseClasses\SecondaryConnection.cs" />
-    <Compile Include="InitialGraphMaker\BasicGeometryFunctions.cs" />
+    <Compile Include="InitialGraphMaker\GeometryFunctions.cs" />
     <Compile Include="InitialGraphMaker\BlockingDetermination.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\AutoNonthreadedFastenerDetection.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\AutoThreadedFastenerDetection.cs" />
     <Compile Include="InitialGraphMaker\BoltAndGearDetector\BoltAndGearConstants.cs" />
     <Compile Include="InitialGraphMaker\BoltAndGearDetector\FastenerDetector.cs" />
     <Compile Include="InitialGraphMaker\BoltAndGearDetector\BoltAndGearUpdateFunctions.cs" />

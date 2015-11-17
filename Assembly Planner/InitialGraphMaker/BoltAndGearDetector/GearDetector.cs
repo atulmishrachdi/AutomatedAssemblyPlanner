@@ -103,7 +103,7 @@ namespace Assembly_Planner
                         crossP.Add(cross);
                     }
                     if (crossP.Count < 10) continue;
-                    var crossSign = BasicGeometryFunctions.ConvertCrossToSign(crossP);
+                    var crossSign = GeometryFunctions.ConvertCrossProductToSign(crossP);
                     if (!IsGear(crossSign)) continue;
                     //Console.WriteLine("Is " + solid.Name + " a gear? 'y' or 'n'");
                     //var read = Convert.ToString(Console.ReadLine());

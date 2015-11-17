@@ -110,9 +110,9 @@ namespace Assembly_Planner
                 {
                     double[] hittingPoint;
                     bool outerTriangle;
-                    if (!BasicGeometryFunctions.RayIntersectsWithFace(ray, face, out hittingPoint, out outerTriangle))
+                    if (!GeometryFunctions.RayIntersectsWithFace(ray, face, out hittingPoint, out outerTriangle))
                         continue;
-                    var dis = BasicGeometryFunctions.DistanceBetweenTwoVertices(hittingPoint, point);
+                    var dis = GeometryFunctions.DistanceBetweenTwoVertices(hittingPoint, point);
                     if (outerTriangle)
                     {
                         if (dis < minDisOuter) 

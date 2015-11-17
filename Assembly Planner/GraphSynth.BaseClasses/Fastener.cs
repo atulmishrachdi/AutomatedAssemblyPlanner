@@ -19,10 +19,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.AccessControl;
 using System.Xml.Serialization;
+using Assembly_Planner.GraphSynth.BaseClasses;
 using GraphSynth.Representation;
 using TVGL;
 
-namespace Assembly_Planner.GraphSynth.BaseClasses
+namespace Assembly_Planner
 {
     /// <summary>
     /// Enum FastenerTypeEnum
@@ -217,7 +218,7 @@ namespace Assembly_Planner.GraphSynth.BaseClasses
                     graph.arcs.Where(a => partsName.Contains(a.From.name) && partsName.Contains(a.To.name))
                         .ToList())
             {
-                var fasten = new GraphSynth.BaseClasses.Fastener();
+                var fasten = new Fastener();
                 fasten.RemovalDirection = RD;
                 fasten.Diameter = radius * 2;
                 fasten.EngagedLength = depth;

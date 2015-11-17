@@ -59,15 +59,15 @@ namespace Assembly_Planner
             var face1 = new PolygonalFace(new[] {cornerVer[0], cornerVer[1], cornerVer[3]},
                 ((cornerVer[3].Position.subtract(cornerVer[0].Position)).crossProduct(
                     cornerVer[1].Position.subtract(cornerVer[0].Position))).normalize());
-            var length1 = BasicGeometryFunctions.DistanceBetweenTwoVertices(cornerVer[0].Position, cornerVer[4].Position);
+            var length1 = GeometryFunctions.DistanceBetweenTwoVertices(cornerVer[0].Position, cornerVer[4].Position);
             var face2 = new PolygonalFace(new[] {cornerVer[1], cornerVer[0], cornerVer[4]},
                 ((cornerVer[1].Position.subtract(cornerVer[0].Position)).crossProduct(
                     cornerVer[4].Position.subtract(cornerVer[0].Position))).normalize());
-            var length2 = BasicGeometryFunctions.DistanceBetweenTwoVertices(cornerVer[0].Position, cornerVer[3].Position);
+            var length2 = GeometryFunctions.DistanceBetweenTwoVertices(cornerVer[0].Position, cornerVer[3].Position);
             var face3 = new PolygonalFace(new[] {cornerVer[0], cornerVer[3], cornerVer[7]},
                 ((cornerVer[0].Position.subtract(cornerVer[3].Position)).crossProduct(
                     cornerVer[7].Position.subtract(cornerVer[3].Position))).normalize());
-            var length3 = BasicGeometryFunctions.DistanceBetweenTwoVertices(cornerVer[0].Position, cornerVer[1].Position);
+            var length3 = GeometryFunctions.DistanceBetweenTwoVertices(cornerVer[0].Position, cornerVer[1].Position);
             return new Dictionary<PolygonalFace, double> {{face1, length1}, {face2, length2}, {face3, length3}};
         }
 
@@ -79,7 +79,7 @@ namespace Assembly_Planner
             {
                 for (var j = i+1; j < side.Vertices.Count; j++)
                 {
-                    var dis = BasicGeometryFunctions.DistanceBetweenTwoVertices(side.Vertices[i].Position,
+                    var dis = GeometryFunctions.DistanceBetweenTwoVertices(side.Vertices[i].Position,
                         side.Vertices[j].Position);
                     if (dis > maxLength) maxLength = dis;
                     longestEdge = new[] {side.Vertices[i], side.Vertices[j]};
@@ -93,7 +93,7 @@ namespace Assembly_Planner
             var maxDistance = double.NegativeInfinity;
             foreach (var vertex in solid.Vertices)
             {
-                var dis = BasicGeometryFunctions.DistanceBetweenLineAndPoint(vector, faceCenters, vertex.Position);
+                var dis = GeometryFunctions.DistanceBetweenLineAndVertex(vector, faceCenters, vertex.Position);
                 if (dis > maxDistance) maxDistance = dis;
             }
             return maxDistance;
