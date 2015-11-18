@@ -59,12 +59,12 @@ namespace Assembly_Planner
             return null;
         }
 
-        private static double TeethDepthFinder(List<double> distancePointToSolid)
+        internal static double TeethDepthFinder(List<double> distancePointToSolid, int k = 10)
         {
             // To consider the noise, I cannot simply say that the depth is equal to the 
             // highest double in distancePointToSolid
             distancePointToSolid.Sort();
-            // take the highest one if it is repeated more than 10 for example!
+            // take the highest one if it is repeated more than k for example!
             for (var i = distancePointToSolid.Count-1; i >= 0; i--)
             {
                 var candidate = distancePointToSolid[i];
@@ -73,7 +73,7 @@ namespace Assembly_Planner
                 {
                     if (Math.Abs(distancePointToSolid[i] - candidate) < 0.001)
                         r++;
-                    if (r >= 10)
+                    if (r >= k)
                         return candidate;
                 }
             }

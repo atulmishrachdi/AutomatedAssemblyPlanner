@@ -35,8 +35,9 @@ namespace Assembly_Planner
 
             var kPointsBetweenMidPoints = KpointBtwPointsGenerator(midPoint1, midPoint2, k);
 
+            double longestDist;
             var distancePointToSolid = PointToSolidDistanceCalculator(solid, kPointsBetweenMidPoints,
-                longestSide[0].Normal.multiply(-1.0));
+                longestSide[0].Normal.multiply(-1.0), out longestDist);
 
             // one more step: Merge points with equal distances.
             List<int> originalInds;
@@ -58,9 +59,11 @@ namespace Assembly_Planner
                     OverallLength =
                         GeometryFunctions.SortedLengthOfObbEdges(PartitioningSolid.OrientedBoundingBoxDic[solid])[2],
                     EngagedLength =
-                        (startEndThreadPoints + (startEndThreadPoints * 2) / (double)numberOfThreads) *
+                        (startEndThreadPoints + (startEndThreadPoints*2)/(double) numberOfThreads)*
                         (GeometryFunctions.DistanceBetweenTwoVertices(midPoint1, midPoint2)/((double) k + 1)),
-                    //Diameter = lengthAndRadius[1]*2.0,
+                    Diameter =
+                        DiameterOfFastenerFinderUsingPolynomial(distancePointToSolid, threadStartEndPoints,
+                            longestSide[0], solid, longestDist),
                     Certainty = 1.0
                 });
             }
@@ -70,11 +73,13 @@ namespace Assembly_Planner
             return true;
         }
 
-        private static bool ContainsThread(List<double> distancePointToSolid, out int numberOfThreads, out int[] threadStartEndPoints)
+        private static bool ContainsThread(List<double> distancePointToSolid, out int numberOfThreads,
+            out int[] threadStartEndPoints)
         {
             var directionChange = new List<double>();
-            var startAndEndPointsOfC = new List<int[]>(); // these are the indices of start And End Points Of every C in distancePointToSolid.
-            for (var i = 0; i < distancePointToSolid.Count-1; i++)
+            var startAndEndPointsOfC = new List<int[]>();
+                // these are the indices of start And End Points Of every C in distancePointToSolid.
+            for (var i = 0; i < distancePointToSolid.Count - 1; i++)
             {
                 var inds = new int[2];
                 inds[0] = i;
@@ -93,7 +98,8 @@ namespace Assembly_Planner
                 startAndEndPointsOfC.Add(inds);
             }
             //PlotInMatlab(directionChange);
-            return ContainsThreadSeries(directionChange, startAndEndPointsOfC, out numberOfThreads, out threadStartEndPoints);
+            return ContainsThreadSeries(directionChange, startAndEndPointsOfC, out numberOfThreads,
+                out threadStartEndPoints);
         }
 
         private static bool ContainsThreadSeries(List<double> directionChange, List<int[]> startAndEndPointsOfC,
@@ -171,7 +177,7 @@ namespace Assembly_Planner
         }
 
         private static List<double> PointToSolidDistanceCalculator(TessellatedSolid solid,
-            List<double[]> kPointsBetweenMidPoints, double[] vector)
+            List<double[]> kPointsBetweenMidPoints, double[] vector, out double longestDist)
         {
             var distList = new List<double>();
             foreach (var point in kPointsBetweenMidPoints)
@@ -192,7 +198,8 @@ namespace Assembly_Planner
             }
             // Normalizing:
             var longestDis = distList.Max();
-            return distList.Select(d => d / longestDis).ToList();
+            longestDist = longestDis;
+            return distList.Select(d => d/longestDis).ToList();
         }
 
         private static List<double[]> KpointBtwPointsGenerator(double[] shortestEdgeMidPoint1, double[] shortestEdgeMidPoint2, int k)
@@ -239,6 +246,26 @@ namespace Assembly_Planner
             return (shortestEdge[0].Position.add(shortestEdge[1].Position)).divide(2.0);
         }
 
+
+        private static double DiameterOfFastenerFinderUsingPolynomial(List<double> distancePointToSolid,
+            int[] threadStartEndPoints, PolygonalFace longestSide, TessellatedSolid solid, double longestDist)
+        {
+            var newList = new List<double>();
+            for (var i = threadStartEndPoints[0];
+                i < threadStartEndPoints[1];
+                i++)
+                newList.Add(distancePointToSolid[i]);
+            var obbEdgesLength =
+                GeometryFunctions.SortedLengthOfObbEdges(PartitioningSolid.OrientedBoundingBoxDic[solid]);
+            // one of the first two small lengths are the number that I am looking for.
+            var shortestEdgeOfTriangle = GeometryFunctions.SortedEdgeLengthOfTriangle(longestSide)[0];
+            var obbDepth = Math.Abs(obbEdgesLength[0] - shortestEdgeOfTriangle) < 0.01
+                ? obbEdgesLength[1]
+                : obbEdgesLength[0];
+
+            return obbDepth - 2*(newList.Min()*longestDist);
+        }
+
         public static void PlotInMatlab(List<double> distancePointToSolid)
         {
             var a = new List<double>();
@@ -246,5 +273,7 @@ namespace Assembly_Planner
                 a.Add(i);
             Matlabplot.Displacements(a.ToArray(), distancePointToSolid.ToArray());
         }
+
+
     }
 }

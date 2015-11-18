@@ -33,6 +33,12 @@ namespace Assembly_Planner
             return Math.Abs(vector.dotProduct(plane.Normal));
         }
 
+        internal static double DistanceBetweenTwoPlanes(PolygonalFace plane1, PolygonalFace plane2)
+        {
+            return
+                Math.Abs((plane1.Vertices[0].Position.subtract(plane2.Vertices[0].Position)).dotProduct(plane1.Normal));
+        }
+
         internal static List<int> ConvertCrossProductToSign(List<double[]> crossP)
         {
             var signs = new List<int> { 1 };
@@ -53,7 +59,7 @@ namespace Assembly_Planner
             return signs;
         }
 
-        internal static double MediumEdgeLengthOfTriangle(PolygonalFace triangle)
+        internal static double[] SortedEdgeLengthOfTriangle(PolygonalFace triangle)
         {
             // shortest, medium, longest. this function returns the lenght of medium
             var lengths = new List<double>
@@ -63,7 +69,7 @@ namespace Assembly_Planner
                 DistanceBetweenTwoVertices(triangle.Vertices[1].Position, triangle.Vertices[2].Position)
             };
             lengths.Sort();
-            return lengths[1];
+            return lengths.ToArray();
         }
 
         internal static double[] SortedLengthOfObbEdges(BoundingBox boundingBox)

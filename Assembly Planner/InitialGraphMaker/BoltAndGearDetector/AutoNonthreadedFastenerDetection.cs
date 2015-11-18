@@ -341,7 +341,7 @@ namespace Assembly_Planner
             var length = double.NegativeInfinity;
             foreach (Cylinder cylinder in solidPrim.Where(p => p is Cylinder))
             {
-                var medLength = GeometryFunctions.MediumEdgeLengthOfTriangle(cylinder.Faces[0]);
+                var medLength = GeometryFunctions.SortedEdgeLengthOfTriangle(cylinder.Faces[0])[1];
                 if (medLength <= length) continue;
                 length = medLength;
                 longestCyl = cylinder;
