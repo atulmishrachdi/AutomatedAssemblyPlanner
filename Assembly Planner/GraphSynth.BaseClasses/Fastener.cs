@@ -137,6 +137,10 @@ namespace Assembly_Planner
         /// </summary>
         public FastenerTypeEnum FastenerType;
         /// <summary>
+        /// The number of threads if available
+        /// </summary>
+        public int NumberOfThreads;
+        /// <summary>
         /// The certainity of this classification
         /// </summary>
         public double Certainty;

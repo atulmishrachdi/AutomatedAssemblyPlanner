@@ -33,7 +33,7 @@ namespace Assembly_Planner
             // Creating OBB for every solid
             //------------------------------------------------------------------------------------------
             PartitioningSolid.CreateOBB2(solids);
-
+            FastenerPolynomialTrend.PolynomialTrendDetector(solids[0]);
             // From repeated parts take only one of them, and do the primitive classification on that:
             //------------------------------------------------------------------------------------------
             var multipleRefs = DuplicatePartsDetector(solids);

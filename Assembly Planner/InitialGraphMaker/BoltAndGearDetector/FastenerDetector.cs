@@ -24,6 +24,9 @@ namespace Assembly_Planner
             s.Start();
             Console.WriteLine();
             Console.WriteLine("Detecting Fasteners ....");
+            Fasteners.Clear();
+            Nuts.Clear();
+            Washers.Clear();
             if (threaded)
             {
                 FastenerLearner.RunPerecptronLearner(regenerateTrainingData);

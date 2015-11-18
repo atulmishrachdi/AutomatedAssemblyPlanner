@@ -27,8 +27,9 @@ namespace Assembly_Planner
                 var distancePointToSolidPositive = PointToSolidDistanceCalculator(solid, kPointsOnSurface, bC, i);
                 // in the distance point to solid array, first one  is for outer triangle (general case)
                 // the second one is for inner triangle (written for negative gears)
+                List<int> originalInds;
                 distancePointToSolidPositive[0] =
-                    FastenerPolynomialTrend.MergingEqualDistances(distancePointToSolidPositive[0], 0.001);
+                    FastenerPolynomialTrend.MergingEqualDistances(distancePointToSolidPositive[0], out originalInds, 0.001);
                 //FastenerPolynomialTrend.PlotInMatlab(distancePointToSolidPositive[0]);
                 if (IsGear(distancePointToSolidPositive[0]))
                     return new Gear
@@ -40,8 +41,9 @@ namespace Assembly_Planner
                         SmallCylinderRadius = bC.Radius - TeethDepthFinder(distancePointToSolidPositive[0])
                     };
                 // check and see if it is an inner gear
+                List<int> originalInds2;
                 distancePointToSolidPositive[1] =
-                    FastenerPolynomialTrend.MergingEqualDistances(distancePointToSolidPositive[1], 0.001);
+                    FastenerPolynomialTrend.MergingEqualDistances(distancePointToSolidPositive[1],out originalInds2, 0.001);
                 if (IsGear(distancePointToSolidPositive[1]))
                     return new Gear
                     {

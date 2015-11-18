@@ -29,17 +29,12 @@ namespace Assembly_Planner
             var learnerWeights = FastenerLearner.ReadingLearnerWeightsAndVotesFromCsv(out learnerVotes);
             foreach (var solid in firstFilter)
             {
-                if (HexBoltNutAllen(solid, solidPrimitive[solid], equalPrimitivesForEverySolid[solid]))
-                    continue;
-                if (PhillipsHeadBolt(solid, solidPrimitive[solid], equalPrimitivesForEverySolid[solid]))
-                    continue;
-                if (SlotHeadBolt(solid, solidPrimitive[solid], equalPrimitivesForEverySolid[solid]))
-                    continue;
-                if (PhillipsSlotComboHeadBolt(solid, solidPrimitive[solid], equalPrimitivesForEverySolid[solid]))
-                    continue;
                 // if it is not any of those, we can still give it another chance:
                 if (ThreadDetector(solid, solidPrimitive[solid]))
+                {
+                   // CommonHeadFatener();
                     continue;
+                }
                 // We may still have some threaded fasteners that could not be recognized by the 
                 // "ThreadDetector" function.
                 // Solution: Voted Perceptron classifier
@@ -53,7 +48,6 @@ namespace Assembly_Planner
                 //    distances. Take a look at the trend and try to learn from it. 
                 if (FastenerPolynomialTrend.PolynomialTrendDetector(solid)) continue;
             }
-            return null;
         }
 
         private static bool ThreadDetector(TessellatedSolid solid, List<PrimitiveSurface> primitiveSurfaces)

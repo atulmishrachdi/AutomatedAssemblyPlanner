@@ -86,7 +86,7 @@ namespace Assembly_Planner
                         Solid = solid,
                         ToolSize = ToolSizeFinder(candidateHexVal),
                         OverallLength = lengthAndRadius[0],
-                        Diameter = lengthAndRadius[1]*2.0,
+                        Diameter = lengthAndRadius[1]*2.0
                     });
                     return true;
                 }

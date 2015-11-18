@@ -23,7 +23,7 @@ namespace Assembly_Planner
             //    1. In fasteners, length is longer than width. 
             var obb = PartitioningSolid.OrientedBoundingBoxDic[solid];
             //if (!solid.Name.Contains("STLB ASM")) return true;
-           
+            const int k = 1000;
             PolygonalFace f1;
             PolygonalFace f2;
             var longestSide = GeometryFunctions.LongestPlaneOfObbDetector(obb, out f1, out f2);
@@ -33,27 +33,51 @@ namespace Assembly_Planner
             var midPoint1 = ShortestEdgeMidPointOfTriangle(longestSide[0]);
             var midPoint2 = ShortestEdgeMidPointOfTriangle(longestSide[1]);
 
-            var kPointsBetweenMidPoints = KpointBtwPointsGenerator(midPoint1, midPoint2, 1000);
+            var kPointsBetweenMidPoints = KpointBtwPointsGenerator(midPoint1, midPoint2, k);
 
             var distancePointToSolid = PointToSolidDistanceCalculator(solid, kPointsBetweenMidPoints,
                 longestSide[0].Normal.multiply(-1.0));
 
             // one more step: Merge points with equal distances.
-            distancePointToSolid = MergingEqualDistances(distancePointToSolid,0.001);
-            
-            var hasThread = ContainsThread(distancePointToSolid);
+            List<int> originalInds;
+            distancePointToSolid = MergingEqualDistances(distancePointToSolid,out originalInds,0.001);
+            int numberOfThreads;
+            int[] threadStartEndPoints;
+            if (ContainsThread(distancePointToSolid, out numberOfThreads, out threadStartEndPoints))
+            {
+                var startEndThreadPoints =
+                    Math.Abs(originalInds[threadStartEndPoints[0]] - originalInds[threadStartEndPoints[1]]);
+                FastenerDetector.Fasteners.Add(new Fastener
+                {
+                    Solid = solid,
+                    //FastenerType = AutoThreadedFastenerDetection.CommonHeadFastener(),
+                    NumberOfThreads = numberOfThreads,
+                    RemovalDirection =
+                        FastenerDetector.RemovalDirectionFinderUsingObb(solid,
+                            PartitioningSolid.OrientedBoundingBoxDic[solid]),
+                    OverallLength =
+                        GeometryFunctions.SortedLengthOfObbEdges(PartitioningSolid.OrientedBoundingBoxDic[solid])[2],
+                    EngagedLength =
+                        (startEndThreadPoints + (startEndThreadPoints * 2) / (double)numberOfThreads) *
+                        (GeometryFunctions.DistanceBetweenTwoVertices(midPoint1, midPoint2)/((double) k + 1)),
+                    //Diameter = lengthAndRadius[1]*2.0,
+                    Certainty = 1.0
+                });
+            }
             // Plot:
-            if (hasThread)
-                PlotInMatlab(distancePointToSolid);
-
-            return hasThread;
+            //if (hasThread)
+                //PlotInMatlab(distancePointToSolid);
+            return true;
         }
 
-        private static bool ContainsThread(List<double> distancePointToSolid)
+        private static bool ContainsThread(List<double> distancePointToSolid, out int numberOfThreads, out int[] threadStartEndPoints)
         {
             var directionChange = new List<double>();
+            var startAndEndPointsOfC = new List<int[]>(); // these are the indices of start And End Points Of every C in distancePointToSolid.
             for (var i = 0; i < distancePointToSolid.Count-1; i++)
             {
+                var inds = new int[2];
+                inds[0] = i;
                 var c = 0;
                 for (var j = i + 1;
                     Math.Sign(distancePointToSolid[j] - distancePointToSolid[j - 1]) ==
@@ -64,20 +88,26 @@ namespace Assembly_Planner
                     if (j == distancePointToSolid.Count - 1) break;
                 }
                 directionChange.Add(c);
+                inds[1] = i + c;
                 i += (c - 1);
+                startAndEndPointsOfC.Add(inds);
             }
             //PlotInMatlab(directionChange);
-            return ContainsThreadSeries(directionChange);
+            return ContainsThreadSeries(directionChange, startAndEndPointsOfC, out numberOfThreads, out threadStartEndPoints);
         }
 
-        private static bool ContainsThreadSeries(List<double> directionChange)
+        private static bool ContainsThreadSeries(List<double> directionChange, List<int[]> startAndEndPointsOfC,
+            out int numberOfThreads, out int[] threadStartEndPoints)
         {
             // key: 2*number of threads. value: total number of the points of the series. 
             var thread = new List<double>();
+            var threadStartAndEndPoint = new List<int[]>();
             var cumulativePoi = new List<double>();
             for (var i = 0; i < directionChange.Count - 1; i++)
             {
                 if (directionChange[i] < 2) continue;
+                var startAndEndPoints = new int[2];
+                startAndEndPoints[0] = startAndEndPointsOfC[i][0];
                 var c = 1;
                 var cumulativePoints = directionChange[i];
                 for (var j = i + 1; Math.Abs(directionChange[j] - directionChange[j - 1]) < 10; j++)
@@ -85,9 +115,11 @@ namespace Assembly_Planner
                     if (j == directionChange.Count - 1) break;
                     if (directionChange[j] < 2) continue;
                     cumulativePoints += directionChange[j];
+                    startAndEndPoints[1] = startAndEndPointsOfC[j][1];
                     c++;
                 }
                 thread.Add(c);
+                threadStartAndEndPoint.Add(startAndEndPoints);
                 cumulativePoi.Add(cumulativePoints);
                 i += (c - 1);
             }
@@ -95,20 +127,28 @@ namespace Assembly_Planner
             // if it is 5 and less, cumulativePoints must be less than 90 of the total number of points
             for (var i = 0; i < thread.Count; i++)
             {
+                numberOfThreads = (int) Math.Ceiling(thread[i]/2.0) + 1;
+                threadStartEndPoints = threadStartAndEndPoint[i];
                 if (thread[i] > 4 && thread[i] < 6)
-                    if (cumulativePoi[i] < directionChange.Sum() * 0.9)
+                {
+                    if (cumulativePoi[i] < directionChange.Sum()*0.9)
                         return true;
-                    else
-                        continue;
-                if (thread[i] >= 6) 
+                    continue;
+                }
+                if (thread[i] >= 6)
                     return true;
             }
+            numberOfThreads = 0;
+            threadStartEndPoints = null;
             return false;
         }
 
-        public static List<double> MergingEqualDistances(List<double> distancePointToSolid, double accuracy = 0.01)
+        public static List<double> MergingEqualDistances(List<double> distancePointToSolid, out List<int> originalInds, double accuracy = 0.01)
         {
             // if the difference is less than 0.01 merge them
+            originalInds = new List<int>();
+            for (var m = 0; m < distancePointToSolid.Count; m++)
+                originalInds.Add(m);
             for (var i = 0; i < distancePointToSolid.Count-1; i++)
             {
                 var equals = new List<double>();
@@ -124,6 +164,7 @@ namespace Assembly_Planner
                 var averageValue = equals.Sum()/(double) equals.Count;
                 distancePointToSolid[i] = averageValue;
                 distancePointToSolid.RemoveRange(i + 1, equals.Count);
+                originalInds.RemoveRange(i + 1, equals.Count);
                 i--;
             }
             return distancePointToSolid;
