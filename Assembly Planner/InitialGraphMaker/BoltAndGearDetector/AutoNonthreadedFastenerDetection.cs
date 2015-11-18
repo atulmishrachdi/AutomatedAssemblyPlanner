@@ -17,7 +17,6 @@ namespace Assembly_Planner
             // This approach will use the symmetric shape of the fasteners' heads. If there is no thread,
             // we willl consider the area of the positive culinders for bolts and negative cylinder for 
             // nuts. 
-            var fastener = new HashSet<TessellatedSolid>();
             var firstFilter = FastenerDetector.SmallObjectsDetector(multipleRefs); //multipleRefs.Keys.ToList(); 
             var equalFlatPrimitivesForEverySolid = FastenerDetector.EqualFlatPrimitiveAreaFinder(firstFilter,
                 solidPrimitive);
@@ -36,7 +35,8 @@ namespace Assembly_Planner
             // when all of the fasteners are recognized, it's time to check the third level filter:
             // something is not acceptable: nut without fastener. If there is a nut without fastener,
             // I will try to look for that.
-
+            // Is there anyway to detect more?
+            ConnectFastenersNutsAndWashers(groupedPotentialFasteners);
         }
 
         private static bool HexBoltNutAllen(TessellatedSolid solid, List<PrimitiveSurface> solidPrim,
@@ -69,9 +69,10 @@ namespace Assembly_Planner
                             RemovalDirectionFinderForAllenHexPhillips(candidateHexVal.Cast<Flat>().ToList(),
                                 PartitioningSolid.OrientedBoundingBoxDic[solid]),
                         OverallLength =
-                            GeometryFunctions.LongestLengthOfObb(PartitioningSolid.OrientedBoundingBoxDic[solid]),
+                            GeometryFunctions.SortedLengthOfObbEdges(PartitioningSolid.OrientedBoundingBoxDic[solid])[2],
                         EngagedLength = lengthAndRadius[0],
-                        Diameter = lengthAndRadius[1]*2.0
+                        Diameter = lengthAndRadius[1]*2.0,
+                        Certainty = 1.0
                     };
                     FastenerDetector.Fasteners.Add(fastener);
                     return true;
@@ -85,7 +86,7 @@ namespace Assembly_Planner
                         Solid = solid,
                         ToolSize = ToolSizeFinder(candidateHexVal),
                         OverallLength = lengthAndRadius[0],
-                        Diameter = lengthAndRadius[1]*2.0
+                        Diameter = lengthAndRadius[1]*2.0,
                     });
                     return true;
                 }
@@ -99,9 +100,10 @@ namespace Assembly_Planner
                         RemovalDirectionFinderForAllenHexPhillips(candidateHexVal.Cast<Flat>().ToList(),
                             PartitioningSolid.OrientedBoundingBoxDic[solid]),
                     OverallLength =
-                        GeometryFunctions.LongestLengthOfObb(PartitioningSolid.OrientedBoundingBoxDic[solid]),
+                        GeometryFunctions.SortedLengthOfObbEdges(PartitioningSolid.OrientedBoundingBoxDic[solid])[2],
                     EngagedLength = lengthAndRadius[0],
-                    Diameter = lengthAndRadius[1]*2.0
+                    Diameter = lengthAndRadius[1]*2.0,
+                    Certainty = 1.0
                 });
                 return true;
             }
@@ -150,9 +152,10 @@ namespace Assembly_Planner
                         RemovalDirectionFinderForAllenHexPhillips(candidateHexVal.Cast<Flat>().ToList(),
                             PartitioningSolid.OrientedBoundingBoxDic[solid]),
                     OverallLength =
-                        GeometryFunctions.LongestLengthOfObb(PartitioningSolid.OrientedBoundingBoxDic[solid]),
+                        GeometryFunctions.SortedLengthOfObbEdges(PartitioningSolid.OrientedBoundingBoxDic[solid])[2],
                     EngagedLength = lengthAndRadius[0],
-                    Diameter = lengthAndRadius[1]*2.0
+                    Diameter = lengthAndRadius[1]*2.0,
+                    Certainty = 1.0
                 };
                 FastenerDetector.Fasteners.Add(fastener);
                 return true;
@@ -190,9 +193,10 @@ namespace Assembly_Planner
                             solidPrim.Where(p => p is Flat).Cast<Flat>().ToList(),
                             PartitioningSolid.OrientedBoundingBoxDic[solid]),
                     OverallLength =
-                        GeometryFunctions.LongestLengthOfObb(PartitioningSolid.OrientedBoundingBoxDic[solid]),
+                        GeometryFunctions.SortedLengthOfObbEdges(PartitioningSolid.OrientedBoundingBoxDic[solid])[2],
                     EngagedLength = lengthAndRadius[0],
-                    Diameter = lengthAndRadius[1]*2.0
+                    Diameter = lengthAndRadius[1]*2.0,
+                    Certainty = 1.0
                 };
                 FastenerDetector.Fasteners.Add(fastener);
                 return true;
@@ -233,9 +237,10 @@ namespace Assembly_Planner
                     RemovalDirectionFinderForAllenHexPhillips(flats.Cast<Flat>().ToList(),
                         PartitioningSolid.OrientedBoundingBoxDic[solid]),
                 OverallLength =
-                    GeometryFunctions.LongestLengthOfObb(PartitioningSolid.OrientedBoundingBoxDic[solid]),
+                    GeometryFunctions.SortedLengthOfObbEdges(PartitioningSolid.OrientedBoundingBoxDic[solid])[2],
                 EngagedLength = lengthAndRadius[0],
-                Diameter = lengthAndRadius[1]*2.0
+                Diameter = lengthAndRadius[1]*2.0,
+                Certainty = 1.0
             };
             FastenerDetector.Fasteners.Add(fastener);
             return true;
@@ -342,6 +347,62 @@ namespace Assembly_Planner
                 longestCyl = cylinder;
             }
             return new[] {length, longestCyl.Radius};
+        }
+
+        private static void ConnectFastenersNutsAndWashers(List<List<TessellatedSolid>> groupedPotentialFasteners)
+        {
+            foreach (var fastener in FastenerDetector.Fasteners)
+            {
+                var group = groupedPotentialFasteners.First(g => g.Contains(fastener.Solid));
+                var nutAndWasherRemovalDirection = DisassemblyDirections.Directions.IndexOf(
+                    DisassemblyDirections.Directions[fastener.RemovalDirection].multiply(-1.0));
+                if (group.Count == 1) continue;
+                var nuts = FastenerDetector.Nuts.Where(n => group.Contains(n.Solid)).ToList();
+                var nutList = new List<Nut>();
+                if (nuts.Any())
+                {
+                    foreach (var nut in nuts)
+                    {
+                        nut.RemovalDirection = nutAndWasherRemovalDirection;
+                        nut.Cerainty = 1.0;
+                        nutList.Add(nut);
+                    }
+                }
+                var potentialWasher = group.Where(s => s != fastener.Solid && nuts.All(n => s != n.Solid)).ToList();
+                // if there is a solid which is very very small comparing the bolt, it is a washer?
+                // the possible washer can still be a nut that has not been detected before
+                // take its obb. if the smallest edge to the longest edge is less than 0.2, it's a washer,
+                // otherwise it can be a nut with low certainty
+                var washers = new List<Washer>();
+                foreach (var pWasher in potentialWasher)
+                {
+                    if (pWasher.Volume > fastener.Solid.Volume) continue;
+                    var edgesOfObb =
+                        GeometryFunctions.SortedLengthOfObbEdges(PartitioningSolid.OrientedBoundingBoxDic[pWasher]);
+                    if ((edgesOfObb[0]/edgesOfObb[2]) < 0.2)
+                        // shortest/ longest // this can be fuzzified to define ceratinty
+                    {
+                        washers.Add(new Washer
+                        {
+                            Solid = pWasher,
+                            Certainty = 0.7,
+                            RemovalDirection = nutAndWasherRemovalDirection
+                        });
+                    }
+                    else
+                    {
+                        // it can be a nut
+                        nutList.Add(new Nut
+                        {
+                            Solid = pWasher,
+                            Cerainty = 0.6,
+                            RemovalDirection = nutAndWasherRemovalDirection
+                        });
+                    }
+                }
+                fastener.Nuts = nutList;
+                fastener.Washer = washers;
+            }
         }
 
         /*private static int HasHexagon(TessellatedSolid solid, List<PrimitiveSurface> solidPrim,

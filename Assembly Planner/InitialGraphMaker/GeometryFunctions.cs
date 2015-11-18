@@ -66,15 +66,19 @@ namespace Assembly_Planner
             return lengths[1];
         }
 
-        internal static double LongestLengthOfObb(BoundingBox boundingBox)
+        internal static double[] SortedLengthOfObbEdges(BoundingBox boundingBox)
         {
-            var dist1 = DistanceBetweenTwoVertices(boundingBox.CornerVertices[0].Position,
-                boundingBox.CornerVertices[1].Position);
-            var dist2 = DistanceBetweenTwoVertices(boundingBox.CornerVertices[0].Position,
-                boundingBox.CornerVertices[3].Position);
-            var dist3 = DistanceBetweenTwoVertices(boundingBox.CornerVertices[0].Position,
-                boundingBox.CornerVertices[4].Position);
-            return Math.Max(Math.Max(dist1, dist2), dist3);
+            var lengths = new List<double>
+            {
+                DistanceBetweenTwoVertices(boundingBox.CornerVertices[0].Position,
+                boundingBox.CornerVertices[1].Position),
+                DistanceBetweenTwoVertices(boundingBox.CornerVertices[0].Position,
+                boundingBox.CornerVertices[3].Position),
+                DistanceBetweenTwoVertices(boundingBox.CornerVertices[0].Position,
+                boundingBox.CornerVertices[4].Position)
+            };
+            lengths.Sort();
+            return lengths.ToArray();
         }
 
         public static bool RayIntersectsWithFace(Ray ray, PolygonalFace face, out double[] hittingPoint, out bool outer)
@@ -124,9 +128,9 @@ namespace Assembly_Planner
     out PolygonalFace facePrepToRD2)
         {
             // it returns longest side. (two adjacent triangles)
-            var dis1 = GeometryFunctions.DistanceBetweenTwoVertices(obb.CornerVertices[0].Position, obb.CornerVertices[1].Position);
-            var dis2 = GeometryFunctions.DistanceBetweenTwoVertices(obb.CornerVertices[0].Position, obb.CornerVertices[3].Position);
-            var dis3 = GeometryFunctions.DistanceBetweenTwoVertices(obb.CornerVertices[0].Position, obb.CornerVertices[4].Position);
+            var dis1 = DistanceBetweenTwoVertices(obb.CornerVertices[0].Position, obb.CornerVertices[1].Position);
+            var dis2 = DistanceBetweenTwoVertices(obb.CornerVertices[0].Position, obb.CornerVertices[3].Position);
+            var dis3 = DistanceBetweenTwoVertices(obb.CornerVertices[0].Position, obb.CornerVertices[4].Position);
             var cornerVer = obb.CornerVertices;
             if (dis1 >= dis2 && dis1 >= dis3)
             {

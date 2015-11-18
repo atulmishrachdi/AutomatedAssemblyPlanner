@@ -149,9 +149,13 @@ namespace Assembly_Planner
         /// </summary>
         public double ToolSize;
         /// <summary>
-        /// The nut if available
+        /// The nuts if available
         /// </summary>
-        public Nut Nut;
+        public List<Nut> Nuts;
+        /// <summary>
+        /// The washers if available
+        /// </summary>
+        public List<Washer> Washer;
         /// <summary>
         /// The fastener type
         /// </summary>
@@ -304,7 +308,27 @@ namespace Assembly_Planner
         /// The size of the tool if identified
         /// </summary>
         public double ToolSize;
+        /// <summary>
+        /// The certainty
+        /// </summary>
+        public double Cerainty;
+    }
 
+    public class Washer
+    {
+        /// <summary>
+        [XmlIgnore]
+        /// The tesselated solid
+        /// </summary>
+        public TessellatedSolid Solid;
+        /// <summary>
+        /// The removal direction
+        /// </summary>
+        public int RemovalDirection;
+        /// <summary>
+        /// The certainty
+        /// </summary>
+        public double Certainty;
     }
 
 }
