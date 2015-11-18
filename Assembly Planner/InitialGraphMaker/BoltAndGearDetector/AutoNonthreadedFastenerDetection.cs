@@ -353,6 +353,7 @@ namespace Assembly_Planner
         {
             foreach (var fastener in FastenerDetector.Fasteners)
             {
+                // if there is a fastener, find its nuts and washers
                 var group = groupedPotentialFasteners.First(g => g.Contains(fastener.Solid));
                 var nutAndWasherRemovalDirection = DisassemblyDirections.Directions.IndexOf(
                     DisassemblyDirections.Directions[fastener.RemovalDirection].multiply(-1.0));
@@ -392,16 +393,73 @@ namespace Assembly_Planner
                     else
                     {
                         // it can be a nut
-                        nutList.Add(new Nut
+                        var uncertainNut = new Nut
                         {
                             Solid = pWasher,
                             Cerainty = 0.6,
                             RemovalDirection = nutAndWasherRemovalDirection
-                        });
+                        };
+                        nutList.Add(uncertainNut);
+                        FastenerDetector.Nuts.Add(uncertainNut);
                     }
                 }
                 fastener.Nuts = nutList;
                 fastener.Washer = washers;
+                FastenerDetector.Washers.AddRange(washers);
+            }
+            // if there is a detected nut, but its fastener was not detected:
+            // fastener is known
+            foreach (var nut in FastenerDetector.Nuts)
+            {
+                if (FastenerDetector.Fasteners.All(f => !f.Nuts.Contains(nut)))
+                {
+                    // this a nut that doesnt have any fastener.
+                    var group = groupedPotentialFasteners.First(g => g.Contains(nut.Solid));
+                    if (group.Count == 1) continue;
+                    var potentialFastener = group.Where(s => s != nut.Solid).ToList();
+                    Fastener fastener = null;
+                    var nutAndWasherRemovalDirection = 0;
+                    List<Washer> washers = new List<Washer>();
+                    foreach (var pF in potentialFastener)
+                    {
+                        if (pF.Volume > nut.Solid.Volume && fastener == null)
+                        {
+                            // can be a fastener
+                            fastener = new Fastener
+                            {
+                                Solid = pF,
+                                RemovalDirection =
+                                    FastenerDetector.RemovalDirectionFinderUsingObb(pF,
+                                        PartitioningSolid.OrientedBoundingBoxDic[pF]),
+                                OverallLength =
+                                    GeometryFunctions.SortedLengthOfObbEdges(
+                                        PartitioningSolid.OrientedBoundingBoxDic[pF])[2],
+                                EngagedLength = GeometryFunctions.SortedLengthOfObbEdges( // TBD
+                                    PartitioningSolid.OrientedBoundingBoxDic[pF])[2],
+                                Diameter = nut.Diameter,
+                                Certainty = 0.3
+                            };
+                            nutAndWasherRemovalDirection = DisassemblyDirections.Directions.IndexOf(
+                                DisassemblyDirections.Directions[fastener.RemovalDirection].multiply(-1.0));
+                        }
+                        if (pF.Volume < nut.Solid.Volume)
+                        {
+                            // can be a washer
+                            washers.Add(new Washer
+                            {
+                                Solid = pF,
+                                Certainty = 0.1,
+                                RemovalDirection = nutAndWasherRemovalDirection
+                            });
+                        }
+                    }
+                    nut.RemovalDirection = nutAndWasherRemovalDirection;
+                    if (fastener != null)
+                    {
+                        fastener.Nuts = new List<Nut>{nut};
+                        fastener.Washer = washers;
+                    }
+                }
             }
         }
 

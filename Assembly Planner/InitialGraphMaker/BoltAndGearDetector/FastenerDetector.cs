@@ -13,6 +13,7 @@ namespace Assembly_Planner
     {
         internal static List<Fastener> Fasteners = new List<Fastener>();
         internal static List<Nut> Nuts = new List<Nut>();
+        internal static List<Washer> Washers = new List<Washer>();
 
         internal static HashSet<TessellatedSolid> Run(
             Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive,
