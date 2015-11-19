@@ -100,11 +100,12 @@ namespace Assembly_Planner
         {
             var distListOuter = new List<double>();
             var distListInner = new List<double>();
+            var met = bC.CenterLineVector.multiply(bC.Length*section);
             kPointsOnSurface =
-                kPointsOnSurface.Select(p => p.add(bC.CenterLineVector.multiply(-bC.Length*section))).ToList();
+                kPointsOnSurface.Select(p => p.add(met)).ToList();
             foreach (var point in kPointsOnSurface)
             {
-                var rayVector = (bC.PointOnTheCenterLine.add(bC.CenterLineVector.multiply(-bC.Length*section))).subtract(point);
+                var rayVector = (bC.PointOnTheCenterLine.add(met)).subtract(point);
                 var ray = new Ray(new AssemblyEvaluation.Vertex(point), new Vector(rayVector));
                 var minDisOuter = double.PositiveInfinity;
                 var minDisInner = double.PositiveInfinity;

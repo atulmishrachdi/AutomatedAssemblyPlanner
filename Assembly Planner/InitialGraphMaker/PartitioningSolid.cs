@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using Assembly_Planner.GeometryReasoning;
+using Assembly_Planner;
 using StarMathLib;
 using TVGL;
 
@@ -18,8 +18,7 @@ namespace Assembly_Planner
         // into "K" number of partitionas, then for ray casting, we don't need 
         // to check every triangle. We can only the triangles that are inside 
         // of the affected partitions. 
-        internal static Dictionary<TessellatedSolid, BoundingBox> OrientedBoundingBoxDic =
-            new Dictionary<TessellatedSolid, BoundingBox>();
+
         internal static Dictionary<TessellatedSolid, Partition[]> Partitions =
             new Dictionary<TessellatedSolid, Partition[]>();
         public static int ccc = 0;
@@ -334,51 +333,10 @@ namespace Assembly_Planner
                 lock (Partitions)
                     Partitions.Add(solid,
                         Run(new HashSet<Vertex>(solid.Vertices), new HashSet<PolygonalFace>(solid.Faces),
-                            OrientedBoundingBoxDic[solid].CornerVertices));
+                            BoundingGeometry.OrientedBoundingBoxDic[solid].CornerVertices));
             });//
             s.Stop();
             Console.WriteLine("Octree Generation is done in:" + "     " + s.Elapsed);
-        }
-
-        internal static void CreateOBB1(List<TessellatedSolid> solids)
-        {
-            var s = new Stopwatch();
-            s.Start();
-            Console.WriteLine();
-            Console.WriteLine("OBBs are being Created ...");
-            Parallel.ForEach(solids, solid =>
-            {
-                var bb = MinimumEnclosure.OrientedBoundingBox(solid);
-                // change the orser of the corner vertices to clock wise:
-                bb.CornerVertices = new[]
-                {
-                    bb.CornerVertices[2], bb.CornerVertices[0], bb.CornerVertices[1], bb.CornerVertices[3],
-                    bb.CornerVertices[6], bb.CornerVertices[4], bb.CornerVertices[5], bb.CornerVertices[7]
-                };
-                lock (OrientedBoundingBoxDic)
-                    OrientedBoundingBoxDic.Add(solid, MinimumEnclosure.OrientedBoundingBox(solid));
-            }
-                );
-            s.Stop();
-            Console.WriteLine("OBB Creation is done in:" + "     " + s.Elapsed);
-        }
-
-        internal static void CreateOBB2(List<TessellatedSolid> solids)
-        {
-            // This function uses my own OBB code not the one in TVGL
-            // It has more accurate results
-            var s = new Stopwatch();
-            s.Start();
-            Console.WriteLine();
-            Console.WriteLine("OBBs are being Created ...");
-            Parallel.ForEach(solids, solid =>
-            {
-                lock (OrientedBoundingBoxDic)
-                    OrientedBoundingBoxDic.Add(solid, OBB.BuildUsingPoints(solid.Vertices.ToList()));
-            }
-                );
-            s.Stop();
-            Console.WriteLine("OBB Creation is done in:" + "     " + s.Elapsed);
         }
     }
 

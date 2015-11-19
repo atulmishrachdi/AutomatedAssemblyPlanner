@@ -4,7 +4,7 @@ using System.Runtime.Versioning;
 using StarMathLib;
 using TVGL;
 
-namespace Assembly_Planner.GeometryReasoning
+namespace Assembly_Planner
 {
     public class OBB
     {
@@ -113,7 +113,7 @@ namespace Assembly_Planner.GeometryReasoning
                     p.Position.subtract(orientedBoundingBox[0].Position)
                         .dotProduct(
                             ((orientedBoundingBox[1].Position.subtract(orientedBoundingBox[0].Position)).crossProduct(
-                                orientedBoundingBox[3].Position.subtract(orientedBoundingBox[0].Position))).normalize()) > 0);
+                                orientedBoundingBox[3].Position.subtract(orientedBoundingBox[0].Position))).normalize()) > 0.01);
             if (!clockWise)
             {
                 // Make it CW:

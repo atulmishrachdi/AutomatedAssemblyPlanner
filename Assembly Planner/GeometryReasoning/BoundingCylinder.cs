@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Assembly_Planner.GeometryReasoning;
 using StarMathLib;
 using TVGL;
 
@@ -39,7 +38,7 @@ namespace Assembly_Planner
                 var volume = Math.PI*Math.Pow(radius, 2.0)*side.Value;
                 if (volume >=  minVolume) continue;
                 minVolume = volume;
-                bC.CenterLineVector = side.Key.Normal;
+                bC.CenterLineVector = side.Key.Normal.multiply(-1.0);
                 bC.PointOnTheCenterLine = faceCenters;
                 bC.PerpVector = (side.Key.Vertices[0].Position.subtract(faceCenters)).normalize();
                 bC.Radius = radius;
@@ -55,7 +54,7 @@ namespace Assembly_Planner
             // This is based on my own OBB function:
             // it returns a dictionary with size of three (3 sides). 
             //    Key: triangle, value: length of the potential cylinder 
-            var cornerVer = PartitioningSolid.OrientedBoundingBoxDic[solid].CornerVertices;
+            var cornerVer = BoundingGeometry.OrientedBoundingBoxDic[solid].CornerVertices;
             var face1 = new PolygonalFace(new[] {cornerVer[0], cornerVer[1], cornerVer[3]},
                 ((cornerVer[3].Position.subtract(cornerVer[0].Position)).crossProduct(
                     cornerVer[1].Position.subtract(cornerVer[0].Position))).normalize());
@@ -81,8 +80,11 @@ namespace Assembly_Planner
                 {
                     var dis = GeometryFunctions.DistanceBetweenTwoVertices(side.Vertices[i].Position,
                         side.Vertices[j].Position);
-                    if (dis > maxLength) maxLength = dis;
-                    longestEdge = new[] {side.Vertices[i], side.Vertices[j]};
+                    if (dis > maxLength) 
+                    {
+                        maxLength = dis;
+                        longestEdge = new[] {side.Vertices[i], side.Vertices[j]};
+                    }
                 }
             }
             return (longestEdge[0].Position.add(longestEdge[1].Position)).divide(2.0);

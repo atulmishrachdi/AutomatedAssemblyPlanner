@@ -43,7 +43,7 @@ namespace Assembly_Planner
             {
                 //CvhHashSet.Add(s, new HashSet<PolygonalFace>(s.ConvexHullFaces));
                 ObbFacesHashSet.Add(s,
-                    new HashSet<PolygonalFace>(PartitioningSolid.TwelveFaceGenerator(PartitioningSolid.OrientedBoundingBoxDic[s].CornerVertices)));
+                    new HashSet<PolygonalFace>(PartitioningSolid.TwelveFaceGenerator(BoundingGeometry.OrientedBoundingBoxDic[s].CornerVertices)));
             }
             //solids.Where(s => s.Name.Contains("Interroll-3")).ToList();
             //solidsL.AddRange(solids.Where(s => s.Name.Contains("LexanSide")));

@@ -30,10 +30,11 @@ namespace Assembly_Planner
             DisassemblyDirections.Directions = new List<double[]>(Directions);
             var globalDirPool = new List<int>();
 
-            // Creating OBB for every solid
+            // Creating Bounding Geometries for every solid
             //------------------------------------------------------------------------------------------
-            PartitioningSolid.CreateOBB2(solids);
-            FastenerPolynomialTrend.PolynomialTrendDetector(solids[0]);
+            BoundingGeometry.CreateOBB2(solids);
+            BoundingGeometry.CreateBoundingCylinder(solids);
+            NutPolynomialTrend.PolynomialTrendDetector(solids[0]);
             // From repeated parts take only one of them, and do the primitive classification on that:
             //------------------------------------------------------------------------------------------
             var multipleRefs = DuplicatePartsDetector(solids);

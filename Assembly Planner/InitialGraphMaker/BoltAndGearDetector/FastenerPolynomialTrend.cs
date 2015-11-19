@@ -8,7 +8,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using AssemblyEvaluation;
-using Assembly_Planner.GeometryReasoning;
+using Assembly_Planner;
 using StarMathLib;
 using TVGL;
 using Vertex = TVGL.Vertex;
@@ -21,7 +21,7 @@ namespace Assembly_Planner
         {
             // Assumptions:
             //    1. In fasteners, length is longer than width. 
-            var obb = PartitioningSolid.OrientedBoundingBoxDic[solid];
+            var obb = BoundingGeometry.OrientedBoundingBoxDic[solid];
             //if (!solid.Name.Contains("STLB ASM")) return true;
             const int k = 1000;
             PolygonalFace f1;
@@ -51,13 +51,12 @@ namespace Assembly_Planner
                 FastenerDetector.Fasteners.Add(new Fastener
                 {
                     Solid = solid,
-                    //FastenerType = AutoThreadedFastenerDetection.CommonHeadFastener(),
                     NumberOfThreads = numberOfThreads,
                     RemovalDirection =
                         FastenerDetector.RemovalDirectionFinderUsingObb(solid,
-                            PartitioningSolid.OrientedBoundingBoxDic[solid]),
+                            BoundingGeometry.OrientedBoundingBoxDic[solid]),
                     OverallLength =
-                        GeometryFunctions.SortedLengthOfObbEdges(PartitioningSolid.OrientedBoundingBoxDic[solid])[2],
+                        GeometryFunctions.SortedLengthOfObbEdges(BoundingGeometry.OrientedBoundingBoxDic[solid])[2],
                     EngagedLength =
                         (startEndThreadPoints + (startEndThreadPoints*2)/(double) numberOfThreads)*
                         (GeometryFunctions.DistanceBetweenTwoVertices(midPoint1, midPoint2)/((double) k + 1)),
@@ -66,14 +65,15 @@ namespace Assembly_Planner
                             longestSide[0], solid, longestDist),
                     Certainty = 1.0
                 });
+                return true;
             }
             // Plot:
             //if (hasThread)
                 //PlotInMatlab(distancePointToSolid);
-            return true;
+            return false;
         }
 
-        private static bool ContainsThread(List<double> distancePointToSolid, out int numberOfThreads,
+        internal static bool ContainsThread(List<double> distancePointToSolid, out int numberOfThreads,
             out int[] threadStartEndPoints)
         {
             var directionChange = new List<double>();
@@ -176,7 +176,7 @@ namespace Assembly_Planner
             return distancePointToSolid;
         }
 
-        private static List<double> PointToSolidDistanceCalculator(TessellatedSolid solid,
+        internal static List<double> PointToSolidDistanceCalculator(TessellatedSolid solid,
             List<double[]> kPointsBetweenMidPoints, double[] vector, out double longestDist)
         {
             var distList = new List<double>();
@@ -202,7 +202,7 @@ namespace Assembly_Planner
             return distList.Select(d => d/longestDis).ToList();
         }
 
-        private static List<double[]> KpointBtwPointsGenerator(double[] shortestEdgeMidPoint1, double[] shortestEdgeMidPoint2, int k)
+        internal static List<double[]> KpointBtwPointsGenerator(double[] shortestEdgeMidPoint1, double[] shortestEdgeMidPoint2, int k)
         {
             // divide into k+1 equal sections
             var points =  new List<double[]>();
@@ -256,7 +256,7 @@ namespace Assembly_Planner
                 i++)
                 newList.Add(distancePointToSolid[i]);
             var obbEdgesLength =
-                GeometryFunctions.SortedLengthOfObbEdges(PartitioningSolid.OrientedBoundingBoxDic[solid]);
+                GeometryFunctions.SortedLengthOfObbEdges(BoundingGeometry.OrientedBoundingBoxDic[solid]);
             // one of the first two small lengths are the number that I am looking for.
             var shortestEdgeOfTriangle = GeometryFunctions.SortedEdgeLengthOfTriangle(longestSide)[0];
             var obbDepth = Math.Abs(obbEdgesLength[0] - shortestEdgeOfTriangle) < 0.01

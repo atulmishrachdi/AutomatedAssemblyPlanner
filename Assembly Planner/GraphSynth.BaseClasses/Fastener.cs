@@ -301,6 +301,10 @@ namespace Assembly_Planner
         /// </summary>
         public double Diameter;
         /// <summary>
+        /// The number of threads if available
+        /// </summary>
+        public int NumberOfThreads;
+        /// <summary>
         /// The nut type
         /// </summary>
         public NutType NutType;
@@ -315,7 +319,7 @@ namespace Assembly_Planner
         /// <summary>
         /// The certainty
         /// </summary>
-        public double Cerainty;
+        public double Certainty;
     }
 
     public class Washer

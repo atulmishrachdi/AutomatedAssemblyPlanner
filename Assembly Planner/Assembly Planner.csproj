@@ -85,6 +85,7 @@
     <Compile Include="Evaluation\TimeEvaluator.cs" />
     <Compile Include="Evaluation\_AbstractAssemblySearch.cs" />
     <Compile Include="GeometryReasoning\BoundingCylinder.cs" />
+    <Compile Include="GeometryReasoning\BoundingGeometry.cs" />
     <Compile Include="GeometryReasoning\ConvexHullAndBoundingBox.cs" />
     <Compile Include="GeometryReasoning\DataInterfaceWithCPP.cs" />
     <Compile Include="GeometryReasoning\InputData.cs" />
@@ -134,6 +135,7 @@
     <Compile Include="GraphSynth.BaseClasses\SearchProcess\RecognizeChooseApply.cs" />
     <Compile Include="GraphSynth.BaseClasses\SearchProcess\SearchProcess.cs" />
     <Compile Include="GraphSynth.BaseClasses\SecondaryConnection.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\NutPolynomialTrend.cs" />
     <Compile Include="InitialGraphMaker\GeometryFunctions.cs" />
     <Compile Include="InitialGraphMaker\BlockingDetermination.cs" />
     <Compile Include="InitialGraphMaker\BoltAndGearDetector\AutoNonthreadedFastenerDetection.cs" />

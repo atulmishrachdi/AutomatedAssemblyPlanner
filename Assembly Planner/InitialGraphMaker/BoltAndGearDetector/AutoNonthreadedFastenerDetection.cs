@@ -67,9 +67,9 @@ namespace Assembly_Planner
                         ToolSize = ToolSizeFinder(candidateHexVal),
                         RemovalDirection =
                             RemovalDirectionFinderForAllenHexPhillips(candidateHexVal.Cast<Flat>().ToList(),
-                                PartitioningSolid.OrientedBoundingBoxDic[solid]),
+                                BoundingGeometry.OrientedBoundingBoxDic[solid]),
                         OverallLength =
-                            GeometryFunctions.SortedLengthOfObbEdges(PartitioningSolid.OrientedBoundingBoxDic[solid])[2],
+                            GeometryFunctions.SortedLengthOfObbEdges(BoundingGeometry.OrientedBoundingBoxDic[solid])[2],
                         EngagedLength = lengthAndRadius[0],
                         Diameter = lengthAndRadius[1]*2.0,
                         Certainty = 1.0
@@ -98,9 +98,9 @@ namespace Assembly_Planner
                     ToolSize = ToolSizeFinder(candidateHexVal),
                     RemovalDirection =
                         RemovalDirectionFinderForAllenHexPhillips(candidateHexVal.Cast<Flat>().ToList(),
-                            PartitioningSolid.OrientedBoundingBoxDic[solid]),
+                            BoundingGeometry.OrientedBoundingBoxDic[solid]),
                     OverallLength =
-                        GeometryFunctions.SortedLengthOfObbEdges(PartitioningSolid.OrientedBoundingBoxDic[solid])[2],
+                        GeometryFunctions.SortedLengthOfObbEdges(BoundingGeometry.OrientedBoundingBoxDic[solid])[2],
                     EngagedLength = lengthAndRadius[0],
                     Diameter = lengthAndRadius[1]*2.0,
                     Certainty = 1.0
@@ -110,7 +110,7 @@ namespace Assembly_Planner
             return false;
         }
 
-        private static bool IsItAllen(List<PrimitiveSurface> candidateHexVal)
+        internal static bool IsItAllen(List<PrimitiveSurface> candidateHexVal)
         {
             return candidateHexVal.Any(p => p.OuterEdges.Any(e => e.Curvature == CurvatureType.Concave));
         }
@@ -150,9 +150,9 @@ namespace Assembly_Planner
                     Tool = Tool.PhillipsBlade,
                     RemovalDirection =
                         RemovalDirectionFinderForAllenHexPhillips(candidateHexVal.Cast<Flat>().ToList(),
-                            PartitioningSolid.OrientedBoundingBoxDic[solid]),
+                            BoundingGeometry.OrientedBoundingBoxDic[solid]),
                     OverallLength =
-                        GeometryFunctions.SortedLengthOfObbEdges(PartitioningSolid.OrientedBoundingBoxDic[solid])[2],
+                        GeometryFunctions.SortedLengthOfObbEdges(BoundingGeometry.OrientedBoundingBoxDic[solid])[2],
                     EngagedLength = lengthAndRadius[0],
                     Diameter = lengthAndRadius[1]*2.0,
                     Certainty = 1.0
@@ -180,8 +180,8 @@ namespace Assembly_Planner
                 var leftVerts = VertsInfrontOfFlat(solid, (Flat) candidateHexVal[0]);
                 var rightVerts = VertsInfrontOfFlat(solid, (Flat) candidateHexVal[1]);
                 if (Math.Abs(leftVerts - rightVerts) > 2 || leftVerts + rightVerts <= solid.Vertices.Length)
-                    return false;
-                if (!solidPrim.Where(p => p is Cylinder).Cast<Cylinder>().Any(c => c.IsPositive)) return false;
+                    continue;
+                if (!solidPrim.Where(p => p is Cylinder).Cast<Cylinder>().Any(c => c.IsPositive)) continue;
                 var lengthAndRadius = FastenerEngagedLengthAndRadiusNoThread(solidPrim);
                 var fastener = new Fastener
                 {
@@ -191,9 +191,9 @@ namespace Assembly_Planner
                     RemovalDirection =
                         RemovalDirectionFinderForSlot(candidateHexVal.Cast<Flat>().ToList(),
                             solidPrim.Where(p => p is Flat).Cast<Flat>().ToList(),
-                            PartitioningSolid.OrientedBoundingBoxDic[solid]),
+                            BoundingGeometry.OrientedBoundingBoxDic[solid]),
                     OverallLength =
-                        GeometryFunctions.SortedLengthOfObbEdges(PartitioningSolid.OrientedBoundingBoxDic[solid])[2],
+                        GeometryFunctions.SortedLengthOfObbEdges(BoundingGeometry.OrientedBoundingBoxDic[solid])[2],
                     EngagedLength = lengthAndRadius[0],
                     Diameter = lengthAndRadius[1]*2.0,
                     Certainty = 1.0
@@ -222,7 +222,7 @@ namespace Assembly_Planner
                 // and this needs to appear 2 times.
                 if (cos.Count(c => Math.Abs(-1 - c) < 0.0001) != 2 ||
                     cos.Count(c => Math.Abs(1 - c) < 0.0001) != 1) continue;
-                if (!solidPrim.Where(p => p is Cylinder).Cast<Cylinder>().Any(c => c.IsPositive)) return false;
+                if (!solidPrim.Where(p => p is Cylinder).Cast<Cylinder>().Any(c => c.IsPositive)) continue;
                 flats.AddRange(candidateHexVal);
                 eachSlot++;
             }
@@ -235,9 +235,9 @@ namespace Assembly_Planner
                 Tool = Tool.PhillipsBlade,
                 RemovalDirection =
                     RemovalDirectionFinderForAllenHexPhillips(flats.Cast<Flat>().ToList(),
-                        PartitioningSolid.OrientedBoundingBoxDic[solid]),
+                        BoundingGeometry.OrientedBoundingBoxDic[solid]),
                 OverallLength =
-                    GeometryFunctions.SortedLengthOfObbEdges(PartitioningSolid.OrientedBoundingBoxDic[solid])[2],
+                    GeometryFunctions.SortedLengthOfObbEdges(BoundingGeometry.OrientedBoundingBoxDic[solid])[2],
                 EngagedLength = lengthAndRadius[0],
                 Diameter = lengthAndRadius[1]*2.0,
                 Certainty = 1.0
@@ -246,14 +246,14 @@ namespace Assembly_Planner
             return true;
         }
 
-        private static int VertsInfrontOfFlat(TessellatedSolid solid, Flat flat)
+        internal static int VertsInfrontOfFlat(TessellatedSolid solid, Flat flat)
         {
             return
                 solid.Vertices.Count(
                     v => flat.Normal.dotProduct(v.Position.subtract(flat.Faces[0].Vertices[0].Position)) > 0);
         }
 
-        private static double ToolSizeFinder(List<PrimitiveSurface> candidateHexVal)
+        internal static double ToolSizeFinder(List<PrimitiveSurface> candidateHexVal)
         {
             var firstPrimNormal = ((Flat) candidateHexVal[0]).Normal;
             for (var i = 1; i < candidateHexVal.Count; i++)
@@ -365,7 +365,7 @@ namespace Assembly_Planner
                     foreach (var nut in nuts)
                     {
                         nut.RemovalDirection = nutAndWasherRemovalDirection;
-                        nut.Cerainty = 1.0;
+                        nut.Certainty = 1.0;
                         nutList.Add(nut);
                     }
                 }
@@ -379,7 +379,7 @@ namespace Assembly_Planner
                 {
                     if (pWasher.Volume > fastener.Solid.Volume) continue;
                     var edgesOfObb =
-                        GeometryFunctions.SortedLengthOfObbEdges(PartitioningSolid.OrientedBoundingBoxDic[pWasher]);
+                        GeometryFunctions.SortedLengthOfObbEdges(BoundingGeometry.OrientedBoundingBoxDic[pWasher]);
                     if ((edgesOfObb[0]/edgesOfObb[2]) < 0.2)
                         // shortest/ longest // this can be fuzzified to define ceratinty
                     {
@@ -396,7 +396,7 @@ namespace Assembly_Planner
                         var uncertainNut = new Nut
                         {
                             Solid = pWasher,
-                            Cerainty = 0.6,
+                            Certainty = 0.6,
                             RemovalDirection = nutAndWasherRemovalDirection
                         };
                         nutList.Add(uncertainNut);
@@ -430,12 +430,12 @@ namespace Assembly_Planner
                                 Solid = pF,
                                 RemovalDirection =
                                     FastenerDetector.RemovalDirectionFinderUsingObb(pF,
-                                        PartitioningSolid.OrientedBoundingBoxDic[pF]),
+                                        BoundingGeometry.OrientedBoundingBoxDic[pF]),
                                 OverallLength =
                                     GeometryFunctions.SortedLengthOfObbEdges(
-                                        PartitioningSolid.OrientedBoundingBoxDic[pF])[2],
+                                        BoundingGeometry.OrientedBoundingBoxDic[pF])[2],
                                 EngagedLength = GeometryFunctions.SortedLengthOfObbEdges( // TBD
-                                    PartitioningSolid.OrientedBoundingBoxDic[pF])[2],
+                                    BoundingGeometry.OrientedBoundingBoxDic[pF])[2],
                                 Diameter = nut.Diameter,
                                 Certainty = 0.3
                             };
@@ -463,34 +463,5 @@ namespace Assembly_Planner
             }
         }
 
-        /*private static int HasHexagon(TessellatedSolid solid, List<PrimitiveSurface> solidPrim,
-        Dictionary<PrimitiveSurface, List<PrimitiveSurface>> equalPrimitives)
-        {
-            // 0: false (doesnt have hexagon)
-            // 1: HexBolt
-            // 2: HexNut
-            // 3: Allen
-            var sixFlat = EqualPrimitivesFinder(equalPrimitives, 6);
-            if (!sixFlat.Any()) return 0;
-            foreach (var candidateHex in sixFlat)
-            {
-                var candidateHexVal = equalPrimitives[candidateHex];
-                var cos = new List<double>();
-                var firstPrimNormal = ((Flat) candidateHexVal[0]).Normal;
-                for (var i = 1; i < candidateHexVal.Count; i++)
-                    cos.Add(firstPrimNormal.dotProduct(((Flat) candidateHexVal[i]).Normal));
-                // if it is a hex or allen bolt, the cos list must have two 1/2, two -1/2 and one -1
-                if (cos.Count(c => Math.Abs(0.5 - c) < 0.0001) != 2 ||
-                    cos.Count(c => Math.Abs(-0.5 - c) < 0.0001) != 2 ||
-                    cos.Count(c => Math.Abs(-1 - c) < 0.0001) != 1) continue;
-                if (IsItAllen(candidateHexVal))
-                    return 3;
-                // else: it is a hex bolt or nut
-                if (IsItNut(solidPrim.Where(p => p is Cylinder).Cast<Cylinder>().ToList(), solid))
-                    return 2;
-                return 1;
-            }
-            return 0;
-        }*/
     }
 }

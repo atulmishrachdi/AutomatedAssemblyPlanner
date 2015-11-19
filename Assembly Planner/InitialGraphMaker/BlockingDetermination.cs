@@ -6,7 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using Assembly_Planner.GeometryReasoning;
+using Assembly_Planner;
 using GraphSynth.Representation;
 using StarMathLib;
 using TVGL;

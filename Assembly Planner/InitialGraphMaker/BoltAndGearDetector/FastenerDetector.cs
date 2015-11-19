@@ -127,7 +127,7 @@ namespace Assembly_Planner
             {
                 var shortestObbEdge = double.PositiveInfinity;
                 var longestObbEdge = double.NegativeInfinity;
-                var solidObb = PartitioningSolid.OrientedBoundingBoxDic[solid];
+                var solidObb = BoundingGeometry.OrientedBoundingBoxDic[solid];
                 for (var i = 1; i < solidObb.CornerVertices.Count(); i++)
                 {
                     var dis =
