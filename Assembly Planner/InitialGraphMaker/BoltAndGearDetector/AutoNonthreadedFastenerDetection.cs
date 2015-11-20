@@ -190,8 +190,7 @@ namespace Assembly_Planner
                     Tool = Tool.FlatBlade,
                     RemovalDirection =
                         RemovalDirectionFinderForSlot(candidateHexVal.Cast<Flat>().ToList(),
-                            solidPrim.Where(p => p is Flat).Cast<Flat>().ToList(),
-                            BoundingGeometry.OrientedBoundingBoxDic[solid]),
+                            solidPrim.Where(p => p is Flat).Cast<Flat>().ToList()),
                     OverallLength =
                         GeometryFunctions.SortedLengthOfObbEdges(BoundingGeometry.OrientedBoundingBoxDic[solid])[2],
                     EngagedLength = lengthAndRadius[0],
@@ -267,8 +266,7 @@ namespace Assembly_Planner
         }
 
 
-        private static int RemovalDirectionFinderForSlot(List<Flat> equalFlats, List<Flat> flats,
-            BoundingBox boundingBox)
+        private static int RemovalDirectionFinderForSlot(List<Flat> equalFlats, List<Flat> flats)
         {
             // for the slot, there will be a flat that is prependicular to both equal flats.
             // this can give mistakably the sides of the bolt head. 
@@ -365,6 +363,7 @@ namespace Assembly_Planner
                     foreach (var nut in nuts)
                     {
                         nut.RemovalDirection = nutAndWasherRemovalDirection;
+                        nut.Diameter = fastener.Diameter;
                         nut.Certainty = 1.0;
                         nutList.Add(nut);
                     }

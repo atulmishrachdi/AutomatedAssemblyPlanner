@@ -77,6 +77,7 @@ namespace Assembly_Planner
                                 NutType = NutType.Hex,
                                 Tool = Tool.HexWrench,
                                 ToolSize = toolSize,
+                                OverallLength = BoundingGeometry.BoundingCylinderDic[solid].Length,
                                 Certainty = 0.9
                             });
                             continue;
@@ -101,7 +102,7 @@ namespace Assembly_Planner
                     {
                         Solid = solid,
                         Diameter = BoundingGeometry.BoundingCylinderDic[solid].Radius*2.0,// this is approximate
-                        OverallLength = BoundingGeometry.BoundingCylinderDic[solid].Length * 2.0,
+                        OverallLength = BoundingGeometry.BoundingCylinderDic[solid].Length,
                         Certainty = 0.5
                     });
                     continue;
