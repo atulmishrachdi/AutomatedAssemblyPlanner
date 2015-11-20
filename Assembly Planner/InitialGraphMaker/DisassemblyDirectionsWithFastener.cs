@@ -20,7 +20,8 @@ namespace Assembly_Planner
         internal static List<TessellatedSolid> Solids;
         internal static Dictionary<int, List<Component[]>> NonAdjacentBlocking = new Dictionary<int, List<Component[]>>(); //Component[0] is blocked by Component[1]
 
-        internal static List<int> Run(designGraph assemblyGraph, List<TessellatedSolid> solids, bool classifyFastener = false, bool threaded = false)
+        internal static List<int> Run(designGraph assemblyGraph, List<TessellatedSolid> solids,
+            bool classifyFastener = false, bool threaded = false)
         {
             Solids = new List<TessellatedSolid>(solids);
 
@@ -34,11 +35,11 @@ namespace Assembly_Planner
             //------------------------------------------------------------------------------------------
             BoundingGeometry.CreateOBB2(solids);
             BoundingGeometry.CreateBoundingCylinder(solids);
-            NutPolynomialTrend.PolynomialTrendDetector(solids[0]);
+
             // From repeated parts take only one of them, and do the primitive classification on that:
             //------------------------------------------------------------------------------------------
             var multipleRefs = DuplicatePartsDetector(solids);
-            var solidPrimitive = BlockingDetermination.PrimitiveMaker(solids);//multipleRefs.Keys.ToList());
+            var solidPrimitive = BlockingDetermination.PrimitiveMaker(solids); //multipleRefs.Keys.ToList());
             //foreach (var mRef in multipleRefs.Keys)
             //    foreach (var duplicated in multipleRefs[mRef])
             //        solidPrimitive.Add(duplicated, solidPrimitive[mRef]);
@@ -47,7 +48,7 @@ namespace Assembly_Planner
             //------------------------------------------------------------------------------------------
             var screwsAndBolts = new HashSet<TessellatedSolid>();
             if (classifyFastener)
-                screwsAndBolts = FastenerDetector.Run(solidPrimitive, multipleRefs,false, threaded,false);
+                screwsAndBolts = FastenerDetector.Run(solidPrimitive, multipleRefs,true, threaded,false);
             var solidsNoFastener = new List<TessellatedSolid>(solids);
             foreach (var bolt in screwsAndBolts)
                 solidsNoFastener.Remove(bolt);
@@ -56,7 +57,7 @@ namespace Assembly_Planner
             //------------------------------------------------------------------------------------------
             var gears = GearDetector.Run(solidsNoFastener, solidPrimitive);
 
-            
+
             // Add the solids as nodes to the graph. Exclude the fasteners 
             //------------------------------------------------------------------------------------------
             DisassemblyDirections.Solids = new List<TessellatedSolid>(solidsNoFastener);
@@ -76,7 +77,7 @@ namespace Assembly_Planner
             {
                 var solid1 = solidsNoFastener[i];
                 var solid1Primitives = solidPrimitive[solid1];
-                for (var j = i+1; j < solidsNoFastener.Count; j++)
+                for (var j = i + 1; j < solidsNoFastener.Count; j++)
                 {
                     var solid2 = solidsNoFastener[j];
                     var solid2Primitives = solidPrimitive[solid2];
@@ -89,8 +90,9 @@ namespace Assembly_Planner
                         // Update the romoval direction if it is a gear mate:
                         localDirInd = GearDetector.UpdateRemovalDirectionsIfGearMate(solid1, solid2, gears, localDirInd);
                         List<int> finDirs, infDirs;
-                        NonadjacentBlockingDetermination.FiniteDirectionsBetweenConnectedPartsWithPartitioning(solid1, solid2,
-                           localDirInd, out finDirs, out infDirs);
+                        NonadjacentBlockingDetermination.FiniteDirectionsBetweenConnectedPartsWithPartitioning(solid1,
+                            solid2,
+                            localDirInd, out finDirs, out infDirs);
                         var from = assemblyGraph[solid2.Name]; // Moving
                         var to = assemblyGraph[solid1.Name]; // Reference
                         assemblyGraph.addArc((node) from, (node) to, "", typeof (Connection));

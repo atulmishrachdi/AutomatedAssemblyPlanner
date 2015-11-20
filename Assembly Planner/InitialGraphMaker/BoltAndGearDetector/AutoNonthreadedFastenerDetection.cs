@@ -349,15 +349,15 @@ namespace Assembly_Planner
             return new[] {length, longestCyl.Radius};
         }
 
-        private static void ConnectFastenersNutsAndWashers(List<List<TessellatedSolid>> groupedPotentialFasteners)
+        internal static void ConnectFastenersNutsAndWashers(List<List<TessellatedSolid>> groupedPotentialFasteners)
         {
             foreach (var fastener in FastenerDetector.Fasteners)
             {
                 // if there is a fastener, find its nuts and washers
                 var group = groupedPotentialFasteners.First(g => g.Contains(fastener.Solid));
+                if (group.Count == 1) continue;
                 var nutAndWasherRemovalDirection = DisassemblyDirections.Directions.IndexOf(
                     DisassemblyDirections.Directions[fastener.RemovalDirection].multiply(-1.0));
-                if (group.Count == 1) continue;
                 var nuts = FastenerDetector.Nuts.Where(n => group.Contains(n.Solid)).ToList();
                 var nutList = new List<Nut>();
                 if (nuts.Any())
@@ -396,7 +396,7 @@ namespace Assembly_Planner
                         var uncertainNut = new Nut
                         {
                             Solid = pWasher,
-                            Certainty = 0.6,
+                            Certainty = 0.4,
                             RemovalDirection = nutAndWasherRemovalDirection
                         };
                         nutList.Add(uncertainNut);

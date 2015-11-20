@@ -50,7 +50,7 @@ namespace Assembly_Planner
             }
             // Plot:
             //if (hasThread)
-            FastenerPolynomialTrend.PlotInMatlab(distancePointToSolid);
+            //FastenerPolynomialTrend.PlotInMatlab(distancePointToSolid);
             return false;
         }
 

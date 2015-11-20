@@ -47,11 +47,12 @@ namespace Assembly_Planner
             if (ContainsThread(distancePointToSolid, out numberOfThreads, out threadStartEndPoints))
             {
                 var startEndThreadPoints =
-                    Math.Abs(originalInds[threadStartEndPoints[0]] - originalInds[threadStartEndPoints[1]]);
+                    Math.Abs(originalInds[threadStartEndPoints[0]+2] - originalInds[threadStartEndPoints[1]-2]);
                 FastenerDetector.Fasteners.Add(new Fastener
                 {
                     Solid = solid,
                     NumberOfThreads = numberOfThreads,
+                    FastenerType = FastenerTypeEnum.Bolt,
                     RemovalDirection =
                         FastenerDetector.RemovalDirectionFinderUsingObb(solid,
                             BoundingGeometry.OrientedBoundingBoxDic[solid]),

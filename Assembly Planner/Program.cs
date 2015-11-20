@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Security;
 using System.Threading.Tasks;
-using Assembly_Planner.GeometryReasoning;
+using Assembly_Planner;
 using Assembly_Planner.GraphSynth.BaseClasses;
 using GraphSynth.Representation;
 using TVGL;
@@ -47,7 +47,7 @@ namespace Assembly_Planner
             {
                 assemblyGraph = new designGraph();
                 //var globalDirPool = DisassemblyDirections.Run(assemblyGraph, solids);
-                globalDirPool = DisassemblyDirectionsWithFastener.Run(assemblyGraph, solids,true, false);
+                globalDirPool = DisassemblyDirectionsWithFastener.Run(assemblyGraph, solids,true, true);
                 //Updates.AddPartsProperties(inputDir, assemblyGraph);
                 //NonadjacentBlockingDeterminationPro.Run(assemblyGraph, solids, globalDirPool);
                 NonadjacentBlockingWithPartitioning.Run(assemblyGraph, solids, globalDirPool);

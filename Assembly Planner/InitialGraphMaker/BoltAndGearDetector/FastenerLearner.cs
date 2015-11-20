@@ -180,7 +180,7 @@ namespace Assembly_Planner
             var cylinder = primitives.Where(p => p is Cylinder).ToList();
             var coneArea = cones.Sum(c => c.Area);
             var cylinderArea = cylinder.Sum(c => c.Area);
-            return new[] { cones.Count, (coneArea + cylinderArea) / solid.SurfaceArea };
+            return new[] { 1, cones.Count, (coneArea + cylinderArea) / solid.SurfaceArea };
         }
 
         internal static void RunPerecptronLearner(bool regenerateTrainingData)
@@ -292,7 +292,7 @@ namespace Assembly_Planner
             var reader =
                 new StreamReader(
                     File.OpenRead(
-                        "../../InitialGraphMaker/BoltAndGearDetector/ClassifierFiles/TrainingData.csv"));
+                        "../../InitialGraphMaker/BoltAndGearDetector/ClassifierFiles/WeightsAndVotes.csv"));
             while (!reader.EndOfStream)
             {
                 var line = reader.ReadLine();

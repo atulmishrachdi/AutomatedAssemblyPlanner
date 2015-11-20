@@ -22,11 +22,12 @@ namespace Assembly_Planner
             // Important: if the fasteners are threaded using solidworks Fastener toolbox, it will not
             //            have helix. The threads will be small cones with the same axis and equal area.
 
-            var firstFilter = FastenerDetector.SmallObjectsDetector(multipleRefs); //multipleRefs.Keys.ToList();
+            var firstFilter = multipleRefs.Keys.ToList(); //FastenerDetector.SmallObjectsDetector(multipleRefs); 
             var equalPrimitivesForEverySolid = FastenerDetector.EqualFlatPrimitiveAreaFinder(firstFilter, solidPrimitive);
             var groupedPotentialFasteners = FastenerDetector.GroupingSmallParts(firstFilter);
             List<int> learnerVotes;
             var learnerWeights = FastenerLearner.ReadingLearnerWeightsAndVotesFromCsv(out learnerVotes);
+            //Parallel.ForEach(firstFilter,solid => // It is a little hard to parallelize this
             foreach (var solid in firstFilter)
             {
                 // if a fastener is detected using polynomial trend approach, it is definitely a fastener but not a nut.
@@ -39,7 +40,6 @@ namespace Assembly_Planner
                     if (FastenerPolynomialTrend.PolynomialTrendDetector(solid))
                     {
                         var lastAddedFastener = FastenerDetector.Fasteners[FastenerDetector.Fasteners.Count - 1];
-                        lastAddedFastener.FastenerType = FastenerTypeEnum.Bolt;
                         lastAddedFastener.ToolSize = toolSize;
                         if (commonHead == 1)
                         {
@@ -86,32 +86,47 @@ namespace Assembly_Planner
                 if (FastenerLearner.FastenerPerceptronLearner(solidPrimitive[solid], solid, learnerWeights, learnerVotes))
                 {
                     if (FastenerPolynomialTrend.PolynomialTrendDetector(solid))
+                        continue;
+                    // can be a nut
+                    // use bounding cylinder to detect nuts.
+                    // Since the nuts are small, the OBB function ddoesnt work perfectly for them
+                    //  therefore, I cannot really trust this. 
+                    if (NutPolynomialTrend.PolynomialTrendDetector(solid))
+                        // It is a nut with certainty == 1
+                        continue;
+                    // still can be a nut since the upper approach is not really accurate
+                    // this 50 percent certainty can go up if the nut is mated with a 
+                    // detected fastener 
+                    FastenerDetector.Nuts.Add(new Nut
+                    {
+                        Solid = solid,
+                        Diameter = BoundingGeometry.BoundingCylinderDic[solid].Radius*2.0,// this is approximate
+                        OverallLength = BoundingGeometry.BoundingCylinderDic[solid].Length * 2.0,
+                        Certainty = 0.5
+                    });
+                    continue;
+                }
+                // if it is not captured by any of the upper methods, give it another chance:
+                if (ThreadDetector(solid, solidPrimitive[solid]))
+                {
+                    if (FastenerPolynomialTrend.PolynomialTrendDetector(solid))
                     {
                         var lastAddedFastener = FastenerDetector.Fasteners[FastenerDetector.Fasteners.Count - 1];
                         lastAddedFastener.FastenerType = FastenerTypeEnum.Bolt;
+                        continue;
                     }
-                    else
+                    //if not, it is a nut:
+                    FastenerDetector.Nuts.Add(new Nut
                     {
-                        // can be a nut
-                        // use bounding cylinder to detect nuts.
-                        // a new code again? :(
-
-                    }
+                        Solid = solid,
+                        Diameter = BoundingGeometry.BoundingCylinderDic[solid].Radius * 2.0,// this is approximate
+                        OverallLength = BoundingGeometry.BoundingCylinderDic[solid].Length * 2.0,
+                        Certainty = 0.5
+                    });
                 }
-
-
-                //if (ThreadDetector(solid, solidPrimitive[solid]))
-                //{
-                //      CommonHeadFatener();
-                //      continue;
-                //}
             }
-        }
-
-        private static void CommonHeadFastenerAndTools(Fastener lastAddedFastener,
-            Dictionary<PrimitiveSurface, List<PrimitiveSurface>> equalPrimitives)
-        {
-            throw new NotImplementedException();
+            // now use groupped small objects:
+            AutoNonthreadedFastenerDetection.ConnectFastenersNutsAndWashers(groupedPotentialFasteners);
         }
 
         private static bool ThreadDetector(TessellatedSolid solid, List<PrimitiveSurface> primitiveSurfaces)
@@ -138,16 +153,7 @@ namespace Assembly_Planner
                             (Math.Abs(c.Faces.Count - cone.Faces.Count) < 3) &&
                             (Math.Abs(c.Area - cone.Area) < 0.001) &&
                             (Math.Abs(c.Aperture - cone.Aperture) < 0.001)).ToList();
-                if (threads.Count < 10) continue;
-                if (ConeThreadIsInternal(threads))
-                    FastenerDetector.Nuts.Add(new Nut {Solid = solid});
-                FastenerDetector.Fasteners.Add(new Fastener
-                {
-                    Solid = solid,
-                    RemovalDirection =
-                        FastenerDetector.RemovalDirectionFinderUsingObb(solid,
-                            BoundingGeometry.OrientedBoundingBoxDic[solid])
-                });
+                if (threads.Count < 8) continue;
                 return true;
             }
             return false;
@@ -162,10 +168,15 @@ namespace Assembly_Planner
             // It seems to be expensive. Let's see how it goes.
             // Standard thread angles:
             //       60     55     29     45     30    80 
-            foreach (var edge in solid.Edges.Where(e => Math.Abs(e.InternalAngle - 2.08566845) < 0.04))
+            var gVisited = new HashSet<Edge>();
+            foreach (
+                var edge in
+                    solid.Edges.Where(e => Math.Abs(e.InternalAngle - 2.08566845) < 0.04 
+                        && !gVisited.Contains(e)))
                 // 2.0943951 is equal to 120 degree
             {
                 // To every side of the edge if there is one edge with the IA of 120, this edge is unique and we dcannot find the second one. 
+                gVisited.Add(edge);
                 var visited = new HashSet<Edge> {edge};
                 var stack = new Stack<Edge>();
                 var possibleHelixEdges = FindHelixEdgesConnectedToAnEdge(solid.Edges, edge, visited);
@@ -183,18 +194,9 @@ namespace Assembly_Planner
                     if (cand == null) continue;
                     stack.Push(cand[0]);
                 }
+                gVisited.UnionWith(visited);
                 if (visited.Count < 1000) // Is it very big?
                     continue;
-                // if the thread is internal, classify it as nut, else fastener
-                if (HelixThreadIsInternal(visited))
-                    FastenerDetector.Nuts.Add(new Nut {Solid = solid});
-                FastenerDetector.Fasteners.Add(new Fastener
-                {
-                    Solid = solid,
-                    RemovalDirection =
-                        FastenerDetector.RemovalDirectionFinderUsingObb(solid,
-                            BoundingGeometry.OrientedBoundingBoxDic[solid])
-                });
                 return true;
             }
             return false;
