@@ -309,6 +309,10 @@ namespace Assembly_Planner
         /// </summary>
         public NutType NutType;
         /// <summary>
+        /// The washers if available
+        /// </summary>
+        public List<Washer> Washer;
+        /// <summary>
         /// The tool if identified
         /// </summary>
         public Tool Tool;

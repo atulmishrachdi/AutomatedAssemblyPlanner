@@ -349,11 +349,23 @@ namespace Assembly_Planner
 
         internal static void ConnectFastenersNutsAndWashers(List<List<TessellatedSolid>> groupedPotentialFasteners)
         {
+            // Possible cases:
+            //  1. Fastener
+            //  2. Fastener-Nut
+            //  3. Fastener-Nut-Washer
+            //  4. Fastener-Washer
+            //  5. Nut
+            //  6. Nut-Washer
+
             foreach (var fastener in FastenerDetector.Fasteners)
             {
                 // if there is a fastener, find its nuts and washers
                 var group = groupedPotentialFasteners.First(g => g.Contains(fastener.Solid));
+                
+                //------------------------------------- Case 1 ------------------------------------
                 if (group.Count == 1) continue;
+                
+                //----------------------------------- Cases 2,3,4 ---------------------------------
                 var nutAndWasherRemovalDirection = DisassemblyDirections.Directions.IndexOf(
                     DisassemblyDirections.Directions[fastener.RemovalDirection].multiply(-1.0));
                 var nuts = FastenerDetector.Nuts.Where(n => group.Contains(n.Solid)).ToList();
@@ -407,14 +419,18 @@ namespace Assembly_Planner
                 FastenerDetector.Washers.AddRange(washers);
             }
             // if there is a detected nut, but its fastener was not detected:
-            // fastener is known
+            // fastener is unknown
             foreach (var nut in FastenerDetector.Nuts)
             {
                 if (FastenerDetector.Fasteners.All(f => !f.Nuts.Contains(nut)))
                 {
                     // this a nut that doesnt have any fastener.
                     var group = groupedPotentialFasteners.First(g => g.Contains(nut.Solid));
+                    
+                    //----------------------------------- Case 5 ----------------------------------
                     if (group.Count == 1) continue;
+                    
+                    //---------------------------------- Cases 2,6 --------------------------------
                     var potentialFastener = group.Where(s => s != nut.Solid).ToList();
                     Fastener fastener = null;
                     var nutAndWasherRemovalDirection = 0;
@@ -447,17 +463,32 @@ namespace Assembly_Planner
                             washers.Add(new Washer
                             {
                                 Solid = pF,
-                                Certainty = 0.1,
-                                RemovalDirection = nutAndWasherRemovalDirection
+                                Certainty = 0.2
                             });
                         }
                     }
-                    nut.RemovalDirection = nutAndWasherRemovalDirection;
+                    // by this point these things can have happened: 
+                    // A nut that its unknown fastener is found
+                    // or a nut that its washer is found without fastener
+                    // a nut, with its fastener and washer
+                    FastenerDetector.Washers.AddRange(washers);
                     if (fastener != null)
                     {
+                        FastenerDetector.Fasteners.Add(fastener);
+                        nut.RemovalDirection = nutAndWasherRemovalDirection;
                         fastener.Nuts = new List<Nut>{nut};
                         fastener.Washer = washers;
                     }
+                    // but if the fastener is null, if any washer exists,
+                    //  it is a washer for the nut. Example: there is a 
+                    //  rod with some threads on one of its ends.
+                    //  I cannot find the rod, but I can possibly find the
+                    //  nut and the washer. So I will also define washer as 
+                    //  a property for nut.
+                    nut.Washer = washers;
+                    // removal direction? I can say along a line, and
+                    // the see if any of those directions are infinite.
+                    // but this doesnt work for threaded nuts and rods
                 }
             }
         }

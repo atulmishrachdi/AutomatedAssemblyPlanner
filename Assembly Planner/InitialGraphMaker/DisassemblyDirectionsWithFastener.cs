@@ -48,7 +48,7 @@ namespace Assembly_Planner
             //------------------------------------------------------------------------------------------
             var screwsAndBolts = new HashSet<TessellatedSolid>();
             if (classifyFastener)
-                screwsAndBolts = FastenerDetector.Run(solidPrimitive, multipleRefs,true, threaded,false);
+                screwsAndBolts = FastenerDetector.Run(solidPrimitive, multipleRefs, true, threaded,false);
             var solidsNoFastener = new List<TessellatedSolid>(solids);
             foreach (var bolt in screwsAndBolts)
                 solidsNoFastener.Remove(bolt);
