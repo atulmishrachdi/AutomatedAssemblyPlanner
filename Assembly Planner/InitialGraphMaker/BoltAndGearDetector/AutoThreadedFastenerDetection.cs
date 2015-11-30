@@ -22,18 +22,22 @@ namespace Assembly_Planner
             // Important: if the fasteners are threaded using solidworks Fastener toolbox, it will not
             //            have helix. The threads will be small cones with the same axis and equal area.
 
-            var firstFilter = multipleRefs.Keys.ToList(); //FastenerDetector.SmallObjectsDetector(multipleRefs); 
-            var equalPrimitivesForEverySolid = FastenerDetector.EqualFlatPrimitiveAreaFinder(firstFilter, solidPrimitive);
-            var groupedPotentialFasteners = FastenerDetector.GroupingSmallParts(firstFilter);
+            var smallParts = FastenerDetector.SmallObjectsDetector(solidPrimitive.Keys.ToList());
+            var groupedPotentialFasteners = FastenerDetector.GroupingSmallParts(smallParts);
+            var uniqueParts = new HashSet<TessellatedSolid>();
+            foreach (var s in multipleRefs.Keys)
+                uniqueParts.Add(s);
+
+            var equalPrimitivesForEveryUniqueSolid = FastenerDetector.EqualFlatPrimitiveAreaFinder(uniqueParts, solidPrimitive);
             List<int> learnerVotes;
             var learnerWeights = FastenerLearner.ReadingLearnerWeightsAndVotesFromCsv(out learnerVotes);
             //Parallel.ForEach(firstFilter,solid => // It is a little hard to parallelize this
-            foreach (var solid in firstFilter)
+            foreach (var solid in uniqueParts)
             {
                 // if a fastener is detected using polynomial trend approach, it is definitely a fastener but not a nut.
                 // if it is detected using any other approach, but not polynomial trend, it is a possible nut.
                 double toolSize;
-                var commonHead = CommonHeadCheck(solid, solidPrimitive[solid], equalPrimitivesForEverySolid[solid],
+                var commonHead = CommonHeadCheck(solid, solidPrimitive[solid], equalPrimitivesForEveryUniqueSolid[solid],
                     out toolSize);
                 if (commonHead != 0)
                 {
@@ -44,26 +48,31 @@ namespace Assembly_Planner
                         if (commonHead == 1)
                         {
                             lastAddedFastener.Tool = Tool.HexWrench;
+                            AddRepeatedSolidstoFasteners(lastAddedFastener, multipleRefs[solid]);
                             continue;
                         }
                         if (commonHead == 2)
                         {
                             lastAddedFastener.Tool = Tool.Allen;
+                            AddRepeatedSolidstoFasteners(lastAddedFastener, multipleRefs[solid]);
                             continue;
                         }
                         if (commonHead == 3)
                         {
                             lastAddedFastener.Tool = Tool.PhillipsBlade;
+                            AddRepeatedSolidstoFasteners(lastAddedFastener, multipleRefs[solid]);
                             continue;
                         }
                         if (commonHead == 4)
                         {
                             lastAddedFastener.Tool = Tool.FlatBlade;
+                            AddRepeatedSolidstoFasteners(lastAddedFastener, multipleRefs[solid]);
                             continue;
                         }
                         if (commonHead == 5)
                         {
                             lastAddedFastener.Tool = Tool.PhillipsBlade;
+                            AddRepeatedSolidstoFasteners(lastAddedFastener, multipleRefs[solid]);
                             continue;
                         }
                     }
@@ -71,15 +80,18 @@ namespace Assembly_Planner
                     {
                         if (commonHead == 1)
                         {
-                            FastenerDetector.Nuts.Add(new Nut
+                            foreach (var repeatedSolid in multipleRefs[solid])
                             {
-                                Solid = solid,
-                                NutType = NutType.Hex,
-                                Tool = Tool.HexWrench,
-                                ToolSize = toolSize,
-                                OverallLength = BoundingGeometry.BoundingCylinderDic[solid].Length,
-                                Certainty = 0.9
-                            });
+                                FastenerDetector.Nuts.Add(new Nut
+                                {
+                                    Solid = repeatedSolid,
+                                    NutType = NutType.Hex,
+                                    Tool = Tool.HexWrench,
+                                    ToolSize = toolSize,
+                                    OverallLength = BoundingGeometry.BoundingCylinderDic[solid].Length,
+                                    Certainty = 0.9
+                                });
+                            }
                             continue;
                         }
                     }
@@ -87,24 +99,35 @@ namespace Assembly_Planner
                 if (FastenerLearner.FastenerPerceptronLearner(solidPrimitive[solid], solid, learnerWeights, learnerVotes))
                 {
                     if (FastenerPolynomialTrend.PolynomialTrendDetector(solid))
+                    {
+                        AddRepeatedSolidstoFasteners(FastenerDetector.Fasteners[FastenerDetector.Fasteners.Count - 1],
+                            multipleRefs[solid]);
                         continue;
+                    }
                     // can be a nut
                     // use bounding cylinder to detect nuts.
                     // Since the nuts are small, the OBB function ddoesnt work perfectly for them
                     //  therefore, I cannot really trust this. 
                     if (NutPolynomialTrend.PolynomialTrendDetector(solid))
                         // It is a nut with certainty == 1
+                    {
+                        AddRepeatedSolidstoNuts(FastenerDetector.Nuts[FastenerDetector.Nuts.Count - 1],
+                            multipleRefs[solid]);
                         continue;
+                    }
                     // still can be a nut since the upper approach is not really accurate
                     // this 50 percent certainty can go up if the nut is mated with a 
                     // detected fastener 
-                    FastenerDetector.Nuts.Add(new Nut
+                    foreach (var repeatedSolid in multipleRefs[solid])
                     {
-                        Solid = solid,
-                        Diameter = BoundingGeometry.BoundingCylinderDic[solid].Radius*2.0,// this is approximate
-                        OverallLength = BoundingGeometry.BoundingCylinderDic[solid].Length,
-                        Certainty = 0.5
-                    });
+                        FastenerDetector.Nuts.Add(new Nut
+                        {
+                            Solid = repeatedSolid,
+                            Diameter = BoundingGeometry.BoundingCylinderDic[solid].Radius * 2.0,// this is approximate
+                            OverallLength = BoundingGeometry.BoundingCylinderDic[solid].Length,
+                            Certainty = 0.5
+                        });
+                    }
                     continue;
                 }
                 // if it is not captured by any of the upper methods, give it another chance:
@@ -114,16 +137,20 @@ namespace Assembly_Planner
                     {
                         var lastAddedFastener = FastenerDetector.Fasteners[FastenerDetector.Fasteners.Count - 1];
                         lastAddedFastener.FastenerType = FastenerTypeEnum.Bolt;
+                        AddRepeatedSolidstoFasteners(lastAddedFastener, multipleRefs[solid]);
                         continue;
                     }
                     //if not, it is a nut:
-                    FastenerDetector.Nuts.Add(new Nut
+                    foreach (var repeatedSolid in multipleRefs[solid])
                     {
-                        Solid = solid,
-                        Diameter = BoundingGeometry.BoundingCylinderDic[solid].Radius * 2.0,// this is approximate
-                        OverallLength = BoundingGeometry.BoundingCylinderDic[solid].Length * 2.0,
-                        Certainty = 0.5
-                    });
+                        FastenerDetector.Nuts.Add(new Nut
+                        {
+                            Solid = repeatedSolid,
+                            Diameter = BoundingGeometry.BoundingCylinderDic[solid].Radius * 2.0,// this is approximate
+                            OverallLength = BoundingGeometry.BoundingCylinderDic[solid].Length * 2.0,
+                            Certainty = 0.5
+                        });
+                    }
                 }
             }
             // now use groupped small objects:
@@ -317,6 +344,46 @@ namespace Assembly_Planner
             }
             if (eachSlot == 2) return 5;
             return 0;
+        }
+
+        private static void AddRepeatedSolidstoFasteners(Fastener lastAddedFastener, List<TessellatedSolid> repeatedSolid)
+        {
+            foreach (var solid in repeatedSolid)
+            {
+                if (solid == lastAddedFastener.Solid) continue;
+                FastenerDetector.Fasteners.Add(new Fastener
+                {
+                    Solid = solid,
+                    NumberOfThreads = lastAddedFastener.NumberOfThreads,
+                    FastenerType = lastAddedFastener.FastenerType,
+                    RemovalDirection = lastAddedFastener.RemovalDirection,
+                    OverallLength = lastAddedFastener.OverallLength,
+                    EngagedLength = lastAddedFastener.EngagedLength,
+                    Diameter = lastAddedFastener.Diameter,
+                    Certainty = lastAddedFastener.Certainty,
+                    Tool = lastAddedFastener.Tool,
+                    ToolSize = lastAddedFastener.ToolSize
+                });
+            }
+        }
+        private static void AddRepeatedSolidstoNuts(Nut lastAddedNut, List<TessellatedSolid> repeatedSolid)
+        {
+            foreach (var solid in repeatedSolid)
+            {
+                if (solid == lastAddedNut.Solid) continue;
+                FastenerDetector.Nuts.Add(new Nut(
+                {
+                    Solid = solid, 
+                    NumberOfThreads = lastAddedNut.NumberOfThreads,
+                    RemovalDirection = lastAddedNut.RemovalDirection,
+                    OverallLength = lastAddedNut.OverallLength,
+                    Diameter = lastAddedNut.Diameter,
+                    Certainty = lastAddedNut.Certainty,
+                    Tool = lastAddedNut.Tool,
+                    ToolSize = lastAddedNut.ToolSize, 
+                    NutType = lastAddedNut.NutType
+                });
+            }
         }
     }
 }

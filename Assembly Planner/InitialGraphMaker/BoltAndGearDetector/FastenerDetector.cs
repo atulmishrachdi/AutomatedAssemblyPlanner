@@ -86,11 +86,11 @@ namespace Assembly_Planner
         }
 
         internal static Dictionary<TessellatedSolid, Dictionary<PrimitiveSurface, List<PrimitiveSurface>>>
-            EqualFlatPrimitiveAreaFinder(List<TessellatedSolid> firstFilter,
+            EqualFlatPrimitiveAreaFinder(HashSet<TessellatedSolid> uniqueParts,
                 Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive)
         {
             var equalPrim = new Dictionary<TessellatedSolid, Dictionary<PrimitiveSurface, List<PrimitiveSurface>>>();
-            foreach (var solid in firstFilter)
+            foreach (var solid in uniqueParts)
             {
                 var primEqualArea = new Dictionary<PrimitiveSurface, List<PrimitiveSurface>>();
                 foreach (var prim in solidPrimitive[solid].Where(p => p is Flat))
@@ -118,12 +118,10 @@ namespace Assembly_Planner
                 k => equalPrimittives[k].Count == numberOfEqualPrim).ToList();
         }
 
-        internal static List<TessellatedSolid> SmallObjectsDetector(
-            Dictionary<TessellatedSolid, List<TessellatedSolid>> solidRepeated)
+        internal static List<TessellatedSolid> SmallObjectsDetector(List<TessellatedSolid> solids)
         {
             var partSize = new Dictionary<TessellatedSolid, double>();
-            var parts = solidRepeated.Keys.ToList();
-            foreach (var solid in solidRepeated.Keys.ToList())
+            foreach (var solid in solids)
             {
                 var shortestObbEdge = double.PositiveInfinity;
                 var longestObbEdge = double.NegativeInfinity;
@@ -195,7 +193,7 @@ namespace Assembly_Planner
 
             // Filling up the values
             var keys = dic.Keys.ToList();
-            foreach (var f in parts.Where(a => !approvedNoise.Contains(a)))
+            foreach (var f in solids.Where(a => !approvedNoise.Contains(a)))
             {
                 for (var i = 0; i < n - 2; i++)
                 {

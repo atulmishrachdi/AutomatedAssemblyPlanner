@@ -17,19 +17,28 @@ namespace Assembly_Planner
             // This approach will use the symmetric shape of the fasteners' heads. If there is no thread,
             // we willl consider the area of the positive culinders for bolts and negative cylinder for 
             // nuts. 
-            var firstFilter = FastenerDetector.SmallObjectsDetector(multipleRefs); //multipleRefs.Keys.ToList(); 
-            var equalFlatPrimitivesForEverySolid = FastenerDetector.EqualFlatPrimitiveAreaFinder(firstFilter,
+            // This is an important point: 
+            //      1. Find the small objects using all of the solids
+            //      2. Group them using small objects
+            //      3. Detect the fasteners using multiple references. (for each similar object, detect one of them) 
+
+            var smallParts = FastenerDetector.SmallObjectsDetector(solidPrimitive.Keys.ToList());
+            var groupedPotentialFasteners = FastenerDetector.GroupingSmallParts(smallParts);
+            var uniqueParts = new HashSet<TessellatedSolid>();
+            foreach (var s in multipleRefs.Keys)
+                uniqueParts.Add(s);
+
+            var equalPrimitivesForEveryUniqueSolid = FastenerDetector.EqualFlatPrimitiveAreaFinder(uniqueParts,
                 solidPrimitive);
-            var groupedPotentialFasteners = FastenerDetector.GroupingSmallParts(firstFilter);
-            foreach (var solid in firstFilter)
+            foreach (var solid in uniqueParts)
             {
-                if (HexBoltNutAllen(solid, solidPrimitive[solid], equalFlatPrimitivesForEverySolid[solid]))
+                if (HexBoltNutAllen(solid, solidPrimitive[solid], equalPrimitivesForEveryUniqueSolid[solid], multipleRefs[solid]))
                     continue;
-                if (PhillipsHeadBolt(solid, solidPrimitive[solid], equalFlatPrimitivesForEverySolid[solid]))
+                if (PhillipsHeadBolt(solid, solidPrimitive[solid], equalPrimitivesForEveryUniqueSolid[solid], multipleRefs[solid]))
                     continue;
-                if (SlotHeadBolt(solid, solidPrimitive[solid], equalFlatPrimitivesForEverySolid[solid]))
+                if (SlotHeadBolt(solid, solidPrimitive[solid], equalPrimitivesForEveryUniqueSolid[solid], multipleRefs[solid]))
                     continue;
-                if (PhillipsSlotComboHeadBolt(solid, solidPrimitive[solid], equalFlatPrimitivesForEverySolid[solid]))
+                if (PhillipsSlotComboHeadBolt(solid, solidPrimitive[solid], equalPrimitivesForEveryUniqueSolid[solid], multipleRefs[solid]))
                     continue;
             }
             // when all of the fasteners are recognized, it's time to check the third level filter:
@@ -40,7 +49,7 @@ namespace Assembly_Planner
         }
 
         private static bool HexBoltNutAllen(TessellatedSolid solid, List<PrimitiveSurface> solidPrim,
-            Dictionary<PrimitiveSurface, List<PrimitiveSurface>> equalPrimitives)
+            Dictionary<PrimitiveSurface, List<PrimitiveSurface>> equalPrimitives, List<TessellatedSolid> repeated)
         {
             var sixFlat = FastenerDetector.EqualPrimitivesFinder(equalPrimitives, 6);
             if (!sixFlat.Any()) return false;
@@ -59,11 +68,50 @@ namespace Assembly_Planner
                 if (IsItAllen(candidateHexVal))
                 {
                     // this is a socket bolt (allen)
-                    var fastener = new Fastener
+                    foreach (var repeatedSolid in repeated) // I guess the value of the key contains the key also. To be checked.
                     {
-                        Solid = solid,
+                        var fastener = new Fastener
+                        {
+                            Solid = repeatedSolid,
+                            FastenerType = FastenerTypeEnum.Bolt,
+                            Tool = Tool.Allen,
+                            ToolSize = ToolSizeFinder(candidateHexVal),
+                            RemovalDirection =
+                                RemovalDirectionFinderForAllenHexPhillips(candidateHexVal.Cast<Flat>().ToList(),
+                                    BoundingGeometry.OrientedBoundingBoxDic[solid]),
+                            OverallLength =
+                                GeometryFunctions.SortedLengthOfObbEdges(BoundingGeometry.OrientedBoundingBoxDic[solid])[2],
+                            EngagedLength = lengthAndRadius[0],
+                            Diameter = lengthAndRadius[1] * 2.0,
+                            Certainty = 1.0
+                        };
+                        FastenerDetector.Fasteners.Add(fastener);
+                    }
+                    return true;
+                }
+                // else: it is a hex bolt or nut
+                if (IsItNut(solidPrim.Where(p => p is Cylinder).Cast<Cylinder>().ToList(), solid))
+                {
+                    foreach (var repeatedSolid in repeated)
+                    {
+                        FastenerDetector.Nuts.Add(new Nut
+                        {
+                            NutType = NutType.Hex,
+                            Solid = repeatedSolid,
+                            ToolSize = ToolSizeFinder(candidateHexVal),
+                            OverallLength = lengthAndRadius[0],
+                            Diameter = lengthAndRadius[1] * 2.0
+                        });
+                    }
+                    return true;
+                }
+                foreach (var repeatedSolid in repeated)
+                {
+                    FastenerDetector.Fasteners.Add(new Fastener
+                    {
+                        Solid = repeatedSolid,
                         FastenerType = FastenerTypeEnum.Bolt,
-                        Tool = Tool.Allen,
+                        Tool = Tool.HexWrench,
                         ToolSize = ToolSizeFinder(candidateHexVal),
                         RemovalDirection =
                             RemovalDirectionFinderForAllenHexPhillips(candidateHexVal.Cast<Flat>().ToList(),
@@ -73,38 +121,8 @@ namespace Assembly_Planner
                         EngagedLength = lengthAndRadius[0],
                         Diameter = lengthAndRadius[1]*2.0,
                         Certainty = 1.0
-                    };
-                    FastenerDetector.Fasteners.Add(fastener);
-                    return true;
-                }
-                // else: it is a hex bolt or nut
-                if (IsItNut(solidPrim.Where(p => p is Cylinder).Cast<Cylinder>().ToList(), solid))
-                {
-                    FastenerDetector.Nuts.Add(new Nut
-                    {
-                        NutType = NutType.Hex,
-                        Solid = solid,
-                        ToolSize = ToolSizeFinder(candidateHexVal),
-                        OverallLength = lengthAndRadius[0],
-                        Diameter = lengthAndRadius[1]*2.0
                     });
-                    return true;
                 }
-                FastenerDetector.Fasteners.Add(new Fastener
-                {
-                    Solid = solid,
-                    FastenerType = FastenerTypeEnum.Bolt,
-                    Tool = Tool.HexWrench,
-                    ToolSize = ToolSizeFinder(candidateHexVal),
-                    RemovalDirection =
-                        RemovalDirectionFinderForAllenHexPhillips(candidateHexVal.Cast<Flat>().ToList(),
-                            BoundingGeometry.OrientedBoundingBoxDic[solid]),
-                    OverallLength =
-                        GeometryFunctions.SortedLengthOfObbEdges(BoundingGeometry.OrientedBoundingBoxDic[solid])[2],
-                    EngagedLength = lengthAndRadius[0],
-                    Diameter = lengthAndRadius[1]*2.0,
-                    Certainty = 1.0
-                });
                 return true;
             }
             return false;
@@ -127,7 +145,7 @@ namespace Assembly_Planner
         }
 
         private static bool PhillipsHeadBolt(TessellatedSolid solid, List<PrimitiveSurface> solidPrim,
-            Dictionary<PrimitiveSurface, List<PrimitiveSurface>> equalPrimitives)
+            Dictionary<PrimitiveSurface, List<PrimitiveSurface>> equalPrimitives, List<TessellatedSolid> repeated)
         {
             var eightFlat = FastenerDetector.EqualPrimitivesFinder(equalPrimitives, 8);
             if (!eightFlat.Any()) return false;
@@ -143,28 +161,31 @@ namespace Assembly_Planner
                     cos.Count(c => Math.Abs(-1 - c) < 0.0001) != 2 ||
                     cos.Count(c => Math.Abs(1 - c) < 0.0001) != 1) continue;
                 var lengthAndRadius = FastenerEngagedLengthAndRadiusNoThread(solidPrim);
-                var fastener = new Fastener
+                foreach (var repeatedSolid in repeated)
                 {
-                    Solid = solid,
-                    FastenerType = FastenerTypeEnum.Bolt,
-                    Tool = Tool.PhillipsBlade,
-                    RemovalDirection =
-                        RemovalDirectionFinderForAllenHexPhillips(candidateHexVal.Cast<Flat>().ToList(),
-                            BoundingGeometry.OrientedBoundingBoxDic[solid]),
-                    OverallLength =
-                        GeometryFunctions.SortedLengthOfObbEdges(BoundingGeometry.OrientedBoundingBoxDic[solid])[2],
-                    EngagedLength = lengthAndRadius[0],
-                    Diameter = lengthAndRadius[1]*2.0,
-                    Certainty = 1.0
-                };
-                FastenerDetector.Fasteners.Add(fastener);
+                    var fastener = new Fastener
+                    {
+                        Solid = repeatedSolid,
+                        FastenerType = FastenerTypeEnum.Bolt,
+                        Tool = Tool.PhillipsBlade,
+                        RemovalDirection =
+                            RemovalDirectionFinderForAllenHexPhillips(candidateHexVal.Cast<Flat>().ToList(),
+                                BoundingGeometry.OrientedBoundingBoxDic[solid]),
+                        OverallLength =
+                            GeometryFunctions.SortedLengthOfObbEdges(BoundingGeometry.OrientedBoundingBoxDic[solid])[2],
+                        EngagedLength = lengthAndRadius[0],
+                        Diameter = lengthAndRadius[1] * 2.0,
+                        Certainty = 1.0
+                    };
+                    FastenerDetector.Fasteners.Add(fastener);
+                }
                 return true;
             }
             return false;
         }
 
         private static bool SlotHeadBolt(TessellatedSolid solid, List<PrimitiveSurface> solidPrim,
-            Dictionary<PrimitiveSurface, List<PrimitiveSurface>> equalPrimitives)
+            Dictionary<PrimitiveSurface, List<PrimitiveSurface>> equalPrimitives, List<TessellatedSolid> repeated)
         {
             var twoFlat = FastenerDetector.EqualPrimitivesFinder(equalPrimitives, 2);
             if (!twoFlat.Any()) return false;
@@ -183,28 +204,31 @@ namespace Assembly_Planner
                     continue;
                 if (!solidPrim.Where(p => p is Cylinder).Cast<Cylinder>().Any(c => c.IsPositive)) continue;
                 var lengthAndRadius = FastenerEngagedLengthAndRadiusNoThread(solidPrim);
-                var fastener = new Fastener
+                foreach (var repeatedSolid in repeated)
                 {
-                    Solid = solid,
-                    FastenerType = FastenerTypeEnum.Bolt,
-                    Tool = Tool.FlatBlade,
-                    RemovalDirection =
-                        RemovalDirectionFinderForSlot(candidateHexVal.Cast<Flat>().ToList(),
-                            solidPrim.Where(p => p is Flat).Cast<Flat>().ToList()),
-                    OverallLength =
-                        GeometryFunctions.SortedLengthOfObbEdges(BoundingGeometry.OrientedBoundingBoxDic[solid])[2],
-                    EngagedLength = lengthAndRadius[0],
-                    Diameter = lengthAndRadius[1]*2.0,
-                    Certainty = 1.0
-                };
-                FastenerDetector.Fasteners.Add(fastener);
+                    var fastener = new Fastener
+                    {
+                        Solid = repeatedSolid,
+                        FastenerType = FastenerTypeEnum.Bolt,
+                        Tool = Tool.FlatBlade,
+                        RemovalDirection =
+                            RemovalDirectionFinderForSlot(candidateHexVal.Cast<Flat>().ToList(),
+                                solidPrim.Where(p => p is Flat).Cast<Flat>().ToList()),
+                        OverallLength =
+                            GeometryFunctions.SortedLengthOfObbEdges(BoundingGeometry.OrientedBoundingBoxDic[solid])[2],
+                        EngagedLength = lengthAndRadius[0],
+                        Diameter = lengthAndRadius[1]*2.0,
+                        Certainty = 1.0
+                    };
+                    FastenerDetector.Fasteners.Add(fastener);
+                }
                 return true;
             }
             return false;
         }
 
         private static bool PhillipsSlotComboHeadBolt(TessellatedSolid solid, List<PrimitiveSurface> solidPrim,
-            Dictionary<PrimitiveSurface, List<PrimitiveSurface>> equalPrimitives)
+            Dictionary<PrimitiveSurface, List<PrimitiveSurface>> equalPrimitives, List<TessellatedSolid> repeated)
         {
             var fourFlat = FastenerDetector.EqualPrimitivesFinder(equalPrimitives, 4);
             if (fourFlat.Count < 2) return false;
@@ -227,21 +251,24 @@ namespace Assembly_Planner
             }
             if (eachSlot != 2) return false;
             var lengthAndRadius = FastenerEngagedLengthAndRadiusNoThread(solidPrim);
-            var fastener = new Fastener
+            foreach (var repeatedSolid in repeated)
             {
-                Solid = solid,
-                FastenerType = FastenerTypeEnum.Bolt,
-                Tool = Tool.PhillipsBlade,
-                RemovalDirection =
-                    RemovalDirectionFinderForAllenHexPhillips(flats.Cast<Flat>().ToList(),
-                        BoundingGeometry.OrientedBoundingBoxDic[solid]),
-                OverallLength =
-                    GeometryFunctions.SortedLengthOfObbEdges(BoundingGeometry.OrientedBoundingBoxDic[solid])[2],
-                EngagedLength = lengthAndRadius[0],
-                Diameter = lengthAndRadius[1]*2.0,
-                Certainty = 1.0
-            };
-            FastenerDetector.Fasteners.Add(fastener);
+                var fastener = new Fastener
+                {
+                    Solid = repeatedSolid,
+                    FastenerType = FastenerTypeEnum.Bolt,
+                    Tool = Tool.PhillipsBlade,
+                    RemovalDirection =
+                        RemovalDirectionFinderForAllenHexPhillips(flats.Cast<Flat>().ToList(),
+                            BoundingGeometry.OrientedBoundingBoxDic[solid]),
+                    OverallLength =
+                        GeometryFunctions.SortedLengthOfObbEdges(BoundingGeometry.OrientedBoundingBoxDic[solid])[2],
+                    EngagedLength = lengthAndRadius[0],
+                    Diameter = lengthAndRadius[1] * 2.0,
+                    Certainty = 1.0
+                };
+                FastenerDetector.Fasteners.Add(fastener);
+            }
             return true;
         }
 
