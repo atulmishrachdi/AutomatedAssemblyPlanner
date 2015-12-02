@@ -180,7 +180,7 @@ namespace Assembly_Planner
             var cylinder = primitives.Where(p => p is Cylinder).ToList();
             var coneArea = cones.Sum(c => c.Area);
             var cylinderArea = cylinder.Sum(c => c.Area);
-            return new[] { 1, cones.Count, (coneArea + cylinderArea) / solid.SurfaceArea };
+            return new[] { 1, (coneArea + cylinderArea) / solid.SurfaceArea, cones.Count };
         }
 
         internal static void RunPerecptronLearner(bool regenerateTrainingData)

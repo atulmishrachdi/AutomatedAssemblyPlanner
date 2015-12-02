@@ -40,18 +40,13 @@ namespace Assembly_Planner
             //------------------------------------------------------------------------------------------
             var multipleRefs = DuplicatePartsDetector(solids);
             var solidPrimitive = BlockingDetermination.PrimitiveMaker(solids); //multipleRefs.Keys.ToList());
-            //foreach (var mRef in multipleRefs.Keys)
-            //    foreach (var duplicated in multipleRefs[mRef])
-            //        solidPrimitive.Add(duplicated, solidPrimitive[mRef]);
 
             // Detect fasteners
             //------------------------------------------------------------------------------------------
             var screwsAndBolts = new HashSet<TessellatedSolid>();
             if (classifyFastener)
                 screwsAndBolts = FastenerDetector.Run(solidPrimitive, multipleRefs, true, threaded,false);
-            var solidsNoFastener = new List<TessellatedSolid>(solids);
-            foreach (var bolt in screwsAndBolts)
-                solidsNoFastener.Remove(bolt);
+            var solidsNoFastener = RemoveFastenersFromTheSolidsList(solids, screwsAndBolts);
 
             // Detect gear mates
             //------------------------------------------------------------------------------------------
@@ -107,6 +102,7 @@ namespace Assembly_Planner
             Console.WriteLine("Blocking Determination is done in:" + "     " + s.Elapsed);
             return globalDirPool;
         }
+
 
         private static Dictionary<TessellatedSolid, List<TessellatedSolid>> DuplicatePartsDetector(List<TessellatedSolid> solids)
         {
@@ -200,6 +196,21 @@ namespace Assembly_Planner
                 dirsG.Add(iniDirs);
             }
             return dirsG[0].Where(dir => dirsG.All(dirs => dirs.Any(d => Math.Abs(1 - d.dotProduct(dir)) < OverlappingFuzzification.CheckWithGlobDirsParall))).ToList();
+        }
+
+
+        private static List<TessellatedSolid> RemoveFastenersFromTheSolidsList(List<TessellatedSolid> solids, HashSet<TessellatedSolid> screwsAndBolts)
+        {
+            var solidsNoFastener = new List<TessellatedSolid>(solids);
+            foreach (var bolt in screwsAndBolts)
+                solidsNoFastener.Remove(bolt);
+            foreach (var fastener in FastenerDetector.Fasteners)
+                solidsNoFastener.Remove(fastener.Solid);
+            foreach (var nuts in FastenerDetector.Nuts)
+                solidsNoFastener.Remove(nuts.Solid);
+            foreach (var washer in FastenerDetector.Washers)
+                solidsNoFastener.Remove(washer.Solid);
+            return solidsNoFastener;
         }
 
     }

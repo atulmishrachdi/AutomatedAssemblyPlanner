@@ -17,7 +17,7 @@ namespace Assembly_Planner
 {
     class NutPolynomialTrend
     {
-        internal static bool PolynomialTrendDetector(TessellatedSolid solid)
+        internal static Nut PolynomialTrendDetector(TessellatedSolid solid)
         {
             // first create the bounding cylinder. 
             // then from the centerline of the cylinder, shoot rays. 
@@ -38,20 +38,19 @@ namespace Assembly_Planner
             int[] threadStartEndPoints;
             if (FastenerPolynomialTrend.ContainsThread(distancePointToSolid, out numberOfThreads, out threadStartEndPoints))
             {
-                FastenerDetector.Nuts.Add(new Nut
+                return new Nut
                 {
                     Solid = solid,
                     NumberOfThreads = numberOfThreads,
                     OverallLength = bCy.Length,
-                    Diameter = bCy.Radius * 2,
+                    Diameter = bCy.Radius*2,
                     Certainty = 1.0
-                });
-                return true;
+                };
             }
             // Plot:
             //if (hasThread)
             //FastenerPolynomialTrend.PlotInMatlab(distancePointToSolid);
-            return false;
+            return null;
         }
 
 

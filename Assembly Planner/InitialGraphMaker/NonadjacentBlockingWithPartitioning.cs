@@ -43,7 +43,10 @@ namespace Assembly_Planner
             {
                 //CvhHashSet.Add(s, new HashSet<PolygonalFace>(s.ConvexHullFaces));
                 ObbFacesHashSet.Add(s,
-                    new HashSet<PolygonalFace>(PartitioningSolid.TwelveFaceGenerator(BoundingGeometry.OrientedBoundingBoxDic[s].CornerVertices)));
+                    new HashSet<PolygonalFace>(
+                        PartitioningSolid.TwelveFaceGenerator(
+                            BoundingGeometry.OrientedBoundingBoxDic[s].CornerVertices.Select(
+                                cv => new TVGL.Vertex(cv.Position)).ToArray())));
             }
             //solids.Where(s => s.Name.Contains("Interroll-3")).ToList();
             //solidsL.AddRange(solids.Where(s => s.Name.Contains("LexanSide")));

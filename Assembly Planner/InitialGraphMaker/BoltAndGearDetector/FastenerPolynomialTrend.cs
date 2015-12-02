@@ -17,13 +17,13 @@ namespace Assembly_Planner
 {
     class FastenerPolynomialTrend
     {
-        internal static bool PolynomialTrendDetector(TessellatedSolid solid)
+        internal static Fastener PolynomialTrendDetector(TessellatedSolid solid)
         {
             // Assumptions:
             //    1. In fasteners, length is longer than width. 
             var obb = BoundingGeometry.OrientedBoundingBoxDic[solid];
             //if (!solid.Name.Contains("STLB ASM")) return true;
-            const int k = 1000;
+            const int k = 500;
             PolygonalFace f1;
             PolygonalFace f2;
             var longestSide = GeometryFunctions.LongestPlaneOfObbDetector(obb, out f1, out f2);
@@ -46,9 +46,10 @@ namespace Assembly_Planner
             int[] threadStartEndPoints;
             if (ContainsThread(distancePointToSolid, out numberOfThreads, out threadStartEndPoints))
             {
+                PlotInMatlab(distancePointToSolid);
                 var startEndThreadPoints =
                     Math.Abs(originalInds[threadStartEndPoints[0]+2] - originalInds[threadStartEndPoints[1]-2]);
-                FastenerDetector.Fasteners.Add(new Fastener
+                return new Fastener
                 {
                     Solid = solid,
                     NumberOfThreads = numberOfThreads,
@@ -65,13 +66,12 @@ namespace Assembly_Planner
                         DiameterOfFastenerFinderUsingPolynomial(distancePointToSolid, threadStartEndPoints,
                             longestSide[0], solid, longestDist),
                     Certainty = 1.0
-                });
-                return true;
+                };
             }
             // Plot:
             //if (hasThread)
                 //PlotInMatlab(distancePointToSolid);
-            return false;
+            return null;
         }
 
         internal static bool ContainsThread(List<double> distancePointToSolid, out int numberOfThreads,
@@ -272,7 +272,7 @@ namespace Assembly_Planner
             var a = new List<double>();
             for (var i = 0; i < distancePointToSolid.Count; i++)
                 a.Add(i);
-            Matlabplot.Displacements(a.ToArray(), distancePointToSolid.ToArray());
+            //Matlabplot.Displacements(a.ToArray(), distancePointToSolid.ToArray());
         }
 
 

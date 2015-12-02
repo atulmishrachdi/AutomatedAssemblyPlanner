@@ -13,7 +13,7 @@ using Assembly_Planner.GraphSynth.BaseClasses;
 
 namespace Assembly_Planner
 {
-    internal class DisassemblyDirections
+    public class DisassemblyDirections
     {
         public static List<double[]> Directions = new List<double[]>();
         internal static List<TessellatedSolid> Solids;

@@ -55,16 +55,16 @@ namespace Assembly_Planner
             // it returns a dictionary with size of three (3 sides). 
             //    Key: triangle, value: length of the potential cylinder 
             var cornerVer = BoundingGeometry.OrientedBoundingBoxDic[solid].CornerVertices;
-            var face1 = new PolygonalFace(new[] {cornerVer[0], cornerVer[1], cornerVer[3]},
-                ((cornerVer[3].Position.subtract(cornerVer[0].Position)).crossProduct(
+            var face1 = new PolygonalFace(new[] { new Vertex(cornerVer[0].Position), new Vertex(cornerVer[1].Position), 
+                new Vertex(cornerVer[3].Position) }, ((cornerVer[3].Position.subtract(cornerVer[0].Position)).crossProduct(
                     cornerVer[1].Position.subtract(cornerVer[0].Position))).normalize());
             var length1 = GeometryFunctions.DistanceBetweenTwoVertices(cornerVer[0].Position, cornerVer[4].Position);
-            var face2 = new PolygonalFace(new[] {cornerVer[1], cornerVer[0], cornerVer[4]},
-                ((cornerVer[1].Position.subtract(cornerVer[0].Position)).crossProduct(
+            var face2 = new PolygonalFace(new[] { new Vertex(cornerVer[1].Position), new Vertex(cornerVer[0].Position),
+                new Vertex(cornerVer[4].Position) }, ((cornerVer[1].Position.subtract(cornerVer[0].Position)).crossProduct(
                     cornerVer[4].Position.subtract(cornerVer[0].Position))).normalize());
             var length2 = GeometryFunctions.DistanceBetweenTwoVertices(cornerVer[0].Position, cornerVer[3].Position);
-            var face3 = new PolygonalFace(new[] {cornerVer[0], cornerVer[3], cornerVer[7]},
-                ((cornerVer[0].Position.subtract(cornerVer[3].Position)).crossProduct(
+            var face3 = new PolygonalFace(new[] { new Vertex(cornerVer[0].Position), new Vertex(cornerVer[3].Position), 
+                new Vertex(cornerVer[7].Position) }, ((cornerVer[0].Position.subtract(cornerVer[3].Position)).crossProduct(
                     cornerVer[7].Position.subtract(cornerVer[3].Position))).normalize());
             var length3 = GeometryFunctions.DistanceBetweenTwoVertices(cornerVer[0].Position, cornerVer[1].Position);
             return new Dictionary<PolygonalFace, double> {{face1, length1}, {face2, length2}, {face3, length3}};

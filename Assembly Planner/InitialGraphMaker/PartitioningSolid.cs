@@ -333,7 +333,8 @@ namespace Assembly_Planner
                 lock (Partitions)
                     Partitions.Add(solid,
                         Run(new HashSet<Vertex>(solid.Vertices), new HashSet<PolygonalFace>(solid.Faces),
-                            BoundingGeometry.OrientedBoundingBoxDic[solid].CornerVertices));
+                            BoundingGeometry.OrientedBoundingBoxDic[solid].CornerVertices.Select(
+                                cv => new Vertex(cv.Position)).ToArray()));
             });//
             s.Stop();
             Console.WriteLine("Octree Generation is done in:" + "     " + s.Elapsed);

@@ -9,11 +9,12 @@ using TVGL;
 
 namespace Assembly_Planner
 {
-    internal class FastenerDetector
+    public class FastenerDetector
     {
-        internal static List<Fastener> Fasteners = new List<Fastener>();
-        internal static List<Nut> Nuts = new List<Nut>();
-        internal static List<Washer> Washers = new List<Washer>();
+        public static List<Fastener> Fasteners = new List<Fastener>();
+        public static List<Nut> Nuts = new List<Nut>();
+        public static List<Washer> Washers = new List<Washer>();
+        public static List<TessellatedSolid> SmallParts = new List<TessellatedSolid>();
 
         internal static HashSet<TessellatedSolid> Run(
             Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive,

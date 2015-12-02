@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AssemblyEvaluation;
 using StarMathLib;
 using TVGL;
+using Vertex = TVGL.Vertex;
 
 namespace Assembly_Planner
 {
@@ -141,59 +142,59 @@ namespace Assembly_Planner
             if (dis1 >= dis2 && dis1 >= dis3)
             {
                 facePrepToRD1 =
-                    new PolygonalFace(new[] { cornerVer[0], cornerVer[3], cornerVer[7] },
-                        ((cornerVer[0].Position.subtract(cornerVer[3].Position)).crossProduct(
+                    new PolygonalFace(new[] { new Vertex(cornerVer[0].Position), new Vertex(cornerVer[3].Position), 
+                        new Vertex(cornerVer[7].Position) }, ((cornerVer[0].Position.subtract(cornerVer[3].Position)).crossProduct(
                             cornerVer[7].Position.subtract(cornerVer[3].Position))).normalize());
                 facePrepToRD2 =
-                    new PolygonalFace(new[] { cornerVer[1], cornerVer[2], cornerVer[6] },
-                        ((cornerVer[6].Position.subtract(cornerVer[2].Position)).crossProduct(
+                    new PolygonalFace(new[] { new Vertex(cornerVer[1].Position), new Vertex(cornerVer[2].Position), 
+                        new Vertex(cornerVer[6].Position) }, ((cornerVer[6].Position.subtract(cornerVer[2].Position)).crossProduct(
                             cornerVer[1].Position.subtract(cornerVer[2].Position))).normalize());
                 return new[]
                 {
-                    new PolygonalFace(new[] {cornerVer[0], cornerVer[1], cornerVer[3]},
-                        ((cornerVer[3].Position.subtract(cornerVer[0].Position)).crossProduct(
+                    new PolygonalFace(new[] {new Vertex(cornerVer[0].Position), new Vertex(cornerVer[1].Position), 
+                        new Vertex(cornerVer[3].Position)}, ((cornerVer[3].Position.subtract(cornerVer[0].Position)).crossProduct(
                             cornerVer[1].Position.subtract(cornerVer[0].Position))).normalize()),
-                    new PolygonalFace(new[] {cornerVer[1], cornerVer[2], cornerVer[3]},
-                        ((cornerVer[1].Position.subtract(cornerVer[2].Position)).crossProduct(
+                    new PolygonalFace(new[] {new Vertex(cornerVer[1].Position),new Vertex(cornerVer[2].Position),
+                        new Vertex(cornerVer[3].Position)}, ((cornerVer[1].Position.subtract(cornerVer[2].Position)).crossProduct(
                             cornerVer[3].Position.subtract(cornerVer[2].Position))).normalize())
                 };
             }
             if (dis2 >= dis1 && dis2 >= dis3)
             {
                 facePrepToRD1 =
-                    new PolygonalFace(new[] { cornerVer[1], cornerVer[0], cornerVer[4] },
-                        ((cornerVer[1].Position.subtract(cornerVer[0].Position)).crossProduct(
+                    new PolygonalFace(new[] { new Vertex(cornerVer[1].Position), new Vertex(cornerVer[0].Position), 
+                        new Vertex(cornerVer[4].Position) }, ((cornerVer[1].Position.subtract(cornerVer[0].Position)).crossProduct(
                             cornerVer[4].Position.subtract(cornerVer[0].Position))).normalize());
                 facePrepToRD2 =
-                    new PolygonalFace(new[] { cornerVer[2], cornerVer[3], cornerVer[7] },
-                        ((cornerVer[7].Position.subtract(cornerVer[3].Position)).crossProduct(
+                    new PolygonalFace(new[] { new Vertex(cornerVer[2].Position), new Vertex(cornerVer[3].Position), 
+                        new Vertex(cornerVer[7].Position) }, ((cornerVer[7].Position.subtract(cornerVer[3].Position)).crossProduct(
                             cornerVer[2].Position.subtract(cornerVer[3].Position))).normalize());
                 return new[]
                 {
-                    new PolygonalFace(new[] {cornerVer[0], cornerVer[1], cornerVer[3]},
-                        ((cornerVer[3].Position.subtract(cornerVer[0].Position)).crossProduct(
+                    new PolygonalFace(new[] {new Vertex(cornerVer[0].Position), new Vertex(cornerVer[1].Position), 
+                        new Vertex(cornerVer[3].Position)}, ((cornerVer[3].Position.subtract(cornerVer[0].Position)).crossProduct(
                             cornerVer[1].Position.subtract(cornerVer[0].Position))).normalize()),
-                    new PolygonalFace(new[] {cornerVer[1], cornerVer[2], cornerVer[3]},
-                        ((cornerVer[1].Position.subtract(cornerVer[2].Position)).crossProduct(
+                    new PolygonalFace(new[] {new Vertex(cornerVer[1].Position), new Vertex(cornerVer[2].Position), 
+                        new Vertex(cornerVer[3].Position)}, ((cornerVer[1].Position.subtract(cornerVer[2].Position)).crossProduct(
                             cornerVer[3].Position.subtract(cornerVer[2].Position))).normalize())
                 };
             }
             if (dis3 >= dis2 && dis3 >= dis1)
             {
                 facePrepToRD1 =
-                    new PolygonalFace(new[] { cornerVer[0], cornerVer[1], cornerVer[3] },
+                    new PolygonalFace(new[] { new Vertex(cornerVer[0].Position), new Vertex(cornerVer[1].Position), new Vertex(cornerVer[3].Position) },
                         ((cornerVer[3].Position.subtract(cornerVer[0].Position)).crossProduct(
                             cornerVer[1].Position.subtract(cornerVer[0].Position))).normalize());
                 facePrepToRD2 =
-                    new PolygonalFace(new[] { cornerVer[4], cornerVer[5], cornerVer[7] },
+                    new PolygonalFace(new[] { new Vertex(cornerVer[4].Position), new Vertex(cornerVer[5].Position), new Vertex(cornerVer[7].Position) },
                         ((cornerVer[5].Position.subtract(cornerVer[4].Position)).crossProduct(
                             cornerVer[7].Position.subtract(cornerVer[4].Position))).normalize());
                 return new[]
                 {
-                    new PolygonalFace(new[] {cornerVer[1], cornerVer[0], cornerVer[4]},
+                    new PolygonalFace(new[] {new Vertex(cornerVer[1].Position), new Vertex(cornerVer[0].Position), new Vertex(cornerVer[4].Position)},
                         ((cornerVer[1].Position.subtract(cornerVer[0].Position)).crossProduct(
                             cornerVer[4].Position.subtract(cornerVer[0].Position))).normalize()),
-                    new PolygonalFace(new[] {cornerVer[1], cornerVer[5], cornerVer[4]},
+                    new PolygonalFace(new[] {new Vertex(cornerVer[1].Position), new Vertex(cornerVer[5].Position), new Vertex(cornerVer[4].Position)},
                         ((cornerVer[4].Position.subtract(cornerVer[5].Position)).crossProduct(
                             cornerVer[1].Position.subtract(cornerVer[5].Position))).normalize())
                 };

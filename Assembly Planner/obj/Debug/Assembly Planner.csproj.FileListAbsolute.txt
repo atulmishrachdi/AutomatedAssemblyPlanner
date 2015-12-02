@@ -60,3 +60,33 @@ C:\Users\Matt\Documents\Visual Studio 2013\Projects\Assembly Planner\Assembly Pl
 C:\Users\Matt\Documents\Visual Studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\PrimitiveClassificationOfTessellatedSolids.pdb
 C:\Users\Matt\Documents\Visual Studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\MIConvexHull.pdb
 C:\Users\Matt\Documents\Visual Studio 2013\Projects\Assembly Planner\Assembly Planner\bin\Debug\TessellationAndVoxelizationGeometryLibrary.pdb
+C:\DMDII Project\Assembly Planning\Assembly Planner\bin\Debug\Assembly Planner.exe.config
+C:\DMDII Project\Assembly Planning\Assembly Planner\obj\Debug\Assembly Planner.exe
+C:\DMDII Project\Assembly Planning\Assembly Planner\obj\Debug\Assembly Planner.pdb
+C:\DMDII Project\Assembly Planning\Assembly Planner\bin\Debug\Assembly Planner.exe
+C:\DMDII Project\Assembly Planning\Assembly Planner\bin\Debug\Assembly Planner.pdb
+C:\DMDII Project\Assembly Planning\Assembly Planner\bin\Debug\MIConvexHull.dll
+C:\DMDII Project\Assembly Planning\Assembly Planner\bin\Debug\PrimitiveClassificationOfTessellatedSolids.dll
+C:\DMDII Project\Assembly Planning\Assembly Planner\bin\Debug\StarMath.dll
+C:\DMDII Project\Assembly Planning\Assembly Planner\bin\Debug\TessellationAndVoxelizationGeometryLibrary.dll
+C:\DMDII Project\Assembly Planning\Assembly Planner\bin\Debug\PrimitiveClassificationOfTessellatedSolids.pdb
+C:\DMDII Project\Assembly Planning\Assembly Planner\bin\Debug\MIConvexHull.pdb
+C:\DMDII Project\Assembly Planning\Assembly Planner\bin\Debug\StarMath.pdb
+C:\DMDII Project\Assembly Planning\Assembly Planner\bin\Debug\TessellationAndVoxelizationGeometryLibrary.pdb
+C:\DMDII Project\Assembly Planning\Assembly Planner\obj\Debug\Assembly Planner.csprojResolveAssemblyReference.cache
+C:\DMDII Project\Assembly Planning\Assembly Planner\obj\Debug\Interop.MLApp.dll
+C:\DMDII Project\Assembly Planning\Assembly Planner\obj\Debug\Assembly Planner.csproj.ResolveComReference.cache
+C:\DMDII Project\VAP Container\Repo\vap\AAP\Assembly Planner\bin\Debug\Assembly Planner.dll.config
+C:\DMDII Project\VAP Container\Repo\vap\AAP\Assembly Planner\bin\Debug\Assembly Planner.dll
+C:\DMDII Project\VAP Container\Repo\vap\AAP\Assembly Planner\bin\Debug\Assembly Planner.pdb
+C:\DMDII Project\VAP Container\Repo\vap\AAP\Assembly Planner\bin\Debug\MIConvexHull.dll
+C:\DMDII Project\VAP Container\Repo\vap\AAP\Assembly Planner\bin\Debug\PrimitiveClassificationOfTessellatedSolids.dll
+C:\DMDII Project\VAP Container\Repo\vap\AAP\Assembly Planner\bin\Debug\TessellationAndVoxelizationGeometryLibrary.dll
+C:\DMDII Project\VAP Container\Repo\vap\AAP\Assembly Planner\bin\Debug\PrimitiveClassificationOfTessellatedSolids.pdb
+C:\DMDII Project\VAP Container\Repo\vap\AAP\Assembly Planner\bin\Debug\MIConvexHull.pdb
+C:\DMDII Project\VAP Container\Repo\vap\AAP\Assembly Planner\bin\Debug\TessellationAndVoxelizationGeometryLibrary.pdb
+C:\DMDII Project\VAP Container\Repo\vap\AAP\Assembly Planner\obj\Debug\Assembly Planner.csprojResolveAssemblyReference.cache
+C:\DMDII Project\VAP Container\Repo\vap\AAP\Assembly Planner\obj\Debug\Interop.MLApp.dll
+C:\DMDII Project\VAP Container\Repo\vap\AAP\Assembly Planner\obj\Debug\Assembly Planner.csproj.ResolveComReference.cache
+C:\DMDII Project\VAP Container\Repo\vap\AAP\Assembly Planner\obj\Debug\Assembly Planner.dll
+C:\DMDII Project\VAP Container\Repo\vap\AAP\Assembly Planner\obj\Debug\Assembly Planner.pdb

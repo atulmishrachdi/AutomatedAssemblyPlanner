@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TVGL;
 using StarMathLib;
@@ -23,6 +24,7 @@ namespace Assembly_Planner
             //      3. Detect the fasteners using multiple references. (for each similar object, detect one of them) 
 
             var smallParts = FastenerDetector.SmallObjectsDetector(solidPrimitive.Keys.ToList());
+            FastenerDetector.SmallParts = smallParts;
             var groupedPotentialFasteners = FastenerDetector.GroupingSmallParts(smallParts);
             var uniqueParts = new HashSet<TessellatedSolid>();
             foreach (var s in multipleRefs.Keys)
@@ -30,17 +32,23 @@ namespace Assembly_Planner
 
             var equalPrimitivesForEveryUniqueSolid = FastenerDetector.EqualFlatPrimitiveAreaFinder(uniqueParts,
                 solidPrimitive);
-            foreach (var solid in uniqueParts)
+            Parallel.ForEach(uniqueParts, solid =>
+            //foreach (var solid in uniqueParts)
             {
                 if (HexBoltNutAllen(solid, solidPrimitive[solid], equalPrimitivesForEveryUniqueSolid[solid], multipleRefs[solid]))
-                    continue;
+                    //continue;
+                    return;
                 if (PhillipsHeadBolt(solid, solidPrimitive[solid], equalPrimitivesForEveryUniqueSolid[solid], multipleRefs[solid]))
-                    continue;
+                    //continue;
+                    return;
                 if (SlotHeadBolt(solid, solidPrimitive[solid], equalPrimitivesForEveryUniqueSolid[solid], multipleRefs[solid]))
-                    continue;
+                    //continue;
+                    return;
                 if (PhillipsSlotComboHeadBolt(solid, solidPrimitive[solid], equalPrimitivesForEveryUniqueSolid[solid], multipleRefs[solid]))
-                    continue;
+                    //continue;
+                    return;
             }
+            );
             // when all of the fasteners are recognized, it's time to check the third level filter:
             // something is not acceptable: nut without fastener. If there is a nut without fastener,
             // I will try to look for that.
@@ -85,7 +93,8 @@ namespace Assembly_Planner
                             Diameter = lengthAndRadius[1] * 2.0,
                             Certainty = 1.0
                         };
-                        FastenerDetector.Fasteners.Add(fastener);
+                        lock(FastenerDetector.Fasteners)
+                            FastenerDetector.Fasteners.Add(fastener);
                     }
                     return true;
                 }
@@ -94,34 +103,37 @@ namespace Assembly_Planner
                 {
                     foreach (var repeatedSolid in repeated)
                     {
-                        FastenerDetector.Nuts.Add(new Nut
-                        {
-                            NutType = NutType.Hex,
-                            Solid = repeatedSolid,
-                            ToolSize = ToolSizeFinder(candidateHexVal),
-                            OverallLength = lengthAndRadius[0],
-                            Diameter = lengthAndRadius[1] * 2.0
-                        });
+                        lock (FastenerDetector.Nuts)
+                            FastenerDetector.Nuts.Add(new Nut
+                            {
+                                NutType = NutType.Hex,
+                                Solid = repeatedSolid,
+                                ToolSize = ToolSizeFinder(candidateHexVal),
+                                OverallLength = lengthAndRadius[0],
+                                Diameter = lengthAndRadius[1]*2.0
+                            });
                     }
                     return true;
                 }
                 foreach (var repeatedSolid in repeated)
                 {
-                    FastenerDetector.Fasteners.Add(new Fastener
-                    {
-                        Solid = repeatedSolid,
-                        FastenerType = FastenerTypeEnum.Bolt,
-                        Tool = Tool.HexWrench,
-                        ToolSize = ToolSizeFinder(candidateHexVal),
-                        RemovalDirection =
-                            RemovalDirectionFinderForAllenHexPhillips(candidateHexVal.Cast<Flat>().ToList(),
-                                BoundingGeometry.OrientedBoundingBoxDic[solid]),
-                        OverallLength =
-                            GeometryFunctions.SortedLengthOfObbEdges(BoundingGeometry.OrientedBoundingBoxDic[solid])[2],
-                        EngagedLength = lengthAndRadius[0],
-                        Diameter = lengthAndRadius[1]*2.0,
-                        Certainty = 1.0
-                    });
+                    lock (FastenerDetector.Fasteners)
+                        FastenerDetector.Fasteners.Add(new Fastener
+                        {
+                            Solid = repeatedSolid,
+                            FastenerType = FastenerTypeEnum.Bolt,
+                            Tool = Tool.HexWrench,
+                            ToolSize = ToolSizeFinder(candidateHexVal),
+                            RemovalDirection =
+                                RemovalDirectionFinderForAllenHexPhillips(candidateHexVal.Cast<Flat>().ToList(),
+                                    BoundingGeometry.OrientedBoundingBoxDic[solid]),
+                            OverallLength =
+                                GeometryFunctions.SortedLengthOfObbEdges(BoundingGeometry.OrientedBoundingBoxDic[solid])
+                                    [2],
+                            EngagedLength = lengthAndRadius[0],
+                            Diameter = lengthAndRadius[1]*2.0,
+                            Certainty = 1.0
+                        });
                 }
                 return true;
             }
@@ -174,10 +186,11 @@ namespace Assembly_Planner
                         OverallLength =
                             GeometryFunctions.SortedLengthOfObbEdges(BoundingGeometry.OrientedBoundingBoxDic[solid])[2],
                         EngagedLength = lengthAndRadius[0],
-                        Diameter = lengthAndRadius[1] * 2.0,
+                        Diameter = lengthAndRadius[1]*2.0,
                         Certainty = 1.0
                     };
-                    FastenerDetector.Fasteners.Add(fastener);
+                    lock (FastenerDetector.Fasteners)
+                        FastenerDetector.Fasteners.Add(fastener);
                 }
                 return true;
             }
@@ -220,7 +233,8 @@ namespace Assembly_Planner
                         Diameter = lengthAndRadius[1]*2.0,
                         Certainty = 1.0
                     };
-                    FastenerDetector.Fasteners.Add(fastener);
+                    lock (FastenerDetector.Fasteners)
+                        FastenerDetector.Fasteners.Add(fastener);
                 }
                 return true;
             }
@@ -264,10 +278,11 @@ namespace Assembly_Planner
                     OverallLength =
                         GeometryFunctions.SortedLengthOfObbEdges(BoundingGeometry.OrientedBoundingBoxDic[solid])[2],
                     EngagedLength = lengthAndRadius[0],
-                    Diameter = lengthAndRadius[1] * 2.0,
+                    Diameter = lengthAndRadius[1]*2.0,
                     Certainty = 1.0
                 };
-                FastenerDetector.Fasteners.Add(fastener);
+                lock (FastenerDetector.Fasteners)
+                    FastenerDetector.Fasteners.Add(fastener);
             }
             return true;
         }
@@ -331,7 +346,7 @@ namespace Assembly_Planner
             {
                 var locDist = GeometryFunctions.DistanceBetweenTwoVertices(a.Position, ver.Position);
                 if (locDist <= dist) continue;
-                farthestVer = ver;
+                farthestVer = new Vertex(ver.Position);
                 dist = locDist;
             }
             var reference = a.Position.subtract(farthestVer.Position);

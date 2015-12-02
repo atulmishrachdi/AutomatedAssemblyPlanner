@@ -29,7 +29,7 @@ namespace Assembly_Planner
                 //"../../../Test/Truck -TXT-1/STL";
                 //"../../../Test/FoodPackagingMachine/FPMSTL2";
                 //"../../../../GearAndFastener Detection/TrainingData/not-screw/Gear";
-                "../../../Test/test";
+                "../../../Test/test2";
             var s = Stopwatch.StartNew();
             s.Start();
             var solids = GetSTLs(inputDir);
@@ -47,7 +47,7 @@ namespace Assembly_Planner
             {
                 assemblyGraph = new designGraph();
                 //var globalDirPool = DisassemblyDirections.Run(assemblyGraph, solids);
-                globalDirPool = DisassemblyDirectionsWithFastener.Run(assemblyGraph, solids,true, true);
+                globalDirPool = DisassemblyDirectionsWithFastener.Run(assemblyGraph, solids, true, true);
                 //Updates.AddPartsProperties(inputDir, assemblyGraph);
                 //NonadjacentBlockingDeterminationPro.Run(assemblyGraph, solids, globalDirPool);
                 NonadjacentBlockingWithPartitioning.Run(assemblyGraph, solids, globalDirPool);
