@@ -23,17 +23,17 @@ namespace Assembly_Planner
             //            have helix. The threads will be small cones with the same axis and equal area.
 
             var smallParts = FastenerDetector.SmallObjectsDetector(solidPrimitive.Keys.ToList());
-            FastenerDetector.SmallParts = smallParts;
+            FastenerDetector.SmallParts = new HashSet<TessellatedSolid>(smallParts);
             var groupedPotentialFasteners = FastenerDetector.GroupingSmallParts(smallParts);
             var uniqueParts = new HashSet<TessellatedSolid>();
-            foreach (var s in multipleRefs.Keys)
+            foreach (var s in multipleRefs.Keys.Where(FastenerDetector.SmallParts.Contains))
                 uniqueParts.Add(s);
 
             var equalPrimitivesForEveryUniqueSolid = FastenerDetector.EqualFlatPrimitiveAreaFinder(uniqueParts, solidPrimitive);
             List<int> learnerVotes;
             var learnerWeights = FastenerLearner.ReadingLearnerWeightsAndVotesFromCsv(out learnerVotes);
             Parallel.ForEach(uniqueParts, solid =>
-            //    foreach (var solid in uniqueParts)
+                //foreach (var solid in uniqueParts)
             {
                 // if a fastener is detected using polynomial trend approach, it is definitely a fastener but not a nut.
                 // if it is detected using any other approach, but not polynomial trend, it is a possible nut.
@@ -185,7 +185,7 @@ namespace Assembly_Planner
                     }
                 }
             }
-                );//
+                );
             // now use groupped small objects:
             AutoNonthreadedFastenerDetection.ConnectFastenersNutsAndWashers(groupedPotentialFasteners);
         }

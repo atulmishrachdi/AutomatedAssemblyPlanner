@@ -24,10 +24,10 @@ namespace Assembly_Planner
             //      3. Detect the fasteners using multiple references. (for each similar object, detect one of them) 
 
             var smallParts = FastenerDetector.SmallObjectsDetector(solidPrimitive.Keys.ToList());
-            FastenerDetector.SmallParts = smallParts;
+            FastenerDetector.SmallParts = new HashSet<TessellatedSolid>(smallParts);
             var groupedPotentialFasteners = FastenerDetector.GroupingSmallParts(smallParts);
             var uniqueParts = new HashSet<TessellatedSolid>();
-            foreach (var s in multipleRefs.Keys)
+            foreach (var s in multipleRefs.Keys.Where(FastenerDetector.SmallParts.Contains))
                 uniqueParts.Add(s);
 
             var equalPrimitivesForEveryUniqueSolid = FastenerDetector.EqualFlatPrimitiveAreaFinder(uniqueParts,

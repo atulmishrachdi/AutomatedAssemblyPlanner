@@ -11,10 +11,10 @@ namespace Assembly_Planner
 {
     public class FastenerDetector
     {
-        public static List<Fastener> Fasteners = new List<Fastener>();
-        public static List<Nut> Nuts = new List<Nut>();
-        public static List<Washer> Washers = new List<Washer>();
-        public static List<TessellatedSolid> SmallParts = new List<TessellatedSolid>();
+        public static HashSet<Fastener> Fasteners = new HashSet<Fastener>();
+        public static HashSet<Nut> Nuts = new HashSet<Nut>();
+        public static HashSet<Washer> Washers = new HashSet<Washer>();
+        public static HashSet<TessellatedSolid> SmallParts = new HashSet<TessellatedSolid>();
 
         internal static HashSet<TessellatedSolid> Run(
             Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive,
@@ -173,7 +173,7 @@ namespace Assembly_Planner
             // it can accellerate the primitive classification. If it is fastener, it doesn't need to be classified?
 
             // creating the dictionary:
-            var n = 99.0; // number of classes
+            var n = 31.0; // number of classes   TBD
             var dic = new Dictionary<double, List<TessellatedSolid>>();
 
             // Filling up the keys
