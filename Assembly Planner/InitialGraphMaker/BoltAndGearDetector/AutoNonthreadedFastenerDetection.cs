@@ -458,7 +458,7 @@ namespace Assembly_Planner
                 }
                 fastener.Nuts = nutList;
                 fastener.Washer = washers;
-                FastenerDetector.Washers.AddRange(washers);
+                FastenerDetector.Washers.UnionWith(washers);
             }
             // if there is a detected nut, but its fastener was not detected:
             // fastener is unknown
@@ -513,7 +513,7 @@ namespace Assembly_Planner
                     // A nut that its unknown fastener is found
                     // or a nut that its washer is found without fastener
                     // a nut, with its fastener and washer
-                    FastenerDetector.Washers.AddRange(washers);
+                    FastenerDetector.Washers.UnionWith(washers);
                     if (fastener != null)
                     {
                         FastenerDetector.Fasteners.Add(fastener);

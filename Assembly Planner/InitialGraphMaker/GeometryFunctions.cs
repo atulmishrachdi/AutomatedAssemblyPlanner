@@ -88,6 +88,33 @@ namespace Assembly_Planner
             return lengths.ToArray();
         }
 
+        internal static Vertex[][] SortedEdgesOfTriangle(PolygonalFace triangle)
+        {
+            // the first one is the shortest edge, the last one is the longest
+            var sorted = new Vertex[3][];
+            var dic = new Dictionary<double, Vertex[]>
+            {
+                {
+                    DistanceBetweenTwoVertices(triangle.Vertices[0].Position, triangle.Vertices[1].Position),
+                    new[] {triangle.Vertices[0], triangle.Vertices[1]}
+                },
+                {
+                    DistanceBetweenTwoVertices(triangle.Vertices[0].Position, triangle.Vertices[2].Position),
+                    new[] {triangle.Vertices[0], triangle.Vertices[2]}
+                },
+                {
+                    DistanceBetweenTwoVertices(triangle.Vertices[1].Position, triangle.Vertices[2].Position),
+                    new[] {triangle.Vertices[1], triangle.Vertices[2]}
+                }
+            };
+            var sortedKey = dic.Keys.ToList();
+            sortedKey.Sort();
+            sorted[0] = dic[sortedKey[0]];
+            sorted[1] = dic[sortedKey[1]];
+            sorted[2] = dic[sortedKey[2]];
+            return sorted;
+        }
+
         public static bool RayIntersectsWithFace(Ray ray, PolygonalFace face, out double[] hittingPoint, out bool outer)
         {
             //if (ray.Direction.dotProduct(face.Normal) > -0.06) return false;

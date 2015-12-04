@@ -19,6 +19,8 @@ namespace Assembly_Planner
     {
         internal static Fastener PolynomialTrendDetector(TessellatedSolid solid)
         {
+            var s = Stopwatch.StartNew();
+            s.Start();
             // Assumptions:
             //    1. In fasteners, length is longer than width. 
             var obb = BoundingGeometry.OrientedBoundingBoxDic[solid];
@@ -27,6 +29,7 @@ namespace Assembly_Planner
             PolygonalFace f1;
             PolygonalFace f2;
             var longestSide = GeometryFunctions.LongestPlaneOfObbDetector(obb, out f1, out f2);
+            var partitions = new FastenerBoundingBoxPartition(solid,longestSide[0], 50);
             // 1. Take the middle point of the smallest edge of each triangle. Or the points of the 2nd longest edge of a side triangle
             // 2. Generate k points between them with equal distances. 
             // 3. Generate rays using generated points. 
@@ -36,9 +39,10 @@ namespace Assembly_Planner
             var kPointsBetweenMidPoints = KpointBtwPointsGenerator(midPoint1, midPoint2, k);
 
             double longestDist;
-            var distancePointToSolid = PointToSolidDistanceCalculator(solid, kPointsBetweenMidPoints,
+            var distancePointToSolid = PointToSolidDistanceCalculator(solid, partitions, kPointsBetweenMidPoints,
                 longestSide[0].Normal.multiply(-1.0), out longestDist);
-
+            s.Stop();
+            Console.WriteLine("ray casting:" + "     " + s.Elapsed);
             // one more step: Merge points with equal distances.
             List<int> originalInds;
             distancePointToSolid = MergingEqualDistances(distancePointToSolid,out originalInds,0.001);
@@ -46,7 +50,7 @@ namespace Assembly_Planner
             int[] threadStartEndPoints;
             if (ContainsThread(distancePointToSolid, out numberOfThreads, out threadStartEndPoints))
             {
-                PlotInMatlab(distancePointToSolid);
+                //PlotInMatlab(distancePointToSolid);
                 var startEndThreadPoints =
                     Math.Abs(originalInds[threadStartEndPoints[0]+2] - originalInds[threadStartEndPoints[1]-2]);
                 return new Fastener
@@ -175,6 +179,34 @@ namespace Assembly_Planner
                 i--;
             }
             return distancePointToSolid;
+        }
+
+        internal static List<double> PointToSolidDistanceCalculatorWithPartitioning(TessellatedSolid solid,
+            FastenerBoundingBoxPartition partitions, List<double[]> kPointsBetweenMidPoints, double[] vector,
+            out double longestDist)
+        {
+            var distList = new List<double>();
+            foreach (var point in kPointsBetweenMidPoints)
+            {
+                var ray = new Ray(new AssemblyEvaluation.Vertex(point), new Vector(vector));
+                var minDis = double.PositiveInfinity;
+                var prtn = FastenerBoundingBoxPartition.PartitionOfThePoint(partitions.Partitions, point);
+                foreach (var face in prtn.FacesOfSolidInPartition)
+                {
+                    double[] hittingPoint;
+                    bool outer;
+                    if (!GeometryFunctions.RayIntersectsWithFace(ray, face, out hittingPoint, out outer) || !outer)
+                        continue;
+                    var dis = GeometryFunctions.DistanceBetweenTwoVertices(hittingPoint, point);
+                    if (dis < minDis) minDis = dis;
+                }
+                if (minDis != double.PositiveInfinity)
+                    distList.Add(minDis);
+            }
+            // Normalizing:
+            var longestDis = distList.Max();
+            longestDist = longestDis;
+            return distList.Select(d => d/longestDis).ToList();
         }
 
         internal static List<double> PointToSolidDistanceCalculator(TessellatedSolid solid,
