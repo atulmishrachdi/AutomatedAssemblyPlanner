@@ -39,7 +39,7 @@ namespace Assembly_Planner
             var kPointsBetweenMidPoints = KpointBtwPointsGenerator(midPoint1, midPoint2, k);
 
             double longestDist;
-            var distancePointToSolid = PointToSolidDistanceCalculator(solid, partitions, kPointsBetweenMidPoints,
+            var distancePointToSolid = PointToSolidDistanceCalculatorWithPartitioning(solid, partitions, kPointsBetweenMidPoints,
                 longestSide[0].Normal.multiply(-1.0), out longestDist);
             s.Stop();
             Console.WriteLine("ray casting:" + "     " + s.Elapsed);
