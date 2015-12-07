@@ -157,6 +157,7 @@
     <Compile Include="GraphSynth.BaseClasses\SearchProcess\SearchProcess.cs" />
     <Compile Include="GraphSynth.BaseClasses\SecondaryConnection.cs" />
     <Compile Include="InitialGraphMaker\BoltAndGearDetector\FastenerBoundingBoxPartition.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\NutBoundingCylinderPartition.cs" />
     <Compile Include="InitialGraphMaker\BoltAndGearDetector\NutPolynomialTrend.cs" />
     <Compile Include="InitialGraphMaker\GeometryFunctions.cs" />
     <Compile Include="InitialGraphMaker\BlockingDetermination.cs" />

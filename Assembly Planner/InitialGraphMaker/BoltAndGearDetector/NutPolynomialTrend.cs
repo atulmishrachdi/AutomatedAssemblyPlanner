@@ -24,12 +24,17 @@ namespace Assembly_Planner
             var bCy = BoundingGeometry.BoundingCylinderDic[solid];
             const int k = 500;
 
+            // I can do the same thing I did for FastenerPolynomial to speed up the code.
+            // To create the sections, they need to be created based on the OBB, then use it in 
+            // bounding cylinder. 
+            var partitions = new NutBoundingCylinderPartition(solid, 50);
+
             var secondPoint = bCy.PointOnTheCenterLine.add(bCy.CenterLineVector.multiply(bCy.Length));
             var kPointsBetweenMidPoints = FastenerPolynomialTrend.KpointBtwPointsGenerator(bCy.PointOnTheCenterLine, secondPoint, k);
 
             double longestDist;
-            var distancePointToSolid = FastenerPolynomialTrend.PointToSolidDistanceCalculator(solid, kPointsBetweenMidPoints,
-                bCy.PerpVector, out longestDist);
+            var distancePointToSolid = FastenerPolynomialTrend.PointToSolidDistanceCalculatorWithPartitioning(solid,
+                partitions.Partitions, kPointsBetweenMidPoints, bCy.PerpVector, out longestDist);
 
             // one more step: Merge points with equal distances.
             List<int> originalInds;
@@ -53,7 +58,6 @@ namespace Assembly_Planner
             return null;
         }
 
-
         private static double DiameterOfFastenerFinderUsingPolynomial(List<double> distancePointToSolid,
             int[] threadStartEndPoints, PolygonalFace longestSide, TessellatedSolid solid, double longestDist)
         {
@@ -72,5 +76,8 @@ namespace Assembly_Planner
 
             return obbDepth - 2*(newList.Min()*longestDist);
         }
+
+
+
     }
 }

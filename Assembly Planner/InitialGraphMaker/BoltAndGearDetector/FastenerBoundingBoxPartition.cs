@@ -14,7 +14,7 @@ namespace Assembly_Planner
     {
         internal int NumberOfPartitions { get; set; }
         internal TessellatedSolid Solid { get; set; }
-        internal List<FastenerPartition> Partitions { get; set; }
+        internal List<FastenerAndNutPartition> Partitions { get; set; }
 
         internal FastenerBoundingBoxPartition(TessellatedSolid solid, PolygonalFace faceFromLongestSide, int numberOfPartitions)
         {
@@ -24,7 +24,7 @@ namespace Assembly_Planner
             SolidTrianglesOfPartitions(this.Partitions, solid, faceFromLongestSide);
         }
 
-        private void SolidTrianglesOfPartitions(List<FastenerPartition> partitions, TessellatedSolid solid, PolygonalFace faceFromLongestSide)
+        internal static void SolidTrianglesOfPartitions(List<FastenerAndNutPartition> partitions, TessellatedSolid solid, PolygonalFace faceFromLongestSide)
         {
             foreach (var vertex in solid.Vertices)
             {
@@ -49,17 +49,17 @@ namespace Assembly_Planner
             }
         }
 
-        private List<FastenerPartition> CreatePartitions(PolygonalFace faceFromLongestSide, int numberOfPartitions)
+        private List<FastenerAndNutPartition> CreatePartitions(PolygonalFace faceFromLongestSide, int numberOfPartitions)
         {
             var sortedEdges = GeometryFunctions.SortedEdgesOfTriangle(faceFromLongestSide);
             var cornerVer = sortedEdges[0].First(sortedEdges[1].Contains);
             var otherVerShertestEdge = sortedEdges[0].First(a => a != cornerVer);
             var partitionGeneratorDirection = sortedEdges[1].First(a => a != cornerVer).Position.subtract(cornerVer.Position);
             var stepVector = partitionGeneratorDirection.divide((double)numberOfPartitions);
-            var partis = new List<FastenerPartition>();
+            var partis = new List<FastenerAndNutPartition>();
             for (var i = 0; i < NumberOfPartitions; i++)
             {
-                var prt = new FastenerPartition
+                var prt = new FastenerAndNutPartition
                 {
                     Edge1 =
                         new[]
@@ -96,9 +96,9 @@ namespace Assembly_Planner
         }
 
 
-        internal static FastenerPartition PartitionOfThePoint(List<FastenerPartition> partitions, double[] point)
+        internal static FastenerAndNutPartition PartitionOfThePoint(List<FastenerAndNutPartition> partitions, double[] point)
         {
-            FastenerPartition chosenPrtn = null;
+            FastenerAndNutPartition chosenPrtn = null;
             var sumDisToEdgs = double.PositiveInfinity;
             foreach (var prtn in partitions)
             {
@@ -122,7 +122,7 @@ namespace Assembly_Planner
     }
 
 
-    internal class FastenerPartition
+    internal class FastenerAndNutPartition
     {
         internal HashSet<PolygonalFace> FacesOfSolidInPartition = new HashSet<PolygonalFace>();
         internal HashSet<Vertex> VerticesOfSolidInPartition = new HashSet<Vertex>();

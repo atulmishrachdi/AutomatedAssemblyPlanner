@@ -236,27 +236,27 @@ namespace Assembly_Planner
         {
             // I am not using this function anymore
             // it returns longest side. (two adjacent triangles)
-            var dis1 = GeometryFunctions.DistanceBetweenTwoVertices(obb[0], obb[1]);
-            var dis2 = GeometryFunctions.DistanceBetweenTwoVertices(obb[0], obb[3]);
-            var dis3 = GeometryFunctions.DistanceBetweenTwoVertices(obb[0], obb[4]);
+            var dis1 = DistanceBetweenTwoVertices(obb[0], obb[1]);
+            var dis2 = DistanceBetweenTwoVertices(obb[0], obb[3]);
+            var dis3 = DistanceBetweenTwoVertices(obb[0], obb[4]);
             var a = clockWise ? 10 : 20;
             if (dis1 >= dis2 && dis1 >= dis3)
             {
                 var normal1 = ((obb[3].subtract(obb[0])).crossProduct(obb[4].subtract(obb[0]))).normalize();
                 facePrepToRD1 =
-                    new PolygonalFace(new[] { new TVGL.Vertex(obb[0]), new TVGL.Vertex(obb[3]), new TVGL.Vertex(obb[4]) },
+                    new PolygonalFace(new[] { new Vertex(obb[0]), new Vertex(obb[3]), new Vertex(obb[4]) },
                         clockWise ? normal1.multiply(-1.0) : normal1);
                 var normal2 = ((obb[5].subtract(obb[1])).crossProduct(obb[2].subtract(obb[1]))).normalize();
                 facePrepToRD2 =
-                    new PolygonalFace(new[] { new TVGL.Vertex(obb[1]), new TVGL.Vertex(obb[2]), new TVGL.Vertex(obb[5]) },
+                    new PolygonalFace(new[] { new Vertex(obb[1]), new Vertex(obb[2]), new Vertex(obb[5]) },
                         clockWise ? normal2.multiply(-1.0) : normal2);
                 var normal3 = ((obb[1].subtract(obb[0])).crossProduct(obb[3].subtract(obb[0]))).normalize();
                 var normal4 = ((obb[3].subtract(obb[2])).crossProduct(obb[1].subtract(obb[2]))).normalize();
                 return new[]
                 {
-                    new PolygonalFace(new[] {new TVGL.Vertex(obb[0]), new TVGL.Vertex(obb[1]), new TVGL.Vertex(obb[3])},
+                    new PolygonalFace(new[] {new Vertex(obb[0]), new Vertex(obb[1]), new Vertex(obb[3])},
                         clockWise ? normal3.multiply(-1.0) : normal3),
-                    new PolygonalFace(new[] {new TVGL.Vertex(obb[1]), new TVGL.Vertex(obb[2]), new TVGL.Vertex(obb[3])},
+                    new PolygonalFace(new[] {new Vertex(obb[1]), new Vertex(obb[2]), new Vertex(obb[3])},
                         clockWise ? normal4.multiply(-1.0) : normal4)
                 };
             }
@@ -264,19 +264,19 @@ namespace Assembly_Planner
             {
                 var normal1 = ((obb[4].subtract(obb[0])).crossProduct(obb[1].subtract(obb[0]))).normalize();
                 facePrepToRD1 =
-                    new PolygonalFace(new[] { new TVGL.Vertex(obb[0]), new TVGL.Vertex(obb[1]), new TVGL.Vertex(obb[4]) },
+                    new PolygonalFace(new[] { new Vertex(obb[0]), new Vertex(obb[1]), new Vertex(obb[4]) },
                         clockWise ? normal1.multiply(-1.0) : normal1);
                 var normal2 = ((obb[2].subtract(obb[3])).crossProduct(obb[7].subtract(obb[3]))).normalize();
                 facePrepToRD2 =
-                    new PolygonalFace(new[] { new TVGL.Vertex(obb[2]), new TVGL.Vertex(obb[3]), new TVGL.Vertex(obb[7]) },
+                    new PolygonalFace(new[] { new Vertex(obb[2]), new Vertex(obb[3]), new Vertex(obb[7]) },
                         clockWise ? normal2.multiply(-1.0) : normal2);
                 var normal3 = ((obb[1].subtract(obb[0])).crossProduct(obb[3].subtract(obb[0]))).normalize();
                 var normal4 = ((obb[3].subtract(obb[2])).crossProduct(obb[1].subtract(obb[2]))).normalize();
                 return new[]
                 {
-                    new PolygonalFace(new[] {new TVGL.Vertex(obb[0]), new TVGL.Vertex(obb[1]), new TVGL.Vertex(obb[3])},
+                    new PolygonalFace(new[] {new Vertex(obb[0]), new Vertex(obb[1]), new Vertex(obb[3])},
                         clockWise ? normal3.multiply(-1.0) : normal3),
-                    new PolygonalFace(new[] {new TVGL.Vertex(obb[1]), new TVGL.Vertex(obb[2]), new TVGL.Vertex(obb[3])},
+                    new PolygonalFace(new[] {new Vertex(obb[1]), new Vertex(obb[2]), new Vertex(obb[3])},
                         clockWise ? normal4.multiply(-1.0) : normal4)
                 };
             }
@@ -284,25 +284,72 @@ namespace Assembly_Planner
             {
                 var normal1 = ((obb[1].subtract(obb[0])).crossProduct(obb[3].subtract(obb[0]))).normalize();
                 facePrepToRD1 =
-                    new PolygonalFace(new[] { new TVGL.Vertex(obb[0]), new TVGL.Vertex(obb[1]), new TVGL.Vertex(obb[3]) },
+                    new PolygonalFace(new[] { new Vertex(obb[0]), new Vertex(obb[1]), new Vertex(obb[3]) },
                         clockWise ? normal1.multiply(-1.0) : normal1);
                 var normal2 = ((obb[7].subtract(obb[4])).crossProduct(obb[5].subtract(obb[4]))).normalize();
                 facePrepToRD2 =
-                    new PolygonalFace(new[] { new TVGL.Vertex(obb[5]), new TVGL.Vertex(obb[4]), new TVGL.Vertex(obb[7]) },
+                    new PolygonalFace(new[] { new Vertex(obb[5]), new Vertex(obb[4]), new Vertex(obb[7]) },
                         clockWise ? normal2.multiply(-1.0) : normal2);
                 var normal3 = ((obb[4].subtract(obb[0])).crossProduct(obb[1].subtract(obb[0]))).normalize();
                 var normal4 = ((obb[1].subtract(obb[5])).crossProduct(obb[4].subtract(obb[5]))).normalize();
                 return new[]
                 {
-                    new PolygonalFace(new[] {new TVGL.Vertex(obb[0]), new TVGL.Vertex(obb[1]), new TVGL.Vertex(obb[4])},
+                    new PolygonalFace(new[] {new Vertex(obb[0]), new Vertex(obb[1]), new Vertex(obb[4])},
                        clockWise ? normal3.multiply(-1.0) : normal3),
-                    new PolygonalFace(new[] {new TVGL.Vertex(obb[1]), new TVGL.Vertex(obb[4]), new TVGL.Vertex(obb[5])},
+                    new PolygonalFace(new[] {new Vertex(obb[1]), new Vertex(obb[4]), new Vertex(obb[5])},
                         clockWise ? normal4.multiply(-1.0) : normal4)
                 };
             }
             facePrepToRD1 = null;
             facePrepToRD2 = null;
             return null;
+        }
+
+        internal static PolygonalFace BoundingCylindertoFaceOnObbRespectiveSide(TessellatedSolid solid,
+            out Vertex[] startingVerts, out double[] partnCreationVect)
+        {
+            var bCy = BoundingGeometry.BoundingCylinderDic[solid];
+            // Find a triangle in OBB which has the middle edge length equal to cylinder length.
+            var obbCornerVer = BoundingGeometry.OrientedBoundingBoxDic[solid].CornerVertices;
+            var dis1 = DistanceBetweenTwoVertices(obbCornerVer[0].Position, obbCornerVer[1].Position);
+            var dis2 = DistanceBetweenTwoVertices(obbCornerVer[0].Position, obbCornerVer[3].Position);
+            var dis3 = DistanceBetweenTwoVertices(obbCornerVer[0].Position, obbCornerVer[4].Position);
+            if (Math.Abs(dis1 - bCy.Length) < 1e-5)
+            {
+                startingVerts = new[] {new Vertex(obbCornerVer[0].Position), new Vertex(obbCornerVer[3].Position)};
+                partnCreationVect = obbCornerVer[1].Position.subtract(obbCornerVer[0].Position);
+                return new PolygonalFace(new[]
+                {
+                    new Vertex(obbCornerVer[0].Position), new Vertex(obbCornerVer[1].Position),
+                    new Vertex(obbCornerVer[3].Position)
+                }, ((obbCornerVer[3].Position.subtract(obbCornerVer[0].Position)).crossProduct(
+                    obbCornerVer[1].Position.subtract(obbCornerVer[0].Position))).normalize());
+            }
+            if (Math.Abs(dis2 - bCy.Length) < 1e-5)
+            {
+                startingVerts = new[] {new Vertex(obbCornerVer[0].Position), new Vertex(obbCornerVer[1].Position)};
+                partnCreationVect = obbCornerVer[3].Position.subtract(obbCornerVer[0].Position);
+                return new PolygonalFace(new[]
+                {
+                    new Vertex(obbCornerVer[0].Position), new Vertex(obbCornerVer[1].Position),
+                    new Vertex(obbCornerVer[3].Position)
+                }, ((obbCornerVer[3].Position.subtract(obbCornerVer[0].Position)).crossProduct(
+                    obbCornerVer[1].Position.subtract(obbCornerVer[0].Position))).normalize());
+            }
+            if (Math.Abs(dis3 - bCy.Length) > 1e-5)
+                throw new Exception("Length of the Bounding Cylinder is not equal to the length of any OBB edges");
+
+            startingVerts = new[] {new Vertex(obbCornerVer[0].Position), new Vertex(obbCornerVer[1].Position)};
+            partnCreationVect = obbCornerVer[4].Position.subtract(obbCornerVer[0].Position);
+            return
+                new PolygonalFace(
+                    new[]
+                    {
+                        new Vertex(obbCornerVer[1].Position), new Vertex(obbCornerVer[0].Position),
+                        new Vertex(obbCornerVer[4].Position)
+                    },
+                    ((obbCornerVer[1].Position.subtract(obbCornerVer[0].Position)).crossProduct(
+                        obbCornerVer[4].Position.subtract(obbCornerVer[0].Position))).normalize());
         }
     }
 }

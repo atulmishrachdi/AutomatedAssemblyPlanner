@@ -39,7 +39,7 @@ namespace Assembly_Planner
             var kPointsBetweenMidPoints = KpointBtwPointsGenerator(midPoint1, midPoint2, k);
 
             double longestDist;
-            var distancePointToSolid = PointToSolidDistanceCalculatorWithPartitioning(solid, partitions, kPointsBetweenMidPoints,
+            var distancePointToSolid = PointToSolidDistanceCalculatorWithPartitioning(solid, partitions.Partitions, kPointsBetweenMidPoints,
                 longestSide[0].Normal.multiply(-1.0), out longestDist);
             s.Stop();
             Console.WriteLine("ray casting:" + "     " + s.Elapsed);
@@ -182,7 +182,7 @@ namespace Assembly_Planner
         }
 
         internal static List<double> PointToSolidDistanceCalculatorWithPartitioning(TessellatedSolid solid,
-            FastenerBoundingBoxPartition partitions, List<double[]> kPointsBetweenMidPoints, double[] vector,
+            List<FastenerAndNutPartition> partitions, List<double[]> kPointsBetweenMidPoints, double[] vector,
             out double longestDist)
         {
             var distList = new List<double>();
@@ -190,7 +190,7 @@ namespace Assembly_Planner
             {
                 var ray = new Ray(new AssemblyEvaluation.Vertex(point), new Vector(vector));
                 var minDis = double.PositiveInfinity;
-                var prtn = FastenerBoundingBoxPartition.PartitionOfThePoint(partitions.Partitions, point);
+                var prtn = FastenerBoundingBoxPartition.PartitionOfThePoint(partitions, point);
                 foreach (var face in prtn.FacesOfSolidInPartition)
                 {
                     double[] hittingPoint;
