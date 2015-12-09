@@ -17,6 +17,7 @@ namespace Assembly_Planner
         {
             // Fast and inaccurate results vs Slow but accurate
             // estimate: inaccurate but fast
+            return new List<Gear>();
             if (!estimate)
             {
                 var gears =
@@ -32,9 +33,11 @@ namespace Assembly_Planner
             List<Gear> gears, List<int> localDirInd)
         {
             // "gear1" is always "Reference" and "gear2" is always "Moving"
-            var gear1 = gears.First(g => g.Solid == solid1);
-            var gear2 = gears.First(g => g.Solid == solid2);
-            if (gear1 == null || gear2 == null) return localDirInd;
+            var gear1L = gears.Where(g => g.Solid == solid1).ToList();
+            var gear2L = gears.Where(g => g.Solid == solid2).ToList();
+            if (!gear1L.Any() || !gear2L.Any()) return localDirInd;
+            var gear1 = gear1L[0];
+            var gear2 = gear2L[0];
             // now it is a gear mate
             var rd = DisassemblyDirections.Directions.First(d => Math.Abs(d.dotProduct(gear1.Axis) - 1) < 0.01);
             var ind1 = DisassemblyDirections.Directions.IndexOf(rd);
