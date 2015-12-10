@@ -32,7 +32,7 @@ namespace Assembly_Planner
                     bb.CornerVertices[6], bb.CornerVertices[4], bb.CornerVertices[5], bb.CornerVertices[7]
                 };
                 lock (OrientedBoundingBoxDic)
-                    OrientedBoundingBoxDic.Add(solid, MinimumEnclosure.OrientedBoundingBox(solid));
+                    OrientedBoundingBoxDic.Add(solid, bb);
             }
                 );
             s.Stop();
@@ -49,8 +49,9 @@ namespace Assembly_Planner
             Console.WriteLine("OBBs are being Created ...");
             Parallel.ForEach(solids, solid =>
             {
+                var obb = OBB.BuildUsingPoints(solid.Vertices.ToList());
                 lock (OrientedBoundingBoxDic)
-                    OrientedBoundingBoxDic.Add(solid, OBB.BuildUsingPoints(solid.Vertices.ToList()));
+                    OrientedBoundingBoxDic.Add(solid, obb);
             }
                 );
             s.Stop();
@@ -67,8 +68,9 @@ namespace Assembly_Planner
             Console.WriteLine("Bounding Cylinders are being Created ...");
             Parallel.ForEach(solids, solid =>
             {
+                var bc = BoundingCylinder.Run(solid);
                 lock (BoundingCylinderDic)
-                    BoundingCylinderDic.Add(solid, BoundingCylinder.Run(solid));
+                    BoundingCylinderDic.Add(solid, bc);
             }
                 );
             s.Stop();
