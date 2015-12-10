@@ -59,17 +59,16 @@ namespace Assembly_Planner
                     // check the convex hull of these two solids to find the planes tha can linearly seperate them
                     // solid1 is moving and solid2 is blocking
                     var solidBlocking = solidsL[j];
-                    
+                    if (
+                        graph.arcs.Any(
+                            a => a is Connection &&
+                                 ((a.From.name == solidMoving.Name && a.To.name == solidBlocking.Name) ||
+                                  (a.From.name == solidBlocking.Name && a.To.name == solidMoving.Name)))) continue;
                     // Add a secondary arc to the 
                     var from = GetNode(graph, solidMoving);
                     var to = GetNode(graph, solidBlocking);
                     graph.addArc(from, to, from.name + to.name, typeof(SecondaryConnection));
                     var lastAddedSecArc = (SecondaryConnection)graph.arcs.Last();
-                    if (
-                        graph.arcs.Any(
-                            a => a is Connection &&
-                                ((a.From.name == solidMoving.Name && a.To.name == solidBlocking.Name) ||
-                                (a.From.name == solidBlocking.Name && a.To.name == solidMoving.Name)))) continue;
                     var filteredDirections = FilterGlobalDirections(solidMoving,solidBlocking,gDir);
                     // remember this: if solid2 is not blocking solid1, we need to check if solid1 is blocking 2 in the opposite direction.
                     // if filteredDirections.Count == gDir.Count then the CVHs overlap
