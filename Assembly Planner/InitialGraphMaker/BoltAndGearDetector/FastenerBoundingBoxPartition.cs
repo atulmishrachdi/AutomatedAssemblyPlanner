@@ -29,10 +29,7 @@ namespace Assembly_Planner
             foreach (var vertex in solid.Vertices)
             {
                 var ray = new Ray(new AssemblyEvaluation.Vertex(vertex.Position), new Vector(faceFromLongestSide.Normal));
-                double[] intersectionPoint;
-                bool outer;
-                GeometryFunctions.RayIntersectsWithFace(ray, faceFromLongestSide, out intersectionPoint,
-                    out outer); // this can be replace with a simpler function
+                var intersectionPoint = GeometryFunctions.RayIntersectionPointWithFace(ray, faceFromLongestSide);
                 var chosenPrtn = PartitionOfThePoint(partitions, intersectionPoint);
                 chosenPrtn.VerticesOfSolidInPartition.Add(vertex);
             }

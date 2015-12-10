@@ -115,6 +115,19 @@ namespace Assembly_Planner
             return sorted;
         }
 
+        public static double[] RayIntersectionPointWithFace(Ray ray, PolygonalFace face)
+        {
+            // this is exclusively for fastener detection -> Partitioning bounding box and cylinder
+            var w = ray.Position.subtract(face.Vertices[0].Position);
+            var s1 = (face.Normal.dotProduct(w)) / (face.Normal.dotProduct(ray.Direction));
+            return new[]
+            {
+                ray.Position[0] - s1*ray.Direction[0], 
+                ray.Position[1] - s1*ray.Direction[1],
+                ray.Position[2] - s1*ray.Direction[2]
+            };
+        }
+
         public static bool RayIntersectsWithFace(Ray ray, PolygonalFace face, out double[] hittingPoint, out bool outer)
         {
             //if (ray.Direction.dotProduct(face.Normal) > -0.06) return false;
