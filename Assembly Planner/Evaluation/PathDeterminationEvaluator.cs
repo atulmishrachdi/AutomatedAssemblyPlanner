@@ -116,7 +116,7 @@ namespace AssemblyEvaluation
             if (RiemannianDx < 0)
             {
                 SearchIO.output("Infeasible path found");
-                return Constants.MaxPathForInfeasibleInstall;
+                return Constants.Values.MaxPathForInfeasibleInstall;
             }
             else return sepHullDx;
             //else return RiemannianDx;

@@ -41,7 +41,7 @@ namespace Assembly_Planner
             var solidsL = solids.Where(s => graph.nodes.Any(n => n.name == s.Name)).ToList();
             foreach (var s in solidsL)
             {
-                //CvhHashSet.Add(s, new HashSet<PolygonalFace>(s.ConvexHullFaces));
+                //CvhHashSet.Add(s, new HashSet<PolygonalFace>(s.ConvexHull.Faces));
                 ObbFacesHashSet.Add(s,
                     new HashSet<PolygonalFace>(
                         PartitioningSolid.TwelveFaceGenerator(
@@ -235,9 +235,9 @@ namespace Assembly_Planner
             var visitedCvhFaces = new HashSet<PolygonalFace>();
             foreach (
                 var s1CvhFace in
-                    solid1.ConvexHullFaces.Where(
+                    solid1.ConvexHull.Faces.Where(
                         s1F =>
-                            solid2.ConvexHullVertices.All(
+                            solid2.ConvexHull.Vertices.All(
                                 s2V =>
                                     s1F.Normal.dotProduct(s2V.Position.subtract(s1F.Vertices[0].Position)) > -0.0001) &&
                             visitedCvhFaces.All(visF => Math.Abs(s1F.Normal.dotProduct(visF.Normal) - 1) < 0.0005)))
@@ -250,9 +250,9 @@ namespace Assembly_Planner
             visitedCvhFaces.Clear();
             foreach (
                 var s2CvhFace in
-                    solid2.ConvexHullFaces.Where(
+                    solid2.ConvexHull.Faces.Where(
                         s2F =>
-                            solid1.ConvexHullVertices.All(
+                            solid1.ConvexHull.Vertices.All(
                                 s1V => s2F.Normal.dotProduct(s1V.Position.subtract(s2F.Vertices[0].Position)) > -0.0001) &&
                             visitedCvhFaces.All(visF => Math.Abs(s2F.Normal.dotProduct(visF.Normal) - 1) < 0.0005)))
             {
@@ -268,7 +268,7 @@ namespace Assembly_Planner
 
         private static List<Ray> RayGenerator(TessellatedSolid solidMoving, double[] direction)
         {
-            var rays = solidMoving.ConvexHullVertices.Select(
+            var rays = solidMoving.ConvexHull.Vertices.Select(
                 vertex =>
                     new Ray(
                         new AssemblyEvaluation.Vertex(vertex.Position[0], vertex.Position[1],
@@ -277,7 +277,7 @@ namespace Assembly_Planner
             // add more vertices to the ray
             rays.AddRange(
                 NonadjacentBlockingDetermination.AddingMoreRays(
-                    solidMoving.ConvexHullEdges.Where(e => e != null && e.Length > 2).ToArray(), direction));
+                    solidMoving.ConvexHull.Edges.Where(e => e != null && e.Length > 2).ToArray(), direction));
             return rays;
         }
 

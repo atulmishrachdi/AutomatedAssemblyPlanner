@@ -50,6 +50,7 @@ namespace Assembly_Planner
 
         internal static SubAssembly Run(ConvexHullAndBoundingBox inputData, List<int> globalDirPool, bool DoEstimate = false)
         {
+            Constants.Values = new Constants();
             Graph = inputData.graphAssembly;
             DirPool = globalDirPool;
             //Updates.UpdateGlobalDirections(DirPool);

@@ -226,7 +226,7 @@ namespace Assembly_Planner
             var longestPlane = GeometryFunctions.LongestPlaneOfObbDetector(obb, out facePrepToRD1, out facePrepToRD2);
             TVGL.Vertex closestVerToPlane = null;
             var minDist = double.PositiveInfinity;
-            foreach (var ver in solid.ConvexHullVertices)
+            foreach (var ver in solid.ConvexHull.Vertices)
             {
                 var dis = GeometryFunctions.DistanceBetweenVertexAndPlane(ver.Position, longestPlane[0]);
                 if (dis >= minDist)

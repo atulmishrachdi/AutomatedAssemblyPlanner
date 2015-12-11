@@ -396,7 +396,7 @@ namespace Assembly_Planner.DisassemblyProcess
                 foreach (var opt in options)
                 {
                     TreeCandidate TC = new TreeCandidate();
-                    if (assemblyEvaluator.EvaluateSub(A, opt.nodes.Cast<Component>().ToList(), out TC.sa) > 0)
+                    if (assemblyEvaluator.EvaluateSub(Graph, A, opt.nodes.Cast<Component>().ToList(), out TC.sa) > 0)
                     {
                         //TC.RefNodes = TC.sa.Install.Reference.PartNodes.Select (n => (node)Graph [n]).ToList ();
                         //TC.MovNodes = TC.sa.Install.Moving.PartNodes.Select (n => (node)Graph [n]).ToList ();
@@ -425,7 +425,7 @@ namespace Assembly_Planner.DisassemblyProcess
                 List<Component> Asm = new List<Component>(new [] { (Component)arc.From, (Component)arc.To });
                 List<Component> Fr = new List<Component>(new[] { (Component)arc.From });
                 SubAssembly sa;
-                if (assemblyEvaluator.EvaluateSub(Asm.Cast<Component>().ToList(), Fr.Cast<Component>().ToList(), out sa) > 0)
+                if (assemblyEvaluator.EvaluateSub(Graph,Asm.Cast<Component>().ToList(), Fr.Cast<Component>().ToList(), out sa) > 0)
                 {
                     HashSet<Component> A = new HashSet<Component>(Asm);
                     MemoData D = new MemoData(sa.Install.Time, sa);

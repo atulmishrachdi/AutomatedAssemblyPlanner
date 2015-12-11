@@ -52,7 +52,7 @@ namespace AssemblyEvaluation
             }
 
             if (insertionDistance != 0)
-                insertiontime = (insertionDistance / 1000) / Constants.MaxInsertionSpeed;
+                insertiontime = (insertionDistance / 1000) / Constants.Values.MaxInsertionSpeed;
 
             double installationTime = traveltime + aligmentime + insertiontime;
             double Disinstalltime = DisTraveltime + DisAligmentime;
@@ -66,8 +66,8 @@ namespace AssemblyEvaluation
             foreach (var a in connectingArcs.Where(a=>a.localVariables.Contains(DisConstants.BoltDepth)))
             {
                 var boltLength = a.localVariables[a.localVariables.IndexOf(DisConstants.BoltDepth)+1];
-                bolttime = bolttime + boltLength / Constants.boltinsertSpeed;
-                DisBolttime = DisBolttime + bolttime-boltLength / (Constants.boltinsertSpeed + 0.2);
+                bolttime = bolttime + boltLength / Constants.Values.boltinsertSpeed;
+                DisBolttime = DisBolttime + bolttime - boltLength / (Constants.Values.boltinsertSpeed + 0.2);
             }
 
             installationTime = installationTime + bolttime;

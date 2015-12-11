@@ -18,7 +18,7 @@ namespace Assembly_Planner
     {
         private static List<DefaultConvexFace<Vertex>> movingFacesInCombined;
         public static List<DefaultConvexFace<Vertex>> refFacesInCombined;
-        private Dictionary<string, ConvexHull<Vertex, DefaultConvexFace<Vertex>>> convexHullForParts;
+        public Dictionary<string, ConvexHull<Vertex, DefaultConvexFace<Vertex>>> convexHullForParts;
 
         public EvaluationForBinaryTree(Dictionary<string, ConvexHull<Vertex, DefaultConvexFace<Vertex>>> convexHullForParts)
         {
@@ -33,7 +33,7 @@ namespace Assembly_Planner
         /// <param name="optNodes">The subset of nodes that represent one of the two parts in the install step.</param>
         /// <param name="sub">The sub is the class that is then tied into the treequence.</param>
         /// <returns>System.Double.</returns>
-        public double EvaluateSub(List<Component> subassemblyNodes, List<Component> optNodes, out SubAssembly sub)
+        public double EvaluateSub(designGraph graph, List<Component> subassemblyNodes, List<Component> optNodes, out SubAssembly sub)
         {
 
             var rest = subassemblyNodes.Where(n => !optNodes.Contains(n)).ToList();
@@ -226,18 +226,18 @@ namespace Assembly_Planner
             /* if the former face area does not take up a significant portion of 
              * the new faces then we do not have the confidence to make the judgement
              * based on this fact. */
-            if (formerFacesArea/totalFaceArea > Constants.CVXFormerFaceConfidence)
+            if (formerFacesArea / totalFaceArea > Constants.Values.CVXFormerFaceConfidence)
             {
                 /* there are two check here: if the common area is very small, we assume the 
                  * subassembly is inside the other. If not, maybe it is more on the outside
                  * but a smaller effect on resulting convex hull. */
-                if (refFaceArea/formerFacesArea < Constants.CVXOnInsideThreshold)
+                if (refFaceArea / formerFacesArea < Constants.Values.CVXOnInsideThreshold)
                     return InstallCharacterType.ReferenceIsInsideMoving;
-                if (movingFaceArea/formerFacesArea < Constants.CVXOnInsideThreshold)
+                if (movingFaceArea / formerFacesArea < Constants.Values.CVXOnInsideThreshold)
                     return InstallCharacterType.MovingIsInsideReference;
-                if (refFaceArea/formerFacesArea < Constants.CVXOnOutsideThreshold)
+                if (refFaceArea / formerFacesArea < Constants.Values.CVXOnOutsideThreshold)
                     return InstallCharacterType.ReferenceIsOnOutsideOfMoving;
-                if (movingFaceArea/formerFacesArea < Constants.CVXOnOutsideThreshold)
+                if (movingFaceArea / formerFacesArea < Constants.Values.CVXOnOutsideThreshold)
                     return InstallCharacterType.MovingIsOnOutsideOfReference;
             }
             /* if we cannot confidently use face area then we switch to comparing

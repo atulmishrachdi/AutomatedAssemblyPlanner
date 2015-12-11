@@ -37,7 +37,7 @@ namespace GeometryReasoning
 
         public static bool RayIntersectsWithFace(Ray ray, DefaultConvexFace<Vertex> face)
         {
-            if (Math.Abs(StarMath.dotProduct(ray.Direction, face.Normal, 3)) < Constants.NearlyParallelFace) return false;
+            if (Math.Abs(StarMath.dotProduct(ray.Direction, face.Normal, 3)) < Constants.Values.NearlyParallelFace) return false;
             var inPlaneVerts = new Vertex[face.Vertices.GetLength(0)];
             var negativeDirCounter = 3;
             for (int i = 0; i < face.Vertices.GetLength(0); i++)
@@ -62,7 +62,7 @@ namespace GeometryReasoning
                 var j = (i == 2) ? 0 : i + 1;
                 var crossProductsFrom_i_To_j = StarMath.crossProduct(StarMath.normalizeInPlace(StarMath.subtract(inPlaneVerts[i].Position, ray.Position,3),3),
                     StarMath.normalizeInPlace(StarMath.subtract(inPlaneVerts[j].Position, ray.Position),3));
-                if (StarMath.norm2(crossProductsFrom_i_To_j, true) < Constants.NearlyOnLine) return false;
+                if (StarMath.norm2(crossProductsFrom_i_To_j, true) < Constants.Values.NearlyOnLine) return false;
                 crossProductsToCorners.Add(crossProductsFrom_i_To_j);
             }
             for (int i = 0; i < 3; i++)

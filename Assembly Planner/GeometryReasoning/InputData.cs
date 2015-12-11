@@ -57,7 +57,7 @@ namespace GeometryReasoning
         {
             try
             {
-                DataInterface.Initialize(InputDir + Constants.CADAssemblyFileName);
+                DataInterface.Initialize(InputDir + Constants.Values.CADAssemblyFileName);
             }
             catch (Exception exception)
             { Console.WriteLine("Unable to LoadCADData because: " + exception.Message); }
@@ -101,7 +101,7 @@ namespace GeometryReasoning
         /// </summary>
         private void LoadOrMakeLiaisonData()
         {
-            LiaisonGraphCreator.Make(graphAssembly, InputDir + Constants.AssemblyXMLFileName);
+            //LiaisonGraphCreator.Make(graphAssembly, InputDir + Constants.AssemblyXMLFileName);
         }
 
         private void BuildFromSAT()
@@ -143,9 +143,9 @@ namespace GeometryReasoning
                 var partNode = graphAssembly[partName];
                 /* the one thing we can get from CVX hull that we might not have in the 
                  * node is the center position - or what is assumed to be the center of gravity */
-                if (!partNode.localVariables.Contains(Constants.TRANSLATION))
+                if (!partNode.localVariables.Contains(Constants.Values.TRANSLATION))
                 {
-                    partNode.localVariables.Add(Constants.TRANSLATION);
+                    partNode.localVariables.Add(Constants.Values.TRANSLATION);
                     partNode.localVariables.Add(cvxhull.Points.Average(v => v.Position[0]));//x
                     partNode.localVariables.Add(cvxhull.Points.Average(v => v.Position[1]));//y
                     partNode.localVariables.Add(cvxhull.Points.Average(v => v.Position[2]));//z;

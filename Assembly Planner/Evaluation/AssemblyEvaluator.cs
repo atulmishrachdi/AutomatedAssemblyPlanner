@@ -18,7 +18,7 @@ namespace AssemblyEvaluation
     public class AssemblyEvaluator
     {
         private static List<List<DefaultConvexFace<Vertex>>> newRefCVHFacesInCom = new List<List<DefaultConvexFace<Vertex>>>();
-        private Dictionary<string, ConvexHull<Vertex, DefaultConvexFace<Vertex>>> convexHullForParts;
+        public static Dictionary<string, ConvexHull<Vertex, DefaultConvexFace<Vertex>>> convexHullForPartsA;
         private int Iterations;
         private readonly TimeEvaluator timeEvaluator;
         private  Stability subMovingPartFinder;
@@ -29,7 +29,7 @@ namespace AssemblyEvaluation
             //feasibility = new FeasibilityEvaluator();
             timeEvaluator = new TimeEvaluator();
             subMovingPartFinder = new Stability();
-            this.convexHullForParts = convexHullForParts;
+            convexHullForPartsA = convexHullForParts;
             //    reOrientations = new ReOrientations();
         }
 
@@ -39,7 +39,7 @@ namespace AssemblyEvaluation
         public double Evaluate(AssemblyCandidate c, option opt, List<Component> rest, List<TessellatedSolid> solides)
         {
             // Set up moving and reference subassemblies
-            var newSubAsm = c.Sequence.Update(opt, rest, convexHullForParts);
+            var newSubAsm = c.Sequence.Update(opt, rest, convexHullForPartsA);
             var refNodes = newSubAsm.Install.Reference.PartNodes.Select(n => (Component)c.graph[n]).ToList();
             var movingNodes = newSubAsm.Install.Moving.PartNodes.Select(n => (Component)c.graph[n]).ToList();
             var install = new[] { refNodes, movingNodes };
@@ -60,7 +60,7 @@ namespace AssemblyEvaluation
             var insertionDirection = FindPartDisconnectMovement(connectingArcs, refNodes, out insertionDistance);
 
             var firstArc = connectingArcs[0];
-            var i = firstArc.localVariables.IndexOf(Constants.CLASH_LOCATION);
+            var i = firstArc.localVariables.IndexOf(Constants.Values.CLASH_LOCATION);
             var insertionPoint = (i == -1) ? new Vertex(0, 0, 0)
                 : new Vertex(firstArc.localVariables[i + 1], firstArc.localVariables[i + 2], firstArc.localVariables[i + 3]);
 
@@ -105,20 +105,20 @@ namespace AssemblyEvaluation
             return c.TimeScore + c.AccessibilityScore + c.StabilityScore;
         }
 
-        private Vector FindPartDisconnectMovement(IEnumerable<Connection> connectingArcs, List<Component> refNodes, out double insertionDistance)
+        public static Vector FindPartDisconnectMovement(IEnumerable<Connection> connectingArcs, List<Component> refNodes, out double insertionDistance)
         {
             var installDirection = new Vector(0, 0, 0);
             // find install direction by averaging all visible_DOF
             foreach (var arc in connectingArcs)
             {
-                var index = arc.localVariables.FindIndex(x => x == Constants.VISIBLE_DOF || x == Constants.CONCENTRIC_DOF);
+                var index = arc.localVariables.FindIndex(x => x == Constants.Values.VISIBLE_DOF || x == Constants.Values.CONCENTRIC_DOF);
                 while (index != -1)
                 {
                     var dir = new Vector(arc.localVariables[++index], arc.localVariables[++index], arc.localVariables[++index]);
                     dir.NormalizeInPlace();
                     installDirection.AddInPlace(dir);
                     if (double.IsNaN(dir.Position[0])) continue;
-                    index = arc.localVariables.FindIndex(index, x => x == Constants.VISIBLE_DOF || x == Constants.CONCENTRIC_DOF);
+                    index = arc.localVariables.FindIndex(index, x => x == Constants.Values.VISIBLE_DOF || x == Constants.Values.CONCENTRIC_DOF);
                 }
             }
             installDirection.NormalizeInPlace();
@@ -132,7 +132,7 @@ namespace AssemblyEvaluation
                 foreach (var a in connectingArcs)
                 {
                     var n = a.To;
-                    var index = n.localVariables.FindIndex(x => x == Constants.TRANSLATION);
+                    var index = n.localVariables.FindIndex(x => x == Constants.Values.TRANSLATION);
                     if (index != -1)
                     {
                         if (refNodes.Contains(n))
@@ -151,7 +151,7 @@ namespace AssemblyEvaluation
                         }
                     }
                     n = a.From;
-                    index = n.localVariables.FindIndex(x => x == Constants.TRANSLATION);
+                    index = n.localVariables.FindIndex(x => x == Constants.Values.TRANSLATION);
                     if (index != -1)
                     {
                         if (refNodes.Contains(n))
@@ -196,13 +196,13 @@ namespace AssemblyEvaluation
                 ConvexHull<Vertex, DefaultConvexFace<Vertex>> refHull, movingHull;
                 if (refNodes.Contains(fromNode))
                 {
-                    refHull = convexHullForParts[fromNode.name];
-                    movingHull = convexHullForParts[toNode.name];
+                    refHull = convexHullForPartsA[fromNode.name];
+                    movingHull = convexHullForPartsA[toNode.name];
                 }
                 else
                 {
-                    refHull = convexHullForParts[toNode.name];
-                    movingHull = convexHullForParts[fromNode.name];
+                    refHull = convexHullForPartsA[toNode.name];
+                    movingHull = convexHullForPartsA[fromNode.name];
                 }
                 var refMaxValue = STLGeometryFunctions.findMaxPlaneHeightInDirection(refHull.Points, installDirection);
 

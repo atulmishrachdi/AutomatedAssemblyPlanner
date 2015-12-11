@@ -91,19 +91,19 @@ namespace Assembly_Planner
                 var node = assemblyGraph.nodes.Cast<Component>().Where(n => n.name == Convert.ToString(values[0])).ToList()[0];
                 while (i < 9)
                 {
-                    if (Convert.ToDouble(values[i]) == Constants.WEIGHT)
+                    if (Convert.ToDouble(values[i]) == Constants.Values.WEIGHT)
                     {
                         node.Mass = Convert.ToDouble(values[i + 1]);
                         i+=2;
                         continue;
                     }
-                    if (Convert.ToDouble(values[i]) == Constants.VOLUME)
+                    if (Convert.ToDouble(values[i]) == Constants.Values.VOLUME)
                     {
                         node.Volume = Convert.ToDouble(values[i + 1]);
                         i += 2;
                         continue;
                     }
-                    if (Convert.ToDouble(values[i]) == Constants.CENTEROFMASS)
+                    if (Convert.ToDouble(values[i]) == Constants.Values.CENTEROFMASS)
                     {
                         node.CenterOfMass = new[] { Convert.ToDouble(values[i + 1]), Convert.ToDouble(values[i + 2]), Convert.ToDouble(values[i + 3]) };
                         i += 4;

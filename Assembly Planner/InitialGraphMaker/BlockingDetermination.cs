@@ -133,16 +133,16 @@ namespace Assembly_Planner
 
         internal static bool ConvexHullOverlap(TessellatedSolid a, TessellatedSolid b)
         {
-            foreach (var f in a.ConvexHullFaces)
+            foreach (var f in a.ConvexHull.Faces)
             {
                 var dStar = (f.Normal.dotProduct(f.Vertices[0].Position));
-                if (b.ConvexHullVertices.All(pt => (f.Normal.dotProduct(pt.Position)) > dStar + 0.001)) // 0.001
+                if (b.ConvexHull.Vertices.All(pt => (f.Normal.dotProduct(pt.Position)) > dStar + 0.001)) // 0.001
                     return false;
             }
-            foreach (var f in b.ConvexHullFaces)
+            foreach (var f in b.ConvexHull.Faces)
             {
                 var dStar = (f.Normal.dotProduct(f.Vertices[0].Position));
-                if (a.ConvexHullVertices.All(pt => (f.Normal.dotProduct(pt.Position)) > dStar + 0.001)) // 0.001
+                if (a.ConvexHull.Vertices.All(pt => (f.Normal.dotProduct(pt.Position)) > dStar + 0.001)) // 0.001
                     return false;
             }
             return true;

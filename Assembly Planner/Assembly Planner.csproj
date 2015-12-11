@@ -79,7 +79,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="TessellationAndVoxelizationGeometryLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\TVGL.1.0.15.1130\lib\portable-net45+sl5+wp8+win8\TessellationAndVoxelizationGeometryLibrary.dll</HintPath>
+      <HintPath>..\packages\TVGL.1.0.15.1211\lib\portable-net4+sl4+wp7+win8\TessellationAndVoxelizationGeometryLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -116,7 +116,6 @@
     <Compile Include="GeometryReasoning\ConvexHullAndBoundingBox.cs" />
     <Compile Include="GeometryReasoning\DataInterfaceWithCPP.cs" />
     <Compile Include="GeometryReasoning\InputData.cs" />
-    <Compile Include="GeometryReasoning\LiaisonGraphCreator.cs" />
     <Compile Include="GeometryReasoning\OBB.cs" />
     <Compile Include="GeometryReasoning\STLGeometryFunctions.cs" />
     <Compile Include="GeometryReasoning\StLReader.cs" />
@@ -131,7 +130,6 @@
     <Compile Include="GPprocess\Start.cs" />
     <Compile Include="GPprocess\StartWithoutInfer.cs" />
     <Compile Include="GPprocess\ThreeDinput.cs" />
-    <Compile Include="GPprocess\XMLeditor.cs" />
     <Compile Include="GPprocess\XMLFUNCTION.cs" />
     <Compile Include="GraphSynth.BaseClasses\Component.cs" />
     <Compile Include="GraphSynth.BaseClasses\Connection.cs" />

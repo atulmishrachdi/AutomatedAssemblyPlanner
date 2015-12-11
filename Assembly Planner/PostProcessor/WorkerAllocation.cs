@@ -121,7 +121,7 @@ namespace Assembly_Planner
         private static void CheckValuesWithCandidate(double totalTime1, double totalTime2,
             double makeSpan1, double makeSpan2)
         {
-            if (Math.Abs(totalTime1 - totalTime2) > Constants.SameWithinError || Math.Abs(makeSpan1 - makeSpan2) > Constants.SameWithinError)
+            if (Math.Abs(totalTime1 - totalTime2) > Constants.Values.SameWithinError || Math.Abs(makeSpan1 - makeSpan2) > Constants.Values.SameWithinError)
                 throw new Exception("Times do not match.");
         }
 

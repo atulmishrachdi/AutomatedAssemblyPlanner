@@ -18,7 +18,7 @@ namespace Assembly_Planner
     {
         private static void Main(string[] args)
         {
-            var graphExists = false;
+            var graphExists = true;
             var inputDir =
                 //"../../../Test/Cube";
                 //"../../../Test/PumpWExtention";
@@ -27,9 +27,9 @@ namespace Assembly_Planner
                 //"../../../Test/Simple-Test";
                 //"../../../Test/Mc Cormik/STL2";
                 //"../../../Test/Truck -TXT-1/STL";
-                //"../../../Test/FoodPackagingMachine/FPMSTL2";
+                "../../../Test/FoodPackagingMachine/FPMSTL2";
                 //"../../../../GearAndFastener Detection/TrainingData/not-screw/Gear";
-                "../../../Test/test3";
+                //"../../../Test/test3";
             var s = Stopwatch.StartNew();
             s.Start();
             var solids = GetSTLs(inputDir);

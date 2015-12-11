@@ -41,7 +41,7 @@ namespace Assembly_Planner
                 {
                     // now find the blocking parts
                     var rays = new List<Ray>();
-                    foreach (var vertex in solid.ConvexHullVertices)
+                    foreach (var vertex in solid.ConvexHull.Vertices)
                         rays.Add(
                             new Ray(
                                 new AssemblyEvaluation.Vertex(vertex.Position[0], vertex.Position[1],
@@ -49,7 +49,7 @@ namespace Assembly_Planner
                                 new Vector(direction[0], direction[1], direction[2])));
                     // add more vertices to the ray
                     rays.AddRange(
-                        AddingMoreRays(solid.ConvexHullEdges.Where(e => e != null && e.Length > 2).ToArray(),
+                        AddingMoreRays(solid.ConvexHull.Edges.Where(e => e != null && e.Length > 2).ToArray(),
                             direction));
 
                     foreach (var solidBlocking in
@@ -97,7 +97,7 @@ namespace Assembly_Planner
             var overlap = false;
             foreach (var ray in rays)
             {
-                if (solidBlocking.ConvexHullFaces.Any(f => RayIntersectsWithFace3(ray, f)))
+                if (solidBlocking.ConvexHull.Faces.Any(f => RayIntersectsWithFace3(ray, f)))
                 //now find the faces that intersect with the ray and find the distance between them
                 {
                     foreach (
@@ -408,7 +408,7 @@ namespace Assembly_Planner
 
         public static bool RayIntersectsWithFace(Ray ray, PolygonalFace face)
         {
-            if (Math.Abs(ray.Direction.dotProduct(face.Normal)) < AssemblyEvaluation.Constants.NearlyParallelFace) return false;
+            if (Math.Abs(ray.Direction.dotProduct(face.Normal)) < AssemblyEvaluation.Constants.Values.NearlyParallelFace) return false;
             var inPlaneVerts = new AssemblyEvaluation.Vertex[3];
             var negativeDirCounter = 3;
             for (var i = 0; i < 3; i++)
@@ -435,7 +435,7 @@ namespace Assembly_Planner
                     inPlaneVerts[i].Position.subtract(ray.Position)
                         .normalizeInPlace(3)
                         .crossProduct(inPlaneVerts[j].Position.subtract(ray.Position).normalizeInPlace(3));
-                if (crossProductsFrom_i_To_j.norm2(true) < AssemblyEvaluation.Constants.NearlyOnLine) return false;
+                if (crossProductsFrom_i_To_j.norm2(true) < AssemblyEvaluation.Constants.Values.NearlyOnLine) return false;
                 crossProductsToCorners.Add(crossProductsFrom_i_To_j);
             }
             for (int i = 0; i < 3; i++)
@@ -460,7 +460,7 @@ namespace Assembly_Planner
                 var crossProductsFrom_i_To_j =
                     face.Vertices[i].Position.subtract(raysPointOnFacePlane).normalize()
                         .crossProduct(face.Vertices[j].Position.subtract(ray.Position).normalize());
-                if (crossProductsFrom_i_To_j.norm2(true) < AssemblyEvaluation.Constants.NearlyOnLine) return false;
+                if (crossProductsFrom_i_To_j.norm2(true) < AssemblyEvaluation.Constants.Values.NearlyOnLine) return false;
                 crossProductsToCorners.Add(crossProductsFrom_i_To_j);
             }
             for (int i = 0; i < 3; i++)
@@ -519,12 +519,12 @@ namespace Assembly_Planner
             {
                 var direction = DisassemblyDirections.Directions[dir];
                 var rays = new List<Ray>();
-                foreach (var vertex in solid2.ConvexHullVertices)
+                foreach (var vertex in solid2.ConvexHull.Vertices)
                     rays.Add(new Ray(new AssemblyEvaluation.Vertex(vertex.Position[0], vertex.Position[1], vertex.Position[2]),
                                     new Vector(direction[0], direction[1], direction[2])));
                 var direction2 = DisassemblyDirections.Directions[dir].multiply(-1.0);
                 var rays2 = new List<Ray>();
-                foreach (var vertex in solid1.ConvexHullVertices)
+                foreach (var vertex in solid1.ConvexHull.Vertices)
                     rays2.Add(new Ray(new AssemblyEvaluation.Vertex(vertex.Position[0], vertex.Position[1], vertex.Position[2]),
                                     new Vector(direction2[0], direction2[1], direction2[2])));
                 if (rays.Any(ray => solid1.Faces.Any(f => RayIntersectsWithFace3(ray, f) && DistanceToTheFace(ray.Position, f) > 0)))
@@ -552,7 +552,7 @@ namespace Assembly_Planner
                 
                 var direction = DisassemblyDirections.Directions[dir];
                 var rays = new List<Ray>();
-                foreach (var vertex in solid2.ConvexHullVertices)
+                foreach (var vertex in solid2.ConvexHull.Vertices)
                     rays.Add(new Ray(new AssemblyEvaluation.Vertex(vertex.Position[0], vertex.Position[1], vertex.Position[2]),
                                     new Vector(direction[0], direction[1], direction[2])));
                 finite = IsTheLocalDirectionFinite(solid1, rays);
@@ -565,7 +565,7 @@ namespace Assembly_Planner
                 
                 var direction2 = DisassemblyDirections.Directions[dir].multiply(-1.0);
                 var rays2 = new List<Ray>();
-                foreach (var vertex in solid1.ConvexHullVertices)
+                foreach (var vertex in solid1.ConvexHull.Vertices)
                     rays2.Add(new Ray(new AssemblyEvaluation.Vertex(vertex.Position[0], vertex.Position[1], vertex.Position[2]),
                                     new Vector(direction2[0], direction2[1], direction2[2])));
                 finite = IsTheLocalDirectionFinite(solid2, rays2);
