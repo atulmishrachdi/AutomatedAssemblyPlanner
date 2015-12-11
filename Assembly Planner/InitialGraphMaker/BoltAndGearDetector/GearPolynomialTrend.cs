@@ -21,7 +21,7 @@ namespace Assembly_Planner
             //   2. if the closest with positive dot product triangles to bounding cylinder points, it is a negative gear
             var section = 5.0;
             var bC = BoundingCylinder.Run(solid);
-            var kPointsOnSurface = KpointObMidSurfaceOfCylinderGenerator(bC, 2000);
+            var kPointsOnSurface = KpointObMidSurfaceOfCylinderGenerator(bC, 1000);
             for (var i = 0.0; i <= 1; i += 1/section)
             {
                 var distancePointToSolidPositive = PointToSolidDistanceCalculator(solid, kPointsOnSurface, bC, i);

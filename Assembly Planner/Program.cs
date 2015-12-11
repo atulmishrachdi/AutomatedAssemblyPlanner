@@ -29,7 +29,7 @@ namespace Assembly_Planner
                 //"../../../Test/Truck -TXT-1/STL";
                 //"../../../Test/FoodPackagingMachine/FPMSTL2";
                 //"../../../../GearAndFastener Detection/TrainingData/not-screw/Gear";
-                "../../../Test/test2";
+                "../../../Test/test3";
             var s = Stopwatch.StartNew();
             s.Start();
             var solids = GetSTLs(inputDir);

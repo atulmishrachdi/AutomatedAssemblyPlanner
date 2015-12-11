@@ -30,7 +30,7 @@ namespace Assembly_Planner
             Directions = IcosahedronPro.DirectionGeneration();
             DisassemblyDirections.Directions = new List<double[]>(Directions);
             var globalDirPool = new List<int>();
-
+            //playWithOBB(solids);
             // Creating Bounding Geometries for every solid
             //------------------------------------------------------------------------------------------
             BoundingGeometry.CreateOBB2(solids);
@@ -102,6 +102,8 @@ namespace Assembly_Planner
             Console.WriteLine("Blocking Determination is done in:" + "     " + s.Elapsed);
             return globalDirPool;
         }
+
+        
 
 
         private static Dictionary<TessellatedSolid, List<TessellatedSolid>> DuplicatePartsDetector(List<TessellatedSolid> solids)
@@ -211,6 +213,104 @@ namespace Assembly_Planner
             foreach (var washer in FastenerDetector.Washers)
                 solidsNoFastener.Remove(washer.Solid);
             return solidsNoFastener;
+        }
+
+
+
+
+
+        private static void playWithOBB(List<TVGL.TessellatedSolid> solids)
+        {
+           /* var filePath = "../../InitialGraphMaker/BoltAndGearDetector/OBBCOMPARISON.csv";
+            if (!File.Exists(filePath))
+                File.Create(filePath).Close();
+            const string delimter = ",";
+            using (TextWriter writer = File.CreateText(filePath))
+                foreach (var solid in solids)
+                {
+                    var obb = OBB.BuildUsingPoints(solid.Vertices.ToList());
+                    var obb2 = MinimumEnclosure.OrientedBoundingBox(solid);
+                    obb2.CornerVertices = new[]
+                    {
+                        obb2.CornerVertices[2], obb2.CornerVertices[0], obb2.CornerVertices[1],
+                        obb2.CornerVertices[3],
+                        obb2.CornerVertices[6], obb2.CornerVertices[4], obb2.CornerVertices[5],
+                        obb2.CornerVertices[7]
+                    };
+                    var cornerVer = obb.CornerVertices.Select(p => new Vertex(p.Position)).ToArray();
+                    var faces = new List<PolygonalFace>
+                    {
+                        new PolygonalFace(new[] {cornerVer[0], cornerVer[1], cornerVer[3]},
+                            ((cornerVer[3].Position.subtract(cornerVer[0].Position)).crossProduct(
+                                cornerVer[1].Position.subtract(cornerVer[0].Position))).normalize()),
+
+                        new PolygonalFace(new[] {cornerVer[1], cornerVer[0], cornerVer[4]},
+                            ((cornerVer[1].Position.subtract(cornerVer[0].Position)).crossProduct(
+                                cornerVer[4].Position.subtract(cornerVer[0].Position))).normalize()),
+
+                        new PolygonalFace(new[] {cornerVer[2], cornerVer[3], cornerVer[7]},
+                            ((cornerVer[7].Position.subtract(cornerVer[3].Position)).crossProduct(
+                                cornerVer[2].Position.subtract(cornerVer[3].Position))).normalize()),
+
+                        new PolygonalFace(new[] {cornerVer[5], cornerVer[6], cornerVer[7]},
+                            ((cornerVer[7].Position.subtract(cornerVer[6].Position)).crossProduct(
+                                cornerVer[5].Position.subtract(cornerVer[6].Position))).normalize()),
+
+                        new PolygonalFace(new[] {cornerVer[1], cornerVer[2], cornerVer[6]},
+                            ((cornerVer[6].Position.subtract(cornerVer[2].Position)).crossProduct(
+                                cornerVer[1].Position.subtract(cornerVer[2].Position))).normalize()),
+
+                        new PolygonalFace(new[] {cornerVer[0], cornerVer[3], cornerVer[7]},
+                            ((cornerVer[0].Position.subtract(cornerVer[3].Position)).crossProduct(
+                                cornerVer[7].Position.subtract(cornerVer[3].Position))).normalize()),
+                    };
+
+                    var c1 =
+                        solid.Vertices.Count(
+                            v =>
+                                faces.Any(
+                                    f =>
+                                        (v.Position.subtract(f.Vertices[0].Position)).dotProduct(f.Normal) >
+                                        -0.000001));
+
+                    var cornerVer2 = obb2.CornerVertices.Select(p => new Vertex(p.Position)).ToArray();
+                    var faces2 = new List<PolygonalFace>
+                    {
+                        new PolygonalFace(new[] {cornerVer2[0], cornerVer2[1], cornerVer2[3]},
+                            ((cornerVer2[3].Position.subtract(cornerVer2[0].Position)).crossProduct(
+                                cornerVer2[1].Position.subtract(cornerVer2[0].Position))).normalize()),
+
+                        new PolygonalFace(new[] {cornerVer2[1], cornerVer2[0], cornerVer2[4]},
+                            ((cornerVer2[1].Position.subtract(cornerVer2[0].Position)).crossProduct(
+                                cornerVer2[4].Position.subtract(cornerVer2[0].Position))).normalize()),
+
+                        new PolygonalFace(new[] {cornerVer2[2], cornerVer2[3], cornerVer2[7]},
+                            ((cornerVer2[7].Position.subtract(cornerVer2[3].Position)).crossProduct(
+                                cornerVer2[2].Position.subtract(cornerVer2[3].Position))).normalize()),
+
+                        new PolygonalFace(new[] {cornerVer2[5], cornerVer2[6], cornerVer2[7]},
+                            ((cornerVer2[7].Position.subtract(cornerVer2[6].Position)).crossProduct(
+                                cornerVer2[5].Position.subtract(cornerVer2[6].Position))).normalize()),
+
+                        new PolygonalFace(new[] {cornerVer2[1], cornerVer2[2], cornerVer2[6]},
+                            ((cornerVer2[6].Position.subtract(cornerVer2[2].Position)).crossProduct(
+                                cornerVer2[1].Position.subtract(cornerVer2[2].Position))).normalize()),
+
+                        new PolygonalFace(new[] {cornerVer2[0], cornerVer2[3], cornerVer2[7]},
+                            ((cornerVer2[0].Position.subtract(cornerVer2[3].Position)).crossProduct(
+                                cornerVer2[7].Position.subtract(cornerVer2[3].Position))).normalize()),
+                    };
+                    var c2 =
+                        solid.Vertices.Count(
+                            v =>
+                                faces2.Any(
+                                    f =>
+                                        (v.Position.subtract(f.Vertices[0].Position)).dotProduct(f.Normal) >
+                                        -0.000001));
+                    var output = new[] { obb.Volume.ToString(), obb2.Volume.ToString(), c1.ToString(), c2.ToString(), solid.Vertices.Count().ToString() };
+                    writer.WriteLine(string.Join(delimter, output));
+                }
+            */
         }
 
     }
