@@ -6,6 +6,7 @@ using System.Linq;
 using System.Xml.Serialization;
 using StarMathLib;
 using Assembly_Planner.GraphSynth.BaseClasses;
+using TVGL;
 
 namespace AssemblyEvaluation
 {
@@ -41,9 +42,9 @@ namespace AssemblyEvaluation
         public Vertex CenterOfMass;
 
         [XmlIgnore]
-        public ConvexHull<Vertex, DefaultConvexFace<Vertex>> CVXHull;
+        public TVGLConvexHull CVXHull;
 
-        public Part(string name, double mass, double volume, ConvexHull<Vertex, DefaultConvexFace<Vertex>> convexHull, Vertex centerOfMass)
+        public Part(string name, double mass, double volume, TVGLConvexHull convexHull, Vertex centerOfMass)
         {
             Name = name;
             PartNodes = new List<string>();
@@ -55,11 +56,11 @@ namespace AssemblyEvaluation
             AvgMomentofInertia = mass * radius * radius;
             CVXHull = convexHull;
 
-            var com = new Vector(0, 0, 0);
+            /*var com = new Vector(0, 0, 0);
             // find install direction by averaging all visible_DOF
             if (convexHull!=null)
-                foreach (var pt in convexHull.Points)
-                    com.AddInPlace(pt);
+                foreach (var pt in convexHull.Vertices)
+                    com.AddInPlace(pt);*/
             //CenterOfMass = new Vertex(StarMath.divide(com.Position, convexHull.Points.Count(), 3));
             CenterOfMass = centerOfMass;
         }
@@ -77,11 +78,11 @@ namespace AssemblyEvaluation
         public SecureAction Secure;
         public RotateAction Rotate;
         public InstallCharacterType InstallCharacter;
-        private List<DefaultConvexFace<Vertex>> refFacesInCombined;
+        private List<PolygonalFace> refFacesInCombined;
 
         public SubAssembly() { }
-        public SubAssembly(Part refAssembly, Part movingAssembly, ConvexHull<Vertex, DefaultConvexFace<Vertex>> combinedCVXHull,
-            InstallCharacterType InstallCharacter, List<DefaultConvexFace<Vertex>> refFacesInCombined)
+        public SubAssembly(Part refAssembly, Part movingAssembly, TVGLConvexHull combinedCVXHull,
+            InstallCharacterType InstallCharacter, List<PolygonalFace> refFacesInCombined)
         {
             Name = "subasm-" + Guid.NewGuid();
             PartNodes = new List<string>(refAssembly.PartNodes);
@@ -96,7 +97,7 @@ namespace AssemblyEvaluation
             CVXHull = combinedCVXHull;
             this.refFacesInCombined = refFacesInCombined;
         }
-        public SubAssembly(List<Component> nodes, ConvexHull<Vertex, DefaultConvexFace<Vertex>> combinedCVXHull,
+        public SubAssembly(List<Component> nodes, TVGLConvexHull combinedCVXHull,
             double Mass, double Volume, Vertex centerOfMass)
         {
             Name = "subasm-" + Guid.NewGuid();

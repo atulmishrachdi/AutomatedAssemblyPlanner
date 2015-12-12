@@ -271,9 +271,9 @@ namespace Assembly_Planner
             var rays = solidMoving.ConvexHull.Vertices.Select(
                 vertex =>
                     new Ray(
-                        new AssemblyEvaluation.Vertex(vertex.Position[0], vertex.Position[1],
-                            vertex.Position[2]),
-                        new Vector(direction[0], direction[1], direction[2]))).ToList();
+                        new Vertex(new []{vertex.Position[0], vertex.Position[1],
+                            vertex.Position[2]}),
+                        new []{direction[0], direction[1], direction[2]})).ToList();
             // add more vertices to the ray
             rays.AddRange(
                 NonadjacentBlockingDetermination.AddingMoreRays(

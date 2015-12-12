@@ -106,7 +106,7 @@ namespace Assembly_Planner
             foreach (var point in kPointsOnSurface)
             {
                 var rayVector = (bC.PointOnTheCenterLine.add(met)).subtract(point);
-                var ray = new Ray(new AssemblyEvaluation.Vertex(point), new Vector(rayVector));
+                var ray = new Ray(new Vertex(point), rayVector);
                 var minDisOuter = double.PositiveInfinity;
                 var minDisInner = double.PositiveInfinity;
                 foreach (var face in solid.Faces)

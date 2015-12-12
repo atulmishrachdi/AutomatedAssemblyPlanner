@@ -8,12 +8,14 @@ using GraphSynth;
 using GraphSynth.Representation;
 using GraphSynth.Search;
 using Assembly_Planner.GraphSynth.BaseClasses;
+using TVGL;
+using Constants = AssemblyEvaluation.Constants;
 
 namespace Assembly_Planner
 {
     class RecursiveOptimizedSearch
     {
-        protected static EvaluationForBinaryTree assemblyEvaluator;
+        protected static EvaluationForBinaryTree AssemblyEvaluator;
         protected static int[] Count = new int[100];
         protected static designGraph Graph;
         protected static List<int> DirPool;
@@ -48,14 +50,12 @@ namespace Assembly_Planner
                 PrintTree((SubAssembly)Tree.Install.Moving, Level + 1);
         }
 
-        internal static SubAssembly Run(ConvexHullAndBoundingBox inputData, List<int> globalDirPool, bool DoEstimate = false)
+        internal static SubAssembly Run(designGraph Graph, List<TessellatedSolid> solids, List<int> globalDirPool, bool DoEstimate = false)
         {
             Constants.Values = new Constants();
-            Graph = inputData.graphAssembly;
+            AssemblyEvaluator = new EvaluationForBinaryTree(solids);
             DirPool = globalDirPool;
             //Updates.UpdateGlobalDirections(DirPool);
-            assemblyEvaluator = new EvaluationForBinaryTree(inputData.ConvexHullDictionary);
-            AssemblyEvaluator.convexHullForPartsA = assemblyEvaluator.convexHullForParts;
             Estimate = DoEstimate;
 
             InitializeMemo();
@@ -136,7 +136,7 @@ namespace Assembly_Planner
                 foreach (var opt in options)
                 {
                     TreeCandidate TC = new TreeCandidate();
-                    if (assemblyEvaluator.EvaluateSub(Graph, A, opt.nodes.Cast<Component>().ToList(), out TC.sa) > 0)
+                    if (AssemblyEvaluator.EvaluateSub(Graph, A, opt.nodes.Cast<Component>().ToList(), out TC.sa) > 0)
                     {
                         TC.RefNodes = new HashSet<Component>(TC.sa.Install.Reference.PartNodes.Select(n => (Component)Graph[n]));
                         TC.MovNodes = new HashSet<Component>(TC.sa.Install.Moving.PartNodes.Select(n => (Component)Graph[n]));
@@ -162,7 +162,7 @@ namespace Assembly_Planner
                 List<Component> Asm = new List<Component>(new Component[] { (Component)arc.From, (Component)arc.To });
                 List<Component> Fr = new List<Component>(new Component[] { (Component)arc.From });
                 SubAssembly sa;
-                if (assemblyEvaluator.EvaluateSub(Graph,Asm, Fr, out sa) > 0)
+                if (AssemblyEvaluator.EvaluateSub(Graph,Asm, Fr, out sa) > 0)
                 {
                     HashSet<Component> A = new HashSet<Component>(Asm);
                     MemoData D = new MemoData(sa.Install.Time, sa);

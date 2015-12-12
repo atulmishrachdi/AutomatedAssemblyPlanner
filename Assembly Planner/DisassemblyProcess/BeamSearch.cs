@@ -9,6 +9,7 @@ using GraphSynth;
 using GraphSynth.Representation;
 using GraphSynth.Search;
 using Assembly_Planner.GraphSynth.BaseClasses;
+using TVGL;
 
 namespace Assembly_Planner
 {
@@ -16,12 +17,11 @@ namespace Assembly_Planner
     {
         public static Dictionary<int, List<List<Component>>> SccTracker = new Dictionary<int, List<List<Component>>>();
         protected static AssemblyEvaluator assemblyEvaluator;
-        internal static List<AssemblyCandidate> Run(ConvexHullAndBoundingBox inputData, List<int> globalDirPool)
+        internal static List<AssemblyCandidate> Run(designGraph assemblyGraph, List<TessellatedSolid> solids, List<int> globalDirPool)
         {
-            var assemblyGraph = inputData.graphAssembly;
             //DisassemblyDirections.Directions = TemporaryDirections();
             var solutions = new List<AssemblyCandidate>();
-            assemblyEvaluator = new AssemblyEvaluator(inputData.ConvexHullDictionary);
+            assemblyEvaluator = new AssemblyEvaluator(solids);
 
             Updates.UpdateGlobalDirections(globalDirPool);
             assemblyGraph.addHyperArc(assemblyGraph.nodes);

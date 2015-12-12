@@ -1,6 +1,5 @@
 ﻿using System.Data;
 using Assembly_Planner;
-using GeometryReasoning;
 using GraphSynth;
 using GraphSynth.Representation;
 using MIConvexHull;

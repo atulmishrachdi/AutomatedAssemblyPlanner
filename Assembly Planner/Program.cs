@@ -18,7 +18,7 @@ namespace Assembly_Planner
     {
         private static void Main(string[] args)
         {
-            var graphExists = true;
+            var graphExists = false;
             var inputDir =
                 //"../../../Test/Cube";
                 //"../../../Test/PumpWExtention";
@@ -54,8 +54,7 @@ namespace Assembly_Planner
                 //NonadjacentBlockingDetermination.Run(assemblyGraph, solids, globalDirPool);
                 //GraphSaving.SaveTheGraph(assemblyGraph);
             }
-            var inputData = new ConvexHullAndBoundingBox(inputDir, assemblyGraph);
-            var solutions = RecursiveOptimizedSearch.Run(inputData, globalDirPool);
+            var solutions = RecursiveOptimizedSearch.Run(assemblyGraph, solids, globalDirPool);
             //var solutions = OrderedDFS.Run(inputData, globalDirPool,solids); // the output is the assembly sequence
             //var solutions = BeamSearch.Run(inputData, globalDirPool);
            

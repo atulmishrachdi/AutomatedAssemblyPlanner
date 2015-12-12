@@ -35,12 +35,10 @@ namespace Assembly_Planner.DisassemblyProcess
         protected static Dictionary<string, int> Node2Int = new Dictionary<string, int>();
         protected static bool Estimate;
 
-        internal static SubAssembly RunAnytime(ConvexHullAndBoundingBox inputData, List<int> globalDirPool)
+        internal static SubAssembly RunAnytime(designGraph Graph, List<int> globalDirPool)
         {
-            Graph = inputData.graphAssembly;
             DirPool = globalDirPool;
             Updates.UpdateGlobalDirections(DirPool);
-            assemblyEvaluator = new EvaluationForBinaryTree(inputData.ConvexHullDictionary); //inputData.ConvexHullDictionary);
 
             InitializeMemo();
 
@@ -303,14 +301,12 @@ namespace Assembly_Planner.DisassemblyProcess
             Console.Write("] (" + A.Count() + ")");
         }
 
-        internal static SubAssembly Run(ConvexHullAndBoundingBox inputData, List<int> globalDirPool,
+        internal static SubAssembly Run(designGraph Graph, List<int> globalDirPool,
             bool DoEstimate = false)
         {
             // same as REcursiveOptimizedSearch
-            Graph = inputData.graphAssembly;
             DirPool = globalDirPool;
             Updates.UpdateGlobalDirections(DirPool);
-            assemblyEvaluator = new EvaluationForBinaryTree(inputData.ConvexHullDictionary); //inputData.ConvexHullDictionary);
             Estimate = DoEstimate;
 
             InitializeMemo();

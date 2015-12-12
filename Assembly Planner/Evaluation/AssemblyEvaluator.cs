@@ -1,6 +1,5 @@
 ﻿using System.Data;
 using Assembly_Planner;
-using GeometryReasoning;
 using GraphSynth;
 using GraphSynth.Representation;
 using MIConvexHull;
@@ -17,20 +16,19 @@ namespace AssemblyEvaluation
 {
     public class AssemblyEvaluator
     {
-        private static List<List<DefaultConvexFace<Vertex>>> newRefCVHFacesInCom = new List<List<DefaultConvexFace<Vertex>>>();
-        public static Dictionary<string, ConvexHull<Vertex, DefaultConvexFace<Vertex>>> convexHullForPartsA;
+        private static List<List<PolygonalFace>> newRefCVHFacesInCom = new List<List<PolygonalFace>>();
+        private static Dictionary<string, TVGLConvexHull> ConvexHullsForParts = new Dictionary<string, TVGLConvexHull>(); 
         private int Iterations;
         private readonly TimeEvaluator timeEvaluator;
         private  Stability subMovingPartFinder;
 
         #region Constructor
-        public AssemblyEvaluator(Dictionary<string, ConvexHull<Vertex, DefaultConvexFace<Vertex>>> convexHullForParts)
+        public AssemblyEvaluator(List<TessellatedSolid> solids)
         {
-            //feasibility = new FeasibilityEvaluator();
+            foreach (var solid in solids)
+                ConvexHullsForParts.Add(solid.Name, solid.ConvexHull);
             timeEvaluator = new TimeEvaluator();
             subMovingPartFinder = new Stability();
-            convexHullForPartsA = convexHullForParts;
-            //    reOrientations = new ReOrientations();
         }
 
         #endregion
@@ -39,7 +37,7 @@ namespace AssemblyEvaluation
         public double Evaluate(AssemblyCandidate c, option opt, List<Component> rest, List<TessellatedSolid> solides)
         {
             // Set up moving and reference subassemblies
-            var newSubAsm = c.Sequence.Update(opt, rest, convexHullForPartsA);
+            var newSubAsm = c.Sequence.Update(opt, rest, ConvexHullsForParts);
             var refNodes = newSubAsm.Install.Reference.PartNodes.Select(n => (Component)c.graph[n]).ToList();
             var movingNodes = newSubAsm.Install.Moving.PartNodes.Select(n => (Component)c.graph[n]).ToList();
             var install = new[] { refNodes, movingNodes };
@@ -61,10 +59,10 @@ namespace AssemblyEvaluation
 
             var firstArc = connectingArcs[0];
             var i = firstArc.localVariables.IndexOf(Constants.Values.CLASH_LOCATION);
-            var insertionPoint = (i == -1) ? new Vertex(0, 0, 0)
-                : new Vertex(firstArc.localVariables[i + 1], firstArc.localVariables[i + 2], firstArc.localVariables[i + 3]);
+            var insertionPoint = (i == -1) ? new Vertex(new[] { 0.0, 0.0, 0.0 })
+                : new Vertex(new[] { firstArc.localVariables[i + 1], firstArc.localVariables[i + 2], firstArc.localVariables[i + 3] });
 
-            newSubAsm.Install.InstallDirection = StarMath.multiply(insertionDistance, insertionDirection.Position);
+            newSubAsm.Install.InstallDirection = StarMath.multiply(insertionDistance, insertionDirection);
             newSubAsm.Install.InstallPoint = insertionPoint.Position;
 
             var travelDistance = 1;//m
@@ -83,7 +81,7 @@ namespace AssemblyEvaluation
             
             //c.f4 += newSubAsm.Install.TimeSD;
             //c.f4 = timeEvaluator.EvaluateTimeOfLongestBranch(c.Sequence);
-            if (double.IsNaN(insertionDirection.Position[0])) Console.WriteLine();
+            if (double.IsNaN(insertionDirection[0])) Console.WriteLine();
 
             double evaluationScore = InitialEvaluation(newSubAsm, newSubAsm.Install.InstallDirection, refNodes, movingNodes, c,newSubAsm.Install.Time );
             
@@ -105,127 +103,128 @@ namespace AssemblyEvaluation
             return c.TimeScore + c.AccessibilityScore + c.StabilityScore;
         }
 
-        public static Vector FindPartDisconnectMovement(IEnumerable<Connection> connectingArcs, List<Component> refNodes, out double insertionDistance)
+        public static double[] FindPartDisconnectMovement(IEnumerable<Connection> connectingArcs, List<Component> refNodes, out double insertionDistance)
         {
-            var installDirection = new Vector(0, 0, 0);
+            // This function needs to be rewritten
+            var installDirection = new[]{0.0,0,0};
             // find install direction by averaging all visible_DOF
-            foreach (var arc in connectingArcs)
-            {
-                var index = arc.localVariables.FindIndex(x => x == Constants.Values.VISIBLE_DOF || x == Constants.Values.CONCENTRIC_DOF);
-                while (index != -1)
-                {
-                    var dir = new Vector(arc.localVariables[++index], arc.localVariables[++index], arc.localVariables[++index]);
-                    dir.NormalizeInPlace();
-                    installDirection.AddInPlace(dir);
-                    if (double.IsNaN(dir.Position[0])) continue;
-                    index = arc.localVariables.FindIndex(index, x => x == Constants.Values.VISIBLE_DOF || x == Constants.Values.CONCENTRIC_DOF);
-                }
-            }
-            installDirection.NormalizeInPlace();
-            if (double.IsNaN(installDirection.Position[0]))
-            {
-                /* if we are unable to find insertion direction from arcs, we will use the CG of the nodes     */
-                var numRefCGs = 0;
-                var numMovingCGs = 0;
-                var movingCG = new double[3];
-                var refCG = new double[3];
-                foreach (var a in connectingArcs)
-                {
-                    var n = a.To;
-                    var index = n.localVariables.FindIndex(x => x == Constants.Values.TRANSLATION);
-                    if (index != -1)
-                    {
-                        if (refNodes.Contains(n))
-                        {
-                            numRefCGs++;
-                            refCG = StarMath.add(refCG,
-                                new[] { n.localVariables[++index], n.localVariables[++index], n.localVariables[++index] },
-                                3);
-                        }
-                        else
-                        {
-                            numMovingCGs++;
-                            movingCG = StarMath.add(movingCG,
-                                new[] { n.localVariables[++index], n.localVariables[++index],n.localVariables[++index] },
-                                3);
-                        }
-                    }
-                    n = a.From;
-                    index = n.localVariables.FindIndex(x => x == Constants.Values.TRANSLATION);
-                    if (index != -1)
-                    {
-                        if (refNodes.Contains(n))
-                        {
-                            numRefCGs++;
-                            refCG = StarMath.add(refCG,
-                                new[] { n.localVariables[++index], n.localVariables[++index], n.localVariables[++index] },
-                                3);
-                        }
-                        else
-                        {
-                            numMovingCGs++;
-                            movingCG = StarMath.add(movingCG,
-                                new[] { n.localVariables[++index], n.localVariables[++index], n.localVariables[++index] },
-                                3);
-                        }
-                    }
-                }
-                refCG = StarMath.divide(refCG, numRefCGs, 3);
-                movingCG = StarMath.divide(movingCG, numMovingCGs, 3);
-                installDirection.Position = StarMath.subtract(movingCG, refCG, 3);
-                installDirection.NormalizeInPlace();
-            }
-            if (double.IsNaN(installDirection.Position[0]))
-            {
-                installDirection.Position = new[] {1.0, 0.0, 0.0};
-                SearchIO.output("unable to find install direction between parts",3);
-            }
+            //foreach (var arc in connectingArcs)
+            //{
+            //    var index = arc.localVariables.FindIndex(x => x == Constants.Values.VISIBLE_DOF || x == Constants.Values.CONCENTRIC_DOF);
+            //    while (index != -1)
+            //    {
+            //        var dir = new Vector(arc.localVariables[++index], arc.localVariables[++index], arc.localVariables[++index]);
+            //        dir.NormalizeInPlace();
+            //        installDirection.AddInPlace(dir);
+            //        if (double.IsNaN(dir.Position[0])) continue;
+            //        index = arc.localVariables.FindIndex(index, x => x == Constants.Values.VISIBLE_DOF || x == Constants.Values.CONCENTRIC_DOF);
+            //    }
+            //}
+            //installDirection.NormalizeInPlace();
+            //if (double.IsNaN(installDirection.Position[0]))
+            //{
+            //    /* if we are unable to find insertion direction from arcs, we will use the CG of the nodes     */
+            //    var numRefCGs = 0;
+            //    var numMovingCGs = 0;
+            //    var movingCG = new double[3];
+            //    var refCG = new double[3];
+            //    foreach (var a in connectingArcs)
+            //    {
+            //        var n = a.To;
+            //        var index = n.localVariables.FindIndex(x => x == Constants.Values.TRANSLATION);
+            //        if (index != -1)
+            //        {
+            //            if (refNodes.Contains(n))
+            //            {
+            //                numRefCGs++;
+            //                refCG = StarMath.add(refCG,
+            //                    new[] { n.localVariables[++index], n.localVariables[++index], n.localVariables[++index] },
+            //                    3);
+            //            }
+            //            else
+            //            {
+            //                numMovingCGs++;
+            //                movingCG = StarMath.add(movingCG,
+            //                    new[] { n.localVariables[++index], n.localVariables[++index],n.localVariables[++index] },
+            //                    3);
+            //            }
+            //        }
+            //        n = a.From;
+            //        index = n.localVariables.FindIndex(x => x == Constants.Values.TRANSLATION);
+            //        if (index != -1)
+            //        {
+            //            if (refNodes.Contains(n))
+            //            {
+            //                numRefCGs++;
+            //                refCG = StarMath.add(refCG,
+            //                    new[] { n.localVariables[++index], n.localVariables[++index], n.localVariables[++index] },
+            //                    3);
+            //            }
+            //            else
+            //            {
+            //                numMovingCGs++;
+            //                movingCG = StarMath.add(movingCG,
+            //                    new[] { n.localVariables[++index], n.localVariables[++index], n.localVariables[++index] },
+            //                    3);
+            //            }
+            //        }
+            //    }
+            //    refCG = StarMath.divide(refCG, numRefCGs, 3);
+            //    movingCG = StarMath.divide(movingCG, numMovingCGs, 3);
+            //    installDirection.Position = movingCG.subtract(refCG, 3);
+            //    installDirection.NormalizeInPlace();
+            //}
+            //if (double.IsNaN(installDirection.Position[0]))
+            //{
+            //    installDirection.Position = new[] {1.0, 0.0, 0.0};
+            //    SearchIO.output("unable to find install direction between parts",3);
+            //}
 
-            // now, we have to figure out how much to move.
-            // foreach arc, we find the point of the cvx hull of the reference node that is farthest along the install direction,
-            // call it rmv (Referenc Max Value)
-            // then we find the lowest value of the moving cvx hull point along this install direction,
-            // call it mmv (Moving Min Value). 
-            // The difference, delta, is the amount of movument to clear one part from the other.
-            // we take the max delta from all interstitial arcs and multiply it by the install direction
-            insertionDistance = double.NegativeInfinity;
-            foreach (var arc in connectingArcs)
-            {
-                var fromNode = arc.From;
-                var toNode = arc.To;
-                ConvexHull<Vertex, DefaultConvexFace<Vertex>> refHull, movingHull;
-                if (refNodes.Contains(fromNode))
-                {
-                    refHull = convexHullForPartsA[fromNode.name];
-                    movingHull = convexHullForPartsA[toNode.name];
-                }
-                else
-                {
-                    refHull = convexHullForPartsA[toNode.name];
-                    movingHull = convexHullForPartsA[fromNode.name];
-                }
-                var refMaxValue = STLGeometryFunctions.findMaxPlaneHeightInDirection(refHull.Points, installDirection);
+            //// now, we have to figure out how much to move.
+            //// foreach arc, we find the point of the cvx hull of the reference node that is farthest along the install direction,
+            //// call it rmv (Referenc Max Value)
+            //// then we find the lowest value of the moving cvx hull point along this install direction,
+            //// call it mmv (Moving Min Value). 
+            //// The difference, delta, is the amount of movument to clear one part from the other.
+            //// we take the max delta from all interstitial arcs and multiply it by the install direction
+            //insertionDistance = double.NegativeInfinity;
+            //foreach (var arc in connectingArcs)
+            //{
+            //    var fromNode = arc.From;
+            //    var toNode = arc.To;
+            //    TVGLConvexHull refHull, movingHull;
+            //    if (refNodes.Contains(fromNode))
+            //    {
+            //        refHull = convexHullForPartsA[fromNode.name];
+            //        movingHull = convexHullForPartsA[toNode.name];
+            //    }
+            //    else
+            //    {
+            //        refHull = convexHullForPartsA[toNode.name];
+            //        movingHull = convexHullForPartsA[fromNode.name];
+            //    }
+            //    var refMaxValue = STLGeometryFunctions.findMaxPlaneHeightInDirection(refHull.Vertices, installDirection);
 
-                var movingMinValue = STLGeometryFunctions.findMinPlaneHeightInDirection(movingHull.Points, installDirection);
+            //    var movingMinValue = STLGeometryFunctions.findMinPlaneHeightInDirection(movingHull.Vertices, installDirection);
 
-                var distance = refMaxValue - movingMinValue;
-                if (insertionDistance < distance) insertionDistance = distance;
-            }
+            //    var distance = refMaxValue - movingMinValue;
+            //    if (insertionDistance < distance) insertionDistance = distance;
+            //}
+            insertionDistance = 0;
             return installDirection;
         }
 
-        public static List<DefaultConvexFace<Vertex>> UnaffectedRefFacesDuringInstallation(SubAssembly newSubAsm)
+        public static List<PolygonalFace> UnaffectedRefFacesDuringInstallation(SubAssembly newSubAsm)
         {
             var insertionDirection = newSubAsm.Install.InstallDirection;
             var notAffectedFacesInCom = newSubAsm.Install.Reference.CVXHull.Faces.ToList();
             var halfOfRefCvh = newSubAsm.Install.Reference.CVXHull.Faces.Where(f => f.Normal.dotProduct(insertionDirection) < 0).ToList();
             foreach (var eachFace in halfOfRefCvh)
             {
-                foreach (var eachMovingVerticies in newSubAsm.Install.Moving.CVXHull.Points)
+                foreach (var eachMovingVerticies in newSubAsm.Install.Moving.CVXHull.Vertices)
                 {
-                    var vector = new Vector(insertionDirection);
-                    var ray = new Ray(eachMovingVerticies, vector);
-                    var faceAffected = STLGeometryFunctions.RayIntersectsWithFace(ray, eachFace);
+                    var ray = new Ray(eachMovingVerticies, insertionDirection);
+                    var faceAffected = GeometryFunctions.RayIntersectsWithFace(ray, eachFace);
                     if (faceAffected)
                         notAffectedFacesInCom.Remove(eachFace);
                 }
@@ -309,7 +308,7 @@ namespace AssemblyEvaluation
                 var toPoint = f.ExCoVer[i + 1];
                 var currentEdge = toPoint.Position.subtract(fromPoint.Position);
                 var arcToComProj = f.COMP.Position.subtract(fromPoint.Position);
-                var arbitraryPoint = new Vertex(0, 0, 0);
+                var arbitraryPoint = new Vertex(new[] { 0.0, 0, 0 });
                 foreach (var eachVertex in f.ExVer.Where(q => q != fromPoint && q != toPoint))
                 {
                     arbitraryPoint = eachVertex;
@@ -344,7 +343,7 @@ namespace AssemblyEvaluation
             var w = refCOM.Position[2];
             var t0 = -(a * u + b * v + c * w + d) / (a * a + b * b + c * c);
 
-            f.COMP = new Vertex(0, 0, 0);
+            f.COMP = new Vertex(new[] { 0, 0, 0.0 });
             f.COMP.Position[0] = u + a * t0; // x element
             f.COMP.Position[1] = v + b * t0; // y element
             f.COMP.Position[2] = w + c * t0; // z element
@@ -364,7 +363,7 @@ namespace AssemblyEvaluation
         }
 
 
-        public static List<FootprintFace> MergingFaces(List<DefaultConvexFace<Vertex>> unChangedFaces)
+        public static List<FootprintFace> MergingFaces(List<PolygonalFace> unChangedFaces)
         {
             var FootprintFaces = new List<FootprintFace>();
             for (var c = 0; c < unChangedFaces.Count; c++)
@@ -374,7 +373,7 @@ namespace AssemblyEvaluation
                 var normal2 = unChangedFaces[c].Normal;
                 FootprintFaces[c].Normal = normal2;
                 FootprintFaces[c].ExCoVer = new List<Vertex>();
-                FootprintFaces[c].Faces = new List<DefaultConvexFace<Vertex>>();
+                FootprintFaces[c].Faces = new List<PolygonalFace>();
                 for (var i = 0; i < 3; i++)
                 {
                     for (var j = i + 1; j < 3; j++)

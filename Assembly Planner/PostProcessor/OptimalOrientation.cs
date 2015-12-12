@@ -190,9 +190,9 @@ namespace Assembly_Planner
             // if the face is adjacent, there is no need to lift it.
             // Maximum Distance is the longest diagonal in the Ref CVH 
             var maxDist = 0.0;
-            foreach (var p1 in task.Install.Reference.CVXHull.Points)
+            foreach (var p1 in task.Install.Reference.CVXHull.Vertices)
             {
-                foreach (var p2 in task.Install.Reference.CVXHull.Points.Where(a => a != p1))
+                foreach (var p2 in task.Install.Reference.CVXHull.Vertices.Where(a => a != p1))
                 {
                     var xDif = p1.Position[0] - p2.Position[0];
                     var yDif = p1.Position[1] - p2.Position[1];

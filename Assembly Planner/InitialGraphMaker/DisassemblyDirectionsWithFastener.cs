@@ -45,7 +45,7 @@ namespace Assembly_Planner
             //------------------------------------------------------------------------------------------
             var screwsAndBolts = new HashSet<TessellatedSolid>();
             if (classifyFastener)
-                screwsAndBolts = FastenerDetector.Run(solidPrimitive, multipleRefs, true, threaded,false);
+                screwsAndBolts = FastenerDetector.Run(solidPrimitive, multipleRefs,false, threaded,false);
             var solidsNoFastener = RemoveFastenersFromTheSolidsList(solids, screwsAndBolts);
 
             // Detect gear mates

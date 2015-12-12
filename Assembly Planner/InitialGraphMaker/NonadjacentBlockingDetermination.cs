@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using AssemblyEvaluation;
 using Assembly_Planner.GraphSynth.BaseClasses;
-using GeometryReasoning;
 using GraphSynth.Representation;
 using MIConvexHull;
 using StarMathLib;
@@ -44,9 +43,9 @@ namespace Assembly_Planner
                     foreach (var vertex in solid.ConvexHull.Vertices)
                         rays.Add(
                             new Ray(
-                                new AssemblyEvaluation.Vertex(vertex.Position[0], vertex.Position[1],
-                                    vertex.Position[2]),
-                                new Vector(direction[0], direction[1], direction[2])));
+                                new Vertex(new[]{vertex.Position[0], vertex.Position[1],
+                                    vertex.Position[2]}),
+                                new[]{direction[0], direction[1], direction[2]}));
                     // add more vertices to the ray
                     rays.AddRange(
                         AddingMoreRays(solid.ConvexHull.Edges.Where(e => e != null && e.Length > 2).ToArray(),
@@ -229,23 +228,28 @@ namespace Assembly_Planner
         {
             //For the case that two objects are nonadacently blocking each other but the rays shot from the corner
             //vertices cannot detect them, we will add more vertices here to solve this issue.
-            var sections = edges.Select(edge => new[] {new AssemblyEvaluation.Vertex(edge.From.Position), new AssemblyEvaluation.Vertex(edge.To.Position)}).ToList();
+            var sections = edges.Select(edge => new[] {new Vertex(edge.From.Position), new Vertex(edge.To.Position)}).ToList();
             var newRays = new List<Ray>();
             var counter = 0;
             while (counter < 1)
             {
                 counter++;
-                var section2 = new List<AssemblyEvaluation.Vertex[]>();
+                var section2 = new List<Vertex[]>();
                 foreach (var sec in sections)
                 {
                     var aP = sec[0];
                     var bP = sec[1];
-                    var midPoint = new AssemblyEvaluation.Vertex((aP.Position[0] + bP.Position[0]) / 2.0, (aP.Position[1] + bP.Position[1]) / 2.0, (aP.Position[2] + bP.Position[2]) / 2.0);
-                    newRays.Add(new Ray(midPoint, new Vector(dir)));
+                    var midPoint =
+                        new Vertex(new[]
+                        {
+                            (aP.Position[0] + bP.Position[0])/2.0, (aP.Position[1] + bP.Position[1])/2.0,
+                            (aP.Position[2] + bP.Position[2])/2.0
+                        });
+                    newRays.Add(new Ray(midPoint, dir));
                     section2.Add(new[] { aP, midPoint });
                     section2.Add(new[] { midPoint, bP });
                 }
-                sections = new List<AssemblyEvaluation.Vertex[]>(section2);
+                sections = new List<Vertex[]>(section2);
             }
             return newRays;
         }
@@ -302,9 +306,8 @@ namespace Assembly_Planner
 
                 // set up a single face with the normal along the direction v in which the other 6 corner of the
                 // block make some sort of hexagonal face
-                var superficialBlockingFace = new DefaultConvexFace<AssemblyEvaluation.Vertex>
+                var superficialBlockingFace = new PolygonalFace()
                 {
-                    Vertices = new AssemblyEvaluation.Vertex[6],
                     Normal = v
                 };
                 var index = 0;
@@ -317,7 +320,7 @@ namespace Assembly_Planner
                     if (vertexIndices[0] == complementaryCornerIndices[0] &&
                         vertexIndices[1] == complementaryCornerIndices[1] &&
                         vertexIndices[2] == complementaryCornerIndices[2]) continue;
-                    superficialBlockingFace.Vertices[index] = new AssemblyEvaluation.Vertex(new[]
+                    superficialBlockingFace.Vertices[index] = new Vertex(new[]
                     {
                         blockingBox[vertexIndices[0]],
                         blockingBox[vertexIndices[1] + 2],
@@ -335,17 +338,17 @@ namespace Assembly_Planner
                     if (vertexIndices[0] == complementaryCornerIndices[0] &&
                         vertexIndices[1] == complementaryCornerIndices[1] &&
                         vertexIndices[2] == complementaryCornerIndices[2]) continue;
-                    var ray = new Ray(new AssemblyEvaluation.Vertex(new[]
+                    var ray = new Ray(new Vertex(new[]
                     {
                         movingPartBox[vertexIndices[0]],
                         movingPartBox[vertexIndices[1] + 2],
                         movingPartBox[vertexIndices[2] + 4]
                     }),
-                        new Vector(v[0], v[1], v[2]));
+                        new[]{v[0], v[1], v[2]});
                     // bug: the following function will only work if the face is convex (which it is) and the
                     // points are provided in the proper order (which they are not). Furthermore, the six
                     // corners are not part of a plane, so I'm not sure this will work out.
-                    if (STLGeometryFunctions.RayIntersectsWithFace(ray, superficialBlockingFace)) return true;
+                    if (RayIntersectsWithFace(ray, superficialBlockingFace)) return true;
                 }
                 return false;
             }
@@ -353,14 +356,14 @@ namespace Assembly_Planner
 
         private static bool newApproachBoundingBox(double[] v, double[] bB, double[] mB)
         {
-            var mV1 = new TVGL.Vertex(new[] { mB[0], mB[2], mB[4] });
-            var mV2 = new TVGL.Vertex(new[] { mB[0], mB[3], mB[4] });
-            var mV3 = new TVGL.Vertex(new[] { mB[1], mB[3], mB[4] });
-            var mV4 = new TVGL.Vertex(new[] { mB[1], mB[2], mB[4] });
-            var mV5 = new TVGL.Vertex(new[] { mB[0], mB[2], mB[5] });
-            var mV6 = new TVGL.Vertex(new[] { mB[0], mB[3], mB[5] });
-            var mV7 = new TVGL.Vertex(new[] { mB[1], mB[3], mB[5] });
-            var mV8 = new TVGL.Vertex(new[] { mB[1], mB[2], mB[5] });
+            var mV1 = new Vertex(new[] { mB[0], mB[2], mB[4] });
+            var mV2 = new Vertex(new[] { mB[0], mB[3], mB[4] });
+            var mV3 = new Vertex(new[] { mB[1], mB[3], mB[4] });
+            var mV4 = new Vertex(new[] { mB[1], mB[2], mB[4] });
+            var mV5 = new Vertex(new[] { mB[0], mB[2], mB[5] });
+            var mV6 = new Vertex(new[] { mB[0], mB[3], mB[5] });
+            var mV7 = new Vertex(new[] { mB[1], mB[3], mB[5] });
+            var mV8 = new Vertex(new[] { mB[1], mB[2], mB[5] });
             var movingVer = new List<Vertex> {mV1, mV2, mV3, mV4, mV5, mV6, mV7, mV8};
             var mE1 = new Edge(mV1, mV2, true);
             var mE2 = new Edge(mV1, mV4, true);
@@ -376,14 +379,14 @@ namespace Assembly_Planner
             var mE12 = new Edge(mV4, mV8, true);
             var movingEdg = new List<Edge> { mE1, mE2, mE3, mE4, mE5, mE6, mE7, mE8, mE9, mE10, mE11, mE12 };
 
-            var bV1 = new TVGL.Vertex(new[] { bB[0], bB[2], bB[4] });
-            var bV2 = new TVGL.Vertex(new[] { bB[0], bB[3], bB[4] });
-            var bV3 = new TVGL.Vertex(new[] { bB[1], bB[3], bB[4] });
-            var bV4 = new TVGL.Vertex(new[] { bB[1], bB[2], bB[4] });
-            var bV5 = new TVGL.Vertex(new[] { bB[0], bB[2], bB[5] });
-            var bV6 = new TVGL.Vertex(new[] { bB[0], bB[3], bB[5] });
-            var bV7 = new TVGL.Vertex(new[] { bB[1], bB[3], bB[5] });
-            var bV8 = new TVGL.Vertex(new[] { bB[1], bB[2], bB[5] });
+            var bV1 = new Vertex(new[] { bB[0], bB[2], bB[4] });
+            var bV2 = new Vertex(new[] { bB[0], bB[3], bB[4] });
+            var bV3 = new Vertex(new[] { bB[1], bB[3], bB[4] });
+            var bV4 = new Vertex(new[] { bB[1], bB[2], bB[4] });
+            var bV5 = new Vertex(new[] { bB[0], bB[2], bB[5] });
+            var bV6 = new Vertex(new[] { bB[0], bB[3], bB[5] });
+            var bV7 = new Vertex(new[] { bB[1], bB[3], bB[5] });
+            var bV8 = new Vertex(new[] { bB[1], bB[2], bB[5] });
             var blockingVer = new List<Vertex> {bV1, bV2, bV3, bV4, bV5, bV6, bV7, bV8};
             var bE1 = new Edge(bV1, bV2, true);
             var bE2 = new Edge(bV1, bV4, true);
@@ -409,16 +412,15 @@ namespace Assembly_Planner
         public static bool RayIntersectsWithFace(Ray ray, PolygonalFace face)
         {
             if (Math.Abs(ray.Direction.dotProduct(face.Normal)) < AssemblyEvaluation.Constants.Values.NearlyParallelFace) return false;
-            var inPlaneVerts = new AssemblyEvaluation.Vertex[3];
+            var inPlaneVerts = new Vertex[3];
             var negativeDirCounter = 3;
             for (var i = 0; i < 3; i++)
             {
-                var vectFromRayToFacePt = new Vector(ray.Position);
-                vectFromRayToFacePt = vectFromRayToFacePt.MakeVectorTo(face.Vertices[i]); // Interesting
-                var dxtoPlane = ray.Direction.dotProduct(vectFromRayToFacePt.Position);
+                var vectFromRayToFacePt = face.Vertices[i].Position.subtract(ray.Position); // Interesting
+                var dxtoPlane = ray.Direction.dotProduct(vectFromRayToFacePt);
                 if (dxtoPlane < 0) negativeDirCounter--;
                 if (negativeDirCounter == 0) return false;
-                inPlaneVerts[i] = new AssemblyEvaluation.Vertex(face.Vertices[i].Position.add(StarMath.multiply(-dxtoPlane, ray.Direction)));
+                inPlaneVerts[i] = new Vertex(face.Vertices[i].Position.add(StarMath.multiply(-dxtoPlane, ray.Direction)));
             }
             if (inPlaneVerts.Min(v => v.Position[0]) > ray.Position[0]) return false;
             if (inPlaneVerts.Max(v => v.Position[0]) < ray.Position[0]) return false;
@@ -520,13 +522,13 @@ namespace Assembly_Planner
                 var direction = DisassemblyDirections.Directions[dir];
                 var rays = new List<Ray>();
                 foreach (var vertex in solid2.ConvexHull.Vertices)
-                    rays.Add(new Ray(new AssemblyEvaluation.Vertex(vertex.Position[0], vertex.Position[1], vertex.Position[2]),
-                                    new Vector(direction[0], direction[1], direction[2])));
+                    rays.Add(new Ray(new Vertex(new[] { vertex.Position[0], vertex.Position[1], vertex.Position[2] }),
+                                    new[] { direction[0], direction[1], direction[2] }));
                 var direction2 = DisassemblyDirections.Directions[dir].multiply(-1.0);
                 var rays2 = new List<Ray>();
                 foreach (var vertex in solid1.ConvexHull.Vertices)
-                    rays2.Add(new Ray(new AssemblyEvaluation.Vertex(vertex.Position[0], vertex.Position[1], vertex.Position[2]),
-                                    new Vector(direction2[0], direction2[1], direction2[2])));
+                    rays2.Add(new Ray(new Vertex(new[] { vertex.Position[0], vertex.Position[1], vertex.Position[2] }),
+                                    new[] { direction2[0], direction2[1], direction2[2] }));
                 if (rays.Any(ray => solid1.Faces.Any(f => RayIntersectsWithFace3(ray, f) && DistanceToTheFace(ray.Position, f) > 0)))
                 {
                    finDirs.Add(dir);
@@ -553,8 +555,8 @@ namespace Assembly_Planner
                 var direction = DisassemblyDirections.Directions[dir];
                 var rays = new List<Ray>();
                 foreach (var vertex in solid2.ConvexHull.Vertices)
-                    rays.Add(new Ray(new AssemblyEvaluation.Vertex(vertex.Position[0], vertex.Position[1], vertex.Position[2]),
-                                    new Vector(direction[0], direction[1], direction[2])));
+                    rays.Add(new Ray(new Vertex(new[] { vertex.Position[0], vertex.Position[1], vertex.Position[2] }),
+                                    new[]{direction[0], direction[1], direction[2]}));
                 finite = IsTheLocalDirectionFinite(solid1, rays);
                 
                 if (finite)
@@ -566,8 +568,8 @@ namespace Assembly_Planner
                 var direction2 = DisassemblyDirections.Directions[dir].multiply(-1.0);
                 var rays2 = new List<Ray>();
                 foreach (var vertex in solid1.ConvexHull.Vertices)
-                    rays2.Add(new Ray(new AssemblyEvaluation.Vertex(vertex.Position[0], vertex.Position[1], vertex.Position[2]),
-                                    new Vector(direction2[0], direction2[1], direction2[2])));
+                    rays2.Add(new Ray(new Vertex(new[] { vertex.Position[0], vertex.Position[1], vertex.Position[2] }),
+                                    new[] {direction2[0], direction2[1], direction2[2]}));
                 finite = IsTheLocalDirectionFinite(solid2, rays2);
 
                 if (finite)

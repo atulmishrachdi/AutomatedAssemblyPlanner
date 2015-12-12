@@ -28,7 +28,7 @@ namespace GPprocess
             double insertionDistance;
             var insertionDirection = AssemblyEvaluator.FindPartDisconnectMovement(connectingArcs, refNodes, out insertionDistance);
 
-            var vt = sub.Install.Moving.CVXHull.Points.Select(p => new TVGL.Vertex(p.Position)).ToList();
+            var vt = sub.Install.Moving.CVXHull.Vertices.Select(p => new Vertex(p.Position)).ToList();
             var movingobb = TVGL.MinimumEnclosure.OrientedBoundingBox(vt);
 
 

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using GraphSynth.Representation;
 using MIConvexHull;
 using StarMathLib;
+using TVGL;
 
 namespace AssemblyEvaluation
 {
@@ -27,12 +28,12 @@ namespace AssemblyEvaluation
         private double TransferLength;
         private double[] CenterOfMass;
         private List<Vertex> convexHullVertices;
-        private List<DefaultConvexFace<Vertex>> convexHullFaces;
-        private Dictionary<string, ConvexHull<Vertex, DefaultConvexFace<Vertex>>> convexHullDictionary;
+        private List<PolygonalFace> convexHullFaces;
+        private Dictionary<string, TVGLConvexHull> convexHullDictionary;
         /// <summary>
         /// constructor
         /// </summary>
-        public ConvexHullEvaluator(Dictionary<string, ConvexHull<Vertex, DefaultConvexFace<Vertex>>> convexHullDictionary)
+        public ConvexHullEvaluator(Dictionary<string, TVGLConvexHull> convexHullDictionary)
         {
             this.convexHullDictionary = convexHullDictionary;
         }
@@ -46,7 +47,7 @@ namespace AssemblyEvaluation
         {
             // Step #1: Creat ConvexHull Vertices for the SubAssembly
             //CreateConvexHullVertices(componentsInReference);
-            var insertDir = new Vector(insertionDirection[0], insertionDirection[1], insertionDirection[2]);
+            var insertDir = new[]{insertionDirection[0], insertionDirection[1], insertionDirection[2]};
             // Step #2: Compute Accessiblity Metric
             ComputeAccessibleMetric(insertionPoint, insertDir);
 
@@ -55,26 +56,26 @@ namespace AssemblyEvaluation
 
         }
 
-        private void ComputeAccessibleMetric(Vertex insertionPoint, Vector insertionDirection)
+        private void ComputeAccessibleMetric(Vertex insertionPoint, double[] insertionDirection)
         {
             var ray = new Ray(insertionPoint, insertionDirection);
 
             // Distance to all convexhull vertices
             var coneHeights = new List<double>();
             foreach (var chv in convexHullVertices)
-                coneHeights.Add(StarMath.dotProduct(ray.Direction, ray.MakeVectorTo(chv).Position, 3));
-            double ConeMaxHeight = Enumerable.Max(coneHeights);
+                coneHeights.Add(ray.Direction.dotProduct(chv.Position.subtract(ray.Position)));
+            var ConeMaxHeight = Enumerable.Max(coneHeights);
 
             // Find candidate convexhull point
             int candidateVertexIndex = coneHeights.FindIndex(x => x == ConeMaxHeight);
             Vertex maxVertex = convexHullVertices[candidateVertexIndex];
 
             // Accessible cone upper-bound (R, D) dimensions
-            double ConeMaxRadius = pointRaySquareDistance(ray, maxVertex);
-            double halfAngleOfMinCone = findConeHalfAngle(ray, maxVertex);
+            var ConeMaxRadius = pointRaySquareDistance(ray, maxVertex);
+            var halfAngleOfMinCone = findConeHalfAngle(ray, maxVertex);
 
-            double ConeMinRadius = 0.0;
-            double ConeMinHeight = double.PositiveInfinity;
+            var ConeMinRadius = 0.0;
+            var ConeMinHeight = double.PositiveInfinity;
             // Accessible cone lower-bound (r, d) dimensions
             for (var i = 0; i < convexHullVertices.Count(); i++)
             {
@@ -94,21 +95,21 @@ namespace AssemblyEvaluation
                 APF = 0;
         }
 
-        private void ComputeStabilityMetric(Vertex Point, Vector insertionAxis)
+        private void ComputeStabilityMetric(Vertex Point, double[] insertionAxis)
         {
             // Find fixed face for a given subassembly
             var maxDot = 0.001;
-            var FixedFaces = new List<DefaultConvexFace<Vertex>>();
+            var FixedFaces = new List<PolygonalFace>();
             var FixedFace_Vertices = new List<Vertex>();
-            var FixedFace_Normal = new double[3] {insertionAxis.Position[0], 
-                                                  insertionAxis.Position[1], 
-                                                  insertionAxis.Position[2]};
+            var FixedFace_Normal = new double[3] {insertionAxis[0], 
+                                                  insertionAxis[1], 
+                                                  insertionAxis[2]};
             for (var i = 0; i < convexHullFaces.Count(); i++)
             {
-                DefaultConvexFace<Vertex> F = convexHullFaces[i];
-                var Dot = F.Normal[0] * insertionAxis.Position[0] +
-                          F.Normal[1] * insertionAxis.Position[1] +
-                          F.Normal[2] * insertionAxis.Position[2];
+                PolygonalFace F = convexHullFaces[i];
+                var Dot = F.Normal[0] * insertionAxis[0] +
+                          F.Normal[1] * insertionAxis[1] +
+                          F.Normal[2] * insertionAxis[2];
                 if (Dot > 0 & Dot < maxDot)
                 {
                     FixedFaces.Add(F);
@@ -148,15 +149,15 @@ namespace AssemblyEvaluation
             CoM[0] /= n;
             CoM[1] /= n;
             CoM[2] /= n;
-            return (new Vertex(CoM[0], CoM[1], CoM[2]));
+            return (new Vertex(new[] { CoM[0], CoM[1], CoM[2] }));
         }
         private Vertex LinePlaneIntersection(double[] normal, Vertex P0, Vertex P1, ref double distance)
         {
             // P0 is the point on the plane, P1 is the input point, P2 is another point on the line
             var T = 1000;
-            var P2 = new Vertex(P1.Position[0] + T * normal[0], P1.Position[1] + T * normal[1], P1.Position[2] + T * normal[2]);
+            var P2 = new Vertex(new[] { P1.Position[0] + T * normal[0], P1.Position[1] + T * normal[1], P1.Position[2] + T * normal[2] });
             var P0_P1 = new double[3] { P0.Position[0] - P1.Position[0], P0.Position[1] - P1.Position[1], P0.Position[2] - P1.Position[2] };
-            distance = Math.Abs(StarMath.dotProduct(normal, P0_P1, 3));
+            distance = Math.Abs(normal.dotProduct(P0_P1, 3));
 
             // Ref: http://paulbourke.net/geometry/pointlineplane/
             var D = -(normal[0] * P0.Position[0] + normal[1] * P0.Position[1] + normal[2] * P0.Position[2]);
@@ -167,9 +168,9 @@ namespace AssemblyEvaluation
             var X = P1.Position[0] + u * (P2.Position[0] - P1.Position[0]);
             var Y = P1.Position[1] + u * (P2.Position[1] - P1.Position[1]);
             var Z = P1.Position[2] + u * (P2.Position[2] - P1.Position[2]);
-            return (new Vertex(X, Y, Z));
+            return (new Vertex(new[] { X, Y, Z }));
         }
-        private List<Vertex[]> findBoundaryEdges(List<DefaultConvexFace<Vertex>> FixedFaces, List<Vertex> FixedFace_Vertices)
+        private List<Vertex[]> findBoundaryEdges(List<PolygonalFace> FixedFaces, List<Vertex> FixedFace_Vertices)
         {
             var boundaryEdges_Length = new List<double>();
             var boundaryEdges = new List<Vertex[]>();
@@ -185,16 +186,18 @@ namespace AssemblyEvaluation
                     var P1_P2 = new Vertex[2];
                     P1_P2[0] = P1;
                     P1_P2[1] = P2;
-                    var L = StarMath.norm2(new double[3] { P2.Position[0] - P1.Position[0], 
-                                                           P2.Position[1] - P1.Position[1], 
-                                                           P2.Position[2] - P1.Position[2] });
+                    var L = new[] { P2.Position[0] - P1.Position[0], 
+                        P2.Position[1] - P1.Position[1], 
+                        P2.Position[2] - P1.Position[2] }.norm2();
                     var validEdge = true;
                     for (var k = 0; k < boundaryEdges.Count(); k++)
                     {
                         if (boundaryEdges_Length[k] == L)
                         {
-                            if ((P1.Same(boundaryEdges[k][0]) || P1.Same(boundaryEdges[k][1])) &&
-                                (P2.Same(boundaryEdges[k][0]) || P2.Same(boundaryEdges[k][1])))
+                            var first = boundaryEdges[k][0];
+                            var second = boundaryEdges[k][1];
+                            if ((TwoVertsAreTheSame(P1, first) || TwoVertsAreTheSame(P1, second)) &&
+                                (TwoVertsAreTheSame(P2, first) || TwoVertsAreTheSame(P1, second)))
                             {
                                 boundaryEdges_Check[k] = false;
                                 validEdge = false;
@@ -217,7 +220,7 @@ namespace AssemblyEvaluation
 
             return validBoundaryEdges;
         }
-        private double pointPolygonAtt(Vertex point, List<DefaultConvexFace<Vertex>> FixedFaces, ref bool PMC)
+        private double pointPolygonAtt(Vertex point, List<PolygonalFace> FixedFaces, ref bool PMC)
         {
             /*
              Mehtod #1
@@ -248,7 +251,7 @@ namespace AssemblyEvaluation
                 // the vector from the point to the first vertex of the polygon
                 var V = new double[3] { polygon[n - 1].Position[0] - X, polygon[n - 1].Position[1] - Y, polygon[n - 1].Position[2] - Z };
                 var W = new double[3] { polygon[0].Position[0] - X, polygon[0].Position[1] - Y, polygon[0].Position[2] - Z };
-                var VW = StarMath.crossProduct(V, W);
+                var VW = V.crossProduct(W);
                 for (int i = 0; i < n; i++)
                 {
                     Vertex P1, P2;
@@ -258,18 +261,18 @@ namespace AssemblyEvaluation
                     // compute PMC test result
                     var E = new double[3] { P1.Position[0] - X, P1.Position[1] - Y, P1.Position[2] - Z };
                     var F = new double[3] { P2.Position[0] - X, P2.Position[1] - Y, P2.Position[2] - Z };
-                    var EF = StarMath.crossProduct(E, F);
+                    var EF = E.crossProduct(F);
                     if (tmpPMC)
                     {
-                        var VW_dot_EF = StarMath.dotProduct(VW, EF, 3);
+                        var VW_dot_EF = VW.dotProduct(EF, 3);
                         if (VW_dot_EF < 0)
                             tmpPMC = false; // point is outside of the polygon
                     }
                     // compute polygon area
                     var G = new double[3] { P1.Position[0] - CoM.Position[0], P1.Position[1] - CoM.Position[1], P1.Position[2] - CoM.Position[2] };
                     var H = new double[3] { P2.Position[0] - CoM.Position[0], P2.Position[1] - CoM.Position[1], P2.Position[2] - CoM.Position[2] };
-                    var GH = StarMath.crossProduct(G, H);
-                    Area += 0.5 * StarMath.norm2(GH);
+                    var GH = G.crossProduct(H);
+                    Area += 0.5 * GH.norm2();
                     ListPMC.Add(tmpPMC);
                 }
                 if (ListPMC.Contains(true)) PMC = true; else PMC = false;
@@ -287,8 +290,8 @@ namespace AssemblyEvaluation
 
                 var M = new double[3] { (P2.Position[0] - P1.Position[0]), (P2.Position[1] - P1.Position[1]), (P2.Position[2] - P1.Position[2]) };
                 var N = new double[3] { (point.Position[0] - P1.Position[0]), (point.Position[1] - P1.Position[1]), (point.Position[2] - P1.Position[2]) };
-                var MN = StarMath.crossProduct(M, N);
-                var tmpDistance = StarMath.norm2(MN) / StarMath.norm2(M);
+                var MN = M.crossProduct(N);
+                var tmpDistance = MN.norm2() / M.norm2();
                 if (Math.Abs(tmpDistance) < Math.Abs(minDistance))
                 {
                     minDistance = Math.Abs(tmpDistance);
@@ -303,25 +306,25 @@ namespace AssemblyEvaluation
             {
                 Vertex P1, P2;
                 P1 = polygon[i];
-                double x_1 = P1.Position[0];
-                double y_1 = P1.Position[1];
-                double z_1 = P1.Position[2];
+                var x_1 = P1.Position[0];
+                var y_1 = P1.Position[1];
+                var z_1 = P1.Position[2];
 
                 if ((i + 1) == polygon.Count()) P2 = polygon[0];
                 else P2 = polygon[i + 1];
 
-                double x_2 = P2.Position[0];
-                double y_2 = P2.Position[1];
-                double z_2 = P2.Position[2];
+                var x_2 = P2.Position[0];
+                var y_2 = P2.Position[1];
+                var z_2 = P2.Position[2];
 
-                double x_3 = point.Position[0];
-                double y_3 = point.Position[1];
-                double z_3 = point.Position[2];
+                var x_3 = point.Position[0];
+                var y_3 = point.Position[1];
+                var z_3 = point.Position[2];
 
-                var V = new double[3] { (x_2 - x_1), (y_2 - y_1), (z_2 - z_1) };
-                var W = new double[3] { (x_3 - x_1), (y_3 - y_1), (z_3 - z_1) };
-                var VW = StarMath.crossProduct(V, W);
-                var D = StarMath.norm2(VW) / StarMath.norm2(V);
+                var V = new[] { (x_2 - x_1), (y_2 - y_1), (z_2 - z_1) };
+                var W = new[] { (x_3 - x_1), (y_3 - y_1), (z_3 - z_1) };
+                var VW = V.crossProduct(W);
+                var D = VW.norm2() / V.norm2();
                 if (Math.Abs(D) < Math.Abs(minDistance))
                 {
                     minDistance = D;
@@ -331,23 +334,33 @@ namespace AssemblyEvaluation
         }
         private double pointRaySquareDistance(Ray R, IVertex P) // Equivalent to Cross Product
         {
-            Vector v = R.MakeVectorTo(P);
-            var cross = StarMath.crossProduct(R.Direction, v.Position);
-            return StarMath.norm2(cross);
+            var v = P.Position.subtract(R.Position);
+            var cross = R.Direction.crossProduct(v);
+            return cross.norm2();
         }
 
 
         private double findConeHalfAngle(Ray R, Vertex P)
         {
-            Vector v = R.MakeVectorTo(P);
-            v.NormalizeInPlace();
-            return StarMath.dotProduct(R.Direction, v.Position, 3);
+            var v = P.Position.subtract(R.Position);
+            return R.Direction.dotProduct(v);
         }
 
         private double pointRayRealDistance(Ray R, IVertex P) // Equivalent to Dot Product
         {
-            Vector w = R.MakeVectorTo(P);
-            return StarMath.dotProduct(R.Direction, R.MakeVectorTo(P).Position, 3);
+            var v = P.Position.subtract(R.Position);
+            return R.Direction.dotProduct(v);
+        }
+
+        private bool TwoVertsAreTheSame(Vertex a, Vertex b) // Equivalent to Dot Product
+        {
+            if (Math.Abs(a.Position[0] - b.Position[0]) > 0.0000001)
+                return false;
+            if (Math.Abs(a.Position[1] - b.Position[1]) > 0.0000001)
+                return false;
+            if (Math.Abs(a.Position[2] - b.Position[2]) > 0.0000001)
+                return false;
+            return true;
         }
 
     }

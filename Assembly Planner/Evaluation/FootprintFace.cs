@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MIConvexHull;
+using TVGL;
 
 namespace AssemblyEvaluation
 {
@@ -21,7 +22,7 @@ namespace AssemblyEvaluation
         /// <value>
         /// Faces
         /// </value>
-        public List<DefaultConvexFace<Vertex>> Faces { get; set; }
+        public List<PolygonalFace> Faces { get; set; }
         /// <summary>
         /// Gets the New Face's Normal
         /// </summary>

@@ -18,12 +18,11 @@ namespace Assembly_Planner
         private TessellatedSolid tessellatedSolid;
         public static Dictionary<int, List<List<Component>>> SccTracker = new Dictionary<int, List<List<Component>>>();
         protected static AssemblyEvaluator assemblyEvaluator;
-        internal static List<AssemblyCandidate> Run(ConvexHullAndBoundingBox inputData, List<int> globalDirPool,List<TessellatedSolid> solides )
+        internal static List<AssemblyCandidate> Run(designGraph assemblyGraph, List<TessellatedSolid>solids, List<int> globalDirPool, List<TessellatedSolid> solides)
         {
-            var assemblyGraph = inputData.graphAssembly;
             //DisassemblyDirections.Directions = TemporaryDirections();
             var solutions = new List<AssemblyCandidate>();
-            assemblyEvaluator = new AssemblyEvaluator(inputData.ConvexHullDictionary);
+            assemblyEvaluator = new AssemblyEvaluator(solids);
             //Updates.UpdateGlobalDirections(globalDirPool);
             assemblyGraph.addHyperArc(assemblyGraph.nodes);
             var iniHy = assemblyGraph.hyperarcs[assemblyGraph.hyperarcs.Count - 1];

@@ -20,72 +20,20 @@
  *************************************************************************/
 using MIConvexHull;
 using StarMathLib;
+using TVGL;
 
 namespace AssemblyEvaluation
 {
-    public class Vertex : IVertex
-    {
-        public double[] Position { get; set; }
-        public Vertex(double x, double y, double z)
-        {
-            Position = new double[] { x, y, z };
-        }
-
-        public Vertex(double[] position)
-        {
-            Position = new double[] { position[0], position[1], position[2] };
-        }
-        internal bool Same(IVertex vertex)
-        {
-            return (Position[0] == vertex.Position[0]
-                && Position[1] == vertex.Position[1]
-                && Position[2] == vertex.Position[2]);
-        }
-        internal Vector MakeVectorTo(IVertex vertex)
-        {
-            return (new Vector(
-                vertex.Position[0] - Position[0],
-                vertex.Position[1] - Position[1],
-                vertex.Position[2] - Position[2]));
-        }
-        internal Vector MakeVectorToRayStart(Ray ray)
-        {
-            return (new Vector(
-                ray.Position[0] - Position[0],
-                ray.Position[1] - Position[1],
-                ray.Position[2] - Position[2]));
-        }
-    }
-    public class Vector : Vertex
-    {
-        public Vector(double x, double y, double z)
-            : base(x, y, z)
-        { }
-        public Vector(double[] position)
-            : base(position)
-        { }
-        internal void NormalizeInPlace()
-        {
-            StarMath.normalizeInPlace(Position, 3);
-        }
-
-        internal void AddInPlace(Vertex dir)
-        {
-            Position[0] += dir.Position[0];
-            Position[1] += dir.Position[1];
-            Position[2] += dir.Position[2];
-        }
-
-    }
-    public class Ray : Vertex
+    public class Ray
     {
         public double[] Direction { get; set; }
+        public double[] Position { get; set; }
 
-        public Ray(Vertex start, Vector direction)
-            : base(start.Position[0], start.Position[1], start.Position[2])
+        public Ray(Vertex start, double[] direction)
         {
-            Direction = new double[] { direction.Position[0], direction.Position[1], direction.Position[2] };
-            StarMath.normalizeInPlace(Direction, 3);
+            Position = start.Position;
+            Direction = new [] { direction[0], direction[1], direction[2] };
+            Direction.normalizeInPlace(3);
         }
     }
 }

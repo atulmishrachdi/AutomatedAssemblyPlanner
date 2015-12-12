@@ -7,15 +7,15 @@ using System.Linq;
 //using System.Runtime.InteropServices.WindowsRuntime;
 using StarMathLib;
 using Assembly_Planner.GraphSynth.BaseClasses;
+using TVGL;
 
 namespace AssemblyEvaluation
 {
-
     public class AssemblySequence
     {
         public List<SubAssembly> Subassemblies = new List<SubAssembly>();
-        private static List<DefaultConvexFace<Vertex>> movingFacesInCombined;
-        public static List<DefaultConvexFace<Vertex>> refFacesInCombined;
+        private static List<PolygonalFace> movingFacesInCombined;
+        public static List<PolygonalFace> refFacesInCombined;
 
         public SubAssembly CreateAssemblyTree(candidate c, int recipeIndex = -1)
         {
@@ -24,8 +24,7 @@ namespace AssemblyEvaluation
             var ruleAction = c.recipe[recipeIndex];
         }
 
-        public SubAssembly Update(option opt, List<Component> rest,
-            Dictionary<string, ConvexHull<Vertex, DefaultConvexFace<Vertex>>> convexHullForParts)
+        public SubAssembly Update(option opt, List<Component> rest, Dictionary<string, TVGLConvexHull> convexHullForParts)
         {
             Part refAssembly, movingAssembly;
             if (ActionIsAssemblyByAssembly(opt.rule))
@@ -84,9 +83,9 @@ namespace AssemblyEvaluation
                 }
             }
             else throw new Exception("Only install rules in assembly at this point.");
-            ConvexHull<Vertex, DefaultConvexFace<Vertex>> combinedCVXHull = CreateCombinedConvexHull(
+            TVGLConvexHull combinedCVXHull = CreateCombinedConvexHull(
                 refAssembly.CVXHull, movingAssembly.CVXHull);
-            //List<DefaultConvexFace<Vertex>> refFacesInCombined, movingFacesInCombined;
+            //List<PolygonalFace> refFacesInCombined, movingFacesInCombined;
             var InstallCharacter = shouldReferenceAndMovingBeSwitched(refAssembly, movingAssembly, combinedCVXHull,
                 out refFacesInCombined, out movingFacesInCombined);
             if ((int) InstallCharacter < 0)
@@ -122,13 +121,12 @@ namespace AssemblyEvaluation
         private Vertex CombinedCenterOfMass(SubAssembly newSubassembly)
         {
             return
-                new Vertex(
-                    (newSubassembly.Install.Moving.CenterOfMass.Position[0] +
+                new Vertex(new[]{(newSubassembly.Install.Moving.CenterOfMass.Position[0] +
                      newSubassembly.Install.Reference.CenterOfMass.Position[0])/2,
                     (newSubassembly.Install.Moving.CenterOfMass.Position[1] +
                      newSubassembly.Install.Reference.CenterOfMass.Position[1])/2,
                     (newSubassembly.Install.Moving.CenterOfMass.Position[2] +
-                     newSubassembly.Install.Reference.CenterOfMass.Position[2])/2);
+                     newSubassembly.Install.Reference.CenterOfMass.Position[2])/2});
         }
 
 
@@ -149,16 +147,16 @@ namespace AssemblyEvaluation
         /// <param name="movingFacesInCombined">The moving faces in combined.</param>
         /// <returns></returns>
         /// <exception cref="System.Exception">The point is in neither original part!</exception>
-        private InstallCharacterType shouldReferenceAndMovingBeSwitched(Part refAssembly, Part movingAssembly, ConvexHull<Vertex, DefaultConvexFace<Vertex>> combinedCVXHull,
-            out List<DefaultConvexFace<Vertex>> refFacesInCombined, out List<DefaultConvexFace<Vertex>> movingFacesInCombined)
+        private InstallCharacterType shouldReferenceAndMovingBeSwitched(Part refAssembly, Part movingAssembly, TVGLConvexHull combinedCVXHull,
+            out List<PolygonalFace> refFacesInCombined, out List<PolygonalFace> movingFacesInCombined)
         {
             /* first, create a list of vertices from the reference hull that are present in the combined hull.
              * likewise, with the moving. */
             var refVertsInCombined = new List<Vertex>();
             var movingVertsInCombined = new List<Vertex>();
-            foreach (var pt in combinedCVXHull.Points)
+            foreach (var pt in combinedCVXHull.Vertices)
             {
-                if (refAssembly.CVXHull.Points.Contains(pt)) refVertsInCombined.Add(pt);
+                if (refAssembly.CVXHull.Vertices.Contains(pt)) refVertsInCombined.Add(pt);
                 else
                 {
                     /* this additional Contains function is unnecessary and potential time-consuming. 
@@ -172,20 +170,20 @@ namespace AssemblyEvaluation
             if (movingVertsInCombined.Count == 0)
             {
                 movingFacesInCombined = null;
-                refFacesInCombined = new List<DefaultConvexFace<Vertex>>(combinedCVXHull.Faces);
+                refFacesInCombined = new List<PolygonalFace>(combinedCVXHull.Faces);
                 return InstallCharacterType.MovingIsInsideReference;
             }
             /* ...likewise for the original reference */
             if (refVertsInCombined.Count == 0)
             {
                 refFacesInCombined = null;
-                movingFacesInCombined = new List<DefaultConvexFace<Vertex>>(combinedCVXHull.Faces);
+                movingFacesInCombined = new List<PolygonalFace>(combinedCVXHull.Faces);
                 return InstallCharacterType.ReferenceIsInsideMoving;
             }
             /* we could just count the number of vertices, but that would not be as accurate a prediction
              * as the area of the faces */
-            refFacesInCombined = new List<DefaultConvexFace<Vertex>>();
-            movingFacesInCombined = new List<DefaultConvexFace<Vertex>>();
+            refFacesInCombined = new List<PolygonalFace>();
+            movingFacesInCombined = new List<PolygonalFace>();
             double refFaceArea = 0.0;
             var movingFaceArea = 0.0;
             var totalFaceArea = 0.0;
@@ -193,12 +191,12 @@ namespace AssemblyEvaluation
             {
                 var faceArea = findFaceArea(face);
                 totalFaceArea += faceArea;
-                if (face.Vertices.All(v => refAssembly.CVXHull.Points.Contains(v)))
+                if (face.Vertices.All(v => refAssembly.CVXHull.Vertices.Contains(v)))
                 {
                     refFacesInCombined.Add(face);
                     refFaceArea += faceArea;
                 }
-                else if (face.Vertices.All(v => movingAssembly.CVXHull.Points.Contains(v)))
+                else if (face.Vertices.All(v => movingAssembly.CVXHull.Vertices.Contains(v)))
                 {
                     movingFacesInCombined.Add(face);
                     movingFaceArea += faceArea;
@@ -235,12 +233,12 @@ namespace AssemblyEvaluation
             return InstallCharacterType.Unknown;
         }
 
-        private double findFaceArea(DefaultConvexFace<Vertex> face)
+        private double findFaceArea(PolygonalFace face)
         {
-            var v1 = face.Vertices[0].MakeVectorTo(face.Vertices[1]);
-            var v2 = face.Vertices[0].MakeVectorTo(face.Vertices[2]);
+            var v1 = face.Vertices[1].Position.subtract(face.Vertices[0].Position);
+            var v2 = face.Vertices[2].Position.subtract(face.Vertices[1].Position);
 
-            return 0.5 * StarMath.norm2(StarMath.crossProduct(v1.Position, v2.Position));
+            return 0.5 * v1.crossProduct(v2).norm2();
         }
 
         private double GetSubassemblyMass(List<Component> Nodes)
@@ -262,7 +260,7 @@ namespace AssemblyEvaluation
                 M += m;
             }
 
-            return new Vertex(sumMx / M, sumMy / M, sumMz / M);
+            return new Vertex(new[] { sumMx / M, sumMy / M, sumMz / M });
         }
 
         private double GetPartMass(Component n)
@@ -278,7 +276,7 @@ namespace AssemblyEvaluation
             //var j = n.localVariables.IndexOf(-6005);
             //if (j == -1) return null; //in case we don't have a center of mass tag, treat the part as zero instead
             //else return new Vertex(n.localVariables[j + 1], n.localVariables[j + 2], n.localVariables[j + 3]);
-            return new Vertex(n.CenterOfMass[0], n.CenterOfMass[1], n.CenterOfMass[2]);
+            return new Vertex(new[] { n.CenterOfMass[0], n.CenterOfMass[1], n.CenterOfMass[2] });
         }
 
         private double GetSubassemblyVolume(List<Component> Nodes)
@@ -293,22 +291,22 @@ namespace AssemblyEvaluation
         }
 
 
-        private ConvexHull<Vertex, DefaultConvexFace<Vertex>> CreateCombinedConvexHull(ConvexHull<Vertex, DefaultConvexFace<Vertex>> refCVXHull, ConvexHull<Vertex, DefaultConvexFace<Vertex>> movingCVXHull)
+        private TVGLConvexHull CreateCombinedConvexHull(TVGLConvexHull refCVXHull, TVGLConvexHull movingCVXHull)
         {
-            var pointCloud = new List<Vertex>(refCVXHull.Points);
-            pointCloud.AddRange(movingCVXHull.Points);
-            return ConvexHull.Create(pointCloud);
+            var pointCloud = new List<Vertex>(refCVXHull.Vertices);
+            pointCloud.AddRange(movingCVXHull.Vertices);
+            return new TVGLConvexHull(pointCloud);
         }
 
-        private ConvexHull<Vertex, DefaultConvexFace<Vertex>> CreateCombinedConvexHull2(List<Component> nodes, Dictionary<string, ConvexHull<Vertex, DefaultConvexFace<Vertex>>> convexHullForParts)
+        private TVGLConvexHull CreateCombinedConvexHull2(List<Component> nodes, Dictionary<string, TVGLConvexHull> convexHullForParts)
         {
             var pointCloud = new List<Vertex>();
             foreach (var n in nodes)
             {
                 var nodeName = n.name;
-                pointCloud.AddRange(convexHullForParts[nodeName].Points);
+                pointCloud.AddRange(convexHullForParts[nodeName].Vertices);
             }
-            return ConvexHull.Create(pointCloud);
+            return new TVGLConvexHull(pointCloud);
         }
 
 

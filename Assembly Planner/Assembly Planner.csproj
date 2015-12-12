@@ -79,7 +79,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="TessellationAndVoxelizationGeometryLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\TVGL.1.0.15.1211\lib\portable-net4+sl4+wp7+win8\TessellationAndVoxelizationGeometryLibrary.dll</HintPath>
+      <HintPath>..\packages\TVGL.1.0.15.1212\lib\portable-net4+sl4+wp7+win8\TessellationAndVoxelizationGeometryLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -96,8 +96,6 @@
     <Compile Include="Evaluation\AssemblyEvaluator.cs" />
     <Compile Include="Evaluation\Constants.cs" />
     <Compile Include="Evaluation\ConvexHullEvaluator.cs" />
-    <Compile Include="Evaluation\EvaluatePath.cs" />
-    <Compile Include="Evaluation\EvaluatePathPINVOKE.cs" />
     <Compile Include="Evaluation\FeasibilityEvaluator.cs" />
     <Compile Include="Evaluation\FootprintFace.cs" />
     <Compile Include="Evaluation\Math.cs" />
@@ -107,18 +105,10 @@
     <Compile Include="Evaluation\OutputXML\AssemblySequence.cs" />
     <Compile Include="Evaluation\OutputXML\Enumerators.cs" />
     <Compile Include="Evaluation\OutputXML\Part_and_Subassembly.cs" />
-    <Compile Include="Evaluation\PathDeterminationEvaluator.cs" />
-    <Compile Include="Evaluation\ReOrientations.cs" />
     <Compile Include="Evaluation\TimeEvaluator.cs" />
-    <Compile Include="Evaluation\_AbstractAssemblySearch.cs" />
     <Compile Include="GeometryReasoning\BoundingCylinder.cs" />
     <Compile Include="GeometryReasoning\BoundingGeometry.cs" />
-    <Compile Include="GeometryReasoning\ConvexHullAndBoundingBox.cs" />
-    <Compile Include="GeometryReasoning\DataInterfaceWithCPP.cs" />
-    <Compile Include="GeometryReasoning\InputData.cs" />
     <Compile Include="GeometryReasoning\OBB.cs" />
-    <Compile Include="GeometryReasoning\STLGeometryFunctions.cs" />
-    <Compile Include="GeometryReasoning\StLReader.cs" />
     <Compile Include="GPprocess\CalculateAssemblyTimeAndSD.cs" />
     <Compile Include="GPprocess\GnuPlot.cs" />
     <Compile Include="GPprocess\Inequality.cs" />

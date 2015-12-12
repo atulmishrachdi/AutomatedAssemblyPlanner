@@ -188,7 +188,7 @@ namespace Assembly_Planner
             var distList = new List<double>();
             foreach (var point in kPointsBetweenMidPoints)
             {
-                var ray = new Ray(new AssemblyEvaluation.Vertex(point), new Vector(vector));
+                var ray = new Ray(new Vertex(point), vector);
                 var minDis = double.PositiveInfinity;
                 var prtn = FastenerBoundingBoxPartition.PartitionOfThePoint(partitions, point);
                 foreach (var face in prtn.FacesOfSolidInPartition)
@@ -215,7 +215,7 @@ namespace Assembly_Planner
             var distList = new List<double>();
             foreach (var point in kPointsBetweenMidPoints)
             {
-                var ray = new Ray(new AssemblyEvaluation.Vertex(point), new Vector(vector));
+                var ray = new Ray(new Vertex(point), vector);
                 var minDis = double.PositiveInfinity;
                 foreach (var face in solid.Faces)
                 {
