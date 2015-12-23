@@ -224,11 +224,11 @@ namespace Assembly_Planner
             PolygonalFace facePrepToRD1;
             PolygonalFace facePrepToRD2;
             var longestPlane = GeometryFunctions.LongestPlaneOfObbDetector(obb, out facePrepToRD1, out facePrepToRD2);
-            TVGL.Vertex closestVerToPlane = null;
+            Vertex closestVerToPlane = null;
             var minDist = double.PositiveInfinity;
             foreach (var ver in solid.ConvexHull.Vertices)
             {
-                var dis = GeometryFunctions.DistanceBetweenVertexAndPlane(ver.Position, longestPlane[0]);
+                var dis = Math.Abs(GeometryFunctions.DistanceBetweenVertexAndPlane(ver.Position, longestPlane[0]));
                 if (dis >= minDist)
                     continue;
                 closestVerToPlane = ver;
@@ -236,8 +236,8 @@ namespace Assembly_Planner
             }
             // The closest vertex to plane is closer to which facePrepToRD?
             double[] normalGuess = null;
-            if (GeometryFunctions.DistanceBetweenVertexAndPlane(closestVerToPlane.Position, facePrepToRD1) <
-                GeometryFunctions.DistanceBetweenVertexAndPlane(closestVerToPlane.Position, facePrepToRD2))
+            if (Math.Abs(GeometryFunctions.DistanceBetweenVertexAndPlane(closestVerToPlane.Position, facePrepToRD1)) <
+                Math.Abs(GeometryFunctions.DistanceBetweenVertexAndPlane(closestVerToPlane.Position, facePrepToRD2)))
                 normalGuess = facePrepToRD1.Normal;
             else
                 normalGuess = facePrepToRD2.Normal;

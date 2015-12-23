@@ -50,10 +50,11 @@ namespace Assembly_Planner
                 PrintTree((SubAssembly)Tree.Install.Moving, Level + 1);
         }
 
-        internal static SubAssembly Run(designGraph Graph, List<TessellatedSolid> solids, List<int> globalDirPool, bool DoEstimate = false)
+        internal static SubAssembly Run(designGraph graph, List<TessellatedSolid> solids, List<int> globalDirPool, bool DoEstimate = false)
         {
             Constants.Values = new Constants();
             AssemblyEvaluator = new EvaluationForBinaryTree(solids);
+            Graph = graph;
             DirPool = globalDirPool;
             //Updates.UpdateGlobalDirections(DirPool);
             Estimate = DoEstimate;

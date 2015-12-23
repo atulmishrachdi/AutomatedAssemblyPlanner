@@ -169,7 +169,7 @@ namespace Assembly_Planner
                 }
                 maxOverlappingProb = Math.Min(maxOverlappingProb, localProb);
             }
-            if (maxOverlappingProb == 0) return false;
+            if (maxOverlappingProb == 0 || double.IsNaN(maxOverlappingProb)) return false;
             if (maxOverlappingProb > MaxProb) 
                 MaxProb = maxOverlappingProb;
 
@@ -263,7 +263,7 @@ namespace Assembly_Planner
                 if (localProb == 1)
                     break;
             }
-            if (localProb == 0) return false;
+            if (localProb == 0 || double.IsNaN(localProb)) return false;
             if (localProb > MaxProb)
                 MaxProb = localProb;
 
@@ -405,7 +405,7 @@ namespace Assembly_Planner
                 if (localProb == 1)
                     break;
             }
-            if (localProb == 0) return false;
+            if (localProb == 0 || double.IsNaN(localProb)) return false;
             if (localProb > MaxProb)
                 MaxProb = localProb;
             for (var i = 0; i < DirInd.Count; i++)
@@ -449,7 +449,7 @@ namespace Assembly_Planner
                         break;
                 }
             }
-            if (localProb == 0) return false;
+            if (localProb == 0 || double.IsNaN(localProb)) return false;
             if (localProb > MaxProb)
                 MaxProb = localProb;
             // work with cone1: negative
@@ -535,7 +535,7 @@ namespace Assembly_Planner
                 }
             }
             // if they overlap, update the directions
-            if (localProb == 0) return false;
+            if (localProb == 0 || double.IsNaN(localProb)) return false;
             if (localProb > MaxProb)
                 MaxProb = localProb;
 
@@ -584,7 +584,7 @@ namespace Assembly_Planner
                 if (localProb == 1)
                     break;
             }
-            if (localProb == 0) return false;
+            if (localProb == 0 || double.IsNaN(localProb)) return false;
             if (localProb > MaxProb)
                 MaxProb = localProb;
             if (re == 1)
@@ -670,7 +670,7 @@ namespace Assembly_Planner
                     }
                 }
             }
-            if (localProb == 0) return false;
+            if (localProb == 0 || double.IsNaN(localProb)) return false;
             if (localProb > MaxProb)
                 MaxProb = localProb;
             // is cylinder1 (negative) half? 
@@ -754,7 +754,7 @@ namespace Assembly_Planner
                 if (localProb == 1)
                     break;
             }
-            if (localProb == 0) return false;
+            if (localProb == 0 || double.IsNaN(localProb)) return false;
             if (localProb > MaxProb)
                 MaxProb = localProb;
             for (var i = 0; i < DirInd.Count; i++)
@@ -815,7 +815,7 @@ namespace Assembly_Planner
                 if (localProb == 1)
                     break;
             }
-            if (localProb == 0) return false;
+            if (localProb == 0 || double.IsNaN(localProb)) return false;
             if (localProb > MaxProb)
                 MaxProb = localProb;
             for (var i = 0; i < DirInd.Count; i++)
@@ -856,7 +856,7 @@ namespace Assembly_Planner
                 if (localProb == 1)
                     break;
             }
-            if (localProb == 0) return false;
+            if (localProb == 0 || double.IsNaN(localProb)) return false;
             if (localProb > MaxProb)
                 MaxProb = localProb;
             if (re == 1)
@@ -917,7 +917,7 @@ namespace Assembly_Planner
                 }
                 maxOverlappingProb = Math.Min(maxOverlappingProb, localProb);
             }
-            if (maxOverlappingProb == 0) return false;
+            if (maxOverlappingProb == 0 || double.IsNaN(maxOverlappingProb)) return false;
             if (maxOverlappingProb > MaxProb)
                 MaxProb = maxOverlappingProb;
             // the axis of the cylinder is the removal direction

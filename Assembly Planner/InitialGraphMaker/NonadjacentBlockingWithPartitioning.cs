@@ -155,9 +155,9 @@ namespace Assembly_Planner
                 foreach (var tri in prtn.SolidTriangles.Where(t => !memoFace.Contains(t)))
                 {
                     memoFace.Add(tri);
-                    if (!NonadjacentBlockingDetermination.RayIntersectsWithFace3(ray, tri))
+                    if (!GeometryFunctions.RayIntersectsWithFace(ray, tri))
                         continue;
-                    if (NonadjacentBlockingDetermination.DistanceToTheFace(ray.Position, tri) < 0)
+                    if (GeometryFunctions.DistanceBetweenVertexAndPlane(ray.Position, tri) < 0)
                         continue;
                     return true;
                 }
@@ -195,9 +195,9 @@ namespace Assembly_Planner
                 foreach (var tri in prtn.SolidTriangles.Where(t => !memoFace.Contains(t)))
                 {
                     memoFace.Add(tri);
-                    if (!NonadjacentBlockingDetermination.RayIntersectsWithFace3(ray, tri))
+                    if (!GeometryFunctions.RayIntersectsWithFace(ray, tri))
                         continue;
-                    if (NonadjacentBlockingDetermination.DistanceToTheFace(ray.Position, tri) < 0)
+                    if (GeometryFunctions.DistanceBetweenVertexAndPlane(ray.Position, tri) < 0)
                         continue;
                     return true;
                 }
@@ -211,7 +211,7 @@ namespace Assembly_Planner
                 partition.Where(
                     prtn =>
                         prtn.SolidTriangles.Count > 0 &&
-                        prtn.Faces.Any(f => NonadjacentBlockingDetermination.RayIntersectsWithFace3(ray, f))).ToList();
+                        prtn.Faces.Any(f => GeometryFunctions.RayIntersectsWithFace(ray, f))).ToList();
         }
 
         internal static List<Partition> AffectedPartitionsWithRayCvhOverlaps(Partition[] partitions, Ray ray)
@@ -219,7 +219,7 @@ namespace Assembly_Planner
             var affected = partitions.Where(
                 prtn =>
                     prtn.SolidTriangles.Count > 0 &&
-                    prtn.Faces.Any(f => NonadjacentBlockingDetermination.RayIntersectsWithFace3(ray, f))).ToList();
+                    prtn.Faces.Any(f => GeometryFunctions.RayIntersectsWithFace(ray, f))).ToList();
             var currentPartition =
                 partitions.Where(p => PartitioningSolid.IsVertexInsidePartition(p, new TVGL.Vertex(ray.Position)));
             affected.AddRange(currentPartition);

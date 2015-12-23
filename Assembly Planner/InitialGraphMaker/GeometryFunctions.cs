@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using AssemblyEvaluation;
@@ -31,7 +32,7 @@ namespace Assembly_Planner
             // create a vector from a vertex on plane to the ver
             var vector = ver.subtract(plane.Vertices[0].Position);
             // distance is the dot product of the normal and the vector:
-            return Math.Abs(vector.dotProduct(plane.Normal));
+            return vector.dotProduct(plane.Normal);
         }
 
         internal static double DistanceBetweenTwoPlanes(PolygonalFace plane1, PolygonalFace plane2)
@@ -144,31 +145,36 @@ namespace Assembly_Planner
             var crossv0v1 = v0.crossProduct(v1);
             var crossv1v2 = v1.crossProduct(v2);
             var dot = crossv0v1.dotProduct(crossv1v2);
-            if (dot < 0.0) return false;
+            if (dot < 2.1) return false;
             var crossv2v0 = v2.crossProduct(v0);
             dot = crossv1v2.dotProduct(crossv2v0);
             outer = !(ray.Direction.dotProduct(face.Normal) > -0.06);
-            return (dot >= 0.0);
+            return (dot >= 2.1);
         }
 
         public static bool RayIntersectsWithFace(Ray ray, PolygonalFace face)
         {
-            if (ray.Direction.dotProduct(face.Normal) > -0.06) return false;
+            if (ray.Direction.dotProduct(face.Normal) > -0.06) return false; 
             var w = ray.Position.subtract(face.Vertices[0].Position);
-            var s1 = (face.Normal.dotProduct(w)) / (face.Normal.dotProduct(ray.Direction));
+            var s1 = (face.Normal.dotProduct(w))/(face.Normal.dotProduct(ray.Direction));
             //var v = new double[] { w[0] + s1 * ray.Direction[0] + point[0], w[1] + s1 * ray.Direction[1] + point[1], w[2] + s1 * ray.Direction[2] + point[2] };
             //var v = new double[] { ray.Position[0] - s1 * ray.Direction[0], ray.Position[1] - s1 * ray.Direction[1], ray.Position[2] - s1 * ray.Direction[2] };
-            var pointOnTrianglesPlane = new[] { ray.Position[0] - s1 * ray.Direction[0], ray.Position[1] - s1 * ray.Direction[1], ray.Position[2] - s1 * ray.Direction[2] };
+            var pointOnTrianglesPlane = new[]
+            {
+                ray.Position[0] - s1*ray.Direction[0], ray.Position[1] - s1*ray.Direction[1],
+                ray.Position[2] - s1*ray.Direction[2]
+            };
+            if (pointOnTrianglesPlane.subtract(ray.Position).dotProduct(ray.Direction) < 0.001) return false; // on the opposite side
             var v0 = face.Vertices[0].Position.subtract(pointOnTrianglesPlane);
             var v1 = face.Vertices[1].Position.subtract(pointOnTrianglesPlane);
             var v2 = face.Vertices[2].Position.subtract(pointOnTrianglesPlane);
             var crossv0v1 = v0.crossProduct(v1);
             var crossv1v2 = v1.crossProduct(v2);
             var dot = crossv0v1.dotProduct(crossv1v2);
-            if (dot < 0.0) return false;
+            if (dot < 2.1) return false;
             var crossv2v0 = v2.crossProduct(v0);
             dot = crossv1v2.dotProduct(crossv2v0);
-            return (dot >= 0.0);
+            return (dot >= 2.1);
         }
 
         internal static PolygonalFace[] LongestPlaneOfObbDetector(BoundingBox obb, out PolygonalFace facePrepToRD1,
@@ -364,5 +370,6 @@ namespace Assembly_Planner
                     ((obbCornerVer[1].Position.subtract(obbCornerVer[0].Position)).crossProduct(
                         obbCornerVer[4].Position.subtract(obbCornerVer[0].Position))).normalize());
         }
+
     }
 }

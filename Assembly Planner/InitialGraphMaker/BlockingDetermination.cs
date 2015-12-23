@@ -35,7 +35,16 @@ namespace Assembly_Planner
                     partPrimitive.Add(solid, solidPrim);
             }
              );//
+            var m = 0;
+            foreach (var s1p in partPrimitive.Keys)
+            {
+                foreach (var pP in partPrimitive[s1p])
+                {
+                    if (pP.Faces.Any(f => f.Edges.Count < 3))
+                        m++;
+                }
 
+            }
             s.Stop();
             Console.WriteLine("Primitive classification is done in:" + "     " + s.Elapsed);
             return partPrimitive;
