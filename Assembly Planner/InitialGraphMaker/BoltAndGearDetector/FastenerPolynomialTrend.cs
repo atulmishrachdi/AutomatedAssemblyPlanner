@@ -50,7 +50,7 @@ namespace Assembly_Planner
             int[] threadStartEndPoints;
             if (ContainsThread(distancePointToSolid, out numberOfThreads, out threadStartEndPoints))
             {
-                //PlotInMatlab(distancePointToSolid);
+                PlotInMatlab(distancePointToSolid);
                 var startEndThreadPoints =
                     Math.Abs(originalInds[threadStartEndPoints[0]+2] - originalInds[threadStartEndPoints[1]-2]);
                 return new Fastener
@@ -72,9 +72,6 @@ namespace Assembly_Planner
                     Certainty = 1.0
                 };
             }
-            // Plot:
-            //if (hasThread)
-                //PlotInMatlab(distancePointToSolid);
             return null;
         }
 

@@ -8,7 +8,7 @@ using StarMathLib;
 
 namespace Assembly_Planner
 {
-    internal class OptimalOrientation
+    public class OptimalOrientation
     {
         public static Dictionary<string, List<string>> SucTasks;
         public static Dictionary<string, SubAssembly> InstTasks;
@@ -30,7 +30,10 @@ namespace Assembly_Planner
                 return Dijkstra(c);
             return null;
         }
-
+        internal static Dictionary<string, double> Run(AssemblySequence solution)
+        {
+            return Dijkstra2(solution);
+        }
         public static Dictionary<string, double> Dijkstra(AssemblyCandidate candidate)
         {
             var taskCommands = new Dictionary<string, double>();
@@ -43,8 +46,7 @@ namespace Assembly_Planner
 
             var lastTask = InstTasks[SucTasks.Keys.Where(sucT => SucTasks[sucT].Count == 0).ToList()[0]];
 
-            var loopMakingSubAsse = new List<SubAssembly>();
-            loopMakingSubAsse.Add(lastTask);
+            var loopMakingSubAsse = new List<SubAssembly> { lastTask };
 
             for (var h = 0; h < loopMakingSubAsse.Count; h++)
             {
@@ -133,7 +135,102 @@ namespace Assembly_Planner
             return taskCommands;
         }
 
+        public static Dictionary<string, double> Dijkstra2(AssemblySequence candidate)
+        {
+            var taskCommands = new Dictionary<string, double>();
 
+            InstTasks = new Dictionary<string, SubAssembly>();
+            UpdatePostProcessor.BuildingInstallationTaskDictionary(candidate.Subassemblies[0]);
+
+            SucTasks = new Dictionary<string, List<string>>();
+            UpdatePostProcessor.BuildSuccedingTaskDictionary(candidate.Subassemblies[0], new List<string>());
+
+            var lastTask = InstTasks[SucTasks.Keys.Where(sucT => SucTasks[sucT].Count == 0).ToList()[0]];
+            return new Dictionary<string, double>();
+            var loopMakingSubAsse = new List<SubAssembly> { lastTask };
+
+            for (var h = 0; h < loopMakingSubAsse.Count; h++)
+            {
+                var lastSubAssEachMoving = loopMakingSubAsse[h];
+                RefPrec = new List<SubAssembly>();
+                Movings = new List<SubAssembly>();
+                UpdatePostProcessor.BuildingListOfReferencePreceedings(loopMakingSubAsse[h]);
+
+                var ftask = RefPrec[RefPrec.Count - 1];
+
+                var initialFaces = ftask.Install.Reference.CVXHull.Faces.ToList();
+                var fromFaces = AssemblyEvaluator.MergingFaces(initialFaces);
+
+                //Console.WriteLine("Which of the following faces is your current footprint face in the subassembly    " + ftask.Name + "   ?");
+                //foreach (var f in fromFaces)
+                //{
+                //    var index = fromFaces.IndexOf(f);
+                //    Console.WriteLine(index + ":" + "   " + f.Name);
+                //}
+
+                var read = 0;//Convert.ToInt32(Console.ReadLine());
+                var startingFace = fromFaces[read];
+                var notAffected = AssemblyEvaluator.UnaffectedRefFacesDuringInstallation(ftask);
+                var toFaces = AssemblyEvaluator.MergingFaces(notAffected);
+
+                var precAndMinC = new List<PreAndCost>();
+
+                foreach (var tFace in toFaces)
+                {
+                    var stabilityAccessCost = StabilityAndAcccessabilityCostCalcultor(ftask, tFace);
+                    var preCost = new PreAndCost
+                    {
+                        SubAssembly = ftask,
+                        Face = tFace,
+                        MinCost = RiLiCostCalculator(ftask, startingFace, tFace) + stabilityAccessCost,
+                        FromFace = startingFace
+                    };
+                    precAndMinC.Add(preCost);
+                }
+
+                if (RefPrec.Count > 1)
+                {
+                    for (var i = RefPrec.Count - 2; i >= 0; i--)
+                    {
+                        var curSubAsse = RefPrec[i];
+                        var preSubAsse = RefPrec[i + 1];
+                        AssemblyEvaluator.MergingFaces(initialFaces);
+                        fromFaces = toFaces;
+
+                        notAffected = AssemblyEvaluator.UnaffectedRefFacesDuringInstallation(curSubAsse);
+                        toFaces = new List<FootprintFace>(AssemblyEvaluator.MergingFaces(notAffected));
+
+                        foreach (var tFace in toFaces)
+                        {
+                            var preCost = new PreAndCost
+                            {
+                                SubAssembly = curSubAsse,
+                                FromSubAssembly = preSubAsse,
+                                Face = tFace,
+                                MinCost = double.PositiveInfinity
+                            };
+
+                            var stabilityAccessCost = StabilityAndAcccessabilityCostCalcultor(curSubAsse, tFace);
+
+                            foreach (var fFace in fromFaces)
+                            {
+                                var m = precAndMinC.Where(a => a.Face == fFace && a.SubAssembly == preSubAsse).ToList();
+                                var totalCost = m[0].MinCost + RiLiCostCalculator(curSubAsse, fFace, tFace) + stabilityAccessCost;
+                                if (!(totalCost < preCost.MinCost)) continue;
+                                preCost.MinCost = totalCost;
+                                preCost.FromFace = fFace;
+                            }
+                            precAndMinC.Add(preCost);
+                        }
+                    }
+                }
+                Commander(RefPrec, precAndMinC, lastSubAssEachMoving, taskCommands);
+                loopMakingSubAsse.Remove(lastSubAssEachMoving);
+                h--;
+                loopMakingSubAsse.AddRange(Movings);
+            }
+            return taskCommands;
+        }
 
         private static void Commander(List<SubAssembly> RefPrec, List<PreAndCost> precAndMinC, SubAssembly lastSubAssEachMoving, Dictionary<string, double> taskCommands)
         {
@@ -198,7 +295,7 @@ namespace Assembly_Planner
                     var yDif = p1.Position[1] - p2.Position[1];
                     var zDif = p1.Position[2] - p2.Position[2];
                     if (Math.Sqrt((xDif * xDif) + (yDif * yDif) + (zDif * zDif)) > maxDist)
-                        maxDist = (Math.Sqrt((xDif * xDif) + (yDif * yDif) + (zDif * zDif)))/10; // since it is in mm
+                        maxDist = (Math.Sqrt((xDif * xDif) + (yDif * yDif) + (zDif * zDif))) / 10; // since it is in mm
                 }
             }
             // if the candidate face is adjacent, do s.th else (do what????), othrwise calculate LI and RI
@@ -219,7 +316,7 @@ namespace Assembly_Planner
             var angleInRad = Math.Acos(fFace.Normal.normalize().dotProduct(tFace.Normal.normalize()));
             var angleBetweenCurrentAndCandidate = angleInRad * (180 / Math.PI);
 
-            if (fFace.Adjacents.Where(f => f.Name == tFace.Name).ToList().Count>0)
+            if (fFace.Adjacents.Where(f => f.Name == tFace.Name).ToList().Count > 0)
             {
                 // It's adjacent, then do s.th ????????????
                 // Giving RI and LI some values?

@@ -35,7 +35,7 @@ namespace Assembly_Planner
             //------------------------------------------------------------------------------------------
             BoundingGeometry.CreateOBB2(solids);
             BoundingGeometry.CreateBoundingCylinder(solids);
-
+            FastenerPolynomialTrend.PolynomialTrendDetector(solids[0]);
             // From repeated parts take only one of them, and do the primitive classification on that:
             //------------------------------------------------------------------------------------------
             var multipleRefs = DuplicatePartsDetector(solids);

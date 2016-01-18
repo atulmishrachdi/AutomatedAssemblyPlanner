@@ -157,8 +157,6 @@ namespace Assembly_Planner
                     memoFace.Add(tri);
                     if (!GeometryFunctions.RayIntersectsWithFace(ray, tri))
                         continue;
-                    if (GeometryFunctions.DistanceBetweenVertexAndPlane(ray.Position, tri) < 0)
-                        continue;
                     return true;
                 }
             }
@@ -196,8 +194,6 @@ namespace Assembly_Planner
                 {
                     memoFace.Add(tri);
                     if (!GeometryFunctions.RayIntersectsWithFace(ray, tri))
-                        continue;
-                    if (GeometryFunctions.DistanceBetweenVertexAndPlane(ray.Position, tri) < 0)
                         continue;
                     return true;
                 }
