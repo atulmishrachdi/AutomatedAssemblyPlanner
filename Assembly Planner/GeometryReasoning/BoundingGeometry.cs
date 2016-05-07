@@ -39,42 +39,48 @@ namespace Assembly_Planner
             Console.WriteLine("OBB Creation is done in:" + "     " + s.Elapsed);
         }
 
-        internal static void CreateOBB2(List<TessellatedSolid> solids)
+        internal static void CreateOBB2(Dictionary<string, List<TessellatedSolid>> solids)
         {
             // This function uses my own OBB code not the one in TVGL
             // It has more accurate results
-            var s = new Stopwatch();
-            s.Start();
-            Console.WriteLine();
-            Console.WriteLine("OBBs are being Created ...");
-            Parallel.ForEach(solids, solid =>
+            //var s = new Stopwatch();
+            //s.Start();
+            //Console.WriteLine();
+            //Console.WriteLine("OBBs are being Created ...");
+            var solidGeometries = solids.SelectMany(s => s.Value).ToList();
+            Parallel.ForEach(solidGeometries, solid =>
             {
                 var obb = OBB.BuildUsingPoints(solid.Vertices.ToList());
                 lock (OrientedBoundingBoxDic)
+                {
                     OrientedBoundingBoxDic.Add(solid, obb);
+                }
             }
                 );
-            s.Stop();
-            Console.WriteLine("OBB Creation is done in:" + "     " + s.Elapsed);
+            //s.Stop();
+            //Console.WriteLine("OBB Creation is done in:" + "     " + s.Elapsed);
         }
 
-        internal static void CreateBoundingCylinder(List<TessellatedSolid> solids)
+        internal static void CreateBoundingCylinder(Dictionary<string, List<TessellatedSolid>> solids)
         {
             // This function uses my own OBB code not the one in TVGL
             // It has more accurate results
-            var s = new Stopwatch();
-            s.Start();
-            Console.WriteLine();
-            Console.WriteLine("Bounding Cylinders are being Created ...");
-            Parallel.ForEach(solids, solid =>
+            //var s = new Stopwatch();
+            //s.Start();
+            //Console.WriteLine();
+            //Console.WriteLine("Bounding Cylinders are being Created ...");
+            var solidGeometries = solids.SelectMany(s => s.Value).ToList();
+            Parallel.ForEach(solidGeometries, solid =>
             {
                 var bc = BoundingCylinder.Run(solid);
                 lock (BoundingCylinderDic)
+                {
                     BoundingCylinderDic.Add(solid, bc);
+                }
             }
                 );
-            s.Stop();
-            Console.WriteLine("Bounding Cylinder Creation is done in:" + "     " + s.Elapsed);
+            //s.Stop();
+            //Console.WriteLine("Bounding Cylinder Creation is done in:" + "     " + s.Elapsed);
         }
     }
 }

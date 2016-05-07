@@ -38,13 +38,16 @@ namespace Assembly_Planner
             //playWithOBB(solids);
             // Creating Bounding Geometries for every solid
             //------------------------------------------------------------------------------------------
+            BoundingGeometry.OrientedBoundingBoxDic = new Dictionary<TessellatedSolid, BoundingBox>();
+            BoundingGeometry.BoundingCylinderDic = new Dictionary<TessellatedSolid, BoundingCylinder>();
             BoundingGeometry.CreateOBB2(solids);
             BoundingGeometry.CreateBoundingCylinder(solids);
-            //FastenerPolynomialTrend.PolynomialTrendDetector(solids[0]);
+
             // From repeated parts take only one of them, and do the primitive classification on that:
             //------------------------------------------------------------------------------------------
+            var partsForPC = BlockingDetermination.PartsTobeClassifiedIntoPrimitives(solids);
+            SolidPrimitive = BlockingDetermination.PrimitiveMaker(partsForPC);
             var multipleRefs = DuplicatePartsDetector(solids);
-            var solidPrimitive = BlockingDetermination.PrimitiveMaker(solids); //multipleRefs.Keys.ToList());
 
             // Detect fasteners
             //------------------------------------------------------------------------------------------
