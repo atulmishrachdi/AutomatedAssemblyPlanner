@@ -17,25 +17,30 @@ namespace Assembly_Planner
     internal class DisassemblyDirectionsWithFastener
     {
         public static List<double[]> Directions = new List<double[]>();
-        internal static List<TessellatedSolid> Solids;
+        internal static Dictionary<string, List<TessellatedSolid>> Solids;
         internal static Dictionary<int, List<Component[]>> NonAdjacentBlocking = new Dictionary<int, List<Component[]>>(); //Component[0] is blocked by Component[1]
+        internal static Dictionary<TessellatedSolid, List<PrimitiveSurface>> SolidPrimitive =
+            new Dictionary<TessellatedSolid, List<PrimitiveSurface>>();
 
-        internal static List<int> Run(designGraph assemblyGraph, List<TessellatedSolid> solids,
+        internal static List<int> Run(designGraph assemblyGraph, Dictionary<string, List<TessellatedSolid>> solids,
             bool classifyFastener = false, bool threaded = false)
         {
-            Solids = new List<TessellatedSolid>(solids);
+            Solids = new Dictionary<string, List<TessellatedSolid>>(solids);
 
             // Generate a good number of directions on the surface of a sphere
             //------------------------------------------------------------------------------------------
-            Directions = IcosahedronPro.DirectionGeneration();
+            Directions = IcosahedronPro.DirectionGeneration(1);
             DisassemblyDirections.Directions = new List<double[]>(Directions);
+            FindingOppositeDirections();
+            SpringDetector.DetectSprings(solids);
             var globalDirPool = new List<int>();
+            //SpringDetector.DetectSprings(solids);
             //playWithOBB(solids);
             // Creating Bounding Geometries for every solid
             //------------------------------------------------------------------------------------------
             BoundingGeometry.CreateOBB2(solids);
             BoundingGeometry.CreateBoundingCylinder(solids);
-            FastenerPolynomialTrend.PolynomialTrendDetector(solids[0]);
+            //FastenerPolynomialTrend.PolynomialTrendDetector(solids[0]);
             // From repeated parts take only one of them, and do the primitive classification on that:
             //------------------------------------------------------------------------------------------
             var multipleRefs = DuplicatePartsDetector(solids);
@@ -45,12 +50,12 @@ namespace Assembly_Planner
             //------------------------------------------------------------------------------------------
             var screwsAndBolts = new HashSet<TessellatedSolid>();
             if (classifyFastener)
-                screwsAndBolts = FastenerDetector.Run(solidPrimitive, multipleRefs,false, threaded,false);
+                screwsAndBolts = FastenerDetector.Run(solidPrimitive, multipleRefs,true, threaded,false);
             var solidsNoFastener = RemoveFastenersFromTheSolidsList(solids, screwsAndBolts);
 
-            // Detect gear mates
-            //------------------------------------------------------------------------------------------
-            var gears = GearDetector.Run(solidsNoFastener, solidPrimitive);
+            //// Detect gear mates
+            ////------------------------------------------------------------------------------------------
+            //var gears = GearDetector.Run(solidsNoFastener, solidPrimitive);
 
 
             // Add the solids as nodes to the graph. Exclude the fasteners 
@@ -83,7 +88,7 @@ namespace Assembly_Planner
                     {
                         // I wrote the code in a way that "solid1" is always "Reference" and "solid2" is always "Moving".
                         // Update the romoval direction if it is a gear mate:
-                        localDirInd = GearDetector.UpdateRemovalDirectionsIfGearMate(solid1, solid2, gears, localDirInd);
+                        //localDirInd = GearDetector.UpdateRemovalDirectionsIfGearMate(solid1, solid2, gears, localDirInd);
                         List<int> finDirs, infDirs;
                         NonadjacentBlockingDetermination.FiniteDirectionsBetweenConnectedPartsWithPartitioning(solid1,
                             solid2,
@@ -215,102 +220,15 @@ namespace Assembly_Planner
             return solidsNoFastener;
         }
 
-
-
-
-
-        private static void playWithOBB(List<TVGL.TessellatedSolid> solids)
+        private static void FindingOppositeDirections()
         {
-           /* var filePath = "../../InitialGraphMaker/BoltAndGearDetector/OBBCOMPARISON.csv";
-            if (!File.Exists(filePath))
-                File.Create(filePath).Close();
-            const string delimter = ",";
-            using (TextWriter writer = File.CreateText(filePath))
-                foreach (var solid in solids)
-                {
-                    var obb = OBB.BuildUsingPoints(solid.Vertices.ToList());
-                    var obb2 = MinimumEnclosure.OrientedBoundingBox(solid);
-                    obb2.CornerVertices = new[]
-                    {
-                        obb2.CornerVertices[2], obb2.CornerVertices[0], obb2.CornerVertices[1],
-                        obb2.CornerVertices[3],
-                        obb2.CornerVertices[6], obb2.CornerVertices[4], obb2.CornerVertices[5],
-                        obb2.CornerVertices[7]
-                    };
-                    var cornerVer = obb.CornerVertices.Select(p => new Vertex(p.Position)).ToArray();
-                    var faces = new List<PolygonalFace>
-                    {
-                        new PolygonalFace(new[] {cornerVer[0], cornerVer[1], cornerVer[3]},
-                            ((cornerVer[3].Position.subtract(cornerVer[0].Position)).crossProduct(
-                                cornerVer[1].Position.subtract(cornerVer[0].Position))).normalize()),
-
-                        new PolygonalFace(new[] {cornerVer[1], cornerVer[0], cornerVer[4]},
-                            ((cornerVer[1].Position.subtract(cornerVer[0].Position)).crossProduct(
-                                cornerVer[4].Position.subtract(cornerVer[0].Position))).normalize()),
-
-                        new PolygonalFace(new[] {cornerVer[2], cornerVer[3], cornerVer[7]},
-                            ((cornerVer[7].Position.subtract(cornerVer[3].Position)).crossProduct(
-                                cornerVer[2].Position.subtract(cornerVer[3].Position))).normalize()),
-
-                        new PolygonalFace(new[] {cornerVer[5], cornerVer[6], cornerVer[7]},
-                            ((cornerVer[7].Position.subtract(cornerVer[6].Position)).crossProduct(
-                                cornerVer[5].Position.subtract(cornerVer[6].Position))).normalize()),
-
-                        new PolygonalFace(new[] {cornerVer[1], cornerVer[2], cornerVer[6]},
-                            ((cornerVer[6].Position.subtract(cornerVer[2].Position)).crossProduct(
-                                cornerVer[1].Position.subtract(cornerVer[2].Position))).normalize()),
-
-                        new PolygonalFace(new[] {cornerVer[0], cornerVer[3], cornerVer[7]},
-                            ((cornerVer[0].Position.subtract(cornerVer[3].Position)).crossProduct(
-                                cornerVer[7].Position.subtract(cornerVer[3].Position))).normalize()),
-                    };
-
-                    var c1 =
-                        solid.Vertices.Count(
-                            v =>
-                                faces.Any(
-                                    f =>
-                                        (v.Position.subtract(f.Vertices[0].Position)).dotProduct(f.Normal) >
-                                        -0.000001));
-
-                    var cornerVer2 = obb2.CornerVertices.Select(p => new Vertex(p.Position)).ToArray();
-                    var faces2 = new List<PolygonalFace>
-                    {
-                        new PolygonalFace(new[] {cornerVer2[0], cornerVer2[1], cornerVer2[3]},
-                            ((cornerVer2[3].Position.subtract(cornerVer2[0].Position)).crossProduct(
-                                cornerVer2[1].Position.subtract(cornerVer2[0].Position))).normalize()),
-
-                        new PolygonalFace(new[] {cornerVer2[1], cornerVer2[0], cornerVer2[4]},
-                            ((cornerVer2[1].Position.subtract(cornerVer2[0].Position)).crossProduct(
-                                cornerVer2[4].Position.subtract(cornerVer2[0].Position))).normalize()),
-
-                        new PolygonalFace(new[] {cornerVer2[2], cornerVer2[3], cornerVer2[7]},
-                            ((cornerVer2[7].Position.subtract(cornerVer2[3].Position)).crossProduct(
-                                cornerVer2[2].Position.subtract(cornerVer2[3].Position))).normalize()),
-
-                        new PolygonalFace(new[] {cornerVer2[5], cornerVer2[6], cornerVer2[7]},
-                            ((cornerVer2[7].Position.subtract(cornerVer2[6].Position)).crossProduct(
-                                cornerVer2[5].Position.subtract(cornerVer2[6].Position))).normalize()),
-
-                        new PolygonalFace(new[] {cornerVer2[1], cornerVer2[2], cornerVer2[6]},
-                            ((cornerVer2[6].Position.subtract(cornerVer2[2].Position)).crossProduct(
-                                cornerVer2[1].Position.subtract(cornerVer2[2].Position))).normalize()),
-
-                        new PolygonalFace(new[] {cornerVer2[0], cornerVer2[3], cornerVer2[7]},
-                            ((cornerVer2[0].Position.subtract(cornerVer2[3].Position)).crossProduct(
-                                cornerVer2[7].Position.subtract(cornerVer2[3].Position))).normalize()),
-                    };
-                    var c2 =
-                        solid.Vertices.Count(
-                            v =>
-                                faces2.Any(
-                                    f =>
-                                        (v.Position.subtract(f.Vertices[0].Position)).dotProduct(f.Normal) >
-                                        -0.000001));
-                    var output = new[] { obb.Volume.ToString(), obb2.Volume.ToString(), c1.ToString(), c2.ToString(), solid.Vertices.Count().ToString() };
-                    writer.WriteLine(string.Join(delimter, output));
-                }
-            */
+            DisassemblyDirections.DirectionsAndOpposits = new Dictionary<int, int>();
+            for (int i = 0; i < Directions.Count; i++)
+            {
+                var dir = Directions[i];
+                var oppos = Directions.First(d => d[0] == -dir[0] && d[1] == -dir[1] && d[2] == -dir[2]);
+                DisassemblyDirections.DirectionsAndOpposits.Add(i, Directions.IndexOf(oppos));
+            }
         }
 
     }
