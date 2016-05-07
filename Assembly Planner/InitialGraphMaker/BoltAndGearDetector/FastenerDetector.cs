@@ -96,7 +96,7 @@ namespace Assembly_Planner
                 var primEqualArea = new Dictionary<PrimitiveSurface, List<PrimitiveSurface>>();
                 foreach (var prim in solidPrimitive[solid].Where(p => p is Flat))
                 {
-                    var equalExist = primEqualArea.Keys.Where(p => Math.Abs(p.Area - prim.Area) < 0.01).ToList();
+                    var equalExist = primEqualArea.Keys.Where(p => Math.Abs(p.Area - prim.Area) < 0.1).ToList();
                     if (!equalExist.Any()) primEqualArea.Add(prim, new List<PrimitiveSurface> {prim});
                     else
                     {
@@ -260,5 +260,17 @@ namespace Assembly_Planner
             return finalCenterline;
         }
 
+
+        internal static HashSet<TessellatedSolid> CheckFastenersWithUser(HashSet<TessellatedSolid> screwsAndBolts)
+        {
+            var approvedFasteners = new HashSet<TessellatedSolid>();
+            foreach (var fastener in screwsAndBolts)
+            {
+                Console.WriteLine("Is " + fastener.Name + " a fastener, nut or washer? n = NO, y = YES");
+                var userInput = Convert.ToString(Console.ReadLine());
+                if (userInput == "y") approvedFasteners.Add(fastener);
+            }
+            return approvedFasteners;
+        }
     }
 }

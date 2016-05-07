@@ -16,6 +16,8 @@ namespace Assembly_Planner
     public class DisassemblyDirections
     {
         public static List<double[]> Directions = new List<double[]>();
+        public static Dictionary<int, int> DirectionsAndOpposits = new Dictionary<int, int>();
+        public static Dictionary<int, int> DirectionsAndOppositsForGlobalpool = new Dictionary<int, int>();
         internal static List<TessellatedSolid> Solids;
         internal static Dictionary<int, List<Component[]>> NonAdjacentBlocking = new Dictionary<int, List<Component[]>>(); //Component[0] is blocked by Component[1]
         internal static List<int> Run(designGraph assemblyGraph, List<TessellatedSolid> solids)

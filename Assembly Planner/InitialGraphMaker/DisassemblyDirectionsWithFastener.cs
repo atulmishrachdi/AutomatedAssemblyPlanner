@@ -18,9 +18,11 @@ namespace Assembly_Planner
     {
         public static List<double[]> Directions = new List<double[]>();
         internal static Dictionary<string, List<TessellatedSolid>> Solids;
+        internal static Dictionary<string, List<TessellatedSolid>> SolidsNoFastener;
         internal static Dictionary<int, List<Component[]>> NonAdjacentBlocking = new Dictionary<int, List<Component[]>>(); //Component[0] is blocked by Component[1]
         internal static Dictionary<TessellatedSolid, List<PrimitiveSurface>> SolidPrimitive =
             new Dictionary<TessellatedSolid, List<PrimitiveSurface>>();
+        internal static List<TessellatedSolid> PartsWithOneGeom;
 
         internal static List<int> Run(designGraph assemblyGraph, Dictionary<string, List<TessellatedSolid>> solids,
             bool classifyFastener = false, bool threaded = false)
@@ -47,14 +49,22 @@ namespace Assembly_Planner
             //------------------------------------------------------------------------------------------
             var partsForPC = BlockingDetermination.PartsTobeClassifiedIntoPrimitives(solids);
             SolidPrimitive = BlockingDetermination.PrimitiveMaker(partsForPC);
-            var multipleRefs = DuplicatePartsDetector(solids);
+
+            PartsWithOneGeom = new List<TessellatedSolid>();
+            foreach (var subAssem in solids.Values)
+                if (subAssem.Count == 1)
+                    PartsWithOneGeom.Add(subAssem[0]);
+            var multipleRefs = DuplicatePartsDetector(PartsWithOneGeom);
 
             // Detect fasteners
             //------------------------------------------------------------------------------------------
             var screwsAndBolts = new HashSet<TessellatedSolid>();
             if (classifyFastener)
-                screwsAndBolts = FastenerDetector.Run(solidPrimitive, multipleRefs,true, threaded,false);
-            var solidsNoFastener = RemoveFastenersFromTheSolidsList(solids, screwsAndBolts);
+            {
+                screwsAndBolts = FastenerDetector.Run(SolidPrimitive, multipleRefs,true, threaded,false);
+                screwsAndBolts = FastenerDetector.CheckFastenersWithUser(screwsAndBolts);
+            }
+            SolidsNoFastener = RemoveFastenersFromTheSolidsList(solids, screwsAndBolts);
 
             //// Detect gear mates
             ////------------------------------------------------------------------------------------------
@@ -209,17 +219,20 @@ namespace Assembly_Planner
         }
 
 
-        private static List<TessellatedSolid> RemoveFastenersFromTheSolidsList(List<TessellatedSolid> solids, HashSet<TessellatedSolid> screwsAndBolts)
+        private static Dictionary<string, List<TessellatedSolid>> RemoveFastenersFromTheSolidsList(
+            Dictionary<string, List<TessellatedSolid>> solids, HashSet<TessellatedSolid> screwsAndBolts)
         {
-            var solidsNoFastener = new List<TessellatedSolid>(solids);
-            foreach (var bolt in screwsAndBolts)
-                solidsNoFastener.Remove(bolt);
-            foreach (var fastener in FastenerDetector.Fasteners)
-                solidsNoFastener.Remove(fastener.Solid);
-            foreach (var nuts in FastenerDetector.Nuts)
-                solidsNoFastener.Remove(nuts.Solid);
-            foreach (var washer in FastenerDetector.Washers)
-                solidsNoFastener.Remove(washer.Solid);
+            var solidsNoFastener = new Dictionary<string, List<TessellatedSolid>>(solids);
+            foreach (var solid in solids)
+            {
+                if (solid.Value.Count > 1)
+                {
+                    solidsNoFastener.Add(solid.Key, solid.Value);
+                    continue;
+                }
+                if (screwsAndBolts.Any(f=> f.Name == solid.Key)) continue;
+                solidsNoFastener.Add(solid.Key, solid.Value);
+            }
             return solidsNoFastener;
         }
 
