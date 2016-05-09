@@ -25,7 +25,7 @@ namespace Assembly_Planner
         internal static List<TessellatedSolid> PartsWithOneGeom;
 
         internal static List<int> Run(designGraph assemblyGraph, Dictionary<string, List<TessellatedSolid>> solids,
-            bool classifyFastener = false, bool threaded = false)
+            bool classifyFastener = false, int threaded = 0)
         {
             Solids = new Dictionary<string, List<TessellatedSolid>>(solids);
 
@@ -61,7 +61,7 @@ namespace Assembly_Planner
             var screwsAndBolts = new HashSet<TessellatedSolid>();
             if (classifyFastener)
             {
-                screwsAndBolts = FastenerDetector.Run(SolidPrimitive, multipleRefs,true, threaded,false);
+                screwsAndBolts = FastenerDetector.Run(SolidPrimitive, multipleRefs, threaded, false);
                 screwsAndBolts = FastenerDetector.CheckFastenersWithUser(screwsAndBolts);
             }
             SolidsNoFastener = RemoveFastenersFromTheSolidsList(solids, screwsAndBolts);

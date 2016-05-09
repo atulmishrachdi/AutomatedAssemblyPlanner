@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,16 +11,16 @@ using TVGL.IOFunctions;
 
 namespace Assembly_Planner
 {
-    static class FastenerLearner
+    static class FastenerPerceptronLearner
     {
         // This is a voted perceptron learner. What it gives me is a list of votes (c)
         // and a list of Ws. Every w from the begining to the end is saved and a vote is 
         // assigned to each. What I need to do for the test data is to take these two lists,
         // and do the dot product on x, w and then c. 
-        private static int Test = 134;
+        private static int Training = 134;
         private static int Features = 3;
 
-        internal static bool FastenerPerceptronLearner(List<PrimitiveSurface> primitives, TessellatedSolid solid,
+        internal static bool FastenerPerceptronClassifier(List<PrimitiveSurface> primitives, TessellatedSolid solid,
             List<double[]> learnerWeights, List<int> learnerVotes)
         {
             var localFeature = FeatureArrayCreator(primitives, solid);
@@ -37,12 +38,40 @@ namespace Assembly_Planner
             return false;
         }
 
-        private static void Learner(int interation = 2000)
+        internal static bool GaussianNaiveBayesClassifier(List<PrimitiveSurface> primitives, TessellatedSolid solid,
+            List<double[]> learnerWeights, List<int> learnerVotes)
+        {
+            var localFeature = FeatureArrayCreator(primitives, solid);
+            var signVector = 0;
+            for (var k = 0; k < learnerVotes.Count; k++)
+            {
+                var dot = 0.0;
+                for (var l = 0; l < Features; l++)
+                    dot += learnerWeights[k][l]*localFeature[l];
+                signVector += learnerVotes[k]*Math.Sign(dot);
+            }
+            var newY = Math.Sign(signVector);
+            // I need intervals to check for certainity
+            if (newY > 0) return true;
+            return false;
+        }
+
+        private static void Learner(int iteration = 2000)
         {
             // Reading CSV
             var Y = new List<double>();
-            var X = new double[Test, Features];
+            var X = new double[Training, Features];
             TrainingDataReader(out X, out Y);
+
+            var completionTimeEstimation = new double[iteration];
+            for (var i = iteration - 1; i >= 0; i--)
+            {
+                if (i == iteration - 1)
+                    completionTimeEstimation[i] = 1;
+                else
+                    completionTimeEstimation[i] = completionTimeEstimation[i + 1] - (1/(double) iteration) -
+                                                  (1/(double) (10*iteration));
+            }
 
             // Defining Variables
             var n = 0;
@@ -56,10 +85,10 @@ namespace Assembly_Planner
             var index = 0;
             var classificationErros = new List<double>();
 
-            for (var j = 0; j < interation; j++)
+            for (var j = 0; j < iteration; j++)
             {
                 index++;
-                var end = Test - 1;
+                var end = Training - 1;
                 var shuff = Enumerable.Range(0, ++end).ToList();
                 shuff.Shuffle();
                 foreach (var rnd in shuff)
@@ -83,7 +112,7 @@ namespace Assembly_Planner
                         c.Add(0);
                     }
                 }
-                for (var i = 0; i < Test; i++)
+                for (var i = 0; i < Training; i++)
                 {
                     var signVector = 0;
                     for (var k = 0; k < c.Count; k++)
@@ -112,7 +141,7 @@ namespace Assembly_Planner
         private static void TrainingDataReader(out double[,] X, out List<double> Y)
         {
             Y = new List<double>();
-            X = new double[Test, Features];
+            X = new double[Training, Features];
             var reader =
                 new StreamReader(
                     File.OpenRead(
@@ -210,7 +239,9 @@ namespace Assembly_Planner
             }
             if (!regenerateTrainingData && !File.Exists(weightsAndVotesPath) && !File.Exists(trainingDataPath))
                 Console.WriteLine("Sorry!! csv files don't exist. We need to generate the training data");
+                //statusReporter.PrintMessage("BOUNDING GEOMETRIES ARE SUCCESSFULLY CREATED.", 1f);
             //Path to read STLs from:
+
             var stlFastenerPath = path + "/TrainingSTLs/Fastener";
             var fastenersTraining = StlToSolid(stlFastenerPath);
             var fastenerPrimitive = BlockingDetermination.PrimitiveMaker(fastenersTraining);
@@ -235,7 +266,7 @@ namespace Assembly_Planner
             var output = new List<string[]>();
             OutputFeatureArrayCreator(fastenerPrimitive, true, output);
             OutputFeatureArrayCreator(notFastenerPrimitive, false, output);
-            Test = output.Count;
+            Training = output.Count;
             var length = output.Count;
             using (TextWriter writer = File.CreateText(filePath))
                 for (int index = 0; index < length; index++)
@@ -316,9 +347,10 @@ namespace Assembly_Planner
             //foreach (var fileInfo in fis)
             {
                 var ts = IO.Open(fileInfo.Open(FileMode.Open), fileInfo.Name);
-                //ts.Name = ts.Name.Remove(0, 1);
                 lock (parts)
+                {
                     parts.Add(ts[0]);
+                }
             }
             );//
             parts =

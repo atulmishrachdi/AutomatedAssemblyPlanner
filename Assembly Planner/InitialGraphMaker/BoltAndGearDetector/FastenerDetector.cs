@@ -11,14 +11,16 @@ namespace Assembly_Planner
 {
     public class FastenerDetector
     {
+        public static HashSet<TessellatedSolid> PreSelectedFasteners = new HashSet<TessellatedSolid>();
         public static HashSet<Fastener> Fasteners = new HashSet<Fastener>();
         public static HashSet<Nut> Nuts = new HashSet<Nut>();
         public static HashSet<Washer> Washers = new HashSet<Washer>();
-        public static HashSet<TessellatedSolid> SmallParts = new HashSet<TessellatedSolid>();
+        public static HashSet<TessellatedSolid> PotentialFastener = new HashSet<TessellatedSolid>();
 
         internal static HashSet<TessellatedSolid> Run(
             Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive,
-            Dictionary<TessellatedSolid, List<TessellatedSolid>> multipleRefs, bool autoDetection, bool threaded,
+            Dictionary<TessellatedSolid, List<TessellatedSolid>> multipleRefs,
+            int threaded,
             bool regenerateTrainingData = false)
         {
             var s = Stopwatch.StartNew();
@@ -28,9 +30,10 @@ namespace Assembly_Planner
             Fasteners.Clear();
             Nuts.Clear();
             Washers.Clear();
-            if (threaded)
+            if (threaded != 0) // either all of them or some of them are threaded 
             {
-                FastenerLearner.RunPerecptronLearner(regenerateTrainingData);
+                FastenerPerceptronLearner.RunPerecptronLearner(regenerateTrainingData);
+                FastenerGaussianNaiveBayes.RunGaussianNaiveBayes();
                 // after training data is generated (or exists), now I should check and see
                 // if the csv containing weights and votes exists or not.
                 // Even if the trainingData csv doesnt exist but the csv of w and votes exist,
@@ -39,30 +42,20 @@ namespace Assembly_Planner
                 // see if the WeightsAndVotes.csv exists or not.
             }
             var fastener = new HashSet<TessellatedSolid>();
-            if (!autoDetection)
-            {
-                foreach (var solid in solidPrimitive.Keys)
-                    if (solid.Name.Contains("Screw") || solid.Name.Contains("Test - Part-S"))
-                        fastener.Add(solid);
-                    else if (solid.Name.Contains("ShaftCollar"))
-                        fastener.Add(solid);
-                    else if (solid.Name.Contains("DowellGrooved"))
-                        if (solid.Name.Contains("-5") || solid.Name.Contains("-14") || solid.Name.Contains("-27") ||
-                            solid.Name.Contains("-30"))
-                            continue;
-                        else
-                            fastener.Add(solid);
-            }
+            if (multipleRefs.Count == 1) return fastener;
+            if (threaded == 0) // non of them are threaded
+                AutoNonthreadedFastenerDetection.Run(solidPrimitive, multipleRefs);
             else
             {
-                if (!threaded)
-                    AutoNonthreadedFastenerDetection.Run(solidPrimitive, multipleRefs);
-                else
+                if (threaded == 2) // all of them are threaded
                     AutoThreadedFastenerDetection.Run(solidPrimitive, multipleRefs);
+                else // some are threaded, some not
+                    AutoSemiThreadedFastenerDetection.Run(solidPrimitive, multipleRefs);
             }
-
-            s.Stop();
-            Console.WriteLine("Fastener Detection:" + "     " + s.Elapsed);
+            RemoveDetectedFastenersFromPotentialFasteners();
+            //s.Stop();
+            //Console.WriteLine("Fastener Detection:" + "     " + s.Elapsed);
+            //ReportStats();
             return fastener;
         }
 
@@ -260,6 +253,15 @@ namespace Assembly_Planner
             return finalCenterline;
         }
 
+        private static void RemoveDetectedFastenersFromPotentialFasteners()
+        {
+            foreach (var f in Fasteners)
+                PotentialFastener.Remove(f.Solid);
+            foreach (var n in Nuts)
+                PotentialFastener.Remove(n.Solid);
+            foreach (var w in Washers)
+                PotentialFastener.Remove(w.Solid);
+        }
 
         internal static HashSet<TessellatedSolid> CheckFastenersWithUser(HashSet<TessellatedSolid> screwsAndBolts)
         {

@@ -22,18 +22,25 @@ namespace Assembly_Planner
             // Important: if the fasteners are threaded using solidworks Fastener toolbox, it will not
             //            have helix. The threads will be small cones with the same axis and equal area.
 
-            var smallParts = FastenerDetector.SmallObjectsDetector(solidPrimitive.Keys.ToList());
-            FastenerDetector.SmallParts = new HashSet<TessellatedSolid>(smallParts);
+            var smallParts = FastenerDetector.SmallObjectsDetector(DisassemblyDirectionsWithFastener.PartsWithOneGeom);
+
+            PreSelectedFastenerToFastenerClass(solidPrimitive, multipleRefs);
+            foreach (var preSelected in FastenerDetector.PreSelectedFasteners.Where(preSelected => !smallParts.Contains(preSelected)))
+                smallParts.Add(preSelected);
+
+            FastenerDetector.PotentialFastener = new HashSet<TessellatedSolid>(smallParts);
             var groupedPotentialFasteners = FastenerDetector.GroupingSmallParts(smallParts);
             var uniqueParts = new HashSet<TessellatedSolid>();
-            foreach (var s in multipleRefs.Keys.Where(FastenerDetector.SmallParts.Contains))
+            foreach (var s in multipleRefs.Keys.Where(FastenerDetector.PotentialFastener.Contains))
                 uniqueParts.Add(s);
+            foreach (var preFastener in FastenerDetector.Fasteners.Where(preFastener => uniqueParts.Contains(preFastener.Solid)))
+                uniqueParts.Remove(preFastener.Solid);
 
             var equalPrimitivesForEveryUniqueSolid = FastenerDetector.EqualFlatPrimitiveAreaFinder(uniqueParts, solidPrimitive);
             List<int> learnerVotes;
-            var learnerWeights = FastenerLearner.ReadingLearnerWeightsAndVotesFromCsv(out learnerVotes);
+            var learnerWeights = FastenerPerceptronLearner.ReadingLearnerWeightsAndVotesFromCsv(out learnerVotes);
             Parallel.ForEach(uniqueParts, solid =>
-                //foreach (var solid in uniqueParts)
+            //foreach (var solid in uniqueParts)
             {
                 // if a fastener is detected using polynomial trend approach, it is definitely a fastener but not a nut.
                 // if it is detected using any other approach, but not polynomial trend, it is a possible nut.
@@ -114,7 +121,7 @@ namespace Assembly_Planner
                         }
                     }
                 }
-                if (FastenerLearner.FastenerPerceptronLearner(solidPrimitive[solid], solid, learnerWeights, learnerVotes))
+                if (FastenerPerceptronLearner.FastenerPerceptronClassifier(solidPrimitive[solid], solid, learnerWeights, learnerVotes))
                 {
                     var newFastener = FastenerPolynomialTrend.PolynomialTrendDetector(solid);
                     if (newFastener != null)
@@ -127,11 +134,11 @@ namespace Assembly_Planner
                     }
                     // can be a nut
                     // use bounding cylinder to detect nuts.
-                    // Since the nuts are small, the OBB function ddoesnt work perfectly for them
-                    //  therefore, I cannot really trust this. 
+                    // Since the nuts are small, the OBB function doesnt work accurately for them.
+                    //  So, I cannot really trust this. 
                     var newNut = NutPolynomialTrend.PolynomialTrendDetector(solid);
                     if (newNut != null)
-                        // It is a nut with certainty == 1
+                    // It is a nut with certainty == 1
                     {
                         lock (FastenerDetector.Nuts)
                             FastenerDetector.Nuts.Add(newNut);
@@ -148,7 +155,7 @@ namespace Assembly_Planner
                             FastenerDetector.Nuts.Add(new Nut
                             {
                                 Solid = repeatedSolid,
-                                Diameter = BoundingGeometry.BoundingCylinderDic[solid].Radius*2.0,
+                                Diameter = BoundingGeometry.BoundingCylinderDic[solid].Radius * 2.0,
                                 // this is approximate
                                 OverallLength = BoundingGeometry.BoundingCylinderDic[solid].Length,
                                 Certainty = 0.5
@@ -177,9 +184,9 @@ namespace Assembly_Planner
                             FastenerDetector.Nuts.Add(new Nut
                             {
                                 Solid = repeatedSolid,
-                                Diameter = BoundingGeometry.BoundingCylinderDic[solid].Radius*2.0,
+                                Diameter = BoundingGeometry.BoundingCylinderDic[solid].Radius * 2.0,
                                 // this is approximate
-                                OverallLength = BoundingGeometry.BoundingCylinderDic[solid].Length*2.0,
+                                OverallLength = BoundingGeometry.BoundingCylinderDic[solid].Length * 2.0,
                                 Certainty = 0.5
                             });
                     }
@@ -190,7 +197,66 @@ namespace Assembly_Planner
             AutoNonthreadedFastenerDetection.ConnectFastenersNutsAndWashers(groupedPotentialFasteners);
         }
 
-        private static bool ThreadDetector(TessellatedSolid solid, List<PrimitiveSurface> primitiveSurfaces)
+        private static void PreSelectedFastenerToFastenerClass(
+            Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive,
+            Dictionary<TessellatedSolid, List<TessellatedSolid>> multipleRefs)
+        {
+            foreach (var preFastener in FastenerDetector.PreSelectedFasteners)
+            {
+                // if this part is repeated, add also those repeated parts to the fastener list
+                var repeated = new HashSet<TessellatedSolid>();
+                var isAKeyInMultipleRefs = multipleRefs.Keys.Where(r => r == preFastener).ToList();
+                if (isAKeyInMultipleRefs.Any())
+                    repeated = new HashSet<TessellatedSolid>(multipleRefs[isAKeyInMultipleRefs[0]]) { preFastener };
+                else
+                {
+                    // it is a part in a value list
+                    foreach (var key in multipleRefs.Keys)
+                    {
+                        if (!multipleRefs[key].Contains(preFastener)) continue;
+                        repeated = new HashSet<TessellatedSolid>(multipleRefs[key]) { key };
+                    }
+                }
+                var newFastener = FastenerPolynomialTrend.PolynomialTrendDetector(preFastener);
+                if (newFastener != null)
+                {
+                    foreach (var repeatedSolid in repeated)
+                    {
+                        FastenerDetector.Fasteners.Add(new Fastener
+                        {
+                            Solid = repeatedSolid,
+                            NumberOfThreads = newFastener.NumberOfThreads,
+                            FastenerType = newFastener.FastenerType,
+                            RemovalDirection = newFastener.RemovalDirection,
+                            OverallLength = newFastener.OverallLength,
+                            EngagedLength = newFastener.EngagedLength,
+                            Diameter = newFastener.Diameter,
+                            Certainty = 1.0
+                        });
+                    }
+                    return;
+                }
+                var overalLength =
+                    GeometryFunctions.SortedLengthOfObbEdges(BoundingGeometry.OrientedBoundingBoxDic[preFastener])[2];
+                foreach (var repeatedSolid in repeated)
+                {
+                    FastenerDetector.Fasteners.Add(new Fastener
+                    {
+                        Solid = repeatedSolid,
+                        FastenerType = FastenerTypeEnum.Bolt,
+                        RemovalDirection =
+                            FastenerDetector.RemovalDirectionFinderUsingObb(preFastener,
+                                BoundingGeometry.OrientedBoundingBoxDic[preFastener]),
+                        OverallLength = overalLength,
+                        EngagedLength = overalLength,
+                        Diameter = BoundingGeometry.BoundingCylinderDic[repeatedSolid].Radius,
+                        Certainty = 1.0
+                    });
+                }
+            }
+        }
+
+        internal static bool ThreadDetector(TessellatedSolid solid, List<PrimitiveSurface> primitiveSurfaces)
         {
             // Consider these two cases:
             //      1. Threads are helix
@@ -232,13 +298,13 @@ namespace Assembly_Planner
             var gVisited = new HashSet<Edge>();
             foreach (
                 var edge in
-                    solid.Edges.Where(e => Math.Abs(e.InternalAngle - 2.08566845) < 0.04 
+                    solid.Edges.Where(e => Math.Abs(e.InternalAngle - 2.08566845) < 0.04
                         && !gVisited.Contains(e)))
-                // 2.0943951 is equal to 120 degree
+            // 2.0943951 is equal to 120 degree
             {
                 // To every side of the edge if there is one edge with the IA of 120, this edge is unique and we dcannot find the second one. 
                 gVisited.Add(edge);
-                var visited = new HashSet<Edge> {edge};
+                var visited = new HashSet<Edge> { edge };
                 var stack = new Stack<Edge>();
                 var possibleHelixEdges = FindHelixEdgesConnectedToAnEdge(solid.Edges, edge, visited);
                 // It can have 0, 1 or 2 edges
@@ -268,7 +334,7 @@ namespace Assembly_Planner
             // If it is seperated cones, it's easy: negative cones make internal thread
             // To make it robust, if 70 percent of the cones are negative, it is internal
             var neg = threads.Count(cone => !cone.IsPositive);
-            if (neg >= 0.7*threads.Count) return true;
+            if (neg >= 0.7 * threads.Count) return true;
             return false;
         }
 
@@ -297,7 +363,7 @@ namespace Assembly_Planner
             return m.ToArray();
         }
 
-        private static int CommonHeadCheck(TessellatedSolid solid, List<PrimitiveSurface> solidPrim,
+        internal static int CommonHeadCheck(TessellatedSolid solid, List<PrimitiveSurface> solidPrim,
             Dictionary<PrimitiveSurface, List<PrimitiveSurface>> equalPrimitives, out double toolSize)
         {
             // 0: false (doesnt have any common head shape)
@@ -313,14 +379,14 @@ namespace Assembly_Planner
             var eightFlat = FastenerDetector.EqualPrimitivesFinder(equalPrimitives, 8);
             var twoFlat = FastenerDetector.EqualPrimitivesFinder(equalPrimitives, 2);
             var fourFlat = FastenerDetector.EqualPrimitivesFinder(equalPrimitives, 4);
-            if (!sixFlat.Any()) return 0;
+            //if (!sixFlat.Any()) return 0;
             foreach (var candidateHex in sixFlat)
             {
                 var candidateHexVal = equalPrimitives[candidateHex];
                 var cos = new List<double>();
-                var firstPrimNormal = ((Flat) candidateHexVal[0]).Normal;
+                var firstPrimNormal = ((Flat)candidateHexVal[0]).Normal;
                 for (var i = 1; i < candidateHexVal.Count; i++)
-                    cos.Add(firstPrimNormal.dotProduct(((Flat) candidateHexVal[i]).Normal));
+                    cos.Add(firstPrimNormal.dotProduct(((Flat)candidateHexVal[i]).Normal));
                 // if it is a hex or allen bolt, the cos list must have two 1/2, two -1/2 and one -1
                 if (cos.Count(c => Math.Abs(0.5 - c) < 0.0001) != 2 ||
                     cos.Count(c => Math.Abs(-0.5 - c) < 0.0001) != 2 ||
@@ -334,27 +400,33 @@ namespace Assembly_Planner
             {
                 var candidateHexVal = equalPrimitives[candidateHex];
                 var cos = new List<double>();
-                var firstPrimNormal = ((Flat) candidateHexVal[0]).Normal;
+                var firstPrimNormal = ((Flat)candidateHexVal[0]).Normal;
                 for (var i = 1; i < candidateHexVal.Count; i++)
-                    cos.Add(firstPrimNormal.dotProduct(((Flat) candidateHexVal[i]).Normal));
+                    cos.Add(firstPrimNormal.dotProduct(((Flat)candidateHexVal[i]).Normal));
+                var oneFlat = FastenerDetector.EqualPrimitivesFinder(equalPrimitives, 1);
+                // Any flat that is adjacent to all of these eights?
                 // if it is philips head, the cos list must have four 0, two -1 and one 1
-                if (cos.Count(c => Math.Abs(0.0 - c) < 0.0001) != 4 ||
+                foreach (var sh in oneFlat)
+                    if (candidateHexVal.All(f => f.OuterEdges.Any(sh.OuterEdges.Contains)))
+                        return 3;
+                /*if (cos.Count(c => Math.Abs(0.0 - c) < 0.0001) != 4 ||
                     cos.Count(c => Math.Abs(-1 - c) < 0.0001) != 2 ||
                     cos.Count(c => Math.Abs(1 - c) < 0.0001) != 1) continue;
-                return 3;
+                return 3;*/
+                continue;
             }
             foreach (var candidateHex in twoFlat)
             {
                 var candidateHexVal = equalPrimitives[candidateHex];
-                var cos = ((Flat) candidateHexVal[0]).Normal.dotProduct(((Flat) candidateHexVal[1]).Normal);
+                var cos = ((Flat)candidateHexVal[0]).Normal.dotProduct(((Flat)candidateHexVal[1]).Normal);
                 if (!(Math.Abs(-1 - cos) < 0.0001)) continue;
                 // I will add couple of conditions here:
                 //    1. If the number of solid vertices in front of each flat is equal to another
                 //    2. If the summation of the vertices in 1 is greater than the total # of verts
                 //    3. and I also need to add some constraints for the for eample the area of the cylinder
-                var leftVerts = AutoNonthreadedFastenerDetection.VertsInfrontOfFlat(solid, (Flat) candidateHexVal[0]);
+                var leftVerts = AutoNonthreadedFastenerDetection.VertsInfrontOfFlat(solid, (Flat)candidateHexVal[0]);
                 var rightVerts = AutoNonthreadedFastenerDetection.VertsInfrontOfFlat(solid, (Flat)candidateHexVal[1]);
-                if (Math.Abs(leftVerts - rightVerts) > 2 || leftVerts + rightVerts <= solid.Vertices.Length)
+                if (Math.Abs(leftVerts - rightVerts) > 10 || leftVerts + rightVerts <= solid.Vertices.Length)
                     continue;
                 return 4;
             }
@@ -379,7 +451,7 @@ namespace Assembly_Planner
             return 0;
         }
 
-        private static void AddRepeatedSolidstoFasteners(Fastener lastAddedFastener, List<TessellatedSolid> repeatedSolid)
+        internal static void AddRepeatedSolidstoFasteners(Fastener lastAddedFastener, List<TessellatedSolid> repeatedSolid)
         {
             foreach (var solid in repeatedSolid)
             {
@@ -400,21 +472,21 @@ namespace Assembly_Planner
                     });
             }
         }
-        private static void AddRepeatedSolidstoNuts(Nut lastAddedNut, List<TessellatedSolid> repeatedSolid)
+        internal static void AddRepeatedSolidstoNuts(Nut lastAddedNut, List<TessellatedSolid> repeatedSolid)
         {
             foreach (var solid in repeatedSolid)
             {
                 if (solid == lastAddedNut.Solid) continue;
                 FastenerDetector.Nuts.Add(new Nut
                 {
-                    Solid = solid, 
+                    Solid = solid,
                     NumberOfThreads = lastAddedNut.NumberOfThreads,
                     RemovalDirection = lastAddedNut.RemovalDirection,
                     OverallLength = lastAddedNut.OverallLength,
                     Diameter = lastAddedNut.Diameter,
                     Certainty = lastAddedNut.Certainty,
                     Tool = lastAddedNut.Tool,
-                    ToolSize = lastAddedNut.ToolSize, 
+                    ToolSize = lastAddedNut.ToolSize,
                     NutType = lastAddedNut.NutType
                 });
             }
