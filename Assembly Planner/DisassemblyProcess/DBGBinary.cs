@@ -14,7 +14,7 @@ namespace Assembly_Planner
         static List<hyperarc> Preceedings = new List<hyperarc>();
         private static int co;
         private static List<hyperarc> visited = new List<hyperarc>();
-        internal static Dictionary<hyperarc, List<hyperarc>> DirectionalBlockingGraph(designGraph assemblyGraph, int cndDirInd)
+        internal static Dictionary<hyperarc, List<hyperarc>> DirectionalBlockingGraph(designGraph assemblyGraph, int cndDirInd, bool relaxingSc = false)
         {
             // So, I am trying to make the DBG for for each seperate hyperarc. 
             // This hyperarc includes small hyperarcs with the lable  "SCC"
@@ -66,11 +66,11 @@ namespace Assembly_Planner
             }
             //dbgDictionary = CombineWithNonAdjacentBlockings2(dbgDictionary, cndDirInd);
             dbgDictionary = CombineWithNonAdjacentBlockingsUsingSecondaryConnections(dbgDictionary, assemblyGraph, cndDirInd);
-            dbgDictionary = SolveMutualBlocking(assemblyGraph, dbgDictionary);
+            dbgDictionary = SolveMutualBlocking(assemblyGraph, dbgDictionary, relaxingSc);
             dbgDictionary = UpdateBlockingDic(dbgDictionary);
             //if (MutualBlocking(assemblyGraph, dbgDictionary))
             //    dbgDictionary = DirectionalBlockingGraph(assemblyGraph, seperate, cndDirInd); // This is expensive. Get rid of it.
-            dbgDictionary = SolveMutualBlocking(assemblyGraph, dbgDictionary);
+            dbgDictionary = SolveMutualBlocking(assemblyGraph, dbgDictionary, relaxingSc);
             if (MutualBlocking2(assemblyGraph, dbgDictionary))
             {
                 var df = 2;
@@ -82,10 +82,14 @@ namespace Assembly_Planner
      Dictionary<hyperarc, List<hyperarc>> dbgDictionary, designGraph assemblyGraph, int cndDirInd)
         {
             var direction = DisassemblyDirections.Directions[cndDirInd];
-            var dirs = (from gDir in DisassemblyDirections.Directions
-                        where 1 - Math.Abs(gDir.dotProduct(direction)) < OverlappingFuzzification.CheckWithGlobDirsParall
-                        select DisassemblyDirections.Directions.IndexOf(gDir)).ToList();
-            var oppositeDir = dirs.Where(d => d != cndDirInd).ToList();
+            /*var dirs = new List<int>();
+            foreach (var gDir in DisassemblyDirections.Directions)
+            {
+                if (1 - Math.Abs(gDir.dotProduct(direction)) < OverlappingFuzzification.CheckWithGlobDirsParall) 
+                    dirs.Add(DisassemblyDirections.Directions.IndexOf(gDir));
+            }*/
+            //var oppositeDir = dirs.Where(d => d != cndDirInd).ToList();
+            var oppositeDir = new List<int> { DisassemblyDirections.DirectionsAndOppositsForGlobalpool[cndDirInd] };
             foreach (SecondaryConnection SC in assemblyGraph.arcs.Where(a => a is SecondaryConnection))
             {
                 var blockedScc = dbgDictionary.Keys.ToList().Where(scc => scc.nodes.Contains(SC.From));
@@ -94,7 +98,7 @@ namespace Assembly_Planner
                     continue;
                 if (oppositeDir.Any())
                 {
-                    if (SC.Directions.Contains(cndDirInd) && SC.Directions.Contains(oppositeDir[0]))
+                    if (ContainsADirection(new HashSet<int>(SC.Directions), cndDirInd) && ContainsADirection(new HashSet<int>(SC.Directions), oppositeDir[0]))
                     {
                         foreach (var blocked in blockedScc)
                         {
@@ -107,7 +111,7 @@ namespace Assembly_Planner
                             }
                         }
                     }
-                    else if (SC.Directions.Contains(cndDirInd))
+                    else if (ContainsADirection(new HashSet<int>(SC.Directions), cndDirInd))
                     {
                         foreach (var blocked in blockedScc)
                         {
@@ -118,7 +122,7 @@ namespace Assembly_Planner
                             }
                         }
                     }
-                    else if (SC.Directions.Contains(oppositeDir[0]))
+                    else if (ContainsADirection(new HashSet<int>(SC.Directions), oppositeDir[0]))
                     {
                         foreach (var blocked in blockedScc)
                         {
@@ -132,7 +136,7 @@ namespace Assembly_Planner
                 }
                 else
                 {
-                    if (!SC.Directions.Contains(cndDirInd)) continue;
+                    if (!ContainsADirection(new HashSet<int>(SC.Directions), cndDirInd)) continue;
                     foreach (var blocked in blockedScc)
                     {
                         foreach (var blocking in blockingScc.Where(b => b != blocked))
@@ -146,7 +150,18 @@ namespace Assembly_Planner
             return dbgDictionary;
         }
 
-        internal static Dictionary<hyperarc, List<hyperarc>> SolveMutualBlocking(designGraph assemblyGraph, Dictionary<hyperarc, List<hyperarc>> dbgDictionary)
+        private static bool ContainsADirection(HashSet<int> dirs, int d)
+        {
+            if (
+                dirs.Any(
+                    dir =>
+                        Math.Abs(1 -
+                                 DisassemblyDirections.Directions[dir].dotProduct(DisassemblyDirections.Directions[d])) <
+                        OverlappingFuzzification.CheckWithGlobDirsParall2)) return true;
+            return false;
+        }
+
+        internal static Dictionary<hyperarc, List<hyperarc>> SolveMutualBlocking(designGraph assemblyGraph, Dictionary<hyperarc, List<hyperarc>> dbgDictionary, bool relaxingSc = false)
         {
             for (var i = 0; i < dbgDictionary.Count - 1; i++)
             {
@@ -156,6 +171,35 @@ namespace Assembly_Planner
                     var jKey = dbgDictionary.Keys.ToList()[j];
                     if (dbgDictionary[iKey].Contains(jKey) && dbgDictionary[jKey].Contains(iKey))
                     {
+                        if (relaxingSc)
+                        {
+                            // if these two keys are not phisically connected, update the dbg
+                            if (
+                                assemblyGraph.arcs.Where(a => a is Connection)
+                                    .Cast<Connection>()
+                                    .Any(
+                                        a =>
+                                            (iKey.nodes.Any(n => n.name == a.From.name) &&
+                                             jKey.nodes.Any(n => n.name == a.To.name)) ||
+                                            (iKey.nodes.Any(n => n.name == a.To.name) &&
+                                             jKey.nodes.Any(n => n.name == a.From.name))))
+                                continue;
+                            // take the one with less volume and delete it from the value of the otherone's key
+                            var volumei = iKey.nodes.Cast<Component>().Sum(n => n.Volume);
+                            var volumej = jKey.nodes.Cast<Component>().Sum(n => n.Volume);
+                            if ((dbgDictionary[iKey].Count == 1 && dbgDictionary[jKey].Count == 1) ||
+                                (dbgDictionary[iKey].Count > 1 && dbgDictionary[jKey].Count > 1))
+                            {
+                                if (volumei < volumej) dbgDictionary[iKey].Remove(jKey);
+                                else dbgDictionary[jKey].Remove(iKey);
+                            }
+                            else
+                            {
+                                if (dbgDictionary[iKey].Count == 1) dbgDictionary[iKey].Remove(jKey);
+                                else dbgDictionary[jKey].Remove(iKey);
+                            }
+                            break;
+                        }
                         var nodes = new List<node>();
                         nodes.AddRange(iKey.nodes);
                         nodes.AddRange(jKey.nodes);
@@ -181,9 +225,10 @@ namespace Assembly_Planner
                                 var a = 2;
                             }
                         }
-                        
+
                         assemblyGraph.removeHyperArc(iKey);
                         assemblyGraph.removeHyperArc(jKey);
+                        // if there is no connection between the keys 
                         dbgDictionary.Add(last, updatedBlocking2);
                         i--;
                         break;
@@ -304,9 +349,9 @@ namespace Assembly_Planner
             foreach (var dirInd in borderArc.InfiniteDirections)
             {
                 var arcDisDir = DisassemblyDirections.Directions[dirInd];
-                if (Math.Abs(1 - arcDisDir.dotProduct(cndDir)) < OverlappingFuzzification.CheckWithGlobDirsParall)
+                if (Math.Abs(1 - arcDisDir.dotProduct(cndDir)) < OverlappingFuzzification.CheckWithGlobDirsParall2)
                     paralAndSame = true;
-                if (Math.Abs(1 + arcDisDir.dotProduct(cndDir)) < OverlappingFuzzification.CheckWithGlobDirsParall)
+                if (Math.Abs(1 + arcDisDir.dotProduct(cndDir)) < OverlappingFuzzification.CheckWithGlobDirsParall2)
                     paralButOppose = true;
             }
             if (paralAndSame && paralButOppose) return 2;
@@ -368,7 +413,7 @@ namespace Assembly_Planner
             co++;
             if (co != 1)
                 Preceedings.Add(sccHy);
-            foreach (var value in blockingDic[sccHy].Where(v=> v != null))
+            foreach (var value in blockingDic[sccHy].Where(v => v != null))
             {
                 if (visited.Contains(value)) continue;
                 visited.Add(value);

@@ -24,12 +24,12 @@ namespace Assembly_Planner
                 //"../../../Test/PumpWExtention";
                 //"../../../Test/FastenerTest/new/test";
                 //"../../../Test/Double";
-                //"../../../Test/Simple-Test";
+                //"../../../Test/test7";
                 //"../../../Test/Mc Cormik/STL2";
                 //"../../../Test/Truck -TXT-1/STL";
-                "../../../Test/FoodPackagingMachine/FPMSTL2";
+                //"../../../Test/FoodPackagingMachine/FPMSTL2";
                 //"../../../../GearAndFastener Detection/TrainingData/not-screw/Gear";
-                //"../../../Test/test3";
+            "../../../Test/test8";
             var s = Stopwatch.StartNew();
             s.Start();
             var solids = GetSTLs(inputDir);
@@ -47,14 +47,15 @@ namespace Assembly_Planner
             {
                 assemblyGraph = new designGraph();
                 //var globalDirPool = DisassemblyDirections.Run(assemblyGraph, solids);
-                globalDirPool = DisassemblyDirectionsWithFastener.Run(assemblyGraph, solids, true, true);
+                globalDirPool = DisassemblyDirectionsWithFastener.Run(assemblyGraph, solids, false);
                 //Updates.AddPartsProperties(inputDir, assemblyGraph);
                 //NonadjacentBlockingDeterminationPro.Run(assemblyGraph, solids, globalDirPool);
                 NonadjacentBlockingWithPartitioning.Run(assemblyGraph, solids, globalDirPool);
                 //NonadjacentBlockingDetermination.Run(assemblyGraph, solids, globalDirPool);
                 //GraphSaving.SaveTheGraph(assemblyGraph);
             }
-            var solutions = RecursiveOptimizedSearch.Run(assemblyGraph, solids, globalDirPool);
+            //var solutions = RecursiveOptimizedSearch.Run(assemblyGraph, solids, globalDirPool);
+            var solutions = LeapBeta.Run(assemblyGraph, solids, globalDirPool, 1);
             //var solutions = OrderedDFS.Run(inputData, globalDirPool,solids); // the output is the assembly sequence
             //var solutions = BeamSearch.Run(inputData, globalDirPool);
            
@@ -66,7 +67,7 @@ namespace Assembly_Planner
             Console.ReadLine();
         }
 
-        private static List<TessellatedSolid> GetSTLs(string InputDir)
+        private static Dictionary<string, List<TessellatedSolid>> GetSTLs(string InputDir)
         {
             Console.WriteLine("Loading STLs ....");
             var parts = new List<TessellatedSolid>();
@@ -84,7 +85,7 @@ namespace Assembly_Planner
             Console.WriteLine("All the files are loaded successfully");
             Console.WriteLine("    * Number of tessellated solids:   " + parts.Count );
             Console.WriteLine("    * Total Number of Triangles:   " + parts.Sum(s => s.Faces.Count()));
-            return parts;
+            return parts.ToDictionary(tessellatedSolid => tessellatedSolid.Name, tessellatedSolid => new List<TessellatedSolid> {tessellatedSolid});
         }
     }
 }

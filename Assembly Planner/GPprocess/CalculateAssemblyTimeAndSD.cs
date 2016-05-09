@@ -19,7 +19,7 @@ namespace GPprocess
         {
 
             ///set up 
-            var refNodes = sub.Install.Reference.PartNodes.Select(n => (Component)graph[n]).ToList();
+            /*var refNodes = sub.Install.Reference.PartNodes.Select(n => (Component)graph[n]).ToList();
             var movingNodes = sub.Install.Moving.PartNodes.Select(n => (Component)graph[n]).ToList();
             var install = new[] { refNodes, movingNodes };
             var connectingArcs = graph.arcs.Where(c=> c is Connection).Cast<Connection>().Where(a => ((movingNodes.Contains(a.To) && refNodes.Contains(a.From))
@@ -76,10 +76,10 @@ namespace GPprocess
      
 
 
-      
+      */
             var pp = new List<double>();
-            pp.Add(predicMean[0]);
-            pp.Add(predicVar[0]);
+            //pp.Add(predicMean[0]);
+            //pp.Add(predicVar[0]);
             return pp;
         }
     }

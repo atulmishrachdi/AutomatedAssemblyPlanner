@@ -17,7 +17,7 @@ namespace AssemblyEvaluation
         public string Name;
 
         [XmlIgnore]
-        public List<string> PartNodes { get; protected set; }
+        public List<string> PartNames { get; set; }
 
         /// <summary>
         /// The mass of the part
@@ -47,8 +47,8 @@ namespace AssemblyEvaluation
         public Part(string name, double mass, double volume, TVGLConvexHull convexHull, Vertex centerOfMass)
         {
             Name = name;
-            PartNodes = new List<string>();
-            PartNodes.Add(name);
+            PartNames = new List<string>();
+            PartNames.Add(name);
             Mass = mass;
             Volume = volume;
             //volume of sphere = (4/3)*Math.Pi*r*r*r
@@ -84,10 +84,12 @@ namespace AssemblyEvaluation
         public SubAssembly(Part refAssembly, Part movingAssembly, TVGLConvexHull combinedCVXHull,
             InstallCharacterType InstallCharacter, List<PolygonalFace> refFacesInCombined)
         {
-            Name = "subasm-" + Guid.NewGuid();
-            PartNodes = new List<string>(refAssembly.PartNodes);
-            PartNodes.AddRange(movingAssembly.PartNodes);
+            PartNames = new List<string>(refAssembly.PartNames);
+            PartNames.AddRange(movingAssembly.PartNames);
+            Name = "subasm-" + PartNames.Aggregate((i, j) => i + "," + j);
             Install = new InstallAction { Reference = refAssembly, Moving = movingAssembly };
+            Secure = new SecureAction();
+            Rotate = new RotateAction();
             this.InstallCharacter = InstallCharacter;
             Mass = refAssembly.Mass + movingAssembly.Mass;
             Volume = refAssembly.Volume + movingAssembly.Volume;
@@ -97,12 +99,12 @@ namespace AssemblyEvaluation
             CVXHull = combinedCVXHull;
             this.refFacesInCombined = refFacesInCombined;
         }
-        public SubAssembly(List<Component> nodes, TVGLConvexHull combinedCVXHull,
+        public SubAssembly(HashSet<Component> nodes, TVGLConvexHull combinedCVXHull,
             double Mass, double Volume, Vertex centerOfMass)
         {
-            Name = "subasm-" + Guid.NewGuid();
-            PartNodes = nodes.Select(n => n.name).ToList();
-            this.Mass = Mass ;
+            PartNames = nodes.Select(n => n.name).ToList();
+            Name = Name = "subasm-" + PartNames.Aggregate((i, j) => i + "," + j);
+            this.Mass = Mass;
             this.Volume = Volume;
             //volume of sphere = (4/3)*Math.Pi*r*r*r
             var radius = Math.Pow(0.75 * Volume / Math.PI, 1.0 / 3.0);

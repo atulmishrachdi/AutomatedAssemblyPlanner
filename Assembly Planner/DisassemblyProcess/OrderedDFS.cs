@@ -101,11 +101,11 @@ namespace Assembly_Planner
             {
                 foreach (var sub in subAsms)
                 {
-                    if (sub.Install.Moving.PartNodes.All(n=>subAsms[i].PartNodes.Contains(n)) &&
-                        subAsms[i].PartNodes.All(n=>sub.Install.Moving.PartNodes.Contains(n)))
+                    if (sub.Install.Moving.PartNames.All(n => subAsms[i].PartNames.Contains(n)) &&
+                        subAsms[i].PartNames.All(n => sub.Install.Moving.PartNames.Contains(n)))
                         sub.Install.Moving = subAsms[i];
-                    if (sub.Install.Reference.PartNodes.All(n => subAsms[i].PartNodes.Contains(n)) &&
-                        subAsms[i].PartNodes.All(n => sub.Install.Reference.PartNodes.Contains(n)))
+                    if (sub.Install.Reference.PartNames.All(n => subAsms[i].PartNames.Contains(n)) &&
+                        subAsms[i].PartNames.All(n => sub.Install.Reference.PartNames.Contains(n)))
                         sub.Install.Reference = subAsms[i];
                 }
             }

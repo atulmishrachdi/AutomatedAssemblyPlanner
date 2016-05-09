@@ -45,6 +45,20 @@ namespace Assembly_Planner
             }
             return edges2D;
         }
+        public static List<Point[]> Get2DEdgesFromFace(PolygonalFace face, Point[] Points2D)
+        {
+            var edges3D = face.Edges;
+            var vertices = face.Vertices.ToList();
+            var edges2D = new List<Point[]>();
+            foreach (var edge in edges3D)
+            {
+                var edge2D = new Point[2];
+                edge2D[0] = Points2D[vertices.IndexOf(edge.From)];
+                edge2D[1] = Points2D[vertices.IndexOf(edge.To)];
+                edges2D.Add(edge2D);
+            }
+            return edges2D;
+        }
 
         public static List<Point[]> Get2DEdges2(List<Edge> edges3D, List<TVGL.Vertex> vertices, TVGL.Point[] points2D)
         {

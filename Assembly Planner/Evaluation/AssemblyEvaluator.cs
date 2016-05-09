@@ -20,7 +20,7 @@ namespace AssemblyEvaluation
         private static Dictionary<string, TVGLConvexHull> ConvexHullsForParts = new Dictionary<string, TVGLConvexHull>(); 
         private int Iterations;
         private readonly TimeEvaluator timeEvaluator;
-        private  Stability subMovingPartFinder;
+        //private  Stability subMovingPartFinder;
 
         #region Constructor
         public AssemblyEvaluator(List<TessellatedSolid> solids)
@@ -28,7 +28,7 @@ namespace AssemblyEvaluation
             foreach (var solid in solids)
                 ConvexHullsForParts.Add(solid.Name, solid.ConvexHull);
             timeEvaluator = new TimeEvaluator();
-            subMovingPartFinder = new Stability();
+        //    subMovingPartFinder = new Stability();
         }
 
         #endregion
@@ -37,9 +37,9 @@ namespace AssemblyEvaluation
         public double Evaluate(AssemblyCandidate c, option opt, List<Component> rest, List<TessellatedSolid> solides)
         {
             // Set up moving and reference subassemblies
-            var newSubAsm = c.Sequence.Update(opt, rest, ConvexHullsForParts);
-            var refNodes = newSubAsm.Install.Reference.PartNodes.Select(n => (Component)c.graph[n]).ToList();
-            var movingNodes = newSubAsm.Install.Moving.PartNodes.Select(n => (Component)c.graph[n]).ToList();
+            /*var newSubAsm = c.Sequence.Update(opt, rest, ConvexHullsForParts);
+            //var refNodes = newSubAsm.Install.Reference.PartNodes.Select(n => (Component)c.graph[n]).ToList();
+            //var movingNodes = newSubAsm.Install.Moving.PartNodes.Select(n => (Component)c.graph[n]).ToList();
             var install = new[] { refNodes, movingNodes };
             var connectingArcs = c.graph.arcs.Cast<Connection>().Where(a => ((movingNodes.Contains(a.To) && refNodes.Contains(a.From))
                                                          || (movingNodes.Contains(a.From) && refNodes.Contains(a.To))))
@@ -86,7 +86,8 @@ namespace AssemblyEvaluation
             double evaluationScore = InitialEvaluation(newSubAsm, newSubAsm.Install.InstallDirection, refNodes, movingNodes, c,newSubAsm.Install.Time );
             
             Updates.UpdateChildGraph(c, install);
-            return evaluationScore;
+            return evaluationScore;*/
+            return 0;
         }
 
 

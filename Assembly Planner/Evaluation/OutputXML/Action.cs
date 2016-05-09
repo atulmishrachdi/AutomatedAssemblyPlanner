@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Assembly_Planner;
 
 namespace AssemblyEvaluation
 {
@@ -10,10 +11,11 @@ namespace AssemblyEvaluation
     }
     public class SecureAction : Action
     {
+        public List<Fastener> Fasteners { get; set; }
     }
     public class RotateAction : Action
     {
-        public double[] RotationTransform;
+        public double[,] TransformationMatrix;
     }
     public class InstallAction : Action
     {
@@ -28,9 +30,9 @@ namespace AssemblyEvaluation
             get;
             set;
         }
-
         public double[] InstallDirection { get; set; }
-
+        public double InstallDistance { get; set; }
+        public double[] InstallDirectionRotated { get; set; }
         public double[] InstallPoint { get; set; }
     }
 }

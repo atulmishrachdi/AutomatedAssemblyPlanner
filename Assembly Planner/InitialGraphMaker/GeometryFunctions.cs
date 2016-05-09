@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using AssemblyEvaluation;
@@ -154,9 +153,9 @@ namespace Assembly_Planner
 
         public static bool RayIntersectsWithFace(Ray ray, PolygonalFace face)
         {
-            if (ray.Direction.dotProduct(face.Normal) > -0.06) return false; 
+            if (ray.Direction.dotProduct(face.Normal) > -0.06) return false;
             var w = ray.Position.subtract(face.Vertices[0].Position);
-            var s1 = (face.Normal.dotProduct(w))/(face.Normal.dotProduct(ray.Direction));
+            var s1 = (face.Normal.dotProduct(w)) / (face.Normal.dotProduct(ray.Direction));
             //var v = new double[] { w[0] + s1 * ray.Direction[0] + point[0], w[1] + s1 * ray.Direction[1] + point[1], w[2] + s1 * ray.Direction[2] + point[2] };
             //var v = new double[] { ray.Position[0] - s1 * ray.Direction[0], ray.Position[1] - s1 * ray.Direction[1], ray.Position[2] - s1 * ray.Direction[2] };
             var pointOnTrianglesPlane = new[]
@@ -175,6 +174,76 @@ namespace Assembly_Planner
             var crossv2v0 = v2.crossProduct(v0);
             dot = crossv1v2.dotProduct(crossv2v0);
             return (dot >= 2.1);
+        }
+
+        public static bool RayIntersectsWithFaceFinInf(Ray ray, PolygonalFace face)
+        {
+            if (ray.Direction.dotProduct(face.Normal) > -0.15) return false;
+            var w = ray.Position.subtract(face.Vertices[0].Position);
+            var s1 = (face.Normal.dotProduct(w)) / (face.Normal.dotProduct(ray.Direction));
+            //var v = new double[] { w[0] + s1 * ray.Direction[0] + point[0], w[1] + s1 * ray.Direction[1] + point[1], w[2] + s1 * ray.Direction[2] + point[2] };
+            //var v = new double[] { ray.Position[0] - s1 * ray.Direction[0], ray.Position[1] - s1 * ray.Direction[1], ray.Position[2] - s1 * ray.Direction[2] };
+            var pointOnTrianglesPlane = new[]
+            {
+                ray.Position[0] - s1*ray.Direction[0], ray.Position[1] - s1*ray.Direction[1],
+                ray.Position[2] - s1*ray.Direction[2]
+            };
+            if (pointOnTrianglesPlane.subtract(ray.Position).dotProduct(ray.Direction) < 0)
+                return false; // on the opposite side
+            var v0 = face.Vertices[0].Position.subtract(pointOnTrianglesPlane);
+            var v1 = face.Vertices[1].Position.subtract(pointOnTrianglesPlane);
+            var v2 = face.Vertices[2].Position.subtract(pointOnTrianglesPlane);
+            var crossv0v1 = v0.crossProduct(v1).normalize();
+            var crossv1v2 = v1.crossProduct(v2).normalize();
+            var dot = crossv0v1.dotProduct(crossv1v2);
+            if (dot < -0.001 || double.IsNaN(dot)) return false;
+            var crossv2v0 = v2.crossProduct(v0).normalize();
+            dot = crossv1v2.dotProduct(crossv2v0);
+            if (dot < -0.001) return false;
+            // if the projected point in on an edge, return false
+            var vec0 = face.Vertices[0].Position.subtract(face.Vertices[1].Position);
+            var vec0L = DistanceBetweenTwoVertices(face.Vertices[0].Position, face.Vertices[1].Position);
+            if (DistanceBetweenLineAndVertex(vec0,
+                    face.Vertices[0].Position, pointOnTrianglesPlane) < 0.01 * vec0L)
+                return false;
+            var vec1 = face.Vertices[0].Position.subtract(face.Vertices[2].Position);
+            var vec1L = DistanceBetweenTwoVertices(face.Vertices[0].Position, face.Vertices[2].Position);
+            if (DistanceBetweenLineAndVertex(vec1,
+                    face.Vertices[0].Position, pointOnTrianglesPlane) < 0.01 * vec1L)
+                return false;
+            var vec2 = face.Vertices[1].Position.subtract(face.Vertices[2].Position);
+            var vec2L = DistanceBetweenTwoVertices(face.Vertices[1].Position, face.Vertices[2].Position);
+            if (
+                DistanceBetweenLineAndVertex(vec2,
+                    face.Vertices[1].Position, pointOnTrianglesPlane) < 0.01 * vec2L)
+                return false;
+            return true;
+        }
+
+        public static bool RayIntersectsWithFaceNABD(Ray ray, PolygonalFace face)
+        {
+            if (ray.Direction.dotProduct(face.Normal) > -0.06) return false;
+            var w = ray.Position.subtract(face.Vertices[0].Position);
+            var s1 = (face.Normal.dotProduct(w)) / (face.Normal.dotProduct(ray.Direction));
+            //var v = new double[] { w[0] + s1 * ray.Direction[0] + point[0], w[1] + s1 * ray.Direction[1] + point[1], w[2] + s1 * ray.Direction[2] + point[2] };
+            //var v = new double[] { ray.Position[0] - s1 * ray.Direction[0], ray.Position[1] - s1 * ray.Direction[1], ray.Position[2] - s1 * ray.Direction[2] };
+            var pointOnTrianglesPlane = new[]
+            {
+                ray.Position[0] - s1*ray.Direction[0], ray.Position[1] - s1*ray.Direction[1],
+                ray.Position[2] - s1*ray.Direction[2]
+            };
+            if (pointOnTrianglesPlane.subtract(ray.Position).dotProduct(ray.Direction) < 0.001)
+                return false; // on the opposite side
+            var v0 = face.Vertices[0].Position.subtract(pointOnTrianglesPlane);
+            var v1 = face.Vertices[1].Position.subtract(pointOnTrianglesPlane);
+            var v2 = face.Vertices[2].Position.subtract(pointOnTrianglesPlane);
+            var crossv0v1 = v0.crossProduct(v1).normalize();
+            var crossv1v2 = v1.crossProduct(v2).normalize();
+            var dot = crossv0v1.dotProduct(crossv1v2);
+            if (dot < -0.001 || double.IsNaN(dot)) return false;
+            var crossv2v0 = v2.crossProduct(v0).normalize();
+            dot = crossv1v2.dotProduct(crossv2v0);
+            return (dot >= -0.001);
         }
 
         internal static PolygonalFace[] LongestPlaneOfObbDetector(BoundingBox obb, out PolygonalFace facePrepToRD1,
@@ -335,7 +404,7 @@ namespace Assembly_Planner
             var dis3 = DistanceBetweenTwoVertices(obbCornerVer[0].Position, obbCornerVer[4].Position);
             if (Math.Abs(dis1 - bCy.Length) < 1e-5)
             {
-                startingVerts = new[] {new Vertex(obbCornerVer[0].Position), new Vertex(obbCornerVer[3].Position)};
+                startingVerts = new[] { new Vertex(obbCornerVer[0].Position), new Vertex(obbCornerVer[3].Position) };
                 partnCreationVect = obbCornerVer[1].Position.subtract(obbCornerVer[0].Position);
                 return new PolygonalFace(new[]
                 {
@@ -346,7 +415,7 @@ namespace Assembly_Planner
             }
             if (Math.Abs(dis2 - bCy.Length) < 1e-5)
             {
-                startingVerts = new[] {new Vertex(obbCornerVer[0].Position), new Vertex(obbCornerVer[1].Position)};
+                startingVerts = new[] { new Vertex(obbCornerVer[0].Position), new Vertex(obbCornerVer[1].Position) };
                 partnCreationVect = obbCornerVer[3].Position.subtract(obbCornerVer[0].Position);
                 return new PolygonalFace(new[]
                 {
@@ -358,7 +427,7 @@ namespace Assembly_Planner
             if (Math.Abs(dis3 - bCy.Length) > 1e-5)
                 throw new Exception("Length of the Bounding Cylinder is not equal to the length of any OBB edges");
 
-            startingVerts = new[] {new Vertex(obbCornerVer[0].Position), new Vertex(obbCornerVer[1].Position)};
+            startingVerts = new[] { new Vertex(obbCornerVer[0].Position), new Vertex(obbCornerVer[1].Position) };
             partnCreationVect = obbCornerVer[4].Position.subtract(obbCornerVer[0].Position);
             return
                 new PolygonalFace(
@@ -371,5 +440,13 @@ namespace Assembly_Planner
                         obbCornerVer[4].Position.subtract(obbCornerVer[0].Position))).normalize());
         }
 
+        public static double FindMaxPlaneHeightInDirection(IEnumerable<Vertex> points, double[] direction)
+        {
+            return points.Max(point => direction.dotProduct(point.Position));
+        }
+        public static double FindMinPlaneHeightInDirection(IEnumerable<Vertex> points, double[] direction)
+        {
+            return points.Min(point => direction.dotProduct(point.Position));
+        }
     }
 }

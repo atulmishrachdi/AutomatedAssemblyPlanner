@@ -21,6 +21,7 @@ namespace Assembly_Planner
         public const double PlaneDistL = 0.1; // 0.0001  0.035
         public const double PlaneDistU = 0.11;
         public const double CheckWithGlobDirsParall = 0.00015;  //0.05
+        public const double CheckWithGlobDirsParall2 = 0.03;  //0.05
         public const double CheckWithGlobDirs = -0.00001;//0.0;
         public const double EqualToZeroL = 5e-4;
         public const double EqualToZeroU = 5.5e-4;

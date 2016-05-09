@@ -16,16 +16,13 @@ namespace Assembly_Planner
     /// <summary>
     /// Class EvaluationForBinaryTree - this is a stub for evaluating a particular install step
     /// </summary>
-    class EvaluationForBinaryTree
+    internal class EvaluationForBinaryTree
     {
-        private static List<PolygonalFace> movingFacesInCombined;
-        public static List<PolygonalFace> refFacesInCombined;
-        private static Dictionary<string, TVGLConvexHull> ConvexHullsForParts = new Dictionary<string, TVGLConvexHull>(); 
+        internal static Dictionary<string, TVGLConvexHull> ConvexHullsForParts = new Dictionary<string, TVGLConvexHull>();
 
-        internal EvaluationForBinaryTree (List<TessellatedSolid> solids)
+        internal EvaluationForBinaryTree(Dictionary<string, List<TessellatedSolid>> subAssems)
         {
-            foreach (var solid in solids)
-                ConvexHullsForParts.Add(solid.Name, solid.ConvexHull);
+            ConvexHullsForParts = NonadjacentBlockingWithPartitioning.CombinedCVHForMultipleGeometries;
         }
         /// <summary>
         /// Evaluates the subassemly.
@@ -34,16 +31,65 @@ namespace Assembly_Planner
         /// <param name="optNodes">The subset of nodes that represent one of the two parts in the install step.</param>
         /// <param name="sub">The sub is the class that is then tied into the treequence.</param>
         /// <returns>System.Double.</returns>
-        public double EvaluateSub(designGraph graph, List<Component> subassemblyNodes, List<Component> optNodes, out SubAssembly sub)
+        public double EvaluateSub(designGraph graph, HashSet<Component> subassemblyNodes, List<Component> optNodes, HashSet<int> validDirs, out SubAssembly sub)
         {
 
             var rest = subassemblyNodes.Where(n => !optNodes.Contains(n)).ToList();
             sub = Update(optNodes, rest);
+            var connectingArcs =
+                graph.arcs.Where(a => a is Connection).Cast<Connection>().Where(a => ((optNodes.Contains(a.To) && rest.Contains(a.From))
+                                                            || (optNodes.Contains(a.From) && rest.Contains(a.To))))
+                    .ToList();
+            var insertionDirections = InsertionDirectionsFromRemovalDirections(sub, optNodes, validDirs);
+            var minDis = double.PositiveInfinity;
+            var bestInstallDirection = new[] { 0.0, 0.0, 0.0 };
+            foreach (var dir in insertionDirections)
+            {
+                var dis = DetermineDistanceToSeparateHull(sub, dir); /// Bridge.MeshMagnifier;
+                if (dis >= minDis) continue;
+                minDis = dis;
+                bestInstallDirection = dir;
+            }
+            sub.Install.InstallDirection = bestInstallDirection;
+            sub.Install.InstallDistance = minDis;
+            // I need to add InstallationPoint also
+
             var install = new[] { rest, optNodes };
             if (EitherRefOrMovHasSeperatedSubassemblies(install, subassemblyNodes))
                 return -1;
             sub.Install.Time = 10;
+
+            sub.Secure.Fasteners = ConnectingArcsFastener(connectingArcs);
             return 1;
+        }
+
+        private HashSet<Double[]> InsertionDirectionsFromRemovalDirections(SubAssembly sub, List<Component> optNodes,
+            HashSet<int> validDirs)
+        {
+            // Note: The hashset of validDirs are the removal directions to remove optNodes from the rest.
+            //       If the optNodes is the reference, then the installDirections are the same as validDirs
+            //       If the optNodes is the moving, then the InstallDirection is the opposite of the validDirs
+
+            var dirs = new HashSet<Double[]>();
+            if (sub.Install.Reference.PartNames.All(optNodes.Select(n => n.name).ToList().Contains) &&
+                optNodes.Select(n => n.name).ToList().All(sub.Install.Reference.PartNames.Contains))
+            {
+                foreach (var dir in validDirs)
+                    dirs.Add(DisassemblyDirections.Directions[dir]);
+                return dirs;
+            }
+            foreach (var dir in validDirs)
+                dirs.Add(DisassemblyDirections.Directions[dir].multiply(-1.0));
+            return dirs;
+        }
+
+        private List<Fastener> ConnectingArcsFastener(List<Connection> connectingArcs)
+        {
+            var fasteners = new List<Fastener>();
+            foreach (var arc in connectingArcs)
+                foreach (var fas in arc.Fasteners.Where(a => !fasteners.Contains(a)))
+                    fasteners.Add(fas);
+            return fasteners;
         }
 
         /// <summary>
@@ -61,8 +107,10 @@ namespace Assembly_Planner
             if (movingNodes.Count == 1)
             {
                 var nodeName = movingNodes[0].name;
-                movingAssembly = new Part(nodeName, movingNodes[0].Volume, movingNodes[0].Volume,
-                    ConvexHullsForParts[nodeName], new Vertex(movingNodes[0].CenterOfMass));
+                movingAssembly = new SubAssembly(new HashSet<Component>(movingNodes), ConvexHullsForParts[nodeName], movingNodes[0].Mass,
+                    movingNodes[0].Volume, new Vertex(movingNodes[0].CenterOfMass));
+                //movingAssembly = new Part(nodeName, movingNodes[0].Volume, movingNodes[0].Volume,
+                //    ConvexHullsForParts[nodeName], new Vertex(movingNodes[0].CenterOfMass));
             }
             else
             {
@@ -70,17 +118,20 @@ namespace Assembly_Planner
                 var VolumeM = GetSubassemblyVolume(movingNodes);
                 var MassM = GetSubassemblyMass(movingNodes);
                 var centerOfMass = GetSubassemblyCenterOfMass(movingNodes);
-                movingAssembly = new SubAssembly(movingNodes, combinedCVXHullM, MassM, VolumeM, centerOfMass);
+                movingAssembly = new SubAssembly(new HashSet<Component>(movingNodes), combinedCVXHullM, MassM, VolumeM, centerOfMass);
             }
 
             var referenceHyperArcnodes = new List<Component>();
-                referenceHyperArcnodes = (List<Component>) newSubAsmNodes.Where(a => !movingNodes.Contains(a)).ToList();
+            referenceHyperArcnodes = (List<Component>)newSubAsmNodes.Where(a => !movingNodes.Contains(a)).ToList();
             if (referenceHyperArcnodes.Count == 1)
             {
                 var nodeName = referenceHyperArcnodes[0].name;
-                refAssembly = new Part(nodeName, referenceHyperArcnodes[0].Mass, referenceHyperArcnodes[0].Volume,
-                    ConvexHullsForParts[nodeName],
+                refAssembly = new SubAssembly(new HashSet<Component>(referenceHyperArcnodes), ConvexHullsForParts[nodeName],
+                    referenceHyperArcnodes[0].Mass, referenceHyperArcnodes[0].Volume,
                     new Vertex(referenceHyperArcnodes[0].CenterOfMass));
+                //refAssembly = new Part(nodeName, referenceHyperArcnodes[0].Mass, referenceHyperArcnodes[0].Volume,
+                //    ConvexHullsForParts[nodeName],
+                //   new Vertex(referenceHyperArcnodes[0].CenterOfMass));
             }
             else
             {
@@ -88,19 +139,21 @@ namespace Assembly_Planner
                 var VolumeR = GetSubassemblyVolume(referenceHyperArcnodes);
                 var MassR = GetSubassemblyMass(referenceHyperArcnodes);
                 var centerOfMass = GetSubassemblyCenterOfMass(referenceHyperArcnodes);
-                refAssembly = new SubAssembly(referenceHyperArcnodes, combinedCVXHullR, MassR, VolumeR, centerOfMass);
+                refAssembly = new SubAssembly(new HashSet<Component>(referenceHyperArcnodes), combinedCVXHullR, MassR, VolumeR, centerOfMass);
             }
             var combinedCvxHull = CreateCombinedConvexHull(refAssembly.CVXHull, movingAssembly.CVXHull);
+            List<PolygonalFace> movingFacesInCombined;
+            List<PolygonalFace> refFacesInCombined;
             var InstallCharacter = shouldReferenceAndMovingBeSwitched(refAssembly, movingAssembly, combinedCvxHull,
                 out refFacesInCombined, out movingFacesInCombined);
-            if ((int) InstallCharacter < 0)
+            if ((int)InstallCharacter < 0)
             {
                 var tempASM = refAssembly;
                 refAssembly = movingAssembly;
                 movingAssembly = tempASM;
                 refFacesInCombined = movingFacesInCombined; // no need to use temp here, as the movingFaces in the 
                 // combined convex hull are not needed.
-                InstallCharacter = (InstallCharacterType) (-((int) InstallCharacter));
+                InstallCharacter = (InstallCharacterType)(-((int)InstallCharacter));
             }
             var newSubassembly = new SubAssembly(refAssembly, movingAssembly, combinedCvxHull, InstallCharacter,
                 refFacesInCombined);
@@ -138,12 +191,12 @@ namespace Assembly_Planner
 
         private double GetSubassemblyVolume(List<Component> nodes)
         {
-            return nodes.Sum(n => n.Volume); 
+            return nodes.Sum(n => n.Volume);
         }
 
         private double GetSubassemblyMass(List<Component> nodes)
         {
-            return nodes.Sum(n => n.Mass); 
+            return nodes.Sum(n => n.Mass);
         }
         private Vertex GetSubassemblyCenterOfMass(List<Component> nodes)
         {
@@ -267,8 +320,8 @@ namespace Assembly_Planner
         /// <param name="install">The install.</param>
         /// <param name="A">a.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        internal static bool EitherRefOrMovHasSeperatedSubassemblies(List<Component>[] install, 
-            List<Component> A)
+        internal static bool EitherRefOrMovHasSeperatedSubassemblies(List<Component>[] install,
+            HashSet<Component> A)
         {
             foreach (var subAsm in install)
             {
@@ -285,7 +338,7 @@ namespace Assembly_Planner
                         var pNode = stack.Pop();
                         visited.Add(pNode);
                         globalVisited.Add(pNode);
-                        var a2 = pNode.arcs.Where(a => a.GetType() == typeof (Connection)).ToList();
+                        var a2 = pNode.arcs.Where(a => a is Connection).ToList();
                         foreach (Connection arc in a2)
                         {
                             if (!A.Contains(arc.From) || !A.Contains(arc.To) ||
@@ -301,6 +354,19 @@ namespace Assembly_Planner
                 }
             }
             return false;
+        }
+
+        private static double DetermineDistanceToSeparateHull(SubAssembly newSubAsm, Double[] insertionDirection)
+        {
+            var refMaxValue = GeometryFunctions.FindMaxPlaneHeightInDirection(newSubAsm.Install.Reference.CVXHull.Vertices, insertionDirection);
+            var refMinValue = GeometryFunctions.FindMinPlaneHeightInDirection(newSubAsm.Install.Reference.CVXHull.Vertices, insertionDirection);
+
+            var movingMaxValue = GeometryFunctions.FindMaxPlaneHeightInDirection(newSubAsm.Install.Moving.CVXHull.Vertices, insertionDirection);
+            var movingMinValue = GeometryFunctions.FindMinPlaneHeightInDirection(newSubAsm.Install.Moving.CVXHull.Vertices, insertionDirection);
+
+            var distanceToFree = Math.Abs(refMaxValue - movingMinValue);
+            if (distanceToFree < 0) { distanceToFree = 0; throw new Exception("How is distance to free less than zero?"); }
+            return distanceToFree + (movingMaxValue - movingMinValue) + (refMaxValue - refMinValue);
         }
     }
 }

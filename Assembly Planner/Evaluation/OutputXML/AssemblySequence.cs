@@ -33,12 +33,12 @@ namespace AssemblyEvaluation
                 var node1 = (Component)opt.nodes[1];
                 var node0name = node0.name;
                 var node1name = node1.name;
-                refAssembly = Subassemblies.FirstOrDefault(subasm => subasm.PartNodes.Contains(node0name));
+                refAssembly = Subassemblies.FirstOrDefault(subasm => subasm.PartNames.Contains(node0name));
                 if (refAssembly == null)
                     refAssembly = new Part(node0name, GetPartMass(node0), GetPartVolume(node0),
                         convexHullForParts[node0name], GetPartCenterOfMass(node0));
                 else Subassemblies.Remove((SubAssembly) refAssembly);
-                movingAssembly = Subassemblies.FirstOrDefault(subasm => subasm.PartNodes.Contains(node1name));
+                movingAssembly = Subassemblies.FirstOrDefault(subasm => subasm.PartNames.Contains(node1name));
                 if (movingAssembly == null)
                     movingAssembly = new Part(node1name, GetPartMass(node1), GetPartVolume(node1),
                         convexHullForParts[node1name], GetPartCenterOfMass(node0));
@@ -61,7 +61,7 @@ namespace AssemblyEvaluation
                     var VolumeM = GetSubassemblyVolume(movingNodes);
                     var MassM = GetSubassemblyMass(movingNodes);
                     var centerOfMass = GetSubassemblyCenterOfMass(movingNodes);
-                    movingAssembly = new SubAssembly(movingNodes, combinedCVXHullM, MassM, VolumeM, centerOfMass);
+                    movingAssembly = new SubAssembly(new HashSet<Component>(movingNodes), combinedCVXHullM, MassM, VolumeM, centerOfMass);
                 }
 
                 var referenceHyperArcnodes = new List<Component>();
@@ -79,7 +79,7 @@ namespace AssemblyEvaluation
                     var VolumeR = GetSubassemblyVolume(referenceHyperArcnodes);
                     var MassR = GetSubassemblyMass(referenceHyperArcnodes);
                     var centerOfMass = GetSubassemblyCenterOfMass(referenceHyperArcnodes);
-                    refAssembly = new SubAssembly(referenceHyperArcnodes, combinedCVXHullR, MassR, VolumeR, centerOfMass);
+                    refAssembly = new SubAssembly(new HashSet<Component>(referenceHyperArcnodes), combinedCVXHullR, MassR, VolumeR, centerOfMass);
                 }
             }
             else throw new Exception("Only install rules in assembly at this point.");
@@ -110,10 +110,10 @@ namespace AssemblyEvaluation
 
         private string NameMaker(Part refAssembly)
         {
-            var name = refAssembly.PartNodes[0];
-            for (var i = 1; i < refAssembly.PartNodes.Count; i++)
+            var name = refAssembly.PartNames[0];
+            for (var i = 1; i < refAssembly.PartNames.Count; i++)
             {
-                name = name +","+refAssembly.PartNodes[i];
+                name = name + "," + refAssembly.PartNames[i];
             }
             return name;
         }

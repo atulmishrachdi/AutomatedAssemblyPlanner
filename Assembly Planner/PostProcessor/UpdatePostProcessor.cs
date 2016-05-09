@@ -39,7 +39,7 @@ namespace Assembly_Planner
         {
             if (subAssembly == null) return;
             OptimalOrientation.RefPrec.Add(subAssembly);
-            if (subAssembly.Install.Moving.PartNodes.Count > 1)
+            if (subAssembly.Install.Moving.PartNames.Count > 1)
                 OptimalOrientation.Movings.Add(subAssembly.Install.Moving as SubAssembly);
             BuildingListOfReferencePreceedings(subAssembly.Install.Reference as SubAssembly);
         }

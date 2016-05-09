@@ -88,6 +88,7 @@
     <Compile Include="DisassemblyProcess\DBG.cs" />
     <Compile Include="DisassemblyProcess\DisConstants.cs" />
     <Compile Include="DisassemblyProcess\BoostedSCC.cs" />
+    <Compile Include="DisassemblyProcess\LeapSearch\LeapBeta.cs" />
     <Compile Include="DisassemblyProcess\OptionGenerator.cs" />
     <Compile Include="DisassemblyProcess\OptionGeneratorPro.cs" />
     <Compile Include="DisassemblyProcess\OrderedDFS.cs" />
@@ -163,9 +164,13 @@
     <Compile Include="GraphSynth.BaseClasses\SearchProcess\RecognizeChooseApply.cs" />
     <Compile Include="GraphSynth.BaseClasses\SearchProcess\SearchProcess.cs" />
     <Compile Include="GraphSynth.BaseClasses\SecondaryConnection.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\AutoSemiThreadedFastenerDetection.cs" />
     <Compile Include="InitialGraphMaker\BoltAndGearDetector\FastenerBoundingBoxPartition.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\FastenerGaussianNaiveBayes.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\FastenerPerceptronLearner.cs" />
     <Compile Include="InitialGraphMaker\BoltAndGearDetector\NutBoundingCylinderPartition.cs" />
     <Compile Include="InitialGraphMaker\BoltAndGearDetector\NutPolynomialTrend.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\SpringDetector.cs" />
     <Compile Include="InitialGraphMaker\GeometryFunctions.cs" />
     <Compile Include="InitialGraphMaker\BlockingDetermination.cs" />
     <Compile Include="InitialGraphMaker\BoltAndGearDetector\AutoNonthreadedFastenerDetection.cs" />
@@ -174,7 +179,6 @@
     <Compile Include="InitialGraphMaker\BoltAndGearDetector\FastenerDetector.cs" />
     <Compile Include="InitialGraphMaker\BoltAndGearDetector\BoltAndGearUpdateFunctions.cs" />
     <Compile Include="InitialGraphMaker\BoltAndGearDetector\ClusteringDenseAndSparseEdges.cs" />
-    <Compile Include="InitialGraphMaker\BoltAndGearDetector\FastenerLearner.cs" />
     <Compile Include="InitialGraphMaker\BoltAndGearDetector\FastenerPolynomialTrend.cs" />
     <Compile Include="InitialGraphMaker\BoltAndGearDetector\GearDetector.cs" />
     <Compile Include="InitialGraphMaker\BoltAndGearDetector\GearPolynomialTrend.cs" />
@@ -257,6 +261,7 @@
       <Name>PrimitiveClassificationOfTessellatedSolids</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
