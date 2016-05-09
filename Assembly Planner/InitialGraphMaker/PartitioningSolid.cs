@@ -19,8 +19,8 @@ namespace Assembly_Planner
         // to check every triangle. We can only the triangles that are inside 
         // of the affected partitions. 
 
-        internal static Dictionary<TessellatedSolid, Partition[]> Partitions =
-            new Dictionary<TessellatedSolid, Partition[]>();
+        internal static Dictionary<TessellatedSolid, Partition[]> Partitions;
+        internal static Dictionary<TessellatedSolid, PartitionAABB[]> PartitionsAABB;
         public static int ccc = 0;
         /*internal static Partition[] Run(TessellatedSolid solid)
         {
@@ -131,12 +131,51 @@ namespace Assembly_Planner
             }
             return partitions.ToArray();
         }
-        
+
+        internal static PartitionAABB[] RunForAABB(HashSet<Vertex> solidVerts, HashSet<PolygonalFace> solidFaces, Vertex[] corverVts)
+        {
+            // the corner vertices are all clock wise now.
+            var partitions = new List<PartitionAABB>();
+            //var ddds = solid.Vertices.Max(v => v.Position[1]);
+            for (var k = 0; k < corverVts.Length; k++) //obb.CornerVertices)
+            {
+                var verK = new Vertex(corverVts[k].Position); //cVer;
+                var prtn = new PartitionAABB();
+                var cornerVer = new List<Vertex>();
+                double Xmin = double.PositiveInfinity, Ymin = double.PositiveInfinity, Zmin = double.PositiveInfinity;
+                double Xmax = double.NegativeInfinity, Ymax = double.NegativeInfinity, Zmax = double.NegativeInfinity;
+                for (var j = 0; j < corverVts.Length; j++)
+                {
+                    var verJ = new Vertex(corverVts[j].Position); //cVer;
+                    var midVer = new Vertex((verJ.Position.add(verK.Position)).divide(2.0));
+                    cornerVer.Add(midVer);
+                    if (midVer.Position[0] > Xmax) Xmax = midVer.Position[0];
+                    if (midVer.Position[0] < Xmin) Xmin = midVer.Position[0];
+                    if (midVer.Position[1] > Ymax) Ymax = midVer.Position[1];
+                    if (midVer.Position[1] < Ymin) Ymin = midVer.Position[1];
+                    if (midVer.Position[2] > Zmax) Zmax = midVer.Position[2];
+                    if (midVer.Position[2] < Zmin) Zmin = midVer.Position[2];
+                }
+                prtn.X = new[] { Xmin, Xmax };
+                prtn.Y = new[] { Ymin, Ymax };
+                prtn.Z = new[] { Zmin, Zmax };
+                prtn.CornerVertices = cornerVer.ToArray();
+                prtn.SolidVertices = new HashSet<Vertex>(solidVerts.Where(vertex => IsVertexInsidePartition(prtn, vertex)));
+                prtn.SolidTriangles = PartitionTrianglesPro(prtn, solidFaces);
+                // continue the octree or not?
+                if (prtn.SolidTriangles.Count > 200)
+                {
+                    prtn.InnerPartition = RunForAABB(prtn.SolidVertices, prtn.SolidTriangles, prtn.CornerVertices);
+                }
+                partitions.Add(prtn);
+            }
+            return partitions.ToArray();
+        }
 
         private static bool IsItWorthGoingDownTheOctree(HashSet<PolygonalFace> faces)
         {
             if (faces.Count == 0) return false;
-            return ((faces.Count/2.0 - 96)*(7e-5)) - ((2.35e-5)*faces.Count + 0.0012) > 0;
+            return ((faces.Count / 2.0 - 96) * (7e-5)) - ((2.35e-5) * faces.Count + 0.0012) > 0;
         }
 
         internal static List<PolygonalFace> TwelveFaceGenerator(Vertex[] cornerVer)
@@ -257,6 +296,14 @@ namespace Assembly_Planner
             //   pFace => !(pFace.Normal.dotProduct(pFace.Vertices[0].Position.subtract(ver.Position)) <0));
             //-0.00000001));
         }
+        private static bool IsVertexInsidePartition(PartitionAABB prtn, Vertex vertex)
+        {
+            var verPos = vertex.Position;
+            if (verPos[0] > prtn.X[1] || verPos[0] < prtn.X[0] ||
+                verPos[1] > prtn.Y[1] || verPos[1] < prtn.Y[0] ||
+                verPos[2] > prtn.Z[1] || verPos[2] < prtn.Z[0]) return false;
+            return true;
+        }
 
         private static HashSet<PolygonalFace> PartitionTrianglesPro(Partition partition, HashSet<PolygonalFace> solidTrgs)
         {
@@ -290,12 +337,43 @@ namespace Assembly_Planner
             return trigs;
         }
 
+        private static HashSet<PolygonalFace> PartitionTrianglesPro(PartitionAABB partition, HashSet<PolygonalFace> solidTrgs)
+        {
+            var trigs = new HashSet<PolygonalFace>();
+            foreach (var ver in partition.SolidVertices)
+                trigs.UnionWith(ver.Faces.Where(f => !trigs.Contains(f)));
+            // using seperating axis theorem (SAT). Among 6 faces of the box and the triangle candidate from the solid
+            //    if any of them can seperate the 
+
+            // normal of the partition planes and and a vertex on the plane 
+            var normalsAndVertex = new Dictionary<double[], double[]>
+            {
+                {new[] {1.0, 0, 0}, new[] {partition.X[1], partition.Y[1], partition.Z[1]}},
+                {new[] {-1.0, 0, 0}, new[] {partition.X[0], partition.Y[1], partition.Z[1]}},
+                {new[] {0, 1.0, 0}, new[] {partition.X[1], partition.Y[1], partition.Z[1]}},
+                {new[] {0, -1.0, 0}, new[] {partition.X[1], partition.Y[0], partition.Z[1]}},
+                {new[] {0, 0, 1.0}, new[] {partition.X[1], partition.Y[1], partition.Z[1]}},
+                {new[] {0, 0, -1.0}, new[] {partition.X[1], partition.Y[1], partition.Z[0]}}
+            };
+            foreach (var pF in solidTrgs.Where(t => !trigs.Contains(t)))
+            {
+                var dots =
+                    partition.CornerVertices.Select(
+                        corVer => (corVer.Position.subtract(pF.Vertices[0].Position)).dotProduct(pF.Normal)).ToList();
+                if (dots.All(d => d >= 0) || dots.All(d => d <= 0))
+                    continue;
+                var overlap = normalsAndVertex.All(dic => !pF.Vertices.All(v => dic.Key.dotProduct(v.Position.subtract(dic.Value)) >= 0));
+                if (overlap) trigs.Add(pF);
+            }
+            return trigs;
+        }
+
         internal static HashSet<PolygonalFace> PartitionTriangles(Partition partition, HashSet<PolygonalFace> solidTrgs)
         {
             var trigs = new HashSet<PolygonalFace>();
             foreach (var ver in partition.SolidVertices)
                 trigs.UnionWith(ver.Faces.Where(f => !trigs.Contains(f)));
-            foreach (var pF in solidTrgs.Where(t=>!trigs.Contains(t)))
+            foreach (var pF in solidTrgs.Where(t => !trigs.Contains(t)))
             {
                 var sign = 0;
                 foreach (var corVer in partition.CornerVertices)
@@ -320,24 +398,48 @@ namespace Assembly_Planner
             return trigs;
         }
 
-        internal static void CreatePartitions(List<TessellatedSolid> solids)
+        internal static void CreatePartitions(Dictionary<string, List<TessellatedSolid>> solids)
         {
-            var s = new Stopwatch();
-            s.Start();
+            var s1 = new Stopwatch();
+            s1.Start();
             Console.WriteLine();
             Console.WriteLine("Octree is being generated ....");
+            var solidGeometries = solids.SelectMany(s => s.Value).ToList();
+            var totalVerts = solidGeometries.Sum(s => s.Vertices.Count());
             //foreach(var solid in solids)
-            Parallel.ForEach(solids, solid =>
+            Parallel.ForEach(solidGeometries, solid =>
             {
                 //solid.SimplifyByPercentage(0.5);
+                var prtn = Run(new HashSet<Vertex>(solid.Vertices), new HashSet<PolygonalFace>(solid.Faces),
+                    BoundingGeometry.OrientedBoundingBoxDic[solid].CornerVertices.Select(
+                        cv => new Vertex(cv.Position)).ToArray());
                 lock (Partitions)
-                    Partitions.Add(solid,
-                        Run(new HashSet<Vertex>(solid.Vertices), new HashSet<PolygonalFace>(solid.Faces),
-                            BoundingGeometry.OrientedBoundingBoxDic[solid].CornerVertices.Select(
-                                cv => new Vertex(cv.Position)).ToArray()));
+                {
+                    Partitions.Add(solid, prtn);
+                }
             });//
-            s.Stop();
-            Console.WriteLine("Octree Generation is done in:" + "     " + s.Elapsed);
+            //foreach (var solid in solidGeometries)
+            Parallel.ForEach(solidGeometries, solid =>
+            {
+                var cornerVer = new[]
+                {
+                    new Vertex(new []{solid.XMin,solid.YMin, solid.ZMin}), 
+                    new Vertex(new []{solid.XMin,solid.YMin, solid.ZMax}), 
+                    new Vertex(new []{solid.XMin,solid.YMax, solid.ZMin}), 
+                    new Vertex(new []{solid.XMin,solid.YMax, solid.ZMax}), 
+                    new Vertex(new []{solid.XMax,solid.YMin, solid.ZMin}), 
+                    new Vertex(new []{solid.XMax,solid.YMin, solid.ZMax}), 
+                    new Vertex(new []{solid.XMax,solid.YMax, solid.ZMin}), 
+                    new Vertex(new []{solid.XMax,solid.YMax, solid.ZMax}), 
+                };
+                var prtn = RunForAABB(new HashSet<Vertex>(solid.Vertices), new HashSet<PolygonalFace>(solid.Faces), cornerVer);
+                lock (PartitionsAABB)
+                {
+                    PartitionsAABB.Add(solid, prtn);
+                }
+            });//
+            s1.Stop();
+            Console.WriteLine("Octree Generation is done in:" + "     " + s1.Elapsed);
         }
     }
 
@@ -347,6 +449,16 @@ namespace Assembly_Planner
         public Vertex[] CornerVertices;
         public Edge[] Edges;
         public List<PolygonalFace> Faces;
+        public HashSet<Vertex> SolidVertices;
+        public HashSet<PolygonalFace> SolidTriangles;
+    }
+    internal class PartitionAABB
+    {
+        public PartitionAABB[] InnerPartition;
+        public Vertex[] CornerVertices;
+        public double[] X; // [Xmin, Xmax]
+        public double[] Y;
+        public double[] Z;
         public HashSet<Vertex> SolidVertices;
         public HashSet<PolygonalFace> SolidTriangles;
     }

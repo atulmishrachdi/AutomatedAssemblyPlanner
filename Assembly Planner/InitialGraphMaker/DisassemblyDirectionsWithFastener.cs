@@ -73,12 +73,13 @@ namespace Assembly_Planner
 
             // Add the solids as nodes to the graph. Exclude the fasteners 
             //------------------------------------------------------------------------------------------
-            DisassemblyDirections.Solids = new List<TessellatedSolid>(solidsNoFastener);
-            AddingNodesToGraph(assemblyGraph, solidsNoFastener); //, gears, screwsAndBolts);
+            AddingNodesToGraph(assemblyGraph, SolidsNoFastener); //, gears, screwsAndBolts);
 
             // Implementing region octree for every solid
             //------------------------------------------------------------------------------------------
-            PartitioningSolid.CreatePartitions(solidsNoFastener);
+            PartitioningSolid.Partitions = new Dictionary<TessellatedSolid, Partition[]>();
+            PartitioningSolid.PartitionsAABB = new Dictionary<TessellatedSolid, PartitionAABB[]>();
+            PartitioningSolid.CreatePartitions(SolidsNoFastener);
 
             // Part to part interaction to obtain removal directions between every connected pair
             //------------------------------------------------------------------------------------------
@@ -159,16 +160,16 @@ namespace Assembly_Planner
             a.InfiniteDirections.AddRange(infDirs);
         }
 
-        private static void AddingNodesToGraph(designGraph assemblyGraph, List<TessellatedSolid> solids)//,
+        private static void AddingNodesToGraph(designGraph assemblyGraph, Dictionary<string, List<TessellatedSolid>> solids)//,
         //Dictionary<TessellatedSolid, double[]> gears)
         {
-            foreach (var solid in solids)
+            foreach (var solidName in solids.Keys)
             {
-                assemblyGraph.addNode(solid.Name, typeof(Component));
+                assemblyGraph.addNode(solidName, typeof(Component));
                 var c = (Component)assemblyGraph.nodes.Last();
-                c.CenterOfMass = solid.Center;
-                c.Volume = solid.Volume;
-                c.Mass = solid.Volume;
+                c.CenterOfMass = COMCalculator(solids[solidName]);
+                c.Volume = solids[solidName].Sum(s => s.Volume);
+                c.Mass = solids[solidName].Sum(s => s.Volume);
                 //if (gears.Keys.Contains(solid))
                 //{
                 //    Component.localLabels.Add(DisConstants.Gear);
@@ -176,6 +177,18 @@ namespace Assembly_Planner
                 //    Component.localVariables.AddRange(gears[solid]);
                 //}
             }
+        }
+
+
+        private static double[] COMCalculator(List<TessellatedSolid> geometries)
+        {
+            var totalMass = geometries.Sum(s => s.Volume);
+            var sumCenterOfMass = new[] { 0.0, 0.0, 0.0 };
+            foreach (var geom in geometries)
+            {
+                sumCenterOfMass = sumCenterOfMass.add(geom.Center.multiply(geom.Volume));
+            }
+            return sumCenterOfMass.divide(totalMass);
         }
 
         public static List<double[]> FreeGlobalDirectionFinder(Component Component)
