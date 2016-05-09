@@ -15,12 +15,14 @@
 /// The BaseClasses namespace.
 /// </summary>
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.AccessControl;
 using System.Xml.Serialization;
 using Assembly_Planner.GraphSynth.BaseClasses;
 using GraphSynth.Representation;
+using StarMathLib;
 using TVGL;
 
 namespace Assembly_Planner
@@ -165,58 +167,58 @@ namespace Assembly_Planner
         /// </summary>
         public List<int> PartsLockedByFastener = new List<int>();
 
-        internal static void AddFastenersInformation(designGraph assemblyGraph, HashSet<TessellatedSolid> screwsAndBolts, List<TessellatedSolid> solidsNoFastener,
-    Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive)
+        internal static void AddFastenersInformation(designGraph assemblyGraph, Dictionary<string, List<TessellatedSolid>> solidsNoFastener,
+            Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive)
         {
-            foreach (var fastener in screwsAndBolts)
+            var counter = 0;
+            foreach (var fastener in FastenerDetector.Fasteners)
             {
-                var fastenertPrimitives = solidPrimitive[fastener];
-                var lockedByTheFastener = new List<TessellatedSolid>();
-                foreach (var solid in solidsNoFastener)
-                {
-                    var solidPrimitives = solidPrimitive[solid];
-                    // This has a way simpler blocking determination code. Check it out:
-                    if (BlockingDetermination.BoundingBoxOverlap(fastener, solid))
-                        if (BlockingDetermination.ConvexHullOverlap(fastener, solid))
-                            if (FastenerPrimitiveOverlap(fastenertPrimitives, solidPrimitives))
-                                lockedByTheFastener.Add(solid);
-                }
-                // now find the removal direction of the fastener.
-                //var RD = BoltRemovalDirection(fastener);
-                double depth, radius;
-                int RD;
-                if (fastener.Name.Contains("LargeScrew"))
-                {
-                    RD = 1;
-                    depth = 25;
-                    radius = 8;
-                }
-                else if (fastener.Name.Contains("ScrewLong"))
-                {
-                    RD = 316;
-                    depth = 27;
-                    radius = 6;
-                }
-                else if (fastener.Name.Contains("S1") || fastener.Name.Contains("S2"))
-                {
-                    RD = 38;
-                    depth = 47;
-                    radius = 4;
-                }
-                else
-                {
-                    RD = 38;
-                    depth = 17;
-                    radius = 2.5;
-                }
-                AddRemovalInformationToArcs(assemblyGraph, lockedByTheFastener, RD, depth, radius);
+                counter++;
+                var lockedByTheFastener = PartsLockedByTheFastenerFinder(fastener.Solid, solidsNoFastener, solidPrimitive);
+                AddFastenerToArc(assemblyGraph, lockedByTheFastener, fastener);
+
             }
             // So, by this point, if there is a fastener between two or more parts, a new local variable
             // is added to their arc which shows the direction of freedom of the fastener.
             // So if I want to seperate two parts or two subassemblies, now I know that there is a 
             // fastener holding them to each other. And I also know the removal direction of the fastener
+
+            // There is still a possibility here: if any of the potential fasteners are holding 2 or more parts
+            // The point is that they can be either a washer, nut or fastener. But if it is a fastener, I need 
+            // to find the parts that it's holding and add it to their arc
+            counter = 0;
+            foreach (var possible in FastenerDetector.PotentialFastener)
+            {
+                counter++;
+                var locked = PartsLockedByTheFastenerFinder(possible, solidsNoFastener, solidPrimitive);
+                if (locked.Count < 2)
+                    continue;
+                var fastener = new Fastener()
+                {
+                    RemovalDirection =
+                        FastenerDetector.RemovalDirectionFinderUsingObb(possible,
+                            BoundingGeometry.OrientedBoundingBoxDic[possible]),
+                    Solid = possible,
+                    Diameter = BoundingGeometry.BoundingCylinderDic[possible].Radius
+                };
+                AddFastenerToArc(assemblyGraph, locked, fastener);
+            }
         }
 
+        private static void AddFastenerToArc(designGraph assemblyGraph, List<string> lockedByTheFastener, Fastener fastener)
+        {
+            fastener.PartsLockedByFastener = new List<int>();
+            foreach (
+                Connection connection in
+                    assemblyGraph.arcs.Where(a => lockedByTheFastener.Contains(a.From.name) && lockedByTheFastener.Contains(a.To.name))
+                        .ToList())
+            {
+                if (lockedByTheFastener.Count > 2)
+                    foreach (var solid in lockedByTheFastener)
+                        fastener.PartsLockedByFastener.Add(assemblyGraph.nodes.IndexOf(assemblyGraph.nodes.Where(n => n.name == solid).ToList()[0]));
+                connection.Fasteners.Add(fastener);
+            }
+        }
         private static void AddRemovalInformationToArcs(designGraph graph,
             List<TessellatedSolid> lockedByTheFastener, int RD, double depth, double radius)
         {
@@ -237,21 +239,26 @@ namespace Assembly_Planner
             }
         }
 
-        private static bool FastenerPrimitiveOverlap(List<PrimitiveSurface> fastenertPrimitives, List<PrimitiveSurface> solidPrimitives)
+
+        private static List<string> PartsLockedByTheFastenerFinder(TessellatedSolid fastener, Dictionary<string, List<TessellatedSolid>> solidsNoFastener,
+            Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive)
         {
-            foreach (var primitiveA in fastenertPrimitives)
+            var lockedByTheFastener = new List<string>();
+            foreach (var subAssem in solidsNoFastener)
             {
-                foreach (var primitiveB in solidPrimitives)
+                foreach (var solid in subAssem.Value)
                 {
-                    if (primitiveA is Cylinder && primitiveB is Cylinder)
-                        if (PrimitivePrimitiveInteractions.CylinderCylinderOverlappingCheck((Cylinder)primitiveA, (Cylinder)primitiveB))
-                            return true;
-                    if (primitiveA is Cone && primitiveB is Cone)
-                        if (PrimitivePrimitiveInteractions.ConeConeOverlappingCheck((Cone)primitiveA, (Cone)primitiveB))
-                            return true;
+                    var solidPrimitives = solidPrimitive[solid];
+                    // This has a way simpler blocking determination code. Check it out:
+                    if (!BlockingDetermination.BoundingBoxOverlap(fastener, solid)) continue;
+                    if (!BlockingDetermination.ConvexHullOverlap(fastener, solid)) continue;
+                    if (!BlockingDetermination.ProximityFastener(fastener, solid)) continue;
+                    //if (!FastenerPrimitiveOverlap(solidPrimitive[fastener], solidPrimitives)) continue;
+                    lockedByTheFastener.Add(subAssem.Key);
+                    break;
                 }
             }
-            return false;
+            return lockedByTheFastener;
         }
 
         /*private static List<int> BoltRemovalDirection(TessellatedSolid fastener)

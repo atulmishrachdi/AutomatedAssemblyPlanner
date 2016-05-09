@@ -279,6 +279,35 @@ namespace Assembly_Planner
             return true;
         }
 
+
+        internal static bool ProximityFastener(TessellatedSolid solid1, TessellatedSolid solid2)
+        {
+            for (int i = 0; i < solid1.Faces.Length; i++)
+            {
+                var a = solid1.Faces[i];
+                for (int j = 0; j < solid2.Faces.Length; j++)
+                {
+                    var localProb = 0.0;
+                    var b = solid2.Faces[j];
+                    var parallel = Math.Abs(a.Normal.dotProduct(b.Normal) + 1);
+                    var probPara = OverlappingFuzzification.FuzzyProbabilityCalculator(0.0055, 0.006, parallel);
+                    if (probPara == 0) continue; // 0.0055
+                    var q = a.Center;
+                    var p = b.Center;
+                    var pq = q.subtract(p);
+                    var qp = p.subtract(q);
+                    var samePlane1 = Math.Abs(pq.dotProduct(a.Normal));
+                    var samePlane2 = Math.Abs(qp.dotProduct(b.Normal));
+                    var probPlane1 = OverlappingFuzzification.FuzzyProbabilityCalculator(0.4, 0.5, samePlane1);
+                    var probPlane2 = OverlappingFuzzification.FuzzyProbabilityCalculator(0.4, 0.5, samePlane2);
+                    if (probPlane1 == 0 || probPlane2 == 0) continue; //0.11 //0.005
+                    if (!TriangleOverlapping(a, b)) continue;
+                    return true;
+                }
+            }
+            return false;
+        }
+
         internal static bool TriangleOverlapping(PolygonalFace tri1, PolygonalFace tri2)
         {
             var edges1 = new HashSet<Vertex[]>();

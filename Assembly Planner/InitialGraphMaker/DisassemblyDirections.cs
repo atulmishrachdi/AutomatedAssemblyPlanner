@@ -31,7 +31,7 @@ namespace Assembly_Planner
 
             AddingNodesToGraph(assemblyGraph, solids);//, gears, screwsAndBolts);
 
-            for (var i = 0; i < solids.Count - 1; i++)
+            /*for (var i = 0; i < solids.Count - 1; i++)
             {
                 var solid1 = solids[i];
                 var solid1Primitives = solidPrimitive[solid1];
@@ -55,7 +55,7 @@ namespace Assembly_Planner
                         AddInformationToArc(a, localDirInd);
                     }
                 }
-            }
+            }*/
             return globalDirPool;
         }
 

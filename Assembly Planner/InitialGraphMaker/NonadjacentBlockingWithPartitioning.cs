@@ -21,6 +21,7 @@ namespace Assembly_Planner
             new Dictionary<TessellatedSolid, HashSet<PolygonalFace>>();
         internal static Dictionary<TessellatedSolid, HashSet<PolygonalFace>> ObbFacesHashSet =
             new Dictionary<TessellatedSolid, HashSet<PolygonalFace>>();
+        internal static Dictionary<string, TVGLConvexHull> CombinedCVHForMultipleGeometries;
         // This class is added as an alternative for current Nonadjacent blocking determination approach.
         // The overal approach is the same as before (ray shooting), but number of both rays and blocking 
         // triangles are droped to speedup the function.
@@ -31,68 +32,121 @@ namespace Assembly_Planner
         //       determination. Code gets really really slow when it goes to check intersection of the ray
         //       and all the triangles of the solid. We are avoiding this problem here by partitionaning
         //       our search space into k number of sections obtained originally from OBB of the solid.
-        internal static void Run(designGraph graph,
-            List<TessellatedSolid> solids, List<int> gDir)
+        internal static void Run(designGraph graph, Dictionary<string, List<TessellatedSolid>> subAssems, List<int> gDir)
         {
             Console.WriteLine();
             Console.WriteLine("Nonadjacent Blocking Determination is running ....");
             var stopWat = Stopwatch.StartNew();
             stopWat.Start();
-            var solidsL = solids.Where(s => graph.nodes.Any(n => n.name == s.Name)).ToList();
-            foreach (var s in solidsL)
+            long totalCases = 0;
+            var subAssemsToList = subAssems.ToList();
+            for (var i = 0; i < subAssems.Count - 1; i++)
             {
-                //CvhHashSet.Add(s, new HashSet<PolygonalFace>(s.ConvexHull.Faces));
-                ObbFacesHashSet.Add(s,
-                    new HashSet<PolygonalFace>(
-                        PartitioningSolid.TwelveFaceGenerator(
-                            BoundingGeometry.OrientedBoundingBoxDic[s].CornerVertices.Select(
-                                cv => new TVGL.Vertex(cv.Position)).ToArray())));
+                var subAssem1 = subAssemsToList[i];
+                for (var j = i + 1; j < subAssems.Count; j++)
+                {
+                    var subAssem2 = subAssemsToList[j];
+                    var tri2Sub1 = subAssem1.Value.Sum(s => s.Faces.Length);
+                    var tri2Sub2 = subAssem2.Value.Sum(s => s.Faces.Length);
+                    totalCases += tri2Sub1 * tri2Sub2;
+                }
             }
-            //solids.Where(s => s.Name.Contains("Interroll-3")).ToList();
-            //solidsL.AddRange(solids.Where(s => s.Name.Contains("LexanSide")));
+            ObbFacesHashSet = new Dictionary<TessellatedSolid, HashSet<PolygonalFace>>();
+            CombinedCVHForMultipleGeometries = new Dictionary<string, TVGLConvexHull>();
+
+            long counter = 0;
+            foreach (var subAssem in subAssems)
+            {
+                foreach (var s in subAssem.Value)
+                {
+                    //CvhHashSet.Add(s, new HashSet<PolygonalFace>(s.ConvexHull.Faces));
+                    ObbFacesHashSet.Add(s,
+                        new HashSet<PolygonalFace>(
+                            PartitioningSolid.TwelveFaceGenerator(
+                                BoundingGeometry.OrientedBoundingBoxDic[s].CornerVertices.Select(
+                                    cv => new Vertex(cv.Position)).ToArray())));
+                }
+            }
+
+            CreateCombinedCVHs(subAssems);
+
+            var solidsL = subAssems.ToList();
             for (var i = 0; i < solidsL.Count; i++)
             {
-                var solidMoving = solidsL[i];
+                var solidMoving = solidsL[i].Value;
                 for (var j = i + 1; j < solidsL.Count; j++)
                 {
                     var blocked = false;
                     // check the convex hull of these two solids to find the planes tha can linearly seperate them
                     // solid1 is moving and solid2 is blocking
-                    var solidBlocking = solidsL[j];
+                    var solidBlocking = solidsL[j].Value;
+                    counter += solidMoving.Sum(s => s.Faces.Length) * solidBlocking.Sum(s => s.Faces.Length);
                     if (
                         graph.arcs.Any(
                             a => a is Connection &&
-                                 ((a.From.name == solidMoving.Name && a.To.name == solidBlocking.Name) ||
-                                  (a.From.name == solidBlocking.Name && a.To.name == solidMoving.Name)))) continue;
+                                 ((a.From.name == solidsL[i].Key && a.To.name == solidsL[j].Key) ||
+                                  (a.From.name == solidsL[j].Key && a.To.name == solidsL[i].Key))))
+                    {
+                        continue;
+                    }
                     // Add a secondary arc to the 
-                    var from = GetNode(graph, solidMoving);
-                    var to = GetNode(graph, solidBlocking);
+                    var from = GetNode(graph, solidsL[i].Key);
+                    var to = GetNode(graph, solidsL[j].Key);
                     graph.addArc(from, to, from.name + to.name, typeof(SecondaryConnection));
                     var lastAddedSecArc = (SecondaryConnection)graph.arcs.Last();
-                    var filteredDirections = FilterGlobalDirections(solidMoving,solidBlocking,gDir);
+                    var filteredDirections = FilterGlobalDirections(solidMoving, solidBlocking, gDir);
+                    var oppositeFiltrdDirs = filteredDirections.Select(d => DisassemblyDirections.DirectionsAndOppositsForGlobalpool[d]).ToList();
                     // remember this: if solid2 is not blocking solid1, we need to check if solid1 is blocking 2 in the opposite direction.
                     // if filteredDirections.Count == gDir.Count then the CVHs overlap
+                    // Only directions need to be checked which the moving part can move along them:
+                    var scndFilteredDirectionsMoving = FinalSetOfDirectionsFinder(graph, solidMoving, filteredDirections);
+                    var scndFilteredDirectionsBlocking = new List<int>();
+                    scndFilteredDirectionsBlocking = FinalSetOfDirectionsFinder(graph, solidBlocking,
+                        filteredDirections.Count == gDir.Count ? filteredDirections : oppositeFiltrdDirs);
+                    foreach (
+                        var d in
+                            scndFilteredDirectionsMoving.Where(
+                                d =>
+                                    !scndFilteredDirectionsBlocking.Contains(
+                                        DisassemblyDirections.DirectionsAndOppositsForGlobalpool[d])))
+                        scndFilteredDirectionsBlocking.Add(DisassemblyDirections.DirectionsAndOppositsForGlobalpool[d]);
+                    foreach (
+                        var d in
+                            scndFilteredDirectionsBlocking.Where(
+                                d =>
+                                    !scndFilteredDirectionsMoving.Contains(
+                                        DisassemblyDirections.DirectionsAndOppositsForGlobalpool[d])))
+                        scndFilteredDirectionsMoving.Add(DisassemblyDirections.DirectionsAndOppositsForGlobalpool[d]);
                     if (filteredDirections.Count == gDir.Count)
                     {
                         //continue;
-                        Parallel.ForEach(filteredDirections, filtDir =>
+                        Parallel.ForEach(scndFilteredDirectionsMoving, filtDir =>
                         //foreach (var filtDir in filteredDirections)
                         {
                             var direction = DisassemblyDirections.Directions[filtDir];
                             blocked = BlockingDeterminationWithCvhOverlapping(direction, solidMoving, solidBlocking);
-                            if (!blocked)
-                            {
-                                // now check solid 1 is blocking solid 2 in opposite direction or not.
-                                blocked = BlockingDeterminationWithCvhOverlapping(direction.multiply(-1.0),
-                                    solidBlocking, solidMoving);
-                            }
                             if (blocked)
                             {
                                 lock (lastAddedSecArc.Directions)
                                     lastAddedSecArc.Directions.Add(filtDir);
+                                if (
+                                    scndFilteredDirectionsBlocking.Contains(
+                                        DisassemblyDirections.DirectionsAndOppositsForGlobalpool[filtDir]))
+                                    scndFilteredDirectionsBlocking.Remove(
+                                        DisassemblyDirections.DirectionsAndOppositsForGlobalpool[filtDir]);
                             }
-                        }
-                            );//
+                        });
+                        Parallel.ForEach(scndFilteredDirectionsBlocking, filtDir =>
+                        //foreach (var filtDir in filteredDirections)
+                        {
+                            var direction = DisassemblyDirections.Directions[filtDir];
+                            blocked = BlockingDeterminationWithCvhOverlapping(direction, solidBlocking, solidMoving);
+                            if (blocked)
+                            {
+                                lock (lastAddedSecArc.Directions)
+                                    lastAddedSecArc.Directions.Add(DisassemblyDirections.DirectionsAndOppositsForGlobalpool[filtDir]);
+                            }
+                        });
                         if (lastAddedSecArc.Directions.Count == 0)
                             graph.removeArc(lastAddedSecArc);
                     }
@@ -100,46 +154,101 @@ namespace Assembly_Planner
                     {
                         //continue;
                         // If CVHs dont overlap:
-                        Parallel.ForEach(filteredDirections, filtDir =>
+                        Parallel.ForEach(scndFilteredDirectionsMoving, filtDir =>
                         //foreach (var filtDir in filteredDirections)
                         {
                             var direction = DisassemblyDirections.Directions[filtDir];
                             blocked = BlockingDeterminationNoCvhOverlapping(direction, solidMoving, solidBlocking);
-                            if (!blocked)
-                            {
-                                // now check solid 1 is blocking solid 2 in opposite direction or not.
-                                blocked = BlockingDeterminationNoCvhOverlapping(direction.multiply(-1.0), solidBlocking,
-                                    solidMoving);
-                            }
                             if (blocked)
                             {
                                 lock (lastAddedSecArc.Directions)
                                     lastAddedSecArc.Directions.Add(filtDir);
+                                if (
+                                    scndFilteredDirectionsBlocking.Contains(
+                                        DisassemblyDirections.DirectionsAndOppositsForGlobalpool[filtDir]))
+                                    scndFilteredDirectionsBlocking.Remove(
+                                        DisassemblyDirections.DirectionsAndOppositsForGlobalpool[filtDir]);
                             }
-                        }
-                             );//
+                        });
+                        Parallel.ForEach(scndFilteredDirectionsBlocking, filtDir =>
+                        //foreach (var filtDir in filteredDirections)
+                        {
+                            var direction = DisassemblyDirections.Directions[filtDir];
+                            blocked = BlockingDeterminationNoCvhOverlapping(direction, solidBlocking, solidMoving);
+                            if (blocked)
+                            {
+                                lock (lastAddedSecArc.Directions)
+                                    lastAddedSecArc.Directions.Add(DisassemblyDirections.DirectionsAndOppositsForGlobalpool[filtDir]);
+                            }
+                        });
                         if (lastAddedSecArc.Directions.Count == 0)
                             graph.removeArc(lastAddedSecArc);
                     }
                 }
             }
+            //stopWat.Stop();
+            //Console.WriteLine("Nonadjacent Blocking Determination is done in:" + "     " + stopWat.Elapsed);
+            //PrintOutSomeStats(graph);
             stopWat.Stop();
             Console.WriteLine("Nonadjacent Blocking Determination is done in:" + "     " + stopWat.Elapsed);
         }
 
-        private static node GetNode(designGraph graph, TessellatedSolid solid)
+        private static node GetNode(designGraph graph, string solidName)
         {
-            return graph.nodes.Where(n => n.name == solid.Name).Cast<Component>().ToList()[0];
+            return graph.nodes.Where(n => n.name == solidName).Cast<Component>().ToList()[0];
         }
-
-        private static bool BlockingDeterminationWithCvhOverlapping(double[] direction, TessellatedSolid solidMoving,
-            TessellatedSolid solidBlocking)
+        private static List<int> FinalSetOfDirectionsFinder(designGraph graph, List<TessellatedSolid> solid, List<int> filteredDirections)
         {
-            var rays = RayGenerator(solidMoving, direction);
+            var dirs = new List<int>();
+            var arcFrom = graph.arcs.Where(a => a is Connection).Cast<Connection>().Where(a => a.From.name == solid[0].Name).ToList();
+            //var dirs = arcFrom.SelectMany(a => a.InfiniteDirections).Where(filteredDirections.Contains).ToList();
+            //dirs.AddRange(arcFrom.SelectMany(a => a.FiniteDirections).Where(filteredDirections.Contains));
+            foreach (var c in arcFrom)
+            {
+                foreach (var i in c.InfiniteDirections.Where(filteredDirections.Contains))
+                {
+                    //var oppos = DisassemblyDirections.DirectionsAndOppositsForGlobalpool[i];
+                    if (dirs.Contains(i)) continue;
+                    dirs.Add(i);
+                }
+                foreach (var i in c.FiniteDirections.Where(filteredDirections.Contains))
+                {
+                    //var oppos = DisassemblyDirections.DirectionsAndOppositsForGlobalpool[i];
+                    if (dirs.Contains(i)) continue;
+                    dirs.Add(i);
+                }
+            }
+            var arcTo = graph.arcs.Where(a => a is Connection).Cast<Connection>().Where(a => a.To.name == solid[0].Name).ToList();
+            foreach (var c in arcTo)
+            {
+                foreach (var i in c.InfiniteDirections.Where(i => filteredDirections.Contains(DisassemblyDirections.DirectionsAndOppositsForGlobalpool[i])))
+                {
+                    var oppos = DisassemblyDirections.DirectionsAndOppositsForGlobalpool[i];
+                    if (dirs.Contains(oppos)) continue;
+                    dirs.Add(oppos);
+                }
+                foreach (var i in c.FiniteDirections.Where(i => filteredDirections.Contains(DisassemblyDirections.DirectionsAndOppositsForGlobalpool[i])))
+                {
+                    var oppos = DisassemblyDirections.DirectionsAndOppositsForGlobalpool[i];
+                    if (dirs.Contains(oppos)) continue;
+                    dirs.Add(oppos);
+                }
+            }
+            //dirs.AddRange(arcTo.SelectMany(a => a.FiniteDirections).Where(d => filteredDirections.Contains(DisassemblyDirections.DirectionsAndOppositsForGlobalpool[d])));
+            //dirs.AddRange(arcTo.SelectMany(a => a.InfiniteDirections).Where(d => filteredDirections.Contains(DisassemblyDirections.DirectionsAndOppositsForGlobalpool[d])));
+            return dirs;
+        }
+        private static bool BlockingDeterminationWithCvhOverlapping(double[] direction, List<TessellatedSolid> subAssemMoving,
+            List<TessellatedSolid> subAssemBlocking)
+        {
+            var rays = RayGenerator(subAssemMoving, direction);
             foreach (var ray in rays)
             {
-                if (RayIntersectsCVHOverlap(PartitioningSolid.Partitions[solidBlocking], ray))
-                    return true;
+                foreach (var solidBlocking in subAssemBlocking)
+                {
+                    if (RayIntersectsCVHOverlap(PartitioningSolid.Partitions[solidBlocking], ray))
+                        return true;
+                }
             }
             return false;
         }
@@ -147,7 +256,7 @@ namespace Assembly_Planner
         private static bool RayIntersectsCVHOverlap(Partition[] partitions, Ray ray)
         {
             var memoFace = new HashSet<PolygonalFace>();
-            var affectedPartitions = AffectedPartitionsWithRayCvhOverlaps(partitions, ray);
+            var affectedPartitions = AffectedPartitionsWithRayCvhOverlapsNABD(partitions, ray);
             foreach (var prtn in affectedPartitions)
             {
                 if (prtn.InnerPartition != null)
@@ -155,7 +264,7 @@ namespace Assembly_Planner
                 foreach (var tri in prtn.SolidTriangles.Where(t => !memoFace.Contains(t)))
                 {
                     memoFace.Add(tri);
-                    if (!GeometryFunctions.RayIntersectsWithFace(ray, tri))
+                    if (!GeometryFunctions.RayIntersectsWithFaceNABD(ray, tri))
                         continue;
                     return true;
                 }
@@ -165,18 +274,34 @@ namespace Assembly_Planner
             //    boo = false;
         }
 
+        public static void CreateCombinedCVHs(Dictionary<string, List<TessellatedSolid>> subAssems)
+        {
+            foreach (var subAssem in subAssems)
+            {
+                if (subAssem.Value.Count == 1)
+                    CombinedCVHForMultipleGeometries.Add(subAssem.Key, subAssem.Value[0].ConvexHull);
+                else
+                {
+                    var vers = subAssem.Value.SelectMany(s => s.ConvexHull.Vertices);
+                    CombinedCVHForMultipleGeometries.Add(subAssem.Key, new TVGLConvexHull(vers.ToArray()));
+                }
+            }
+        }
 
-        private static bool BlockingDeterminationNoCvhOverlapping(Double[] direction, TessellatedSolid solidMoving,
-            TessellatedSolid solidBlocking)
+        private static bool BlockingDeterminationNoCvhOverlapping(Double[] direction, List<TessellatedSolid> subAssemMoving,
+            List<TessellatedSolid> subAssemBlocking)
         {
             //direction = DisassemblyDirections.Directions[0];
-            var rays = RayGenerator(solidMoving, direction);
+            var rays = RayGenerator(subAssemMoving, direction);
             foreach (var ray in rays)
             {
-                if (!ObbFacesHashSet[solidBlocking].Any(
-                    f => RayIntersectsForObb(ray, f))) continue;
-                if (RayIntersects(PartitioningSolid.Partitions[solidBlocking], ray))
-                    return true;
+                foreach (var solidBlocking in subAssemBlocking)
+                {
+                    if (!ObbFacesHashSet[solidBlocking].Any(
+                        f => RayIntersectsForObb(ray, f))) continue;
+                    if (RayIntersects(PartitioningSolid.Partitions[solidBlocking], ray))
+                        return true;
+                }
             }
             return false;
         }
@@ -184,16 +309,16 @@ namespace Assembly_Planner
         private static bool RayIntersects(Partition[] partition, Ray ray)
         {
             var memoFace = new HashSet<PolygonalFace>();
-            var affectedPartitions = AffectedPartitionsWithRay(partition, ray);
+            var affectedPartitions = AffectedPartitionsWithRayNABD(partition, ray);
             // I can have a sorting command here to sort affected partitions based on the number of faces they have(?)
             foreach (var prtn in affectedPartitions)
             {
                 if (prtn.InnerPartition != null)
-                    RayIntersects(prtn.InnerPartition,ray);
+                    RayIntersects(prtn.InnerPartition, ray);
                 foreach (var tri in prtn.SolidTriangles.Where(t => !memoFace.Contains(t)))
                 {
                     memoFace.Add(tri);
-                    if (!GeometryFunctions.RayIntersectsWithFace(ray, tri))
+                    if (!GeometryFunctions.RayIntersectsWithFaceNABD(ray, tri))
                         continue;
                     return true;
                 }
@@ -210,6 +335,18 @@ namespace Assembly_Planner
                         prtn.Faces.Any(f => GeometryFunctions.RayIntersectsWithFace(ray, f))).ToList();
         }
 
+        internal static List<Partition> AffectedPartitionsWithRayCvhOverlapsNABD(Partition[] partitions, Ray ray)
+        {
+            var affected = partitions.Where(
+                prtn =>
+                    prtn.SolidTriangles.Count > 0 &&
+                    prtn.Faces.Any(f => GeometryFunctions.RayIntersectsWithFaceNABD(ray, f))).ToList();
+            var currentPartition =
+                partitions.Where(p => PartitioningSolid.IsVertexInsidePartition(p, new Vertex(ray.Position)));
+            affected.AddRange(currentPartition);
+            return affected;
+        }
+
         internal static List<Partition> AffectedPartitionsWithRayCvhOverlaps(Partition[] partitions, Ray ray)
         {
             var affected = partitions.Where(
@@ -222,58 +359,77 @@ namespace Assembly_Planner
             return affected;
         }
 
-        private static List<int> FilterGlobalDirections(TessellatedSolid solid1, TessellatedSolid solid2, List<int> gDir)
+        private static List<Partition> AffectedPartitionsWithRayNABD(Partition[] partition, Ray ray)
+        {
+            return
+                partition.Where(
+                    prtn =>
+                        prtn.SolidTriangles.Count > 0 &&
+                        prtn.Faces.Any(f => GeometryFunctions.RayIntersectsWithFaceNABD(ray, f))).ToList();
+        }
+
+        private static List<int> FilterGlobalDirections(List<TessellatedSolid> subAssem1, List<TessellatedSolid> subAssem2,
+            List<int> gDir)
         {
             // If there is a plane that can seperate these two CVHs, then we only need to keep the directions
             // that have a positive dot prodoct with the normal of the plane.
+            var subAssem1CVHVerts = CombinedCVHForMultipleGeometries[subAssem1[0].Name].Vertices;
+            var subAssem2CVHVerts = CombinedCVHForMultipleGeometries[subAssem2[0].Name].Vertices;
+            var subAssem1CVHFaces = CombinedCVHForMultipleGeometries[subAssem1[0].Name].Faces;
+            var subAssem2CVHFaces = CombinedCVHForMultipleGeometries[subAssem2[0].Name].Faces;
+
+
             var filteredGlobDirs1 = new List<int>(gDir);
             var filteredGlobDirs2 = new List<int>(gDir);
-            var visitedCvhFaces = new HashSet<PolygonalFace>();
+            //var visitedCvhFaces = new HashSet<PolygonalFace>();
             foreach (
                 var s1CvhFace in
-                    solid1.ConvexHull.Faces.Where(
+                    subAssem1CVHFaces.Where(
                         s1F =>
-                            solid2.ConvexHull.Vertices.All(
+                            subAssem2CVHVerts.All(
                                 s2V =>
-                                    s1F.Normal.dotProduct(s2V.Position.subtract(s1F.Vertices[0].Position)) > -0.0001) &&
-                            visitedCvhFaces.All(visF => Math.Abs(s1F.Normal.dotProduct(visF.Normal) - 1) < 0.0005)))
+                                    s1F.Normal.dotProduct(s2V.Position.subtract(s1F.Vertices[0].Position)) > -0.0001) /*&&
+                            visitedCvhFaces.All(visF => Math.Abs(s1F.Normal.dotProduct(visF.Normal) - 1) < 0.0005)*/))
             {
                 filteredGlobDirs1 =
                     filteredGlobDirs1.Where(gD => DisassemblyDirections.Directions[gD].dotProduct(s1CvhFace.Normal) > 0)
                         .ToList();
-                visitedCvhFaces.Add(s1CvhFace);
+                //visitedCvhFaces.Add(s1CvhFace);
+                break;
             }
-            visitedCvhFaces.Clear();
+            //visitedCvhFaces.Clear();
             foreach (
                 var s2CvhFace in
-                    solid2.ConvexHull.Faces.Where(
+                    subAssem2CVHFaces.Where(
                         s2F =>
-                            solid1.ConvexHull.Vertices.All(
-                                s1V => s2F.Normal.dotProduct(s1V.Position.subtract(s2F.Vertices[0].Position)) > -0.0001) &&
-                            visitedCvhFaces.All(visF => Math.Abs(s2F.Normal.dotProduct(visF.Normal) - 1) < 0.0005)))
+                            subAssem1CVHVerts.All(
+                                s1V => s2F.Normal.dotProduct(s1V.Position.subtract(s2F.Vertices[0].Position)) > -0.0001) /*&&
+                            visitedCvhFaces.All(visF => Math.Abs(s2F.Normal.dotProduct(visF.Normal) - 1) < 0.0005)*/))
             {
                 filteredGlobDirs2 =
                     filteredGlobDirs2.Where(gD => DisassemblyDirections.Directions[gD].dotProduct(s2CvhFace.Normal) < 0)
                         .ToList();
-                visitedCvhFaces.Add(s2CvhFace);
+                //visitedCvhFaces.Add(s2CvhFace);
+                break;
             }
             if (filteredGlobDirs1.Count <= filteredGlobDirs2.Count) return filteredGlobDirs1;
             return filteredGlobDirs2;
 
         }
 
-        private static List<Ray> RayGenerator(TessellatedSolid solidMoving, double[] direction)
+        private static List<Ray> RayGenerator(List<TessellatedSolid> solidMoving, double[] direction)
         {
-            var rays = solidMoving.ConvexHull.Vertices.Select(
+            var rays = CombinedCVHForMultipleGeometries[solidMoving[0].Name].Vertices.Select(
                 vertex =>
                     new Ray(
-                        new Vertex(new []{vertex.Position[0], vertex.Position[1],
+                        new Vertex(new[]{vertex.Position[0], vertex.Position[1],
                             vertex.Position[2]}),
-                        new []{direction[0], direction[1], direction[2]})).ToList();
+                        new[] { direction[0], direction[1], direction[2] })).ToList();
             // add more vertices to the ray
             rays.AddRange(
                 NonadjacentBlockingDetermination.AddingMoreRays(
-                    solidMoving.ConvexHull.Edges.Where(e => e != null && e.Length > 2).ToArray(), direction));
+                    CombinedCVHForMultipleGeometries[solidMoving[0].Name].Edges.Where(
+                    e => e != null && e.Length > 2).ToArray(), direction));
             return rays;
         }
 

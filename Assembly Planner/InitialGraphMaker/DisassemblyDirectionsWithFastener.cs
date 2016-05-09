@@ -144,7 +144,7 @@ namespace Assembly_Planner
                     AddInformationToArc(a, finDirs, infDirs);
                 }
             }//);
-            Fastener.AddFastenersInformation(assemblyGraph, screwsAndBolts, solidsNoFastener, solidPrimitive);
+            Fastener.AddFastenersInformation(assemblyGraph, SolidsNoFastener, SolidPrimitive);
             s.Stop();
             Console.WriteLine("Blocking Determination is done in:" + "     " + s.Elapsed);
             return globalDirPool;
