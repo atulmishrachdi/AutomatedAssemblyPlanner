@@ -501,64 +501,76 @@ namespace Assembly_Planner
             }
         }
 
-        internal static void FiniteDirectionsBetweenConnectedPartsWithPartitioning(TessellatedSolid solid1,
-            TessellatedSolid solid2, List<int> localDirInd, out List<int> finDirs, out List<int> infDirs)
+        internal static void FiniteDirectionsBetweenConnectedPartsWithPartitioning(List<TessellatedSolid> subAssem1,
+            List<TessellatedSolid> subAssem2, List<int> localDirInd, out List<int> finDirs, out List<int> infDirs)
         {
             // solid1 is Reference and solid2 is Moving
             finDirs = new List<int>();
             infDirs = new List<int>();
             var boo = false;
-
+            if (localDirInd.Count < 3)
+            {
+                infDirs.AddRange(localDirInd);
+                return;
+            }
             foreach (var dir in localDirInd)
             {
                 var finite = false;
-                
                 var direction = DisassemblyDirections.Directions[dir];
                 var rays = new List<Ray>();
-                foreach (var vertex in solid2.ConvexHull.Vertices)
+                foreach (var vertex in subAssem2.SelectMany(s => s.ConvexHull.Vertices))
                     rays.Add(new Ray(new Vertex(new[] { vertex.Position[0], vertex.Position[1], vertex.Position[2] }),
-                                    new[]{direction[0], direction[1], direction[2]}));
-                finite = IsTheLocalDirectionFinite(solid1, rays);
-                
+                                    new[] { direction[0], direction[1], direction[2] }));
+                finite = IsTheLocalDirectionFinite(subAssem1, rays);
                 if (finite)
                 {
                     finDirs.Add(dir);
                     continue;
                 }
-                
+
                 var direction2 = DisassemblyDirections.Directions[dir].multiply(-1.0);
                 var rays2 = new List<Ray>();
-                foreach (var vertex in solid1.ConvexHull.Vertices)
+                foreach (var vertex in subAssem1.SelectMany(s => s.ConvexHull.Vertices))
                     rays2.Add(new Ray(new Vertex(new[] { vertex.Position[0], vertex.Position[1], vertex.Position[2] }),
-                                    new[] {direction2[0], direction2[1], direction2[2]}));
-                finite = IsTheLocalDirectionFinite(solid2, rays2);
+                                    new[] { direction2[0], direction2[1], direction2[2] }));
+                finite = IsTheLocalDirectionFinite(subAssem2, rays2);
 
                 if (finite)
                     finDirs.Add(dir);
-                else 
+                else
                     infDirs.Add(dir);
             }
         }
 
-        private static bool IsTheLocalDirectionFinite(TessellatedSolid blockingSolid, List<Ray> rays)
+        private static bool IsTheLocalDirectionFinite(List<TessellatedSolid> blockingSubAssem, List<Ray> rays)
         {
-            foreach (var ray in rays)
+            var fin = false;
+            Parallel.ForEach(rays, (ray, state) =>
+            //foreach (var ray in rays)
             {
-                var memoFace = new HashSet<PolygonalFace>();
-                var affectedPartitions =
-                    NonadjacentBlockingWithPartitioning.AffectedPartitionsWithRayCvhOverlaps(
-                        PartitioningSolid.Partitions[blockingSolid], ray);
-                foreach (var prtn in affectedPartitions)
+                foreach (var blockingSolid in blockingSubAssem)
                 {
-                    foreach (var t in prtn.SolidTriangles.Where(t=>!memoFace.Contains(t)))
+                    var memoFace = new HashSet<PolygonalFace>();
+                    var affectedPartitions =
+                        NonadjacentBlockingWithPartitioning.AffectedPartitionsWithRayCvhOverlaps(
+                            PartitioningSolid.Partitions[blockingSolid], ray);
+                    foreach (var prtn in affectedPartitions)
                     {
-                        memoFace.Add(t);
-                        if (GeometryFunctions.RayIntersectsWithFace(ray, t)) 
-                            return true;
+                        foreach (var t in prtn.SolidTriangles.Where(t => !memoFace.Contains(t)))
+                        {
+                            memoFace.Add(t);
+                            if (GeometryFunctions.RayIntersectsWithFaceFinInf(ray, t))
+                            {
+                                //return true;
+                                fin = true;
+                                state.Stop();
+                            }
+                        }
                     }
                 }
-            }
-            return false;
+            });
+            //return false;
+            return fin;
         }
     }
 

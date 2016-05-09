@@ -143,8 +143,6 @@ namespace Assembly_Planner
                     a.Certainty = certainty;
                     AddInformationToArc(a, finDirs, infDirs);
                 }
-                if (counter < totalTriTobeChecked)
-                    Bridge.StatusReporter.ReportProgress(counter / (float)totalTriTobeChecked);
             }//);
             Fastener.AddFastenersInformation(assemblyGraph, screwsAndBolts, solidsNoFastener, solidPrimitive);
             s.Stop();
