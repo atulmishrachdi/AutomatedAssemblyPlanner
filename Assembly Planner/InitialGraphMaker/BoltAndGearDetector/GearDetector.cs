@@ -29,12 +29,13 @@ namespace Assembly_Planner
         }
 
 
-        internal static List<int> UpdateRemovalDirectionsIfGearMate(TessellatedSolid solid1, TessellatedSolid solid2,
+        internal static List<int> UpdateRemovalDirectionsIfGearMate(List<TessellatedSolid> subAssem1, List<TessellatedSolid> subAssem2,
             List<Gear> gears, List<int> localDirInd)
         {
             // "gear1" is always "Reference" and "gear2" is always "Moving"
-            var gear1L = gears.Where(g => g.Solid == solid1).ToList();
-            var gear2L = gears.Where(g => g.Solid == solid2).ToList();
+            if (subAssem1.Count != 1 || subAssem2.Count != 1) return localDirInd;
+            var gear1L = gears.Where(g => g.Solid == subAssem1[0]).ToList();
+            var gear2L = gears.Where(g => g.Solid == subAssem2[0]).ToList();
             if (!gear1L.Any() || !gear2L.Any()) return localDirInd;
             var gear1 = gear1L[0];
             var gear2 = gear2L[0];

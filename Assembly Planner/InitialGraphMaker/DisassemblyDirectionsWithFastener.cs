@@ -68,7 +68,7 @@ namespace Assembly_Planner
 
             //// Detect gear mates
             ////------------------------------------------------------------------------------------------
-            //var gears = GearDetector.Run(solidsNoFastener, solidPrimitive);
+            var gears = GearDetector.Run(PartsWithOneGeom, SolidPrimitive);
 
 
             // Add the solids as nodes to the graph. Exclude the fasteners 
@@ -87,35 +87,65 @@ namespace Assembly_Planner
             s.Start();
             Console.WriteLine();
             Console.WriteLine("Blocking Determination is running ....");
-            for (var i = 0; i < solidsNoFastener.Count - 1; i++)
+            BlockingDetermination.OverlappingSurfaces = new List<OverlappedSurfaces>();
+            var solidNofastenerList = SolidsNoFastener.ToList();
+            //var totalCases = ((solidsNoFastener.Count - 1) * (solidsNoFastener.Count)) / 2.0;
+            long totalTriTobeChecked = 0;
+            var overlapCheck = new HashSet<KeyValuePair<string, List<TessellatedSolid>>[]>();
+            for (var i = 0; i < SolidsNoFastener.Count - 1; i++)
             {
-                var solid1 = solidsNoFastener[i];
-                var solid1Primitives = solidPrimitive[solid1];
-                for (var j = i + 1; j < solidsNoFastener.Count; j++)
+                var subAssem1 = solidNofastenerList[i];
+                for (var j = i + 1; j < SolidsNoFastener.Count; j++)
                 {
-                    var solid2 = solidsNoFastener[j];
-                    var solid2Primitives = solidPrimitive[solid2];
-                    List<int> localDirInd;
-                    double certainty;
-                    if (BlockingDetermination.DefineBlocking(assemblyGraph, solid1, solid2, solid1Primitives,
-                        solid2Primitives, globalDirPool, out localDirInd, out certainty))
-                    {
-                        // I wrote the code in a way that "solid1" is always "Reference" and "solid2" is always "Moving".
-                        // Update the romoval direction if it is a gear mate:
-                        //localDirInd = GearDetector.UpdateRemovalDirectionsIfGearMate(solid1, solid2, gears, localDirInd);
-                        List<int> finDirs, infDirs;
-                        NonadjacentBlockingDetermination.FiniteDirectionsBetweenConnectedPartsWithPartitioning(solid1,
-                            solid2,
-                            localDirInd, out finDirs, out infDirs);
-                        var from = assemblyGraph[solid2.Name]; // Moving
-                        var to = assemblyGraph[solid1.Name]; // Reference
-                        assemblyGraph.addArc((node) from, (node) to, "", typeof (Connection));
-                        var a = (Connection) assemblyGraph.arcs.Last();
-                        a.Certainty = certainty;
-                        AddInformationToArc(a, new List<int>(), localDirInd);
-                    }
+                    var subAssem2 = solidNofastenerList[j];
+                    overlapCheck.Add(new[] { subAssem1, subAssem2 });
+                    var tri2Sub1 = subAssem1.Value.Sum(s2 => s2.Faces.Length);
+                    var tri2Sub2 = subAssem2.Value.Sum(s2 => s2.Faces.Length);
+                    totalTriTobeChecked += tri2Sub1 * tri2Sub2;
                 }
             }
+            long counter = 0;
+            foreach (var each in overlapCheck)
+            //Parallel.ForEach(overlapCheck, each =>
+            {
+                var localDirInd = new List<int>();
+                for (var t = 0; t < DisassemblyDirections.Directions.Count; t++)
+                    localDirInd.Add(t);
+                var connected = false;
+                var certainty = 0.0;
+                foreach (var solid1 in each[0].Value)
+                {
+                    foreach (var solid2 in each[1].Value)
+                    {
+                        counter += solid1.Faces.Length * solid2.Faces.Length;
+                        double localCertainty;
+                        var blocked = BlockingDetermination.DefineBlocking(solid1, solid2, globalDirPool,
+                            localDirInd, out localCertainty);
+                        if (connected == false)
+                            connected = blocked;
+                        if (localCertainty > certainty)
+                            certainty = localCertainty;
+                    }
+                }
+                if (connected)
+                {
+                    // I wrote the code in a way that "solid1" is always "Reference" and "solid2" is always "Moving".
+                    // Update the romoval direction if it is a gear mate:
+                    localDirInd = GearDetector.UpdateRemovalDirectionsIfGearMate(each[0].Value,
+                        each[1].Value, gears, localDirInd);
+                    List<int> finDirs, infDirs;
+                    NonadjacentBlockingDetermination.FiniteDirectionsBetweenConnectedPartsWithPartitioning(
+                        each[0].Value, each[1].Value, localDirInd, out finDirs, out infDirs);
+                    var from = assemblyGraph[each[1].Key]; // Moving
+                    var to = assemblyGraph[each[0].Key]; // Reference
+                    assemblyGraph.addArc((node)from, (node)to, "", typeof(Connection));
+                    var a = (Connection)assemblyGraph.arcs.Last();
+                    a.Certainty = certainty;
+                    AddInformationToArc(a, finDirs, infDirs);
+                }
+                if (counter < totalTriTobeChecked)
+                    Bridge.StatusReporter.ReportProgress(counter / (float)totalTriTobeChecked);
+            }//);
             Fastener.AddFastenersInformation(assemblyGraph, screwsAndBolts, solidsNoFastener, solidPrimitive);
             s.Stop();
             Console.WriteLine("Blocking Determination is done in:" + "     " + s.Elapsed);
