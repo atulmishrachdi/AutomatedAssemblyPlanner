@@ -15,6 +15,8 @@ using AwokeKnowing.GnuplotCSharp;
 using OptimizationToolbox;
 using System.IO;
 using System.Xml.Linq;
+using Assembly_Planner;
+
 //using MathNet.Numerics;
 //using MathNet.Numerics.LinearAlgebra;
 //using MathNet.Numerics.LinearAlgebra.Double;
@@ -169,8 +171,8 @@ namespace GPprocess
                     double[,] restfoldobdataX = new double[numFold, 2];
                     double[] restfoldobdataY = new double[restfoldobdataX.GetLength(0)];
 
-                    double[,] obdataX = readdata.read("D:\\Desktop\\testdata\\MassAndVol.csv", 2);
-                    double[] obdataY = readdata.read("D:\\Desktop\\testdata\\Time.csv");
+                    double[,] obdataX = readdata.read( "testdata/MassAndVol.csv", 2);
+                    double[] obdataY = readdata.read("testdata/Time.csv");
 
 
 
@@ -201,8 +203,8 @@ namespace GPprocess
                     if (improve == false)
                     {
                         testpoints = GetRandomXTraningData(range1, range2, testnum, dim);
-                        obdataX = readdata.read("D:\\Desktop\\testdata\\MassAndVol.csv", 2);
-                        obdataY = readdata.read("D:\\Desktop\\testdata\\Time.csv");
+                        obdataX = readdata.read( "testdata/MassAndVol.csv", 2);
+                        obdataY = readdata.read("testdata/Time.csv");
                     }
 
 
@@ -267,17 +269,17 @@ namespace GPprocess
                     //var meanerror = getmeanerror(comparelist);
                     var predicMean = Getmean(newm);
                     var predicVar = Getvar(newm);
-                    var matlab = new MLApp.MLApp();
+                    //var matlab = new MLApp.MLApp();
 
 
-                    matlab.Execute("close all");
-                    matlab.Execute("figure");
+                    //matlab.Execute("close all");
+                    //matlab.Execute("figure");
 
 
-                    Matlabplot.Displacements(obdataX, obdataY);
-                    Matlabplot.Displacements(testpoints, predicMean);
+                    //Matlabplot.Displacements(obdataX, obdataY);
+                    //Matlabplot.Displacements(testpoints, predicMean);
                     //  Matlabplot.Displacements(testpoints, predicMean, predicVar);
-                    Matlabplot.Displacements(testpoints, predicMean, predicVar, Ytrueb);//true mean and predicVar
+                    //Matlabplot.Displacements(testpoints, predicMean, predicVar, Ytrueb);//true mean and predicVar
                     //Matlabplot.Displacements(testpoints, Ytrue, predicMean, true);
                     var err = 0.0;
                     for (int i = 0; i < predicMean.Count(); i++)
@@ -297,8 +299,8 @@ namespace GPprocess
                         break;
                     }
                     //Console.ReadKey();
-                     if (err < error)
-                   // if (fv < fvini)
+                    if (err < error)
+                    // if (fv < fvini)
                     {
                         totaltry = 0;
                         bestl = l;
@@ -581,7 +583,17 @@ namespace GPprocess
             }
             return comlist;
         }
-
+        public static double[] GetSD(List<double> MeansAndVars)
+        {
+            var l = MeansAndVars.Count / 2;
+            var comlist = new double[l];
+            var bothsidesd = new double[l * 2];
+            for (int i = 0; i < l; i++)
+            {
+                comlist[i] = Math.Sqrt(Math.Abs(MeansAndVars[2 * i + 1]));
+            }
+            return comlist;
+        }
         public static double[] Getmean(List<double> MeansAndVars)
         {
             var l = MeansAndVars.Count / 2;
@@ -700,7 +712,7 @@ namespace GPprocess
                 for (int i = 0; i < rows; i++)
                 {
                     {
-                        y[i] = (obdataX[i, 0] +obdataX[i, 1])/10;
+                        y[i] = (obdataX[i, 0] + obdataX[i, 1]) / 10;
                         //y[i] = obdataX[i, 0] * obdataX[i, 1]+Math.Sin( obdataX[i, 2]);
                         //y[i] = obdataX[i, 0] * obdataX[i, 1];
                         // y[i] = obdataX[i, 0] + obdataX[i, 1];
@@ -1399,7 +1411,7 @@ namespace GPprocess
             }
             return MeanAndVar;
         }
-     
+
         /// MD GetMeanAndVar Backup
         //public static List<double> GetMeanAndVar(double[,] Xobdata, double[] obdatay, double[,] testpoints, double[] para, double noise)
         //{

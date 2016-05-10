@@ -15,72 +15,62 @@ namespace GPprocess
 {
     public class CalculateAssemblyTimeAndSD
     {
-        public static List<double> Run(designGraph graph,SubAssembly sub)
+        private static double[,] obdataX;
+
+
+        public static double GetTimeAndSD(double[] testpoints, string action, out  double meantime1, out double SD)
         {
+            meantime1 = new double();
+            SD = new double();
+            var l = testpoints.Length;
 
-            ///set up 
-            /*var refNodes = sub.Install.Reference.PartNodes.Select(n => (Component)graph[n]).ToList();
-            var movingNodes = sub.Install.Moving.PartNodes.Select(n => (Component)graph[n]).ToList();
-            var install = new[] { refNodes, movingNodes };
-            var connectingArcs = graph.arcs.Where(c=> c is Connection).Cast<Connection>().Where(a => ((movingNodes.Contains(a.To) && refNodes.Contains(a.From))
-                                                         || (movingNodes.Contains(a.From) && refNodes.Contains(a.To))))
-                                                        .ToList();
-            double insertionDistance;
-            var insertionDirection = AssemblyEvaluator.FindPartDisconnectMovement(connectingArcs, refNodes, out insertionDistance);
+            var testpointsmatrix = new double[1, l];
+            for (int i = 0; i < l; i++)
+            {
+                testpointsmatrix[0, i] = testpoints[i];
+            }
 
-            var vt = sub.Install.Moving.CVXHull.Vertices.Select(p => new Vertex(p.Position)).ToList();
-            var movingobb = TVGL.MinimumEnclosure.OrientedBoundingBox(vt);
+            if (action.StartsWith("m") || action.StartsWith("M"))//done
+            {
+                obdataX = readdata.read("C:/WeifengDOC/Desktop/gpxk/movingdata/dataset3/TrainX.csv", 5);
+                var obdataY = readdata.read("C:/WeifengDOC/Desktop/gpxk/movingdata/dataset3/TrainY.csv");
+                var OptimPara = new double[7] { 0.26, 0.71, 0.21, 0.26, 0.26, 0.01, 0.06 };
+                var newm = ThreeDinput.newMDGetMeanAndVar(obdataX, obdataY, testpointsmatrix, OptimPara);
+                meantime1 = ThreeDinput.Getmean(newm)[0];
+                SD = ThreeDinput.GetSD(newm)[0];
+            }
 
-
-            //////////////////////////////////////////////
-            //1 Rotate
-            ////////////////////////
-          
-            //////////////////////////////////////////////
-            //2 install a. travel
-            ////////////////////////
-            var travelmass = sub.Install.Moving.Mass;
-            var travelvol = movingobb;
-
-
-            var obdataX = readdata.read("D:\\Desktop\\testdata\\MassAndVolorigin.csv", 2);
-            var obdataY = readdata.read("D:\\Desktop\\testdata\\Timeorgin.csv");
-            var OptimPara = new double[4] { 5.430416, 15.3306, 16.16355, 0.09315 };
-
-
-
-            var testpoints = new double[1, 2];
-            testpoints[0, 0] = travelmass;
-            testpoints[0, 1] = sub.Install.Moving.Volume;
-           // testpoints[0, 1] = travelvol.Volume;
-            //testpoints[0, 0] = mass/1000000;
-            //testpoints[0, 1] = vol/1000000;
-               var newm = ThreeDinput.newMDGetMeanAndVar(obdataX, obdataY, testpoints, OptimPara);
-            var predicMean = ThreeDinput.Getmean(newm);
-            var predicVar =ThreeDinput.Getvar(newm);
-            //////////////////////////////////////////////
-            //1 install b. instert
-            ////////////////////////
-
-
-    
-
-            //////////////////////////////////////////////
-            //2 install b. instert
-            ////////////////////////
+            if (action.StartsWith("i") || action.StartsWith("L"))
+            {
+                var obdataX = readdata.read("C:/WeifengDOC/Desktop/gpxk/installdata/dataset3/TrainX.csv", 6);
+                var obdataY = readdata.read("C:/WeifengDOC/Desktop/gpxk/installdata/dataset3/TrainY.csv");
+                var OptimPara = new double[8] { 0.77, 0.28, 0.21, 0.14, 0.27, 0.05, 0.37, 0.06 };
+                var newm = ThreeDinput.newMDGetMeanAndVar(obdataX, obdataY, testpointsmatrix, OptimPara);
+                meantime1 = ThreeDinput.Getmean(newm)[0];
+                SD = ThreeDinput.GetSD(newm)[0];
+            }
+            //if (action.StartsWith("s") || action.StartsWith("S"))
+            //{
+            //    var obdataX = readdata.read(Bridge.CSVPath + "testdata/MassAndVolorigin.csv", 2);
+            //    var obdataY = readdata.read(Bridge.CSVPath + "testdata/Timeorgin.csv");
+            //    var OptimPara = new double[4] { 5.430416, 15.3306, 16.16355, 0.09315 };
+            //    var newm = ThreeDinput.newMDGetMeanAndVar(obdataX, obdataY, testpointsmatrix, OptimPara);
+            //    meantime1 = ThreeDinput.Getmean(newm)[0];
+            //    SD = ThreeDinput.GetSD(newm)[0];
+            //}
+            //if (action.StartsWith("r") || action.StartsWith("R"))
+            //{
+            //    var obdataX = readdata.read(Bridge.CSVPath + "testdata/MassAndVolorigin.csv", 2);
+            //    var obdataY = readdata.read(Bridge.CSVPath + "testdata/Timeorgin.csv");
+            //    var OptimPara = new double[4] { 5.430416, 15.3306, 16.16355, 0.09315 };
+            //    var newm = ThreeDinput.newMDGetMeanAndVar(obdataX, obdataY, testpointsmatrix, OptimPara);
+            //    meantime1 = ThreeDinput.Getmean(newm)[0];
+            //    SD = ThreeDinput.GetSD(newm)[0];
+            //}
 
 
-            //////////////////////////////////////////////
-            //3 secure
-            ////////////////////////
-     
 
-
-      */
-            var pp = new List<double>();
-            //pp.Add(predicMean[0]);
-            //pp.Add(predicVar[0]);
-            return pp;
+            return 1.1;
         }
     }
 }

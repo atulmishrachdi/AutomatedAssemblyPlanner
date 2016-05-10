@@ -99,6 +99,31 @@ namespace Assembly_Planner.GraphSynth.BaseClasses
         /// The connection type
         /// </summary>
         public ConnectionTypeEnum ConnectionType;
- 
+
+
+        [XmlIgnore]
+        public List<List<double[]>> UnionAreaPoints = new List<List<double[]>>();
+        /// <summary>
+        /// FromPartForeceReactionDirectons
+        /// </summary>
+
+        [XmlIgnore]
+        public List<double[]> FromPartReactionForeceDirections = new List<double[]>();
+        /// <summary>
+        /// ToPartForeceReactionDirectons
+        /// </summary>
+        [XmlIgnore]
+        public List<double[]> ToPartReactionForeceDirections = new List<double[]>();
+        /// <summary>
+        /// Suppoted Area Points Center
+        /// </summary>
+        [XmlIgnore]
+        public List<double[]> UnionAreaPointsCenter = new List<double[]>();
+
+        /// <summary>
+        /// Connected cylindar axes vectors (indicated by two points)
+        [XmlIgnore]
+        public List<double[,]> Axes = new List<double[,]>();
+
     }
 }

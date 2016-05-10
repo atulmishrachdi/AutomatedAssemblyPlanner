@@ -263,7 +263,7 @@ namespace Assembly_Planner
         private static Dictionary<string, List<TessellatedSolid>> RemoveFastenersFromTheSolidsList(
             Dictionary<string, List<TessellatedSolid>> solids, HashSet<TessellatedSolid> screwsAndBolts)
         {
-            var solidsNoFastener = new Dictionary<string, List<TessellatedSolid>>(solids);
+            var solidsNoFastener = new Dictionary<string, List<TessellatedSolid>>();
             foreach (var solid in solids)
             {
                 if (solid.Value.Count > 1)

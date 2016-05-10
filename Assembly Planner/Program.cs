@@ -16,23 +16,26 @@ namespace Assembly_Planner
 {
     internal class Program
     {
+        public static Dictionary<string, List<TessellatedSolid>> solids = new Dictionary<string, List<TessellatedSolid>>();
         private static void Main(string[] args)
         {
+
             var graphExists = false;
             var inputDir =
-                //"../../../Test/Cube";
-                //"../../../Test/PumpWExtention";
-                //"../../../Test/FastenerTest/new/test";
-                //"../../../Test/Double";
-                //"../../../Test/test7";
-                //"../../../Test/Mc Cormik/STL2";
-                //"../../../Test/Truck -TXT-1/STL";
-                //"../../../Test/FoodPackagingMachine/FPMSTL2";
-                //"../../../../GearAndFastener Detection/TrainingData/not-screw/Gear";
-            "../../../Test/test8";
+                 " C:/WeifengDOC/Desktop/sim3";
+            //"../../../Test/Cube";
+            // "../../../Test/PumpWExtention";
+            //"../../../Test/FastenerTest/new/test";
+            //"../../../Test/Double";
+            //"../../../Test/test7";
+            //"../../../Test/Mc Cormik/STL2";
+            //"../../../Test/Truck -TXT-1/STL";
+            //"../../../Test/FoodPackagingMachine/FPMSTL2";
+            //"../../../../GearAndFastener Detection/TrainingData/not-screw/Gear";
+            //  "../../../Test/test8";
             var s = Stopwatch.StartNew();
             s.Start();
-            var solids = GetSTLs(inputDir);
+            solids = GetSTLs(inputDir);
             designGraph assemblyGraph;
             List<int> globalDirPool = new List<int>();
             if (graphExists)
@@ -55,10 +58,11 @@ namespace Assembly_Planner
                 //GraphSaving.SaveTheGraph(assemblyGraph);
             }
             //var solutions = RecursiveOptimizedSearch.Run(assemblyGraph, solids, globalDirPool);
+            Stabilityfunctions.GenerateReactionForceInfo(assemblyGraph);
             var solutions = LeapBeta.Run(assemblyGraph, solids, globalDirPool, 1);
             //var solutions = OrderedDFS.Run(inputData, globalDirPool,solids); // the output is the assembly sequence
             //var solutions = BeamSearch.Run(inputData, globalDirPool);
-           
+
             //var reorientation = OptimalOrientation.Run(solutions);
             //WorkerAllocation.Run(solutions, reorientation);
             s.Stop();
@@ -74,18 +78,18 @@ namespace Assembly_Planner
             var di = new DirectoryInfo(InputDir);
             var fis = di.EnumerateFiles("*.STL");
             // Parallel.ForEach(fis, fileInfo =>
-               foreach (var fileInfo in fis)
+            foreach (var fileInfo in fis)
             {
                 var ts = IO.Open(fileInfo.Open(FileMode.Open), fileInfo.Name);
                 //ts.Name = ts.Name.Remove(0, 1);
                 //lock (parts) 
-                    parts.Add(ts[0]);
+                parts.Add(ts[0]);
             }
-                //);
+            //);
             Console.WriteLine("All the files are loaded successfully");
-            Console.WriteLine("    * Number of tessellated solids:   " + parts.Count );
+            Console.WriteLine("    * Number of tessellated solids:   " + parts.Count);
             Console.WriteLine("    * Total Number of Triangles:   " + parts.Sum(s => s.Faces.Count()));
-            return parts.ToDictionary(tessellatedSolid => tessellatedSolid.Name, tessellatedSolid => new List<TessellatedSolid> {tessellatedSolid});
+            return parts.ToDictionary(tessellatedSolid => tessellatedSolid.Name, tessellatedSolid => new List<TessellatedSolid> { tessellatedSolid });
         }
     }
 }

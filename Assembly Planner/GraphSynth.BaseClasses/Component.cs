@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Assembly_Planner.GraphSynth.BaseClasses
 {
@@ -55,5 +56,8 @@ namespace Assembly_Planner.GraphSynth.BaseClasses
         /// The rotational inertia
         /// </summary>
         public double RotationalInertia;
+
+        [XmlIgnore]
+        public Dictionary<string, List<int>> RemovealDirectionsforEachPart = new Dictionary<string, List<int>>();
     }
 }

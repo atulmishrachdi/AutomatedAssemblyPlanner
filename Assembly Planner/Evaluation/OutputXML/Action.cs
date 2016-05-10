@@ -9,6 +9,10 @@ namespace AssemblyEvaluation
         public double TimeSD;
         public List<Tool> Tools;
     }
+    public class MovingAction : Action
+    {
+        public double travaldistance { get; set; }
+    }
     public class SecureAction : Action
     {
         public List<Fastener> Fasteners { get; set; }

@@ -68,15 +68,29 @@ namespace AssemblyEvaluation
         public Part()
         {
         }
+        public class InternalStability
+        {
+            public double OverAllDOF;
+            public double OverAllTippingScore;
+            public double OverAllSlidingScore;
+            public double MaxSingleDOF;
+            public double MinSingleTippingScore;
+            public double MinSingleSlidingScore;
+            public double Totalsecore;
+            public bool needfixture;
 
+
+        }
         private TVGL.BoundingBox OBB;
     }
 
     public class SubAssembly : Part
     {
+        public InternalStability InternalStabilityInfo;
         public InstallAction Install;
         public SecureAction Secure;
         public RotateAction Rotate;
+        public MovingAction Moving;
         public InstallCharacterType InstallCharacter;
         private List<PolygonalFace> refFacesInCombined;
 
@@ -98,6 +112,8 @@ namespace AssemblyEvaluation
             AvgMomentofInertia = Mass * radius * radius;
             CVXHull = combinedCVXHull;
             this.refFacesInCombined = refFacesInCombined;
+            InternalStabilityInfo = new InternalStability();
+            InternalStabilityInfo.needfixture = false;
         }
         public SubAssembly(HashSet<Component> nodes, TVGLConvexHull combinedCVXHull,
             double Mass, double Volume, Vertex centerOfMass)

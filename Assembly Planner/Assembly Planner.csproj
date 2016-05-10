@@ -66,9 +66,8 @@
     <Reference Include="RandomGen">
       <HintPath>..\packages\RandomGen.0.4.0\lib\net40\RandomGen.dll</HintPath>
     </Reference>
-    <Reference Include="StarMath, Version=2.0.14.1114, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\StarMath.2.0.15.9091\lib\portable-net4+sl5+wp8+win8\StarMath.dll</HintPath>
+    <Reference Include="StarMath">
+      <HintPath>..\packages\StarMath.2.0.16.0423\lib\portable-net4+sl5+wp8+win8\StarMath.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -77,12 +76,12 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="TessellationAndVoxelizationGeometryLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\TVGL.1.0.15.1215\lib\portable-net4+sl4+wp7+win8\TessellationAndVoxelizationGeometryLibrary.dll</HintPath>
+    <Reference Include="TessellationAndVoxelizationGeometryLibrary">
+      <HintPath>..\..\vap2\AAP\packages\TVGL.1.0.15.1215\lib\portable-net4+sl4+wp7+win8\TessellationAndVoxelizationGeometryLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="bbbbb.cs" />
     <Compile Include="DisassemblyProcess\AStarInspiredRecursiveOptimizedSearch.cs" />
     <Compile Include="DisassemblyProcess\BeamSearch.cs" />
     <Compile Include="DisassemblyProcess\DBG.cs" />
@@ -196,6 +195,7 @@
     <Compile Include="PostProcessor\OptimalOrientation.cs" />
     <Compile Include="PostProcessor\PostProcessingConstnts.cs" />
     <Compile Include="PostProcessor\Scheduling.cs" />
+    <Compile Include="PostProcessor\Stabilityfucntions.cs" />
     <Compile Include="PostProcessor\TasksClass.cs" />
     <Compile Include="PostProcessor\UpdatePostProcessor.cs" />
     <Compile Include="PostProcessor\WorkerAllocation.cs" />
