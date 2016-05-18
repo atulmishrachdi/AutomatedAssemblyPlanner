@@ -364,7 +364,7 @@ namespace Assembly_Planner
             var a = new List<double>();
             for (var i = 0; i < distancePointToSolid.Count; i++)
                 a.Add(i);
-            Matlabplot.Displacements(a.ToArray(), distancePointToSolid.ToArray());
+           // Matlabplot.Displacements(a.ToArray(), distancePointToSolid.ToArray());
         }
 
 

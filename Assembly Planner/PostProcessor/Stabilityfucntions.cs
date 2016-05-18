@@ -319,10 +319,11 @@ namespace Assembly_Planner
 
             }
             var nodecomponent = (Component)refnode;
-            var forceCVH = MinimumEnclosure.ConvexHull2D(allupforcepionts, tofaceNormal);
-            allupforcepionts.Add(new Vertex(nodecomponent.CenterOfMass));
-            var forceandCMCVH = MinimumEnclosure.ConvexHull2D(allupforcepionts, tofaceNormal);
+            var points2D = MiscFunctions.Get2DProjectionPoints(allupforcepionts, tofaceNormal);
+            var forceCVH = MinimumEnclosure.ConvexHull2DMaximal(points2D);
+            var forceandCMCVH = new List<Point>(forceCVH);
 
+            allupforcepionts.Add(new Vertex(nodecomponent.CenterOfMass));
             var comlist1 = new List<double[]>();
             var comlist2 = new List<double[]>();
             foreach (var p in forceCVH)

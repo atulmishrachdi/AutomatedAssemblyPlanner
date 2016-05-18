@@ -57,11 +57,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MIConvexHull, Version=1.0.10.1021, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\MIConvexHull.1.0.10.1045\lib\portable-net4+sl4+wp7+win8\MIConvexHull.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="OptimizationToolbox">
-      <HintPath>..\packages\OOOT.1.0.15.0716\lib\OptimizationToolbox.dll</HintPath>
+    <Reference Include="OptimizationToolbox, Version=1.0.14.1031, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OOOT.1.0.16.0419\lib\OptimizationToolbox.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="RandomGen">
       <HintPath>..\packages\RandomGen.0.4.0\lib\net40\RandomGen.dll</HintPath>
@@ -76,12 +77,12 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="TessellationAndVoxelizationGeometryLibrary">
-      <HintPath>..\..\vap2\AAP\packages\TVGL.1.0.15.1215\lib\portable-net4+sl4+wp7+win8\TessellationAndVoxelizationGeometryLibrary.dll</HintPath>
+    <Reference Include="TessellationAndVoxelizationGeometryLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TVGL.1.0.16.0405\lib\portable-net4+sl4+wp7+win8\TessellationAndVoxelizationGeometryLibrary.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="bbbbb.cs" />
     <Compile Include="DisassemblyProcess\AStarInspiredRecursiveOptimizedSearch.cs" />
     <Compile Include="DisassemblyProcess\BeamSearch.cs" />
     <Compile Include="DisassemblyProcess\DBG.cs" />
@@ -112,7 +113,6 @@
     <Compile Include="GPprocess\CalculateAssemblyTimeAndSD.cs" />
     <Compile Include="GPprocess\GnuPlot.cs" />
     <Compile Include="GPprocess\Inequality.cs" />
-    <Compile Include="GPprocess\Matlabplot.cs" />
     <Compile Include="GPprocess\ObjectiveFunc - Copy.cs" />
     <Compile Include="GPprocess\OneDObjectiveFunc.cs" />
     <Compile Include="GPprocess\Optimization.cs" />
@@ -190,7 +190,6 @@
     <Compile Include="InitialGraphMaker\OverlappingFuzzification.cs" />
     <Compile Include="InitialGraphMaker\PartitioningSolid.cs" />
     <Compile Include="InitialGraphMaker\PrimitivePrimitiveInteractions.cs" />
-    <Compile Include="Matlabplot.cs" />
     <Compile Include="Output\GraphSaving.cs" />
     <Compile Include="PostProcessor\OptimalOrientation.cs" />
     <Compile Include="PostProcessor\PostProcessingConstnts.cs" />
@@ -218,6 +217,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="MIConvexHull.xml" />
     <Content Include="OptimizationToolbox.XML" />
     <Content Include="PropertyTools.dll" />
     <Content Include="PropertyTools.Wpf.dll" />

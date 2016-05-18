@@ -854,7 +854,7 @@ namespace PrimitiveClassificationOfTessellatedSolids
         {
             foreach (var f in ts.Faces)
             {
-                f.color = new Color(KnownColors.Yellow);
+                f.Color = new Color(KnownColors.Yellow);
             }
             var i = 0;
             foreach (var primitiveSurface in primitives)
@@ -865,22 +865,22 @@ namespace PrimitiveClassificationOfTessellatedSolids
                     if (i == 5)
                     {
                         foreach (var f in primitiveSurface.Faces)
-                            f.color = new Color(KnownColors.Red);
+                            f.Color = new Color(KnownColors.Red);
                     }
                 }
 
                 if (primitiveSurface is Cone)
                     foreach (var f in primitiveSurface.Faces)
-                        f.color = new Color(KnownColors.Pink);
+                        f.Color = new Color(KnownColors.Pink);
                 else if (primitiveSurface is Sphere)
                     foreach (var f in primitiveSurface.Faces)
-                        f.color = new Color(KnownColors.Blue);
+                        f.Color = new Color(KnownColors.Blue);
                 else if (primitiveSurface is Flat)
                     foreach (var f in primitiveSurface.Faces)
-                        f.color = new Color(KnownColors.Green);
+                        f.Color = new Color(KnownColors.Green);
                 else if (primitiveSurface is DenseRegion)
                     foreach (var f in primitiveSurface.Faces)
-                        f.color = new Color(KnownColors.Black);
+                        f.Color = new Color(KnownColors.Black);
             }
         }
         private static void ReportStats(List<PrimitiveSurface> primitives)
