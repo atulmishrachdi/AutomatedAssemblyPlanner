@@ -1,6 +1,8 @@
-# README #
-
-This README would normally document whatever steps are necessary to get your application up and running.
+# Automated Assembly Planning for Digital Manufacturing Commons #
+This repository represents efforts funded under DARPA AVM iFAB from 2012 to present. Following termination of funds in 2013, researchers at Oregon State University have continued to develop the assembly planning tool. Current efforts are developing the tool to run:
+* as a command line executable 
+* as a plugin to ESI's IC.IDO Virtual Reality software
+* as a app for the Digital Manufacturing Commons
 
 ### What is this repository for? ###
 
