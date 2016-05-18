@@ -12,26 +12,10 @@ A folder of shapes where each shape is positioned relative to one another in a g
 ###Outputs###
 A folder of plans are created. Each plan is a xml file which describes a "treequence". A treequence (portmanteau of tree and sequence) is an assembly tree showing what parts come together in a particular order. Given the timing associated with the actions and the accommodation for parallel assembly steps the treequence provides details of how and when to build parts of the system. This treequence requires some external visualization and could also be used to create documentation, which would essentially be an instruction manual.
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+## How do I get set up? ##
+1. Clone the repository 
+2. Open the file "Assembly Planner.sln" in visual studio. 
+3. Build and run
 
-### How do I get set up? ###
-
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
-
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+## Contribution guidelines ##
+Current efforts are being completed by the Design Engineering Lab at Oregon State University. If you are interested in contributing contact Prof. Matt Campbell at matt<dot>campbell<at>oregonstate<dot>edu.
