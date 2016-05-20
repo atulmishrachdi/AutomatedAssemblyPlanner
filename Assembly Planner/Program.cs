@@ -22,7 +22,6 @@ namespace Assembly_Planner
 
             var graphExists = false;
             var inputDir =
-                 " C:/WeifengDOC/Desktop/sim3";
             //"../../../Test/Cube";
             // "../../../Test/PumpWExtention";
             //"../../../Test/FastenerTest/new/test";
@@ -32,7 +31,7 @@ namespace Assembly_Planner
             //"../../../Test/Truck -TXT-1/STL";
             //"../../../Test/FoodPackagingMachine/FPMSTL2";
             //"../../../../GearAndFastener Detection/TrainingData/not-screw/Gear";
-            //  "../../../Test/test8";
+              "../../../Test/test8";
             var s = Stopwatch.StartNew();
             s.Start();
             solids = GetSTLs(inputDir);
