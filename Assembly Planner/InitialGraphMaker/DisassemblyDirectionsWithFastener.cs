@@ -145,6 +145,7 @@ namespace Assembly_Planner
                 }
             }//);
             Fastener.AddFastenersInformation(assemblyGraph, SolidsNoFastener, SolidPrimitive);
+            FindingOppositeDirectionsForGlobalPool(globalDirPool);
             s.Stop();
             Console.WriteLine("Blocking Determination is done in:" + "     " + s.Elapsed);
             return globalDirPool;
@@ -285,6 +286,37 @@ namespace Assembly_Planner
                 var dir = Directions[i];
                 var oppos = Directions.First(d => d[0] == -dir[0] && d[1] == -dir[1] && d[2] == -dir[2]);
                 DisassemblyDirections.DirectionsAndOpposits.Add(i, Directions.IndexOf(oppos));
+            }
+        }
+
+
+        private static void FindingOppositeDirectionsForGlobalPool(List<int> globalDirPool)
+        {
+            DisassemblyDirections.DirectionsAndOppositsForGlobalpool = new Dictionary<int, int>();
+            var toBeAddedToGDir = new List<int>();
+            for (int i = 0; i < globalDirPool.Count; i++)
+            {
+                var dir = Directions[globalDirPool[i]];
+                var temp =
+                    globalDirPool.Where(
+                        d =>
+                            Math.Abs(1 +
+                            DisassemblyDirections.Directions[d].dotProduct(
+                                DisassemblyDirections.Directions[globalDirPool[i]])) < 0.01).ToList();
+                if (temp.Any())
+                    DisassemblyDirections.DirectionsAndOppositsForGlobalpool.Add(globalDirPool[i], temp[0]);
+                else
+                {
+                    DisassemblyDirections.Directions.Add(dir.multiply(-1));
+                    DisassemblyDirections.DirectionsAndOppositsForGlobalpool.Add(globalDirPool[i], DisassemblyDirections.Directions.Count - 1);
+                    toBeAddedToGDir.Add(DisassemblyDirections.Directions.Count - 1);
+                }
+            }
+            foreach (var newD in toBeAddedToGDir)
+            {
+                globalDirPool.Add(newD);
+                var key = DisassemblyDirections.DirectionsAndOppositsForGlobalpool.Where(k => k.Value == newD).ToList();
+                DisassemblyDirections.DirectionsAndOppositsForGlobalpool.Add(newD, key[0].Key);
             }
         }
 

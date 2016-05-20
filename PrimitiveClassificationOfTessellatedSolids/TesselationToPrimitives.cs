@@ -38,7 +38,7 @@ namespace PrimitiveClassificationOfTessellatedSolids
 
             // Filter out faces and edges 
             //SparseAndDenseClustering.Run(unassignedEdges, unassignedFaces, filteredOutEdges, filteredOutFaces);
-            FilterOutBadFaces(unassignedEdges, unassignedFaces, filteredOutEdges, filteredOutFaces);
+            //FilterOutBadFaces(unassignedEdges, unassignedFaces, filteredOutEdges, filteredOutFaces);
             Debug.WriteLine("Filtering is complete.");
             // Classify Edges
             foreach (var e in unassignedEdges)
@@ -80,6 +80,82 @@ namespace PrimitiveClassificationOfTessellatedSolids
 
         private static List<PrimitiveSurface> MinorCorrections(List<PrimitiveSurface> primitives, List<EdgeWithScores> allEdgeWithScores)
         {
+            //foreach (var primitive in primitives.Where(a => a.Faces.Count == 1 && a is Sphere))
+            primitivesBeforeFiltering = primitives.Count;
+            //return primitives;
+            for (var i = 0; i < primitives.Count - 1; i++)
+            {
+                var c = false;
+                for (var j = i + 1; j < primitives.Count; j++)
+                {
+                    if ((primitives[i] is Cylinder /*|| primitives[i] is Cone*/) &&
+                        primitives[j].Faces.Any(f => primitives[i].IsNewMemberOf(f)))
+                    {
+                        var del = new List<PolygonalFace>();
+                        foreach (var f in primitives[j].Faces.Where(f => primitives[i].IsNewMemberOf(f)))
+                        {
+                            primitives[i].UpdateWith(f);
+                            del.Add(f);
+                        }
+                        if (del.Count == primitives[j].Faces.Count)
+                        {
+                            primitives.RemoveAt(j);
+                            j--;
+                        }
+                        else
+                            foreach (var f in del)
+                                primitives[j].Faces.Remove(f);
+                        continue;
+                    }
+                    if ((primitives[j] is Cylinder /*|| primitives[j] is Cone*/) && primitives[i].Faces.Any(f => primitives[j].IsNewMemberOf(f)))
+                    {
+                        var del = new List<PolygonalFace>();
+                        var cyl = (Cylinder)primitives[j];
+                        // if the radius of the cylinder is very high, just continue;
+                        var d = DistanceBetweenTwoVertices(primitives[j].Faces[0].Vertices[0].Position,
+                            primitives[j].Faces[0].Vertices[1].Position);
+                        if (Math.Abs(1 - (cyl.Radius - d) / (cyl.Radius)) < 0.001)
+                            continue;
+                        foreach (var f in primitives[i].Faces.Where(f => primitives[j].IsNewMemberOf(f)))
+                        {
+                            primitives[j].UpdateWith(f);
+                            del.Add(f);
+                        }
+                        if (del.Count == primitives[i].Faces.Count)
+                        {
+                            primitives.RemoveAt(i);
+                            c = true;
+                            break;
+                        }
+                        else
+                            foreach (var f in del)
+                                primitives[i].Faces.Remove(f);
+                    }
+                }
+                if (c) i--;
+            }
+            var flats = primitives.Where(p => p is Flat).Cast<Flat>().ToList();
+            var cylinders = primitives.Where(p => p is Cylinder).Cast<Cylinder>().ToList();
+            foreach (var cy in cylinders)
+            {
+                var d = DistanceBetweenTwoVertices(cy.Faces[0].Vertices[0].Position,
+                    cy.Faces[0].Vertices[1].Position);
+                if (Math.Abs(1 - (cy.Radius - d) / (cy.Radius)) < 0.001)
+                    continue;
+                foreach (var fl in flats)
+                {
+                    var newFaces = fl.Faces.Where(f => cy.IsNewMemberOf(f)).ToList();
+                    if (newFaces.Any())
+                    {
+                        foreach (var f in newFaces)
+                        {
+                            cy.Faces.Add(f);
+                            fl.Faces.Remove(f);
+                        }
+                    }
+                    if (fl.Faces.Count == 0) primitives.Remove(fl);
+                }
+            }
             //foreach (var primitive in primitives.Where(a => a.Faces.Count == 1 && a is Sphere))
             primitivesBeforeFiltering = primitives.Count;
             for (var i = 0; i < primitives.Count; i++)
@@ -577,8 +653,8 @@ namespace PrimitiveClassificationOfTessellatedSolids
             var stackOfPotentialPatches = new Stack<PlanningSurface>();
             // put possible start states on the stack starting with the seedface. But don't start with faces that
             // are too small or have not
-            if (seedFace.Face.Area < ClassificationConstants.Classifier_MinAreaForStartFace || seedFace.CatToCom.Count == 0)
-                return new List<PlanningSurface>();
+            //if (seedFace.Face.Area < ClassificationConstants.Classifier_MinAreaForStartFace || seedFace.CatToCom.Count == 0)
+            //    return new List<PlanningSurface>();
             foreach (var faceCat in seedFace.FaceCat.Keys)
                 stackOfPotentialPatches.Push(new PlanningSurface(faceCat, seedFace));
             while (stackOfPotentialPatches.Any())
@@ -626,6 +702,13 @@ namespace PrimitiveClassificationOfTessellatedSolids
                 && p.Faces.Contains(newSeed.Faces[0])));
         }
 
+        public static double DistanceBetweenTwoVertices(double[] vertex1, double[] vertex2)
+        {
+            return
+                Math.Sqrt((Math.Pow(vertex1[0] - vertex2[0], 2)) +
+                          (Math.Pow(vertex1[1] - vertex2[1], 2)) +
+                          (Math.Pow(vertex1[2] - vertex2[2], 2)));
+        }
 
         #endregion
         #region Decide In Overlapping Patches

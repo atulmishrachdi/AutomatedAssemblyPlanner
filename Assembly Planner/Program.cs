@@ -59,7 +59,8 @@ namespace Assembly_Planner
             }
             //var solutions = RecursiveOptimizedSearch.Run(assemblyGraph, solids, globalDirPool);
             Stabilityfunctions.GenerateReactionForceInfo(assemblyGraph);
-            var solutions = LeapBeta.Run(assemblyGraph, solids, globalDirPool, 1);
+            var leapSearch = new LeapSearch();
+            var solutions = leapSearch.Run(assemblyGraph, solids, globalDirPool, 1);
             //var solutions = OrderedDFS.Run(inputData, globalDirPool,solids); // the output is the assembly sequence
             //var solutions = BeamSearch.Run(inputData, globalDirPool);
 

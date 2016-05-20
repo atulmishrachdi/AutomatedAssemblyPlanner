@@ -88,7 +88,7 @@
     <Compile Include="DisassemblyProcess\DBG.cs" />
     <Compile Include="DisassemblyProcess\DisConstants.cs" />
     <Compile Include="DisassemblyProcess\BoostedSCC.cs" />
-    <Compile Include="DisassemblyProcess\LeapSearch\LeapBeta.cs" />
+    <Compile Include="DisassemblyProcess\LeapSearch\LeapSearch.cs" />
     <Compile Include="DisassemblyProcess\OptionGenerator.cs" />
     <Compile Include="DisassemblyProcess\OptionGeneratorPro.cs" />
     <Compile Include="DisassemblyProcess\OrderedDFS.cs" />

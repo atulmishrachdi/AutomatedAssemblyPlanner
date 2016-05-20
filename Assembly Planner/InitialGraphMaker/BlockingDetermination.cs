@@ -221,8 +221,8 @@ namespace Assembly_Planner
                         var qp = p.subtract(q);
                         var samePlane1 = Math.Abs(pq.dotProduct(a.Normal));
                         var samePlane2 = Math.Abs(qp.dotProduct(b.Normal));
-                        var probPlane1 = OverlappingFuzzification.FuzzyProbabilityCalculator(0.4, 0.5, samePlane1);
-                        var probPlane2 = OverlappingFuzzification.FuzzyProbabilityCalculator(0.4, 0.5, samePlane2);
+                        var probPlane1 = OverlappingFuzzification.FuzzyProbabilityCalculator(0.1, 0.5, samePlane1); //0.4, 0.5
+                        var probPlane2 = OverlappingFuzzification.FuzzyProbabilityCalculator(0.1, 0.5, samePlane2); //0.4, 0.5
                         if (probPlane1 == 0 || probPlane2 == 0) continue; //0.11 //0.005
                         counter3++;
                         if (!TriangleOverlapping(a, b)) continue;
