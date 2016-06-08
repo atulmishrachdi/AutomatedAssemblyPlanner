@@ -16,7 +16,13 @@ namespace Assembly_Planner
 {
     internal class Program
     {
+        public static List<double> DegreeOfFreedoms = new List<double>();
+        public static List<double> StablbiblityScores = new List<double>();
         public static Dictionary<string, List<TessellatedSolid>> solids = new Dictionary<string, List<TessellatedSolid>>();
+        public static designGraph AssemblyGraph;
+
+        public static List<int> globalDirPool = new List<int>();
+
         private static void Main(string[] args)
         {
 
@@ -35,31 +41,29 @@ namespace Assembly_Planner
             var s = Stopwatch.StartNew();
             s.Start();
             solids = GetSTLs(inputDir);
-            designGraph assemblyGraph;
-            List<int> globalDirPool = new List<int>();
             if (graphExists)
             {
                 var fileName = "../../../Test/PremadeGraphs/FPM.gxml";
-                assemblyGraph = (designGraph)GraphSaving.OpenSavedGraph(fileName)[0];
-                globalDirPool = GraphSaving.RetrieveGlobalDirsFromExistingGraph(assemblyGraph);
+                AssemblyGraph = (designGraph)GraphSaving.OpenSavedGraph(fileName)[0];
+                globalDirPool = GraphSaving.RetrieveGlobalDirsFromExistingGraph(AssemblyGraph);
                 var Directions = IcosahedronPro.DirectionGeneration();
                 DisassemblyDirections.Directions = new List<double[]>(Directions);
             }
             else
             {
-                assemblyGraph = new designGraph();
+                AssemblyGraph = new designGraph();
                 //var globalDirPool = DisassemblyDirections.Run(assemblyGraph, solids);
-                globalDirPool = DisassemblyDirectionsWithFastener.Run(assemblyGraph, solids, false);
+                globalDirPool = DisassemblyDirectionsWithFastener.Run(AssemblyGraph, solids, false);
                 //Updates.AddPartsProperties(inputDir, assemblyGraph);
                 //NonadjacentBlockingDeterminationPro.Run(assemblyGraph, solids, globalDirPool);
-                NonadjacentBlockingWithPartitioning.Run(assemblyGraph, solids, globalDirPool);
+                NonadjacentBlockingWithPartitioning.Run(AssemblyGraph, solids, globalDirPool);
                 //NonadjacentBlockingDetermination.Run(assemblyGraph, solids, globalDirPool);
                 //GraphSaving.SaveTheGraph(assemblyGraph);
             }
             //var solutions = RecursiveOptimizedSearch.Run(assemblyGraph, solids, globalDirPool);
-            Stabilityfunctions.GenerateReactionForceInfo(assemblyGraph);
+            Stabilityfunctions.GenerateReactionForceInfo(AssemblyGraph);
             var leapSearch = new LeapSearch();
-            var solutions = leapSearch.Run(assemblyGraph, solids, globalDirPool, 1);
+            var solutions = leapSearch.Run(AssemblyGraph, solids, globalDirPool, 1);
             //var solutions = OrderedDFS.Run(inputData, globalDirPool,solids); // the output is the assembly sequence
             //var solutions = BeamSearch.Run(inputData, globalDirPool);
 

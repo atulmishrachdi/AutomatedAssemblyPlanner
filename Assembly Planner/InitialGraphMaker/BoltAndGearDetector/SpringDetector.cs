@@ -23,22 +23,23 @@ namespace Assembly_Planner
         }
         internal static bool Run(TessellatedSolid solid)
         {
-            // take 100 random faces 
             var rnd = new Random();
             var rndVertices = new List<Vertex>();
-            for (var i = 0; i < Math.Floor(solid.Vertices.Count() / 50.0); i++)
+            for (var i = 0; i < 70; i++)
             {
                 var rInd = rnd.Next(0, solid.Vertices.Count());
+                if (rndVertices.Contains(solid.Vertices[rInd])) continue;
                 rndVertices.Add(solid.Vertices[rInd]);
             }
-            var a = new List<int>();
-            var possibleCylinders = new Dictionary<double[], double>();
             var radii = new List<double>();
+            var circleMemo = new HashSet<HashSet<Vertex>>();
             foreach (var ver in rndVertices)
             {
+                if (circleMemo.Any(c => c.Contains(ver))) continue;
                 var startingVer = ver;
                 var shortestEdge = ver.Edges.First(e => e.Length == ver.Edges.Min(e1 => e1.Length));
                 Vertex to;
+                if (shortestEdge.Curvature == CurvatureType.Concave) continue;
                 if (shortestEdge.From == ver) to = shortestEdge.To;
                 else to = shortestEdge.From;
                 var counter = 0;
@@ -55,15 +56,15 @@ namespace Assembly_Planner
                     else to = otherEdge.From;
                     edge = otherEdge;
                 }
-                a.Add(circleVertcs.Count());
                 if (circleVertcs.Count() < 14) continue;
                 double radius;
                 double[] center;
                 if (!CircleDetector(circleVertcs, out radius, out center)) continue;
+                circleMemo.Add(new HashSet<Vertex>(circleVertcs));
                 radii.Add(radius);
             }
             radii.Sort();
-            if (radii.Count < 40) return false;
+            if (radii.Count < (rndVertices.Count * 0.4)) return false;
             // get rid of 10 percent on the top and bottom. 
             var fifteenPer = (int)Math.Floor(radii.Count() * 0.15);
             if (((radii[radii.Count - fifteenPer - 1] - radii[fifteenPer]) / radii[fifteenPer]) > 0.15)

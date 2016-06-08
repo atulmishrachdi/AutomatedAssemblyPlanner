@@ -51,6 +51,11 @@ namespace Assembly_Planner.GraphSynth.BaseClasses
         /// The center of mass
         /// </summary>
         public double[] CenterOfMass;
+
+        /// <summary>
+        /// Pins connected to the component 
+        /// </summary>
+        public List<Fastener> Pins = new List<Fastener>();
         
         /// <summary>
         /// The rotational inertia
@@ -59,5 +64,10 @@ namespace Assembly_Planner.GraphSynth.BaseClasses
 
         [XmlIgnore]
         public Dictionary<string, List<int>> RemovealDirectionsforEachPart = new Dictionary<string, List<int>>();
+        /// <summary>
+        /// The dictionary of stability scores and DOF with different connection.
+        /// </summary>
+        [XmlIgnore]
+        public Dictionary<HashSet<string>, List<double>> SingleStabilityAndDOF = new Dictionary<HashSet<string>, List<double>>();
     }
 }

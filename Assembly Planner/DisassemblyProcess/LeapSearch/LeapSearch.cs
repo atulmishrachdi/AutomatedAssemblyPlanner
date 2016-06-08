@@ -35,8 +35,6 @@ namespace Assembly_Planner
         protected static Dictionary<HashSet<Component>, HashSet<TreeCandidate>> MemoCandidates =
             new Dictionary<HashSet<Component>, HashSet<TreeCandidate>>(HashSet<Component>.CreateSetComparer());
 
-        internal static HashSet<HashSet<Component>> FrozenSequence = new HashSet<HashSet<Component>>();
-
         internal AssemblySequence Run(designGraph graph, Dictionary<string, List<TessellatedSolid>> solids,
             List<int> globalDirPool, int beamWidth)
         {
@@ -47,6 +45,7 @@ namespace Assembly_Planner
             BeamWidth = beamWidth;
             Constants.Values = new Constants();
             DirPool = globalDirPool;
+
             var initialMemo = InitializeMemoInitial();
             /*SubAssembly tree = null;
             
@@ -71,6 +70,7 @@ namespace Assembly_Planner
         {
             SubAssembly tree = null;
             SortedStack = new SortedList<double, HashSet<TreeCandidate>>(new CandidateComparer());
+            var beamChildern = new SortedList<double, HashSet<TreeCandidate>>(new CandidateComparer());
             var cands = GetCandidates(new HashSet<Component>(Graph.nodes.Cast<Component>()), 0);
             foreach (var c in cands)
                 SortedStack.Add(c.G + c.H, new HashSet<TreeCandidate> { c });
@@ -132,7 +132,7 @@ namespace Assembly_Planner
                             var merged = lsl.Value;
                             merged.UnionWith(otherTC1);
                             merged.UnionWith(temp);
-                            SortedStack.Add(cost1 + lsl.Key, merged);
+                            beamChildern.Add(cost1 + lsl.Key, merged);
                         }
                         //all.Add(localSorted);
                         //continue;
@@ -155,7 +155,7 @@ namespace Assembly_Planner
                             var merged = lsl.Value;
                             merged.UnionWith(otherTC2);
                             merged.UnionWith(temp);
-                            SortedStack.Add(cost2 + lsl.Key, merged);
+                            beamChildern.Add(cost2 + lsl.Key, merged);
                         }
                         //continue;
                         break;
@@ -187,11 +187,16 @@ namespace Assembly_Planner
                         var merged = lsl.Value;
                         merged.UnionWith(otherTC);
                         merged.UnionWith(temp);
-                        SortedStack.Add(cost + lsl.Key, merged);
+                        beamChildern.Add(cost + lsl.Key, merged);
                     }
                     break;
                     //all.Add(localSorted);
                 }
+
+                if (!SortedStack.Any())
+                    foreach (var child in beamChildern)
+                        SortedStack.Add(child.Key, child.Value);
+                beamChildern.Clear();
                 if (counter == cand.Count)
                     tree = CreateTheSequence(cand);
                 if (tree != null) break;
@@ -251,16 +256,16 @@ namespace Assembly_Planner
         private static void UpdateSortedStackWithBeamWidth(int beamWidth)
         {
             if (SortedStack.Count > beamWidth)
-                for (var i = SortedStack.Count - 1; i > beamWidth; i--)
+                for (var i = SortedStack.Count - 1; i >= beamWidth; i--)
                     SortedStack.RemoveAt(i);
         }
 
         private static HashSet<TreeCandidate> GetCandidates(HashSet<Component> nodes, double parentTransitionCost, bool relaxingSc = false)
         {
-            if (MemoCandidates.ContainsKey(nodes))
-                return MemoCandidates[nodes];
             var gOptions = new Dictionary<option, HashSet<int>>();
             var candidates = new HashSet<TreeCandidate>();
+            if (MemoCandidates.ContainsKey(nodes))
+                return MemoCandidates[nodes];
             GenerateOptions(nodes, gOptions, relaxingSc);
             var c = 0;
             foreach (var opt in gOptions.Keys)
@@ -281,7 +286,10 @@ namespace Assembly_Planner
 
                 var HR = H(TC.RefNodes);
                 var HM = H(TC.MovNodes);
-                TC.G = parentTransitionCost + TC.sa.Install.Time + TC.sa.InternalStabilityInfo.Totalsecore;
+
+                var ssss = TC.sa.InternalStabilityInfo.Totalsecore;
+                var ss2 = Constants.Innerstabilityweight * TC.sa.InternalStabilityInfo.Totalsecore;
+                TC.G = parentTransitionCost + TC.sa.Install.Time + Constants.Innerstabilityweight * TC.sa.InternalStabilityInfo.Totalsecore;
                 TC.H = Math.Max(HR, HM);
                 candidates.Add(TC);
             }
@@ -545,7 +553,7 @@ namespace Assembly_Planner
         {
             Memo.Clear();
             MemoCandidates.Clear();
-            FrozenSequence.Clear();
+            EvaluationForBinaryTree.AdjacentParts.Clear();
         }
     }
 

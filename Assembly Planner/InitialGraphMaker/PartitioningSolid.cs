@@ -174,7 +174,7 @@ namespace Assembly_Planner
 
         private static bool IsItWorthGoingDownTheOctree(HashSet<PolygonalFace> faces)
         {
-            if (faces.Count == 0) return false;
+            if (faces.Count > 2000) return false;
             return ((faces.Count / 2.0 - 96) * (7e-5)) - ((2.35e-5) * faces.Count + 0.0012) > 0;
         }
 

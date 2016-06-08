@@ -204,8 +204,10 @@ namespace Assembly_Planner
             {
                 foreach (var a in overlapPrtn[0].SolidTriangles)
                 {
+                    if (a.Vertices.Count < 3) continue;
                     foreach (var b in overlapPrtn[1].SolidTriangles)
                     {
+                        if (b.Vertices.Count < 3) continue;
                         var newSet = new HashSet<PolygonalFace> { a, b };
                         if (memoFace.Contains(newSet)) continue;
                         memoFace.Add(newSet);
@@ -214,15 +216,21 @@ namespace Assembly_Planner
                         var parallel = Math.Abs(a.Normal.dotProduct(b.Normal) + 1);
                         var probPara = OverlappingFuzzification.FuzzyProbabilityCalculator(0.0055, 0.006, parallel);
                         if (probPara == 0) continue; // 0.0055
+                        // if they are on the wrong side of each other
+                        if (a.Vertices.All(av => (av.Position.subtract(b.Vertices[0].Position)).dotProduct(b.Normal) < 0.0) ||
+                            b.Vertices.All(bv => (bv.Position.subtract(a.Vertices[0].Position)).dotProduct(a.Normal) < 0.0)) continue;
                         counter2++;
+                        var aAverageEdgeLength = a.Edges.Sum(e => e.Length) / 3.0;
+                        var bAverageEdgeLength = b.Edges.Sum(e => e.Length) / 3.0;
                         var q = a.Center;
                         var p = b.Center;
                         var pq = q.subtract(p);
                         var qp = p.subtract(q);
-                        var samePlane1 = Math.Abs(pq.dotProduct(a.Normal));
-                        var samePlane2 = Math.Abs(qp.dotProduct(b.Normal));
-                        var probPlane1 = OverlappingFuzzification.FuzzyProbabilityCalculator(0.1, 0.5, samePlane1); //0.4, 0.5
-                        var probPlane2 = OverlappingFuzzification.FuzzyProbabilityCalculator(0.1, 0.5, samePlane2); //0.4, 0.5
+                        var devisionFactor = Math.Min(aAverageEdgeLength, bAverageEdgeLength);
+                        var samePlane1 = Math.Abs(pq.dotProduct(a.Normal)) / devisionFactor; // I need to devide it by a better factor
+                        var samePlane2 = Math.Abs(qp.dotProduct(b.Normal)) / devisionFactor;
+                        var probPlane1 = OverlappingFuzzification.FuzzyProbabilityCalculator(0.1, 0.4, samePlane1); //0.4, 0.5
+                        var probPlane2 = OverlappingFuzzification.FuzzyProbabilityCalculator(0.1, 0.4, samePlane2); //0.4, 0.5
                         if (probPlane1 == 0 || probPlane2 == 0) continue; //0.11 //0.005
                         counter3++;
                         if (!TriangleOverlapping(a, b)) continue;
@@ -262,6 +270,8 @@ namespace Assembly_Planner
                 }
 
             }
+            certainty = finalProb;
+            if (counter1 == 0) return false;
             var primOver = new List<PrimitiveSurface[]>();
             foreach (var tto in triTriOver)
             {
@@ -273,12 +283,76 @@ namespace Assembly_Planner
                 if (primOver.Any(p => p[0] == prim1[0] && p[1] == prim2[0])) continue;
                 primOver.Add(new[] { prim1[0], prim2[0] });
             }
+            FilteroutBadPrimitiveProximities(primOver);
             OverlappingSurfaces.Add(new OverlappedSurfaces { Solid1 = solid1, Solid2 = solid2, Overlappings = primOver });
-            certainty = finalProb;
-            if (counter1 == 0) return false;
             return true;
         }
 
+        private static void FilteroutBadPrimitiveProximities(List<PrimitiveSurface[]> primOver)
+        {
+            for (var i = 0; i < primOver.Count; i++)
+            {
+                var pp = primOver[i];
+                if (pp[0] is Cylinder || pp[0] is Cone || pp[0] is Sphere)
+                {
+                    if (pp[0].Faces.Count < 7)
+                    {
+                        primOver.RemoveAt(i);
+                        i--;
+                        continue;
+                    }
+                }
+                if (pp[1] is Cylinder || pp[1] is Cone || pp[1] is Sphere)
+                {
+                    if (pp[1].Faces.Count < 7)
+                    {
+                        primOver.RemoveAt(i);
+                        i--;
+                        continue;
+                    }
+                }
+                if (pp[0] is Flat && pp[1] is Cylinder)
+                {
+                    var cy = (Cylinder)pp[1];
+                    if (!cy.IsPositive)
+                    {
+                        primOver.RemoveAt(i);
+                        i--;
+                        continue;
+                    }
+                }
+                if (pp[0] is Cylinder && pp[1] is Flat)
+                {
+                    var cy = (Cylinder)pp[0];
+                    if (!cy.IsPositive)
+                    {
+                        primOver.RemoveAt(i);
+                        i--;
+                        continue;
+                    }
+                }
+                if (pp[0] is Flat && pp[1] is Cone)
+                {
+                    var cy = (Cone)pp[1];
+                    if (!cy.IsPositive)
+                    {
+                        primOver.RemoveAt(i);
+                        i--;
+                        continue;
+                    }
+                }
+                if (pp[0] is Cone && pp[1] is Flat)
+                {
+                    var cy = (Cone)pp[0];
+                    if (!cy.IsPositive)
+                    {
+                        primOver.RemoveAt(i);
+                        i--;
+                        continue;
+                    }
+                }
+            }
+        }
 
         internal static bool ProximityFastener(TessellatedSolid solid1, TessellatedSolid solid2)
         {

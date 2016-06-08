@@ -47,9 +47,19 @@ namespace AssemblyEvaluation
 
     public class Constants
     {
+
+        // Weights for differne evalutations
+        //
+        public static double Innerstabilityweight = 10;
+
+        public static double Installtimeweight = 0;
+        public static double Movingtimeweight = 0;
+        public static double Rotatetimeweight = 0;
+
+
+
         public static Constants Values;
         public string CADAssemblyFileName = "input.sat";
-
         public string AssemblyXMLFileName = "input.xml";
 
         /* ants for determining which subassembly is moving and which is the reference. */

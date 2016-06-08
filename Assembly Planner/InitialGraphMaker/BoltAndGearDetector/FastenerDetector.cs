@@ -133,7 +133,7 @@ namespace Assembly_Planner
                     if (dis < shortestObbEdge) shortestObbEdge = dis;
                     if (dis > longestObbEdge) longestObbEdge = dis;
                 }
-                var sizeMetric = solid.Volume*(longestObbEdge/shortestObbEdge);
+                var sizeMetric = solid.Volume * (longestObbEdge / shortestObbEdge);
                 partSize.Add(solid, sizeMetric);
             }
             // if removing the first 10 percent drops the max size by 95 percent, consider them as noise: 
@@ -142,7 +142,7 @@ namespace Assembly_Planner
             sortedPartSize.Sort((x, y) => y.Value.CompareTo(x.Value));
 
             var noise = new List<TessellatedSolid>();
-            for (var i = 0; i < Math.Ceiling(partSize.Count*5/100.0); i++)
+            for (var i = 0; i < Math.Ceiling(partSize.Count * 5 / 100.0); i++)
                 noise.Add(sortedPartSize[i].Key);
             var approvedNoise = new List<TessellatedSolid>();
             for (var i = 0; i < noise.Count; i++)
@@ -154,7 +154,7 @@ namespace Assembly_Planner
                     partSize.Where(a => !newList.Contains(a.Key))
                         .ToDictionary(key => key.Key, value => value.Value)
                         .Values.Max();
-                if (max > maxSize*10.0/100.0) continue;
+                if (max > maxSize * 10.0 / 100.0) continue;
                 approvedNoise = newList;
                 break;
             }
@@ -178,18 +178,24 @@ namespace Assembly_Planner
             for (var i = 0; i < n; i++)
             {
                 var ini = new List<TessellatedSolid>();
-                var key = minSize + (i/(n - 1))*(maxSize - minSize);
+                var key = minSize + (i / (n - 1)) * (maxSize - minSize);
                 dic.Add(key, ini);
             }
 
-            dic[minSize].AddRange(smallestSolid);
+            //dic[minSize].AddRange(smallestSolid);
             dic[maxSize].AddRange(approvedNoise);
 
             // Filling up the values
             var keys = dic.Keys.ToList();
-            foreach (var f in solids.Where(a => !approvedNoise.Contains(a)))
+            var counter = 0;
+            var solidsWithoutNoise = solids.Where(a => !approvedNoise.Contains(a)).ToList();
+            // after getting rid of the noise, if the size of the largest is less than 3 times of the size of the smalles,
+            // all of them are fasteners.
+            if (Math.Abs(maxSize / minSize) < 3) return solidsWithoutNoise;
+            foreach (var f in solidsWithoutNoise)
             {
-                for (var i = 0; i < n - 2; i++)
+                counter++;
+                for (var i = 0; i <= n - 2; i++)
                 {
                     if (partSize[f] >= keys[i] && partSize[f] <= keys[i + 1])
                     {
@@ -203,6 +209,7 @@ namespace Assembly_Planner
             //    Console.WriteLine(v.Name);//partSize[v]/maxSize);
             return dic[minSize];
         }
+
 
         internal static int RemovalDirectionFinderUsingObb(TessellatedSolid solid, BoundingBox obb)
         {
@@ -236,6 +243,47 @@ namespace Assembly_Planner
                 normalGuess = facePrepToRD2.Normal;
             var equInDirections =
                 DisassemblyDirections.Directions.Where(d => Math.Abs(d.dotProduct(normalGuess) - 1) < 0.001).ToList()[0];
+            return DisassemblyDirections.Directions.IndexOf(equInDirections);
+        }
+
+        internal static int RemovalDirectionFinderUsingObbWithTopPlane(TessellatedSolid solid, BoundingBox obb, out PolygonalFace topPlane)
+        {
+            // this is hard. it can be a simple threaded rod,or it can be a standard
+            // bolt that could not be detected by other approaches.
+            // If it is a rod, the removal direction is not really important,
+            // but if not, it's important I still have no idea about how to detect it.
+            // Idea: find any of the 4 longest sides of the OBB.
+            //       find the closest vertex to this side. (if it's a rod,
+            //       the closest vertex can be everywhere, but in a regular bolt,
+            //       it's on the top (it's most definitely a vertex from the head))
+            PolygonalFace facePrepToRD1;
+            PolygonalFace facePrepToRD2;
+            var longestPlane = GeometryFunctions.LongestPlaneOfObbDetector(obb, out facePrepToRD1, out facePrepToRD2);
+            Vertex closestVerToPlane = null;
+            var minDist = double.PositiveInfinity;
+            foreach (var ver in solid.ConvexHull.Vertices)
+            {
+                var dis = Math.Abs(GeometryFunctions.DistanceBetweenVertexAndPlane(ver.Position, longestPlane[0]));
+                if (dis >= minDist)
+                    continue;
+                closestVerToPlane = ver;
+                minDist = dis;
+            }
+            // The closest vertex to plane is closer to which facePrepToRD?
+            double[] normalGuess = null;
+            if (Math.Abs(GeometryFunctions.DistanceBetweenVertexAndPlane(closestVerToPlane.Position, facePrepToRD1)) <
+                Math.Abs(GeometryFunctions.DistanceBetweenVertexAndPlane(closestVerToPlane.Position, facePrepToRD2)))
+            {
+                normalGuess = facePrepToRD1.Normal;
+                topPlane = facePrepToRD1;
+            }
+            else
+            {
+                normalGuess = facePrepToRD2.Normal;
+                topPlane = facePrepToRD2;
+            }
+            var equInDirections =
+                DisassemblyDirections.Directions.First(d => Math.Abs(d.dotProduct(normalGuess) - 1) < 0.05);
             return DisassemblyDirections.Directions.IndexOf(equInDirections);
         }
 

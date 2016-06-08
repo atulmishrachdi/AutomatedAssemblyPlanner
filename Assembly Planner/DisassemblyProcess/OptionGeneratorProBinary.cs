@@ -136,6 +136,7 @@ namespace Assembly_Planner
                     }
                 }
                 comb.UnionWith(newGroup);
+                if (comb.Count > 100) break;
                 lastGroup.Clear();
                 lastGroup.AddRange(newGroup.Select(nG => nG.ToList()));
                 i++;
@@ -202,6 +203,7 @@ namespace Assembly_Planner
                 var opt = generated.Dequeue();
                 if (!(finalCombination.Any(hys => hys.All(opt.Contains) && opt.All(hys.Contains))))
                     finalCombination.Add(opt);
+                if (finalCombination.Count > 100) break;
                 var screwedToOption = ScrewedToOption(dic, opt);
                 var combination = CombinationsCreator(screwedToOption);
                 foreach (var com in combination)

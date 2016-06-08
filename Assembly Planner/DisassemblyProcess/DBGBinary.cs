@@ -27,11 +27,13 @@ namespace Assembly_Planner
             //            but it is blocked by that. Also shaft is not touching the lid, but it is blocked by that. 
 
             var dbgDictionary = new Dictionary<hyperarc, List<hyperarc>>();
+            var dbgDictionaryAdjacent = new Dictionary<hyperarc, List<hyperarc>>();
             //var connectedButUnblocked= new Dictionary<hyperarc, List<hyperarc>>();
             foreach (var sccHy in assemblyGraph.hyperarcs.Where(h => h.localLabels.Contains(DisConstants.SCC)))
             {
                 var hyperarcBorderArcs = HyperarcBorderArcsFinder(sccHy);
                 var blockedWith = new List<hyperarc>();
+                var blockedWith2 = new List<hyperarc>();
                 //var notBlockedWith = new List<hyperarc>();
                 foreach (var borderArc in hyperarcBorderArcs)
                 {
@@ -48,7 +50,10 @@ namespace Assembly_Planner
                             continue;
                         }
                         if (!blockedWith.Contains(blocking))
+                        {
                             blockedWith.Add(blocking);
+                            blockedWith2.Add(blocking);
+                        }
                     }
                     else // contains  "To"
                     {
@@ -58,19 +63,23 @@ namespace Assembly_Planner
                             continue;
                         }
                         if (!blockedWith.Contains(blocking))
+                        {
                             blockedWith.Add(blocking);
+                            blockedWith2.Add(blocking);
+                        }
                     }
                 }
                 dbgDictionary.Add(sccHy, blockedWith);
+                dbgDictionaryAdjacent.Add(sccHy, blockedWith2);
                 //connectedButUnblocked.Add(sccHy,notBlockedWith);
             }
             //dbgDictionary = CombineWithNonAdjacentBlockings2(dbgDictionary, cndDirInd);
-            dbgDictionary = CombineWithNonAdjacentBlockingsUsingSecondaryConnections(dbgDictionary, assemblyGraph, cndDirInd);
-            dbgDictionary = SolveMutualBlocking(assemblyGraph, dbgDictionary, relaxingSc);
+            dbgDictionary = CombineWithNonAdjacentBlockingsUsingSecondaryConnections(dbgDictionary, assemblyGraph, cndDirInd, relaxingSc);
+            dbgDictionary = SolveMutualBlocking(assemblyGraph, dbgDictionary, dbgDictionaryAdjacent, relaxingSc);
             dbgDictionary = UpdateBlockingDic(dbgDictionary);
             //if (MutualBlocking(assemblyGraph, dbgDictionary))
             //    dbgDictionary = DirectionalBlockingGraph(assemblyGraph, seperate, cndDirInd); // This is expensive. Get rid of it.
-            dbgDictionary = SolveMutualBlocking(assemblyGraph, dbgDictionary, relaxingSc);
+            dbgDictionary = SolveMutualBlocking(assemblyGraph, dbgDictionary, dbgDictionaryAdjacent, relaxingSc);
             if (MutualBlocking2(assemblyGraph, dbgDictionary))
             {
                 var df = 2;
@@ -79,16 +88,9 @@ namespace Assembly_Planner
         }
 
         private static Dictionary<hyperarc, List<hyperarc>> CombineWithNonAdjacentBlockingsUsingSecondaryConnections(
-     Dictionary<hyperarc, List<hyperarc>> dbgDictionary, designGraph assemblyGraph, int cndDirInd)
+            Dictionary<hyperarc, List<hyperarc>> dbgDictionary, designGraph assemblyGraph, int cndDirInd,
+            bool relaxingSc)
         {
-            var direction = DisassemblyDirections.Directions[cndDirInd];
-            /*var dirs = new List<int>();
-            foreach (var gDir in DisassemblyDirections.Directions)
-            {
-                if (1 - Math.Abs(gDir.dotProduct(direction)) < OverlappingFuzzification.CheckWithGlobDirsParall) 
-                    dirs.Add(DisassemblyDirections.Directions.IndexOf(gDir));
-            }*/
-            //var oppositeDir = dirs.Where(d => d != cndDirInd).ToList();
             var oppositeDir = new List<int> { DisassemblyDirections.DirectionsAndOppositsForGlobalpool[cndDirInd] };
             foreach (SecondaryConnection SC in assemblyGraph.arcs.Where(a => a is SecondaryConnection))
             {
@@ -96,47 +98,22 @@ namespace Assembly_Planner
                 var blockingScc = dbgDictionary.Keys.ToList().Where(scc => scc.nodes.Contains(SC.To));
                 if (!blockedScc.Any() || !blockingScc.Any())
                     continue;
-                if (oppositeDir.Any())
+                if (ContainsADirection(new HashSet<int>(SC.Directions), cndDirInd) &&
+                    ContainsADirection(new HashSet<int>(SC.Directions), oppositeDir[0]) && !relaxingSc)
                 {
-                    if (ContainsADirection(new HashSet<int>(SC.Directions), cndDirInd) && ContainsADirection(new HashSet<int>(SC.Directions), oppositeDir[0]))
+                    foreach (var blocked in blockedScc)
                     {
-                        foreach (var blocked in blockedScc)
+                        foreach (var blocking in blockingScc.Where(b => b != blocked))
                         {
-                            foreach (var blocking in blockingScc.Where(b => b != blocked))
-                            {
-                                if (!dbgDictionary[blocked].Contains(blocking))
-                                    dbgDictionary[blocked].Add(blocking);
-                                if (!dbgDictionary[blocking].Contains(blocked))
-                                    dbgDictionary[blocking].Add(blocked);
-                            }
-                        }
-                    }
-                    else if (ContainsADirection(new HashSet<int>(SC.Directions), cndDirInd))
-                    {
-                        foreach (var blocked in blockedScc)
-                        {
-                            foreach (var blocking in blockingScc.Where(b => b != blocked))
-                            {
-                                if (!dbgDictionary[blocked].Contains(blocking))
-                                    dbgDictionary[blocked].Add(blocking);
-                            }
-                        }
-                    }
-                    else if (ContainsADirection(new HashSet<int>(SC.Directions), oppositeDir[0]))
-                    {
-                        foreach (var blocked in blockedScc)
-                        {
-                            foreach (var blocking in blockingScc.Where(b => b != blocked))
-                            {
-                                if (!dbgDictionary[blocking].Contains(blocked))
-                                    dbgDictionary[blocking].Add(blocked);
-                            }
+                            if (!dbgDictionary[blocked].Contains(blocking))
+                                dbgDictionary[blocked].Add(blocking);
+                            if (!dbgDictionary[blocking].Contains(blocked))
+                                dbgDictionary[blocking].Add(blocked);
                         }
                     }
                 }
-                else
+                else if (ContainsADirection(new HashSet<int>(SC.Directions), cndDirInd))
                 {
-                    if (!ContainsADirection(new HashSet<int>(SC.Directions), cndDirInd)) continue;
                     foreach (var blocked in blockedScc)
                     {
                         foreach (var blocking in blockingScc.Where(b => b != blocked))
@@ -146,6 +123,18 @@ namespace Assembly_Planner
                         }
                     }
                 }
+                else if (ContainsADirection(new HashSet<int>(SC.Directions), oppositeDir[0]))
+                {
+                    foreach (var blocked in blockedScc)
+                    {
+                        foreach (var blocking in blockingScc.Where(b => b != blocked))
+                        {
+                            if (!dbgDictionary[blocking].Contains(blocked))
+                                dbgDictionary[blocking].Add(blocked);
+                        }
+                    }
+                }
+
             }
             return dbgDictionary;
         }
@@ -161,20 +150,29 @@ namespace Assembly_Planner
             return false;
         }
 
-        internal static Dictionary<hyperarc, List<hyperarc>> SolveMutualBlocking(designGraph assemblyGraph, Dictionary<hyperarc, List<hyperarc>> dbgDictionary, bool relaxingSc = false)
+        internal static Dictionary<hyperarc, List<hyperarc>> SolveMutualBlocking(designGraph assemblyGraph,
+            Dictionary<hyperarc, List<hyperarc>> dbgDictionary,
+            Dictionary<hyperarc, List<hyperarc>> dbgDictionaryAdjacent, bool relaxingSc = false)
         {
+            foreach (var key in dbgDictionary.Keys)
+            {
+                if (dbgDictionary[key].Contains(key))
+                    dbgDictionary[key].Remove(key);
+            }
             for (var i = 0; i < dbgDictionary.Count - 1; i++)
             {
                 var iKey = dbgDictionary.Keys.ToList()[i];
+                dbgDictionary[iKey].RemoveAll(a => a == null);
                 for (var j = i + 1; j < dbgDictionary.Count; j++)
                 {
                     var jKey = dbgDictionary.Keys.ToList()[j];
+                    dbgDictionary[jKey].RemoveAll(a => a == null);
                     if (dbgDictionary[iKey].Contains(jKey) && dbgDictionary[jKey].Contains(iKey))
                     {
                         if (relaxingSc)
                         {
                             // if these two keys are not phisically connected, update the dbg
-                            if (
+                            /*if (
                                 assemblyGraph.arcs.Where(a => a is Connection)
                                     .Cast<Connection>()
                                     .Any(
@@ -183,22 +181,52 @@ namespace Assembly_Planner
                                              jKey.nodes.Any(n => n.name == a.To.name)) ||
                                             (iKey.nodes.Any(n => n.name == a.To.name) &&
                                              jKey.nodes.Any(n => n.name == a.From.name))))
+                                continue;*/
+                            if (dbgDictionaryAdjacent[iKey].Contains(jKey) && dbgDictionaryAdjacent[jKey].Contains(iKey))
+                            {
                                 continue;
+                            }
                             // take the one with less volume and delete it from the value of the otherone's key
                             var volumei = iKey.nodes.Cast<Component>().Sum(n => n.Volume);
                             var volumej = jKey.nodes.Cast<Component>().Sum(n => n.Volume);
                             if ((dbgDictionary[iKey].Count == 1 && dbgDictionary[jKey].Count == 1) ||
                                 (dbgDictionary[iKey].Count > 1 && dbgDictionary[jKey].Count > 1))
                             {
-                                if (volumei < volumej) dbgDictionary[iKey].Remove(jKey);
-                                else dbgDictionary[jKey].Remove(iKey);
+                                if (!dbgDictionaryAdjacent[iKey].Contains(jKey) &&
+                                    !dbgDictionaryAdjacent[jKey].Contains(iKey))
+                                {
+                                    if (volumei < volumej)
+                                    {
+                                        if (!dbgDictionaryAdjacent[iKey].Contains(jKey))
+                                            dbgDictionary[iKey].Remove(jKey);
+                                    }
+                                    else dbgDictionary[jKey].Remove(iKey);
+
+                                }
+                                if (!dbgDictionaryAdjacent[iKey].Contains(jKey))
+                                    dbgDictionary[iKey].Remove(jKey);
+                                else
+                                    dbgDictionary[jKey].Remove(iKey);
+                                dbgDictionary[iKey].RemoveAll(a => a == null);
+                                dbgDictionary[jKey].RemoveAll(a => a == null);
                             }
                             else
                             {
-                                if (dbgDictionary[iKey].Count == 1) dbgDictionary[iKey].Remove(jKey);
-                                else dbgDictionary[jKey].Remove(iKey);
+                                if (!dbgDictionaryAdjacent[iKey].Contains(jKey) &&
+                                    !dbgDictionaryAdjacent[jKey].Contains(iKey))
+                                {
+                                    if (dbgDictionary[iKey].Count == 1) dbgDictionary[iKey].Remove(jKey);
+                                    else dbgDictionary[jKey].Remove(iKey);
+
+                                }
+                                if (!dbgDictionaryAdjacent[iKey].Contains(jKey))
+                                    dbgDictionary[iKey].Remove(jKey);
+                                else
+                                    dbgDictionary[jKey].Remove(iKey);
+                                dbgDictionary[iKey].RemoveAll(a => a == null);
+                                dbgDictionary[jKey].RemoveAll(a => a == null);
                             }
-                            break;
+                            continue;
                         }
                         var nodes = new List<node>();
                         nodes.AddRange(iKey.nodes);
@@ -208,7 +236,8 @@ namespace Assembly_Planner
                         last.localLabels.Add(DisConstants.SCC);
                         var updatedBlocking = new List<hyperarc>();
                         updatedBlocking.AddRange(dbgDictionary[iKey].Where(hy => hy != jKey));
-                        updatedBlocking.AddRange(dbgDictionary[jKey].Where(hy => hy != iKey && !updatedBlocking.Contains(hy)));
+                        updatedBlocking.AddRange(
+                            dbgDictionary[jKey].Where(hy => hy != iKey && !updatedBlocking.Contains(hy)));
                         var updatedBlocking2 = new List<hyperarc>(updatedBlocking);
                         dbgDictionary.Remove(iKey);
                         dbgDictionary.Remove(jKey);
@@ -219,10 +248,7 @@ namespace Assembly_Planner
                                 dbgDictionary[key].Add(last);
                                 dbgDictionary[key].Remove(iKey);
                                 dbgDictionary[key].Remove(jKey);
-                            }
-                            if (dbgDictionary[key].Any(a => a == null))
-                            {
-                                var a = 2;
+                                dbgDictionary[key].RemoveAll(a => a == null);
                             }
                         }
 

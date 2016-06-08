@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,8 @@ using Assembly_Planner.GraphSynth.BaseClasses;
 using StarMathLib;
 using TVGL;
 using Constants = AssemblyEvaluation.Constants;
-
+using RandomGen;
+using GPprocess;
 namespace Assembly_Planner
 {
     /// <summary>
@@ -18,12 +20,17 @@ namespace Assembly_Planner
     /// </summary>
     internal class EvaluationForBinaryTree
     {
-        internal static Dictionary<string, TVGLConvexHull> ConvexHullsForParts = new Dictionary<string, TVGLConvexHull>();
+        internal static Dictionary<string, TVGLConvexHull> ConvexHullsForParts =
+            new Dictionary<string, TVGLConvexHull>();
+
+        internal static Dictionary<Component, HashSet<Component>> AdjacentParts =
+            new Dictionary<Component, HashSet<Component>>();
 
         internal EvaluationForBinaryTree(Dictionary<string, List<TessellatedSolid>> subAssems)
         {
             ConvexHullsForParts = NonadjacentBlockingWithPartitioning.CombinedCVHForMultipleGeometries;
         }
+
         /// <summary>
         /// Evaluates the subassemly.
         /// </summary>
@@ -31,21 +38,23 @@ namespace Assembly_Planner
         /// <param name="optNodes">The subset of nodes that represent one of the two parts in the install step.</param>
         /// <param name="sub">The sub is the class that is then tied into the treequence.</param>
         /// <returns>System.Double.</returns>
-        public double EvaluateSub(designGraph graph, HashSet<Component> subassemblyNodes, List<Component> optNodes, HashSet<int> validDirs, out SubAssembly sub)
+        public double EvaluateSub(designGraph graph, HashSet<Component> subassemblyNodes, List<Component> optNodes,
+            HashSet<int> validDirs, out SubAssembly sub)
         {
-
             var rest = subassemblyNodes.Where(n => !optNodes.Contains(n)).ToList();
             sub = Update(optNodes, rest);
             var connectingArcs =
-                graph.arcs.Where(a => a is Connection).Cast<Connection>().Where(a => ((optNodes.Contains(a.To) && rest.Contains(a.From))
-                                                            || (optNodes.Contains(a.From) && rest.Contains(a.To))))
+                graph.arcs.Where(a => a is Connection)
+                    .Cast<Connection>()
+                    .Where(a => ((optNodes.Contains(a.To) && rest.Contains(a.From))
+                                 || (optNodes.Contains(a.From) && rest.Contains(a.To))))
                     .ToList();
             var insertionDirections = InsertionDirectionsFromRemovalDirections(sub, optNodes, validDirs);
             var minDis = double.PositiveInfinity;
             var bestInstallDirection = new[] { 0.0, 0.0, 0.0 };
             foreach (var dir in insertionDirections)
             {
-                var dis = DetermineDistanceToSeparateHull(sub, dir); /// Bridge.MeshMagnifier;
+                var dis = DetermineDistanceToSeparateHull(sub, dir);
                 if (dis >= minDis) continue;
                 minDis = dis;
                 bestInstallDirection = dir;
@@ -53,7 +62,6 @@ namespace Assembly_Planner
             sub.Install.InstallDirection = bestInstallDirection;
             sub.Install.InstallDistance = minDis;
             // I need to add InstallationPoint also
-
             var install = new[] { rest, optNodes };
             if (EitherRefOrMovHasSeperatedSubassemblies(install, subassemblyNodes))
                 return -1;
@@ -63,237 +71,297 @@ namespace Assembly_Planner
             var movingnodes = subassemblyNodes.Where(n => moivingnames.Contains(n.name)).ToList();
             var refnodes = subassemblyNodes.Where(n => refnames.Contains(n.name)).ToList();
 
-            /////time
-            sub.Install.Time = 10;
+            /////time 
+            sub.Install.Time = 0;
             EvaluateSubFirstThreeTime(sub, refnodes, movingnodes, minDis, out sub.Install.Time, out sub.Install.TimeSD);
-
+            if (sub.Install.Time < 0)
+                sub.Install.Time = 0.5;
 
             ///////stability
+
             var stabilityscore = EvaluateSubStable(graph, refnodes, movingnodes, sub);
-            //sub.Secure.Fasteners = ConnectingArcsFastener(connectingArcs);
+            sub.Secure.Fasteners = ConnectingArcsFastener(connectingArcs, subassemblyNodes, optNodes);
             return 1;
         }
-        private double EvaluateSubStable(designGraph graph, List<Component> optNodes, List<Component> rest, SubAssembly sub)
+
+        private double EvaluateSubStable(designGraph graph, List<Component> optNodes, List<Component> rest,
+            SubAssembly sub)
         {
-
-            ////debug
-            //var refnodenames = new List<string>
-            //{
-            //   //  "Assem1 - Part4",
-            //   //"Assem1 - Part2",
-            //   // "Assem1 - Part1",
-            //   //  "Assem1 - b-1",
-            //  //  "Assem1 - a-1",
-
-            //      "sim1 - L",
-            //   "sim1 - B",
-            //};
-            //var movnodenames = new List<string>
-            //{
-            //    // "Assem1 - Part3",
-
-            //       // "Assem1 - c-1",
-            //    //"Assem1 - Part4",
-            //    //  "Assem1 - Part3",
-            //  "sim1 - P",
-            //    "sim1 - R",
-            //     "sim1 - S",
-            //};
-            //optNodes.Clear();
-            //rest.Clear(); ;
-            //var refnodes = new List<node>();
-            //var movnodes = new List<node>();
-            ////  var refarcs = new List<arc>();
-
-            //foreach (var refname in refnodenames)
-            //{
-            //    optNodes.Add(graph.nodes.
-            //        Where(n => n is Component).Cast<Component>().ToList().
-            //        Find(x => x.name.StartsWith(refname)));
-            //}
-
-            //foreach (var movename in movnodenames)
-            //{
-            //    rest.Add(graph.nodes.
-            //        Where(n => n is Component).Cast<Component>().ToList().
-            //        Find(x => x.name.StartsWith(movename)));
-            //}
-
-            //foreach (var arc in graph.arcs.Where(a => a is arc))
-            //{
-            //    if (rest.Exists(a => a.name.Equals(arc.From.name) || a.name.Equals(arc.To.name)))
-            //    {
-            //        continue;
-            //    }
-            //    refarcs.Add(arc);
-            //}
-
-            //debug
-
             var subassembly = new List<Component>();
             var othersubassembly = new List<Component>();
-
-
             double bothsubstatiblit = 0;
             double finalscore = 0;
-
-
-            for (int i = 0; i < 2; i++)//check moving and reference
+            for (int i = 0; i < 2; i++) //check moving and reference
             {
-
-
                 if (i == 0)
                 {
-
                     subassembly = optNodes;
                     othersubassembly = rest;
-
                 }
                 else
                 {
                     subassembly = rest;
                     othersubassembly = optNodes;
                 }
-
-
                 var overallstatiblity = 0.0;
-
                 var ss = EvaluationForBinaryTree.CreateCombinedConvexHull2(subassembly);
                 var reductedfaces = AssemblyEvaluator.MergingFaces(ss.Faces.ToList());
                 var maxsigleDOF = 0.0;
                 var minsigleSB = double.PositiveInfinity;
-                double totaldof = 0;
-                double totalSBscore = 0;
-
+                // double totaldof = 0;
+                // double totalSBscore = 0;
+                var totaldof = new List<double>();
+                var totalSBscore = new List<double>();
                 foreach (var refnode in subassembly)
                 {
+                    bool anyscoreinarc = false;
+                    double signlescore;
                     bool isanyfastener = false;
                     double stability = 0;
+                    var ministablility = double.PositiveInfinity;
                     var alldof = new double[12];
-                    if (refnode.name.StartsWith("sim1 - S"))
-                    {
-                        var er = 1;
-                    }
                     var othernodes = subassembly.Where(n => !n.name.Equals(refnode.name)).ToList();
                     var refarcs =
-                        graph.arcs
-                            .Where(a => (a.XmlFrom.Equals(refnode.name) && othernodes.Exists(on => on.name.Equals(a.XmlTo)))
-                            || ((a.XmlTo.Equals(refnode.name) && othernodes.Exists(on => on.name.Equals(a.XmlFrom)))
-                            )).ToList();
+                        graph.arcs.Where(a => a is Connection).Cast<Connection>()
+                            .Where(
+                                a =>
+                                    (a.XmlFrom.Equals(refnode.name) && othernodes.Exists(on => on.name.Equals(a.XmlTo)))
+                                    ||
+                                    ((a.XmlTo.Equals(refnode.name) && othernodes.Exists(on => on.name.Equals(a.XmlFrom)))
+                                        )).ToList();
+                    var refarcsnames = new HashSet<string>();
 
                     if (subassembly.Count == 1)
                     {
-                        totaldof = 11.5;
-                        totalSBscore = 9.8;// TBD
-                        maxsigleDOF = 11.5;
+                        totaldof.Add(3.5);
+                        totalSBscore.Add(9.8);
+                        ; // TBD
+                        maxsigleDOF = 3.5;
                         minsigleSB = 9.8;
+                        Program.DegreeOfFreedoms.Add(3.5);
+                        Program.StablbiblityScores.Add(9.8);
                         continue;
+                    }
+                    foreach (Connection a in refarcs.Where(a => a is Connection))
+                    {
+                        refarcsnames.Add(a.name);
+                    }
+                    //debug
+                    var refnodename = refnode.name;
+                    var othernames = new List<string>();
+                    //debug
+                    foreach (var on in othernodes)
+                    {
+                        if (!on.Equals(refnodename))
+                            othernames.Add(on.name);
+                    }
+                    var firstkey = new HashSet<string>();
+                    if (graph.nodes.Where(n => n is Component).Cast<Component>().First(n => n.name.Equals(refnode.name))
+                        .SingleStabilityAndDOF.Keys.Any(
+                            k =>
+                                (k.Intersect(refarcsnames).Count().Equals(k.Count) &&
+                                 k.Intersect(refarcsnames).Count().Equals(refarcsnames.Count))))
+                    {
+                        firstkey = graph.nodes.Where(n => n is Component)
+                            .Cast<Component>()
+                            .First(n => n.name.Equals(refnode.name))
+                            .SingleStabilityAndDOF.Keys.First(
+                                k =>
+                                    (k.Intersect(refarcsnames).Count().Equals(k.Count) &&
+                                     k.Intersect(refarcsnames).Count().Equals(refarcsnames.Count)));
+                        anyscoreinarc = true;
+                    }
+                    var val = new List<double>();
 
+                    if (anyscoreinarc == true)
+                    {
+                        val =
+                            graph.nodes.Where(n => n is Component)
+                                .Cast<Component>()
+                                .First(n => n.name.Equals(refnode.name))
+                                .SingleStabilityAndDOF[firstkey];
+                        ministablility = val[0];
+                        for (int j = 1; j < 13; j++)
+                        {
+                            alldof[j - 1] = val[j];
+                        }
                     }
                     foreach (Connection carc in refarcs.Where(a => a is Connection))
                     {
                         if (carc.Fasteners.Count != 0)
                         {
                             isanyfastener = true;
-                            stability = 9.8;
                             break;
                         }
                     }
-                    if (isanyfastener == false)
-                        alldof = Stabilityfunctions.GetDOF(refnode, refarcs);
+                    if (refnode.name.StartsWith("PumpAssembly.21"))
+                    {
+                        var s = 123;
+                    }
 
+                    if (isanyfastener == true && anyscoreinarc == false)
+                    {
+                        alldof = new double[12];
+                    }
+                    else if (isanyfastener == false && anyscoreinarc == false)
+                    {
+                        alldof = Stabilityfunctions.GetDOF(refnode, refarcs);
+                    }
+                    /////////////anyscoreinarc == false
                     var linearDOF = new double[6];
                     var rotateDOF = new double[6];
                     var sumlinearDOF = new double();
                     var sumrotateDOF = new double();
                     for (int k = 0; k < 6; k++)
                     {
-                        linearDOF[i] = alldof[k];
-                        rotateDOF[i] = alldof[6 + k];
+                        linearDOF[k] = alldof[k];
+                        rotateDOF[k] = alldof[6 + k];
                         sumlinearDOF += alldof[k];
                         sumrotateDOF += alldof[6 + k];
                     }
-                    foreach (var d in alldof)
+                    //debug wait nima to fix bug
+                    if (linearDOF.Sum() == 3)
                     {
-                        totaldof += d;
+                        alldof = Stabilityfunctions.GetDOF(refnode, refarcs);
                     }
-                    if (totaldof > maxsigleDOF)
+
+                    var sumdof = alldof.SumAllElements();
+                    Program.DegreeOfFreedoms.Add(sumdof);
+
+                    totaldof.Add(sumdof);
+                    if (sumdof > maxsigleDOF)
                     {
-                        maxsigleDOF = totaldof;
+                        maxsigleDOF = sumdof;
                     }
-                    //cheke stability
+
+
+                    /////check stability
                     var mindir = new double[3];
-                    if ((sumlinearDOF <= 1 && sumrotateDOF <= 1) || isanyfastener == true)//need new if only 1 DOF or 1 roitate DOF
+
+
+                    if ((sumlinearDOF <= 1 && sumrotateDOF <= 1) || isanyfastener == true)
+                    //need new if only 1 DOF or 1 roitate DOF
                     {
-                        stability = 9.8; //50??
+                        minsigleSB = 9.8; //50??
+                        ministablility = 9.8;
+                        Program.StablbiblityScores.Add(9.8);
                     }
-                    else
+                    else if (anyscoreinarc == false)
                     {
                         var removalindex = Stabilityfunctions.GetSubPartRemovealDirectionIndexs(refnode, refarcs);
                         var Gdirection = new double[3];
                         ///perpendicular to the ground. TBD
-                        foreach (var indxe in removalindex)
+                        foreach (var indxe in removalindex) ///siglepare stability
                         {
-                            Gdirection = Gdirection.add(DisassemblyDirections.Directions[indxe]);
-                        }
-                        var tofaceNormal = Gdirection.normalize().multiply(-1);
+                            //Gdirection = Gdirection.add(DisassemblyDirections.Directions[indxe]);
 
-                        var totallinear = alldof[0] + alldof[1] + alldof[2] + alldof[3] + alldof[4] + alldof[5];
-                        var totalrotate = alldof[6] + alldof[7] + alldof[8] + alldof[9] + alldof[10] + alldof[11];
+                            Gdirection = Gdirection.add(DisassemblyDirections.Directions[indxe].multiply(-1));
+                        }
+
                         var selected = new double[3];
                         // stability = RotateBeforeTreeSearch.Getstabilityscore(refnode, refarcs, reduceface.Normal, out mindir);
-                        stability = Stabilityfunctions.Getstabilityscore(refnode, refarcs, tofaceNormal, out mindir, out selected);
-                        if (stability == -9.8)//at least one part can tip without any acceleration
+
+                        stability = Stabilityfunctions.Getstabilityscore(refnode, refarcs, Gdirection.normalize(),
+                            out mindir,
+                            out selected);
+                        if (stability > 9.8)
+                        {
+                            stability = 9.8;
+                        }
+                        if (stability < ministablility)
+                        {
+                            ministablility = stability;
+                        }
+                        if (stability == 0) //at least one part can tip without any acceleration
                             sub.InternalStabilityInfo.needfixture = true;
                         //minimum acceleration to tip a part
-                    }
-                    if (stability > 9.9)
-                    {
-                        var tt = 1;
-                    }
-                    if (stability < minsigleSB)
-                    {
-                        minsigleSB = stability;
-                    }
-                    totalSBscore += stability;
-                    Console.WriteLine(stability);
-                    Console.WriteLine("{0} {1} {2}", mindir[0], mindir[1], mindir[2]);
-                    //   overallstatiblity += partialminstatiblity;
-                }
-                // bothsubstatiblit += overallstatiblity;
-                //var s1 = totaldof / subassembly.Count + maxsigleDOF;
-                //var s2 = minsigleSB + totalSBscore / subassembly.Count;
-                var s1 = totaldof / subassembly.Count + maxsigleDOF - (minsigleSB + totalSBscore / subassembly.Count);
-                finalscore += totaldof / subassembly.Count + maxsigleDOF - (minsigleSB + totalSBscore / subassembly.Count); //the less the better
 
+                        var stabilityanddof = new List<double>();
+                        stabilityanddof.Add(ministablility);
+                        Program.StablbiblityScores.Add(ministablility);
+                        for (int j = 0; j < 12; j++)
+                        {
+                            stabilityanddof.Add(alldof[j]);
+                        }
+                        graph.nodes.Where(n => n is Component).Cast<Component>().First(n => n.name.Equals(refnode.name))
+                            .SingleStabilityAndDOF.Add(refarcsnames, stabilityanddof);
+                    }
+
+                    if (100000000000000 < ministablility)
+                    {
+                        var bug2 = 1;
+                    }
+                    if (ministablility < minsigleSB)
+                    {
+                        minsigleSB = ministablility;
+                    }
+
+                    totalSBscore.Add(ministablility);
+                }
+                //old stable score
+                //finalscore += totaldof.Sum() / subassembly.Count + maxsigleDOF - (minsigleSB + totalSBscore.Sum() / subassembly.Count)+GetSD(totaldof)+GetSD(totalSBscore);
+                finalscore += (totaldof.Sum() / subassembly.Count + maxsigleDOF) / 12 -
+                              ((minsigleSB + totalSBscore.Sum() / subassembly.Count)) / 19.6;
+                var score = (totaldof.Sum() / subassembly.Count + maxsigleDOF) / 12 -
+                            ((minsigleSB + totalSBscore.Sum() / subassembly.Count)) / 19.6;
+                //the less the better
+                if (finalscore < -99999)
+                {
+                    var sdf = 1;
+                }
                 if (i == 1)
                 {
+                    finalscore = (finalscore + 2) / 4;
                     UpdateInternalStabilityInfo(sub, totaldof, maxsigleDOF, totalSBscore, minsigleSB);
                     sub.InternalStabilityInfo.Totalsecore = finalscore;
                 }
+                var subnames = new List<string>();
+                var othersubnames = new List<string>();
+                var allname = new List<List<string>>();
+                foreach (var sn in subassembly)
+                {
+                    subnames.Add(sn.name);
+                }
+                foreach (var osn in othersubassembly)
+                {
+                    othersubnames.Add(osn.name);
+                }
+                allname.Add(subnames);
+                allname.Add(othersubnames);
             }
-            return finalscore;
+            return finalscore; //return score between 0-1;
         }
-        private void UpdateInternalStabilityInfo(SubAssembly sub, double totaldof, double maxsigleDOF, double totalSBscore, double minsigleSB)
-        {
 
-            sub.InternalStabilityInfo.OverAllDOF = totaldof;
-            sub.InternalStabilityInfo.MaxSingleDOF = maxsigleDOF;
-            sub.InternalStabilityInfo.OverAllTippingScore = totalSBscore;
-            sub.InternalStabilityInfo.MinSingleTippingScore = minsigleSB;
+        public static double GetSD(IEnumerable<double> values)
+        {
+            double ret = 0;
+            if (values.Count() > 0)
+            {
+                //Compute the Average      
+                double avg = values.Average();
+                //Perform the Sum of (value-avg)_2_2      
+                double sum = values.Sum(d => Math.Pow(d - avg, 2));
+                //Put it all together      
+                ret = Math.Sqrt((sum) / (values.Count() - 1));
+            }
+            return ret;
         }
-        public void EvaluateSubFirstThreeTime(SubAssembly sub, List<Component> refnodes, List<Component> movingnodes, double olpdis, out double totaltime, out double totalSD)
+
+        public void EvaluateSubFirstThreeTime(SubAssembly sub, List<Component> refnodes, List<Component> movingnodes,
+            double olpdis, out double totaltime, out double totalSD)
         {
             var movingsolids = new List<TessellatedSolid>();
             var referencesolids = new List<TessellatedSolid>();
             var movingvertex = new List<Vertex>();
+            var counter = 10e6;
+
 
             ///////
             ///moving
             ///////
             foreach (var n in movingnodes)
             {
-                movingsolids.Add(Program.solids[n.name][0]); //cheange bbbbb class
+                movingsolids.Add(DisassemblyDirectionsWithFastener.Solids[n.name][0]); //cheange bbbbb class
             }
             foreach (var s in movingsolids)
             {
@@ -301,56 +369,76 @@ namespace Assembly_Planner
                 {
                     movingvertex.Add(v);
                 }
-
             }
             var movingOBB = OBB.BuildUsingPoints(movingvertex);
             var lengths = new double[]
-            {
-                StarMath.norm1(movingOBB.CornerVertices[0].Position.subtract(movingOBB.CornerVertices[1].Position)),
-                StarMath.norm1(movingOBB.CornerVertices[2].Position.subtract(movingOBB.CornerVertices[1].Position)),
-                StarMath.norm1(movingOBB.CornerVertices[0].Position.subtract(movingOBB.CornerVertices[4].Position)),
-            };
+                {
+                    StarMath.norm1(movingOBB.CornerVertices[0].Position.subtract(movingOBB.CornerVertices[1].Position)),
+                    StarMath.norm1(movingOBB.CornerVertices[2].Position.subtract(movingOBB.CornerVertices[1].Position)),
+                    StarMath.norm1(movingOBB.CornerVertices[0].Position.subtract(movingOBB.CornerVertices[4].Position)),
+                };
             var lmax = lengths.Max();
             var lmin = lengths.Min();
             double lmid = lengths.Average() * 3 - lmax - lmin;
-            var movingweight = Math.Log(sub.Install.Moving.Mass / 1000);//in g ???????????
+            var movingweight = Math.Log(sub.Install.Moving.Mass / 1000); //in g ???????????
             var OBBvolue = Math.Log(movingOBB.Volume / 1000);
             var OBBmaxsurface = Math.Log(lmax * lmid / 1000);
             var OBBminsurface = Math.Log(lmin * lmid / 1000);
             /////
             /// distance TBD
             var movingdistance = 500;
-
             var movingdis = Math.Log(movingdistance);
             var movinginput = new double[5] { movingweight, OBBvolue, OBBmaxsurface, OBBminsurface, movingdis };
             //    log ( weight, OOBvol OBB, maxf OBB, minf moving, distance  )all in mmgs unit system 
             double movingtime, movingSD;
-            GPprocess.CalculateAssemblyTimeAndSD.GetTimeAndSD(movinginput, "moving", out movingtime, out movingSD);
+            CalculateAssemblyTimeAndSD.GetTimeAndSD(movinginput, "moving", out movingtime, out movingSD);
             ///////
             ///install
             ///////
             var allolpfs = BlockingDetermination.OverlappingSurfaces.FindAll(
-           s =>
-               (movingnodes.Any(n => n.name.Equals(s.Solid1.Name))) && (refnodes.Any(n => n.name.Equals(s.Solid2.Name)))
-               || (movingnodes.Any(n => n.name.Equals(s.Solid2.Name))) && (refnodes.Any(n => n.name.Equals(s.Solid1.Name)))
-               );
+                s =>
+                    (movingnodes.Any(n => n.name.Equals(s.Solid1.Name))) &&
+                    (refnodes.Any(n => n.name.Equals(s.Solid2.Name)))
+                    ||
+                    (movingnodes.Any(n => n.name.Equals(s.Solid2.Name))) &&
+                    (refnodes.Any(n => n.name.Equals(s.Solid1.Name)))
+                );
             int olpfeatures = 0;
             for (int i = 0; i < allolpfs.Count; i++)
             {
-                olpfeatures += allolpfs[i].Overlappings.Count;////not alignment features for now;
+                olpfeatures += allolpfs[i].Overlappings.Count; ////not alignment features for now;
             }
             var installinput = new double[6] { movingweight, OBBvolue, OBBmaxsurface, OBBminsurface, olpdis, olpfeatures };
             double installtime, instalSD;
-            GPprocess.CalculateAssemblyTimeAndSD.GetTimeAndSD(installinput, "install", out installtime, out instalSD);
+
+            CalculateAssemblyTimeAndSD.GetTimeAndSD(installinput, "install", out installtime, out instalSD);
             ///////
             ///rotate
             ///////
+            /// 
+
+
+            if (installtime < 0)
+                installtime = 0.5;
+            if (movingtime < 0)
+                movingtime = 0.5;
             totaltime = installtime + movingtime;
-            totalSD = instalSD + instalSD;
+            totalSD = instalSD + movingSD;
 
 
             var sss = 1;
         }
+
+
+        private void UpdateInternalStabilityInfo(SubAssembly sub, List<double> totaldof, double maxsigleDOF,
+            List<double> totalSBscore, double minsigleSB)
+        {
+            sub.InternalStabilityInfo.OverAllDOF = totaldof.Sum();
+            sub.InternalStabilityInfo.MaxSingleDOF = maxsigleDOF;
+            sub.InternalStabilityInfo.OverAllTippingScore = totalSBscore.Sum();
+            sub.InternalStabilityInfo.MinSingleTippingScore = minsigleSB;
+        }
+
         private HashSet<Double[]> InsertionDirectionsFromRemovalDirections(SubAssembly sub, List<Component> optNodes,
             HashSet<int> validDirs)
         {
@@ -371,12 +459,49 @@ namespace Assembly_Planner
             return dirs;
         }
 
-        private List<Fastener> ConnectingArcsFastener(List<Connection> connectingArcs)
+        private List<Fastener> ConnectingArcsFastener(List<Connection> connectingArcs,
+            HashSet<Component> subassemblyNodes, List<Component> optNodes)
         {
+            // if all of the parts exist in the partsLockedByFastener, are in the subassemblyNodes, add the fastenrs to subAssembly,
+            // otherwise it's removed before
+
+            if (!AdjacentParts.Any())
+            {
+                foreach (Component comp in Program.AssemblyGraph.nodes)
+                {
+                    var adjacents = new HashSet<Component>();
+                    foreach (Connection compArc in comp.arcs.Where(a => a is Connection))
+                    {
+                        if (compArc.From.name == comp.name)
+                            adjacents.Add((Component)compArc.To);
+                        else adjacents.Add((Component)compArc.From);
+                    }
+                    AdjacentParts.Add(comp, adjacents);
+                }
+            }
             var fasteners = new List<Fastener>();
             foreach (var arc in connectingArcs)
+            {
                 foreach (var fas in arc.Fasteners.Where(a => !fasteners.Contains(a)))
-                    fasteners.Add(fas);
+                {
+                    if (fas.PartsLockedByFastener.All(ind => subassemblyNodes.Contains(Program.AssemblyGraph.nodes[ind])))
+                        fasteners.Add(fas);
+                }
+            }
+
+            // now see if there is any pin:
+            var partsWithPins = subassemblyNodes.Where(n => n.Pins.Any()).ToList();
+            if (!partsWithPins.Any())
+                return fasteners;
+            foreach (var part in partsWithPins)
+            {
+                var howManyInOption = AdjacentParts[part].Count(optNodes.Contains);
+                if (AdjacentParts[part].All(subassemblyNodes.Contains) && howManyInOption > 0 &&
+                    howManyInOption < AdjacentParts[part].Count)
+                {
+                    fasteners.AddRange(part.Pins);
+                }
+            }
             return fasteners;
         }
 
@@ -395,7 +520,8 @@ namespace Assembly_Planner
             if (movingNodes.Count == 1)
             {
                 var nodeName = movingNodes[0].name;
-                movingAssembly = new SubAssembly(new HashSet<Component>(movingNodes), ConvexHullsForParts[nodeName], movingNodes[0].Mass,
+                movingAssembly = new SubAssembly(new HashSet<Component>(movingNodes), ConvexHullsForParts[nodeName],
+                    movingNodes[0].Mass,
                     movingNodes[0].Volume, new Vertex(movingNodes[0].CenterOfMass));
                 //movingAssembly = new Part(nodeName, movingNodes[0].Volume, movingNodes[0].Volume,
                 //    ConvexHullsForParts[nodeName], new Vertex(movingNodes[0].CenterOfMass));
@@ -406,7 +532,8 @@ namespace Assembly_Planner
                 var VolumeM = GetSubassemblyVolume(movingNodes);
                 var MassM = GetSubassemblyMass(movingNodes);
                 var centerOfMass = GetSubassemblyCenterOfMass(movingNodes);
-                movingAssembly = new SubAssembly(new HashSet<Component>(movingNodes), combinedCVXHullM, MassM, VolumeM, centerOfMass);
+                movingAssembly = new SubAssembly(new HashSet<Component>(movingNodes), combinedCVXHullM, MassM, VolumeM,
+                    centerOfMass);
             }
 
             var referenceHyperArcnodes = new List<Component>();
@@ -414,7 +541,8 @@ namespace Assembly_Planner
             if (referenceHyperArcnodes.Count == 1)
             {
                 var nodeName = referenceHyperArcnodes[0].name;
-                refAssembly = new SubAssembly(new HashSet<Component>(referenceHyperArcnodes), ConvexHullsForParts[nodeName],
+                refAssembly = new SubAssembly(new HashSet<Component>(referenceHyperArcnodes),
+                    ConvexHullsForParts[nodeName],
                     referenceHyperArcnodes[0].Mass, referenceHyperArcnodes[0].Volume,
                     new Vertex(referenceHyperArcnodes[0].CenterOfMass));
                 //refAssembly = new Part(nodeName, referenceHyperArcnodes[0].Mass, referenceHyperArcnodes[0].Volume,
@@ -427,7 +555,8 @@ namespace Assembly_Planner
                 var VolumeR = GetSubassemblyVolume(referenceHyperArcnodes);
                 var MassR = GetSubassemblyMass(referenceHyperArcnodes);
                 var centerOfMass = GetSubassemblyCenterOfMass(referenceHyperArcnodes);
-                refAssembly = new SubAssembly(new HashSet<Component>(referenceHyperArcnodes), combinedCVXHullR, MassR, VolumeR, centerOfMass);
+                refAssembly = new SubAssembly(new HashSet<Component>(referenceHyperArcnodes), combinedCVXHullR, MassR,
+                    VolumeR, centerOfMass);
             }
             var combinedCvxHull = CreateCombinedConvexHull(refAssembly.CVXHull, movingAssembly.CVXHull);
             List<PolygonalFace> movingFacesInCombined;
@@ -452,13 +581,17 @@ namespace Assembly_Planner
         private Vertex CombinedCenterOfMass(SubAssembly newSubassembly)
         {
             return
-                new Vertex(new[]{(newSubassembly.Install.Moving.CenterOfMass.Position[0] +
-                     newSubassembly.Install.Reference.CenterOfMass.Position[0]) / 2,
+                new Vertex(new[]
+                {
+                    (newSubassembly.Install.Moving.CenterOfMass.Position[0] +
+                     newSubassembly.Install.Reference.CenterOfMass.Position[0])/2,
                     (newSubassembly.Install.Moving.CenterOfMass.Position[1] +
-                     newSubassembly.Install.Reference.CenterOfMass.Position[1]) / 2,
+                     newSubassembly.Install.Reference.CenterOfMass.Position[1])/2,
                     (newSubassembly.Install.Moving.CenterOfMass.Position[2] +
-                     newSubassembly.Install.Reference.CenterOfMass.Position[2]) / 2});
+                     newSubassembly.Install.Reference.CenterOfMass.Position[2])/2
+                });
         }
+
         private TVGLConvexHull CreateCombinedConvexHull(TVGLConvexHull refCVXHull, TVGLConvexHull movingCVXHull)
         {
             var pointCloud = new List<Vertex>(refCVXHull.Vertices);
@@ -486,6 +619,7 @@ namespace Assembly_Planner
         {
             return nodes.Sum(n => n.Mass);
         }
+
         private Vertex GetSubassemblyCenterOfMass(List<Component> nodes)
         {
             var sumMx = 0.0;
@@ -626,7 +760,10 @@ namespace Assembly_Planner
                         var pNode = stack.Pop();
                         visited.Add(pNode);
                         globalVisited.Add(pNode);
-                        var a2 = pNode.arcs.Where(a => a is Connection).ToList();
+                        var a2 = new List<Connection>();
+                        lock (pNode.arcs)
+                            a2 = pNode.arcs.Where(a => a is Connection).Cast<Connection>().ToList();
+
                         foreach (Connection arc in a2)
                         {
                             if (!A.Contains(arc.From) || !A.Contains(arc.To) ||
@@ -646,14 +783,26 @@ namespace Assembly_Planner
 
         private static double DetermineDistanceToSeparateHull(SubAssembly newSubAsm, Double[] insertionDirection)
         {
-            var refMaxValue = GeometryFunctions.FindMaxPlaneHeightInDirection(newSubAsm.Install.Reference.CVXHull.Vertices, insertionDirection);
-            var refMinValue = GeometryFunctions.FindMinPlaneHeightInDirection(newSubAsm.Install.Reference.CVXHull.Vertices, insertionDirection);
+            var refMaxValue =
+                GeometryFunctions.FindMaxPlaneHeightInDirection(newSubAsm.Install.Reference.CVXHull.Vertices,
+                    insertionDirection);
+            var refMinValue =
+                GeometryFunctions.FindMinPlaneHeightInDirection(newSubAsm.Install.Reference.CVXHull.Vertices,
+                    insertionDirection);
 
-            var movingMaxValue = GeometryFunctions.FindMaxPlaneHeightInDirection(newSubAsm.Install.Moving.CVXHull.Vertices, insertionDirection);
-            var movingMinValue = GeometryFunctions.FindMinPlaneHeightInDirection(newSubAsm.Install.Moving.CVXHull.Vertices, insertionDirection);
+            var movingMaxValue =
+                GeometryFunctions.FindMaxPlaneHeightInDirection(newSubAsm.Install.Moving.CVXHull.Vertices,
+                    insertionDirection);
+            var movingMinValue =
+                GeometryFunctions.FindMinPlaneHeightInDirection(newSubAsm.Install.Moving.CVXHull.Vertices,
+                    insertionDirection);
 
             var distanceToFree = Math.Abs(refMaxValue - movingMinValue);
-            if (distanceToFree < 0) { distanceToFree = 0; throw new Exception("How is distance to free less than zero?"); }
+            if (distanceToFree < 0)
+            {
+                distanceToFree = 0;
+                throw new Exception("How is distance to free less than zero?");
+            }
             return distanceToFree + (movingMaxValue - movingMinValue) + (refMaxValue - refMinValue);
         }
     }

@@ -10,9 +10,9 @@ namespace Assembly_Planner
     {
         internal static string SeperateHyperarcs = "Seperated";
         internal static string SCC = "SCC";
+        internal static string gSCC = "FrozenNodes";
         internal static string Removable = "Removable";
         internal static string SingleNode = "Done";
-        internal static string gSCC = "FrozenNodes";
         internal static int BeamWidth = 50;
         internal static double Parallel = 1e-5;
         internal static string Gear = "Gear";

@@ -15,9 +15,7 @@ namespace Assembly_Planner
         {
             // The function takes every hyperarc with "seperate" lable and generates its SCCs with respect to 
             // the candidate direction. After generation, a new hyperarc is added to the graph with local lable "SCC".
-            var seperateHys =
-                seperate.Where(sepNode => !RecursiveOptimizedSearch.FrozenSequence.Any(seq => seq.Contains(sepNode)))
-                    .Select(n => new hyperarc("", new List<node> { n })).ToList();
+            var seperateHys = new List<hyperarc>();
             seperateHys.AddRange(graph.hyperarcs.Where(h => h.localLabels.Contains(DisConstants.gSCC)));
 
             var stack = new Stack<hyperarc>();

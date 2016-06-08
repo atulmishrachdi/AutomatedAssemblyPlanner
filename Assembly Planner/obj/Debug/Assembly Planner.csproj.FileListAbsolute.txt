@@ -90,3 +90,6 @@ C:\DMDII Project\VAP Container\Repo\vap\AAP\Assembly Planner\obj\Debug\Interop.M
 C:\DMDII Project\VAP Container\Repo\vap\AAP\Assembly Planner\obj\Debug\Assembly Planner.csproj.ResolveComReference.cache
 C:\DMDII Project\VAP Container\Repo\vap\AAP\Assembly Planner\obj\Debug\Assembly Planner.dll
 C:\DMDII Project\VAP Container\Repo\vap\AAP\Assembly Planner\obj\Debug\Assembly Planner.pdb
+C:\DMDII Project\Assembly Planning\Assembly Planner\bin\Debug\OptimizationToolbox.dll
+C:\DMDII Project\Assembly Planning\Assembly Planner\bin\Debug\RandomGen.dll
+C:\DMDII Project\Assembly Planning\Assembly Planner\bin\Debug\OptimizationToolbox.pdb

@@ -89,27 +89,21 @@ namespace Assembly_Planner
         /// <summary>
         /// The simple flat screw driver
         /// </summary>
-        FlatBlade ,
+        FlatBlade,
         /// <summary>
         /// The phillips blade screw driver, 4 sided
         /// </summary>
-        PhillipsBlade
+        PhillipsBlade,
+        /// <summary>
+        /// The power screw driver
+        /// </summary>
+        powerscrewdriver
     }
     /// <summary>
     /// Class Fastener.
     /// </summary>
-    public class Fastener
+    public class Fastener : FastenerBase
     {
-
-        /// <summary>
-        /// The tesselated solid
-        /// </summary>
-        [XmlIgnore]
-        public TessellatedSolid Solid;
-        /// <summary>
-        /// The removal direction
-        /// </summary>
-        public int RemovalDirection;
         /// <summary>
         /// The overall length
         /// </summary>
@@ -143,18 +137,6 @@ namespace Assembly_Planner
         /// </summary>
         public int NumberOfThreads;
         /// <summary>
-        /// The certainity of this classification
-        /// </summary>
-        public double Certainty;
-        /// <summary>
-        /// The tool if identified
-        /// </summary>
-        public Tool Tool;
-        /// <summary>
-        /// The size of the tool if identified
-        /// </summary>
-        public double ToolSize;
-        /// <summary>
         /// The nuts if available
         /// </summary>
         public List<Nut> Nuts;
@@ -163,9 +145,17 @@ namespace Assembly_Planner
         /// </summary>
         public List<Washer> Washer;
         /// <summary>
-        /// The fastener type
+        /// The Parts Locked By Fastener
         /// </summary>
-        public List<int> PartsLockedByFastener = new List<int>();
+        public List<int> PartsLockedByFastener;
+
+        /// <summary>
+        /// for every part that is locked by this fastener, (if they are more than 2), I add one triangle that is touching the
+        /// surface of the fastener. The order is the same as the order of the parts added to "PartsLockedByFastener". I can
+        /// use this in order to understand which part is on the top, which one is on the bottom. In other words to understand
+        /// the order of the PartsLockedByFastener. This will help later to install fastener at the right moment.
+        /// </summary>
+        private List<PolygonalFace> TrianglesOnTheLockedParts;
 
         internal static void AddFastenersInformation(designGraph assemblyGraph, Dictionary<string, List<TessellatedSolid>> solidsNoFastener,
             Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive)
@@ -176,7 +166,6 @@ namespace Assembly_Planner
                 counter++;
                 var lockedByTheFastener = PartsLockedByTheFastenerFinder(fastener.Solid, solidsNoFastener, solidPrimitive);
                 AddFastenerToArc(assemblyGraph, lockedByTheFastener, fastener);
-
             }
             // So, by this point, if there is a fastener between two or more parts, a new local variable
             // is added to their arc which shows the direction of freedom of the fastener.
@@ -186,22 +175,42 @@ namespace Assembly_Planner
             // There is still a possibility here: if any of the potential fasteners are holding 2 or more parts
             // The point is that they can be either a washer, nut or fastener. But if it is a fastener, I need 
             // to find the parts that it's holding and add it to their arc
-            counter = 0;
             foreach (var possible in FastenerDetector.PotentialFastener)
             {
                 counter++;
                 var locked = PartsLockedByTheFastenerFinder(possible, solidsNoFastener, solidPrimitive);
                 if (locked.Count < 2)
-                    continue;
+                {
+                    if (locked.Count == 1)
+                    {
+                        var comp = (Component)assemblyGraph[locked[0]];
+                        var pin = new Fastener()
+                        {
+                            RemovalDirection =
+                                FastenerDetector.RemovalDirectionFinderUsingObb(possible,
+                                    BoundingGeometry.OrientedBoundingBoxDic[possible]),
+                            Solid = possible,
+                            Diameter = BoundingGeometry.BoundingCylinderDic[possible].Radius
+                        };
+                        if (comp.Pins == null) comp.Pins = new List<Fastener>();
+                        comp.Pins.Add(pin);
+                    }
+                }
+                PolygonalFace topPlane = null;
                 var fastener = new Fastener()
                 {
                     RemovalDirection =
-                        FastenerDetector.RemovalDirectionFinderUsingObb(possible,
-                            BoundingGeometry.OrientedBoundingBoxDic[possible]),
+                        FastenerDetector.RemovalDirectionFinderUsingObbWithTopPlane(possible,
+                            BoundingGeometry.OrientedBoundingBoxDic[possible], out topPlane),
                     Solid = possible,
                     Diameter = BoundingGeometry.BoundingCylinderDic[possible].Radius
                 };
                 AddFastenerToArc(assemblyGraph, locked, fastener);
+                /*(if (fastener.PartsLockedByFastener.Count > 2)
+                    // if there are more than 2 parts locked by the fastener, sort them based on their distance to the top plane of the fastener
+                {
+
+                }*/
             }
         }
 
@@ -210,35 +219,23 @@ namespace Assembly_Planner
             fastener.PartsLockedByFastener = new List<int>();
             foreach (
                 Connection connection in
-                    assemblyGraph.arcs.Where(a => lockedByTheFastener.Contains(a.From.name) && lockedByTheFastener.Contains(a.To.name))
+                    assemblyGraph.arcs.Where(
+                        a => lockedByTheFastener.Contains(a.From.name) && lockedByTheFastener.Contains(a.To.name))
                         .ToList())
             {
                 if (lockedByTheFastener.Count > 2)
+                {
                     foreach (var solid in lockedByTheFastener)
-                        fastener.PartsLockedByFastener.Add(assemblyGraph.nodes.IndexOf(assemblyGraph.nodes.Where(n => n.name == solid).ToList()[0]));
+                    {
+                        var nodeInd =
+                            assemblyGraph.nodes.IndexOf(assemblyGraph.nodes.Where(n => n.name == solid).ToList()[0]);
+                        if (fastener.PartsLockedByFastener.Contains(nodeInd)) continue;
+                        fastener.PartsLockedByFastener.Add(nodeInd);
+                    }
+                }
                 connection.Fasteners.Add(fastener);
             }
         }
-        private static void AddRemovalInformationToArcs(designGraph graph,
-            List<TessellatedSolid> lockedByTheFastener, int RD, double depth, double radius)
-        {
-            var partsName = lockedByTheFastener.Select(part => part.Name).ToList();
-            foreach (
-                Connection connection in
-                    graph.arcs.Where(a => partsName.Contains(a.From.name) && partsName.Contains(a.To.name))
-                        .ToList())
-            {
-                var fasten = new Fastener();
-                fasten.RemovalDirection = RD;
-                fasten.Diameter = radius * 2;
-                fasten.EngagedLength = depth;
-                if (lockedByTheFastener.Count > 2)
-                    foreach (var solid in lockedByTheFastener)
-                        fasten.PartsLockedByFastener.Add(graph.nodes.IndexOf(graph.nodes.Where(n => n.name == solid.Name).ToList()[0]));
-                connection.Fasteners.Add(fasten);
-            }
-        }
-
 
         private static List<string> PartsLockedByTheFastenerFinder(TessellatedSolid fastener, Dictionary<string, List<TessellatedSolid>> solidsNoFastener,
             Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive)
@@ -248,7 +245,6 @@ namespace Assembly_Planner
             {
                 foreach (var solid in subAssem.Value)
                 {
-                    var solidPrimitives = solidPrimitive[solid];
                     // This has a way simpler blocking determination code. Check it out:
                     if (!BlockingDetermination.BoundingBoxOverlap(fastener, solid)) continue;
                     if (!BlockingDetermination.ConvexHullOverlap(fastener, solid)) continue;
@@ -260,6 +256,24 @@ namespace Assembly_Planner
             }
             return lockedByTheFastener;
         }
+
+        private static bool FastenerPrimitiveOverlap(List<PrimitiveSurface> fastenertPrimitives, List<PrimitiveSurface> solidPrimitives)
+        {
+            foreach (var primitiveA in fastenertPrimitives)
+            {
+                foreach (var primitiveB in solidPrimitives)
+                {
+                    if (primitiveA is Cylinder && primitiveB is Cylinder)
+                        if (PrimitivePrimitiveInteractions.CylinderCylinderOverlappingCheck((Cylinder)primitiveA, (Cylinder)primitiveB))
+                            return true;
+                    if (primitiveA is Cone && primitiveB is Cone)
+                        if (PrimitivePrimitiveInteractions.ConeConeOverlappingCheck((Cone)primitiveA, (Cone)primitiveB))
+                            return true;
+                }
+            }
+            return false;
+        }
+
 
         /*private static List<int> BoltRemovalDirection(TessellatedSolid fastener)
         {
@@ -288,25 +302,12 @@ namespace Assembly_Planner
         }*/
     }
 
-    public class Nut
+    public class Nut : FastenerBase
     {
-        /// <summary>
-        [XmlIgnore]
-        /// The tesselated solid
-        /// </summary>
-        public TessellatedSolid Solid;
-        /// <summary>
-        /// The removal direction
-        /// </summary>
-        public int RemovalDirection;
         /// <summary>
         /// The overall length
         /// </summary>
         public double OverallLength;
-        /// <summary>
-        /// The diameter
-        /// </summary>
-        public double Diameter;
         /// <summary>
         /// The number of threads if available
         /// </summary>
@@ -319,35 +320,11 @@ namespace Assembly_Planner
         /// The washers if available
         /// </summary>
         public List<Washer> Washer;
-        /// <summary>
-        /// The tool if identified
-        /// </summary>
-        public Tool Tool;
-        /// <summary>
-        /// The size of the tool if identified
-        /// </summary>
-        public double ToolSize;
-        /// <summary>
-        /// The certainty
-        /// </summary>
-        public double Certainty;
     }
 
-    public class Washer
+    public class Washer : FastenerBase
     {
-        /// <summary>
-        [XmlIgnore]
-        /// The tesselated solid
-        /// </summary>
-        public TessellatedSolid Solid;
-        /// <summary>
-        /// The removal direction
-        /// </summary>
-        public int RemovalDirection;
-        /// <summary>
-        /// The certainty
-        /// </summary>
-        public double Certainty;
+
     }
 
 }
