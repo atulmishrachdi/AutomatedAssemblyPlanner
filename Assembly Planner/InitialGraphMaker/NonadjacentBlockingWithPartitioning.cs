@@ -315,7 +315,7 @@ namespace Assembly_Planner
             {
                 if (prtn.InnerPartition != null)
                     RayIntersects(prtn.InnerPartition, ray);
-                foreach (var tri in prtn.SolidTriangles.Where(t => !memoFace.Contains(t)))
+                foreach (var tri in prtn.SolidTriangles.Where(t => !memoFace.Contains(t) && t.Vertices.Count == 3))
                 {
                     memoFace.Add(tri);
                     if (!GeometryFunctions.RayIntersectsWithFaceNABD(ray, tri))

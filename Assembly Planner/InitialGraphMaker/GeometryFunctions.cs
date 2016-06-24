@@ -34,6 +34,14 @@ namespace Assembly_Planner
             return vector.dotProduct(plane.Normal);
         }
 
+        internal static double DistanceBetweenVertexAndPlane(double[] ver, double[] planeNormal, double[] pointOnLine)
+        {
+            // create a vector from a vertex on plane to the ver
+            var vector = ver.subtract(pointOnLine);
+            // distance is the dot product of the normal and the vector:
+            return vector.dotProduct(planeNormal);
+        }
+
         internal static double DistanceBetweenTwoPlanes(PolygonalFace plane1, PolygonalFace plane2)
         {
             return
@@ -97,16 +105,14 @@ namespace Assembly_Planner
                 {
                     DistanceBetweenTwoVertices(triangle.Vertices[0].Position, triangle.Vertices[1].Position),
                     new[] {triangle.Vertices[0], triangle.Vertices[1]}
-                },
-                {
-                    DistanceBetweenTwoVertices(triangle.Vertices[0].Position, triangle.Vertices[2].Position),
-                    new[] {triangle.Vertices[0], triangle.Vertices[2]}
-                },
-                {
-                    DistanceBetweenTwoVertices(triangle.Vertices[1].Position, triangle.Vertices[2].Position),
-                    new[] {triangle.Vertices[1], triangle.Vertices[2]}
                 }
             };
+            var dis1 = DistanceBetweenTwoVertices(triangle.Vertices[0].Position, triangle.Vertices[2].Position);
+            var dis2 = DistanceBetweenTwoVertices(triangle.Vertices[1].Position, triangle.Vertices[2].Position);
+            if (dic.ContainsKey(dis1)) dis1 += 1e-6;
+            dic.Add(dis1, new[] { triangle.Vertices[0], triangle.Vertices[2] });
+            if (dic.ContainsKey(dis2)) dis2 += 1e-6;
+            dic.Add(dis2, new[] { triangle.Vertices[1], triangle.Vertices[2] });
             var sortedKey = dic.Keys.ToList();
             sortedKey.Sort();
             sorted[0] = dic[sortedKey[0]];
@@ -122,7 +128,7 @@ namespace Assembly_Planner
             var s1 = (face.Normal.dotProduct(w)) / (face.Normal.dotProduct(ray.Direction));
             return new[]
             {
-                ray.Position[0] - s1*ray.Direction[0], 
+                ray.Position[0] - s1*ray.Direction[0],
                 ray.Position[1] - s1*ray.Direction[1],
                 ray.Position[2] - s1*ray.Direction[2]
             };
@@ -138,17 +144,19 @@ namespace Assembly_Planner
             var pointOnTrianglesPlane = new[] { ray.Position[0] - s1 * ray.Direction[0], ray.Position[1] - s1 * ray.Direction[1], ray.Position[2] - s1 * ray.Direction[2] };
             hittingPoint = pointOnTrianglesPlane;
             outer = true;
+            if (pointOnTrianglesPlane.subtract(ray.Position).dotProduct(ray.Direction) < 0.001)
+                return false; // on the opposite side
+            if (ray.Direction.dotProduct(face.Normal) > -0.06) return false;
             var v0 = face.Vertices[0].Position.subtract(pointOnTrianglesPlane);
             var v1 = face.Vertices[1].Position.subtract(pointOnTrianglesPlane);
             var v2 = face.Vertices[2].Position.subtract(pointOnTrianglesPlane);
-            var crossv0v1 = v0.crossProduct(v1);
-            var crossv1v2 = v1.crossProduct(v2);
+            var crossv0v1 = v0.crossProduct(v1).normalize();
+            var crossv1v2 = v1.crossProduct(v2).normalize();
             var dot = crossv0v1.dotProduct(crossv1v2);
-            if (dot < 2.1) return false;
-            var crossv2v0 = v2.crossProduct(v0);
+            if (dot < 0 || double.IsNaN(dot)) return false;
+            var crossv2v0 = v2.crossProduct(v0).normalize();
             dot = crossv1v2.dotProduct(crossv2v0);
-            outer = !(ray.Direction.dotProduct(face.Normal) > -0.06);
-            return (dot >= 2.1);
+            return (dot >= 0);
         }
 
         public static bool RayIntersectsWithFace(Ray ray, PolygonalFace face)
@@ -222,7 +230,7 @@ namespace Assembly_Planner
 
         public static bool RayIntersectsWithFaceNABD(Ray ray, PolygonalFace face)
         {
-            if (ray.Direction.dotProduct(face.Normal) > -0.06) return false;
+            if (ray.Direction.dotProduct(face.Normal) > -0.15) return false;
             var w = ray.Position.subtract(face.Vertices[0].Position);
             var s1 = (face.Normal.dotProduct(w)) / (face.Normal.dotProduct(ray.Direction));
             //var v = new double[] { w[0] + s1 * ray.Direction[0] + point[0], w[1] + s1 * ray.Direction[1] + point[1], w[2] + s1 * ray.Direction[2] + point[2] };
@@ -257,16 +265,16 @@ namespace Assembly_Planner
             if (dis1 >= dis2 && dis1 >= dis3)
             {
                 facePrepToRD1 =
-                    new PolygonalFace(new[] { new Vertex(cornerVer[0].Position), new Vertex(cornerVer[3].Position), 
+                    new PolygonalFace(new[] { new Vertex(cornerVer[0].Position), new Vertex(cornerVer[3].Position),
                         new Vertex(cornerVer[7].Position) }, ((cornerVer[0].Position.subtract(cornerVer[3].Position)).crossProduct(
                             cornerVer[7].Position.subtract(cornerVer[3].Position))).normalize());
                 facePrepToRD2 =
-                    new PolygonalFace(new[] { new Vertex(cornerVer[1].Position), new Vertex(cornerVer[2].Position), 
+                    new PolygonalFace(new[] { new Vertex(cornerVer[1].Position), new Vertex(cornerVer[2].Position),
                         new Vertex(cornerVer[6].Position) }, ((cornerVer[6].Position.subtract(cornerVer[2].Position)).crossProduct(
                             cornerVer[1].Position.subtract(cornerVer[2].Position))).normalize());
                 return new[]
                 {
-                    new PolygonalFace(new[] {new Vertex(cornerVer[0].Position), new Vertex(cornerVer[1].Position), 
+                    new PolygonalFace(new[] {new Vertex(cornerVer[0].Position), new Vertex(cornerVer[1].Position),
                         new Vertex(cornerVer[3].Position)}, ((cornerVer[3].Position.subtract(cornerVer[0].Position)).crossProduct(
                             cornerVer[1].Position.subtract(cornerVer[0].Position))).normalize()),
                     new PolygonalFace(new[] {new Vertex(cornerVer[1].Position),new Vertex(cornerVer[2].Position),
@@ -277,19 +285,19 @@ namespace Assembly_Planner
             if (dis2 >= dis1 && dis2 >= dis3)
             {
                 facePrepToRD1 =
-                    new PolygonalFace(new[] { new Vertex(cornerVer[1].Position), new Vertex(cornerVer[0].Position), 
+                    new PolygonalFace(new[] { new Vertex(cornerVer[1].Position), new Vertex(cornerVer[0].Position),
                         new Vertex(cornerVer[4].Position) }, ((cornerVer[1].Position.subtract(cornerVer[0].Position)).crossProduct(
                             cornerVer[4].Position.subtract(cornerVer[0].Position))).normalize());
                 facePrepToRD2 =
-                    new PolygonalFace(new[] { new Vertex(cornerVer[2].Position), new Vertex(cornerVer[3].Position), 
+                    new PolygonalFace(new[] { new Vertex(cornerVer[2].Position), new Vertex(cornerVer[3].Position),
                         new Vertex(cornerVer[7].Position) }, ((cornerVer[7].Position.subtract(cornerVer[3].Position)).crossProduct(
                             cornerVer[2].Position.subtract(cornerVer[3].Position))).normalize());
                 return new[]
                 {
-                    new PolygonalFace(new[] {new Vertex(cornerVer[0].Position), new Vertex(cornerVer[1].Position), 
+                    new PolygonalFace(new[] {new Vertex(cornerVer[0].Position), new Vertex(cornerVer[1].Position),
                         new Vertex(cornerVer[3].Position)}, ((cornerVer[3].Position.subtract(cornerVer[0].Position)).crossProduct(
                             cornerVer[1].Position.subtract(cornerVer[0].Position))).normalize()),
-                    new PolygonalFace(new[] {new Vertex(cornerVer[1].Position), new Vertex(cornerVer[2].Position), 
+                    new PolygonalFace(new[] {new Vertex(cornerVer[1].Position), new Vertex(cornerVer[2].Position),
                         new Vertex(cornerVer[3].Position)}, ((cornerVer[1].Position.subtract(cornerVer[2].Position)).crossProduct(
                             cornerVer[3].Position.subtract(cornerVer[2].Position))).normalize())
                 };
