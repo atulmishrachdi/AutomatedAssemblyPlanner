@@ -47,7 +47,7 @@ namespace Assembly_Planner
                 AutoNonthreadedFastenerDetection.Run(solidPrimitive, multipleRefs);
             else
             {
-                if (threaded == 2) // all of them are threaded
+                if (threaded == 1) // all of them are threaded
                     AutoThreadedFastenerDetection.Run(solidPrimitive, multipleRefs);
                 else // some are threaded, some not
                     AutoSemiThreadedFastenerDetection.Run(solidPrimitive, multipleRefs);
@@ -86,11 +86,12 @@ namespace Assembly_Planner
             var equalPrim = new Dictionary<TessellatedSolid, Dictionary<PrimitiveSurface, List<PrimitiveSurface>>>();
             foreach (var solid in uniqueParts)
             {
+                if (solidPrimitive[solid].Count == 0) equalPrim.Add(solid, new Dictionary<PrimitiveSurface, List<PrimitiveSurface>>());
                 var primEqualArea = new Dictionary<PrimitiveSurface, List<PrimitiveSurface>>();
                 foreach (var prim in solidPrimitive[solid].Where(p => p is Flat))
                 {
-                    var equalExist = primEqualArea.Keys.Where(p => Math.Abs(p.Area - prim.Area) < 0.1).ToList();
-                    if (!equalExist.Any()) primEqualArea.Add(prim, new List<PrimitiveSurface> {prim});
+                    var equalExist = primEqualArea.Keys.Where(p => Math.Abs(p.Area - prim.Area) < 0.001 * p.Area).ToList();
+                    if (!equalExist.Any()) primEqualArea.Add(prim, new List<PrimitiveSurface> { prim });
                     else
                     {
                         foreach (var equal in equalExist)

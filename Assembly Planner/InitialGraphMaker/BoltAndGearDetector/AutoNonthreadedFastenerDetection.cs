@@ -233,7 +233,24 @@ namespace Assembly_Planner
 
         internal static bool IsItAllen(List<PrimitiveSurface> candidateHexVal)
         {
-            return candidateHexVal.Any(p => p.OuterEdges.Any(e => e.Curvature == CurvatureType.Concave));
+            Flat p1 = (Flat) candidateHexVal[0], p2 = null;
+            for (var i = 1; i < candidateHexVal.Count; i++)
+            {
+                var prim = (Flat) candidateHexVal[i];
+                if (Math.Abs(prim.Normal.dotProduct(p1.Normal)) < 0.9)
+                {
+                    p2 = prim;
+                    break;
+                }
+            }
+            var refVector = p1.Normal.crossProduct(p2.Normal).normalize();
+            return
+                candidateHexVal.Any(
+                    p =>
+                        p.OuterEdges.Any(
+                            e =>
+                                1 - Math.Abs(e.Vector.dotProduct(refVector)) < 0.8 &&
+                                e.Curvature == CurvatureType.Concave));
         }
 
         internal static bool IsItNut(List<Cylinder> cylinders, TessellatedSolid boltOrNut)
