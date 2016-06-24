@@ -911,14 +911,14 @@ namespace Assembly_Planner
                 rotateDOF[1] = 0.5;
             }
             //no cylindar rotateion
-            Console.WriteLine("linearDOF");
+            //Console.WriteLine("linearDOF");
             //Console.WriteLine("X, -X, Y, -Y, Z, -Z");
-            Console.WriteLine("X:{0}, -X:{1}, Y:{2}, -Y:{3}, Z:{4}, -Z:{5}", linearDOF[0], linearDOF[1], linearDOF[2],
-                linearDOF[3], linearDOF[4], linearDOF[5]);
-            Console.WriteLine("rotateDOF");
+            //Console.WriteLine("X:{0}, -X:{1}, Y:{2}, -Y:{3}, Z:{4}, -Z:{5}", linearDOF[0], linearDOF[1], linearDOF[2],
+            //    linearDOF[3], linearDOF[4], linearDOF[5]);
+            //Console.WriteLine("rotateDOF");
 
-            Console.WriteLine("X:{0}, -X:{1}, Y:{2}, -Y:{3}, Z:{4}, -Z:{5}", rotateDOF[0], rotateDOF[1], rotateDOF[2],
-                rotateDOF[3], rotateDOF[4], rotateDOF[5]);
+            //Console.WriteLine("X:{0}, -X:{1}, Y:{2}, -Y:{3}, Z:{4}, -Z:{5}", rotateDOF[0], rotateDOF[1], rotateDOF[2],
+            //    rotateDOF[3], rotateDOF[4], rotateDOF[5]);
             var alldof = new double[12];
             for (int i = 0; i < 6; i++)
             {
