@@ -11,7 +11,6 @@ using GraphSynth.Representation;
 using StarMathLib;
 using TVGL;
 using TVGL;
-using PrimitiveClassificationOfTessellatedSolids;
 
 namespace Assembly_Planner
 {
@@ -27,14 +26,14 @@ namespace Assembly_Planner
             Console.WriteLine("Classifying Primitives for " + parts.Count + " unique parts ....");
             var partPrimitive = new Dictionary<TessellatedSolid, List<PrimitiveSurface>>();
 
-            Parallel.ForEach(parts, solid =>
-            //foreach (var solid in parts)
+          //  Parallel.ForEach(parts, solid =>
+           foreach (var solid in parts)
             {
-                var solidPrim = TesselationToPrimitives.Run(solid);
+                var solidPrim = TVGL.Primitive_Classification.Run(solid);
                 lock (partPrimitive)
                     partPrimitive.Add(solid, solidPrim);
             }
-             );//
+            // );//
             s.Stop();
             Console.WriteLine("Primitive classification is done in:" + "     " + s.Elapsed);
             return partPrimitive;
@@ -582,10 +581,10 @@ namespace Assembly_Planner
                 {
                     var b = solid2.Faces[j];
                     if (Math.Abs(a.Normal.dotProduct(b.Normal) + 1) > 0.0055) continue; // 0.0055
-                    counter2 ++;
+                    counter2++;
                     var q = a.Center;
                     var p = b.Center;
-                    var pq = new[] {q[0] - p[0], q[1] - p[1], q[2] - p[2]};
+                    var pq = new[] { q[0] - p[0], q[1] - p[1], q[2] - p[2] };
                     if (Math.Abs(pq.dotProduct(a.Normal)) > 0.011) continue; //0.11 //0.005
                     counter3++;
                     /*var overl = true;
@@ -700,7 +699,7 @@ namespace Assembly_Planner
         /// the second one is surface of Solid2
         /// </summary>
         /// <value>The Overlapping surfaces</value>
-        internal List<PrimitiveSurface[]> Overlappings {set; get;} 
+        internal List<PrimitiveSurface[]> Overlappings { set; get; }
 
     }
 }
