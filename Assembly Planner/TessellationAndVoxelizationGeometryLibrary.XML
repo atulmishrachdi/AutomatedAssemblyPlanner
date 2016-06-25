@@ -732,7 +732,7 @@
             </summary>
             <summary>
                 The MinimumEnclosure class includes static functions for defining smallest enclosures for a
-                tesselated solid. For example: convex hull, minimum bounding box, or minimum bounding sphere.
+                tessellated solid. For example: convex hull, minimum bounding box, or minimum bounding sphere.
             </summary>
             <summary>
                 The MinimumEnclosure class includes static functions for defining smallest enclosures for a
@@ -747,10 +747,10 @@
             <returns>System.Double.</returns>
             <exception cref="T:System.Exception">Bounding circle failed to converge</exception>
             <references>
-                Based on Emo Welzl's "move-to-front hueristic" and this paper (algorithm 1).
+                Based on Emo Welzl's "move-to-front heuristic" and this paper (algorithm 1).
                 http://www.inf.ethz.ch/personal/gaertner/texts/own_work/esa99_final.pdf
                 This algorithm runs in near linear time. Visiting most points just a few times.
-                Though a linear algorithm was found by Meggido, this algorithm is more robust
+                Though a linear algorithm was found by Meggi do, this algorithm is more robust
                 (doesn't care about multiple points on a line and fewer rounding functions)
                 and directly applicable to multiple dimensions (in our case, just 2 and 3 D).
             </references>
@@ -824,7 +824,7 @@
         </member>
         <member name="M:TVGL.MinimumEnclosure.InternalCircle.Furthest(TVGL.Point,TVGL.Point@,System.Collections.Generic.List{TVGL.Point}@)">
             <summary>
-                Furthests the specified point.
+                Finds the furthest the specified point.
             </summary>
             <param name="point">The point.</param>
             <param name="furthestPoint">The furthest point.</param>
@@ -873,15 +873,15 @@
             </timeDomain>
             <accuracy>
                 Generally fairly accurate, but suboptimal solutions.
-                Particular cases can yeild very poor results.
-                Ex. Dimitrov showed in 2009 that continuous PCA yeilds a volume 4x optimal for a octahedron
+                Particular cases can yield very poor results.
+                Ex. Dimitrov showed in 2009 that continuous PCA yields a volume 4x optimal for a octahedron
                 http://page.mi.fu-berlin.de/rote/Papers/pdf/Bounds+on+the+quality+of+the+PCA+bounding+boxes.pdf
             </accuracy>
         </member>
         <member name="M:TVGL.MinimumEnclosure.OrientedBoundingBox(TVGL.TVGLConvexHull)">
             <summary>
                 The MC_ApproachOne rotates around each edge of the convex hull between the owned and
-                other faces. In this way, it gaurantees a much more optimal solution than the flat
+                other faces. In this way, it guarantees a much more optimal solution than the flat
                 with face algorithm, but is, therefore, slower.
             </summary>
             <timeDomain>
@@ -1008,6 +1008,253 @@
             </summary>
             <param name="boxData">The box data.</param>
         </member>
+        <member name="T:TVGL.IOFunctions.threemfclasses.Build">
+            <summary>
+                Class Build is a major categoy usually following resources.
+            </summary>
+        </member>
+        <member name="M:TVGL.IOFunctions.threemfclasses.Build.#ctor">
+            <summary>
+                Initializes a new instance of the <see cref="T:TVGL.IOFunctions.threemfclasses.Build" /> class.
+            </summary>
+        </member>
+        <member name="P:TVGL.IOFunctions.threemfclasses.Build.Items">
+            <summary>
+                Gets or sets the item.
+            </summary>
+            <value>The item.</value>
+        </member>
+        <member name="T:TVGL.IOFunctions.threemfclasses.Item">
+            <summary>
+                Class Item - is used in the build section.
+            </summary>
+        </member>
+        <member name="P:TVGL.IOFunctions.threemfclasses.Item.objectid">
+            <summary>
+                Gets or sets the objectid.
+            </summary>
+            <value>The objectid.</value>
+        </member>
+        <member name="P:TVGL.IOFunctions.threemfclasses.Item.transform">
+            <summary>
+                Gets or sets the transform.
+            </summary>
+            <value>The transform.</value>
+        </member>
+        <member name="P:TVGL.IOFunctions.threemfclasses.Item.itemref">
+            <summary>
+                Gets or sets the itemref.
+            </summary>
+        </member>
+        <member name="T:TVGL.IOFunctions.threemfclasses.Metadata">
+            <summary>
+                Class Metadata is used in the header and potentially other places.
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.threemfclasses.Metadata.type">
+            <summary>
+                The type
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.threemfclasses.Metadata.Value">
+            <summary>
+                The value
+            </summary>
+        </member>
+        <member name="T:TVGL.IOFunctions.threemfclasses.Component">
+            <summary>
+                Class Component.
+            </summary>
+        </member>
+        <member name="P:TVGL.IOFunctions.threemfclasses.Component.objectid">
+            <summary>
+                Gets or sets the objectid.
+            </summary>
+            <value>The objectid.</value>
+        </member>
+        <member name="P:TVGL.IOFunctions.threemfclasses.Component.transform">
+            <summary>
+                Gets or sets the transform.
+            </summary>
+            <value>The transform.</value>
+        </member>
+        <member name="T:TVGL.IOFunctions.threemfclasses.Triangle">
+            <summary>
+                Class CT_Triangle.
+            </summary>
+        </member>
+        <member name="P:TVGL.IOFunctions.threemfclasses.Triangle.v1">
+            <summary>
+                Gets or sets the v1.
+            </summary>
+            <value>The v1.</value>
+        </member>
+        <member name="P:TVGL.IOFunctions.threemfclasses.Triangle.v2">
+            <summary>
+                Gets or sets the v2.
+            </summary>
+            <value>The v2.</value>
+        </member>
+        <member name="P:TVGL.IOFunctions.threemfclasses.Triangle.v3">
+            <summary>
+                Gets or sets the v3.
+            </summary>
+            <value>The v3.</value>
+        </member>
+        <member name="P:TVGL.IOFunctions.threemfclasses.Triangle.p1">
+            <summary>
+                Gets or sets the p1.
+            </summary>
+            <value>The p1.</value>
+        </member>
+        <member name="P:TVGL.IOFunctions.threemfclasses.Triangle.p2">
+            <summary>
+                Gets or sets the p2.
+            </summary>
+            <value>The p2.</value>
+        </member>
+        <member name="P:TVGL.IOFunctions.threemfclasses.Triangle.p3">
+            <summary>
+                Gets or sets the p3.
+            </summary>
+            <value>The p3.</value>
+        </member>
+        <member name="P:TVGL.IOFunctions.threemfclasses.Triangle.pid">
+            <summary>
+                Gets or sets the pid.
+            </summary>
+            <value>The pid.</value>
+        </member>
+        <member name="T:TVGL.IOFunctions.threemfclasses.Vertex">
+            <summary>
+                Class CT_Vertex.
+            </summary>
+        </member>
+        <member name="P:TVGL.IOFunctions.threemfclasses.Vertex.x">
+            <summary>
+                Gets or sets the x.
+            </summary>
+            <value>The x.</value>
+        </member>
+        <member name="P:TVGL.IOFunctions.threemfclasses.Vertex.y">
+            <summary>
+                Gets or sets the y.
+            </summary>
+            <value>The y.</value>
+        </member>
+        <member name="P:TVGL.IOFunctions.threemfclasses.Vertex.z">
+            <summary>
+                Gets or sets the z.
+            </summary>
+            <value>The z.</value>
+        </member>
+        <member name="T:TVGL.IOFunctions.threemfclasses.Mesh">
+            <summary>
+                Class CT_Mesh.
+            </summary>
+        </member>
+        <member name="P:TVGL.IOFunctions.threemfclasses.Mesh.vertices">
+            <summary>
+                Gets or sets the vertices.
+            </summary>
+            <value>The vertices.</value>
+        </member>
+        <member name="P:TVGL.IOFunctions.threemfclasses.Mesh.triangles">
+            <summary>
+                Gets or sets the triangles.
+            </summary>
+            <value>The triangles.</value>
+        </member>
+        <member name="T:TVGL.IOFunctions.threemfclasses.Object">
+            <summary>
+                Class Object.
+            </summary>
+        </member>
+        <member name="P:TVGL.IOFunctions.threemfclasses.Object.components">
+            <summary>
+                Gets or sets the components.
+            </summary>
+            <value>The components.</value>
+        </member>
+        <member name="T:TVGL.IOFunctions.threemfclasses.ObjectType">
+            <summary>
+                Enum ST_ObjectType
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.threemfclasses.ObjectType.model">
+            <summary>
+                The model
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.threemfclasses.ObjectType.support">
+            <summary>
+                The support
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.threemfclasses.ObjectType.other">
+            <summary>
+                The other
+            </summary>
+        </member>
+        <member name="T:TVGL.IOFunctions.threemfclasses.Resources">
+            <summary>
+                Class CT_Resources.
+            </summary>
+        </member>
+        <member name="M:TVGL.IOFunctions.threemfclasses.Resources.#ctor">
+            <summary>
+                Initializes a new instance of the <see cref="T:TVGL.IOFunctions.threemfclasses.Resources" /> class.
+            </summary>
+        </member>
+        <member name="P:TVGL.IOFunctions.threemfclasses.Resources.objects">
+            <summary>
+                Gets or sets the object.
+            </summary>
+            <value>The object.</value>
+        </member>
+        <member name="T:TVGL.IOFunctions.threemfclasses.Material">
+            <summary>
+                Class Material.
+            </summary>
+        </member>
+        <member name="T:TVGL.IOFunctions.threemfclasses.Color3MF">
+            <summary>
+                Class Color3MF.
+            </summary>
+        </member>
+        <member name="T:TVGL.IOFunctions.threemfclasses.BaseMaterials">
+            <summary>
+            Class BaseMaterials.
+            </summary>
+        </member>
+        <member name="M:TVGL.IOFunctions.threemfclasses.BaseMaterials.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:TVGL.IOFunctions.threemfclasses.BaseMaterials"/> class.
+            </summary>
+        </member>
+        <member name="P:TVGL.IOFunctions.threemfclasses.BaseMaterials.bases">
+            <summary>
+            Gets or sets the base.
+            </summary>
+            <value>The base.</value>
+        </member>
+        <member name="P:TVGL.IOFunctions.threemfclasses.BaseMaterials.id">
+            <summary>
+            Gets or sets the identifier.
+            </summary>
+            <value>The identifier.</value>
+        </member>
+        <member name="T:TVGL.IOFunctions.threemfclasses.Base">
+            <summary>
+                Class Base.
+            </summary>
+        </member>
+        <member name="P:TVGL.IOFunctions.threemfclasses.Base.name">
+            <summary>
+                Gets or sets the name.
+            </summary>
+            <value>The name.</value>
+        </member>
         <member name="T:TVGL.IOFunctions.ThreeMFFileData">
             <summary>
                 Class ThreeMFFileData.
@@ -1018,67 +1265,35 @@
                 Initializes a new instance of the <see cref="T:TVGL.IOFunctions.ThreeMFFileData" /> class.
             </summary>
         </member>
-        <member name="P:TVGL.IOFunctions.ThreeMFFileData.Objects">
+        <member name="P:TVGL.IOFunctions.ThreeMFFileData.metadata">
             <summary>
-                Gets or sets the objects.
+                Gets or sets the metadata.
             </summary>
-            <value>The objects.</value>
+            <value>The metadata.</value>
         </member>
-        <member name="P:TVGL.IOFunctions.ThreeMFFileData.unitSpecified">
+        <member name="P:TVGL.IOFunctions.ThreeMFFileData.resources">
             <summary>
-                Gets or sets a value indicating whether [unit specified].
+                Gets or sets the resources.
             </summary>
-            <value><c>true</c> if [unit specified]; otherwise, <c>false</c>.</value>
+            <value>The resources.</value>
         </member>
-        <member name="P:TVGL.IOFunctions.ThreeMFFileData.version">
+        <member name="P:TVGL.IOFunctions.ThreeMFFileData.build">
             <summary>
-                Gets or sets the version.
+                Gets or sets the build.
             </summary>
-            <value>The version.</value>
+            <value>The build.</value>
         </member>
-        <member name="P:TVGL.IOFunctions.ThreeMFFileData.versionSpecified">
+        <member name="P:TVGL.IOFunctions.ThreeMFFileData.requiredextensions">
             <summary>
-                Gets or sets a value indicating whether [version specified].
+                Gets or sets the requiredextensions.
             </summary>
-            <value><c>true</c> if [version specified]; otherwise, <c>false</c>.</value>
+            <value>The requiredextensions.</value>
         </member>
-        <member name="P:TVGL.IOFunctions.ThreeMFFileData.lang">
-            <summary>
-                Gets or sets the language.
-            </summary>
-            <value>The language.</value>
-        </member>
-        <member name="P:TVGL.IOFunctions.ThreeMFFileData.Name">
-            <summary>
-                Gets or sets the name.
-            </summary>
-            <value>The name.</value>
-        </member>
-        <member name="M:TVGL.IOFunctions.ThreeMFFileData.Open(System.IO.Stream,System.Boolean)">
-            <summary>
-                Opens the specified s.
-            </summary>
+        <member name="M:TVGL.IOFunctions.ThreeMFFileData.OpenSolids(System.IO.Stream,System.String,System.Boolean)">
             <param name="s">The s.</param>
+            <param name="filename">The filename.</param>
             <param name="inParallel">if set to <c>true</c> [in parallel].</param>
             <returns>List&lt;TessellatedSolid&gt;.</returns>
-        </member>
-        <member name="M:TVGL.IOFunctions.ThreeMFFileData.TryUnzippedXMLRead(System.IO.Stream,TVGL.IOFunctions.ThreeMFFileData@)">
-            <summary>
-                Tries the unzipped XML read.
-            </summary>
-            <param name="stream">The stream.</param>
-            <param name="threeMFFileData">The threeMF file data.</param>
-            <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        </member>
-        <member name="M:TVGL.IOFunctions.ThreeMFFileData.TryZippedXMLRead(System.IO.Stream,TVGL.IOFunctions.ThreeMFFileData@)">
-            <summary>
-                Tries the zipped XML read.
-            </summary>
-            <param name="stream">The stream.</param>
-            <param name="threeMFFileData">The threeMF file data.</param>
-            <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-            <exception cref="T:System.NotImplementedException"></exception>
-            <exception cref="T:System.NotImplementedException"></exception>
         </member>
         <member name="M:TVGL.IOFunctions.ThreeMFFileData.Save(System.IO.Stream,System.Collections.Generic.IList{TVGL.TessellatedSolid})">
             <summary>
@@ -1087,11 +1302,593 @@
             <param name="stream">The stream.</param>
             <param name="solids">The solids.</param>
             <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="M:TVGL.IOFunctions.ThreeMFFileData.SaveModel(System.IO.Stream,System.Collections.Generic.IList{TVGL.TessellatedSolid})">
+            <summary>
+                Saves the specified stream.
+            </summary>
+            <param name="stream">The stream.</param>
+            <param name="solids">The solids.</param>
+            <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        </member>
+        <member name="T:TVGL.IOFunctions.amfclasses.AMF_Object">
+            <summary>
+                Class AMF_Object.
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Object.id">
+            <summary>
+                The identifier
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Object.mesh">
+            <summary>
+                The mesh
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Object.metadata">
+            <summary>
+                The metadata
+            </summary>
+        </member>
+        <member name="T:TVGL.IOFunctions.amfclasses.Metadata">
+            <summary>
+                Class AMF_Metadata.
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.Metadata.type">
+            <summary>
+                The type
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.Metadata.Value">
+            <summary>
+                The value
+            </summary>
+        </member>
+        <member name="M:TVGL.IOFunctions.amfclasses.Metadata.ToString">
+            <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+            <returns>
+            A <see cref="T:System.String" /> that represents this instance.
+            </returns>
+        </member>
+        <member name="T:TVGL.IOFunctions.amfclasses.AMF_Mesh">
+            <summary>
+                Class AMF_Mesh.
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Mesh.vertices">
+            <summary>
+                The vertices
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Mesh.volume">
+            <summary>
+                The volume
+            </summary>
+        </member>
+        <member name="T:TVGL.IOFunctions.amfclasses.AMF_Vertices">
+            <summary>
+                Class AMF_Vertices.
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Vertices.Edges">
+            <summary>
+                The edges
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Vertices.Vertices">
+            <summary>
+                The vertices
+            </summary>
+        </member>
+        <member name="M:TVGL.IOFunctions.amfclasses.AMF_Vertices.#ctor">
+            <summary>
+                Initializes a new instance of the <see cref="T:TVGL.IOFunctions.amfclasses.AMF_Vertices" /> class.
+            </summary>
+        </member>
+        <member name="T:TVGL.IOFunctions.amfclasses.AMF_Triangle">
+            <summary>
+                Class AMF_Triangle.
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Triangle.color">
+            <summary>
+                The color
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Triangle.texmap">
+            <summary>
+                The texmap
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Triangle.v1">
+            <summary>
+                The v1
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Triangle.v2">
+            <summary>
+                The v2
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Triangle.v3">
+            <summary>
+                The v3
+            </summary>
+        </member>
+        <member name="P:TVGL.IOFunctions.amfclasses.AMF_Triangle.VertexIndices">
+            <summary>
+                Gets the vertex indices.
+            </summary>
+            <value>The vertex indices.</value>
+        </member>
+        <member name="T:TVGL.IOFunctions.amfclasses.AMF_Color">
+            <summary>
+                Class AMF_Color.
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Color.a">
+            <summary>
+                a
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Color.b">
+            <summary>
+                The b
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Color.g">
+            <summary>
+                The g
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Color.r">
+            <summary>
+                The r
+            </summary>
+        </member>
+        <member name="T:TVGL.IOFunctions.amfclasses.AMF_Volume">
+            <summary>
+                Class AMF_Volume.
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Volume.color">
+            <summary>
+                The color
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Volume.materialid">
+            <summary>
+                The materialid
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Volume.Triangles">
+            <summary>
+                The triangles
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Volume.type">
+            <summary>
+                The type
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Volume.typeSpecified">
+            <summary>
+                The type specified
+            </summary>
+        </member>
+        <member name="M:TVGL.IOFunctions.amfclasses.AMF_Volume.#ctor">
+            <summary>
+                Initializes a new instance of the <see cref="T:TVGL.IOFunctions.amfclasses.AMF_Volume" /> class.
+            </summary>
+        </member>
+        <member name="T:TVGL.IOFunctions.amfclasses.AMF_VolumeType">
+            <summary>
+                Enum AMF_VolumeType
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_VolumeType.object">
+            <summary>
+                The object
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_VolumeType.support">
+            <summary>
+                The support
+            </summary>
+        </member>
+        <member name="T:TVGL.IOFunctions.amfclasses.AMF_Edge">
+            <summary>
+                Class AMF_Edge.
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Edge.dx1">
+            <summary>
+                The DX1
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Edge.dx2">
+            <summary>
+                The DX2
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Edge.dy1">
+            <summary>
+                The dy1
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Edge.dy2">
+            <summary>
+                The dy2
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Edge.dz1">
+            <summary>
+                The DZ1
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Edge.dz2">
+            <summary>
+                The DZ2
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Edge.v1">
+            <summary>
+                The v1
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Edge.v2">
+            <summary>
+                The v2
+            </summary>
+        </member>
+        <member name="T:TVGL.IOFunctions.amfclasses.AMF_Normal">
+            <summary>
+                Class AMF_Normal.
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Normal.nx">
+            <summary>
+                The nx
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Normal.ny">
+            <summary>
+                The ny
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Normal.nz">
+            <summary>
+                The nz
+            </summary>
+        </member>
+        <member name="T:TVGL.IOFunctions.amfclasses.AMF_Coordinates">
+            <summary>
+                Class AMF_Coordinates.
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Coordinates.x">
+            <summary>
+                The x
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Coordinates.y">
+            <summary>
+                The y
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Coordinates.z">
+            <summary>
+                The z
+            </summary>
+        </member>
+        <member name="P:TVGL.IOFunctions.amfclasses.AMF_Coordinates.AsArray">
+            <summary>
+                Gets as array.
+            </summary>
+            <value>As array.</value>
+        </member>
+        <member name="T:TVGL.IOFunctions.amfclasses.AMF_Vertex">
+            <summary>
+                Class AMF_Vertex.
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Vertex.coordinates">
+            <summary>
+                The coordinates
+            </summary>
+        </member>
+        <member name="T:TVGL.IOFunctions.amfclasses.AMF_Constellation">
+            <summary>
+                Class AMF_Constellation.
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Constellation.id">
+            <summary>
+                The identifier
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Constellation.instance">
+            <summary>
+                The instance
+            </summary>
+        </member>
+        <member name="M:TVGL.IOFunctions.amfclasses.AMF_Constellation.#ctor">
+            <summary>
+                Initializes a new instance of the <see cref="T:TVGL.IOFunctions.amfclasses.AMF_Constellation" /> class.
+            </summary>
+        </member>
+        <member name="T:TVGL.IOFunctions.amfclasses.AMF_Instance">
+            <summary>
+                Class AMF_Instance.
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Instance.deltax">
+            <summary>
+                The deltax
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Instance.deltaxSpecified">
+            <summary>
+                The deltax specified
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Instance.deltay">
+            <summary>
+                The deltay
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Instance.deltaySpecified">
+            <summary>
+                The deltay specified
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Instance.deltaz">
+            <summary>
+                The deltaz
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Instance.deltazSpecified">
+            <summary>
+                The deltaz specified
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Instance.objectid">
+            <summary>
+                The objectid
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Instance.rx">
+            <summary>
+                The rx
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Instance.rxSpecified">
+            <summary>
+                The rx specified
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Instance.ry">
+            <summary>
+                The ry
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Instance.rySpecified">
+            <summary>
+                The ry specified
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Instance.rz">
+            <summary>
+                The rz
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Instance.rzSpecified">
+            <summary>
+                The rz specified
+            </summary>
+        </member>
+        <member name="T:TVGL.IOFunctions.amfclasses.AMF_Texture">
+            <summary>
+                Class AMF_Texture.
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Texture.depth">
+            <summary>
+                The depth
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Texture.height">
+            <summary>
+                The height
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Texture.id">
+            <summary>
+                The identifier
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Texture.tiled">
+            <summary>
+                The tiled
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Texture.type">
+            <summary>
+                The type
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Texture.Value">
+            <summary>
+                The value
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Texture.width">
+            <summary>
+                The width
+            </summary>
+        </member>
+        <member name="T:TVGL.IOFunctions.amfclasses.AMF_TextureType">
+            <summary>
+                Enum AMF_TextureType
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_TextureType.grayscale">
+            <summary>
+                The grayscale
+            </summary>
+        </member>
+        <member name="T:TVGL.IOFunctions.amfclasses.AMF_Composite">
+            <summary>
+                Class AMF_Composite.
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Composite.materialid">
+            <summary>
+                The materialid
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Composite.Value">
+            <summary>
+                The value
+            </summary>
+        </member>
+        <member name="T:TVGL.IOFunctions.amfclasses.AMF_Material">
+            <summary>
+                Class AMF_Material.
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Material.composite">
+            <summary>
+                The composite
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Material.id">
+            <summary>
+                The identifier
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Material.metadata">
+            <summary>
+                The metadata
+            </summary>
+        </member>
+        <member name="M:TVGL.IOFunctions.amfclasses.AMF_Material.#ctor">
+            <summary>
+                Initializes a new instance of the <see cref="T:TVGL.IOFunctions.amfclasses.AMF_Material" /> class.
+            </summary>
+        </member>
+        <member name="T:TVGL.IOFunctions.amfclasses.AMF_Metadata">
+            <summary>
+                Class AMF_Metadata.
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Metadata.type">
+            <summary>
+                The type
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_Metadata.Value">
+            <summary>
+                The value
+            </summary>
+        </member>
+        <member name="T:TVGL.IOFunctions.amfclasses.AMF_TexMap">
+            <summary>
+                Class AMF_TexMap.
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_TexMap.atexid">
+            <summary>
+                The atexid
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_TexMap.btexid">
+            <summary>
+                The btexid
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_TexMap.gtexid">
+            <summary>
+                The gtexid
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_TexMap.rtexid">
+            <summary>
+                The rtexid
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_TexMap.utex1">
+            <summary>
+                The utex1
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_TexMap.utex2">
+            <summary>
+                The utex2
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_TexMap.utex3">
+            <summary>
+                The utex3
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_TexMap.vtex1">
+            <summary>
+                The vtex1
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_TexMap.vtex2">
+            <summary>
+                The vtex2
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_TexMap.vtex3">
+            <summary>
+                The vtex3
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_TexMap.wtex1">
+            <summary>
+                The wtex1
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_TexMap.wtex1Specified">
+            <summary>
+                The wtex1 specified
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_TexMap.wtex2">
+            <summary>
+                The wtex2
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_TexMap.wtex2Specified">
+            <summary>
+                The wtex2 specified
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_TexMap.wtex3">
+            <summary>
+                The wtex3
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.amfclasses.AMF_TexMap.wtex3Specified">
+            <summary>
+                The wtex3 specified
+            </summary>
         </member>
         <member name="T:TVGL.IOFunctions.PLYFileData">
             <summary>
                 Class PLYFileData.
+            </summary>
+        </member>
+        <member name="M:TVGL.IOFunctions.PLYFileData.#ctor">
+            <summary>
+                Initializes a new instance of the <see cref="T:TVGL.IOFunctions.PLYFileData" /> class.
             </summary>
         </member>
         <member name="F:TVGL.IOFunctions.PLYFileData._lastColor">
@@ -1112,11 +1909,6 @@
         <member name="F:TVGL.IOFunctions.PLYFileData.ReadInOrder">
             <summary>
                 The read in order
-            </summary>
-        </member>
-        <member name="M:TVGL.IOFunctions.PLYFileData.#ctor">
-            <summary>
-                Initializes a new instance of the <see cref="T:TVGL.IOFunctions.PLYFileData" /> class.
             </summary>
         </member>
         <member name="P:TVGL.IOFunctions.PLYFileData.HasColorSpecified">
@@ -1143,18 +1935,6 @@
             </summary>
             <value>The face to vertex indices.</value>
         </member>
-        <member name="P:TVGL.IOFunctions.PLYFileData.Name">
-            <summary>
-                Gets the file header.
-            </summary>
-            <value>The header.</value>
-        </member>
-        <member name="P:TVGL.IOFunctions.PLYFileData.Comments">
-            <summary>
-                Gets the comments.
-            </summary>
-            <value>The comments.</value>
-        </member>
         <member name="P:TVGL.IOFunctions.PLYFileData.NumVertices">
             <summary>
                 Gets the number vertices.
@@ -1173,22 +1953,14 @@
             </summary>
             <value>The number edges.</value>
         </member>
-        <member name="M:TVGL.IOFunctions.PLYFileData.Open(System.IO.Stream,System.Boolean)">
+        <member name="M:TVGL.IOFunctions.PLYFileData.OpenSolid(System.IO.Stream,System.String)">
             <summary>
-                Opens the specified s.
+            Opens the specified s.
             </summary>
             <param name="s">The s.</param>
+            <param name="filename">The filename.</param>
             <param name="inParallel">if set to <c>true</c> [in parallel].</param>
             <returns>List&lt;TessellatedSolid&gt;.</returns>
-        </member>
-        <member name="M:TVGL.IOFunctions.PLYFileData.TryReadAscii(System.IO.Stream,TVGL.IOFunctions.PLYFileData@)">
-            <summary>
-                Tries the read ASCII.
-            </summary>
-            <param name="stream">The stream.</param>
-            <param name="plyData">The ply data.</param>
-            <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-            <exception cref="T:System.ArgumentOutOfRangeException"></exception>
         </member>
         <member name="M:TVGL.IOFunctions.PLYFileData.ReadEdges(System.IO.StreamReader)">
             <summary>
@@ -1217,28 +1989,29 @@
             </summary>
             <param name="reader">The reader.</param>
         </member>
-        <member name="M:TVGL.IOFunctions.PLYFileData.Save(System.IO.Stream,System.Collections.Generic.IList{TVGL.TessellatedSolid})">
+        <member name="M:TVGL.IOFunctions.PLYFileData.SaveSolid(System.IO.Stream,TVGL.TessellatedSolid)">
             <summary>
-                Saves the specified stream.
+            Saves the specified stream.
             </summary>
             <param name="stream">The stream.</param>
-            <param name="solids">The solids.</param>
-            <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-            <exception cref="T:System.NotImplementedException"></exception>
+            <param name="solid">The solid.</param>
+            <returns>
+              <c>true</c> if XXXX, <c>false</c> otherwise.
+            </returns>
         </member>
         <member name="T:TVGL.IOFunctions.OFFFileData">
             <summary>
                 Class OFFFileData.
             </summary>
         </member>
-        <member name="F:TVGL.IOFunctions.OFFFileData._lastColor">
-            <summary>
-                The last color
-            </summary>
-        </member>
         <member name="M:TVGL.IOFunctions.OFFFileData.#ctor">
             <summary>
                 Initializes a new instance of the <see cref="T:TVGL.IOFunctions.OFFFileData" /> class.
+            </summary>
+        </member>
+        <member name="F:TVGL.IOFunctions.OFFFileData._lastColor">
+            <summary>
+                The last color
             </summary>
         </member>
         <member name="P:TVGL.IOFunctions.OFFFileData.HasColorSpecified">
@@ -1264,12 +2037,6 @@
                 Gets the face to vertex indices.
             </summary>
             <value>The face to vertex indices.</value>
-        </member>
-        <member name="P:TVGL.IOFunctions.OFFFileData.Name">
-            <summary>
-                Gets the file header.
-            </summary>
-            <value>The header.</value>
         </member>
         <member name="P:TVGL.IOFunctions.OFFFileData.NumVertices">
             <summary>
@@ -1313,13 +2080,15 @@
             </summary>
             <value>The contains normals.</value>
         </member>
-        <member name="M:TVGL.IOFunctions.OFFFileData.Open(System.IO.Stream,System.Boolean)">
+        <member name="M:TVGL.IOFunctions.OFFFileData.OpenSolid(System.IO.Stream,System.String)">
             <summary>
-                Opens the specified s.
+            Opens the specified s.
             </summary>
             <param name="s">The s.</param>
-            <param name="inParallel">if set to <c>true</c> [in parallel].</param>
-            <returns>List&lt;TessellatedSolid&gt;.</returns>
+            <param name="filename">The filename.</param>
+            <returns>
+            List&lt;TessellatedSolid&gt;.
+            </returns>
         </member>
         <member name="M:TVGL.IOFunctions.OFFFileData.TryReadAscii(System.IO.Stream,TVGL.IOFunctions.OFFFileData@)">
             <summary>
@@ -1340,7 +2109,7 @@
             <exception cref="T:System.NotImplementedException"></exception>
             <exception cref="T:System.IO.EndOfStreamException">Incomplete file</exception>
         </member>
-        <member name="M:TVGL.IOFunctions.OFFFileData.Save(System.IO.Stream,System.Collections.Generic.IList{TVGL.TessellatedSolid})">
+        <member name="M:TVGL.IOFunctions.OFFFileData.SaveSolid(System.IO.Stream,TVGL.TessellatedSolid)">
             <summary>
                 Saves the specified stream.
             </summary>
@@ -1371,75 +2140,30 @@
             </summary>
             <value>The textures.</value>
         </member>
-        <member name="P:TVGL.IOFunctions.AMFFileData.unit">
-            <summary>
-                Gets or sets the unit.
-            </summary>
-            <value>The unit.</value>
-        </member>
-        <member name="P:TVGL.IOFunctions.AMFFileData.unitSpecified">
-            <summary>
-                Gets or sets a value indicating whether [unit specified].
-            </summary>
-            <value><c>true</c> if [unit specified]; otherwise, <c>false</c>.</value>
-        </member>
         <member name="P:TVGL.IOFunctions.AMFFileData.version">
             <summary>
                 Gets or sets the version.
             </summary>
             <value>The version.</value>
         </member>
-        <member name="P:TVGL.IOFunctions.AMFFileData.versionSpecified">
+        <member name="M:TVGL.IOFunctions.AMFFileData.OpenSolids(System.IO.Stream,System.String)">
             <summary>
-                Gets or sets a value indicating whether [version specified].
-            </summary>
-            <value><c>true</c> if [version specified]; otherwise, <c>false</c>.</value>
-        </member>
-        <member name="P:TVGL.IOFunctions.AMFFileData.lang">
-            <summary>
-                Gets or sets the language.
-            </summary>
-            <value>The language.</value>
-        </member>
-        <member name="P:TVGL.IOFunctions.AMFFileData.Name">
-            <summary>
-                Gets or sets the name.
-            </summary>
-            <value>The name.</value>
-        </member>
-        <member name="M:TVGL.IOFunctions.AMFFileData.Open(System.IO.Stream,System.Boolean)">
-            <summary>
-                Opens the specified s.
+            Opens the specified s.
             </summary>
             <param name="s">The s.</param>
+            <param name="filename">The filename.</param>
             <param name="inParallel">if set to <c>true</c> [in parallel].</param>
             <returns>List&lt;TessellatedSolid&gt;.</returns>
         </member>
-        <member name="M:TVGL.IOFunctions.AMFFileData.TryUnzippedXMLRead(System.IO.Stream,TVGL.IOFunctions.AMFFileData@)">
+        <member name="M:TVGL.IOFunctions.AMFFileData.SaveSolids(System.IO.Stream,System.Collections.Generic.IList{TVGL.TessellatedSolid})">
             <summary>
-                Tries the unzipped XML read.
-            </summary>
-            <param name="stream">The stream.</param>
-            <param name="amfFileData">The amf file data.</param>
-            <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        </member>
-        <member name="M:TVGL.IOFunctions.AMFFileData.TryZippedXMLRead(System.IO.Stream,TVGL.IOFunctions.AMFFileData@)">
-            <summary>
-                Tries the zipped XML read.
-            </summary>
-            <param name="stream">The stream.</param>
-            <param name="amfFileData">The amf file data.</param>
-            <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-            <exception cref="T:System.NotImplementedException"></exception>
-            <exception cref="T:System.NotImplementedException"></exception>
-        </member>
-        <member name="M:TVGL.IOFunctions.AMFFileData.Save(System.IO.Stream,System.Collections.Generic.IList{TVGL.TessellatedSolid})">
-            <summary>
-                Saves the specified stream.
+            Saves the specified stream.
             </summary>
             <param name="stream">The stream.</param>
             <param name="solids">The solids.</param>
-            <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+            <returns>
+              <c>true</c> if XXXX, <c>false</c> otherwise.
+            </returns>
             <exception cref="T:System.NotImplementedException"></exception>
         </member>
         <member name="T:TVGL.IOFunctions.IO">
@@ -1447,6 +2171,45 @@
                 The IO or input/output class contains static functions for saving and loading files in common formats.
                 Note that as a Portable class library, these IO functions cannot interact with your file system. In order
                 to load or save, the filename is not enough. One needs to provide the stream.
+            </summary>
+        </member>
+        <member name="P:TVGL.IOFunctions.IO.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
+            <value>The name.</value>
+        </member>
+        <member name="P:TVGL.IOFunctions.IO.FileName">
+            <summary>
+            Gets or sets the name of the file.
+            </summary>
+            <value>
+            The name of the file.
+            </value>
+        </member>
+        <member name="P:TVGL.IOFunctions.IO.Units">
+            <summary>
+            Gets or sets the unit.
+            </summary>
+            <value>The unit.</value>
+        </member>
+        <member name="P:TVGL.IOFunctions.IO.Language">
+            <summary>
+            Gets or sets the language.
+            </summary>
+            <value>The language.</value>
+        </member>
+        <member name="P:TVGL.IOFunctions.IO.Comments">
+            <summary>
+            Gets or sets the comments.
+            </summary>
+            <value>
+            The comments.
+            </value>
+        </member>
+        <member name="F:TVGL.IOFunctions.IO._comments">
+            <summary>
+            The _comments
             </summary>
         </member>
         <member name="M:TVGL.IOFunctions.IO.Open(System.IO.Stream,System.String,System.Boolean)">
@@ -1470,11 +2233,11 @@
                 Cannot determine format from extension (not .stl, .3ds, .lwo, .obj, .objx, or .off.
             </exception>
         </member>
-        <member name="M:TVGL.IOFunctions.IO.getNameFromStream(System.IO.Stream)">
+        <member name="M:TVGL.IOFunctions.IO.GetNameFromFileName(System.String)">
             <summary>
-                Gets the name from stream.
+            Gets the name from the filename.
             </summary>
-            <param name="stream">The stream.</param>
+            <param name="filename">The filename.</param>
             <returns>System.String.</returns>
         </member>
         <member name="M:TVGL.IOFunctions.IO.ParseLine(System.String,System.String@,System.String@)">
@@ -1520,6 +2283,21 @@
             <param name="reader">The reader.</param>
             <returns>System.String.</returns>
         </member>
+        <member name="M:TVGL.IOFunctions.IO.InferUnitsFromComments(System.Collections.Generic.List{System.String})">
+            <summary>
+            Infers the units from comments.
+            </summary>
+            <param name="comments">The comments.</param>
+            <returns></returns>
+        </member>
+        <member name="M:TVGL.IOFunctions.IO.TryParseUnits(System.String,TVGL.UnitType@)">
+            <summary>
+            Tries to parse units.
+            </summary>
+            <param name="input">The input.</param>
+            <param name="units">The units.</param>
+            <returns></returns>
+        </member>
         <member name="M:TVGL.IOFunctions.IO.Save(System.IO.Stream,System.Collections.Generic.IList{TVGL.TessellatedSolid},TVGL.FileType)">
             <summary>
                 Saves the specified stream.
@@ -1529,25 +2307,16 @@
             <param name="fileType">Type of the file.</param>
             <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         </member>
-        <member name="M:TVGL.IOFunctions.IO.WriteCoordinates(System.Collections.Generic.IList{System.Double},System.IO.StreamWriter)">
-            <summary>
-                Writes the coordinates.
-            </summary>
-            <param name="coordinates">The coordinates.</param>
-            <param name="writer">The writer.</param>
-        </member>
-        <member name="M:TVGL.IOFunctions.IO.WriteCoordinates(System.Double[],System.IO.BinaryWriter)">
-            <summary>
-                Writes the coordinates.
-            </summary>
-            <param name="coordinates">The coordinates.</param>
-            <param name="writer">The writer.</param>
-        </member>
         <member name="T:TVGL.IOFunctions.STLFileData">
             <summary>
                 Provides an importer for StereoLithography .StL files.
             </summary>
             <remarks>The format is documented on <a href="http://en.wikipedia.org/wiki/STL_(file_format)">Wikipedia</a>.</remarks>
+        </member>
+        <member name="M:TVGL.IOFunctions.STLFileData.#ctor">
+            <summary>
+                Initializes a new instance of the <see cref="T:TVGL.IOFunctions.STLFileData" /> class.
+            </summary>
         </member>
         <member name="F:TVGL.IOFunctions.STLFileData.NormalRegex">
             <summary>
@@ -1562,11 +2331,6 @@
         <member name="F:TVGL.IOFunctions.STLFileData._lastColor">
             <summary>
                 The last color
-            </summary>
-        </member>
-        <member name="M:TVGL.IOFunctions.STLFileData.#ctor">
-            <summary>
-                Initializes a new instance of the <see cref="T:TVGL.IOFunctions.STLFileData" /> class.
             </summary>
         </member>
         <member name="P:TVGL.IOFunctions.STLFileData.HasColorSpecified">
@@ -1593,11 +2357,22 @@
             </summary>
             <value>The normals.</value>
         </member>
-        <member name="P:TVGL.IOFunctions.STLFileData.Name">
+        <member name="M:TVGL.IOFunctions.STLFileData.OpenSolids(System.IO.Stream,System.String)">
             <summary>
-                Gets the file header.
+                Opens the specified s.
             </summary>
-            <value>The header.</value>
+            <param name="s">The s.</param>
+            <param name="filename">The filename.</param>
+            <param name="inParallel">if set to <c>true</c> [in parallel].</param>
+            <returns>List&lt;TessellatedSolid&gt;.</returns>
+        </member>
+        <member name="M:TVGL.IOFunctions.STLFileData.TryReadAscii(System.IO.Stream,System.String,System.Collections.Generic.List{TVGL.IOFunctions.STLFileData}@)">
+            <summary>
+                Reads the model in ASCII format from the specified stream.
+            </summary>
+            <param name="stream">The stream.</param>
+            <param name="stlData">The STL data.</param>
+            <returns>True if the model was loaded successfully.</returns>
         </member>
         <member name="M:TVGL.IOFunctions.STLFileData.ReadFacet(System.IO.StreamReader,System.String)">
             <summary>
@@ -1613,42 +2388,7 @@
                 Unexpected line.
             </exception>
         </member>
-        <member name="M:TVGL.IOFunctions.STLFileData.SaveASCII(System.IO.Stream,System.Collections.Generic.IList{TVGL.TessellatedSolid})">
-            <summary>
-                Saves the ASCII.
-            </summary>
-            <param name="stream">The stream.</param>
-            <param name="solids">The solids.</param>
-            <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-            <exception cref="T:System.NotImplementedException"></exception>
-        </member>
-        <member name="M:TVGL.IOFunctions.STLFileData.Save(System.IO.Stream,System.Collections.Generic.IList{TVGL.TessellatedSolid})">
-            <summary>
-                Saves the specified stream.
-            </summary>
-            <param name="stream">The stream.</param>
-            <param name="solids">The solids.</param>
-            <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-            <exception cref="T:System.NotImplementedException"></exception>
-        </member>
-        <member name="M:TVGL.IOFunctions.STLFileData.SaveBinary(System.IO.Stream,System.Collections.Generic.IList{TVGL.TessellatedSolid})">
-            <summary>
-                Saves the binary.
-            </summary>
-            <param name="stream">The stream.</param>
-            <param name="solids">The solids.</param>
-            <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-            <exception cref="T:System.NotImplementedException"></exception>
-        </member>
-        <member name="M:TVGL.IOFunctions.STLFileData.TryReadAscii(System.IO.Stream,System.Collections.Generic.List{TVGL.IOFunctions.STLFileData}@)">
-            <summary>
-                Reads the model in ASCII format from the specified stream.
-            </summary>
-            <param name="stream">The stream.</param>
-            <param name="stlData">The STL data.</param>
-            <returns>True if the model was loaded successfully.</returns>
-        </member>
-        <member name="M:TVGL.IOFunctions.STLFileData.TryReadBinary(System.IO.Stream,System.Collections.Generic.List{TVGL.IOFunctions.STLFileData}@)">
+        <member name="M:TVGL.IOFunctions.STLFileData.TryReadBinary(System.IO.Stream,System.String,System.Collections.Generic.List{TVGL.IOFunctions.STLFileData}@)">
             <summary>
                 Tries the read binary.
             </summary>
@@ -1658,15 +2398,7 @@
             <exception cref="T:System.IO.EndOfStreamException">Incomplete file</exception>
             <exception cref="T:System.IO.EndOfStreamException">Incomplete file</exception>
         </member>
-        <member name="M:TVGL.IOFunctions.STLFileData.Open(System.IO.Stream,System.Boolean)">
-            <summary>
-                Opens the STL.
-            </summary>
-            <param name="s">The s.</param>
-            <param name="inParallel">The in parallel.</param>
-            <returns>TessellatedSolid.</returns>
-        </member>
-        <member name="M:TVGL.IOFunctions.STLFileData.ReadTriangle(System.IO.BinaryReader)">
+        <member name="M:TVGL.IOFunctions.STLFileData.ReadFacet(System.IO.BinaryReader)">
             <summary>
                 Reads a triangle from a binary STL file.
             </summary>
@@ -1692,6 +2424,24 @@
             </summary>
             <param name="reader">The reader.</param>
             <returns>The unsigned integer.</returns>
+        </member>
+        <member name="M:TVGL.IOFunctions.STLFileData.SaveASCII(System.IO.Stream,System.Collections.Generic.IList{TVGL.TessellatedSolid})">
+            <summary>
+                Saves the ASCII.
+            </summary>
+            <param name="stream">The stream.</param>
+            <param name="solids">The solids.</param>
+            <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="M:TVGL.IOFunctions.STLFileData.SaveBinary(System.IO.Stream,System.Collections.Generic.IList{TVGL.TessellatedSolid})">
+            <summary>
+                Saves the binary.
+            </summary>
+            <param name="stream">The stream.</param>
+            <param name="solids">The solids.</param>
+            <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+            <exception cref="T:System.NotImplementedException"></exception>
         </member>
         <member name="T:TVGL.AreaDecomposition">
             <summary>
@@ -3585,7 +4335,7 @@
             </summary>
             <param name="knownColor">Color of the known.</param>
         </member>
-        <member name="M:TVGL.Color.#ctor(amf.AMF_Color)">
+        <member name="M:TVGL.Color.#ctor(TVGL.IOFunctions.amfclasses.AMF_Color)">
             <summary>
                 Initializes a new instance of the <see cref="T:TVGL.Color" /> class.
             </summary>
@@ -3606,9 +4356,17 @@
             <param name="g">The g.</param>
             <param name="b">The b.</param>
         </member>
-        <member name="M:TVGL.Color.#ctor(System.Byte,System.Byte,System.Byte,System.Byte)">
+        <member name="M:TVGL.Color.#ctor(System.Single,System.Single,System.Single)">
             <summary>
                 Initializes a new instance of the <see cref="T:TVGL.Color" /> struct.
+            </summary>
+            <param name="r">The r.</param>
+            <param name="g">The g.</param>
+            <param name="b">The b.</param>
+        </member>
+        <member name="M:TVGL.Color.#ctor(System.Byte,System.Byte,System.Byte,System.Byte)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TVGL.Color"/> struct.
             </summary>
             <param name="a">a.</param>
             <param name="r">The r.</param>
@@ -3622,6 +4380,12 @@
             <param name="r">The r.</param>
             <param name="g">The g.</param>
             <param name="b">The b.</param>
+        </member>
+        <member name="M:TVGL.Color.ToString">
+            <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+            <returns>A <see cref="T:System.String" /> that represents this instance.</returns>
         </member>
         <member name="F:TVGL.Color.A">
             <summary>
@@ -3738,6 +4502,41 @@
             <param name="predicate">The predicate.</param>
             <returns>System.Int32.</returns>
         </member>
+        <member name="T:TVGL.UnitType">
+            <summary>
+            Enum Units of specified shape
+            </summary>
+        </member>
+        <member name="F:TVGL.UnitType.millimeter">
+            <summary>
+                The millimeter
+            </summary>
+        </member>
+        <member name="F:TVGL.UnitType.micron">
+            <summary>
+                The micron
+            </summary>
+        </member>
+        <member name="F:TVGL.UnitType.centimeter">
+            <summary>
+                The centimeter
+            </summary>
+        </member>
+        <member name="F:TVGL.UnitType.inch">
+            <summary>
+                The inch
+            </summary>
+        </member>
+        <member name="F:TVGL.UnitType.foot">
+            <summary>
+                The foot
+            </summary>
+        </member>
+        <member name="F:TVGL.UnitType.meter">
+            <summary>
+                The meter
+            </summary>
+        </member>
         <member name="T:TVGL.CurvatureType">
             <summary>
                 Enum CurvatureType
@@ -3779,6 +4578,11 @@
             </summary>
         </member>
         <member name="F:TVGL.FileType.ThreeMF">
+            <summary>
+                Mobile MultiModal Framework
+            </summary>
+        </member>
+        <member name="F:TVGL.FileType.Model3MF">
             <summary>
                 Mobile MultiModal Framework
             </summary>
@@ -4104,12 +4908,6 @@
             </summary>
             <value>The polygonal faces.</value>
         </member>
-        <member name="P:TVGL.PrimitiveSurface.Transformation">
-            <summary>
-                Gets or sets the transformation.
-            </summary>
-            <value>The transformation.</value>
-        </member>
         <member name="P:TVGL.PrimitiveSurface.InnerEdges">
             <summary>
                 Gets the inner edges.
@@ -4127,6 +4925,12 @@
                 Gets the vertices.
             </summary>
             <value>The vertices.</value>
+        </member>
+        <member name="M:TVGL.PrimitiveSurface.Transform(System.Double[0:,0:])">
+            <summary>
+            Transforms the shape by the provided transformation matrix.
+            </summary>
+            <param name="transformMatrix">The transform matrix.</param>
         </member>
         <member name="M:TVGL.PrimitiveSurface.IsNewMemberOf(TVGL.PolygonalFace)">
             <summary>
@@ -4743,22 +5547,6 @@
             The cone
             </summary>
         </member>
-        <member name="T:TVGL.Properties.Resources">
-            <summary>
-              A strongly-typed resource class, for looking up localized strings, etc.
-            </summary>
-        </member>
-        <member name="P:TVGL.Properties.Resources.ResourceManager">
-            <summary>
-              Returns the cached ResourceManager instance used by this class.
-            </summary>
-        </member>
-        <member name="P:TVGL.Properties.Resources.Culture">
-            <summary>
-              Overrides the current thread's CurrentUICulture property for all
-              resource lookups using this strongly typed resource class.
-            </summary>
-        </member>
         <member name="T:TVGL.BoundingBox">
             <summary>
                 The BoundingBox struct is a simple structure for representing an arbitrarily oriented box
@@ -5207,11 +5995,6 @@
                 Stores errors in the tessellated solid
             </summary>
         </member>
-        <member name="F:TVGL.TessellationError._edgeFaceRatio">
-            <summary>
-                The _edge face ratio
-            </summary>
-        </member>
         <member name="P:TVGL.TessellationError.OverusedEdges">
             <summary>
                 Edges that are used by more than two faces
@@ -5326,6 +6109,14 @@
             </summary>
             <value><c>true</c> if [no errors]; otherwise, <c>false</c>.</value>
         </member>
+        <member name="P:TVGL.TessellationError.ModelIsInsideOut">
+            <summary>
+            Gets a value indicating whether [model is inside out].
+            </summary>
+            <value>
+              <c>true</c> if [model is inside out]; otherwise, <c>false</c>.
+            </value>
+        </member>
         <member name="M:TVGL.TessellationError.CheckModelIntegrity(TVGL.TessellatedSolid,System.Boolean)">
             <summary>
                 Checks the model integrity.
@@ -5337,6 +6128,12 @@
             <summary>
                 Report out any errors
             </summary>
+        </member>
+        <member name="M:TVGL.TessellationError.StoreModelIsInsideOut(TVGL.TessellatedSolid)">
+            <summary>
+            Stores the model is inside out.
+            </summary>
+            <param name="ts">The ts.</param>
         </member>
         <member name="M:TVGL.TessellationError.StoreHigherThanTriFaces(TVGL.TessellatedSolid)">
             <summary>
@@ -5413,7 +6210,7 @@
             <param name="face">The face.</param>
             <param name="edge">The edge.</param>
         </member>
-        <member name="M:TVGL.TessellationError.StoreFaceWithOTwoEdges(TVGL.TessellatedSolid,TVGL.PolygonalFace)">
+        <member name="M:TVGL.TessellationError.StoreFaceWithTwoEdges(TVGL.TessellatedSolid,TVGL.PolygonalFace)">
             <summary>
                 Stores the face with o two edges.
             </summary>
@@ -5665,6 +6462,12 @@
                 Updates normal, vertex order, and area
             </summary>
         </member>
+        <member name="M:TVGL.PolygonalFace.AddEdge(TVGL.Edge)">
+            <summary>
+            Adds the edge.
+            </summary>
+            <param name="edge">The edge.</param>
+        </member>
         <member name="M:TVGL.PolygonalFace.OtherEdge(TVGL.Vertex,System.Boolean)">
             <summary>
                 Others the edge.
@@ -5736,12 +6539,6 @@
             <param name="reverseVertexOrder">if set to <c>true</c> [reverse vertex order].</param>
             <param name="normal">The normal.</param>
             <returns>System.Double[].</returns>
-        </member>
-        <member name="P:TVGL.PolygonalFace.IsConvex">
-            <summary>
-                Gets the is convex.
-            </summary>
-            <value>The is convex.</value>
         </member>
         <member name="P:TVGL.PolygonalFace.Normal">
             <summary>
@@ -5838,11 +6635,6 @@
             </summary>
             <returns><c>true</c> if this solid is now free of errors, <c>false</c> if errors remain.</returns>
         </member>
-        <member name="F:TVGL.TessellatedSolid._bounds">
-            <summary>
-                The _bounds
-            </summary>
-        </member>
         <member name="P:TVGL.TessellatedSolid.Center">
             <summary>
                 Gets the center.
@@ -5914,6 +6706,22 @@
                 The name of solid
             </summary>
             <value>The name.</value>
+        </member>
+        <member name="F:TVGL.TessellatedSolid.Comments">
+            <summary>
+            The comments
+            </summary>
+        </member>
+        <member name="F:TVGL.TessellatedSolid.FileName">
+            <summary>
+            The file name
+            </summary>
+        </member>
+        <member name="F:TVGL.TessellatedSolid.Units">
+            <summary>
+            Gets or sets the units.
+            </summary>
+            <value>The units.</value>
         </member>
         <member name="P:TVGL.TessellatedSolid.Faces">
             <summary>
@@ -6001,40 +6809,47 @@
                 Gets or sets the primitive objects that make up the solid
             </summary>
         </member>
-        <member name="M:TVGL.TessellatedSolid.#ctor">
+        <member name="M:TVGL.TessellatedSolid.#ctor(System.Collections.Generic.IList{System.Double[]},System.Collections.Generic.IList{System.Collections.Generic.List{System.Double[]}},System.Collections.Generic.IList{TVGL.Color},TVGL.UnitType,System.String,System.String,System.Collections.Generic.List{System.String},System.String)">
             <summary>
-                Prevents a default instance of the <see cref="T:TVGL.TessellatedSolid" /> class from being created.
+            Initializes a new instance of the <see cref="T:TVGL.TessellatedSolid" /> class. This is the one that
+            matches with the STL format.
             </summary>
-        </member>
-        <member name="M:TVGL.TessellatedSolid.#ctor(System.String,System.Collections.Generic.IList{System.Double[]},System.Collections.Generic.IList{System.Collections.Generic.List{System.Double[]}},System.Collections.Generic.IList{TVGL.Color})">
-            <summary>
-                Initializes a new instance of the <see cref="T:TVGL.TessellatedSolid" /> class. This is the one that
-                matches with the STL format.
-            </summary>
-            <param name="name">The name.</param>
             <param name="normals">The normals.</param>
             <param name="vertsPerFace">The verts per face.</param>
             <param name="colors">The colors.</param>
-        </member>
-        <member name="M:TVGL.TessellatedSolid.#ctor(System.String,System.Collections.Generic.IList{System.Double[]},System.Collections.Generic.IList{System.Int32[]},System.Collections.Generic.IList{TVGL.Color})">
-            <summary>
-                Initializes a new instance of the <see cref="T:TVGL.TessellatedSolid" /> class. This matches with formats
-                that use indices to the vertices (almost everything except STL).
-            </summary>
+            <param name="units">The units.</param>
             <param name="name">The name.</param>
+            <param name="filename">The filename.</param>
+            <param name="comments">The comments.</param>
+            <param name="language">The language.</param>
+        </member>
+        <member name="M:TVGL.TessellatedSolid.#ctor(System.Collections.Generic.IList{System.Double[]},System.Collections.Generic.IList{System.Int32[]},System.Collections.Generic.IList{TVGL.Color},TVGL.UnitType,System.String,System.String,System.Collections.Generic.List{System.String},System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:TVGL.TessellatedSolid" /> class. This matches with formats
+            that use indices to the vertices (almost everything except STL).
+            </summary>
             <param name="vertices">The vertices.</param>
             <param name="faceToVertexIndices">The face to vertex indices.</param>
             <param name="colors">The colors.</param>
+            <param name="units">The units.</param>
+            <param name="name">The name.</param>
+            <param name="filename">The filename.</param>
+            <param name="comments">The comments.</param>
+            <param name="language">The language.</param>
         </member>
-        <member name="M:TVGL.TessellatedSolid.#ctor(System.Collections.Generic.IList{TVGL.PolygonalFace},System.Collections.Generic.IList{TVGL.Vertex},System.String,System.Collections.Generic.IList{TVGL.Color})">
+        <member name="M:TVGL.TessellatedSolid.#ctor(System.Collections.Generic.IList{TVGL.PolygonalFace},System.Collections.Generic.IList{TVGL.Vertex},System.Collections.Generic.IList{TVGL.Color},TVGL.UnitType,System.String,System.String,System.Collections.Generic.List{System.String},System.String)">
             <summary>
-                Initializes a new instance of the <see cref="T:TVGL.TessellatedSolid" /> class. This constructor is
-                for cases in which the faces and vertices are already defined.
+            Initializes a new instance of the <see cref="T:TVGL.TessellatedSolid" /> class. This constructor is
+            for cases in which the faces and vertices are already defined.
             </summary>
-            <param name="faces"></param>
-            <param name="vertices"></param>
-            <param name="name"></param>
-            <param name="colors"></param>
+            <param name="faces">The faces.</param>
+            <param name="vertices">The vertices.</param>
+            <param name="colors">The colors.</param>
+            <param name="units">The units.</param>
+            <param name="name">The name.</param>
+            <param name="filename">The filename.</param>
+            <param name="comments">The comments.</param>
+            <param name="language">The language.</param>
         </member>
         <member name="M:TVGL.TessellatedSolid.DefineAxisAlignedBoundingBoxAndTolerance(System.Collections.Generic.IEnumerable{System.Double[]})">
             <summary>
@@ -6324,1016 +7139,6 @@
         <member name="F:TVGL.VerbosityLevels.Everything">
             <summary>
                 The everything
-            </summary>
-        </member>
-        <member name="T:ClassesFor_3mf_Files.CT_Model">
-            <summary>
-            Class CT_Model.
-            </summary>
-        </member>
-        <member name="M:ClassesFor_3mf_Files.CT_Model.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:ClassesFor_3mf_Files.CT_Model"/> class.
-            </summary>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Model.metadata">
-            <summary>
-            Gets or sets the metadata.
-            </summary>
-            <value>The metadata.</value>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Model.resources">
-            <summary>
-            Gets or sets the resources.
-            </summary>
-            <value>The resources.</value>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Model.build">
-            <summary>
-            Gets or sets the build.
-            </summary>
-            <value>The build.</value>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Model.unit">
-            <summary>
-            Gets or sets the unit.
-            </summary>
-            <value>The unit.</value>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Model.lang">
-            <summary>
-            Gets or sets the language.
-            </summary>
-            <value>The language.</value>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Model.requiredextensions">
-            <summary>
-            Gets or sets the requiredextensions.
-            </summary>
-            <value>The requiredextensions.</value>
-        </member>
-        <member name="T:ClassesFor_3mf_Files.CT_Metadata">
-            <summary>
-            Class CT_Metadata.
-            </summary>
-        </member>
-        <member name="M:ClassesFor_3mf_Files.CT_Metadata.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:ClassesFor_3mf_Files.CT_Metadata"/> class.
-            </summary>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Metadata.name">
-            <summary>
-            Gets or sets the name.
-            </summary>
-            <value>The name.</value>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Metadata.Text">
-            <summary>
-            Gets or sets the text.
-            </summary>
-            <value>The text.</value>
-        </member>
-        <member name="T:ClassesFor_3mf_Files.CT_Item">
-            <summary>
-            Class CT_Item.
-            </summary>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Item.objectid">
-            <summary>
-            Gets or sets the objectid.
-            </summary>
-            <value>The objectid.</value>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Item.transform">
-            <summary>
-            Gets or sets the transform.
-            </summary>
-            <value>The transform.</value>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Item.itemref">
-            <summary>
-            Gets or sets the itemref.
-            </summary>
-            <value>The itemref.</value>
-        </member>
-        <member name="T:ClassesFor_3mf_Files.CT_Build">
-            <summary>
-            Class CT_Build.
-            </summary>
-        </member>
-        <member name="M:ClassesFor_3mf_Files.CT_Build.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:ClassesFor_3mf_Files.CT_Build"/> class.
-            </summary>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Build.item">
-            <summary>
-            Gets or sets the item.
-            </summary>
-            <value>The item.</value>
-        </member>
-        <member name="T:ClassesFor_3mf_Files.CT_Components">
-            <summary>
-            Class CT_Components.
-            </summary>
-        </member>
-        <member name="M:ClassesFor_3mf_Files.CT_Components.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:ClassesFor_3mf_Files.CT_Components"/> class.
-            </summary>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Components.component">
-            <summary>
-            Gets or sets the component.
-            </summary>
-            <value>The component.</value>
-        </member>
-        <member name="T:ClassesFor_3mf_Files.CT_Component">
-            <summary>
-            Class CT_Component.
-            </summary>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Component.objectid">
-            <summary>
-            Gets or sets the objectid.
-            </summary>
-            <value>The objectid.</value>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Component.transform">
-            <summary>
-            Gets or sets the transform.
-            </summary>
-            <value>The transform.</value>
-        </member>
-        <member name="T:ClassesFor_3mf_Files.CT_Triangle">
-            <summary>
-            Class CT_Triangle.
-            </summary>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Triangle.v1">
-            <summary>
-            Gets or sets the v1.
-            </summary>
-            <value>The v1.</value>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Triangle.v2">
-            <summary>
-            Gets or sets the v2.
-            </summary>
-            <value>The v2.</value>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Triangle.v3">
-            <summary>
-            Gets or sets the v3.
-            </summary>
-            <value>The v3.</value>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Triangle.p1">
-            <summary>
-            Gets or sets the p1.
-            </summary>
-            <value>The p1.</value>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Triangle.p2">
-            <summary>
-            Gets or sets the p2.
-            </summary>
-            <value>The p2.</value>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Triangle.p3">
-            <summary>
-            Gets or sets the p3.
-            </summary>
-            <value>The p3.</value>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Triangle.pid">
-            <summary>
-            Gets or sets the pid.
-            </summary>
-            <value>The pid.</value>
-        </member>
-        <member name="T:ClassesFor_3mf_Files.CT_Vertex">
-            <summary>
-            Class CT_Vertex.
-            </summary>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Vertex.x">
-            <summary>
-            Gets or sets the x.
-            </summary>
-            <value>The x.</value>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Vertex.y">
-            <summary>
-            Gets or sets the y.
-            </summary>
-            <value>The y.</value>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Vertex.z">
-            <summary>
-            Gets or sets the z.
-            </summary>
-            <value>The z.</value>
-        </member>
-        <member name="T:ClassesFor_3mf_Files.CT_Mesh">
-            <summary>
-            Class CT_Mesh.
-            </summary>
-        </member>
-        <member name="M:ClassesFor_3mf_Files.CT_Mesh.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:ClassesFor_3mf_Files.CT_Mesh"/> class.
-            </summary>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Mesh.vertices">
-            <summary>
-            Gets or sets the vertices.
-            </summary>
-            <value>The vertices.</value>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Mesh.triangles">
-            <summary>
-            Gets or sets the triangles.
-            </summary>
-            <value>The triangles.</value>
-        </member>
-        <member name="T:ClassesFor_3mf_Files.CT_Object">
-            <summary>
-            Class CT_Object.
-            </summary>
-        </member>
-        <member name="M:ClassesFor_3mf_Files.CT_Object.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:ClassesFor_3mf_Files.CT_Object"/> class.
-            </summary>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Object.Item">
-            <summary>
-            Gets or sets the item.
-            </summary>
-            <value>The item.</value>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Object.id">
-            <summary>
-            Gets or sets the identifier.
-            </summary>
-            <value>The identifier.</value>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Object.type">
-            <summary>
-            Gets or sets the type.
-            </summary>
-            <value>The type.</value>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Object.matid">
-            <summary>
-            Gets or sets the matid.
-            </summary>
-            <value>The matid.</value>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Object.matindex">
-            <summary>
-            Gets or sets the matindex.
-            </summary>
-            <value>The matindex.</value>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Object.thumbnail">
-            <summary>
-            Gets or sets the thumbnail.
-            </summary>
-            <value>The thumbnail.</value>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Object.partnumber">
-            <summary>
-            Gets or sets the partnumber.
-            </summary>
-            <value>The partnumber.</value>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Object.name">
-            <summary>
-            Gets or sets the name.
-            </summary>
-            <value>The name.</value>
-        </member>
-        <member name="T:ClassesFor_3mf_Files.ST_ObjectType">
-            <summary>
-            Enum ST_ObjectType
-            </summary>
-        </member>
-        <member name="F:ClassesFor_3mf_Files.ST_ObjectType.model">
-            <summary>
-            The model
-            </summary>
-        </member>
-        <member name="F:ClassesFor_3mf_Files.ST_ObjectType.support">
-            <summary>
-            The support
-            </summary>
-        </member>
-        <member name="F:ClassesFor_3mf_Files.ST_ObjectType.other">
-            <summary>
-            The other
-            </summary>
-        </member>
-        <member name="T:ClassesFor_3mf_Files.CT_Base">
-            <summary>
-            Class CT_Base.
-            </summary>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Base.name">
-            <summary>
-            Gets or sets the name.
-            </summary>
-            <value>The name.</value>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Base.displaycolor">
-            <summary>
-            Gets or sets the displaycolor.
-            </summary>
-            <value>The displaycolor.</value>
-        </member>
-        <member name="T:ClassesFor_3mf_Files.CT_BaseMaterials">
-            <summary>
-            Class CT_BaseMaterials.
-            </summary>
-        </member>
-        <member name="M:ClassesFor_3mf_Files.CT_BaseMaterials.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:ClassesFor_3mf_Files.CT_BaseMaterials"/> class.
-            </summary>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_BaseMaterials.base">
-            <summary>
-            Gets or sets the base.
-            </summary>
-            <value>The base.</value>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_BaseMaterials.id">
-            <summary>
-            Gets or sets the identifier.
-            </summary>
-            <value>The identifier.</value>
-        </member>
-        <member name="T:ClassesFor_3mf_Files.CT_Resources">
-            <summary>
-            Class CT_Resources.
-            </summary>
-        </member>
-        <member name="M:ClassesFor_3mf_Files.CT_Resources.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:ClassesFor_3mf_Files.CT_Resources"/> class.
-            </summary>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Resources.basematerials">
-            <summary>
-            Gets or sets the basematerials.
-            </summary>
-            <value>The basematerials.</value>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Resources.object">
-            <summary>
-            Gets or sets the object.
-            </summary>
-            <value>The object.</value>
-        </member>
-        <member name="T:ClassesFor_3mf_Files.ST_Unit">
-            <summary>
-            Enum ST_Unit
-            </summary>
-        </member>
-        <member name="F:ClassesFor_3mf_Files.ST_Unit.micron">
-            <summary>
-            The micron
-            </summary>
-        </member>
-        <member name="F:ClassesFor_3mf_Files.ST_Unit.millimeter">
-            <summary>
-            The millimeter
-            </summary>
-        </member>
-        <member name="F:ClassesFor_3mf_Files.ST_Unit.centimeter">
-            <summary>
-            The centimeter
-            </summary>
-        </member>
-        <member name="F:ClassesFor_3mf_Files.ST_Unit.inch">
-            <summary>
-            The inch
-            </summary>
-        </member>
-        <member name="F:ClassesFor_3mf_Files.ST_Unit.foot">
-            <summary>
-            The foot
-            </summary>
-        </member>
-        <member name="F:ClassesFor_3mf_Files.ST_Unit.meter">
-            <summary>
-            The meter
-            </summary>
-        </member>
-        <member name="T:ClassesFor_3mf_Files.CT_Vertices">
-            <summary>
-            Class CT_Vertices.
-            </summary>
-        </member>
-        <member name="M:ClassesFor_3mf_Files.CT_Vertices.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:ClassesFor_3mf_Files.CT_Vertices"/> class.
-            </summary>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Vertices.vertex">
-            <summary>
-            Gets or sets the vertex.
-            </summary>
-            <value>The vertex.</value>
-        </member>
-        <member name="T:ClassesFor_3mf_Files.CT_Triangles">
-            <summary>
-            Class CT_Triangles.
-            </summary>
-        </member>
-        <member name="M:ClassesFor_3mf_Files.CT_Triangles.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:ClassesFor_3mf_Files.CT_Triangles"/> class.
-            </summary>
-        </member>
-        <member name="P:ClassesFor_3mf_Files.CT_Triangles.triangle">
-            <summary>
-            Gets or sets the triangle.
-            </summary>
-            <value>The triangle.</value>
-        </member>
-        <member name="T:amf.AMF_Object">
-            <summary>
-                Class AMF_Object.
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Object.id">
-            <summary>
-                The identifier
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Object.mesh">
-            <summary>
-                The mesh
-            </summary>
-        </member>
-        <member name="T:amf.AMF_Mesh">
-            <summary>
-                Class AMF_Mesh.
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Mesh.vertices">
-            <summary>
-                The vertices
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Mesh.volume">
-            <summary>
-                The volume
-            </summary>
-        </member>
-        <member name="T:amf.AMF_Vertices">
-            <summary>
-                Class AMF_Vertices.
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Vertices.Edges">
-            <summary>
-                The edges
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Vertices.Vertices">
-            <summary>
-                The vertices
-            </summary>
-        </member>
-        <member name="M:amf.AMF_Vertices.#ctor">
-            <summary>
-                Initializes a new instance of the <see cref="T:amf.AMF_Vertices" /> class.
-            </summary>
-        </member>
-        <member name="T:amf.AMF_Triangle">
-            <summary>
-                Class AMF_Triangle.
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Triangle.color">
-            <summary>
-                The color
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Triangle.texmap">
-            <summary>
-                The texmap
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Triangle.v1">
-            <summary>
-                The v1
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Triangle.v2">
-            <summary>
-                The v2
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Triangle.v3">
-            <summary>
-                The v3
-            </summary>
-        </member>
-        <member name="P:amf.AMF_Triangle.VertexIndices">
-            <summary>
-                Gets the vertex indices.
-            </summary>
-            <value>The vertex indices.</value>
-        </member>
-        <member name="T:amf.AMF_Color">
-            <summary>
-                Class AMF_Color.
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Color.a">
-            <summary>
-                a
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Color.b">
-            <summary>
-                The b
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Color.g">
-            <summary>
-                The g
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Color.r">
-            <summary>
-                The r
-            </summary>
-        </member>
-        <member name="T:amf.AMF_Volume">
-            <summary>
-                Class AMF_Volume.
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Volume.color">
-            <summary>
-                The color
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Volume.materialid">
-            <summary>
-                The materialid
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Volume.Triangles">
-            <summary>
-                The triangles
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Volume.type">
-            <summary>
-                The type
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Volume.typeSpecified">
-            <summary>
-                The type specified
-            </summary>
-        </member>
-        <member name="M:amf.AMF_Volume.#ctor">
-            <summary>
-                Initializes a new instance of the <see cref="T:amf.AMF_Volume" /> class.
-            </summary>
-        </member>
-        <member name="T:amf.AMF_VolumeType">
-            <summary>
-                Enum AMF_VolumeType
-            </summary>
-        </member>
-        <member name="F:amf.AMF_VolumeType.object">
-            <summary>
-                The object
-            </summary>
-        </member>
-        <member name="F:amf.AMF_VolumeType.support">
-            <summary>
-                The support
-            </summary>
-        </member>
-        <member name="T:amf.AMF_Edge">
-            <summary>
-                Class AMF_Edge.
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Edge.dx1">
-            <summary>
-                The DX1
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Edge.dx2">
-            <summary>
-                The DX2
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Edge.dy1">
-            <summary>
-                The dy1
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Edge.dy2">
-            <summary>
-                The dy2
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Edge.dz1">
-            <summary>
-                The DZ1
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Edge.dz2">
-            <summary>
-                The DZ2
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Edge.v1">
-            <summary>
-                The v1
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Edge.v2">
-            <summary>
-                The v2
-            </summary>
-        </member>
-        <member name="T:amf.AMF_Normal">
-            <summary>
-                Class AMF_Normal.
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Normal.nx">
-            <summary>
-                The nx
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Normal.ny">
-            <summary>
-                The ny
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Normal.nz">
-            <summary>
-                The nz
-            </summary>
-        </member>
-        <member name="T:amf.AMF_Coordinates">
-            <summary>
-                Class AMF_Coordinates.
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Coordinates.x">
-            <summary>
-                The x
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Coordinates.y">
-            <summary>
-                The y
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Coordinates.z">
-            <summary>
-                The z
-            </summary>
-        </member>
-        <member name="P:amf.AMF_Coordinates.AsArray">
-            <summary>
-                Gets as array.
-            </summary>
-            <value>As array.</value>
-        </member>
-        <member name="T:amf.AMF_Vertex">
-            <summary>
-                Class AMF_Vertex.
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Vertex.coordinates">
-            <summary>
-                The coordinates
-            </summary>
-        </member>
-        <member name="T:amf.AMF_Constellation">
-            <summary>
-                Class AMF_Constellation.
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Constellation.id">
-            <summary>
-                The identifier
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Constellation.instance">
-            <summary>
-                The instance
-            </summary>
-        </member>
-        <member name="M:amf.AMF_Constellation.#ctor">
-            <summary>
-                Initializes a new instance of the <see cref="T:amf.AMF_Constellation" /> class.
-            </summary>
-        </member>
-        <member name="T:amf.AMF_Instance">
-            <summary>
-                Class AMF_Instance.
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Instance.deltax">
-            <summary>
-                The deltax
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Instance.deltaxSpecified">
-            <summary>
-                The deltax specified
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Instance.deltay">
-            <summary>
-                The deltay
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Instance.deltaySpecified">
-            <summary>
-                The deltay specified
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Instance.deltaz">
-            <summary>
-                The deltaz
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Instance.deltazSpecified">
-            <summary>
-                The deltaz specified
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Instance.objectid">
-            <summary>
-                The objectid
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Instance.rx">
-            <summary>
-                The rx
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Instance.rxSpecified">
-            <summary>
-                The rx specified
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Instance.ry">
-            <summary>
-                The ry
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Instance.rySpecified">
-            <summary>
-                The ry specified
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Instance.rz">
-            <summary>
-                The rz
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Instance.rzSpecified">
-            <summary>
-                The rz specified
-            </summary>
-        </member>
-        <member name="T:amf.AMF_Texture">
-            <summary>
-                Class AMF_Texture.
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Texture.depth">
-            <summary>
-                The depth
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Texture.height">
-            <summary>
-                The height
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Texture.id">
-            <summary>
-                The identifier
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Texture.tiled">
-            <summary>
-                The tiled
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Texture.type">
-            <summary>
-                The type
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Texture.Value">
-            <summary>
-                The value
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Texture.width">
-            <summary>
-                The width
-            </summary>
-        </member>
-        <member name="T:amf.AMF_TextureType">
-            <summary>
-                Enum AMF_TextureType
-            </summary>
-        </member>
-        <member name="F:amf.AMF_TextureType.grayscale">
-            <summary>
-                The grayscale
-            </summary>
-        </member>
-        <member name="T:amf.AMF_Composite">
-            <summary>
-                Class AMF_Composite.
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Composite.materialid">
-            <summary>
-                The materialid
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Composite.Value">
-            <summary>
-                The value
-            </summary>
-        </member>
-        <member name="T:amf.AMF_Material">
-            <summary>
-                Class AMF_Material.
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Material.composite">
-            <summary>
-                The composite
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Material.id">
-            <summary>
-                The identifier
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Material.metadata">
-            <summary>
-                The metadata
-            </summary>
-        </member>
-        <member name="M:amf.AMF_Material.#ctor">
-            <summary>
-                Initializes a new instance of the <see cref="T:amf.AMF_Material" /> class.
-            </summary>
-        </member>
-        <member name="T:amf.AMF_Metadata">
-            <summary>
-                Class AMF_Metadata.
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Metadata.type">
-            <summary>
-                The type
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Metadata.Value">
-            <summary>
-                The value
-            </summary>
-        </member>
-        <member name="T:amf.AMF_TexMap">
-            <summary>
-                Class AMF_TexMap.
-            </summary>
-        </member>
-        <member name="F:amf.AMF_TexMap.atexid">
-            <summary>
-                The atexid
-            </summary>
-        </member>
-        <member name="F:amf.AMF_TexMap.btexid">
-            <summary>
-                The btexid
-            </summary>
-        </member>
-        <member name="F:amf.AMF_TexMap.gtexid">
-            <summary>
-                The gtexid
-            </summary>
-        </member>
-        <member name="F:amf.AMF_TexMap.rtexid">
-            <summary>
-                The rtexid
-            </summary>
-        </member>
-        <member name="F:amf.AMF_TexMap.utex1">
-            <summary>
-                The utex1
-            </summary>
-        </member>
-        <member name="F:amf.AMF_TexMap.utex2">
-            <summary>
-                The utex2
-            </summary>
-        </member>
-        <member name="F:amf.AMF_TexMap.utex3">
-            <summary>
-                The utex3
-            </summary>
-        </member>
-        <member name="F:amf.AMF_TexMap.vtex1">
-            <summary>
-                The vtex1
-            </summary>
-        </member>
-        <member name="F:amf.AMF_TexMap.vtex2">
-            <summary>
-                The vtex2
-            </summary>
-        </member>
-        <member name="F:amf.AMF_TexMap.vtex3">
-            <summary>
-                The vtex3
-            </summary>
-        </member>
-        <member name="F:amf.AMF_TexMap.wtex1">
-            <summary>
-                The wtex1
-            </summary>
-        </member>
-        <member name="F:amf.AMF_TexMap.wtex1Specified">
-            <summary>
-                The wtex1 specified
-            </summary>
-        </member>
-        <member name="F:amf.AMF_TexMap.wtex2">
-            <summary>
-                The wtex2
-            </summary>
-        </member>
-        <member name="F:amf.AMF_TexMap.wtex2Specified">
-            <summary>
-                The wtex2 specified
-            </summary>
-        </member>
-        <member name="F:amf.AMF_TexMap.wtex3">
-            <summary>
-                The wtex3
-            </summary>
-        </member>
-        <member name="F:amf.AMF_TexMap.wtex3Specified">
-            <summary>
-                The wtex3 specified
-            </summary>
-        </member>
-        <member name="T:amf.AMF_Unit">
-            <summary>
-                Enum AMF_Unit
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Unit.inch">
-            <summary>
-                The inch
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Unit.millimeter">
-            <summary>
-                The millimeter
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Unit.meter">
-            <summary>
-                The meter
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Unit.feet">
-            <summary>
-                The feet
-            </summary>
-        </member>
-        <member name="F:amf.AMF_Unit.micron">
-            <summary>
-                The micron
             </summary>
         </member>
     </members>

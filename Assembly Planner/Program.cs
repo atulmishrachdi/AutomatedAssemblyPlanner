@@ -26,10 +26,13 @@ namespace Assembly_Planner
         private static void Main(string[] args)
         {
 
+           
+
             var graphExists = false;
-            var inputDir =
-            //"../../../Test/Cube";
-            // "../../../Test/PumpWExtention";
+            var inputDir = 
+            consoleFrontEnd.getPartsDirectory();
+            //"../../../Test/Cube" ;
+            //"../../../Test/PumpWExtention";
             //"../../../Test/FastenerTest/new/test";
             //"../../../Test/Double";
             //"../../../Test/test7";
@@ -37,7 +40,7 @@ namespace Assembly_Planner
             //"../../../Test/Truck -TXT-1/STL";
             //"../../../Test/FoodPackagingMachine/FPMSTL2";
             //"../../../../GearAndFastener Detection/TrainingData/not-screw/Gear";
-              "../../../Test/test8";
+           //   "../../../Test/test8";
             var s = Stopwatch.StartNew();
             s.Start();
             solids = GetSTLs(inputDir);

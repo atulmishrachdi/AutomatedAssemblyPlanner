@@ -93,3 +93,17 @@ C:\DMDII Project\VAP Container\Repo\vap\AAP\Assembly Planner\obj\Debug\Assembly 
 C:\DMDII Project\Assembly Planning\Assembly Planner\bin\Debug\OptimizationToolbox.dll
 C:\DMDII Project\Assembly Planning\Assembly Planner\bin\Debug\RandomGen.dll
 C:\DMDII Project\Assembly Planning\Assembly Planner\bin\Debug\OptimizationToolbox.pdb
+Z:\Windows.Documents\Desktop\assemblyplanner\Assembly Planner\bin\Debug\Assembly Planner.exe.config
+Z:\Windows.Documents\Desktop\assemblyplanner\Assembly Planner\bin\Debug\Assembly Planner.exe
+Z:\Windows.Documents\Desktop\assemblyplanner\Assembly Planner\bin\Debug\Assembly Planner.pdb
+Z:\Windows.Documents\Desktop\assemblyplanner\Assembly Planner\bin\Debug\MIConvexHull.dll
+Z:\Windows.Documents\Desktop\assemblyplanner\Assembly Planner\bin\Debug\OptimizationToolbox.dll
+Z:\Windows.Documents\Desktop\assemblyplanner\Assembly Planner\bin\Debug\PrimitiveClassificationOfTessellatedSolids.dll
+Z:\Windows.Documents\Desktop\assemblyplanner\Assembly Planner\bin\Debug\RandomGen.dll
+Z:\Windows.Documents\Desktop\assemblyplanner\Assembly Planner\bin\Debug\StarMath.dll
+Z:\Windows.Documents\Desktop\assemblyplanner\Assembly Planner\bin\Debug\TessellationAndVoxelizationGeometryLibrary.dll
+Z:\Windows.Documents\Desktop\assemblyplanner\Assembly Planner\bin\Debug\PrimitiveClassificationOfTessellatedSolids.pdb
+Z:\Windows.Documents\Desktop\assemblyplanner\Assembly Planner\obj\Debug\Assembly Planner.csprojResolveAssemblyReference.cache
+Z:\Windows.Documents\Desktop\assemblyplanner\Assembly Planner\obj\Debug\Assembly Planner.exe
+Z:\Windows.Documents\Desktop\assemblyplanner\Assembly Planner\obj\Debug\Assembly Planner.pdb
+Z:\Windows.Documents\Desktop\assemblyplanner\Assembly Planner\bin\Debug\TessellationAndVoxelizationGeometryLibrary.pdb
