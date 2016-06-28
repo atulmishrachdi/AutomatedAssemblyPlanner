@@ -11,6 +11,10 @@ namespace AssemblyEvaluation
     {
         public AssemblySequence Sequence;
 
+        public AssemblyCandidate()
+        {
+        }
+
         public AssemblyCandidate(candidate c)
         {
             activeRuleSetIndex = c.activeRuleSetIndex;

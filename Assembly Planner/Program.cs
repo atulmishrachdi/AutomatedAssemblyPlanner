@@ -4,7 +4,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Security;
+using System.Reflection;
 using System.Threading.Tasks;
+using AssemblyEvaluation;
 using Assembly_Planner;
 using Assembly_Planner.GraphSynth.BaseClasses;
 using GraphSynth.Representation;
@@ -25,13 +27,13 @@ namespace Assembly_Planner
 
         private static void Main(string[] args)
         {
-
-           
-
+            string inputDir;
             var graphExists = false;
-            var inputDir = 
-            consoleFrontEnd.getPartsDirectory();
-            //"../../../Test/Cube" ;
+#if InputDialog
+             inputDir = consoleFrontEnd.getPartsDirectory();
+#else
+            inputDir
+            = "../../../Test/Cube";
             //"../../../Test/PumpWExtention";
             //"../../../Test/FastenerTest/new/test";
             //"../../../Test/Double";
@@ -40,7 +42,8 @@ namespace Assembly_Planner
             //"../../../Test/Truck -TXT-1/STL";
             //"../../../Test/FoodPackagingMachine/FPMSTL2";
             //"../../../../GearAndFastener Detection/TrainingData/not-screw/Gear";
-           //   "../../../Test/test8";
+            //   "../../../Test/test8";
+#endif
             var s = Stopwatch.StartNew();
             s.Start();
             solids = GetSTLs(inputDir);
@@ -69,7 +72,8 @@ namespace Assembly_Planner
             var solutions = leapSearch.Run(AssemblyGraph, solids, globalDirPool, 1);
             //var solutions = OrderedDFS.Run(inputData, globalDirPool,solids); // the output is the assembly sequence
             //var solutions = BeamSearch.Run(inputData, globalDirPool);
-
+            var cand = new AssemblyCandidate() { Sequence = solutions };
+            cand.SaveToDisk(Directory.GetCurrentDirectory() + "\\solution.xml");
             //var reorientation = OptimalOrientation.Run(solutions);
             //WorkerAllocation.Run(solutions, reorientation);
             s.Stop();
