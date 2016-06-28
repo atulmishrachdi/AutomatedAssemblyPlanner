@@ -4,6 +4,7 @@ using System;
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Serialization;
 //using System.Runtime.InteropServices.WindowsRuntime;
 using StarMathLib;
 using Assembly_Planner.GraphSynth.BaseClasses;
@@ -15,6 +16,7 @@ namespace AssemblyEvaluation
     {
         public List<SubAssembly> Subassemblies = new List<SubAssembly>();
         private static List<PolygonalFace> movingFacesInCombined;
+        [XmlIgnore]
         public static List<PolygonalFace> refFacesInCombined;
 
         public SubAssembly CreateAssemblyTree(candidate c, int recipeIndex = -1)
