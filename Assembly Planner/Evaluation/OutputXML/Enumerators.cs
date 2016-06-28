@@ -1,7 +1,7 @@
 ﻿
 namespace AssemblyEvaluation
 {
-    public enum Tool
+    public enum tool
     {
         Screwdriver0Phillips,
         Screwdriver3Flat,

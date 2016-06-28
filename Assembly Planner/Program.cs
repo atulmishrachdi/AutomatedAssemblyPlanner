@@ -32,9 +32,9 @@ namespace Assembly_Planner
 #if InputDialog
              inputDir = consoleFrontEnd.getPartsDirectory();
 #else
-            inputDir
-            = "../../../Test/Cube";
-            //"../../../Test/PumpWExtention";
+            inputDir=
+            //"../../../Test/Cube";
+            "../../../Test/PumpWExtention";
             //"../../../Test/FastenerTest/new/test";
             //"../../../Test/Double";
             //"../../../Test/test7";
