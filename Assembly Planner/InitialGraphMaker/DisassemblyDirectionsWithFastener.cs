@@ -11,6 +11,7 @@ using StarMathLib;
 using TVGL;
 using TVGL;
 using Assembly_Planner.GraphSynth.BaseClasses;
+using Assembly_Planner;
 
 namespace Assembly_Planner
 {
@@ -104,10 +105,24 @@ namespace Assembly_Planner
                     totalTriTobeChecked += tri2Sub1 * tri2Sub2;
                 }
             }
+
             long counter = 0;
+            int width = 55;
+            int refresh = (int)Math.Ceiling(((float)overlapCheck.Count) / ((float)(width * 4)));
+            int check = 0;
+            LoadingBar.start(width, 0);
+
+
             foreach (var each in overlapCheck)
             //Parallel.ForEach(overlapCheck, each =>
             {
+                
+                if (check % refresh == 0)
+                {
+                    LoadingBar.refresh(width, ((float) check) / ((float) overlapCheck.Count));
+                }
+                check++;
+
                 var localDirInd = new List<int>();
                 for (var t = 0; t < DisassemblyDirections.Directions.Count; t++)
                     localDirInd.Add(t);
@@ -144,10 +159,11 @@ namespace Assembly_Planner
                     AddInformationToArc(a, finDirs, infDirs);
                 }
             }//);
+            LoadingBar.refresh(width,1);
             Fastener.AddFastenersInformation(assemblyGraph, SolidsNoFastener, SolidPrimitive);
             FindingOppositeDirectionsForGlobalPool(globalDirPool);
             s.Stop();
-            Console.WriteLine("Blocking Determination is done in:" + "     " + s.Elapsed);
+            Console.WriteLine("\nBlocking Determination is done in:" + "     " + s.Elapsed);
             return globalDirPool;
         }
 

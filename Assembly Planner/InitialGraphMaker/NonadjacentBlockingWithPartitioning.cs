@@ -70,12 +70,30 @@ namespace Assembly_Planner
 
             CreateCombinedCVHs(subAssems);
 
+            
+
             var solidsL = subAssems.ToList();
+
+
+            int width = 55;
+            int total = (solidsL.Count + 1) * (solidsL.Count / 2);
+            int refresh = (int)Math.Ceiling(((float)total) / ((float)(width * 4)));
+            int check = 0;
+            LoadingBar.start(width, 0);
+
+
             for (var i = 0; i < solidsL.Count; i++)
             {
                 var solidMoving = solidsL[i].Value;
                 for (var j = i + 1; j < solidsL.Count; j++)
                 {
+                    
+                    if (check % refresh == 0)
+                    {
+                        LoadingBar.refresh(width, ((float)check) / ((float)total));
+                    }
+                    check++;
+
                     var blocked = false;
                     // check the convex hull of these two solids to find the planes tha can linearly seperate them
                     // solid1 is moving and solid2 is blocking
@@ -186,11 +204,12 @@ namespace Assembly_Planner
                     }
                 }
             }
+            LoadingBar.refresh(width, 1);
             //stopWat.Stop();
             //Console.WriteLine("Nonadjacent Blocking Determination is done in:" + "     " + stopWat.Elapsed);
             //PrintOutSomeStats(graph);
             stopWat.Stop();
-            Console.WriteLine("Nonadjacent Blocking Determination is done in:" + "     " + stopWat.Elapsed);
+            Console.WriteLine("\nNonadjacent Blocking Determination is done in:" + "     " + stopWat.Elapsed);
         }
 
         private static node GetNode(designGraph graph, string solidName)

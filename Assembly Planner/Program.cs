@@ -33,11 +33,12 @@ namespace Assembly_Planner
              inputDir = consoleFrontEnd.getPartsDirectory();
 #else
             inputDir=
-            //"../../../Test/Cube";
-            "../../../Test/PumpWExtention";
+            "../../../Test/Cube";
+            //"../../../Test/PumpWExtention";
             //"../../../Test/FastenerTest/new/test";
             //"../../../Test/Double";
             //"../../../Test/test7";
+            //"../../../Test/FPM2";
             //"../../../Test/Mc Cormik/STL2";
             //"../../../Test/Truck -TXT-1/STL";
             //"../../../Test/FoodPackagingMachine/FPMSTL2";

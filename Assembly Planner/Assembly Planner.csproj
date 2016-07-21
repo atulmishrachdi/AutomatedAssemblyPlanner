@@ -193,6 +193,7 @@
     <Compile Include="InitialGraphMaker\PartitioningSolid.cs" />
     <Compile Include="InitialGraphMaker\PrimitivePrimitiveInteractions.cs" />
     <Compile Include="Input\consoleFrontEnd.cs" />
+    <Compile Include="Output\LoadingBar.cs" />
     <Compile Include="Output\GraphSaving.cs" />
     <Compile Include="PostProcessor\OptimalOrientation.cs" />
     <Compile Include="PostProcessor\PostProcessingConstnts.cs" />
@@ -253,9 +254,7 @@
       <Name>PrimitiveClassificationOfTessellatedSolids</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Evaluation\OutputXML\Serializable_Alternate\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <PropertyGroup>
