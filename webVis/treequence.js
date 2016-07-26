@@ -627,3 +627,136 @@ function drawFor(theTree, theSigma,theTheme){
 	theSigma.refresh();			
 
 }
+
+
+
+
+
+function insertTreequenceHTML(theTree,parentElement,theName){
+
+	if(theTree==null){
+		return;
+	}
+	var theButton=document.createElement("BUTTON");
+	theButton.innerHTML="-";
+	theButton.setAttribute("onclick","swapHiding(parentElement)");
+	theButton.setAttribute("style","background-color: #AA0000;\
+							border: none;\
+							color: white;\
+							padding: 2px 4px 2px 4px;\
+							text-align: center;\
+							text-decoration: none;\
+							display: inline-block;\
+							font-size: 12px;")
+
+	
+	if(theTree.Ref!=null || theTree.Mov!=null){
+		parentElement.appendChild(theButton);
+		//parentElement.appendChild(document.createElement("P"));
+		parentElement.appendChild(document.createTextNode("  "+theName));
+	}
+	else{
+		parentElement.appendChild(document.createTextNode(theTree.Name));
+	}
+	
+	if(theTree.Ref!=null){
+		var theRef=document.createElement("DIV");
+		parentElement.appendChild(theRef);
+		insertTreequenceHTML(theTree.Ref,theRef,theName+"R");
+	}
+	if(theTree.Mov!=null){
+		var theMov=document.createElement("DIV");
+		parentElement.appendChild(theMov);
+		insertTreequenceHTML(theTree.Mov,theMov,theName+"M");
+	}
+	hideChildren(parentElement);
+	
+}
+
+
+function swapHiding(theNode){
+	
+	var buttonState=getChildrenByTag(theNode,"BUTTON");
+	if(buttonState==null || buttonState.length<1){
+		return;
+	}
+	var theButton=buttonState[0];
+	
+	if(theButton.innerHTML=="+"){
+		theButton.innerHTML="-";
+		showChildren(theNode);
+	}
+	else{
+		theButton.innerHTML="+";
+		hideChildren(theNode);
+	}
+
+	
+}
+
+
+function show(theNode){
+	
+	var theText=getChildrenByTag(theNode,"TEXT");
+
+	theNode.setAttribute("style","display: block; position: relative; left: 15px; border-style: solid; border-color: #880000;");
+	//console.log("Just Showed: "+theNode.innerHTML);
+	
+}
+
+function hide(theNode){
+	
+	var theText=getChildrenByTag(theNode,"TEXT");
+	if(!(theText==null || theText.length<1)){
+		console.log("Hiding: "+theText[0].innerHTML);
+	}
+	var buttonState=getChildrenByTag(theNode,"BUTTON");
+	if(!(buttonState==null || buttonState.length<1)){
+		buttonState[0].innerHTML='+';
+	}
+	theNode.setAttribute("style","display: none;");
+	
+	//console.log("Just Hid: "+theNode.innerHTML);
+	
+}
+
+function showChildren(theNode){
+	
+	var theChildren = getChildrenByTag(theNode,"DIV");
+	var pos=0;
+	var lim=theChildren.length;
+	while(pos<lim){
+		show(theChildren[pos]);
+		hideChildren(theChildren[pos]);
+		pos++;
+	}	
+}
+
+function hideChildren(theNode){
+	
+	theNode.setAttribute("style","display: block; position: relative; left: 15px; border-left: solid #880000; padding: 10px 5px 10px 5px;");
+	var theChildren = getChildrenByTag(theNode,"DIV");
+	var pos=0;
+	var lim=theChildren.length;
+	while(pos<lim){
+		hideChildren(theChildren[pos]);
+		hide(theChildren[pos]);
+		pos++;
+	}	
+}
+
+function getChildrenByTag(theNode,tag){
+	
+	var childs=theNode.children;
+	var pos=0;
+	var lim=childs.length;
+	var result=[];
+	while(pos<lim){
+		if(childs[pos].tagName===tag){
+			result.push(childs[pos]);
+		}
+		pos++;
+	}
+	return result;
+}
+

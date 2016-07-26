@@ -1,20 +1,13 @@
 <!DOCTYPE html>
 <html>
-
-	<input type="file" id="fileinput" multiple />
 	<output id="list"></output>
-	
-	<button id="renderBut" onclick="renderThis(theXML,s,theme)"> Render This </button>
-	<button id="flipBut" onclick="flipAxis(s)"> Flip Axes </button>
-	
-
-<body id="theDisplay" onclick="tryMouseLock()">
+<body id="theDisplay" >
 
 	<head>
 		  <!--<style type="text/css">
 			#theDisplay {
 			  position: absolute;
-			  width: 80%;
+			  width: 90%;
 			  height: 50%;
 			  border-style: solid;
 			  border-color: gray;
@@ -24,17 +17,104 @@
 		  </style>-->
 		  
 		  <style>
-			#infoDiv{
+			#body{
+			  margin: 0px;
+			  overflow: hidden;
+			}
+			canvas {
+				display: inline;
+			}
+			#theDisplay{
 				position: absolute;
-				font-size: 200%;
+				background-color: black;
+				padding: 0px 0px 0px 0px;
+			}
+			#HUD{
+				position: absolute;
+				width:98%;
+				height: 96%;
 				font-family: "Lucida Console";
 				color: red;
 			}
+			#fileinput{
+				position: absolute;
+				top: 20px;
+				left: 10px;
+				width: 250px;
+				font-size: 75%;
+				font-family: "Lucida Console";
+				background: rgba(0, 0, 0, 0.3);
+				border-style: solid;
+				border-color: #880000;
+				color: red;
+				padding: 10px 10px 10px 10px;
+			}
+			#infoDiv{
+				position: absolute;
+				bottom: 0px;
+				right: 0px;
+				font-size: 150%;
+				font-family: "Lucida Console";
+				background: rgba(0, 0, 0, 0.3);
+				border-style: solid;
+				border-color: #880000;
+				color: red;
+				padding: 10px 10px 10px 10px;
+			}
+			#treequenceDiv{
+				position: absolute;
+				top: 90px;
+				left: 10px;
+				height: 80%;
+				width: 250px;
+				font-size: 75%;
+				font-family: "Lucida Console";
+				background: rgba(0, 0, 0, 0.3);
+				border-style: solid;
+				border-color: #880000;
+				color: red;
+				padding: 10px 10px 10px 10px;
+				overflow: scroll;
+			}
+			#lockButton{
+				position: absolute;
+				top: 20px;
+				right: 0px;
+				background-color: #AA0000;
+				border: none;
+				color: white;
+				padding: 10px 10px;
+				text-align: center;
+				text-decoration: none;
+				display: inline-block;
+				font-size: 12px;
+
+			}
+
+				background-color: #AA0000;
+				border: none;
+				color: white;
+				padding: 8px 10px;
+				text-align: center;
+				text-decoration: none;
+				display: inline-block;
+				font-size: 12px;
 		  </style>
 	</head>
-	<div id="infoDiv">
-		<p></p>
-		<text id="mouseoverName" color="#FF0000" size="20" ></text>
+	<div id="HUD">
+		<input type="file" id="fileinput" multiple />
+		<button id="lockButton" onclick="tryMouseLock()" >Mouse Lock</button>
+		<div id="treequenceDiv">
+			
+		</div>
+		<div id="infoDiv">
+			<div>
+			<text id="mouseoverName" color="#FF0000" size="20" >PART: </text>
+			</div>
+			<div>
+			<text id="theTime" color="#FF0000" size="20" >TIME: 0.0000000000</text>
+			</div>
+		</div>
 	</div>
 	
 	
@@ -102,6 +182,7 @@
 		
 		}
 		
+		var skyColor= 0x66ccff;
 		var movementTree=null;
 		var theCenter= new THREE.Vector3(0,0,0);
 		var objectOfInterest=null;
@@ -126,9 +207,10 @@
 		
 
 		var renderer = new THREE.WebGLRenderer();
-		renderer.setClearColor( 0x99ddff, 1 );
-		renderer.setSize( window.innerWidth*0.9, window.innerHeight*0.9);
+		renderer.setClearColor( skyColor, 1 );
+		renderer.setSize( window.innerWidth*0.98, window.innerHeight*0.96);
 		document.body.appendChild( renderer.domElement );
+
 		
 		camera.rotation.reorder('YXZ');
 		
@@ -174,7 +256,7 @@
                 scene.add( directionalLight );
 				
 				
-		var sunLight = new THREE.SpotLight( 0xee9944, 6, 32000, 1.2, 1, 1 );
+		var sunLight = new THREE.SpotLight( 0xaa5533, 6, 32000, 1.2, 1, 1 );
 				sunLight.position.set( 4000, 4000, 4000 );
 				scene.add( sunLight );
 				
@@ -246,7 +328,7 @@
 		flipNormals(water);
 		scene.add(water);
 		
-		var theFog=new THREE.Fog( 0x99ddff, 9000, 12000 );
+		var theFog=new THREE.Fog( skyColor, 9000, 12000 );
 		scene.fog=theFog;
 		
 		
@@ -568,9 +650,11 @@
 			
 			}
 			
-			document.getElementById("mouseoverName").innerHTML=mouseOverText;
+			document.getElementById("mouseoverName").innerHTML="PART: "+mouseOverText;
+			document.getElementById("theTime").innerHTML=("TIME: "+ theTime.toFixed(10)).toString();
 			
 			updateLines(movementTree,null,theTime);
+			//explodeParts();
 			
 			renderer.render(scene, camera);
 		};
@@ -725,6 +809,8 @@
 				movementTree=moveTree;
 				flipTreeTime(movementTree,getLongestTime(movementTree));
 				addDisplacement(movementTree, partFrames, 0);
+				insertTreequenceHTML(movementTree,document.getElementById("treequenceDiv"),"~");
+				getChildrenByTag(document.getElementById("treequenceDiv"),"BUTTON")[0].innerHTML="+";
 				render();
 			}
 			else{
@@ -741,9 +827,9 @@
 			
 			var lim=parts.length;
 			while(pos<lim){
-				parts[pos].Mesh.position.x+=Math.random()*4-2;
-				parts[pos].Mesh.position.y+=Math.random()*4-2;
-				parts[pos].Mesh.position.z+=Math.random()*4-2;
+				parts[pos].Mesh.position.x+=Math.random()*2-1;
+				parts[pos].Mesh.position.y+=Math.random()*2-1;
+				parts[pos].Mesh.position.z+=Math.random()*2-1;
 				parts[pos].Mesh.rotation.x+=Math.random()*0.04-0.02;
 				parts[pos].Mesh.rotation.y+=Math.random()*0.04-0.02;
 				parts[pos].Mesh.rotation.z+=Math.random()*0.04-0.02;
