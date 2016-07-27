@@ -33,8 +33,8 @@ namespace Assembly_Planner
              inputDir = consoleFrontEnd.getPartsDirectory();
 #else
             inputDir=
-            "../../../Test/Cube";
-            //"../../../Test/PumpWExtention";
+          //  "../../../Test/Cube";
+            "../../../Test/PumpWExtention";
             //"../../../Test/FastenerTest/new/test";
             //"../../../Test/Double";
             //"../../../Test/test7";
@@ -75,7 +75,7 @@ namespace Assembly_Planner
             //var solutions = BeamSearch.Run(inputData, globalDirPool);
             var cand = new AssemblyCandidate() { Sequence = solutions };
             cand.SaveToDisk(Directory.GetCurrentDirectory() + "\\solution.xml");
-            //var reorientation = OptimalOrientation.Run(solutions);
+            var reorientation = OptimalOrientation.Run(solutions);
             //WorkerAllocation.Run(solutions, reorientation);
             s.Stop();
             Console.WriteLine();

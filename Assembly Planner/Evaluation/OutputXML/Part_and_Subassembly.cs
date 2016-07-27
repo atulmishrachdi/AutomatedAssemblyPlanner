@@ -90,7 +90,7 @@ namespace AssemblyEvaluation
         public InstallAction Install;
         public SecureAction Secure;
         public RotateAction Rotate;
-        public MovingAction Moving;
+       // public MovingAction Moving;
         public InstallCharacterType InstallCharacter;
         private List<PolygonalFace> refFacesInCombined;
 

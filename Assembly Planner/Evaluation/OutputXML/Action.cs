@@ -7,11 +7,7 @@ namespace AssemblyEvaluation
     {
         public double Time;
         public double TimeSD;
-        public List<tool> Tools;
-    }
-    public class MovingAction : Action
-    {
-        public double travaldistance { get; set; }
+        public List<Tool> Tools;
     }
     public class SecureAction : Action
     {
@@ -19,9 +15,8 @@ namespace AssemblyEvaluation
     }
     public class RotateAction : Action
     {
-        public double[][] TransformationMatrix;
+        public double[,] TransformationMatrix;
     }
-
     public class InstallAction : Action
     {
         public Part Reference
@@ -35,6 +30,7 @@ namespace AssemblyEvaluation
             get;
             set;
         }
+
         public double[] InstallDirection { get; set; }
         public double InstallDistance { get; set; }
         public double[] InstallDirectionRotated { get; set; }

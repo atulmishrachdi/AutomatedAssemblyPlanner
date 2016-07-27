@@ -1096,6 +1096,7 @@ namespace GPprocess
                 }
             }
             var Imatrix = CreatImatrix(obdataX.GetLength(0));
+            CovM = CovM.add(Imatrix.multiply(ell));
             return CovM;
         }
         private static double[,] CreatmatrixhaveSameEle(double p, int size)

@@ -65,7 +65,7 @@ namespace AssemblyEvaluation
         /// <value>
         /// Hight of Center of Mass
         /// </value>
-        public double Hight{ get; set; }
+        public double Hight { get; set; }
         /// <summary>
         /// Gets the adjacent faces of the new face
         /// </summary>
@@ -114,6 +114,15 @@ namespace AssemblyEvaluation
         /// <value>
         /// total cost
         /// </value>
-        public double totalCost { get; set; }
+        public double TotalCost { get; set; }
+
+        public FootprintFace()
+        {
+
+        }
+        public FootprintFace(double[] normal)
+        {
+            Normal = normal;
+        }
     }
 }
