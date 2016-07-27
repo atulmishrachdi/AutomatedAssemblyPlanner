@@ -249,7 +249,7 @@ namespace GPprocess
 
                     }
                     // var OptimPara = new double[4] {  11,6.4,6.3,-10}; ;
-                    var newm = newMDGetMeanAndVar(obdataX, obdataY, testpoints, OptimPara);
+                    var newm = newMDGetMeanAndVar(obdataX, obdataY, testpoints, OptimPara,new double[1,1],new double[2,2] );
                     var m = MDGetMeanAndVar(obdataX, obdataY, testpoints, OptimPara, Math.Exp(OptimPara[3]));
 
                     ////  var OptimPara = new double[] { 0.5, 0.2, 1.2, 1.2};
@@ -355,10 +355,10 @@ namespace GPprocess
             obdataX = obdataX.RemoveRows(index);
             obdataY = obdataY.RemoveVectorCells(index);
         }
-        public static List<double> newMDGetMeanAndVar(double[,] Xobdata, double[] obdatay, double[,] testpoints, double[] para)
+        public static List<double> newMDGetMeanAndVar(double[,] Xobdata, double[] obdatay, double[,] testpoints, double[] para,double[,]cov, double[,] kInv)
         {
             var mean = GetfVactor(obdatay);
-            var cov = GetCovMatrix(Xobdata, para, true);
+        
             var MeanAndVar = new List<double>();
             var a = testpoints.GetLength(0);
             for (var i = 0; i <= a - 1; i++)
@@ -370,9 +370,8 @@ namespace GPprocess
                 {
                     kstart[j, 0] = newcov[j, newcov.GetLength(0) - 1];
                 }
-                var Cholcov = StarMath.CholeskyDecomposition(cov);
                 var kstartT = kstart.transpose();
-                var kInv = cov.inverse();
+               
                 var MeanStart = (kstartT.multiply(kInv)).multiply(mean);
                 var VarStart = (((kstartT.multiply(kInv)).multiply(kstart)).multiply(-1));
                 MeanAndVar.Add(MeanStart[0, 0]);
@@ -965,7 +964,7 @@ namespace GPprocess
             var CovM = SEKernel(obdataX, para, noise, true);
             return CovM;
         }
-        private static double[,] GetCovMatrix(double[,] obdataX, double[] para, bool MatlabSE)// test
+        public static double[,] GetCovMatrix(double[,] obdataX, double[] para, bool MatlabSE)// test
         {
             var CovM = SEKernel(obdataX, para, true);
             return CovM;

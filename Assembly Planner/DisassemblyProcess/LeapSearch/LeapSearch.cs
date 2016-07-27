@@ -268,6 +268,7 @@ namespace Assembly_Planner
                 return MemoCandidates[nodes];
             GenerateOptions(nodes, gOptions, relaxingSc);
             var c = 0;
+
             foreach (var opt in gOptions.Keys)
             {
                 var TC = new TreeCandidate();

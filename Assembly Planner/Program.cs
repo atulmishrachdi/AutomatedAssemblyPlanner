@@ -24,17 +24,18 @@ namespace Assembly_Planner
         public static designGraph AssemblyGraph;
 
         public static List<int> globalDirPool = new List<int>();
-
+ 
         private static void Main(string[] args)
         {
+
             string inputDir;
             var graphExists = false;
 #if InputDialog
              inputDir = consoleFrontEnd.getPartsDirectory();
 #else
             inputDir=
-          //  "../../../Test/Cube";
-            "../../../Test/PumpWExtention";
+            "../../../Test/Cube";
+           // "../../../Test/PumpWExtention";
             //"../../../Test/FastenerTest/new/test";
             //"../../../Test/Double";
             //"../../../Test/test7";

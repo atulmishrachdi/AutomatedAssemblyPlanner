@@ -2,6 +2,7 @@
 using Assembly_Planner;
 using GPprocess;
 using Tool = Assembly_Planner.Tool;
+using StarMathLib;
 
 namespace Assembly_Planner
 
@@ -10,13 +11,24 @@ namespace Assembly_Planner
     {
         private static double[,] MovingobdataX = readdata.read("../../Evaluation/TrainningTimeData/movingdata/dataset4/TrainX.csv", 5);
         private static double[] MovingobdataY = readdata.read("../../Evaluation/TrainningTimeData/movingdata/dataset4/TrainY.csv");
-        private static double[,] IinstallobdataX = readdata.read("../../Evaluation/TrainningTimeData/installdata/dataset3/TrainX.csv", 6);
+        private static double[,] InstallobdataX = readdata.read("../../Evaluation/TrainningTimeData/installdata/dataset3/TrainX.csv", 6);
         private static double[] IinstallobdataY = readdata.read("../../Evaluation/TrainningTimeData/installdata/dataset3/TrainY.csv");
         // private static double[,] RotateobdataX = readdata.read("../../Evaluation/TrainningTimeData/rotatedata/dataset1/TrainX.csv", 10);
         // private static double[] RotateobdataY = readdata.read("../../Evaluation/TrainningTimeData/rotatedata/dataset1/TrainY.csv");
         // rotate only with angle
         private static double[,] RotateobdataX = readdata.read("../../Evaluation/TrainningTimeData/rotatedata/dataset1withonlyangles/TrainXangle.csv", 5);
         private static double[] RotateobdataY = readdata.read("../../Evaluation/TrainningTimeData/rotatedata/dataset1withonlyangles/TrainY.csv");
+        private static double[] OptimParamoving = new double[7] { 0.37666666666666671, 0.8939, 0.30833333333333335, 0.12666666666666668, 0.45833333333333337, 0.15333333333333335, 0.018333333333333333 };
+        private static double[,] COVmove =ThreeDinput.GetCovMatrix(MovingobdataX, OptimParamoving, true);
+        private static double[] OptimParainstall = new double[8] { 0.77, 0.28, 0.21, 0.14, 0.27, 0.05, 0.37, 0.06 };
+        private static double[,] COVinstall = ThreeDinput.GetCovMatrix(InstallobdataX, OptimParainstall, true);
+        private static double[] OptimPararotate = new double[7] { 0.95113333333333339, 0.21833333333333335, 0.23833333333333334, 0.155, 0.46166666666666667, 0.18000000000000002, 0.01 };//need work
+        private static double[,] COVrotate = ThreeDinput.GetCovMatrix(RotateobdataX, OptimPararotate, true);
+        private static double[,] kInvmove = COVmove.inverse();
+        private static double[,] kInvinstall = COVinstall.inverse();
+        private static double[,] kInvrotate = COVrotate.inverse();
+
+
 
 
         public static void GetTimeAndSD(double[] testpoints, string action, out double meantime1, out double SD)
@@ -34,15 +46,15 @@ namespace Assembly_Planner
             if (action.StartsWith("m") || action.StartsWith("M"))//done
             {
                 var OptimPara = new double[7] { 0.37666666666666671, 0.8939, 0.30833333333333335, 0.12666666666666668, 0.45833333333333337, 0.15333333333333335, 0.018333333333333333 };
-                var newm = ThreeDinput.newMDGetMeanAndVar(MovingobdataX, MovingobdataY, testpointsmatrix, OptimPara);
+                var newm = ThreeDinput.newMDGetMeanAndVar(MovingobdataX, MovingobdataY, testpointsmatrix, OptimPara,COVmove,kInvmove);
                 meantime1 = ThreeDinput.Getmean(newm)[0];
                 SD = ThreeDinput.GetSD(newm)[0];
             }
 
-            if (action.StartsWith("i") || action.StartsWith("L"))
+            if (action.StartsWith("i") || action.StartsWith("I"))
             {
                 var OptimPara = new double[8] { 0.77, 0.28, 0.21, 0.14, 0.27, 0.05, 0.37, 0.06 };
-                var newm = ThreeDinput.newMDGetMeanAndVar(IinstallobdataX, IinstallobdataY, testpointsmatrix, OptimPara);
+                var newm = ThreeDinput.newMDGetMeanAndVar(InstallobdataX, IinstallobdataY, testpointsmatrix, OptimPara,COVinstall,kInvinstall);
                 meantime1 = ThreeDinput.Getmean(newm)[0];
                 SD = ThreeDinput.GetSD(newm)[0];
             }
@@ -60,7 +72,7 @@ namespace Assembly_Planner
             if (action.StartsWith("r") || action.StartsWith("R"))
             {
                 var OptimPara = new double[7] { 0.95113333333333339, 0.21833333333333335, 0.23833333333333334, 0.155, 0.46166666666666667, 0.18000000000000002, 0.01 };//need work
-                var newm = ThreeDinput.newMDGetMeanAndVar(RotateobdataX, RotateobdataY, testpointsmatrix, OptimPara);
+                var newm = ThreeDinput.newMDGetMeanAndVar(RotateobdataX, RotateobdataY, testpointsmatrix, OptimPara,COVrotate,kInvrotate);
                 meantime1 = ThreeDinput.Getmean(newm)[0];
                 SD = ThreeDinput.GetSD(newm)[0];
             }
