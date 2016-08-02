@@ -1,6 +1,7 @@
 ﻿using System;
 using System.CodeDom;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -11,118 +12,118 @@ using StarMathLib;
 using TVGL;
 using TVGL;
 using Assembly_Planner.GraphSynth.BaseClasses;
-using Assembly_Planner;
+using TVGL.IOFunctions;
+using Component = Assembly_Planner.GraphSynth.BaseClasses.Component;
 
 namespace Assembly_Planner
 {
     internal class DisassemblyDirectionsWithFastener
     {
         public static List<double[]> Directions = new List<double[]>();
-        internal static Dictionary<string, List<TessellatedSolid>> Solids;
-        internal static Dictionary<string, List<TessellatedSolid>> SolidsNoFastener;
-        internal static Dictionary<int, List<Component[]>> NonAdjacentBlocking = new Dictionary<int, List<Component[]>>(); //Component[0] is blocked by Component[1]
+
+        internal static Dictionary<int, List<Component[]>> NonAdjacentBlocking =
+            new Dictionary<int, List<Component[]>>(); //Component[0] is blocked by Component[1]
+
         internal static Dictionary<TessellatedSolid, List<PrimitiveSurface>> SolidPrimitive =
             new Dictionary<TessellatedSolid, List<PrimitiveSurface>>();
+        internal static Dictionary<string, List<TessellatedSolid>> Solids;
+        internal static Dictionary<string, List<TessellatedSolid>> SolidsNoFastener;
         internal static List<TessellatedSolid> PartsWithOneGeom;
 
-        internal static List<int> Run(designGraph assemblyGraph, Dictionary<string, List<TessellatedSolid>> solids,
-            bool classifyFastener = false, int threaded = 0)
-        {
-            Solids = new Dictionary<string, List<TessellatedSolid>>(solids);
+        protected static int gCounter = 0;
 
+        internal static void RunGeometricReasoning(Dictionary<string, List<TessellatedSolid>> solids)
+        {
             // Generate a good number of directions on the surface of a sphere
             //------------------------------------------------------------------------------------------
+            //SimplifySolids(solids);
             Directions = IcosahedronPro.DirectionGeneration(1);
             DisassemblyDirections.Directions = new List<double[]>(Directions);
             FindingOppositeDirections();
-            SpringDetector.DetectSprings(solids);
-            var globalDirPool = new List<int>();
-            //SpringDetector.DetectSprings(solids);
-            //playWithOBB(solids);
             // Creating Bounding Geometries for every solid
             //------------------------------------------------------------------------------------------
+            //Bridge.StatusReporter.ReportStatusMessage("Creating Bounding Geometries ... ", 1);
             BoundingGeometry.OrientedBoundingBoxDic = new Dictionary<TessellatedSolid, BoundingBox>();
             BoundingGeometry.BoundingCylinderDic = new Dictionary<TessellatedSolid, BoundingCylinder>();
             BoundingGeometry.CreateOBB2(solids);
             BoundingGeometry.CreateBoundingCylinder(solids);
+            //Bridge.StatusReporter.PrintMessage("BOUNDING GEOMETRIES ARE SUCCESSFULLY CREATED.", 0.5f);
 
-            // From repeated parts take only one of them, and do the primitive classification on that:
+            // Detecting Springs
+            SpringDetector.DetectSprings(solids);
+
+            // Primitive Classification
             //------------------------------------------------------------------------------------------
+            // what parts to be classified?
             var partsForPC = BlockingDetermination.PartsTobeClassifiedIntoPrimitives(solids);
             SolidPrimitive = BlockingDetermination.PrimitiveMaker(partsForPC);
+        }
 
+        internal static void RunFastenerDetection(Dictionary<string, List<TessellatedSolid>> solids, int threaded)
+        {
             PartsWithOneGeom = new List<TessellatedSolid>();
             foreach (var subAssem in solids.Values)
                 if (subAssem.Count == 1)
                     PartsWithOneGeom.Add(subAssem[0]);
+            // From repeated parts take only one of them:
+            //------------------------------------------------------------------------------------------
             var multipleRefs = DuplicatePartsDetector(PartsWithOneGeom);
 
             // Detect fasteners
             //------------------------------------------------------------------------------------------
-            var screwsAndBolts = new HashSet<TessellatedSolid>();
-            if (classifyFastener)
-            {
-                screwsAndBolts = FastenerDetector.Run(SolidPrimitive, multipleRefs, threaded, false);
-                screwsAndBolts = FastenerDetector.CheckFastenersWithUser(screwsAndBolts);
-            }
-            SolidsNoFastener = RemoveFastenersFromTheSolidsList(solids, screwsAndBolts);
+            FastenerDetector.Run(SolidPrimitive, multipleRefs, threaded, false);
+        }
 
-            //// Detect gear mates
-            ////------------------------------------------------------------------------------------------
+        internal static List<int> RunGraphGeneration(designGraph assemblyGraph, Dictionary<string, List<TessellatedSolid>> solidsNoFastener)
+        {
+            //PrintOutSomeInitialStats();
+            var globalDirPool = new List<int>();
+            // Detect gear mates
+            //------------------------------------------------------------------------------------------
             var gears = GearDetector.Run(PartsWithOneGeom, SolidPrimitive);
-
+            var sw = new Stopwatch();
+            sw.Start();
 
             // Add the solids as nodes to the graph. Exclude the fasteners 
             //------------------------------------------------------------------------------------------
-            AddingNodesToGraph(assemblyGraph, SolidsNoFastener); //, gears, screwsAndBolts);
+            //DisassemblyDirections.Solids = new List<TessellatedSolid>(solidsNoFastener);
+            AddingNodesToGraph(assemblyGraph, solidsNoFastener); //, gears, screwsAndBolts);
 
             // Implementing region octree for every solid
             //------------------------------------------------------------------------------------------
             PartitioningSolid.Partitions = new Dictionary<TessellatedSolid, Partition[]>();
             PartitioningSolid.PartitionsAABB = new Dictionary<TessellatedSolid, PartitionAABB[]>();
-            PartitioningSolid.CreatePartitions(SolidsNoFastener);
+            PartitioningSolid.CreatePartitions(solidsNoFastener);
 
             // Part to part interaction to obtain removal directions between every connected pair
             //------------------------------------------------------------------------------------------
-            var s = Stopwatch.StartNew();
-            s.Start();
-            Console.WriteLine();
-            Console.WriteLine("Blocking Determination is running ....");
+            //var s = Stopwatch.StartNew();
+            //s.Start();
+            //Console.WriteLine();
+            //Console.WriteLine("Blocking Determination is running ....");
+            //Bridge.StatusReporter.ReportStatusMessage("Generating the Liaison Graph - Adjacent Blocking Determination ...", 0.5f);
+            //Bridge.StatusReporter.ReportProgress(0);
             BlockingDetermination.OverlappingSurfaces = new List<OverlappedSurfaces>();
-            var solidNofastenerList = SolidsNoFastener.ToList();
+            var solidNofastenerList = solidsNoFastener.ToList();
             //var totalCases = ((solidsNoFastener.Count - 1) * (solidsNoFastener.Count)) / 2.0;
             long totalTriTobeChecked = 0;
             var overlapCheck = new HashSet<KeyValuePair<string, List<TessellatedSolid>>[]>();
-            for (var i = 0; i < SolidsNoFastener.Count - 1; i++)
+            for (var i = 0; i < solidsNoFastener.Count - 1; i++)
             {
                 var subAssem1 = solidNofastenerList[i];
-                for (var j = i + 1; j < SolidsNoFastener.Count; j++)
+                for (var j = i + 1; j < solidsNoFastener.Count; j++)
                 {
                     var subAssem2 = solidNofastenerList[j];
                     overlapCheck.Add(new[] { subAssem1, subAssem2 });
-                    var tri2Sub1 = subAssem1.Value.Sum(s2 => s2.Faces.Length);
-                    var tri2Sub2 = subAssem2.Value.Sum(s2 => s2.Faces.Length);
+                    var tri2Sub1 = subAssem1.Value.Sum(s => s.Faces.Length);
+                    var tri2Sub2 = subAssem2.Value.Sum(s => s.Faces.Length);
                     totalTriTobeChecked += tri2Sub1 * tri2Sub2;
                 }
             }
-
             long counter = 0;
-            int width = 55;
-            int refresh = (int)Math.Ceiling(((float)overlapCheck.Count) / ((float)(width * 4)));
-            int check = 0;
-            LoadingBar.start(width, 0);
-
-
             foreach (var each in overlapCheck)
             //Parallel.ForEach(overlapCheck, each =>
             {
-                
-                if (check % refresh == 0)
-                {
-                    LoadingBar.refresh(width, ((float) check) / ((float) overlapCheck.Count));
-                }
-                check++;
-
                 var localDirInd = new List<int>();
                 for (var t = 0; t < DisassemblyDirections.Directions.Count; t++)
                     localDirInd.Add(t);
@@ -158,16 +159,30 @@ namespace Assembly_Planner
                     a.Certainty = certainty;
                     AddInformationToArc(a, finDirs, infDirs);
                 }
+                //if (counter < totalTriTobeChecked)
+                    //Bridge.StatusReporter.ReportProgress(counter / (float)totalTriTobeChecked);
             }//);
-            LoadingBar.refresh(width,1);
-            Fastener.AddFastenersInformation(assemblyGraph, SolidsNoFastener, SolidPrimitive);
+            //Bridge.StatusReporter.ReportProgress(1);
+            //if (Bridge.SavedSessionIsStarted) return globalDirPool;
+            Fastener.AddFastenersInformation(assemblyGraph, solidsNoFastener, SolidPrimitive);
+            // create oppositeDirections for global direction pool.
             FindingOppositeDirectionsForGlobalPool(globalDirPool);
-            s.Stop();
-            Console.WriteLine("\nBlocking Determination is done in:" + "     " + s.Elapsed);
+            //sw.Stop();
+            // Simplify the solids, before doing anything
+            //------------------------------------------------------------------------------------------
+            //if (solidsNoFastener.Count == 20)
+            {
+                SimplifySolids(solidsNoFastener);
+                // Implementing region octree for every solid
+                //------------------------------------------------------------------------------------------
+                PartitioningSolid.Partitions = new Dictionary<TessellatedSolid, Partition[]>();
+                PartitioningSolid.PartitionsAABB = new Dictionary<TessellatedSolid, PartitionAABB[]>();
+                PartitioningSolid.CreatePartitions(solidsNoFastener);
+            }
+            //s.Stop();
+            //Console.WriteLine("Blocking Determination is done in:" + "     " + s.Elapsed);
             return globalDirPool;
         }
-
-        
 
 
         private static Dictionary<TessellatedSolid, List<TessellatedSolid>> DuplicatePartsDetector(List<TessellatedSolid> solids)
@@ -177,24 +192,32 @@ namespace Assembly_Planner
             // We need the transformatiuon matrix to transform information we get from primitive classification.
             // Is it really worth it? yes. Because we will most likely detect fasteners after this step, so we will
             // have a lot of similar parts.
+
+            // When we are detecting duplicate parts, we will only do it for the parts with one geomtery. Why?
+            //  because these duplicates are only used in fastener detection. And fasteners cannot be seen in
+            //  parts with more than one geometry
+            //Bridge.StatusReporter.ReportStatusMessage("Detecting Duplicated Solids ...", 1);
+            //Bridge.StatusReporter.ReportProgress(0);
             var multipleRefs = new Dictionary<TessellatedSolid, List<TessellatedSolid>>();
-            foreach (var solid in solids)
+            for (var i = 0; i < solids.Count; i++)
             {
+                var solid = solids[i];
                 var exist = multipleRefs.Keys.Where(
                     k =>
                         k.Faces.Count() == solid.Faces.Count() &&
                         Math.Abs(k.Vertices.Count() - solid.Vertices.Count()) < 2 &&
-                        (Math.Max(k.SurfaceArea, solid.SurfaceArea) - Math.Min(k.SurfaceArea, solid.SurfaceArea))/
+                        (Math.Max(k.SurfaceArea, solid.SurfaceArea) - Math.Min(k.SurfaceArea, solid.SurfaceArea)) /
                         Math.Max(k.SurfaceArea, solid.SurfaceArea) < 0.001).ToList();
                 if (exist.Count == 0)
                 {
                     var d = new List<TessellatedSolid>();
-                    multipleRefs.Add(solid,d);
+                    multipleRefs.Add(solid, d);
                 }
                 else
                 {
                     multipleRefs[exist[0]].Add(solid);
                 }
+                //Bridge.StatusReporter.ReportProgress((i + 1) / (float)(solids.Count));
             }
             return multipleRefs;
         }
@@ -203,6 +226,33 @@ namespace Assembly_Planner
         {
             a.FiniteDirections.AddRange(finDirs);
             a.InfiniteDirections.AddRange(infDirs);
+        }
+
+
+        private static void SimplifySolids(Dictionary<string, List<TessellatedSolid>> subAssems)
+        {
+            foreach (var sa in subAssems)
+            {
+                //using (var fileStream = File.Create(sa.Key + ".amf"))
+                //    IO.Save(fileStream, sa.Value, FileType.AMF);
+                foreach (var ts in sa.Value)
+                {
+                    if (ts.Errors == null || ((ts.Errors.EdgesThatDoNotLinkBackToFace == null ||
+                                               ts.Errors.EdgesThatDoNotLinkBackToFace.Count < 2) &&
+                                              ts.Errors.SingledSidedEdges.Count < 5))
+                    {
+                        gCounter++;
+                        //if (ts.Faces.Count() == 410) continue;
+                        //var perc = (ts.Faces.Length - 1000)/(double)ts.Faces.Length;
+                        ts.SimplifyByPercentage(0.7);
+                        //ts.Repair();
+                        //continue;
+                    }
+                    //if (ts.Faces.Length <= 800) continue;
+                    //ts.SimplifyByPercentage(0.5);
+                    //ts.Repair();
+                }
+            }
         }
 
         private static void AddingNodesToGraph(designGraph assemblyGraph, Dictionary<string, List<TessellatedSolid>> solids)//,
@@ -223,7 +273,6 @@ namespace Assembly_Planner
                 //}
             }
         }
-
 
         private static double[] COMCalculator(List<TessellatedSolid> geometries)
         {
@@ -254,7 +303,7 @@ namespace Assembly_Planner
             }
             return dirsG[0].Where(dir => dirsG.All(dirs => dirs.Any(d => Math.Abs(1 - d.dotProduct(dir)) < OverlappingFuzzification.CheckWithGlobDirsParall))).ToList();
         }
-        
+
         public static List<double[]> FreeLocalDirectionFinder(Component Component, List<Component> subgraph)
         {
             if (!subgraph.Contains(Component)) return null;
@@ -277,20 +326,17 @@ namespace Assembly_Planner
         }
 
 
-        private static Dictionary<string, List<TessellatedSolid>> RemoveFastenersFromTheSolidsList(
-            Dictionary<string, List<TessellatedSolid>> solids, HashSet<TessellatedSolid> screwsAndBolts)
+        private static List<TessellatedSolid> RemoveFastenersFromTheSolidsList(List<TessellatedSolid> solids, HashSet<TessellatedSolid> screwsAndBolts)
         {
-            var solidsNoFastener = new Dictionary<string, List<TessellatedSolid>>();
-            foreach (var solid in solids)
-            {
-                if (solid.Value.Count > 1)
-                {
-                    solidsNoFastener.Add(solid.Key, solid.Value);
-                    continue;
-                }
-                if (screwsAndBolts.Any(f=> f.Name == solid.Key)) continue;
-                solidsNoFastener.Add(solid.Key, solid.Value);
-            }
+            var solidsNoFastener = new List<TessellatedSolid>(solids);
+            foreach (var bolt in screwsAndBolts)
+                solidsNoFastener.Remove(bolt);
+            foreach (var fastener in FastenerDetector.Fasteners)
+                solidsNoFastener.Remove(fastener.Solid);
+            foreach (var nuts in FastenerDetector.Nuts)
+                solidsNoFastener.Remove(nuts.Solid);
+            foreach (var washer in FastenerDetector.Washers)
+                solidsNoFastener.Remove(washer.Solid);
             return solidsNoFastener;
         }
 
@@ -306,7 +352,7 @@ namespace Assembly_Planner
         }
 
 
-        private static void FindingOppositeDirectionsForGlobalPool(List<int> globalDirPool)
+        internal static void FindingOppositeDirectionsForGlobalPool(List<int> globalDirPool)
         {
             DisassemblyDirections.DirectionsAndOppositsForGlobalpool = new Dictionary<int, int>();
             var toBeAddedToGDir = new List<int>();
@@ -335,6 +381,5 @@ namespace Assembly_Planner
                 DisassemblyDirections.DirectionsAndOppositsForGlobalpool.Add(newD, key[0].Key);
             }
         }
-
     }
 }
