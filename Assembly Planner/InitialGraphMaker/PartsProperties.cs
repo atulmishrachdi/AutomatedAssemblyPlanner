@@ -71,6 +71,12 @@ namespace Assembly_Planner
         }
 
     }
+    /// <summary>
+    /// Class PartProperties.
+    /// vaolume is in cubic mm
+    /// and mass is in grams
+    /// Braxton, make sure the conversion is correct here.
+    /// </summary>
     public class PartProperties
     {
         [XmlElement("name")]
@@ -78,9 +84,10 @@ namespace Assembly_Planner
         [XmlElement("mass")]
         public double Mass { get; set; }
 
-        [XmlElement("density")]
-        public double Density { get; set; }
+        [XmlElement("volume")]
+        public double Volume { get; set; }
 
+      
         [XmlElement("fastener_certainty")]
         public double fastenerCertainty { get; set; }
 
