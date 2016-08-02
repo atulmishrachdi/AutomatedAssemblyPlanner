@@ -25,6 +25,8 @@ namespace Assembly_Planner
         public static Dictionary<string, List<TessellatedSolid>> SolidsNoFastener = new Dictionary<string, List<TessellatedSolid>>();
         public static Dictionary<string, double> SolidsMass = new Dictionary<string, double>();
         public static designGraph AssemblyGraph;
+        public const double MeshMagnifier = 1;
+        public static double[] PointInMagicBox = {0,0,0.0};
 
         public static List<int> globalDirPool = new List<int>();
 
@@ -36,8 +38,8 @@ namespace Assembly_Planner
              inputDir = consoleFrontEnd.getPartsDirectory();
 #else
             inputDir =
-            //    "../../../Test/Cube";
-             "../../../Test/PumpWExtention";
+                //    "../../../Test/Cube";
+                "../../../Test/PumpWExtention";
             //"../../../Test/FastenerTest/new/test";
             //"../../../Test/Double";
             //"../../../Test/test7";
@@ -63,8 +65,8 @@ namespace Assembly_Planner
             SerializeSolidProperties();
             DeserializeSolidProperties();
             globalDirPool = DisassemblyDirectionsWithFastener.RunGraphGeneration(AssemblyGraph, SolidsNoFastener);
+            // the second user interaction must happen here
             NonadjacentBlockingWithPartitioning.Run(AssemblyGraph, SolidsNoFastener, globalDirPool);
-
             //var solutions = RecursiveOptimizedSearch.Run(assemblyGraph, solids, globalDirPool);
             Stabilityfunctions.GenerateReactionForceInfo(AssemblyGraph);
             var leapSearch = new LeapSearch();
@@ -115,7 +117,7 @@ namespace Assembly_Planner
             foreach (var solidName in Solids.Keys)
             {
                 var userUpdated = partsProperties.parts.First(p => p.Name == solidName);
-                if (userUpdated.fastenerCertainty == 0)
+                if (userUpdated.FastenerCertainty == 0)
                     SolidsNoFastener.Add(solidName, Solids[solidName]);
             }
             FastenerDetector.Fasteners =
