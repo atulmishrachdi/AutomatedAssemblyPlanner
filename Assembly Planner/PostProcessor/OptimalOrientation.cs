@@ -166,7 +166,7 @@ namespace Assembly_Planner
             // A point at angle theta on the circle whose centre is (x0,y0) and whose radius is r is (x0 + r cos theta, y0 + r sin theta).
             // The center of the circle can be anything. I will take the projected center of the whole AABB
             VertsOnCircle = new List<double[]>();
-            var allVertcs = Program.solids.SelectMany(s => s.Value.SelectMany(g => g.Vertices)).ToList();
+            var allVertcs = Program.Solids.SelectMany(s => s.Value.SelectMany(g => g.Vertices)).ToList();
             var x = new[] { allVertcs.Min(v => v.X), allVertcs.Max(v => v.X) };
             var y = new[] { allVertcs.Min(v => v.Y), allVertcs.Max(v => v.Y) };
             var z = new[] { allVertcs.Min(v => v.Z), allVertcs.Max(v => v.Z) };
