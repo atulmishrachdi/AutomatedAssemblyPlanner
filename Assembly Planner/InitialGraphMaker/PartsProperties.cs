@@ -18,10 +18,10 @@ namespace Assembly_Planner
             this.parts = new List<PartProperties>();
             foreach (var solidName in Program.Solids.Keys)
             {
-                var part = new PartProperties {Name = solidName, Mass = 0.0, Density = 0.0};
+                var part = new PartProperties {Name = solidName, Mass = 0.0, Volume = 0.0};
                 if (Program.Solids[solidName].Count > 1)
                 {
-                    part.fastenerCertainty = 0.0;
+                    part.FastenerCertainty = 0.0;
                     this.parts.Add(part);
                     continue;
                 }
@@ -30,7 +30,7 @@ namespace Assembly_Planner
                     var fastener = FastenerDetector.Fasteners.Where(f => solidName == f.Solid.Name).ToList();
                     if (fastener.Any())
                     {
-                        part.fastenerCertainty = fastener[0].Certainty;
+                        part.FastenerCertainty = fastener[0].Certainty;
                         this.parts.Add(part);
                         continue;
                     }
@@ -40,7 +40,7 @@ namespace Assembly_Planner
                     var nut = FastenerDetector.Nuts.Where(n => solidName == n.Solid.Name).ToList();
                     if (nut.Any())
                     {
-                        part.fastenerCertainty = nut[0].Certainty;
+                        part.FastenerCertainty = nut[0].Certainty;
                         this.parts.Add(part);
                         continue;
                     }
@@ -50,7 +50,7 @@ namespace Assembly_Planner
                     var washer = FastenerDetector.Fasteners.Where(w => solidName == w.Solid.Name).ToList();
                     if (washer.Any())
                     {
-                        part.fastenerCertainty = washer[0].Certainty;
+                        part.FastenerCertainty = washer[0].Certainty;
                         this.parts.Add(part);
                         continue;
                     }
@@ -60,12 +60,12 @@ namespace Assembly_Planner
                     var smallPart = FastenerDetector.PotentialFastener.Where(f => solidName == f.Name).ToList();
                     if (smallPart.Any())
                     {
-                        part.fastenerCertainty = 0.1;
+                        part.FastenerCertainty = 0.1;
                         this.parts.Add(part);
                         continue;
                     }
                 }
-                part.fastenerCertainty = 0.0;
+                part.FastenerCertainty = 0.0;
                 this.parts.Add(part);
             }
         }
@@ -89,7 +89,7 @@ namespace Assembly_Planner
 
       
         [XmlElement("fastener_certainty")]
-        public double fastenerCertainty { get; set; }
+        public double FastenerCertainty { get; set; }
 
 
     }
