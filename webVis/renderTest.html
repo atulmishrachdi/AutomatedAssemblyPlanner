@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html>
+	<output id="list"></output>
+<body id="theDisplay" >
+
+	<head>
+		  <!--<style type="text/css">
+			#theDisplay {
+			  position: absolute;
+			  width: 90%;
+			  height: 50%;
+			  border-style: solid;
+			  border-color: gray;
+			  border-width: 2;
+			  background-color: black;
+			}
+		  </style>-->
+		  
+		  <style>
+			#body{
+			  margin: 0px;
+			  overflow: hidden;
+			}
+			canvas {
+				display: inline;
+			}
+			#theDisplay{
+				position: absolute;
+				background-color: black;
+				padding: 0px 0px 0px 0px;
+			}
+			#HUD{
+				position: absolute;
+				width:98%;
+				height: 96%;
+				font-family: "Lucida Console";
+				color: red;
+			}
+			#fileinput{
+				position: absolute;
+				top: 20px;
+				left: 10px;
+				width: 250px;
+				font-size: 75%;
+				font-family: "Lucida Console";
+				background: rgba(0, 0, 0, 0.3);
+				border-style: solid;
+				border-color: #880000;
+				color: red;
+				padding: 10px 10px 10px 10px;
+			}
+			#infoDiv{
+				position: absolute;
+				bottom: 0px;
+				right: 0px;
+				font-size: 150%;
+				font-family: "Lucida Console";
+				background: rgba(0, 0, 0, 0.3);
+				border-style: solid;
+				border-color: #880000;
+				color: red;
+				padding: 10px 10px 10px 10px;
+			}
+			#treequenceDiv{
+				position: absolute;
+				top: 90px;
+				left: 10px;
+				height: 80%;
+				width: 250px;
+				font-size: 75%;
+				font-family: "Lucida Console";
+				background: rgba(0, 0, 0, 0.3);
+				border-style: solid;
+				border-color: #880000;
+				color: red;
+				padding: 10px 10px 10px 10px;
+				overflow: scroll;
+			}
+			#lockButton{
+				position: absolute;
+				top: 20px;
+				right: 0px;
+				background-color: #AA0000;
+				border: none;
+				color: white;
+				padding: 10px 10px;
+				text-align: center;
+				text-decoration: none;
+				display: inline-block;
+				font-size: 12px;
+
+			}
+
+				background-color: #AA0000;
+				border: none;
+				color: white;
+				padding: 8px 10px;
+				text-align: center;
+				text-decoration: none;
+				display: inline-block;
+				font-size: 12px;
+		  </style>
+	</head>
+	<div id="HUD">
+		<input type="file" id="fileinput" multiple />
+		<button id="lockButton" onclick="tryMouseLock()" >Mouse Lock</button>
+		<div id="treequenceDiv">
+			
+		</div>
+		<div id="infoDiv">
+			<div>
+			<text id="mouseoverName" color="#FF0000" size="20" >PART: </text>
+			</div>
+			<div>
+			<text id="theTime" color="#FF0000" size="20" >TIME: 0.0000000000</text>
+			</div>
+		</div>
+	</div>
+	
+	
+	
+	<!--<div id="container"></div>-->
+	
+	<script src="./jsstl.js"></script>
+	<script src="./treequence.js"></script>
+	<script src="./sigma.min.js"></script>
+	<script src="./sigma.canvas.edges.curvedArrow.js"></script>
+	
+	<script src="./partRender.js"></script>
+	
+	<xmp id="warning"></xmp>
+	
+	
+	
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/threejs/r76/three.min.js"></script>
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/gojs/1.6.7/go-debug.js"></script>
+	
+	<script>
+	
+		var theXML=null;
+		var fileReaders=[];
+		var STLs=[];
+		var parts=[];
+		var partFrames=null;
+		var theTime=0;
+		var theme= {Main:'#fff',Mov:'#d00',Ref:'#00d',Time:'#888'};
+		
+		
+		
+		/*var s = new sigma('container');
+		s = new sigma({
+		  graph: {nodes: [], edges: []},
+		  renderer: {
+			container: document.getElementById('container'),
+			type: 'canvas'
+		  },
+		  settings: {
+			minNodeSize: 1,
+			maxNodeSize: 10,
+			minEdgeSize: 0.1,
+			maxEdgeSize: 2,
+			enableEdgeHovering: false,
+			edgeHoverSizeRatio: 2,
+			defaultLabelColor:'#fff'
+		  }
+		});*/
+		
+		
+		
+		
+		var inputState={
+			W: false,
+			A: false,
+			S: false,
+			D: false,
+			R: false,
+			F: false,
+			Space: false	
+		
+		}
+		
+		var skyColor= 0x66ccff;
+		var movementTree=null;
+		var theCenter= new THREE.Vector3(0,0,0);
+		var objectOfInterest=null;
+		var focusPoint=null;
+		var mouseOverText="";
+		var zoom=0.2;
+		var theSpeed=0.2;
+		var theBoost=1;
+		var boostLim=25;
+		var boostInc=0.1;
+		var theDrag=0.96;
+		var camYaw=0;
+		var camPitch=Math.PI/2;
+		var momentum= new THREE.Vector3(0,0,0);
+		var scene = new THREE.Scene();
+		var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 1, 16000 );
+		camera.position.x=200;
+		camera.position.z=200;
+		camera.position.y=0;
+		var pointerIsLocked=false;
+		camera.position.y=0;
+		
+
+		var renderer = new THREE.WebGLRenderer();
+		renderer.setClearColor( skyColor, 1 );
+		renderer.setSize( window.innerWidth*0.98, window.innerHeight*0.96);
+		document.body.appendChild( renderer.domElement );
+
+		
+		camera.rotation.reorder('YXZ');
+		
+		var directionalLight = new THREE.DirectionalLight( 0x888888 );
+                directionalLight.position.x = 0; 
+                directionalLight.position.y = 0; 
+                directionalLight.position.z = 1; 
+                directionalLight.position.normalize();
+                scene.add( directionalLight );
+				
+		var directionalLight = new THREE.DirectionalLight( 0x888888 );
+                directionalLight.position.x = 0; 
+                directionalLight.position.y = 1; 
+                directionalLight.position.z = 0; 
+                directionalLight.position.normalize();
+                scene.add( directionalLight );
+				
+		var directionalLight = new THREE.DirectionalLight( 0x888888 );
+                directionalLight.position.x = 1; 
+                directionalLight.position.y = 0; 
+                directionalLight.position.z = 0; 
+                directionalLight.position.normalize();
+                scene.add( directionalLight );
+		var directionalLight = new THREE.DirectionalLight( 0x888888 );
+                directionalLight.position.x = 0; 
+                directionalLight.position.y = 0; 
+                directionalLight.position.z = -1; 
+                directionalLight.position.normalize();
+                scene.add( directionalLight );
+				
+		var directionalLight = new THREE.DirectionalLight( 0x888888 );
+                directionalLight.position.x = 0; 
+                directionalLight.position.y = -1; 
+                directionalLight.position.z = 0; 
+                directionalLight.position.normalize();
+                scene.add( directionalLight );
+				
+		var directionalLight = new THREE.DirectionalLight( 0x888888 );
+                directionalLight.position.x = -1; 
+                directionalLight.position.y = 0; 
+                directionalLight.position.z = 0; 
+                directionalLight.position.normalize();
+                scene.add( directionalLight );
+				
+				
+		var sunLight = new THREE.SpotLight( 0xaa5533, 6, 32000, 1.2, 1, 1 );
+				sunLight.position.set( 4000, 4000, 4000 );
+				scene.add( sunLight );
+				
+		/*var globe= new THREE.Mesh( 
+		
+			new THREE.SphereGeometry(8000, 127, 32, 0, Math.PI*2, 0, 2.1),
+			new THREE.MeshStandardMaterial({
+					color:0x4444FF,
+					roughness: 1.0,
+					metalness: 0.0,
+					shading:THREE.SmoothShading
+				} )
+		
+		);
+		flipNormals(globe);
+		scene.add(globe);
+		*/
+		
+		
+		/*var ground=new THREE.Mesh( 
+		
+			new THREE.PlaneGeometry(16000, 16000, 32,32),
+			new THREE.MeshStandardMaterial({
+					color:0xC35817,
+					roughness: 1,
+					metalness: 0,
+					shading:THREE.SmoothShading,
+					refractionRatio: 0.3
+				} )
+		
+		);
+		ground.position.x=0;
+		ground.position.y=-2000;
+		ground.position.z=0;
+		ground.rotation.x=Math.PI/2;
+		flipNormals(ground);
+		addNoise(ground,new THREE.Vector3(0,0,800));
+		scene.add(ground);
+		*/
+		
+		var water=new THREE.Mesh( 
+		
+			new THREE.PlaneGeometry(32000, 32000, 255,255),
+			new THREE.MeshStandardMaterial({
+					color:0x007BBC,
+					roughness: 0.2,
+					metalness: 0.75,
+					shading:THREE.FlatShading,
+					refractionRatio: 0.9,
+					transparent: true,
+					opacity: 0.90
+				} )
+			/*new THREE.MeshPhongMaterial({
+					color:0x007BBC,
+					shininess: 60,
+					shading:THREE.FlatShading,
+					refractionRatio: 0.5,
+					
+				} )*/
+		
+		);
+		water.position.x=0;
+		water.position.y=-2500;
+		water.position.z=0;
+		water.rotation.x=Math.PI/2;
+		addNoise(water,0,16);
+		smooth(water,255);
+
+		flipNormals(water);
+		scene.add(water);
+		
+		var theFog=new THREE.Fog( skyColor, 9000, 12000 );
+		scene.fog=theFog;
+		
+		
+		/*var sunShadow= new THREE.OrthographicCamera(-800,800,500,-500,1,10000);
+		sunShadow.position.x=4000;
+		sunShadow.position.y=4000;
+		sunShadow.position.z=4000;
+		sunShadow.lookAt(new THREE.Vector3(0,0,0));
+		var shadowCast=new THREE.DirectionalLightShadow(sunShadow);
+		scene.add(shadowCast);*/
+		
+		
+		
+		
+		
+		
+		document.getElementById("theDisplay").addEventListener("wheel", zoomIt);
+		
+		document.addEventListener('pointerlockchange', lockChange, false);
+		document.addEventListener('mozpointerlockchange', lockChange, false);
+		document.addEventListener('webkitpointerlockchange', lockChange, false);
+		
+		//document.addEventListener('keypress', registerKeyPress , false);
+		document.addEventListener('keydown', registerDown , false);
+		document.addEventListener('keyup', registerUp , false);
+
+
+		
+		function zoomIt(e){
+			
+			zoom=zoom*Math.pow(1.001,e.wheelDelta);
+			//theTime+=e.wheelDelta*0.0001;
+		}
+		
+		function tryMouseLock(){
+			
+			var element= document.getElementById("theDisplay");
+			
+			element.requestPointerLock = element.requestPointerLock ||
+			     element.mozRequestPointerLock ||
+			     element.webkitRequestPointerLock;
+			// Ask the browser to lock the pointer
+			element.requestPointerLock();
+		
+		}
+		
+		function lockChange(e){
+		
+			var theTarget=document.getElementById("theDisplay");
+			if (document.pointerLockElement === theTarget ||
+				document.mozPointerLockElement === theTarget ||
+				document.webkitPointerLockElement === theTarget) {
+				// Pointer was just locked
+				// Enable the mousemove listener
+				document.addEventListener("mousemove", mouseMoved, false);
+				pointerIsLocked=true;
+			} 
+			else {
+				// Pointer was just unlocked
+				// Disable the mousemove listener
+				document.removeEventListener("mousemove", mouseMoved, false);
+				pointerIsLocked=false;
+			}
+		
+		}
+		
+		function mouseMoved(e){
+		
+			var movementX = e.movementX ||
+				  e.mozMovementX        ||
+				  e.webkitMovementX     ||
+				  0;
+			var movementY = e.movementY ||
+				  e.mozMovementY        ||
+				  e.webkitMovementY     ||
+				  0;
+				  
+			camPitch-=movementY/400;
+			if(camPitch> Math.PI/2){
+				camPitch= Math.PI/2;
+			}
+			else if(camPitch< Math.PI/(-2)){
+				camPitch= Math.PI/(-2)
+			}
+			
+			camYaw-=movementX/400;
+			if(camPitch> Math.PI){
+				camPitch= Math.PI;
+			}
+			else if(camPitch< Math.PI*(-1)){
+				camPitch= Math.PI*(-1);
+			}
+		
+		}
+		
+		
+		function registerDown(e){
+			
+		
+			
+			var theKey;
+			if (e.which == null) {
+				theKey= String.fromCharCode(e.keyCode) // IE
+			} else if (e.which!=0 /*&& e.charCode!=0*/) {
+				theKey= String.fromCharCode(e.which)   // the rest
+			} else {
+				return;// special key
+			}
+			theKey=theKey.toUpperCase();
+			
+			
+			
+			if(theKey=='A'){
+				inputState.A=true;
+			}
+			if(theKey=='S'){
+				inputState.S=true;
+			}
+			if(theKey=='D'){
+				inputState.D=true;
+			}
+			if(theKey=='W'){
+				inputState.W=true;
+			}
+			if(theKey==' '){
+				inputState.Space=true;
+			}
+			if(theKey=='R'){
+				inputState.R=true;
+			}
+			if(theKey=='F'){
+				inputState.F=true;
+			}
+			return;
+			
+		}
+		
+		function registerUp(e){
+			
+			
+			var theKey;
+			if (e.which == null) {
+				theKey= String.fromCharCode(e.keyCode) // IE
+			} else if (e.which!=0 /*&& e.charCode!=0*/) {
+				theKey= String.fromCharCode(e.which)   // the rest
+			} else {
+				return;// special key
+			}
+			theKey=theKey.toUpperCase();
+			
+			
+			
+			if(theKey=='A'){
+				inputState.A=false;
+			}
+			if(theKey=='S'){
+				inputState.S=false;
+			}
+			if(theKey=='D'){
+				inputState.D=false;
+			}
+			if(theKey=='W'){
+				inputState.W=false;
+			}
+			if(theKey==' '){
+				inputState.Space=false;
+			}
+			if(theKey=='R'){
+				inputState.R=false;
+			}
+			if(theKey=='F'){
+				inputState.F=false;
+			}
+			return;
+			
+		}
+		
+		
+		
+		function manageControls(){
+		
+			var theRot= new THREE.Quaternion(0,0,0,0);
+			theRot.setFromEuler(camera.rotation);
+			var theDir= new THREE.Vector3(0,0,0);
+			
+
+			
+			if(inputState.A==true){
+				theDir.x-=1;
+			}
+			if(inputState.S==true){
+				theDir.z+=1;
+			}
+			if(inputState.D==true){
+				theDir.x+=1;
+			}
+			if(inputState.W==true){
+				theDir.z-=1;
+			}
+			if(inputState.Space==true){
+				momentum.y+=theSpeed*theBoost;
+			}
+			if(inputState.R==true){
+				theTime=0;
+			}
+			
+			if(theDir.length()>0.1){
+			
+				if(theBoost<boostLim){
+				
+					theBoost+=boostInc;
+				
+				}
+				else{
+				
+					theBoost=boostLim;
+					
+				}
+			
+			}
+			else{
+			
+				theBoost=1;
+			
+			}
+
+			theDir.applyQuaternion(theRot);
+			theDir.multiplyScalar(theSpeed*theBoost);
+			
+			momentum.x+=theDir.x;
+			momentum.y+=theDir.y;
+			momentum.z+=theDir.z;
+			
+			camera.position.x+=momentum.x;
+			camera.position.y+=momentum.y;
+			camera.position.z+=momentum.z;
+			
+			
+			if(inputState.F==true){
+				if(focusPoint==null && objectOfInterest!=null){
+					focusPoint=objectOfInterest;
+				}
+				if(focusPoint!=null){
+					
+					camera.lookAt(getPartCenter(focusPoint));
+					camPitch=camera.rotation.x;
+					camYaw=camera.rotation.y;
+				}
+			}
+			else{
+				if(focusPoint!=null){
+					focusPoint.Mesh.material=new THREE.MeshNormalMaterial( );
+					focusPoint=null;
+				}
+			}
+			
+			if(focusPoint==null){
+				camera.rotation.x=camPitch;
+				camera.rotation.y=camYaw;
+			}
+		
+		
+		}
+
+		
+		
+		
+
+		var render = function () {
+			requestAnimationFrame( render );
+			//console.log(partFrames);
+			
+			manageControls();
+			
+			momentum.multiplyScalar(theDrag);
+			
+			theTime=animate(partFrames,theTime,zoom);
+			
+			addNoise(water,0,4);
+			smooth(water,255);
+			smooth(water,255);
+			smooth(water,255);
+			smooth(water,255);
+			smooth(water,255);
+			
+			if(objectOfInterest!=null){
+			
+				objectOfInterest.Mesh.material=new THREE.MeshNormalMaterial( );
+			
+			}
+			
+			objectOfInterest=getFirstIntersect(scene,camera,partFrames);
+			
+			if(objectOfInterest!=null){
+			
+				mouseOverText=" "+objectOfInterest.Name;
+				objectOfInterest.Mesh.material=new THREE.MeshStandardMaterial({
+					color:0xbbbbbb,
+					roughness: 1.0,
+					metalness: 1.0,
+					shading: THREE.SmoothShading
+				} );
+			
+			}
+			else{
+			
+				mouseOverText="";
+			
+			}
+			
+			if(focusPoint!=null){
+			
+				focusPoint.Mesh.material=new THREE.MeshStandardMaterial({
+					color:0xff6666,
+					roughness: 1.0,
+					metalness: 1.0,
+					shading: THREE.SmoothShading
+				} );
+			
+			}
+			
+			document.getElementById("mouseoverName").innerHTML="PART: "+mouseOverText;
+			document.getElementById("theTime").innerHTML=("TIME: "+ theTime.toFixed(10)).toString();
+			
+			updateLines(movementTree,null,theTime);
+			//explodeParts();
+			
+			renderer.render(scene, camera);
+		};
+
+		
+		
+		
+		function grabExtension(theName){
+			return (/[.]/.exec(theName)) ? /[^.]+$/.exec(theName) : undefined;
+		}
+	
+	
+		function whoIsLeft(theReaders){
+		
+			var pos=0;
+			var lim=fileReaders.length;
+			var theList=[];
+			while(pos<lim){
+				if(theReaders[pos].Reader.readyState!=2){
+					theList.push(theReaders[pos].Name);
+				}
+				pos++;
+			}
+			console.log(theList);
+		
+		}
+	
+	
+		function readMultipleFiles(evt) {
+			//Retrieve all the files from the FileList object
+			var files = evt.target.files; 
+					
+			if (files) {
+				for (var i=0, f; f=files[i]; i++) {
+					
+					var r = new FileReader();
+					var extension=grabExtension(f.name)[0];
+					console.log(f.name);
+					
+					if(extension===undefined){
+						return;
+					}
+					if(extension.toLowerCase()==="stl"){
+						r.onload = (function(f) {
+							return function(e) {
+							console.log(f.name);
+								var contents = e.target.result;
+								if(r.result!=null){
+									STLs.push(r.result);
+								}
+								loadParts();
+							};
+						})(f);
+						r.readAsArrayBuffer(f);
+						fileReaders.push({Reader: r, Name: f.name});
+					}
+					else if(extension.toLowerCase()==="xml"){
+						if(!(theXML===null)){
+							console.log("Warning: More than one XML file provided");
+						}
+						r.onload = (function(f) {
+							return function(e) {
+								console.log(f.name);
+								var contents = e.target.result;
+								theXML=r.result;
+								loadParts();
+							};
+						})(f);
+						r.readAsText(f,"US-ASCII");
+						fileReaders.push({Reader: r, Name: f.name});
+					}
+								
+				}
+				console.log(fileReaders);
+			} 
+			else {
+				  alert("Failed to load files"); 
+			}
+		}
+		
+		
+		document.getElementById('fileinput').addEventListener('change', readMultipleFiles, false);
+		
+		
+		
+		function loadParts (){
+		
+			
+		
+			var pos=0;
+			var lim=fileReaders.length;
+			while(pos<lim){
+				if(!(fileReaders[pos].Reader.readyState===2)){
+					console.log(pos);
+					console.log(fileReaders[pos].Name);
+					break;
+				}
+				pos++;
+			}
+			if(pos===lim){
+				console.log("ALL DONE");
+				parts.length=0;
+				pos=0;
+				var partGeom;
+				var partMesh;
+				var theCenter;
+				var ext;
+				while(pos<lim){
+					ext=grabExtension(fileReaders[pos].Name)[0];
+
+					if(ext.toLowerCase()==="stl"){
+						
+						partGeom=parseStlBinary(fileReaders[pos].Reader.result);						
+						partMesh=new THREE.Mesh( 
+								partGeom,
+								new THREE.MeshNormalMaterial( )
+						);
+						parts.push({
+							Mesh: partMesh,
+							Name: fileReaders[pos].Name
+						})
+						scene.add(partMesh);
+						
+					}
+					
+					pos++;
+				}
+				
+				
+				cutoffPartNames(parts);
+				var treeQ = $.parseXML(theXML);
+				//console.log(treeQ);
+				treeQ=grab(treeQ,"AssemblyCandidate");
+				//console.log(treeQ);
+				treeQ=grab(treeQ,"Sequence");
+				//console.log(treeQ);
+				treeQ=grab(treeQ,"Subassemblies");
+				//console.log(treeQ);
+				treeQ=grab(treeQ,"SubAssembly");
+				//console.log(treeQ);
+				var moveTree=getMovement(treeQ,0,0,0,0);
+				cutOffNames(moveTree,similarityCutoff(getNameList(moveTree)));
+				console.log(moveTree);
+				var theFrameLists=makeKeyFrames(moveTree,[],[]);
+				//return 0;
+				partFrames= bindPartsToKeyFrames(theFrameLists,parts);
+				showFrames(theFrameLists);
+				console.log(partFrames);
+				//return 0;
+				theTime=0;
+				addLines(moveTree,null,scene);
+				movementTree=moveTree;
+				flipTreeTime(movementTree,getLongestTime(movementTree));
+				addDisplacement(movementTree, partFrames, 0);
+				insertTreequenceHTML(movementTree,document.getElementById("treequenceDiv"),"~");
+				getChildrenByTag(document.getElementById("treequenceDiv"),"BUTTON")[0].innerHTML="+";
+				render();
+			}
+			else{
+			
+				whoIsLeft(fileReaders);
+			
+			}
+		
+		}
+		
+		function explodeParts(){
+		
+			var pos=0;
+			
+			var lim=parts.length;
+			while(pos<lim){
+				parts[pos].Mesh.position.x+=Math.random()*2-1;
+				parts[pos].Mesh.position.y+=Math.random()*2-1;
+				parts[pos].Mesh.position.z+=Math.random()*2-1;
+				parts[pos].Mesh.rotation.x+=Math.random()*0.04-0.02;
+				parts[pos].Mesh.rotation.y+=Math.random()*0.04-0.02;
+				parts[pos].Mesh.rotation.z+=Math.random()*0.04-0.02;
+				pos++;
+			}
+			
+		
+		
+		}
+		
+		
+ 
+    </script>
+</body>
+</html>

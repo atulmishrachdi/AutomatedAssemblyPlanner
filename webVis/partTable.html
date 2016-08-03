@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+
+<html>
+
+	<style>
+		
+		#theBody{
+			background-color: #aaaaaa;
+		}
+		#fileinput{
+			color: black;
+		}
+		
+	</style>
+	<body id="theBody">
+	
+		
+	
+	
+		<input type="file" id="fileinput" multiple ></input>
+		<a href="" id="downloadLink" download></a>
+		
+		
+		
+		<table id="table_id" class="display">
+			<thead>
+				<tr>
+					<th>NAME</th>
+					<th>VOLUME</th>
+					<th>MASS</th>
+					<th>DENSITY</th>
+					<th>THICKNESS</th>
+					<th>FASTENER</th>
+					<th>CLASS CERTAINTY</th>
+				</tr>
+			</thead>
+			<tbody id="body_id">
+
+			</tbody>
+			<tfoot>
+				<tr>
+					<th>NAME</th>
+					<th>VOLUME</th>
+					<th>MASS</th>
+					<th>DENSITY</th>
+					<th>THICKNESS</th>
+					<th>FASTENER</th>
+					<th>CLASS CERTAINTY</th>
+				</tr>
+			</tfoot>
+		</table>
+		
+		
+		
+		
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/gojs/1.6.7/go-debug.js"></script>
+		<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.css"/>
+
+		<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.js"></script>
+	
+	</body>
+	<script>
+	
+		var fileReaders=[];
+		var inputXML=null;
+		
+		
+		var theTable= $('#table_id').DataTable();
+		
+		//document.getElementById("downloadLink").setAttribute("style","display: none");
+		
+	
+		function grabExtension(theName){
+			return (/[.]/.exec(theName)) ? /[^.]+$/.exec(theName) : undefined;
+		}
+		
+		function getChildrenByTag(theNode,tag){
+			var childs=theNode.children;
+			var pos=0;
+			var lim=childs.length;
+			var result=[];
+			while(pos<lim){
+				if(childs[pos].tagName===tag){
+					result.push(childs[pos]);
+				}
+				pos++;
+			}
+			return result;
+		}
+	
+		function readMultipleFiles(evt) {
+			//Retrieve all the files from the FileList object
+			var files = evt.target.files; 
+					
+			if (files) {
+				for (var i=0, f; f=files[i]; i++) {
+					
+					var r = new FileReader();
+					var extension=grabExtension(f.name)[0];
+					console.log(f.name);
+					
+					if(extension===undefined){
+						continue;
+					}
+					if(extension.toLowerCase()==="xml"){
+						if(!(inputXML===null)){
+							console.log("Warning: More than one XML file provided");
+						}
+						r.onload = (function(f) {
+							return function(e) {
+								console.log(f.name);
+								var contents = e.target.result;
+								inputXML=r.result;
+								loadParts();
+							};
+						})(f);
+						r.readAsText(f,"US-ASCII");
+						fileReaders.push({Reader: r, Name: f.name});
+					}
+								
+				}
+				console.log(fileReaders);
+			} 
+			else {
+				  alert("Failed to load files"); 
+			}
+		}
+		
+		
+		document.getElementById('fileinput').addEventListener('change', readMultipleFiles, false);
+		
+		
+		
+		
+		function loadParts (){
+		
+			var pos=0;
+			var lim=fileReaders.length;
+			while(pos<lim){
+				if(!(fileReaders[pos].Reader.readyState===2)){
+					console.log(pos);
+					console.log(fileReaders[pos].Name);
+					break;
+				}
+				pos++;
+			}
+			if(pos===lim){
+				console.log("ALL DONE");
+				fillOutTable(inputXML);				
+			}
+		}
+		
+		
+		
+	
+	
+		function grab(theTree,theMember){
+
+			if($(theTree).children(theMember).length!=0){
+				
+				return $(theTree).children(theMember)[0];
+				
+			}
+			else{
+			
+				return null;
+			
+			}
+
+		}
+
+		function grabInd(theTree,theMember, theIndex){
+
+			if($(theTree).children(theMember).length>theIndex){
+				
+				return $(theTree).children(theMember)[theIndex];
+				
+			}
+			else{
+			
+				return null;
+			
+			}
+
+		}
+		
+		function addEntry(theEntry){
+		
+			var theName=grab(theEntry,"Name").innerHTML;
+			var theVolume=grab(theEntry,"Volume").innerHTML;
+			var theMass="<input type='text'></input>";
+			var theDensity="<input type='text'></input>";
+			var theThickness="<div><text>hollow </text> <input type='checkbox' onchange='hollowOpt(this)'></input></div>";
+			var theCertainty=grab(theEntry,"certainty").innerHTML;
+			
+			
+			var fstChecked="<input type='checkbox'></input>";
+			if(grab(theEntry,"IsFastener").innerHTML=="true"){
+				fstChecked="<input type='checkbox' checked></input>";
+			}
+			
+			theTable.row.add( [
+				theName,
+				theVolume,
+				theMass,
+				theDensity,
+				theThickness,
+				fstChecked,
+				theCertainty
+			] ).draw();
+			
+		}
+		
+		function fillOutTable(theXMLText){
+		
+			var theXML=$.parseXML(theXMLText);
+			console.log(theXML);
+			//console.log(theXML);
+			var theEntries=grab(theXML,"ArrayOfPartTableEntry");
+			var theEntries=$(theEntries).children("partTableEntry");
+			var pos=0;
+			var lim=theEntries.length;
+			var name;
+			var classif;
+			while(pos<lim){
+				addEntry(theEntries[pos]);
+				pos++;
+			}
+		
+		}
+		
+		
+		
+		function renderXML(){
+			
+			
+			var result="<?xml version='1.0' encoding='utf-8'?>\n\n";
+			
+			theTable=document.getElementById("body_id");
+			
+			var theEntries=getChildrenByTag(theTable,"TR");
+			var entryPos=0;
+			var entryLim=theEntries.length;
+			
+			var theCells;
+			var cellPos;
+			var cellLim;
+			
+			
+			while(entryPos<entryLim){
+				theCells=getChildrenByTag(theTable,"TH");
+				result=result+"<entry>\n";
+				result=result+"<Name>"+theCells[0]+"</Name>";
+				result=result+"<IsFastener>"+theCells[1]+"</IsFastener>";
+				result=result+"<Certainty>"+theCells[2]+"</Certainty>";
+				result=result+"<Volume>"+theCells[3]+"</Volume>";
+				result=result+"<IsHollow>"+theCells[4]+"</IsHollow>";
+				result=result+"<Thickness>"+theCells[5]+"</Thickness>";
+				result=result+"<Density>"+theCells[6]+"</Density>";
+				result=result+"</entry>\n";
+				entryPos++;
+			}
+			
+			console.log(result);
+			
+			document.getElementById("downloadLink").setAttribute("style","color: white; display: inline;");
+		
+		}
+		
+		
+		
+		
+		function hollowOpt(theCheckBox){
+		
+			theCheckBox.parentElement.innerHTML="<input type='text' onchange='revertHollowOpt(this)'> </input>";
+		
+		}
+		
+		function revertHollowOpt(theTextBox){
+		
+			if(isNaN(Number.parseFloat(theTextBox.value))){
+				theTextBox.parentElement.innerHTML="<text>hollow </text><input type='checkbox' onchange='hollowOpt(this)'> </input>";
+			
+			}
+		
+		}
+		
+		
+	
+	</script>
+</html>
+
