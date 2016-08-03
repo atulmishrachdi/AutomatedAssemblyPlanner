@@ -76,6 +76,8 @@ namespace Assembly_Planner
 
         internal static List<int> RunGraphGeneration(designGraph assemblyGraph, Dictionary<string, List<TessellatedSolid>> solidsNoFastener)
         {
+            Solids = Program.Solids;
+            solidsNoFastener = Program.SolidsNoFastener;
             //PrintOutSomeInitialStats();
             var globalDirPool = new List<int>();
             // Detect gear mates

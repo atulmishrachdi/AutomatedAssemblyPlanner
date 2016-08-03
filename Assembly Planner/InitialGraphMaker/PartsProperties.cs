@@ -18,7 +18,7 @@ namespace Assembly_Planner
             this.parts = new List<PartProperties>();
             foreach (var solidName in Program.Solids.Keys)
             {
-                var part = new PartProperties {Name = solidName, Mass = 0.0, Volume = 0.0};
+                var part = new PartProperties {Name = solidName, Mass = 0.0, Volume = Program.Solids[solidName].Sum(s=> s.Volume) };
                 if (Program.Solids[solidName].Count > 1)
                 {
                     part.FastenerCertainty = 0.0;
