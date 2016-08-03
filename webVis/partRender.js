@@ -578,7 +578,7 @@ function addLines(movTree,parentNode,theScene){
 			movTree.Line= new THREE.LineSegments(
 				theGeo,
 				new THREE.LineDashedMaterial({
-					color: 0xffffff,
+					color: 0x333333,
 					dashSize: 50,
 					gapSize:50
 				

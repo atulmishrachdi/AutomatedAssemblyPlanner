@@ -34,7 +34,7 @@
 				width:98%;
 				height: 96%;
 				font-family: "Lucida Console";
-				color: red;
+				color: black;
 			}
 			#fileinput{
 				position: absolute;
@@ -43,10 +43,10 @@
 				width: 250px;
 				font-size: 75%;
 				font-family: "Lucida Console";
-				background: rgba(0, 0, 0, 0.3);
+				background: rgba(1, 1, 1, 0.3);
 				border-style: solid;
-				border-color: #880000;
-				color: red;
+				border-color: #000000;
+				color: black;
 				padding: 10px 10px 10px 10px;
 			}
 			#infoDiv{
@@ -55,10 +55,10 @@
 				right: 0px;
 				font-size: 150%;
 				font-family: "Lucida Console";
-				background: rgba(0, 0, 0, 0.3);
+				background: rgba(1, 1, 1, 0.3);
 				border-style: solid;
-				border-color: #880000;
-				color: red;
+				border-color: #000000;
+				color: white;
 				padding: 10px 10px 10px 10px;
 			}
 			#treequenceDiv{
@@ -69,10 +69,10 @@
 				width: 250px;
 				font-size: 75%;
 				font-family: "Lucida Console";
-				background: rgba(0, 0, 0, 0.3);
+				background: rgba(1, 1, 1, 0.3);
 				border-style: solid;
-				border-color: #880000;
-				color: red;
+				border-color: #000000;
+				color: black;
 				padding: 10px 10px 10px 10px;
 				overflow: scroll;
 			}
@@ -80,7 +80,7 @@
 				position: absolute;
 				top: 20px;
 				right: 0px;
-				background-color: #AA0000;
+				background-color: #000000;
 				border: none;
 				color: white;
 				padding: 10px 10px;
@@ -91,14 +91,6 @@
 
 			}
 
-				background-color: #AA0000;
-				border: none;
-				color: white;
-				padding: 8px 10px;
-				text-align: center;
-				text-decoration: none;
-				display: inline-block;
-				font-size: 12px;
 		  </style>
 	</head>
 	<div id="HUD">
@@ -109,10 +101,10 @@
 		</div>
 		<div id="infoDiv">
 			<div>
-			<text id="mouseoverName" color="#FF0000" size="20" >PART: </text>
+			<text id="mouseoverName" color="#000000" size="20" >PART: </text>
 			</div>
 			<div>
-			<text id="theTime" color="#FF0000" size="20" >TIME: 0.0000000000</text>
+			<text id="theTime" color="#000000" size="20" >TIME: 0.0000000000</text>
 			</div>
 		</div>
 	</div>
@@ -133,10 +125,11 @@
 	
 	
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/gojs/1.6.7/go-debug.js"></script>
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/threejs/r76/three.min.js"></script>
 	
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/gojs/1.6.7/go-debug.js"></script>
+	
 	
 	<script>
 	
@@ -182,7 +175,7 @@
 		
 		}
 		
-		var skyColor= 0x66ccff;
+		var skyColor= 0xFFFFFF;
 		var movementTree=null;
 		var theCenter= new THREE.Vector3(0,0,0);
 		var objectOfInterest=null;
@@ -297,6 +290,7 @@
 		scene.add(ground);
 		*/
 		
+		/*
 		var water=new THREE.Mesh( 
 		
 			new THREE.PlaneGeometry(32000, 32000, 255,255),
@@ -309,13 +303,13 @@
 					transparent: true,
 					opacity: 0.90
 				} )
-			/*new THREE.MeshPhongMaterial({
+			new THREE.MeshPhongMaterial({
 					color:0x007BBC,
 					shininess: 60,
 					shading:THREE.FlatShading,
 					refractionRatio: 0.5,
 					
-				} )*/
+				} )
 		
 		);
 		water.position.x=0;
@@ -324,12 +318,57 @@
 		water.rotation.x=Math.PI/2;
 		addNoise(water,0,16);
 		smooth(water,255);
-
 		flipNormals(water);
 		scene.add(water);
+		*/
+		
+		/*
+		var loader = new THREE.TextureLoader();
+
+		// load a resource
+		loader.load(
+			// resource URL
+			'textures/concrete.bmp',
+			// Function when resource is loaded
+			function ( texture ) {
+				// do something with the texture
+				var concMaterial = new THREE.MeshBasicMaterial( {
+					map: texture
+				 } );
+				 var water=new THREE.Mesh( 
+				new THREE.PlaneGeometry(32000, 32000, 2,2),
+					concMaterial		
+				);
+				water.position.x=0;
+				water.position.y=-2500;
+				water.position.z=0;
+				water.rotation.x=Math.PI/2;
+				
+				water.geometry.faceVertexUvs.push([]);
+				water.geometry.faceVertexUvs[0].push(new THREE.Vector3(0,0));
+				water.geometry.faceVertexUvs[0].push(new THREE.Vector3(1,0));
+				water.geometry.faceVertexUvs[0].push(new THREE.Vector3(1,1));
+				water.geometry.faceVertexUvs[0].push(new THREE.Vector3(1,1));
+				water.geometry.faceVertexUvs[0].push(new THREE.Vector3(0,1));
+				water.geometry.faceVertexUvs[0].push(new THREE.Vector3(0,0));
+				
+				},
+			// Function called when download progresses
+			function ( xhr ) {
+				console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+			},
+			// Function called when download errors
+			function ( xhr ) {
+				console.log( 'An error happened' );
+			}
+		);
+		
+		
+		*/
 		
 		var theFog=new THREE.Fog( skyColor, 9000, 12000 );
 		scene.fog=theFog;
+		
 		
 		
 		/*var sunShadow= new THREE.OrthographicCamera(-800,800,500,-500,1,10000);
@@ -607,12 +646,14 @@
 			
 			theTime=animate(partFrames,theTime,zoom);
 			
+			/*
 			addNoise(water,0,4);
 			smooth(water,255);
 			smooth(water,255);
 			smooth(water,255);
 			smooth(water,255);
 			smooth(water,255);
+			*/
 			
 			if(objectOfInterest!=null){
 			
@@ -695,7 +736,7 @@
 					console.log(f.name);
 					
 					if(extension===undefined){
-						return;
+						continue;
 					}
 					if(extension.toLowerCase()==="stl"){
 						r.onload = (function(f) {
@@ -815,7 +856,7 @@
 			}
 			else{
 			
-				whoIsLeft(fileReaders);
+				//whoIsLeft(fileReaders);
 			
 			}
 		

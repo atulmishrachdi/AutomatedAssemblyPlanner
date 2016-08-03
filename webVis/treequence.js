@@ -640,7 +640,7 @@ function insertTreequenceHTML(theTree,parentElement,theName){
 	var theButton=document.createElement("BUTTON");
 	theButton.innerHTML="-";
 	theButton.setAttribute("onclick","swapHiding(parentElement)");
-	theButton.setAttribute("style","background-color: #AA0000;\
+	theButton.setAttribute("style","background-color: #000000;\
 							border: none;\
 							color: white;\
 							padding: 2px 4px 2px 4px;\
@@ -699,7 +699,7 @@ function show(theNode){
 	
 	var theText=getChildrenByTag(theNode,"TEXT");
 
-	theNode.setAttribute("style","display: block; position: relative; left: 15px; border-style: solid; border-color: #880000;");
+	theNode.setAttribute("style","display: block; position: relative; left: 15px; border-style: solid; border-color: #000000;");
 	//console.log("Just Showed: "+theNode.innerHTML);
 	
 }
@@ -734,7 +734,7 @@ function showChildren(theNode){
 
 function hideChildren(theNode){
 	
-	theNode.setAttribute("style","display: block; position: relative; left: 15px; border-left: solid #880000; padding: 10px 5px 10px 5px;");
+	theNode.setAttribute("style","display: block; position: relative; left: 15px; border-left: solid #000000; padding: 10px 5px 10px 5px;");
 	var theChildren = getChildrenByTag(theNode,"DIV");
 	var pos=0;
 	var lim=theChildren.length;
