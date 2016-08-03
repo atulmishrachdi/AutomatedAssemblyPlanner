@@ -32,14 +32,14 @@ namespace Assembly_Planner
             public SubAssembly FromSubAssembly;
         }
 
-        internal static Dictionary<string, double> Run(AssemblySequence solution)//, ReportStatus statusReporter)
+        internal static void Run(AssemblySequence solution)//, ReportStatus statusReporter)
         {
             TranslateToMagicBoxDic = new Dictionary<string, double[,]>();
             TranslateToMagicBox();
-            return Dijkstra2(solution);
+            Dijkstra2(solution);
         }
 
-        public static Dictionary<string, double> Dijkstra2(AssemblySequence candidate)
+        public static void Dijkstra2(AssemblySequence candidate)
         {
             //Bridge.StatusReporter.ReportStatusMessage("Generating the Assembly Plan - Optimal orientation search ...", 1);
             //Bridge.StatusReporter.ReportProgress(0);
@@ -242,7 +242,7 @@ namespace Assembly_Planner
             //Bridge.StatusReporter.PrintMessage("AN ASSEMBLY PLAN IS SUCCESSFULLY GENERATED", 1);
             //Bridge.StatusReporter.PrintMessage(
                 //"   - NUMBER OF REQUIRED INSTALL ACTIONS:                             " + InstTasks.Count, 0.7F);
-            return taskCommands;
+            //return taskCommands;
         }
 
         private static List<FootprintFace> Getnotaffectedfromface(List<FootprintFace> fromFaces,

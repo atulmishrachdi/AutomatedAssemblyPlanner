@@ -1336,7 +1336,8 @@ namespace Assembly_Planner
                         listpoints.Add(v.Position);
                     }
                     arctoadd.UnionAreaPoints.Add(listpoints);
-                    listpoints.RemoveAt(listpoints.Count - 1);
+                    if (listpoints.Count > 0)
+                        listpoints.RemoveAt(listpoints.Count - 1);
                     arctoadd.UnionAreaPointsCenter.Add(GetPointsCenter(listpoints));
                     arctoadd.ToPartReactionForeceDirections.Add(pairsurfaces[otherindex].Faces[0].Normal);
                     arctoadd.FromPartReactionForeceDirections.Add(pairsurfaces[checkindex].Faces[0].Normal);

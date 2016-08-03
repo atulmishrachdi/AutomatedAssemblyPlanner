@@ -67,15 +67,12 @@ namespace Assembly_Planner
             globalDirPool = DisassemblyDirectionsWithFastener.RunGraphGeneration(AssemblyGraph, SolidsNoFastener);
             // the second user interaction must happen here
             NonadjacentBlockingWithPartitioning.Run(AssemblyGraph, SolidsNoFastener, globalDirPool);
-            //var solutions = RecursiveOptimizedSearch.Run(assemblyGraph, solids, globalDirPool);
             Stabilityfunctions.GenerateReactionForceInfo(AssemblyGraph);
             var leapSearch = new LeapSearch();
             var solutions = leapSearch.Run(AssemblyGraph, Solids, globalDirPool, 1);
-            //var solutions = OrderedDFS.Run(inputData, globalDirPool,solids); // the output is the assembly sequence
-            //var solutions = BeamSearch.Run(inputData, globalDirPool);
-            var cand = new AssemblyCandidate() {Sequence = solutions};
+            OptimalOrientation.Run(solutions);
+            var cand = new AssemblyCandidate() { Sequence = solutions };
             cand.SaveToDisk(Directory.GetCurrentDirectory() + "\\solution.xml");
-            var reorientation = OptimalOrientation.Run(solutions);
             //WorkerAllocation.Run(solutions, reorientation);
             s.Stop();
             Console.WriteLine();
