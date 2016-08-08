@@ -57,12 +57,16 @@ namespace Assembly_Planner
             var threaded = 0; // 0:none, 1: all, 2: subset
 
             AssemblyGraph = new designGraph();
+            
             DisassemblyDirectionsWithFastener.RunGeometricReasoning(Solids);
+            
             if (detectFasteners)
             {
                 DisassemblyDirectionsWithFastener.RunFastenerDetection(Solids, threaded);
             }
             SerializeSolidProperties();
+            Console.Write("PRESS ENTER TO CONTINUE >>");
+            var BSInput = Console.ReadLine();
             DeserializeSolidProperties();
             globalDirPool = DisassemblyDirectionsWithFastener.RunGraphGeneration(AssemblyGraph, SolidsNoFastener);
             // the second user interaction must happen here
@@ -153,3 +157,4 @@ namespace Assembly_Planner
         }
     }
 }
+

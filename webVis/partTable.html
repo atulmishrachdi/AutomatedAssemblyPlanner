@@ -18,7 +18,8 @@
 	
 	
 		<input type="file" id="fileinput" multiple ></input>
-		<a href="" id="downloadLink" download></a>
+		<button style="display: inline;" onclick="renderXML()">Render XML</button>
+		<a href="" id="downloadLink" download="parts_properties2.xml" ></a>
 		
 		
 		
@@ -27,11 +28,10 @@
 				<tr>
 					<th>NAME</th>
 					<th>VOLUME</th>
+					<th>SURFACE AREA</th>
 					<th>MASS</th>
-					<th>DENSITY</th>
-					<th>THICKNESS</th>
 					<th>FASTENER</th>
-					<th>CLASS CERTAINTY</th>
+					<th>AMBIGUITY</th>
 				</tr>
 			</thead>
 			<tbody id="body_id">
@@ -41,11 +41,10 @@
 				<tr>
 					<th>NAME</th>
 					<th>VOLUME</th>
+					<th>SURFACE AREA</th>
 					<th>MASS</th>
-					<th>DENSITY</th>
-					<th>THICKNESS</th>
 					<th>FASTENER</th>
-					<th>CLASS CERTAINTY</th>
+					<th>AMBIGUITY</th>
 				</tr>
 			</tfoot>
 		</table>
@@ -65,6 +64,9 @@
 	
 		var fileReaders=[];
 		var inputXML=null;
+		var textFile=null;
+		
+		var massElem="<button onclick='insertMassInput(this)'>Input By Mass</button><button onclick='insertDensityInput(this)'>Input By Volume+Density</button>";
 		
 		
 		var theTable= $('#table_id').DataTable();
@@ -189,26 +191,26 @@
 		function addEntry(theEntry){
 		
 			var theName=grab(theEntry,"name").innerHTML;
-			var theVolume=grab(theEntry,"volume").innerHTML;
-			var theMass="<input type='text'></input>";
-			var theDensity="<input type='text'></input>";
-			var theThickness="<div><text>hollow </text> <input type='checkbox' onchange='hollowOpt(this)'></input></div>";
-			var theCertainty=Number.ParseFloat(grab(theEntry,"fastener_certainty").innerHTML);
-			
+			var theVolume=Number.parseFloat(grab(theEntry,"volume").innerHTML);
+			var theMass=massElem;
+			var theCertainty=Number.parseFloat(grab(theEntry,"fastener_certainty").innerHTML);
+			var theSurfaceArea=Number.parseFloat(grab(theEntry,"surface_area").innerHTML);
 			
 			var fstChecked="<input type='checkbox'></input>";
-			if(){
+			if(theCertainty>0.5){
 				fstChecked="<input type='checkbox' checked></input>";
 			}
+			
+			var theAmbiguity=1-2*Math.abs(theCertainty-0.5);
+			theAmbiguity=theAmbiguity.toFixed(2);
 			
 			theTable.row.add( [
 				theName,
 				theVolume,
+				theSurfaceArea,
 				theMass,
-				theDensity,
-				theThickness,
 				fstChecked,
-				theCertainty
+				theAmbiguity
 			] ).draw();
 			
 		}
@@ -236,39 +238,96 @@
 		function renderXML(){
 			
 			
-			var result="<?xml version='1.0' encoding='utf-8'?>\n\n";
+			var result="<?xml version='1.0' encoding='utf-8'?>\n<parts_properties xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>\n";
 			
 			theTable=document.getElementById("body_id");
+			console.log(theTable);
 			
 			var theEntries=getChildrenByTag(theTable,"TR");
+			console.log(theEntries);
 			var entryPos=0;
 			var entryLim=theEntries.length;
 			
 			var theCells;
-			var cellPos;
-			var cellLim;
 			
 			
 			while(entryPos<entryLim){
-				theCells=getChildrenByTag(theTable,"TH");
-				result=result+"<entry>\n";
-				result=result+"<Name>"+theCells[0]+"</Name>";
-				result=result+"<IsFastener>"+theCells[1]+"</IsFastener>";
-				result=result+"<Certainty>"+theCells[2]+"</Certainty>";
-				result=result+"<Volume>"+theCells[3]+"</Volume>";
-				result=result+"<IsHollow>"+theCells[4]+"</IsHollow>";
-				result=result+"<Thickness>"+theCells[5]+"</Thickness>";
-				result=result+"<Density>"+theCells[6]+"</Density>";
-				result=result+"</entry>\n";
+				
+				result=result+renderEntry(getChildrenByTag(theEntries[entryPos],"TD"));
 				entryPos++;
 			}
 			
+			result+="</parts_properties>";
+			
 			console.log(result);
 			
+			
+			var data = new Blob([result], {type: 'text/plain'});
+
+			if (textFile !== null) {
+			  window.URL.revokeObjectURL(textFile);
+			}
+
+			textFile = window.URL.createObjectURL(data);
+
+			
 			document.getElementById("downloadLink").setAttribute("style","color: white; display: inline;");
+			document.getElementById("downloadLink").innerHTML="Download";
+			document.getElementById("downloadLink").href=textFile;
 		
 		}
 		
+		
+		function renderEntry(theCells){
+		
+			
+			var massCell=theCells[3];
+			console.log(massCell);
+			var buttons=getChildrenByTag(massCell,"BUTTON");
+			var inputs=getChildrenByTag(massCell,"INPUT");
+			
+			var massText="";
+			if(inputs.length==0){
+				alert("Mass data not provided for one or more cells");
+			}
+			else if(inputs.length==1){
+				if(buttons.length==1){
+					massText="  <mass>"+inputs[0].value+"</mass>\n";
+				}
+				else if(buttons.length==2){
+					massText="  <mass>"+Number.parseFloat(inputs[0].value)*Number.parseFloat(theCells[1].innerHTML)+"</mass>\n";
+				}
+				else{
+					alert("HTML Corrupted");
+				}
+			}
+			else if(inputs.length==2){
+					massText="  <mass>"+Number.parseFloat(inputs[0].value)*Number.parseFloat(inputs[1].value)*Number.parseFloat(theCells[2].innerHTML)+"</mass>\n";
+			}
+			else{
+				alert("HTML Corrupted");
+			}
+			
+			
+			
+			
+			var checkText="  <fastener_certainty>0</fastener_certainty>\n";
+			if(theCells[4].checked){
+				checkText="  <fastener_certainty>1</fastener_certainty>\n";
+			}
+			
+		
+			var result="";
+			result=result+"<part_properties>\n";
+			result=result+"  <name>"+theCells[0].innerHTML+"</name>\n";
+			result=result+massText;
+			result=result+"  <volume>"+theCells[1].innerHTML+"</volume>\n";
+			result=result+"  <surface_area>"+theCells[2].innerHTML+"</surface_area>\n";
+			result=result+checkText;
+			result=result+"</part_properties>\n";
+			return result;
+		
+		}
 		
 		
 		
@@ -282,8 +341,25 @@
 		
 			if(isNaN(Number.parseFloat(theTextBox.value))){
 				theTextBox.parentElement.innerHTML="<text>hollow </text><input type='checkbox' onchange='hollowOpt(this)'> </input>";
-			
 			}
+		
+		}
+		
+		function insertMassInput(theButton){
+		
+			theButton.parentElement.innerHTML="<button onclick='insertDensityInput(this)'>Input By Volume+Density</button>Mass: <input type='text'></input>";
+		
+		}
+		
+		function insertDensityInput(theButton){
+		
+			theButton.parentElement.innerHTML="<button onclick='insertMassInput(this)'>Input By Mass</button>Density: <input type='text'></input><button onclick='insertThicknessInput(this)'>Hollow</button>";
+		
+		}
+		
+		function insertThicknessInput(theButton){
+		
+			theButton.parentElement.innerHTML="<button onclick='insertMassInput(this)'>Input By Mass</button>Density: <input type='text'></input>Thickness: <input type='text'></input>";
 		
 		}
 		
