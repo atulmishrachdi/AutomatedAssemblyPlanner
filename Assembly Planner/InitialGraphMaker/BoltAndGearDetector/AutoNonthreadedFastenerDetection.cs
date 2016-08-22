@@ -119,7 +119,7 @@ namespace Assembly_Planner
         {
             foreach (var preFastener in FastenerDetector.PreSelectedFasteners)
             {
-                var lengthAndRadius = FastenerEngagedLengthAndRadiusNoThread(solidPrimitive[preFastener]);
+                var lengthAndRadius = FastenerEngagedLengthAndRadiusNoThread(preFastener, solidPrimitive[preFastener]);
                 // if this part is repeated, add also those repeated parts to the fastener list
                 var repeated = new HashSet<TessellatedSolid>();
                 var isAKeyInMultipleRefs = multipleRefs.Keys.Where(r => r == preFastener).ToList();
@@ -156,7 +156,7 @@ namespace Assembly_Planner
         }
 
         private static bool HexBoltNutAllen(TessellatedSolid solid, List<PrimitiveSurface> solidPrim,
-            Dictionary<PrimitiveSurface, List<PrimitiveSurface>> equalPrimitives, List<TessellatedSolid> repeated)
+            Dictionary<TemporaryFlat, List<TemporaryFlat>> equalPrimitives, List<TessellatedSolid> repeated)
         {
             repeated.Add(solid);
             var sixFlat = FastenerDetector.EqualPrimitivesFinder(equalPrimitives, 6);
@@ -165,14 +165,14 @@ namespace Assembly_Planner
             {
                 var candidateHexVal = equalPrimitives[candidateHex];
                 var cos = new List<double>();
-                var firstPrimNormal = ((Flat)candidateHexVal[0]).Normal;
+                var firstPrimNormal = (candidateHexVal[0]).Normal;
                 for (var i = 1; i < candidateHexVal.Count; i++)
-                    cos.Add(firstPrimNormal.dotProduct(((Flat)candidateHexVal[i]).Normal));
+                    cos.Add(firstPrimNormal.dotProduct((candidateHexVal[i]).Normal));
                 // if it is a hex or allen bolt, the cos list must have two 1/2, two -1/2 and one -1
                 if (cos.Count(c => Math.Abs(0.5 - c) < 0.0001) != 2 ||
                     cos.Count(c => Math.Abs(-0.5 - c) < 0.0001) != 2 ||
                     cos.Count(c => Math.Abs(-1 - c) < 0.0001) != 1) continue;
-                var lengthAndRadius = FastenerEngagedLengthAndRadiusNoThread(solidPrim);
+                var lengthAndRadius = FastenerEngagedLengthAndRadiusNoThread(solid, solidPrim);
                 if (IsItAllen(candidateHexVal))
                 {
                     // this is a socket bolt (allen)
@@ -243,12 +243,12 @@ namespace Assembly_Planner
             return false;
         }
 
-        internal static bool IsItAllen(List<PrimitiveSurface> candidateHexVal)
+        internal static bool IsItAllen(List<TemporaryFlat> candidateHexVal)
         {
-            Flat p1 = (Flat) candidateHexVal[0], p2 = null;
+            TemporaryFlat p1 = candidateHexVal[0], p2 = null;
             for (var i = 1; i < candidateHexVal.Count; i++)
             {
-                var prim = (Flat) candidateHexVal[i];
+                var prim = candidateHexVal[i];
                 if (Math.Abs(prim.Normal.dotProduct(p1.Normal)) < 0.9)
                 {
                     p2 = prim;
@@ -277,23 +277,45 @@ namespace Assembly_Planner
         }
 
         private static bool PhillipsHeadBolt(TessellatedSolid solid, List<PrimitiveSurface> solidPrim,
-            Dictionary<PrimitiveSurface, List<PrimitiveSurface>> equalPrimitives, List<TessellatedSolid> repeated)
+            Dictionary<TemporaryFlat, List<TemporaryFlat>> equalPrimitives, List<TessellatedSolid> repeated)
         {
             repeated.Add(solid);
             var eightFlat = FastenerDetector.EqualPrimitivesFinder(equalPrimitives, 8);
-            if (!eightFlat.Any()) return false;
+            if (!eightFlat.Any())
+            {
+                // before I return false, I will take the ones with 4 faces that have a close area and merge them.
+                /*var fourEqual1 = FastenerDetector.EqualPrimitivesFinder(equalPrimitives, 4);
+                var closeArea1 = new List<TemporaryFlat[]>();
+                for (var i = 0; i < fourEqual1.Count - 1; i++)
+                {
+                    for (var j = i + 1; j < fourEqual1.Count; j++)
+                    {
+                        if (Math.Abs(fourEqual1[i].Area - fourEqual1[j].Area) < 0.1 * fourEqual1[i].Area)
+                        {
+                            closeArea1.Add(new[] { fourEqual1[i], fourEqual1[j] });
+                            break;
+                        }
+                    }
+                }
+                foreach (var cA in closeArea1)
+                {
+                    equalPrimitives[cA[0]].AddRange(equalPrimitives[cA[1]]);
+                }
+                return PhillipsHeadBolt(solid, solidPrim, equalPrimitives, repeated);*/
+                return false;
+            }
             foreach (var candidateHex in eightFlat)
             {
                 var candidateHexVal = equalPrimitives[candidateHex];
                 var cos = new List<double>();
-                var firstPrimNormal = ((Flat)candidateHexVal[0]).Normal;
+                var firstPrimNormal = (candidateHexVal[0]).Normal;
                 for (var i = 1; i < candidateHexVal.Count; i++)
-                    cos.Add(firstPrimNormal.dotProduct(((Flat)candidateHexVal[i]).Normal));
+                    cos.Add(firstPrimNormal.dotProduct((candidateHexVal[i]).Normal));
                 // if it is philips head, the cos list must have four 0, two -1 and one 1
-                if (cos.Count(c => Math.Abs(0.0 - c) < 0.0001) != 4 ||
-                    cos.Count(c => Math.Abs(-1 - c) < 0.0001) != 2 ||
-                    cos.Count(c => Math.Abs(1 - c) < 0.0001) != 1) continue;
-                var lengthAndRadius = FastenerEngagedLengthAndRadiusNoThread(solidPrim);
+                if (cos.Count(c => Math.Abs(0.0 - c) < 0.025) != 4 ||
+                    cos.Count(c => Math.Abs(-1 - c) < 0.025) != 2 ||
+                    cos.Count(c => Math.Abs(1 - c) < 0.001) != 1) continue;
+                var lengthAndRadius = FastenerEngagedLengthAndRadiusNoThread(solid, solidPrim);
                 foreach (var repeatedSolid in repeated)
                 {
                     var fastener = new Fastener
@@ -316,11 +338,30 @@ namespace Assembly_Planner
                 }
                 return true;
             }
+            // before I return false, I will take the ones with 4 faces that have a close area and merge them.
+            /*var fourEqual = FastenerDetector.EqualPrimitivesFinder(equalPrimitives, 4);
+            var closeArea = new List<TemporaryFlat[]>();
+            for (var i = 0; i < fourEqual.Count - 1; i++)
+            {
+                for (var j = i+1; j < fourEqual.Count; j++)
+                {
+                    if (Math.Abs(fourEqual[i].Area - fourEqual[j].Area) < 0.01*fourEqual[i].Area)
+                    {
+                        closeArea.Add(new []{ fourEqual[i] , fourEqual[j] });
+                        break;
+                    }
+                }
+            }
+            foreach (var cA in closeArea)
+            {
+                equalPrimitives[cA[0]].AddRange(equalPrimitives[cA[1]]);
+            }
+            return PhillipsHeadBolt(solid, solidPrim, equalPrimitives, repeated);*/
             return false;
         }
 
         private static bool SlotHeadBolt(TessellatedSolid solid, List<PrimitiveSurface> solidPrim,
-            Dictionary<PrimitiveSurface, List<PrimitiveSurface>> equalPrimitives, List<TessellatedSolid> repeated)
+            Dictionary<TemporaryFlat, List<TemporaryFlat>> equalPrimitives, List<TessellatedSolid> repeated)
         {
             repeated.Add(solid);
             var twoFlat = FastenerDetector.EqualPrimitivesFinder(equalPrimitives, 2);
@@ -328,18 +369,18 @@ namespace Assembly_Planner
             foreach (var candidateHex in twoFlat)
             {
                 var candidateHexVal = equalPrimitives[candidateHex];
-                var cos = ((Flat)candidateHexVal[0]).Normal.dotProduct(((Flat)candidateHexVal[1]).Normal);
+                var cos = (candidateHexVal[0]).Normal.dotProduct((candidateHexVal[1]).Normal);
                 if (!(Math.Abs(-1 - cos) < 0.0001)) continue;
                 // I will add couple of conditions here:
                 //    1. If the number of solid vertices in front of each flat is equal to another
                 //    2. If the summation of the vertices in 1 is greater than the total # of verts
                 //    3. and I also need to add some constraints for the for eample the area of the cylinder
-                var leftVerts = VertsInfrontOfFlat(solid, (Flat)candidateHexVal[0]);
-                var rightVerts = VertsInfrontOfFlat(solid, (Flat)candidateHexVal[1]);
+                var leftVerts = VertsInfrontOfFlat(solid, candidateHexVal[0]);
+                var rightVerts = VertsInfrontOfFlat(solid, candidateHexVal[1]);
                 if (Math.Abs(leftVerts - rightVerts) > 2 || leftVerts + rightVerts <= solid.Vertices.Length)
                     continue;
                 if (!solidPrim.Where(p => p is Cylinder).Cast<Cylinder>().Any(c => c.IsPositive)) continue;
-                var lengthAndRadius = FastenerEngagedLengthAndRadiusNoThread(solidPrim);
+                var lengthAndRadius = FastenerEngagedLengthAndRadiusNoThread(solid, solidPrim);
                 foreach (var repeatedSolid in repeated)
                 {
                     var fastener = new Fastener
@@ -367,20 +408,20 @@ namespace Assembly_Planner
         }
 
         private static bool PhillipsSlotComboHeadBolt(TessellatedSolid solid, List<PrimitiveSurface> solidPrim,
-            Dictionary<PrimitiveSurface, List<PrimitiveSurface>> equalPrimitives, List<TessellatedSolid> repeated)
+            Dictionary<TemporaryFlat, List<TemporaryFlat>> equalPrimitives, List<TessellatedSolid> repeated)
         {
             repeated.Add(solid);
             var fourFlat = FastenerDetector.EqualPrimitivesFinder(equalPrimitives, 4);
             if (fourFlat.Count < 2) return false;
             var eachSlot = 0;
-            var flats = new List<PrimitiveSurface>();
+            var flats = new List<TemporaryFlat>();
             foreach (var candidateHex in fourFlat)
             {
                 var candidateHexVal = equalPrimitives[candidateHex];
                 var cos = new List<double>();
-                var firstPrimNormal = ((Flat)candidateHexVal[0]).Normal;
+                var firstPrimNormal = (candidateHexVal[0]).Normal;
                 for (var i = 1; i < candidateHexVal.Count; i++)
-                    cos.Add(firstPrimNormal.dotProduct(((Flat)candidateHexVal[i]).Normal));
+                    cos.Add(firstPrimNormal.dotProduct((candidateHexVal[i]).Normal));
                 // if it is a slot and phillips combo the cos list must have two -1 and one 1
                 // and this needs to appear 2 times.
                 if (cos.Count(c => Math.Abs(-1 - c) < 0.0001) != 2 ||
@@ -390,7 +431,7 @@ namespace Assembly_Planner
                 eachSlot++;
             }
             if (eachSlot != 2) return false;
-            var lengthAndRadius = FastenerEngagedLengthAndRadiusNoThread(solidPrim);
+            var lengthAndRadius = FastenerEngagedLengthAndRadiusNoThread(solid, solidPrim);
             foreach (var repeatedSolid in repeated)
             {
                 var fastener = new Fastener
@@ -414,22 +455,22 @@ namespace Assembly_Planner
             return true;
         }
 
-        internal static int VertsInfrontOfFlat(TessellatedSolid solid, Flat flat)
+        internal static int VertsInfrontOfFlat(TessellatedSolid solid, TemporaryFlat flat)
         {
             return
                 solid.Vertices.Count(
                     v => flat.Normal.dotProduct(v.Position.subtract(flat.Faces[0].Vertices[0].Position)) > 0);
         }
 
-        internal static double ToolSizeFinder(List<PrimitiveSurface> candidateHexVal)
+        internal static double ToolSizeFinder(List<TemporaryFlat> candidateHexVal)
         {
-            var firstPrimNormal = ((Flat)candidateHexVal[0]).Normal;
+            var firstPrimNormal = (candidateHexVal[0]).Normal;
             for (var i = 1; i < candidateHexVal.Count; i++)
             {
-                if (Math.Abs(firstPrimNormal.dotProduct(((Flat)candidateHexVal[i]).Normal) + 1) > 0.0001) continue;
+                if (Math.Abs(firstPrimNormal.dotProduct((candidateHexVal[i]).Normal) + 1) > 0.0001) continue;
                 return
-                    Math.Abs(Math.Abs(candidateHexVal[0].Vertices[0].Position.dotProduct(firstPrimNormal)) -
-                             Math.Abs(candidateHexVal[i].Vertices[0].Position.dotProduct(firstPrimNormal)));
+                    Math.Abs(Math.Abs(candidateHexVal[0].Faces[0].Vertices[0].Position.dotProduct(firstPrimNormal)) -
+                             Math.Abs(candidateHexVal[i].Faces[0].Vertices[0].Position.dotProduct(firstPrimNormal)));
             }
             return 0.0;
         }
@@ -498,12 +539,15 @@ namespace Assembly_Planner
             return reference.Normal.crossProduct(second.Normal).normalize();
         }
 
-        internal static double[] FastenerEngagedLengthAndRadiusNoThread(List<PrimitiveSurface> solidPrim)
+        internal static double[] FastenerEngagedLengthAndRadiusNoThread(TessellatedSolid solid, List<PrimitiveSurface> solidPrim)
         {
             // the length and the radius of the longest cylinder
-            if (!solidPrim.Any(p => p is Cylinder))
-                throw new Exception("the fastener does not have any cylinder");
+            //if (!solidPrim.Any(p => p is Cylinder))
+            //    throw new Exception("the fastener does not have any cylinder");
             //[0] = length, [1] = radius
+            if (!solidPrim.Any(p => p is Cylinder))
+                return new[]
+                {BoundingGeometry.BoundingCylinderDic[solid].Length, BoundingGeometry.BoundingCylinderDic[solid].Radius};
             Cylinder longestCyl = null;
             var length = double.NegativeInfinity;
             foreach (Cylinder cylinder in solidPrim.Where(p => p is Cylinder))

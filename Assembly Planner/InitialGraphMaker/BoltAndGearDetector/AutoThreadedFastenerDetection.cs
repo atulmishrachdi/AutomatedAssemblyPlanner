@@ -389,7 +389,7 @@ namespace Assembly_Planner
         }
 
         internal static int CommonHeadCheck(TessellatedSolid solid, List<PrimitiveSurface> solidPrim,
-            Dictionary<PrimitiveSurface, List<PrimitiveSurface>> equalPrimitives, out double toolSize)
+                    Dictionary<TemporaryFlat, List<TemporaryFlat>> equalPrimitives, out double toolSize)
         {
             // 0: false (doesnt have any common head shape)
             // 1: HexBolt or Nut
@@ -409,9 +409,9 @@ namespace Assembly_Planner
             {
                 var candidateHexVal = equalPrimitives[candidateHex];
                 var cos = new List<double>();
-                var firstPrimNormal = ((Flat)candidateHexVal[0]).Normal;
+                var firstPrimNormal = (candidateHexVal[0]).Normal;
                 for (var i = 1; i < candidateHexVal.Count; i++)
-                    cos.Add(firstPrimNormal.dotProduct(((Flat)candidateHexVal[i]).Normal));
+                    cos.Add(firstPrimNormal.dotProduct((candidateHexVal[i]).Normal));
                 // if it is a hex or allen bolt, the cos list must have two 1/2, two -1/2 and one -1
                 if (cos.Count(c => Math.Abs(0.5 - c) < 0.0001) != 2 ||
                     cos.Count(c => Math.Abs(-0.5 - c) < 0.0001) != 2 ||
@@ -425,9 +425,9 @@ namespace Assembly_Planner
             {
                 var candidateHexVal = equalPrimitives[candidateHex];
                 var cos = new List<double>();
-                var firstPrimNormal = ((Flat)candidateHexVal[0]).Normal;
+                var firstPrimNormal = (candidateHexVal[0]).Normal;
                 for (var i = 1; i < candidateHexVal.Count; i++)
-                    cos.Add(firstPrimNormal.dotProduct(((Flat)candidateHexVal[i]).Normal));
+                    cos.Add(firstPrimNormal.dotProduct((candidateHexVal[i]).Normal));
                 var oneFlat = FastenerDetector.EqualPrimitivesFinder(equalPrimitives, 1);
                 // Any flat that is adjacent to all of these eights?
                 // if it is philips head, the cos list must have four 0, two -1 and one 1
@@ -443,28 +443,28 @@ namespace Assembly_Planner
             foreach (var candidateHex in twoFlat)
             {
                 var candidateHexVal = equalPrimitives[candidateHex];
-                var cos = ((Flat)candidateHexVal[0]).Normal.dotProduct(((Flat)candidateHexVal[1]).Normal);
+                var cos = (candidateHexVal[0]).Normal.dotProduct((candidateHexVal[1]).Normal);
                 if (!(Math.Abs(-1 - cos) < 0.0001)) continue;
                 // I will add couple of conditions here:
                 //    1. If the number of solid vertices in front of each flat is equal to another
                 //    2. If the summation of the vertices in 1 is greater than the total # of verts
                 //    3. and I also need to add some constraints for the for eample the area of the cylinder
-                var leftVerts = AutoNonthreadedFastenerDetection.VertsInfrontOfFlat(solid, (Flat)candidateHexVal[0]);
-                var rightVerts = AutoNonthreadedFastenerDetection.VertsInfrontOfFlat(solid, (Flat)candidateHexVal[1]);
+                var leftVerts = AutoNonthreadedFastenerDetection.VertsInfrontOfFlat(solid, candidateHexVal[0]);
+                var rightVerts = AutoNonthreadedFastenerDetection.VertsInfrontOfFlat(solid, candidateHexVal[1]);
                 if (Math.Abs(leftVerts - rightVerts) > 10 || leftVerts + rightVerts <= solid.Vertices.Length)
                     continue;
                 return 4;
             }
 
             var eachSlot = 0;
-            var flats = new List<PrimitiveSurface>();
+            var flats = new List<TemporaryFlat>();
             foreach (var candidateHex in fourFlat)
             {
                 var candidateHexVal = equalPrimitives[candidateHex];
                 var cos = new List<double>();
-                var firstPrimNormal = ((Flat)candidateHexVal[0]).Normal;
+                var firstPrimNormal = (candidateHexVal[0]).Normal;
                 for (var i = 1; i < candidateHexVal.Count; i++)
-                    cos.Add(firstPrimNormal.dotProduct(((Flat)candidateHexVal[i]).Normal));
+                    cos.Add(firstPrimNormal.dotProduct((candidateHexVal[i]).Normal));
                 // if it is a slot and phillips combo the cos list must have two -1 and one 1
                 // and this needs to appear 2 times.
                 if (cos.Count(c => Math.Abs(-1 - c) < 0.0001) != 2 ||

@@ -61,7 +61,7 @@ namespace Assembly_Planner
                         return;
                     }
                     var lengthAndRadius =
-                        AutoNonthreadedFastenerDetection.FastenerEngagedLengthAndRadiusNoThread(solidPrimitive[solid]);
+                        AutoNonthreadedFastenerDetection.FastenerEngagedLengthAndRadiusNoThread(solid, solidPrimitive[solid]);
                     if (AutoNonthreadedFastenerDetection.IsItNut(
                         solidPrimitive[solid].Where(p => p is Cylinder).Cast<Cylinder>().ToList(), solid))
                     {
@@ -213,7 +213,7 @@ namespace Assembly_Planner
                 return;
             }
             var lengthAndRadius =
-                AutoNonthreadedFastenerDetection.FastenerEngagedLengthAndRadiusNoThread(prim);
+                AutoNonthreadedFastenerDetection.FastenerEngagedLengthAndRadiusNoThread(solid, prim);
             var fastener = new Fastener
             {
                 Solid = solid,
