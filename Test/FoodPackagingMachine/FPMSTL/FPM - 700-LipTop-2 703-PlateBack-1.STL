@@ -1,0 +1,86 @@
+solid FPM - 700-LipTop-2 703-PlateBack-1
+   facet normal -1.000000e+000 0.000000e+000 8.969728e-016
+      outer loop
+         vertex 1.103670e+003 1.168400e+003 1.876425e+002
+         vertex 1.103670e+003 9.921000e+002 1.876425e+002
+         vertex 1.103670e+003 1.168400e+003 5.178425e+002
+      endloop
+   endfacet
+   facet normal -1.000000e+000 0.000000e+000 8.969728e-016
+      outer loop
+         vertex 1.103670e+003 1.168400e+003 5.178425e+002
+         vertex 1.103670e+003 9.921000e+002 1.876425e+002
+         vertex 1.103670e+003 9.921000e+002 5.178425e+002
+      endloop
+   endfacet
+   facet normal -1.891077e-031 1.000000e+000 -8.433152e-016
+      outer loop
+         vertex 1.105169e+003 1.168400e+003 1.876425e+002
+         vertex 1.103670e+003 1.168400e+003 1.876425e+002
+         vertex 1.105170e+003 1.168400e+003 5.178425e+002
+      endloop
+   endfacet
+   facet normal -1.891077e-031 1.000000e+000 -8.433152e-016
+      outer loop
+         vertex 1.105170e+003 1.168400e+003 5.178425e+002
+         vertex 1.103670e+003 1.168400e+003 1.876425e+002
+         vertex 1.103670e+003 1.168400e+003 5.178425e+002
+      endloop
+   endfacet
+   facet normal 1.000000e+000 0.000000e+000 -8.969728e-016
+      outer loop
+         vertex 1.105169e+003 9.921000e+002 1.876425e+002
+         vertex 1.105169e+003 1.168400e+003 1.876425e+002
+         vertex 1.105170e+003 9.921000e+002 5.178425e+002
+      endloop
+   endfacet
+   facet normal 1.000000e+000 0.000000e+000 -8.969728e-016
+      outer loop
+         vertex 1.105170e+003 9.921000e+002 5.178425e+002
+         vertex 1.105169e+003 1.168400e+003 1.876425e+002
+         vertex 1.105170e+003 1.168400e+003 5.178425e+002
+      endloop
+   endfacet
+   facet normal 1.891077e-031 -1.000000e+000 8.433152e-016
+      outer loop
+         vertex 1.103670e+003 9.921000e+002 1.876425e+002
+         vertex 1.105169e+003 9.921000e+002 1.876425e+002
+         vertex 1.103670e+003 9.921000e+002 5.178425e+002
+      endloop
+   endfacet
+   facet normal 1.891077e-031 -1.000000e+000 8.433152e-016
+      outer loop
+         vertex 1.103670e+003 9.921000e+002 5.178425e+002
+         vertex 1.105169e+003 9.921000e+002 1.876425e+002
+         vertex 1.105170e+003 9.921000e+002 5.178425e+002
+      endloop
+   endfacet
+   facet normal -8.969728e-016 -8.433152e-016 -1.000000e+000
+      outer loop
+         vertex 1.105169e+003 1.168400e+003 1.876425e+002
+         vertex 1.105169e+003 9.921000e+002 1.876425e+002
+         vertex 1.103670e+003 1.168400e+003 1.876425e+002
+      endloop
+   endfacet
+   facet normal -8.969728e-016 -8.433152e-016 -1.000000e+000
+      outer loop
+         vertex 1.103670e+003 1.168400e+003 1.876425e+002
+         vertex 1.105169e+003 9.921000e+002 1.876425e+002
+         vertex 1.103670e+003 9.921000e+002 1.876425e+002
+      endloop
+   endfacet
+   facet normal 8.969728e-016 8.433152e-016 1.000000e+000
+      outer loop
+         vertex 1.105170e+003 9.921000e+002 5.178425e+002
+         vertex 1.105170e+003 1.168400e+003 5.178425e+002
+         vertex 1.103670e+003 9.921000e+002 5.178425e+002
+      endloop
+   endfacet
+   facet normal 8.969728e-016 8.433152e-016 1.000000e+000
+      outer loop
+         vertex 1.103670e+003 9.921000e+002 5.178425e+002
+         vertex 1.105170e+003 1.168400e+003 5.178425e+002
+         vertex 1.103670e+003 1.168400e+003 5.178425e+002
+      endloop
+   endfacet
+endsolid
