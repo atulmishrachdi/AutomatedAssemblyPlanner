@@ -21,10 +21,12 @@ namespace Assembly_Planner
                     FastenerDetector.PreSelectedFasteners.Where(preSelected => !smallParts.Contains(preSelected)))
                 smallParts.Add(preSelected);
 
-            FastenerDetector.PotentialFastener = new HashSet<TessellatedSolid>(smallParts);
+            FastenerDetector.PotentialFastener = new Dictionary<TessellatedSolid, double>();
+            foreach (var p in smallParts)
+                FastenerDetector.PotentialFastener.Add(p, 0.1);
             var groupedPotentialFasteners = FastenerDetector.GroupingSmallParts(smallParts);
             var uniqueParts = new HashSet<TessellatedSolid>();
-            foreach (var s in multipleRefs.Keys.Where(FastenerDetector.PotentialFastener.Contains))
+            foreach (var s in multipleRefs.Keys.Where(FastenerDetector.PotentialFastener.Keys.Contains))
                 uniqueParts.Add(s);
             foreach (
                 var preFastener in
@@ -35,6 +37,7 @@ namespace Assembly_Planner
                 solidPrimitive);
             List<int> learnerVotes;
             var learnerWeights = FastenerPerceptronLearner.ReadingLearnerWeightsAndVotesFromCsv(out learnerVotes);
+
 
             Parallel.ForEach(uniqueParts, solid =>
                 //foreach (var solid in uniqueParts)

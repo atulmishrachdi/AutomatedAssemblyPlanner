@@ -55,15 +55,11 @@ namespace Assembly_Planner
                         continue;
                     }
                 }
-                if (FastenerDetector.PotentialFastener != null)
+                var smallPart = FastenerDetector.PotentialFastener.Keys.Where(sp => solidName == sp.Name).ToList();
+                if (smallPart.Any())
                 {
-                    var smallPart = FastenerDetector.PotentialFastener.Where(f => solidName == f.Name).ToList();
-                    if (smallPart.Any())
-                    {
-                        part.FastenerCertainty = 0.1;
-                        this.parts.Add(part);
-                        continue;
-                    }
+                    part.FastenerCertainty = FastenerDetector.PotentialFastener[smallPart[0]];
+                    continue;
                 }
                 part.FastenerCertainty = 0.0;
                 this.parts.Add(part);

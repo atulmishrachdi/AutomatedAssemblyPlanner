@@ -126,9 +126,11 @@ namespace Assembly_Planner
             FastenerDetector.Washers =
                 new HashSet<Washer>(
                     FastenerDetector.Washers.Where(w => !SolidsNoFastener.Keys.Contains(w.Solid.Name)).ToList());
+            var pF =
+                FastenerDetector.PotentialFastener.Where(u => !SolidsNoFastener.Keys.Contains(u.Key.Name))
+                    .ToDictionary(t => t.Key, t => t.Value);
             FastenerDetector.PotentialFastener =
-                new HashSet<TessellatedSolid>(
-                    FastenerDetector.PotentialFastener.Where(u => !SolidsNoFastener.Keys.Contains(u.Name)).ToList());
+                new Dictionary<TessellatedSolid, double>(pF);
         }
 
         private static Dictionary<string, List<TessellatedSolid>> GetSTLs(string InputDir)

@@ -23,7 +23,8 @@ namespace Assembly_Planner
             //      2. Group them using small objects
             //      3. Detect the fasteners using multiple references. (for each similar object, detect one of them) 
 
-            var smallParts = FastenerDetector.SmallObjectsDetector(DisassemblyDirectionsWithFastener.PartsWithOneGeom); //new List<TessellatedSolid>(DisassemblyDirectionsWithFastener.PartsWithOneGeom);
+            var smallParts = FastenerDetector.SmallObjectsDetector(DisassemblyDirectionsWithFastener.PartsWithOneGeom);
+                //new List<TessellatedSolid>(DisassemblyDirectionsWithFastener.PartsWithOneGeom);
 
             PreSelectedFastenerToFastenerClass(solidPrimitive, multipleRefs);
             foreach (
@@ -31,10 +32,13 @@ namespace Assembly_Planner
                     FastenerDetector.PreSelectedFasteners.Where(preSelected => !smallParts.Contains(preSelected)))
                 smallParts.Add(preSelected);
 
-            FastenerDetector.PotentialFastener = new HashSet<TessellatedSolid>(smallParts);
+            FastenerDetector.PotentialFastener = new Dictionary<TessellatedSolid, double>();
+            foreach (var p in smallParts)
+                FastenerDetector.PotentialFastener.Add(p, 0.1);
+
             var groupedPotentialFasteners = FastenerDetector.GroupingSmallParts(smallParts);
             var uniqueParts = new HashSet<TessellatedSolid>();
-            foreach (var s in multipleRefs.Keys.Where(FastenerDetector.PotentialFastener.Contains))
+            foreach (var s in multipleRefs.Keys.Where(FastenerDetector.PotentialFastener.Keys.Contains))
                 uniqueParts.Add(s);
             foreach (
                 var preFastener in
@@ -44,9 +48,16 @@ namespace Assembly_Planner
             var equalPrimitivesForEveryUniqueSolid = FastenerDetector.EqualFlatPrimitiveAreaFinder(uniqueParts,
                 solidPrimitive);
             var checkedSolids = new HashSet<TessellatedSolid>();
+            FastenerGaussianNaiveBayes.GNB();
+
             Parallel.ForEach(uniqueParts, solid =>
-            //foreach (var solid in uniqueParts)
+                //foreach (var solid in uniqueParts)
             {
+                var initialCertainty = FastenerGaussianNaiveBayes.GaussianNaiveBayesClassifier(solidPrimitive[solid],
+                    solid);
+                FastenerDetector.PotentialFastener[solid] = 0.1 + initialCertainty;
+                foreach (var up in multipleRefs[solid])
+                    FastenerDetector.PotentialFastener[up] = 0.1 + initialCertainty;
                 if (solidPrimitive[solid].Count == 0) return;
                 if (HexBoltNutAllen(solid, solidPrimitive[solid], equalPrimitivesForEveryUniqueSolid[solid],
                     multipleRefs[solid]))
@@ -91,9 +102,10 @@ namespace Assembly_Planner
                 lock (checkedSolids)
                 {
                     checkedSolids.Add(solid);
+
                 }
             }
-                );//
+                ); //
             // when all of the fasteners are recognized, it's time to check the third level filter:
             // something is not acceptable: nut without fastener. If there is a nut without fastener,
             // I will try to look for that.

@@ -15,7 +15,7 @@ namespace Assembly_Planner
         public static HashSet<Fastener> Fasteners = new HashSet<Fastener>();
         public static HashSet<Nut> Nuts = new HashSet<Nut>();
         public static HashSet<Washer> Washers = new HashSet<Washer>();
-        public static HashSet<TessellatedSolid> PotentialFastener = new HashSet<TessellatedSolid>();
+        public static Dictionary<TessellatedSolid, double> PotentialFastener = new Dictionary<TessellatedSolid, double>(); // value is its certainty
 
         internal static HashSet<TessellatedSolid> Run(
             Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive,
