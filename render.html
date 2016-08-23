@@ -801,8 +801,6 @@
 		
 		function loadParts (){
 		
-			
-		
 			var pos=0;
 			var lim=fileReaders.length;
 			while(pos<lim){
@@ -817,7 +815,7 @@
 				console.log("ALL DONE");
 				parts.length=0;
 				pos=0;
-				var partGeom;
+				var partGeom=null;
 				var partMesh;
 				var theCenter;
 				var ext;
@@ -826,7 +824,11 @@
 
 					if(ext.toLowerCase()==="stl"){
 						
-						partGeom=parseStlBinary(fileReaders[pos].Reader.result);						
+						partGeom=parseStl(fileReaders[pos].Reader.result);
+						if(partGeom===null){
+							partGeom=parseStlBinary(fileReaders[pos].Reader.result);
+						}
+						
 						partMesh=new THREE.Mesh( 
 								partGeom,
 								new THREE.MeshNormalMaterial( )

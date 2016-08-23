@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -13,13 +14,13 @@ using Assembly_Planner.GraphSynth.BaseClasses;
 using GraphSynth.Representation;
 using TVGL;
 using TVGL.IOFunctions;
-using TVGL;
 
-namespace Assembly_Planner
+
+
+namespace Assembly_Planner_2
 {
-    internal class Program
+    public class Program
     {
-
         public static List<double> DegreeOfFreedoms = new List<double>();
         public static List<double> StablbiblityScores = new List<double>();
         public static Dictionary<string, List<TessellatedSolid>> Solids = new Dictionary<string, List<TessellatedSolid>>();
@@ -31,12 +32,11 @@ namespace Assembly_Planner
 
         public static List<int> globalDirPool = new List<int>();
 
-        public static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            Program1.main(args);     
+           Program2.main(args);
         }
-       
     }
-
 }
+
 

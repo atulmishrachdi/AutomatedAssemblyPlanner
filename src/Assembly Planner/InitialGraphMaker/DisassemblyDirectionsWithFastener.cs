@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using GraphSynth.Representation;
 using StarMathLib;
 using TVGL;
-using TVGL;
 using Assembly_Planner.GraphSynth.BaseClasses;
 using TVGL.IOFunctions;
 using Component = Assembly_Planner.GraphSynth.BaseClasses.Component;

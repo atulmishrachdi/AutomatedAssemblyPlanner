@@ -13,6 +13,8 @@
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkProfile />
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -25,20 +27,18 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\</OutputPath>
     <DefineConstants>TRACE;DEBUG;InputDialogOFF</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <WarningLevel>0</WarningLevel>
     <Externalconsole>true</Externalconsole>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
@@ -84,6 +84,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Program2.cs" />
+    <Compile Include="Program1.cs" />
+    <Compile Include="DegreeOfFreedomGraph\DoFCombinedPart.cs" />
+    <Compile Include="DegreeOfFreedomGraph\DoFPart.cs" />
+    <Compile Include="DegreeOfFreedomGraph\DoFGraph.cs" />
     <Compile Include="DisassemblyProcess\AStarInspiredRecursiveOptimizedSearch.cs" />
     <Compile Include="DisassemblyProcess\BeamSearch.cs" />
     <Compile Include="DisassemblyProcess\DBG.cs" />
