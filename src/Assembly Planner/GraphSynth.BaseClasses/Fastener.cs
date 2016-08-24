@@ -175,7 +175,7 @@ namespace Assembly_Planner
             // There is still a possibility here: if any of the potential fasteners are holding 2 or more parts
             // The point is that they can be either a washer, nut or fastener. But if it is a fastener, I need 
             // to find the parts that it's holding and add it to their arc
-            foreach (var possible in FastenerDetector.PotentialFastener)
+            foreach (var possible in FastenerDetector.PotentialFastener.Keys)
             {
                 counter++;
                 var locked = PartsLockedByTheFastenerFinder(possible, solidsNoFastener, solidPrimitive);

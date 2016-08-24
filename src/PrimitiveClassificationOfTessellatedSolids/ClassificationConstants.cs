@@ -76,7 +76,7 @@ namespace PrimitiveClassificationOfTessellatedSolids
         internal static List<List<int>> readingEdgesRules2()
         {
             //var reader = getStreamReader("NewEdgeRules.csv"); // "EdRulesBeta.csv"
-            var reader = new StreamReader(File.OpenRead("src/PrimitiveClassificationOfTessellatedSolids/NewEdgeRules.csv"));
+            var reader = new StreamReader(File.OpenRead("../../../PrimitiveClassificationOfTessellatedSolids/NewEdgeRules.csv"));
             var Lists = new List<List<int>>();
             bool blocker = true;
             while (!reader.EndOfStream)
@@ -105,7 +105,7 @@ namespace PrimitiveClassificationOfTessellatedSolids
         internal static List<List<int>> readingFacesRules()
         {
             //var reader = getStreamReader("NewFaRules.csv");//FaRules2.csv
-            var reader = new StreamReader(File.OpenRead("src/PrimitiveClassificationOfTessellatedSolids/NewFaRules.csv"));
+            var reader = new StreamReader(File.OpenRead("../../../PrimitiveClassificationOfTessellatedSolids/NewFaRules.csv"));
             List<List<int>> Lists = new List<List<int>>();
             bool blocker = true;
             while (!reader.EndOfStream)

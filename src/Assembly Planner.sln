@@ -7,9 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly Planner", "Assembl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrimitiveClassificationOfTessellatedSolids", "PrimitiveClassificationOfTessellatedSolids\PrimitiveClassificationOfTessellatedSolids.csproj", "{59F5FE35-E4B0-4C0C-8405-9E314CF48298}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly Planner 2", "Assembly Planner 2\Assembly Planner 2.csproj", "{7D38D662-2EBE-4BCA-824E-F30EDF3E8927}"
-EndProject
 Global
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Console Debug|Any CPU = Console Debug|Any CPU
 		Console Debug|x86 = Console Debug|x86
@@ -61,30 +62,6 @@ Global
 		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.WPF GUI Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.WPF GUI Release|Any CPU.Build.0 = Release|Any CPU
 		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.WPF GUI Release|x86.ActiveCfg = Release|Any CPU
-		{7D38D662-2EBE-4BCA-824E-F30EDF3E8927}.Console Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7D38D662-2EBE-4BCA-824E-F30EDF3E8927}.Console Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7D38D662-2EBE-4BCA-824E-F30EDF3E8927}.Console Debug|x86.ActiveCfg = Debug|Any CPU
-		{7D38D662-2EBE-4BCA-824E-F30EDF3E8927}.Console Debug|x86.Build.0 = Debug|Any CPU
-		{7D38D662-2EBE-4BCA-824E-F30EDF3E8927}.Console Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7D38D662-2EBE-4BCA-824E-F30EDF3E8927}.Console Release|Any CPU.Build.0 = Release|Any CPU
-		{7D38D662-2EBE-4BCA-824E-F30EDF3E8927}.Console Release|x86.ActiveCfg = Release|Any CPU
-		{7D38D662-2EBE-4BCA-824E-F30EDF3E8927}.Console Release|x86.Build.0 = Release|Any CPU
-		{7D38D662-2EBE-4BCA-824E-F30EDF3E8927}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7D38D662-2EBE-4BCA-824E-F30EDF3E8927}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7D38D662-2EBE-4BCA-824E-F30EDF3E8927}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{7D38D662-2EBE-4BCA-824E-F30EDF3E8927}.Debug|x86.Build.0 = Debug|Any CPU
-		{7D38D662-2EBE-4BCA-824E-F30EDF3E8927}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7D38D662-2EBE-4BCA-824E-F30EDF3E8927}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7D38D662-2EBE-4BCA-824E-F30EDF3E8927}.Release|x86.ActiveCfg = Release|Any CPU
-		{7D38D662-2EBE-4BCA-824E-F30EDF3E8927}.Release|x86.Build.0 = Release|Any CPU
-		{7D38D662-2EBE-4BCA-824E-F30EDF3E8927}.WPF GUI Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7D38D662-2EBE-4BCA-824E-F30EDF3E8927}.WPF GUI Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7D38D662-2EBE-4BCA-824E-F30EDF3E8927}.WPF GUI Debug|x86.ActiveCfg = Debug|Any CPU
-		{7D38D662-2EBE-4BCA-824E-F30EDF3E8927}.WPF GUI Debug|x86.Build.0 = Debug|Any CPU
-		{7D38D662-2EBE-4BCA-824E-F30EDF3E8927}.WPF GUI Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7D38D662-2EBE-4BCA-824E-F30EDF3E8927}.WPF GUI Release|Any CPU.Build.0 = Release|Any CPU
-		{7D38D662-2EBE-4BCA-824E-F30EDF3E8927}.WPF GUI Release|x86.ActiveCfg = Release|Any CPU
-		{7D38D662-2EBE-4BCA-824E-F30EDF3E8927}.WPF GUI Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

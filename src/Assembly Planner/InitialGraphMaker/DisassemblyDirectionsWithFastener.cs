@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using GraphSynth.Representation;
 using StarMathLib;
 using TVGL;
+using TVGL;
 using Assembly_Planner.GraphSynth.BaseClasses;
 using TVGL.IOFunctions;
 using Component = Assembly_Planner.GraphSynth.BaseClasses.Component;
@@ -205,8 +206,8 @@ namespace Assembly_Planner
                 var solid = solids[i];
                 var exist = multipleRefs.Keys.Where(
                     k =>
-                        k.Faces.Count() == solid.Faces.Count() &&
-                        Math.Abs(k.Vertices.Count() - solid.Vertices.Count()) < 2 &&
+                        (Math.Abs(k.Faces.Count() - solid.Faces.Count()) / Math.Max(k.Faces.Count(), solid.Faces.Count()) < 0.01) &&
+                        Math.Abs(k.Vertices.Count() - solid.Vertices.Count()) / Math.Max(k.Vertices.Count(), solid.Vertices.Count()) < 0.01 &&
                         (Math.Max(k.SurfaceArea, solid.SurfaceArea) - Math.Min(k.SurfaceArea, solid.SurfaceArea)) /
                         Math.Max(k.SurfaceArea, solid.SurfaceArea) < 0.001).ToList();
                 if (exist.Count == 0)
@@ -218,7 +219,6 @@ namespace Assembly_Planner
                 {
                     multipleRefs[exist[0]].Add(solid);
                 }
-                //Bridge.StatusReporter.ReportProgress((i + 1) / (float)(solids.Count));
             }
             return multipleRefs;
         }

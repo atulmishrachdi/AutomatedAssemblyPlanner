@@ -25,7 +25,6 @@ function getPartNameCutoff(partFrames){
 
 function cutoffPartNames(partFrames){
 	
-	
 	var cut=getPartNameCutoff(partFrames);
 	
 	var pos=0;
@@ -87,7 +86,7 @@ function getGeometries(theSTLs){
 
 function bindPartsToKeyFrames(theKeyFrameLists, theParts){
 	
-	//console.log(theKeyFrameLists);
+	console.log(theKeyFrameLists);
 	
 	var pos=0;
 	var searchPos;
@@ -116,7 +115,7 @@ function bindPartsToKeyFrames(theKeyFrameLists, theParts){
 	}
 	
 	flipTheTimes(result);
-	//console.log(result);
+	console.log(result);
 	return result;
 	
 }
@@ -140,7 +139,7 @@ function longestTimeFromFrames(partFrames){
 		}
 		x++;
 	}
-	//console.log(best);
+	console.log(best);
 	return best;
 	
 }
@@ -255,9 +254,9 @@ function makeKeyFrames(theTree, runningList, currentFrameList){
 	
 	if(theTree.Ref===null){
 		var copiedList= copyFrameList(runningList);
-		//console.log("-----------");
-		//console.log(runningList);
-		//console.log(copiedList);
+		console.log("-----------");
+		console.log(runningList);
+		console.log(copiedList);
 		currentFrameList.push({Name: theTree.Name, Frames: copiedList});
 		runningList.pop();
 		return;

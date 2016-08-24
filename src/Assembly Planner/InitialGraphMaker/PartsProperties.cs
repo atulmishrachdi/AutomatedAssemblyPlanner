@@ -18,7 +18,7 @@ namespace Assembly_Planner
             this.parts = new List<PartProperties>();
             foreach (var solidName in Program.Solids.Keys)
             {
-                var part = new PartProperties {Name = solidName, Mass = 0.0, Volume = Program.Solids[solidName].Sum(s=> s.Volume), SurfaceArea = (Program.Solids[solidName]).Sum(s => s.SurfaceArea) };
+                var part = new PartProperties {Name = solidName, Mass = 0.0, Volume = Program.Solids[solidName].Sum(s=> s.Volume) };
                 if (Program.Solids[solidName].Count > 1)
                 {
                     part.FastenerCertainty = 0.0;
@@ -55,15 +55,11 @@ namespace Assembly_Planner
                         continue;
                     }
                 }
-                if (FastenerDetector.PotentialFastener != null)
+                var smallPart = FastenerDetector.PotentialFastener.Keys.Where(sp => solidName == sp.Name).ToList();
+                if (smallPart.Any())
                 {
-                    var smallPart = FastenerDetector.PotentialFastener.Where(f => solidName == f.Name).ToList();
-                    if (smallPart.Any())
-                    {
-                        part.FastenerCertainty = 0.1;
-                        this.parts.Add(part);
-                        continue;
-                    }
+                    part.FastenerCertainty = FastenerDetector.PotentialFastener[smallPart[0]];
+                    continue;
                 }
                 part.FastenerCertainty = 0.0;
                 this.parts.Add(part);
@@ -87,10 +83,7 @@ namespace Assembly_Planner
         [XmlElement("volume")]
         public double Volume { get; set; }
 
-        [XmlElement("surface_area")]
-        public double SurfaceArea { get; set; }
-
-
+      
         [XmlElement("fastener_certainty")]
         public double FastenerCertainty { get; set; }
 

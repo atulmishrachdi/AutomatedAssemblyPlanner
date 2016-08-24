@@ -28,6 +28,7 @@ namespace Assembly_Planner
         protected static int TimeEstmCounter;
         protected static SortedList<double, HashSet<TreeCandidate>> SortedStack;
         protected static int BeamWidth;
+        protected static bool FirstRun;
 
         protected static Dictionary<HashSet<Component>, MemoData> Memo =
             new Dictionary<HashSet<Component>, MemoData>(HashSet<Component>.CreateSetComparer());
@@ -45,7 +46,7 @@ namespace Assembly_Planner
             BeamWidth = beamWidth;
             Constants.Values = new Constants();
             DirPool = globalDirPool;
-
+            FirstRun = true;
             var initialMemo = InitializeMemoInitial();
             /*SubAssembly tree = null;
             
@@ -101,7 +102,11 @@ namespace Assembly_Planner
                         {
                             lock (Memo)
                             {
-                                Memo.Add(a, d);
+                                if (BeamWidth == 1 || (BeamWidth > 1 && !FirstRun))
+                                {
+                                    Memo.Add(a, d);
+                                    FillUpMemo(treeCandidate.parent);
+                                }
                             }
                         }
                         else
@@ -198,7 +203,17 @@ namespace Assembly_Planner
                         SortedStack.Add(child.Key, child.Value);
                 beamChildern.Clear();
                 if (counter == cand.Count)
-                    tree = CreateTheSequence(cand);
+                {
+                    if (FirstRun)
+                    {
+                        FirstRun = false;
+                        //AssignNewWeight(InitialTimes, InitialStableScores, Bridge.StabilityWeightChosenByUser,
+                        //    out FinalTimeWeight, out FinalStableWeight);
+                        tree = LeapOptimizationSearch();
+                    }
+                    if (tree == null)
+                        tree = CreateTheSequence(cand);
+                }
                 if (tree != null) break;
             }
             return tree;
@@ -253,8 +268,31 @@ namespace Assembly_Planner
             return finalNodes[0];
         }
 
+        private static void FillUpMemo(TreeCandidate sa)
+        {
+            //var d = new MemoData(time, treeCandidate.sa);
+            var a = new HashSet<Component>(sa.MovNodes);
+            a.UnionWith(sa.RefNodes);
+            if (Memo.ContainsKey(sa.MovNodes) && Memo.ContainsKey(sa.RefNodes))
+            {
+                var time = Memo[sa.MovNodes].Value + Memo[sa.RefNodes].Value +
+                           sa.sa.Install.Time;
+                var d = new MemoData(time, sa.sa);
+                if (!Memo.ContainsKey(a))
+                    lock (Memo)
+                        Memo.Add(a, d);
+                else
+                {
+                    if (Memo[a].Value > d.Value)
+                        Memo[a] = d;
+                }
+                if (sa.parent != null)
+                    FillUpMemo(sa.parent);
+            }
+        }
         private static void UpdateSortedStackWithBeamWidth(int beamWidth)
         {
+            if (FirstRun) beamWidth = 1;
             if (SortedStack.Count > beamWidth)
                 for (var i = SortedStack.Count - 1; i >= beamWidth; i--)
                     SortedStack.RemoveAt(i);
