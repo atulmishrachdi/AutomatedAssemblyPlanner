@@ -274,6 +274,8 @@
 		
 		
 		function renderXML(){
+		
+			theTable.search("").draw();
 			
 			var result="<?xml version='1.0' encoding='utf-8'?>\n<parts_properties xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>\n";
 			
@@ -467,31 +469,31 @@
 			var mat=theButton.innerHTML;
 			var val;
 			if(mat=="Aluminum"){
-				val=2.7/100;
+				val=2.7/1000;
 			}
 			else if(mat=="Glass"){
-				val=2.52/100;
+				val=2.52/1000;
 			}
 			else if(mat=="Plastic (Hi-Density)"){
-				val=1.95/100;
+				val=1.95/1000;
 			}
 			else if(mat=="Plastic (Med-Density)"){
-				val=1.1/100;
+				val=1.1/1000;
 			}
 			else if(mat=="Plastic (Low-Density)"){
-				val=0.9/100;
+				val=0.9/1000;
 			}
 			else if(mat=="Rubber"){
-				val=1.27/100;
+				val=1.27/1000;
 			}
 			else if(mat=="Steel"){
-				val=7.859/100;
+				val=7.859/1000;
 			}
 			else if(mat=="Titanium"){
-				val=4.507/100;
+				val=4.507/1000;
 			}
 			else if(mat=="Wood"){
-				val=0.63/100;
+				val=0.63/1000;
 			}
 			else{
 				return;
