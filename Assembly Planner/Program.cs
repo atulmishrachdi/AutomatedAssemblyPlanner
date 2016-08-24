@@ -53,7 +53,7 @@ namespace Assembly_Planner
             var s = Stopwatch.StartNew();
             s.Start();
             Solids = GetSTLs(inputDir);
-            var detectFasteners = true; //TBI
+            var detectFasteners = false; //TBI
             var threaded = 0; // 0:none, 1: all, 2: subset
 
             AssemblyGraph = new designGraph();
@@ -62,8 +62,12 @@ namespace Assembly_Planner
             {
                 DisassemblyDirectionsWithFastener.RunFastenerDetection(Solids, threaded);
             }
+            else
+            {
+                SolidsNoFastener = Solids;
+            }
             SerializeSolidProperties();
-            DeserializeSolidProperties();
+            //DeserializeSolidProperties();
             globalDirPool = DisassemblyDirectionsWithFastener.RunGraphGeneration(AssemblyGraph, SolidsNoFastener);
             // the second user interaction must happen here
             NonadjacentBlockingWithPartitioning.Run(AssemblyGraph, SolidsNoFastener, globalDirPool);

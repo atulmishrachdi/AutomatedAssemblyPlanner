@@ -496,7 +496,7 @@ namespace AssemblyEvaluation
                     unChangedFaces.Remove(tbcFace);
                 }
 
-                if (1 - refNormal.dotProduct(new[] { 1.0, 0, 0 }) < 0.05)
+                /*if (1 - refNormal.dotProduct(new[] { 1.0, 0, 0 }) < 0.05)
                     refNormal = new[] { 1.0, 0, 0 };
                 else if (1 - refNormal.dotProduct(new[] { 0.0, 1, 0 }) < 0.05)
                     refNormal = new[] { 0.0, 1, 0 };
@@ -507,7 +507,7 @@ namespace AssemblyEvaluation
                 else if (1 - refNormal.dotProduct(new[] { 0.0, -1, 0 }) < 0.05)
                     refNormal = new[] { 0.0, -1, 0 };
                 else if (1 - refNormal.dotProduct(new[] { 0.0, 0, -1 }) < 0.05)
-                    refNormal = new[] { 0.0, 0, -1 };
+                    refNormal = new[] { 0.0, 0, -1 };*/
 
                 footprintFaces.Add(new FootprintFace
                 {

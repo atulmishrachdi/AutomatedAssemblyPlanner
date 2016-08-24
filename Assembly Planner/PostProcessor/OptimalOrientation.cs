@@ -115,7 +115,10 @@ namespace Assembly_Planner
                 //if (fixedReference)
                 //    toFaces = new List<FootprintFace> { new FootprintFace(GravityVector) };
                 //else
+                //{
                     toFaces = AssemblyEvaluator.MergingFaces(notAffected);
+                    toFaces = FilteroutBadFaces(toFaces, (SubAssembly)ftask.Install.Reference);
+                //}
                 //toFaces.Add(startingFace);
                 var precAndMinC = new List<PreAndCost>();
                 foreach (var tFace in toFaces)
@@ -139,18 +142,19 @@ namespace Assembly_Planner
                     {
                         var curSubAsse = RefPrec[i];
                         var preSubAsse = RefPrec[i + 1];
-                        var refvertex = curSubAsse.Install.Reference.CVXHull.Vertices.ToList();
+                        //var refvertex = curSubAsse.Install.Reference.CVXHull.Vertices.ToList();
 
-                        var refOBB = OBB.BuildUsingPoints(refvertex);
+                        //var refOBB = OBB.BuildUsingPoints(refvertex);
                         //AssemblyEvaluator.MergingFaces(initialFaces);
                         fromFaces = toFaces;
                         //if (!fixedReference)
-                        {
+                        //{
                             notAffected = AssemblyEvaluator.UnaffectedRefFacesDuringInstallation(curSubAsse);
                             toFaces = new List<FootprintFace>(AssemblyEvaluator.MergingFaces(notAffected));
+                            toFaces = FilteroutBadFaces(toFaces, (SubAssembly)ftask.Install.Reference);
                             //var notAffectedfromface = Getnotaffectedfromface(fromFaces, notAffected);
                             //toFaces.AddRange(notAffectedfromface);
-                        }
+                        //}
                         foreach (var tFace in toFaces)
                         {
                             var preCost = new PreAndCost
@@ -169,14 +173,11 @@ namespace Assembly_Planner
                                 var totalCost = double.PositiveInfinity;
                                 if (samefromandtoface == false)
                                 {
-                                    var lengths = new[]
+                                    /*var lengths = new[]
                                     {
-                                        refOBB.CornerVertices[0].Position.subtract(refOBB.CornerVertices[1].Position)
-                                            .norm1(),
-                                        refOBB.CornerVertices[2].Position.subtract(refOBB.CornerVertices[1].Position)
-                                            .norm1(),
-                                        refOBB.CornerVertices[0].Position.subtract(refOBB.CornerVertices[4].Position)
-                                            .norm1()
+                                        refOBB.CornerVertices[0].Position.subtract(refOBB.CornerVertices[1].Position).norm1(),
+                                        refOBB.CornerVertices[2].Position.subtract(refOBB.CornerVertices[1].Position).norm1(),
+                                        refOBB.CornerVertices[0].Position.subtract(refOBB.CornerVertices[4].Position).norm1()
                                     };
                                     var lmax = lengths.Max();
                                     var lmin = lengths.Min();
@@ -191,14 +192,14 @@ namespace Assembly_Planner
                                     };
                                     double rotatetime, rotateSD;
                                     CalculateAssemblyTimeAndSD.GetTimeAndSD(input, "rotate",
-                                        out rotatetime, out rotateSD);
+                                        out rotatetime, out rotateSD);*/
                                     //var c1 = m[0].MinCost; //transition cost
                                     //var c2 = RiLiCostCalculator(curSubAsse, fFace, tFace); //0-2
                                     //var c3 = stabilityAccessCost //0-2
                                     //         + rotatetime;
                                     totalCost = m[0].MinCost +
                                                 RiLiCostCalculator(curSubAsse, fFace, tFace) +
-                                                stabilityAccessCost + rotatetime;
+                                                stabilityAccessCost; //+ rotatetime;
                                 }
                                 else
                                 {
@@ -222,6 +223,25 @@ namespace Assembly_Planner
                 loopMakingSubAsse.AddRange(Movings);
             }
             return taskCommands;
+        }
+
+        private static List<FootprintFace> FilteroutBadFaces(List<FootprintFace> toFaces, SubAssembly reference)
+        {
+            var badFaces = new List<FootprintFace>();
+            var totalArea = reference.CVXHull.SurfaceArea;
+            foreach (var f in toFaces)
+            {
+                if (f.Faces.Sum(face => face.Area) > totalArea / 100.0) continue;
+                badFaces.Add(f);
+            }
+            foreach (var bf in badFaces)
+                toFaces.Remove(bf);
+            if (!toFaces.Any())
+            {
+                var sortedBad = badFaces.OrderBy(b => b.Faces.Sum(f => f.Area)).ToList();
+                toFaces.Add(sortedBad[sortedBad.Count - 1]);
+            }
+            return toFaces;
         }
 
         private static void UpdateFasteners()
@@ -312,6 +332,7 @@ namespace Assembly_Planner
             // now find the transformation matrices:
             //var uniquePosition = new[] { VertsOnCircle[0][0], VertsOnCircle[0][1], VertsOnCircle[0][2] };
             //Vertex initialCOM = null;
+            var referenceRotationPoint = subAssems[0].SubAssembly.Install.Reference.CenterOfMass;
             for (var i = 0; i < subAssems.Length; i++)
             {
                 double[,] tM;
@@ -320,17 +341,9 @@ namespace Assembly_Planner
                     tM = TransformationMatrixForStartingReferenceNewApproach(subAssems[i].FromFace, subAssems[i].Face,
                         subAssems[i].SubAssembly.Install.Reference.CenterOfMass);
                     subAssems[i].SubAssembly.Rotate.TransformationMatrix = tM;
-                    //initialCOM = subAssems[i].SubAssembly.CenterOfMass;
                 }
                 else
                 {
-                    /*var rotatedCOM = MatrixTimesMatrix(subAssems[i].FromSubAssembly.Rotate.TransformationMatrix,
-                        new[]
-                        {
-                            subAssems[i].SubAssembly.Install.Reference.CenterOfMass.Position[0],
-                            subAssems[i].SubAssembly.Install.Reference.CenterOfMass.Position[1],
-                            subAssems[i].SubAssembly.Install.Reference.CenterOfMass.Position[2], 1
-                        });*/
                     tM = TransformationMatrixNewApproach(subAssems[i].FromFace, subAssems[i].Face,
                         subAssems[i].SubAssembly.Install.Reference.CenterOfMass);  //new Vertex(rotatedCOM)
                 }
@@ -338,7 +351,7 @@ namespace Assembly_Planner
                     subAssems[i].SubAssembly.Rotate.TransformationMatrix = tM;
                 else
                     subAssems[i].SubAssembly.Rotate.TransformationMatrix =
-                        MatrixTimesMatrix(subAssems[i].FromSubAssembly.Rotate.TransformationMatrix, tM);
+                        MatrixTimesMatrix(tM, subAssems[i].FromSubAssembly.Rotate.TransformationMatrix);
                 var transMatr = subAssems[i].SubAssembly.Rotate.TransformationMatrix;
                 var toGroundTranslation = TranslationToGroundFinder(subAssems[i]);
                 subAssems[i].SubAssembly.Rotate.TransformationMatrix = MatrixTimesMatrix(toGroundTranslation,
@@ -500,36 +513,36 @@ namespace Assembly_Planner
                 TranslateToMagicBoxDic.Add(solid.Key, matrix);
             }
             // This is temporary
-            /*foreach (var spring in SpringDetector.Springs)
-            {
-                var solid = spring.Solid;
-                var allVertcs = solid.Vertices;
-                var x = new[] { allVertcs.Min(v => v.X), allVertcs.Max(v => v.X) };
-                var y = new[] { allVertcs.Min(v => v.Y), allVertcs.Max(v => v.Y) };
-                var z = new[] { allVertcs.Min(v => v.Z), allVertcs.Max(v => v.Z) };
-                var midBox = new[]
-                {
-                    (x[0] + x[1])/(2.0*Bridge.MeshMagnifier),
-                    (y[0] + y[1])/(2.0*Bridge.MeshMagnifier),
-                    (z[0] + z[1])/(2.0*Bridge.MeshMagnifier)
-                };
-                // now translate midBox to Bridge.PointInMagicBox
-                var matrix = new[,]
-                {
-                    {1.0, 0, 0, Bridge.PointInMagicBox[0] - midBox[0]},
-                    {0, 1.0, 0, Bridge.PointInMagicBox[1] - midBox[1]},
-                    {0, 0, 1.0, Bridge.PointInMagicBox[2] - midBox[2]},
-                    {0, 0, 0.0, 1.0}
-                };
-                TranslateToMagicBoxDic.Add(solid.Name, matrix);
-            }*/
+            //foreach (var spring in SpringDetector.Springs)
+            //{
+            //    var solid = spring.Solid;
+            //    var allVertcs = solid.Vertices;
+            //    var x = new[] { allVertcs.Min(v => v.X), allVertcs.Max(v => v.X) };
+            //    var y = new[] { allVertcs.Min(v => v.Y), allVertcs.Max(v => v.Y) };
+            //    var z = new[] { allVertcs.Min(v => v.Z), allVertcs.Max(v => v.Z) };
+            //    var midBox = new[]
+            //    {
+            //        (x[0] + x[1])/(2.0*Bridge.MeshMagnifier),
+            //        (y[0] + y[1])/(2.0*Bridge.MeshMagnifier),
+            //        (z[0] + z[1])/(2.0*Bridge.MeshMagnifier)
+            //    };
+            //    // now translate midBox to Bridge.PointInMagicBox
+            //    var matrix = new[,]
+            //    {
+            //        {1.0, 0, 0, Bridge.PointInMagicBox[0] - midBox[0]},
+            //        {0, 1.0, 0, Bridge.PointInMagicBox[1] - midBox[1]},
+            //        {0, 0, 1.0, Bridge.PointInMagicBox[2] - midBox[2]},
+            //        {0, 0, 0.0, 1.0}
+            //    };
+            //    TranslateToMagicBoxDic.Add(solid.Name, matrix);
+            //}
         }
 
         private static double StabilityAndAcccessabilityCostCalcultor(SubAssembly task, FootprintFace tFace)
         {
             var SI = AssemblyEvaluator.CheckStabilityForReference(task, tFace);
             var AI = AssemblyEvaluator.CheckAccessability(task.Install.InstallDirection, tFace);
-            return AI + SI;
+            return SI;
         }
 
 
@@ -848,7 +861,7 @@ namespace Assembly_Planner
         internal static double[,] TransformationMatrixNewApproach(FootprintFace from, FootprintFace to, Vertex COM)
         {
             // Taken from: math.kennesaw.edu/~plaval/math4490/rotgen.pdf
-            if (Math.Abs(from.Normal.dotProduct(to.Normal) - 1) <= 0.2)
+            if (Math.Abs(from.Normal.dotProduct(to.Normal) - 1) <= 0.15)
             {
                 to.Normal = from.Normal;
                 return new[,]
@@ -872,7 +885,7 @@ namespace Assembly_Planner
             else
                 r = to.Normal.crossProduct(from.Normal).normalize();
             var c = to.Normal.dotProduct(from.Normal); // cosine
-            var s = Math.Sqrt(r[0] * r[0] + r[1] * r[1] + r[2] * r[2]); // sine
+            var s = Math.Sin(Math.Acos(c)); // sine
             var t = 1 - c;
             var rotationMatrix = new[,]
             {
@@ -908,9 +921,9 @@ namespace Assembly_Planner
             FootprintFace to, Vertex COM)
         {
             // Taken from: math.kennesaw.edu/~plaval/math4490/rotgen.pdf
-            if (Math.Abs(from.Normal.dotProduct(to.Normal) - 1) <= 0.2)
+            if (Math.Abs(from.Normal.dotProduct(to.Normal) - 1) <= 0.15)
             {
-                to.Normal = from.Normal;
+                //to.Normal = from.Normal;
                 var uniquePositionini = VertsOnCircle[0];
                 VertsOnCircle.RemoveAt(0);
                 return new[,]
@@ -935,7 +948,7 @@ namespace Assembly_Planner
                 r = to.Normal.crossProduct(from.Normal).normalize();
             var c = to.Normal.dotProduct(from.Normal); // cosine
             var t = 1 - c;
-            var s = Math.Sqrt(r[0] * r[0] + r[1] * r[1] + r[2] * r[2]); // sine
+            var s = Math.Sin(Math.Acos(c)); // sine
             var rotationMatrix = new[,]
             {
                 {t*r[0]*r[0] + c, t*r[0]*r[1] - s*r[2], t*r[0]*r[2] + s*r[1], 0.0},
