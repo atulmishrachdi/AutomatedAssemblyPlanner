@@ -9,12 +9,15 @@ namespace Assembly_Planner
     class DoFPart
     {
 
-        float [] yaw;
-        float [] pitch;
-        float [] roll;
-        float [] width;
-        float [] height;
-        float [] depth;
+        internal List<DoFLink> connections;
+        
+        
+        virtual public Boolean isComposite()
+        {
+            return false;
+        }
+
+
 
     }
 

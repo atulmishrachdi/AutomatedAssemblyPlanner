@@ -84,9 +84,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DegreeOfFreedomGraph\DoFLink.cs" />
     <Compile Include="Program2.cs" />
     <Compile Include="Program1.cs" />
-    <Compile Include="DegreeOfFreedomGraph\DoFCombinedPart.cs" />
+    <Compile Include="DegreeOfFreedomGraph\DoFCompositePart.cs" />
     <Compile Include="DegreeOfFreedomGraph\DoFPart.cs" />
     <Compile Include="DegreeOfFreedomGraph\DoFGraph.cs" />
     <Compile Include="DisassemblyProcess\AStarInspiredRecursiveOptimizedSearch.cs" />
