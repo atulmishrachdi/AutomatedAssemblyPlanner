@@ -59,6 +59,7 @@ namespace Assembly_Planner
                 if (smallPart.Any())
                 {
                     part.FastenerCertainty = FastenerDetector.PotentialFastener[smallPart[0]];
+                    this.parts.Add(part);
                     continue;
                 }
                 part.FastenerCertainty = 0.0;

@@ -11,6 +11,7 @@ using AssemblyEvaluation;
 using Assembly_Planner;
 using Assembly_Planner.GraphSynth.BaseClasses;
 using GraphSynth.Representation;
+using StarMathLib;
 using TVGL;
 using TVGL.IOFunctions;
 using TVGL;
@@ -25,7 +26,7 @@ namespace Assembly_Planner
         public static Dictionary<string, List<TessellatedSolid>> SolidsNoFastener = new Dictionary<string, List<TessellatedSolid>>();
         public static Dictionary<string, double> SolidsMass = new Dictionary<string, double>();
         public static designGraph AssemblyGraph;
-        public const double MeshMagnifier = 1;
+        public const double MeshMagnifier = 10;
         public static double[] PointInMagicBox = {0,0,0.0};
 
         public static List<int> globalDirPool = new List<int>();
@@ -39,7 +40,7 @@ namespace Assembly_Planner
 #else
             inputDir =
                 //    "../../../Test/Cube";
-                "../../../Test/PumpWExtention";
+                "../../../Test/TXT-Binary";
             //"../../../Test/FastenerTest/new/test";
             //"../../../Test/Double";
             //"../../../Test/test7";
@@ -53,7 +54,7 @@ namespace Assembly_Planner
             var s = Stopwatch.StartNew();
             s.Start();
             Solids = GetSTLs(inputDir);
-            var detectFasteners = false; //TBI
+            var detectFasteners = true; //TBI
             var threaded = 0; // 0:none, 1: all, 2: subset
 
             AssemblyGraph = new designGraph();
@@ -67,8 +68,43 @@ namespace Assembly_Planner
                 SolidsNoFastener = Solids;
             }
             SerializeSolidProperties();
-            //DeserializeSolidProperties();
+            DeserializeSolidProperties();
             globalDirPool = DisassemblyDirectionsWithFastener.RunGraphGeneration(AssemblyGraph, SolidsNoFastener);
+            var TTC1 = AssemblyGraph.nodes.Count;
+            var counter1 = 0;
+            var batches = new List<HashSet<Component>>();
+            var stack = new Stack<Component>();
+            var visited = new HashSet<Component>();
+            var globalVisited = new HashSet<Component>();
+            foreach (Component Component in AssemblyGraph.nodes.Where(n => !globalVisited.Contains(n)))
+            {
+                stack.Clear();
+                visited.Clear();
+                stack.Push(Component);
+                while (stack.Count > 0)
+                {
+                    var pNode = stack.Pop();
+                    visited.Add(pNode);
+                    counter1++;
+                    globalVisited.Add(pNode);
+                    List<Connection> a2;
+                    lock (pNode.arcs)
+                        a2 = pNode.arcs.Where(a => a is Connection).Cast<Connection>().ToList();
+
+                    foreach (Connection arc in a2)
+                    {
+                        if (!AssemblyGraph.nodes.Contains(arc.From) || !AssemblyGraph.nodes.Contains(arc.To)) continue;
+                        var otherNode = (Component)(arc.From == pNode ? arc.To : arc.From);
+                        if (visited.Contains(otherNode))
+                            continue;
+                        stack.Push(otherNode);
+                    }
+                }
+                if (visited.Count != AssemblyGraph.nodes.Count)
+                {
+                    var a = 2;
+                }
+            }
             // the second user interaction must happen here
             NonadjacentBlockingWithPartitioning.Run(AssemblyGraph, SolidsNoFastener, globalDirPool);
             Stabilityfunctions.GenerateReactionForceInfo(AssemblyGraph);
@@ -118,7 +154,7 @@ namespace Assembly_Planner
             foreach (var solidName in Solids.Keys)
             {
                 var userUpdated = partsProperties.parts.First(p => p.Name == solidName);
-                if (userUpdated.FastenerCertainty == 0)
+                if (userUpdated.FastenerCertainty < 0.5)
                     SolidsNoFastener.Add(solidName, Solids[solidName]);
             }
             FastenerDetector.Fasteners =
@@ -144,12 +180,14 @@ namespace Assembly_Planner
             var di = new DirectoryInfo(InputDir);
             var fis = di.EnumerateFiles("*.STL");
             // Parallel.ForEach(fis, fileInfo =>
+            var i = 0;
             foreach (var fileInfo in fis)
             {
                 var ts = IO.Open(fileInfo.Open(FileMode.Open), fileInfo.Name);
                 //ts.Name = ts.Name.Remove(0, 1);
                 //lock (parts) 
-                parts.Add(ts[0]);
+                parts.Add(EnlargeTheSolid(ts[0]));
+                i++;
             }
             //);
             Console.WriteLine("All the files are loaded successfully");
@@ -157,5 +195,39 @@ namespace Assembly_Planner
             Console.WriteLine("    * Total Number of Triangles:   " + parts.Sum(s => s.Faces.Count()));
             return parts.ToDictionary(tessellatedSolid => tessellatedSolid.Name, tessellatedSolid => new List<TessellatedSolid> { tessellatedSolid });
         }
+
+        private static TessellatedSolid EnlargeTheSolid(TessellatedSolid ts)
+        {
+            var newVer = ts.Vertices.Select(vertex => new TempVer {Ver = vertex, IndexInList = 0}).ToList();
+            var newFace = ts.Faces.Select(face => new TempFace { Face = face, Vers = face.Vertices.Select(v=>newVer.First(nv=> nv.Ver ==v)).ToArray()}).ToList();
+            var tvglVertices = new List<Vertex>();
+            var tvglFaces = new List<PolygonalFace>();
+            for (var i = 0; i < newVer.Count; i++)
+            {
+                var v = newVer[i];
+                //var vTransformed = MultiplyByTrans(vapPart.OriginalTransformation, v);
+                v.IndexInList = i;
+                tvglVertices.Add(new Vertex(v.Ver.Position.multiply(MeshMagnifier)));
+            }
+            foreach (var tri in newFace)
+            {
+                tvglFaces.Add(
+                    new PolygonalFace(tri.Vers.Select(v => tvglVertices[v.IndexInList]).ToList(), null));
+            }
+            var tsM = new TessellatedSolid(tvglFaces, tvglVertices, null, UnitType.millimeter, ts.FileName);
+            tsM.Repair();
+            return tsM;
+        }
+    }
+
+    class TempVer
+    {
+        internal Vertex Ver { get; set; }
+        internal int IndexInList;
+    }
+    class TempFace
+    {
+        internal PolygonalFace Face { get; set; }
+        internal TempVer[] Vers;
     }
 }
