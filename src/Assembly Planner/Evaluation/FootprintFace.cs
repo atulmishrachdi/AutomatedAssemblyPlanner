@@ -38,19 +38,12 @@ namespace AssemblyEvaluation
         /// </value>
         public Vertex COMP { get; set; }
         /// <summary>
-        /// Gets the external vertices.
+        /// Gets the Outer Edges
         /// </summary>
         /// <value>
-        /// External Vertices
+        /// Outer Edges
         /// </value>
-        public List<Vertex> ExVer { get; set; }
-        /// <summary>
-        /// Gets the external couple vertices.
-        /// </summary>
-        /// <value>
-        /// External Couple Vertices
-        /// </value>
-        public List<Vertex> ExCoVer { get; set; }
+        public Edge[] OuterEdges { get; set; }
         //public List<double> DistanceBetweenCOMProjAndEachnode = new List<double>();
         /// <summary>
         /// Gets the minimum distance of COMProjection to its Nearest Edge.
@@ -65,7 +58,7 @@ namespace AssemblyEvaluation
         /// <value>
         /// Hight of Center of Mass
         /// </value>
-        public double Hight { get; set; }
+        public double Height { get; set; }
         /// <summary>
         /// Gets the adjacent faces of the new face
         /// </summary>

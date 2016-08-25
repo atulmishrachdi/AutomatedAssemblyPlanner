@@ -15,7 +15,7 @@ namespace Assembly_Planner
         public static HashSet<Fastener> Fasteners = new HashSet<Fastener>();
         public static HashSet<Nut> Nuts = new HashSet<Nut>();
         public static HashSet<Washer> Washers = new HashSet<Washer>();
-        public static HashSet<TessellatedSolid> PotentialFastener = new HashSet<TessellatedSolid>();
+        public static Dictionary<TessellatedSolid, double> PotentialFastener = new Dictionary<TessellatedSolid, double>(); // value is its certainty
 
         internal static HashSet<TessellatedSolid> Run(
             Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive,
@@ -79,19 +79,75 @@ namespace Assembly_Planner
             return groups;
         }
 
-        internal static Dictionary<TessellatedSolid, Dictionary<PrimitiveSurface, List<PrimitiveSurface>>>
+        internal static Dictionary<TessellatedSolid, Dictionary<TemporaryFlat, List<TemporaryFlat>>>
             EqualFlatPrimitiveAreaFinder(HashSet<TessellatedSolid> uniqueParts,
                 Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive)
         {
-            var equalPrim = new Dictionary<TessellatedSolid, Dictionary<PrimitiveSurface, List<PrimitiveSurface>>>();
+            var equalPrim = new Dictionary<TessellatedSolid, Dictionary<TemporaryFlat, List<TemporaryFlat>>>();
             foreach (var solid in uniqueParts)
             {
-                if (solidPrimitive[solid].Count == 0) equalPrim.Add(solid, new Dictionary<PrimitiveSurface, List<PrimitiveSurface>>());
+                var unassignedFaces = new List<PolygonalFace>(solid.Faces);
+                var visited = new List<PolygonalFace>();
+                var flats = new List<TemporaryFlat>();
+                while (unassignedFaces.Any())
+                {
+                    var iniFace = unassignedFaces[0];
+                    var flat = new TemporaryFlat
+                    {
+                        Faces = new List<PolygonalFace>() { iniFace },
+                        Area = iniFace.Area,
+                        Normal = iniFace.Normal,
+                        OuterEdges = new List<Edge>(iniFace.Edges)
+                    };
+                    var st = new Stack<PolygonalFace>();
+                    st.Push(iniFace);
+                    while (st.Any())
+                    {
+                        var face = st.Pop();
+                        visited.Add(face);
+                        foreach (var edge in face.Edges)
+                        {
+                            var otherface = edge.OwnedFace == face ? edge.OtherFace : edge.OwnedFace;
+                            if (otherface == null) continue;
+                            if (visited.Contains(otherface)) continue;
+                            if (edge.InternalAngle < 3.14 && edge.InternalAngle > 0.002) continue;
+                            if (edge.InternalAngle > 3.1433 && edge.InternalAngle < 6.2814) continue;
+                            st.Push(otherface);
+                            flat.Faces.Add(otherface);
+                            flat.Area += otherface.Area;
+                            flat.OuterEdges.Remove(edge);
+                            flat.OuterEdges.AddRange(otherface.Edges.Where(e => e != edge));
+                        }
+                        unassignedFaces.Remove(face);
+                    }
+                    flats.Add(flat);
+                }
+                var all = flats.Where(f => f.Faces.Count == 3);
+                var primEqualArea = new Dictionary<TemporaryFlat, List<TemporaryFlat>>();
+                foreach (var potFl in flats.Where(f => f.Faces.Count > 1))
+                {
+                    var equalExist =
+                        primEqualArea.Keys.Where(p => Math.Abs(p.Area - potFl.Area) < 0.001 * p.Area)
+                            .ToList();
+                    if (!equalExist.Any())
+                    {
+                        primEqualArea.Add(potFl, new List<TemporaryFlat> { potFl });
+                    }
+                    else
+                    {
+                        foreach (var equal in equalExist)
+                        {
+                            primEqualArea[equal].Add(potFl);
+                            break;
+                        }
+                    }
+                }
+                /*if (solidPrimitive[solid].Count == 0) equalPrim.Add(solid, new Dictionary<PrimitiveSurface, List<PrimitiveSurface>>());
                 var primEqualArea = new Dictionary<PrimitiveSurface, List<PrimitiveSurface>>();
                 foreach (var prim in solidPrimitive[solid].Where(p => p is Flat))
                 {
-                    var equalExist = primEqualArea.Keys.Where(p => Math.Abs(p.Area - prim.Area) < 0.001 * p.Area).ToList();
-                    if (!equalExist.Any()) primEqualArea.Add(prim, new List<PrimitiveSurface> { prim });
+                    var equalExist = primEqualArea.Keys.Where(p => Math.Abs(p.Area - prim.Area) < 0.001*p.Area).ToList();
+                    if (!equalExist.Any()) primEqualArea.Add(prim, new List<PrimitiveSurface> {prim});
                     else
                     {
                         foreach (var equal in equalExist)
@@ -100,17 +156,17 @@ namespace Assembly_Planner
                             break;
                         }
                     }
-                }
+                }*/
                 equalPrim.Add(solid, primEqualArea);
             }
             return equalPrim;
         }
 
-        internal static List<PrimitiveSurface> EqualPrimitivesFinder(
-            Dictionary<PrimitiveSurface, List<PrimitiveSurface>> equalPrimittives, int numberOfEqualPrim)
+        internal static List<TemporaryFlat> EqualPrimitivesFinder(
+            Dictionary<TemporaryFlat, List<TemporaryFlat>> equalPrimitives, int numberOfEqualPrim)
         {
-            return equalPrimittives.Keys.Where(
-                k => equalPrimittives[k].Count == numberOfEqualPrim).ToList();
+            return equalPrimitives.Keys.Where(
+                k => equalPrimitives[k].Count == numberOfEqualPrim).ToList();
         }
 
         internal static List<TessellatedSolid> SmallObjectsDetector(List<TessellatedSolid> solids)
@@ -323,5 +379,12 @@ namespace Assembly_Planner
             }
             return approvedFasteners;
         }
+    }
+    internal class TemporaryFlat
+    {
+        internal List<PolygonalFace> Faces;
+        internal double[] Normal;
+        internal double Area;
+        internal List<Edge> OuterEdges;
     }
 }

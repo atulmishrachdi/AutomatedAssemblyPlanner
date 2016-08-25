@@ -76,7 +76,6 @@ namespace AssemblyEvaluation
             ac.Sequence = Sequence.copy();
             return ac;
         }
-
         public void SaveToDisk(string filename)
         {
             // c1.graph.checkForRepeatNames();

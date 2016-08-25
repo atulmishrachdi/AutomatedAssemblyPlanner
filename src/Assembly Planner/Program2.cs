@@ -17,28 +17,17 @@ using TVGL;
 
 namespace Assembly_Planner
 {
-    internal class Program
+    public class Program2
     {
-        public static List<double> DegreeOfFreedoms = new List<double>();
-        public static List<double> StablbiblityScores = new List<double>();
-        public static Dictionary<string, List<TessellatedSolid>> Solids = new Dictionary<string, List<TessellatedSolid>>();
-        public static Dictionary<string, List<TessellatedSolid>> SolidsNoFastener = new Dictionary<string, List<TessellatedSolid>>();
-        public static Dictionary<string, double> SolidsMass = new Dictionary<string, double>();
-        public static designGraph AssemblyGraph;
-        public const double MeshMagnifier = 1;
-        public static double[] PointInMagicBox = {0,0,0.0};
 
-        public static List<int> globalDirPool = new List<int>();
-
-        private static void Main(string[] args)
+        public static void main(string[] args)
         {
 
             string inputDir;
 #if InputDialog
-             inputDir = consoleFrontEnd.getPartsDirectory();
+            inputDir = consoleFrontEnd.getPartsDirectory();
 #else
-            inputDir = 
-            "workspace";
+            inputDir = "workspace";
             //"src/Test/Cube";
             //"src/Test/PumpWExtention";
             //"src/Test/FastenerTest/new/test";
@@ -48,32 +37,32 @@ namespace Assembly_Planner
             //"src/Test/Mc Cormik/STL2";
             //"src/Test/Truck -TXT-1/STL";
             //"src/Test/FoodPackagingMachine/FPMSTL2";
-            //   "src/Test/test8";
+
 #endif
+
+
             var s = Stopwatch.StartNew();
             s.Start();
-            Solids = GetSTLs(inputDir);
-            var detectFasteners = false; //TBI
+            Program.Solids = GetSTLs(inputDir);
+            var detectFasteners = true; //TBI
             var threaded = 0; // 0:none, 1: all, 2: subset
 
-            AssemblyGraph = new designGraph();
-            DisassemblyDirectionsWithFastener.RunGeometricReasoning(Solids);
+            Program.AssemblyGraph = new designGraph();
+
+            DisassemblyDirectionsWithFastener.RunGeometricReasoning(Program.Solids);
+
             if (detectFasteners)
             {
-                DisassemblyDirectionsWithFastener.RunFastenerDetection(Solids, threaded);
+                DisassemblyDirectionsWithFastener.RunFastenerDetection(Program.Solids, threaded);
             }
-            else
-            {
-                SolidsNoFastener = Solids;
-            }
-            SerializeSolidProperties();
-            //DeserializeSolidProperties();
-            globalDirPool = DisassemblyDirectionsWithFastener.RunGraphGeneration(AssemblyGraph, SolidsNoFastener);
+
+            DeserializeSolidProperties();
+            Program.globalDirPool = DisassemblyDirectionsWithFastener.RunGraphGeneration(Program.AssemblyGraph, Program.SolidsNoFastener);
             // the second user interaction must happen here
-            NonadjacentBlockingWithPartitioning.Run(AssemblyGraph, SolidsNoFastener, globalDirPool);
-            Stabilityfunctions.GenerateReactionForceInfo(AssemblyGraph);
+            NonadjacentBlockingWithPartitioning.Run(Program.AssemblyGraph, Program.SolidsNoFastener, Program.globalDirPool);
+            Stabilityfunctions.GenerateReactionForceInfo(Program.AssemblyGraph);
             var leapSearch = new LeapSearch();
-            var solutions = leapSearch.Run(AssemblyGraph, Solids, globalDirPool, 1);
+            var solutions = leapSearch.Run(Program.AssemblyGraph, Program.Solids, Program.globalDirPool, 1);
             OptimalOrientation.Run(solutions);
             var cand = new AssemblyCandidate() { Sequence = solutions };
             cand.SaveToDisk(Directory.GetCurrentDirectory() + "\\workspace\\solution.xml");
@@ -82,6 +71,8 @@ namespace Assembly_Planner
             Console.WriteLine();
             Console.WriteLine("TOTAL TIME:" + "     " + s.Elapsed);
             Console.ReadLine();
+
+
         }
 
 
@@ -90,14 +81,14 @@ namespace Assembly_Planner
             XmlSerializer ser = new XmlSerializer(typeof(PartsProperties));
             var partsProperties = new PartsProperties();
             partsProperties.GenerateProperties();
-            var writer = new StreamWriter("workspace\\parts_properties.xml");
+            var writer = new StreamWriter("workspace/parts_properties.xml");
             ser.Serialize(writer, partsProperties);
         }
 
         private static void DeserializeSolidProperties()
         {
             XmlSerializer ser = new XmlSerializer(typeof(PartsProperties));
-            var reader = new StreamReader("workspace\\parts_properties2.xml");
+            var reader = new StreamReader("workspace/parts_properties2.xml");
             var partsProperties = (PartsProperties)ser.Deserialize(reader);
             //now update everything with the revised properties
             UpdateSolidsProperties(partsProperties);
@@ -106,35 +97,33 @@ namespace Assembly_Planner
 
         private static void UpdateSolidsProperties(PartsProperties partsProperties)
         {
-            foreach (var solidName in Solids.Keys)
+            foreach (var solidName in Program.Solids.Keys)
             {
                 var userUpdated = partsProperties.parts.First(p => p.Name == solidName);
-                SolidsMass.Add(solidName,userUpdated.Mass);
+                Program.SolidsMass.Add(solidName, userUpdated.Mass);
             }
         }
 
         private static void UpdateFasteners(PartsProperties partsProperties)
         {
-            foreach (var solidName in Solids.Keys)
+            foreach (var solidName in Program.Solids.Keys)
             {
                 var userUpdated = partsProperties.parts.First(p => p.Name == solidName);
                 if (userUpdated.FastenerCertainty == 0)
-                    SolidsNoFastener.Add(solidName, Solids[solidName]);
+                    Program.SolidsNoFastener.Add(solidName, Program.Solids[solidName]);
             }
             FastenerDetector.Fasteners =
                 new HashSet<Fastener>(
-                    FastenerDetector.Fasteners.Where(f => !SolidsNoFastener.Keys.Contains(f.Solid.Name)).ToList());
+                    FastenerDetector.Fasteners.Where(f => !Program.SolidsNoFastener.Keys.Contains(f.Solid.Name)).ToList());
             FastenerDetector.Nuts =
                 new HashSet<Nut>(
-                    FastenerDetector.Nuts.Where(n => !SolidsNoFastener.Keys.Contains(n.Solid.Name)).ToList());
+                    FastenerDetector.Nuts.Where(n => !Program.SolidsNoFastener.Keys.Contains(n.Solid.Name)).ToList());
             FastenerDetector.Washers =
                 new HashSet<Washer>(
-                    FastenerDetector.Washers.Where(w => !SolidsNoFastener.Keys.Contains(w.Solid.Name)).ToList());
-            var pF =
-                FastenerDetector.PotentialFastener.Where(u => !SolidsNoFastener.Keys.Contains(u.Key.Name))
-                    .ToDictionary(t => t.Key, t => t.Value);
+                    FastenerDetector.Washers.Where(w => !Program.SolidsNoFastener.Keys.Contains(w.Solid.Name)).ToList());
             FastenerDetector.PotentialFastener =
-                new Dictionary<TessellatedSolid, double>(pF);
+                new HashSet<TessellatedSolid>(
+                    FastenerDetector.PotentialFastener.Where(u => !Program.SolidsNoFastener.Keys.Contains(u.Name)).ToList());
         }
 
         private static Dictionary<string, List<TessellatedSolid>> GetSTLs(string InputDir)
@@ -158,4 +147,8 @@ namespace Assembly_Planner
             return parts.ToDictionary(tessellatedSolid => tessellatedSolid.Name, tessellatedSolid => new List<TessellatedSolid> { tessellatedSolid });
         }
     }
+
+
 }
+
+
