@@ -35,7 +35,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\</OutputPath>
     <DefineConstants>TRACE;DEBUG;InputDialogOFF</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -84,6 +84,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DegreeOfFreedomGraph\DoFCompositePart.cs" />
+    <Compile Include="DegreeOfFreedomGraph\DoFGraph.cs" />
+    <Compile Include="DegreeOfFreedomGraph\DoFLink.cs" />
+    <Compile Include="DegreeOfFreedomGraph\DoFPart.cs" />
     <Compile Include="DisassemblyProcess\AStarInspiredRecursiveOptimizedSearch.cs" />
     <Compile Include="DisassemblyProcess\BeamSearch.cs" />
     <Compile Include="DisassemblyProcess\DBG.cs" />

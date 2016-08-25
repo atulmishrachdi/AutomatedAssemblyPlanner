@@ -9,15 +9,15 @@ namespace Assembly_Planner
 {
     public class CalculateAssemblyTimeAndSD
     {
-        private static double[,] MovingobdataX = readdata.read("../../Evaluation/TrainningTimeData/movingdata/dataset4/TrainX.csv", 5);
-        private static double[] MovingobdataY = readdata.read("../../Evaluation/TrainningTimeData/movingdata/dataset4/TrainY.csv");
-        private static double[,] InstallobdataX = readdata.read("../../Evaluation/TrainningTimeData/installdata/dataset3/TrainX.csv", 6);
-        private static double[] IinstallobdataY = readdata.read("../../Evaluation/TrainningTimeData/installdata/dataset3/TrainY.csv");
-        // private static double[,] RotateobdataX = readdata.read("../../Evaluation/TrainningTimeData/rotatedata/dataset1/TrainX.csv", 10);
-        // private static double[] RotateobdataY = readdata.read("../../Evaluation/TrainningTimeData/rotatedata/dataset1/TrainY.csv");
+        private static double[,] MovingobdataX = readdata.read("src/Assembly Planner/Evaluation/TrainningTimeData/movingdata/dataset4/TrainX.csv", 5);
+        private static double[] MovingobdataY = readdata.read("src/Assembly Planner/Evaluation/TrainningTimeData/movingdata/dataset4/TrainY.csv");
+        private static double[,] InstallobdataX = readdata.read("src/Assembly Planner/Evaluation/TrainningTimeData/installdata/dataset3/TrainX.csv", 6);
+        private static double[] IinstallobdataY = readdata.read("src/Assembly Planner/Evaluation/TrainningTimeData/installdata/dataset3/TrainY.csv");
+        // private static double[,] RotateobdataX = readdata.read("src/Assembly Planner/Evaluation/TrainningTimeData/rotatedata/dataset1/TrainX.csv", 10);
+        // private static double[] RotateobdataY = readdata.read("src/Assembly Planner/Evaluation/TrainningTimeData/rotatedata/dataset1/TrainY.csv");
         // rotate only with angle
-        private static double[,] RotateobdataX = readdata.read("../../Evaluation/TrainningTimeData/rotatedata/dataset1withonlyangles/TrainXangle.csv", 5);
-        private static double[] RotateobdataY = readdata.read("../../Evaluation/TrainningTimeData/rotatedata/dataset1withonlyangles/TrainY.csv");
+        private static double[,] RotateobdataX = readdata.read("src/Assembly Planner/Evaluation/TrainningTimeData/rotatedata/dataset1withonlyangles/TrainXangle.csv", 5);
+        private static double[] RotateobdataY = readdata.read("src/Assembly Planner/Evaluation/TrainningTimeData/rotatedata/dataset1withonlyangles/TrainY.csv");
         private static double[] OptimParamoving = new double[7] { 0.37666666666666671, 0.8939, 0.30833333333333335, 0.12666666666666668, 0.45833333333333337, 0.15333333333333335, 0.018333333333333333 };
         private static double[,] COVmove =ThreeDinput.GetCovMatrix(MovingobdataX, OptimParamoving, true);
         private static double[] OptimParainstall = new double[8] { 0.77, 0.28, 0.21, 0.14, 0.27, 0.05, 0.37, 0.06 };

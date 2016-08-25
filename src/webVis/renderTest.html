@@ -113,12 +113,12 @@
 	
 	<!--<div id="container"></div>-->
 	
-	<script src="./src/webVis/jsstl.js"></script>
-	<script src="./src/webVis/treequence.js"></script>
-	<script src="./src/webVis/sigma.min.js"></script>
-	<script src="./src/webVis/sigma.canvas.edges.curvedArrow.js"></script>
+	<script src="./jsstl.js"></script>
+	<script src="./treequence.js"></script>
+	<script src="./sigma.min.js"></script>
+	<script src="./sigma.canvas.edges.curvedArrow.js"></script>
 	
-	<script src="./src/webVis/partRender.js"></script>
+	<script src="./partRender.js"></script>
 	
 	<xmp id="warning"></xmp>
 	
@@ -321,21 +321,22 @@
 		flipNormals(water);
 		scene.add(water);
 		*/
+		
 		/*
 		var loader = new THREE.TextureLoader();
 
-		new THREE.TextureLoader().load( "textures/concrete.jpg",
-
-		(
-			function(texture){
-				console.log(texture);
-		
+		// load a resource
+		loader.load(
+			// resource URL
+			'textures/concrete.bmp',
+			// Function when resource is loaded
+			function ( texture ) {
+				// do something with the texture
 				var concMaterial = new THREE.MeshBasicMaterial( {
 					map: texture
-				} );
-				 
-				var water=new THREE.Mesh( 
-				new THREE.PlaneGeometry(32000, 32000, 1,1),
+				 } );
+				 var water=new THREE.Mesh( 
+				new THREE.PlaneGeometry(32000, 32000, 2,2),
 					concMaterial		
 				);
 				water.position.x=0;
@@ -343,46 +344,27 @@
 				water.position.z=0;
 				water.rotation.x=Math.PI/2;
 				
-
-				water.geometry.faceVertexUvs[ 0 ].push(
-				[
-					new THREE.Vector2( 0, 0 ),
-					new THREE.Vector2( 0, 1 ),
-					new THREE.Vector2( 1, 0 )
-				] );
-
-				water.geometry.faces[ 0 ].materialIndex = 0;
-
-				water.geometry.faceVertexUvs[ 0 ].push(
-				[
-					new THREE.Vector2( 0, 1 ),
-					new THREE.Vector2( 1, 1 ),
-					new THREE.Vector2( 1, 0 )    
-				] );
-
-				water.geometry.faces[ 1 ].materialIndex = 0;
-
-				console.log(water);
+				water.geometry.faceVertexUvs.push([]);
+				water.geometry.faceVertexUvs[0].push(new THREE.Vector3(0,0));
+				water.geometry.faceVertexUvs[0].push(new THREE.Vector3(1,0));
+				water.geometry.faceVertexUvs[0].push(new THREE.Vector3(1,1));
+				water.geometry.faceVertexUvs[0].push(new THREE.Vector3(1,1));
+				water.geometry.faceVertexUvs[0].push(new THREE.Vector3(0,1));
+				water.geometry.faceVertexUvs[0].push(new THREE.Vector3(0,0));
 				
-				
-				scene.add(water);
+				},
+			// Function called when download progresses
+			function ( xhr ) {
+				console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+			},
+			// Function called when download errors
+			function ( xhr ) {
+				console.log( 'An error happened' );
 			}
-		),
-		function ( xhr ) {
-			console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
-		},
-		// Function called when download errors
-		function ( xhr ) {
-			console.log( 'An error happened' );
-		}
-
 		);
 		
-		 */
 		
-		
-
-		
+		*/
 		
 		var theFog=new THREE.Fog( skyColor, 9000, 12000 );
 		scene.fog=theFog;
@@ -751,7 +733,7 @@
 					
 					var r = new FileReader();
 					var extension=grabExtension(f.name)[0];
-					//console.log(f.name);
+					console.log(f.name);
 					
 					if(extension===undefined){
 						continue;
@@ -759,7 +741,7 @@
 					if(extension.toLowerCase()==="stl"){
 						r.onload = (function(f) {
 							return function(e) {
-							//console.log(f.name);
+							console.log(f.name);
 								var contents = e.target.result;
 								if(r.result!=null){
 									STLs.push(r.result);
@@ -776,7 +758,7 @@
 						}
 						r.onload = (function(f) {
 							return function(e) {
-								//console.log(f.name);
+								console.log(f.name);
 								var contents = e.target.result;
 								theXML=r.result;
 								loadParts();
@@ -787,7 +769,7 @@
 					}
 								
 				}
-				//`console.log(fileReaders);
+				console.log(fileReaders);
 			} 
 			else {
 				  alert("Failed to load files"); 
@@ -801,12 +783,14 @@
 		
 		function loadParts (){
 		
+			
+		
 			var pos=0;
 			var lim=fileReaders.length;
 			while(pos<lim){
 				if(!(fileReaders[pos].Reader.readyState===2)){
-					//console.log(pos);
-					//console.log(fileReaders[pos].Name);
+					console.log(pos);
+					console.log(fileReaders[pos].Name);
 					break;
 				}
 				pos++;
@@ -815,7 +799,7 @@
 				console.log("ALL DONE");
 				parts.length=0;
 				pos=0;
-				var partGeom=null;
+				var partGeom;
 				var partMesh;
 				var theCenter;
 				var ext;
@@ -824,11 +808,7 @@
 
 					if(ext.toLowerCase()==="stl"){
 						
-						partGeom=parseStl(fileReaders[pos].Reader.result);
-						if(partGeom===null){
-							partGeom=parseStlBinary(fileReaders[pos].Reader.result);
-						}
-						
+						partGeom=parseStlBinary(fileReaders[pos].Reader.result);						
 						partMesh=new THREE.Mesh( 
 								partGeom,
 								new THREE.MeshNormalMaterial( )
@@ -843,6 +823,7 @@
 					
 					pos++;
 				}
+				
 				
 				cutoffPartNames(parts);
 				var treeQ = $.parseXML(theXML);
@@ -862,7 +843,7 @@
 				//return 0;
 				partFrames= bindPartsToKeyFrames(theFrameLists,parts);
 				showFrames(theFrameLists);
-				//console.log(partFrames);
+				console.log(partFrames);
 				//return 0;
 				theTime=0;
 				addLines(moveTree,null,scene);
