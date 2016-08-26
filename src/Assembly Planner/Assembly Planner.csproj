@@ -134,12 +134,15 @@
     <Compile Include="GeometryReasoning\BoundingGeometry.cs" />
     <Compile Include="GeometryReasoning\OBB.cs" />
     <Compile Include="GPprocess\CalculateAssemblyTimeAndSD.cs" />
+    <Compile Include="GPprocess\CalculatRegression.cs" />
     <Compile Include="GPprocess\GnuPlot.cs" />
+    <Compile Include="GPprocess\GPwithMeanfunction.cs" />
     <Compile Include="GPprocess\Inequality.cs" />
     <Compile Include="GPprocess\ObjectiveFunc - Copy.cs" />
     <Compile Include="GPprocess\OneDObjectiveFunc.cs" />
     <Compile Include="GPprocess\Optimization.cs" />
     <Compile Include="GPprocess\readdata.cs" />
+    <Compile Include="GPprocess\Readwholedata.cs" />
     <Compile Include="GPprocess\Start.cs" />
     <Compile Include="GPprocess\StartWithoutInfer.cs" />
     <Compile Include="GPprocess\ThreeDinput.cs" />

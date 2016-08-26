@@ -31,7 +31,7 @@ namespace GPprocess
             this.noise = noise;
             this.para = para;
 
-            Y = ThreeDinput.GetfVactor(obdatay);
+            Y = GPwithMeanfunction.GetfVactor(obdatay);
         }
         public OneDObjectiveFunc(double[,] MDXobdata, double[] obdatay, double[] para)
         {
@@ -41,7 +41,7 @@ namespace GPprocess
             this.para = para;
 
 
-            Y = ThreeDinput.GetfVactor(obdatay);
+            Y = GPwithMeanfunction.GetfVactor(obdatay);
         }
         public OneDObjectiveFunc(double[] Xobdata, double[] obdatay, double[] para)//matlab test 
         {
@@ -50,7 +50,7 @@ namespace GPprocess
             //this.noise = noise;
             this.para = para;
 
-            Y = ThreeDinput.GetfVactor(obdatay);
+            Y = GPwithMeanfunction.GetfVactor(obdatay);
         }
         public double calculate(double[] x)//matlab test 
         {
@@ -60,19 +60,19 @@ namespace GPprocess
 
             if (matlab && !md)
             {
-                k = ThreeDinput.SEKernel(Xobdata, x, true);
+                k = GPwithMeanfunction.SEKernel(Xobdata, x, true);
             }
             else if (matlab && md)
             {
-                k = ThreeDinput.SEKernel(MDXobdata, x, true);
+                k = GPwithMeanfunction.SEKernel(MDXobdata, x, true);
             }
             else if (x.GetLength(0) == 2)
             {
-                k = ThreeDinput.SEKernel(Xobdata, x, noise);
+                k = GPwithMeanfunction.SEKernel(Xobdata, x, noise);
             }
             else
             {
-                k = ThreeDinput.SEKernel(MDXobdata, x, noise, true);
+                k = GPwithMeanfunction.SEKernel(MDXobdata, x, noise, true);
             }
 
 
