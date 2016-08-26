@@ -26,14 +26,14 @@ namespace Assembly_Planner
         public static Dictionary<string, List<TessellatedSolid>> SolidsNoFastener = new Dictionary<string, List<TessellatedSolid>>();
         public static Dictionary<string, double> SolidsMass = new Dictionary<string, double>();
         public static designGraph AssemblyGraph;
+        public static double StabilityWeightChosenByUser = 0;
         public const double MeshMagnifier = 10;
         public static double[] PointInMagicBox = {0,0,0.0};
-
         public static List<int> globalDirPool = new List<int>();
-
+        public static List<double> allmtime = new List<double>();
+        public static List<double> allitime = new List<double>();
         private static void Main(string[] args)
         {
-
             string inputDir;
 #if InputDialog
              inputDir = consoleFrontEnd.getPartsDirectory();
@@ -154,7 +154,7 @@ namespace Assembly_Planner
             foreach (var solidName in Solids.Keys)
             {
                 var userUpdated = partsProperties.parts.First(p => p.Name == solidName);
-                if (userUpdated.FastenerCertainty == 1)
+                if (userUpdated.FastenerCertainty == 0)
                     SolidsNoFastener.Add(solidName, Solids[solidName]);
             }
             FastenerDetector.Fasteners =

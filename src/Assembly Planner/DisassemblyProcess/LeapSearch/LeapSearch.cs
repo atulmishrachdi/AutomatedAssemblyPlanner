@@ -29,7 +29,11 @@ namespace Assembly_Planner
         protected static SortedList<double, HashSet<TreeCandidate>> SortedStack;
         protected static int BeamWidth;
         protected static bool FirstRun;
-
+        protected static List<double> InitialStableScores = new List<double>();
+        protected static List<double> InitialTimes = new List<double>();
+        protected static List<double> InitialStablyH = new List<double>();
+        protected static double FinalTimeWeight;
+        protected static double FinalStableWeight;
         protected static Dictionary<HashSet<Component>, MemoData> Memo =
             new Dictionary<HashSet<Component>, MemoData>(HashSet<Component>.CreateSetComparer());
 
@@ -92,7 +96,6 @@ namespace Assembly_Planner
                     var localSorted = new SortedList<double, HashSet<TreeCandidate>>(new CandidateComparer());
                     if (Memo.ContainsKey(treeCandidate.MovNodes) && Memo.ContainsKey(treeCandidate.RefNodes))
                     {
-
                         var time = Memo[treeCandidate.MovNodes].Value + Memo[treeCandidate.RefNodes].Value +
                                    treeCandidate.sa.Install.Time;
                         var d = new MemoData(time, treeCandidate.sa);
@@ -207,7 +210,7 @@ namespace Assembly_Planner
                     if (FirstRun)
                     {
                         FirstRun = false;
-                        //AssignNewWeight(InitialTimes, InitialStableScores, Bridge.StabilityWeightChosenByUser,
+                        AssignNewWeight(InitialTimes, InitialStableScores, Program.StabilityWeightChosenByUser, out FinalTimeWeight, out FinalStableWeight);
                         //    out FinalTimeWeight, out FinalStableWeight);
                         tree = LeapOptimizationSearch();
                     }
@@ -217,6 +220,15 @@ namespace Assembly_Planner
                 if (tree != null) break;
             }
             return tree;
+        }
+
+        private static void AssignNewWeight(List<double> initialTimes, List<double> initialStableScores, double stabilityWeightChosenByUser, out double finalTimeWeight, out double finalStableWeight)
+        {
+            var meantime = initialTimes.Sum() / initialTimes.Count;
+            var meanSB = initialStableScores.Sum() / initialStableScores.Count;
+            var scale = meantime / meanSB;
+            finalTimeWeight = 1 - stabilityWeightChosenByUser;
+            finalStableWeight = scale * stabilityWeightChosenByUser;
         }
 
         private static SubAssembly CreateTheSequence(HashSet<TreeCandidate> cand)
@@ -322,15 +334,18 @@ namespace Assembly_Planner
                     new HashSet<Component>(TC.sa.Install.Moving.PartNames.Select(n => (Component)Graph[n]));
                 //if (Math.Min (TC.RefNodes.Count, TC.MovNodes.Count) > 21)	//example constraint
                 //	continue;
-
                 var HR = H(TC.RefNodes);
                 var HM = H(TC.MovNodes);
-
-                var ssss = TC.sa.InternalStabilityInfo.Totalsecore;
-                var ss2 = Constants.Innerstabilityweight * TC.sa.InternalStabilityInfo.Totalsecore;
                 TC.G = parentTransitionCost + TC.sa.Install.Time + Constants.Innerstabilityweight * TC.sa.InternalStabilityInfo.Totalsecore;
                 TC.H = Math.Max(HR, HM);
+                if (FirstRun)
+                {
+                    InitialStableScores.Add(TC.sa.InternalStabilityInfo.Totalsecore);
+                    InitialTimes.Add(TC.sa.Install.Time);
+                    InitialStablyH.Add(TC.H);
+                }
                 candidates.Add(TC);
+
             }
             // if candidates.Count is zero, s.th. is wrong. Meaning that we have a subassembly that cannot be disassembled
             // It means that finite/inf directions suck or secondary connections.

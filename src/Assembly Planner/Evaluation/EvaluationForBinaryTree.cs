@@ -65,22 +65,22 @@ namespace Assembly_Planner
             var install = new[] { rest, optNodes };
             if (EitherRefOrMovHasSeperatedSubassemblies(install, subassemblyNodes))
                 return -1;
-
             var moivingnames = sub.Install.Moving.PartNames;
             var refnames = sub.Install.Reference.PartNames;
             var movingnodes = subassemblyNodes.Where(n => moivingnames.Contains(n.name)).ToList();
             var refnodes = subassemblyNodes.Where(n => refnames.Contains(n.name)).ToList();
-
             /////time 
             sub.Install.Time = 0;
-            EvaluateSubFirstThreeTime(sub, refnodes, movingnodes, minDis, out sub.Install.Time, out sub.Install.TimeSD);
+            EvaluateSubFirstThreeTime(sub, refnodes, movingnodes, minDis, out sub.Install.Time, out sub.Install.TimeSD,out sub.Secure.Time,out sub.Secure.TimeSD);
             if (sub.Install.Time < 0)
                 sub.Install.Time = 0.5;
-
             ///////stability
 
             var stabilityscore = EvaluateSubStable(graph, refnodes, movingnodes, sub);
             sub.Secure.Fasteners = ConnectingArcsFastener(connectingArcs, subassemblyNodes, optNodes);
+
+          
+
             return 1;
         }
 
@@ -348,7 +348,7 @@ namespace Assembly_Planner
         }
 
         public void EvaluateSubFirstThreeTime(SubAssembly sub, List<Component> refnodes, List<Component> movingnodes,
-            double olpdis, out double totaltime, out double totalSD)
+            double olpdis, out double totaltime, out double totalSD,out double securetime,out double securesd)
         {
             var movingsolids = new List<TessellatedSolid>();
             var referencesolids = new List<TessellatedSolid>();
@@ -377,21 +377,24 @@ namespace Assembly_Planner
                     StarMath.norm1(movingOBB.CornerVertices[2].Position.subtract(movingOBB.CornerVertices[1].Position)),
                     StarMath.norm1(movingOBB.CornerVertices[0].Position.subtract(movingOBB.CornerVertices[4].Position)),
                 };
-            var lmax = lengths.Max();
-            var lmin = lengths.Min();
-            double lmid = lengths.Average() * 3 - lmax - lmin;
-            var movingweight = Math.Log(sub.Install.Moving.Mass / 1000); //in g ???????????
-            var OBBvolue = Math.Log(movingOBB.Volume / 1000);
+            var lmax = lengths.Max()/10;
+            var lmin = lengths.Min()/10;
+            double lmid = lengths.Average()/10 * 3 - lmax - lmin;
+            var movingweight = Math.Log(sub.Install.Moving.Mass/1000000 ); //in g ???????????
+            var OBBvolue = Math.Log(movingOBB.Volume/1000000 );
             var OBBmaxsurface = Math.Log(lmax * lmid / 1000);
             var OBBminsurface = Math.Log(lmin * lmid / 1000);
             /////
             /// distance TBD
-            var movingdistance = 500;
+            var movingdistance = 50;//cm
             var movingdis = Math.Log(movingdistance);
             var movinginput = new double[5] { movingweight, OBBvolue, OBBmaxsurface, OBBminsurface, movingdis };
             //    log ( weight, OOBvol OBB, maxf OBB, minf moving, distance  )all in mmgs unit system 
-            double movingtime, movingSD;
+            double movingtime=0.0;
+            double movingSD=0.0;
+            //new CalculateAssemblyTimeAndSD();
             CalculateAssemblyTimeAndSD.GetTimeAndSD(movinginput, "moving", out movingtime, out movingSD);
+            Program.allmtime.Add(movingtime);
             ///////
             ///install
             ///////
@@ -403,30 +406,63 @@ namespace Assembly_Planner
                     (movingnodes.Any(n => n.name.Equals(s.Solid2.Name))) &&
                     (refnodes.Any(n => n.name.Equals(s.Solid1.Name)))
                 );
-            int olpfeatures = 0;
+            double olpfeatures = 0.0;
             for (int i = 0; i < allolpfs.Count; i++)
             {
                 olpfeatures += allolpfs[i].Overlappings.Count; ////not alignment features for now;
             }
-            var installinput = new double[6] { movingweight, OBBvolue, OBBmaxsurface, OBBminsurface, olpdis, olpfeatures };
-            double installtime, instalSD;
-
+            if (olpfeatures == 0)
+            {
+                olpfeatures = 0.3;
+            }
+            var installinput = new double[6] { movingweight, OBBvolue, OBBmaxsurface, OBBminsurface, Math.Log(olpdis/1000), Math.Log(olpfeatures)  };
+            double installtime=0;
+            double instalSD=0;
             CalculateAssemblyTimeAndSD.GetTimeAndSD(installinput, "install", out installtime, out instalSD);
+            Program.allitime.Add(installtime);
             ///////
-            ///rotate
+            ///secure
             ///////
-            /// 
-
-
+            securetime = 0.0;
+            securesd = 0.0;
+            if (sub.Secure.Fasteners!= null)
+            {
+                foreach (var f in sub.Secure.Fasteners)
+                {
+                    double eachseucretime = 0;
+                    double eachsecureSD = 0;
+                    var OBBmax = f.Diameter * f.OverallLength;
+                    var OBBmin = f.Diameter * f.Diameter;
+                    var numberofthreads = f.NumberOfThreads;
+                    var insertdistance = f.EngagedLength * 0.5;
+                    var nut = 1;
+                    var tool = 1;
+                    if (f.Nuts == null)
+                    {
+                        nut = 1;
+                    }
+                    if (f.Tool != Tool.powerscrewdriver)
+                    {
+                        tool = 0;
+                    }
+                    var input = new double[] { OBBmax, OBBmin, numberofthreads, insertdistance, nut, tool };
+                    CalculateAssemblyTimeAndSD.GetTimeAndSD(input, "s", out eachseucretime, out eachsecureSD);
+                    securetime += eachseucretime;
+                    securesd += eachsecureSD;
+                }
+            }
+          
+           
             if (installtime < 0)
                 installtime = 0.5;
             if (movingtime < 0)
                 movingtime = 0.5;
             totaltime = installtime + movingtime;
             totalSD = instalSD + movingSD;
-
-
-            var sss = 1;
+            sub.Install.Time = totaltime;
+            sub.Install.TimeSD = totalSD;
+            sub.Secure.Time = securetime;
+            sub.Secure.Time = securesd;
         }
 
 
