@@ -231,9 +231,9 @@
 			var theCertainty=Number.parseFloat(grab(theEntry,"fastener_certainty").innerHTML);
 			var theSurfaceArea=Number.parseFloat(grab(theEntry,"surface_area").innerHTML);
 			
-			var fstChecked="<input type='checkbox'></input>";
+			var fstChecked="<input type='checkbox' onchange='flipCheck(this)' value='false'></input>";
 			if(theCertainty>0.5){
-				fstChecked="<input type='checkbox' checked></input>";
+				fstChecked="<input type='checkbox' onchange='flipCheck(this) value='true' checked></input>";
 			}
 			
 			var theAmbiguity=1-2*Math.abs(theCertainty-0.5);
@@ -365,8 +365,15 @@
 			
 			
 			var checkText="  <fastener_certainty>0</fastener_certainty>\n";
-			if(theCells[4].checked){
+			console.log(getChildrenByTag(theCells[4],"INPUT"));
+			console.log(getChildrenByTag(theCells[4],"INPUT")[0]);
+			console.log(getChildrenByTag(theCells[4],"INPUT")[0].value);
+			if(getChildrenByTag(theCells[4],"INPUT")[0].value=="on"){
 				checkText="  <fastener_certainty>1</fastener_certainty>\n";
+				console.log("aaaaargh!");
+			}
+			else{
+				console.log(theCells[4]);
 			}
 			
 		
@@ -392,17 +399,20 @@
 			theCheckBox.parentElement.innerHTML="<input type='text' onchange='revertHollowOpt(this)'> </input>";
 		}
 		
+		
 		function revertHollowOpt(theTextBox){
 			if(isNaN(Number.parseFloat(theTextBox.value))){
 				theTextBox.parentElement.innerHTML="<text>hollow </text><input type='checkbox' onchange='hollowOpt(this)'> </input>";
 			}
 		}
 		
+		
 		function insertMassInput(theButton){
 			theButton.parentElement.innerHTML=	"<text>Mass:</text> "+
 												"<input type='text'></input>"+
 												"<button onclick='insertDensityInput(this)'>Input By Volume+Density</button>";
 		}
+		
 		
 		function insertDensityInput(theButton){
 			theButton.parentElement.innerHTML=	"<text></text><text>Density:</text> "+
@@ -501,6 +511,18 @@
 			
 			getChildrenByTag(theButton.parentElement.parentElement.parentElement,"INPUT")[0].value=val;
 			updateMassDisplay(getChildrenByTag(theButton.parentElement.parentElement.parentElement,"INPUT")[0]);
+		
+		}
+		
+		function flipCheck(theBox){
+		
+			if(theBox.value=='on'){
+				theBox.value='off';
+			}
+			else{
+				theBox.value='on';
+			}
+			console.log(theBox.value);
 		
 		}
 		

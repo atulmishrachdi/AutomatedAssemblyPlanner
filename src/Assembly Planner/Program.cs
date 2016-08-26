@@ -39,17 +39,17 @@ namespace Assembly_Planner
              inputDir = consoleFrontEnd.getPartsDirectory();
 #else
             inputDir =
-                //    "../../../Test/Cube";
-                "../../../Test/TXT-Binary";
-            //"../../../Test/FastenerTest/new/test";
-            //"../../../Test/Double";
-            //"../../../Test/test7";
-            //"../../../Test/FPM2";
-            //"../../../Test/Mc Cormik/STL2";
-            //"../../../Test/Truck -TXT-1/STL";
-            //"../../../Test/FoodPackagingMachine/FPMSTL2";
-            //"../../../../GearAndFastener Detection/TrainingData/not-screw/Gear";
-            //   "../../../Test/test8";
+            "src/Test/PumpWExtention";
+            //"src/Test/Cube";
+            //"src/Test/TXT-Binary";
+            //"src/Test/FastenerTest/new/test";
+            //"src/Test/Double";
+            //"src/Test/test7";
+            //"src/Test/FPM2";
+            //"src/Test/Mc Cormik/STL2";
+            //"src/Test/Truck -TXT-1/STL";
+            //"src/Test/FoodPackagingMachine/FPMSTL2";
+            //"src/Test/test8";
 #endif
             var s = Stopwatch.StartNew();
             s.Start();
@@ -112,7 +112,7 @@ namespace Assembly_Planner
             var solutions = leapSearch.Run(AssemblyGraph, Solids, globalDirPool, 1);
             OptimalOrientation.Run(solutions);
             var cand = new AssemblyCandidate() { Sequence = solutions };
-            cand.SaveToDisk(Directory.GetCurrentDirectory() + "\\solution.xml");
+            cand.SaveToDisk(Directory.GetCurrentDirectory() + "\\workspace\\solution.xml");
             //WorkerAllocation.Run(solutions, reorientation);
             s.Stop();
             Console.WriteLine();
@@ -126,14 +126,14 @@ namespace Assembly_Planner
             XmlSerializer ser = new XmlSerializer(typeof(PartsProperties));
             var partsProperties = new PartsProperties();
             partsProperties.GenerateProperties();
-            var writer = new StreamWriter("parts_properties.xml");
+            var writer = new StreamWriter("workspace/parts_properties.xml");
             ser.Serialize(writer, partsProperties);
         }
 
         private static void DeserializeSolidProperties()
         {
             XmlSerializer ser = new XmlSerializer(typeof(PartsProperties));
-            var reader = new StreamReader("parts_properties2.xml");
+            var reader = new StreamReader("workspace/parts_properties2.xml");
             var partsProperties = (PartsProperties)ser.Deserialize(reader);
             //now update everything with the revised properties
             UpdateSolidsProperties(partsProperties);
@@ -154,7 +154,7 @@ namespace Assembly_Planner
             foreach (var solidName in Solids.Keys)
             {
                 var userUpdated = partsProperties.parts.First(p => p.Name == solidName);
-                if (userUpdated.FastenerCertainty < 0.5)
+                if (userUpdated.FastenerCertainty == 1)
                     SolidsNoFastener.Add(solidName, Solids[solidName]);
             }
             FastenerDetector.Fasteners =

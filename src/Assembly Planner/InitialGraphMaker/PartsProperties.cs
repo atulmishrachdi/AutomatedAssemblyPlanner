@@ -18,7 +18,7 @@ namespace Assembly_Planner
             this.parts = new List<PartProperties>();
             foreach (var solidName in Program.Solids.Keys)
             {
-                var part = new PartProperties {Name = solidName, Mass = 0.0, Volume = Program.Solids[solidName].Sum(s=> s.Volume) };
+                var part = new PartProperties {Name = solidName, Mass = 0.0, SurfaceArea = Program.Solids[solidName].Sum(s => s.SurfaceArea), Volume = Program.Solids[solidName].Sum(s=> s.Volume) };
                 if (Program.Solids[solidName].Count > 1)
                 {
                     part.FastenerCertainty = 0.0;
@@ -84,7 +84,10 @@ namespace Assembly_Planner
         [XmlElement("volume")]
         public double Volume { get; set; }
 
-      
+        [XmlElement("surface_area")]
+        public double SurfaceArea { get; set; }
+
+
         [XmlElement("fastener_certainty")]
         public double FastenerCertainty { get; set; }
 
