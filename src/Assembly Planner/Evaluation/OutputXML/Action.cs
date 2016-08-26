@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Xml.Serialization;
 using Assembly_Planner;
 
 namespace AssemblyEvaluation
@@ -15,6 +16,7 @@ namespace AssemblyEvaluation
     }
     public class RotateAction : Action
     {
+        [XmlIgnore]
         public double[,] TransformationMatrix;
     }
     public class InstallAction : Action
