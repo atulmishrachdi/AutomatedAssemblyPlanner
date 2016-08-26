@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+
+<html>
+
+	<style>
+		
+		#theBody{
+			background-color: #aaaaaa;
+		}
+		#fileinput{
+			color: black;
+		}
+		button{
+			display: block; 
+			width: 150px;
+			background-color: #DDDDDD;
+			border: 1px solid #888888;
+			color: #444444;
+			padding: 5px 8px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 12px;
+		}
+		button:hover{
+			color: #000000;
+			background-color: #EEEEEE;
+			border: 1px dashed #AAAAAA;
+		}
+		#table_id{
+		
+			font-family: Arial, Helvetica, sans-serif;
+		
+		}
+		
+	</style>
+	<body id="theBody">
+	
+		
+	
+	
+		<input type="file" id="fileinput" multiple ></input>
+		<button style="display: inline;" onclick="renderXML()">Render XML</button>
+		<a href="" id="downloadLink" download="parts_properties2.xml" ></a>
+		
+		
+		
+		<table id="table_id" class="display">
+			<thead>
+				<tr>
+					<th>NAME</th>
+					<th>VOLUME (mm^3)</th>
+					<th>SURFACE AREA (mm^2)</th>
+					<th>MASS (kg)</th>
+					<th>FASTENER</th>
+					<th>AMBIGUITY</th>
+				</tr>
+			</thead>
+			<tbody id="body_id">
+
+			</tbody>
+			<tfoot>
+				<tr>
+					<th>NAME</th>
+					<th>VOLUME (mm^3)</th>
+					<th>SURFACE AREA (mm^2)</th>
+					<th>MASS (kg)</th>
+					<th>FASTENER</th>
+					<th>AMBIGUITY</th>
+				</tr>
+			</tfoot>
+		</table>
+		
+		
+		
+		
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/gojs/1.6.7/go-debug.js"></script>
+		<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.css"/>
+
+		<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.js"></script>
+	
+	</body>
+	<script>
+	
+		var fileReaders=[];
+		var inputXML=null;
+		var textFile=null;
+		
+		var massElem="<button onclick='insertMassInput(this)'>Input By Mass</button><button onclick='insertDensityInput(this)'>Input By Volume+Density</button>";
+		
+		var volElem="<button onclick='insertHollowInput(this)'>Is Hollow</button>";
+		
+		
+		
+		var dropDensityButton="<button class='dropbtn' onclick='doDensityDrop(this)'>Sample Densities</button>";
+						
+		var undropDensityButton="<button class='dropbtn' onclick='undoDensityDrop(this)'>Sample Densities</button>";
+						
+		var densityMenu="<div class='dropdown-content' style='border-color: #666666; background-color: #DDDDDD; border-style: solid; padding: 10px 10px 10px 10px;'>"+
+							"<button onclick='changeDensity(this)'>Aluminum</button>"+
+							"<button onclick='changeDensity(this)'>Glass</button>"+
+							"<button onclick='changeDensity(this)'>Plastic (Hi-Density)</button>"+
+							"<button onclick='changeDensity(this)'>Plastic (Med-Density)</button>"+
+							"<button onclick='changeDensity(this)'>Plastic (Low-Density)</button>"+
+							"<button onclick='changeDensity(this)'>Rubber</button>"+
+							"<button onclick='changeDensity(this)'>Steel</button>"+
+							"<button onclick='changeDensity(this)'>Titanium</button>"+
+							"<button onclick='changeDensity(this)'>Wood</button>"+
+						"</div>";
+						
+		var densityDiv= "\n<div class='dropdown'>"+dropDensityButton+"</div>";
+		
+	
+		
+		var theTable= $('#table_id').DataTable();
+		
+		//document.getElementById("downloadLink").setAttribute("style","display: none");
+		
+	
+		function grabExtension(theName){
+			return (/[.]/.exec(theName)) ? /[^.]+$/.exec(theName) : undefined;
+		}
+		
+		function getChildrenByTag(theNode,tag){
+			var childs=theNode.children;
+			var pos=0;
+			var lim=childs.length;
+			var result=[];
+			while(pos<lim){
+				if(childs[pos].tagName===tag){
+					result.push(childs[pos]);
+				}
+				pos++;
+			}
+			return result;
+		}
+	
+		function readMultipleFiles(evt) {
+			//Retrieve all the files from the FileList object
+			var files = evt.target.files; 
+					
+			if (files) {
+				for (var i=0, f; f=files[i]; i++) {
+					
+					var r = new FileReader();
+					var extension=grabExtension(f.name)[0];
+					console.log(f.name);
+					
+					if(extension===undefined){
+						continue;
+					}
+					if(extension.toLowerCase()==="xml"){
+						if(!(inputXML===null)){
+							console.log("Warning: More than one XML file provided");
+						}
+						r.onload = (function(f) {
+							return function(e) {
+								console.log(f.name);
+								var contents = e.target.result;
+								inputXML=r.result;
+								loadParts();
+							};
+						})(f);
+						r.readAsText(f,"US-ASCII");
+						fileReaders.push({Reader: r, Name: f.name});
+					}
+								
+				}
+				console.log(fileReaders);
+			} 
+			else {
+				  alert("Failed to load files"); 
+			}
+		}
+		
+		
+		document.getElementById('fileinput').addEventListener('change', readMultipleFiles, false);
+		
+		
+		
+		
+		function loadParts (){
+			var pos=0;
+			var lim=fileReaders.length;
+			while(pos<lim){
+				if(!(fileReaders[pos].Reader.readyState===2)){
+					console.log(pos);
+					console.log(fileReaders[pos].Name);
+					break;
+				}
+				pos++;
+			}
+			if(pos===lim){
+				console.log("ALL DONE");
+				fillOutTable(inputXML);				
+			}
+		}
+		
+		
+		
+	
+	
+		function grab(theTree,theMember){
+			if($(theTree).children(theMember).length!=0){
+				return $(theTree).children(theMember)[0];
+			}
+			else{
+				return null;
+			}
+		}
+
+		function grabInd(theTree,theMember, theIndex){
+			if($(theTree).children(theMember).length>theIndex){
+				return $(theTree).children(theMember)[theIndex];
+			}
+			else{
+				return null;
+			}
+		}
+		
+		
+		
+		function addEntry(theEntry){
+		
+			var theName=grab(theEntry,"name").innerHTML;
+			var theVolume="<text>"+Number.parseFloat(grab(theEntry,"volume").innerHTML)+"</text>\n"+volElem;
+			
+			var theMass=massElem;
+			var theCertainty=Number.parseFloat(grab(theEntry,"fastener_certainty").innerHTML);
+			var theSurfaceArea=Number.parseFloat(grab(theEntry,"surface_area").innerHTML);
+			
+			var fstChecked="<input type='checkbox' onchange='flipCheck(this)' value='false'></input>";
+			if(theCertainty>0.5){
+				fstChecked="<input type='checkbox' onchange='flipCheck(this) value='true' checked></input>";
+			}
+			
+			var theAmbiguity=1-2*Math.abs(theCertainty-0.5);
+			theAmbiguity=theAmbiguity.toFixed(2);
+			
+			
+			theTable.row.add( [
+				theName,
+				theVolume,
+				theSurfaceArea,
+				theMass,
+				fstChecked,
+				theAmbiguity
+			] ).draw();
+			
+		}
+		
+		
+		
+		function fillOutTable(theXMLText){
+		
+			var theXML=$.parseXML(theXMLText);
+			console.log(theXML);
+			//console.log(theXML);
+			var theEntries=grab(theXML,"parts_properties");
+			var theEntries=$(theEntries).children("part_properties");
+			var pos=0;
+			var lim=theEntries.length;
+			var name;
+			var classif;
+			while(pos<lim){
+				addEntry(theEntries[pos]);
+				pos++;
+			}
+		
+		}
+		
+		
+		
+		function renderXML(){
+		
+			theTable.search("").draw();
+			
+			var result="<?xml version='1.0' encoding='utf-8'?>\n<parts_properties xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>\n";
+			
+			theTable=document.getElementById("body_id");
+			console.log(theTable);
+			
+			var theEntries=getChildrenByTag(theTable,"TR");
+			console.log(theEntries);
+			var entryPos=0;
+			var entryLim=theEntries.length;
+			
+			var theCells;
+			var thisResult;
+			
+			
+			while(entryPos<entryLim){
+				
+				thisResult=renderEntry(getChildrenByTag(theEntries[entryPos],"TD"));
+				if(thisResult!=null){
+					result=result+thisResult;
+				}
+				else{
+					return null;
+				}
+				
+				entryPos++;
+			}
+			
+			result+="</parts_properties>";
+			
+			console.log(result);
+			
+			
+			var data = new Blob([result], {type: 'text/plain'});
+
+			if (textFile !== null) {
+			  window.URL.revokeObjectURL(textFile);
+			}
+
+			textFile = window.URL.createObjectURL(data);
+
+			
+			document.getElementById("downloadLink").setAttribute("style","color: white; display: inline;");
+			document.getElementById("downloadLink").innerHTML="Download";
+			document.getElementById("downloadLink").href=textFile;
+		
+		}
+		
+		
+		
+		
+		
+		function renderEntry(theCells){
+		
+			var massCell=theCells[3];
+			console.log(massCell);
+			var texts=getChildrenByTag(massCell,"TEXT");
+			var inputs=getChildrenByTag(massCell,"INPUT");
+			
+			var massText="";
+			if(inputs.length==0 || isNaN(Number.parseFloat(inputs[0].value))){
+				alert("Mass data not provided for one or more cells");
+				return null;
+			}
+			else if(texts.length==1){
+				if(inputs.length==1){
+					console.log(inputs);
+					if(inputs[0].value.toString()===""){
+						return null;
+					}
+					massText="  <mass>"+inputs[0].value+"</mass>\n";
+				}
+				else{
+					alert("HTML Corrupted");
+				}
+			}
+			else if(texts.length==2){
+				console.log(texts);
+				if(texts[0].innerHTML.toString()==="" || isNaN(Number.parseFloat(texts[0].innerHTML))){
+					return null;
+				}
+				massText="  <mass>"+texts[0].innerHTML+"</mass>\n";
+			}
+			else{
+				alert("HTML Corrupted");
+			}
+			
+			
+			var checkText="  <fastener_certainty>0</fastener_certainty>\n";
+			console.log(getChildrenByTag(theCells[4],"INPUT"));
+			console.log(getChildrenByTag(theCells[4],"INPUT")[0]);
+			console.log(getChildrenByTag(theCells[4],"INPUT")[0].value);
+			if(getChildrenByTag(theCells[4],"INPUT")[0].value=="on"){
+				checkText="  <fastener_certainty>1</fastener_certainty>\n";
+				console.log("aaaaargh!");
+			}
+			else{
+				console.log(theCells[4]);
+			}
+			
+		
+			var result="";
+			result=result+"<part_properties>\n";
+			result=result+"  <name>"+theCells[0].innerHTML+"</name>\n";
+			result=result+massText;
+			if(getChildrenByTag(theCells[1],"TEXT")[0].innerHTML=="" || isNaN(Number.parseFloat(getChildrenByTag(theCells[1],"TEXT")[0].innerHTML))){
+				alert("Volume data not provided for one or more cells");
+				return null;
+			}
+			result=result+"  <volume>"+getChildrenByTag(theCells[1],"TEXT")[0].innerHTML+"</volume>\n";
+			result=result+"  <surface_area>"+theCells[2].innerHTML+"</surface_area>\n";
+			result=result+checkText;
+			result=result+"</part_properties>\n";
+			return result;
+		
+		}
+		
+		
+		
+		function hollowOpt(theCheckBox){
+			theCheckBox.parentElement.innerHTML="<input type='text' onchange='revertHollowOpt(this)'> </input>";
+		}
+		
+		
+		function revertHollowOpt(theTextBox){
+			if(isNaN(Number.parseFloat(theTextBox.value))){
+				theTextBox.parentElement.innerHTML="<text>hollow </text><input type='checkbox' onchange='hollowOpt(this)'> </input>";
+			}
+		}
+		
+		
+		function insertMassInput(theButton){
+			theButton.parentElement.innerHTML=	"<text>Mass:</text> "+
+												"<input type='text'></input>"+
+												"<button onclick='insertDensityInput(this)'>Input By Volume+Density</button>";
+		}
+		
+		
+		function insertDensityInput(theButton){
+			theButton.parentElement.innerHTML=	"<text></text><text>Density:</text> "+
+												"<input type='text' onchange='updateMassDisplay(this)'></input>"+
+												densityDiv+
+												"<button onclick='insertMassInput(this)' >Input By Mass</button>";
+		}
+		
+
+		
+		function insertHollowInput(theButton){
+			console.log(getChildrenByTag(theButton.parentElement,"TEXT")[0].innerHTML);
+			console.log(Number.parseFloat(getChildrenByTag(theButton.parentElement,"TEXT")[0].innerHTML));
+			var storage="<p style='display: none;'>"+Number.parseFloat(getChildrenByTag(theButton.parentElement,"TEXT")[0].innerHTML)+"</p>";
+			var display="<text></text>";
+			var backButton="<button onclick='removeHollowInput(this)'>Is Not Hollow</button>";
+			var thicknessBox="Thickness: <input type='text' onchange='updateVolumeDisplay(this)'></input>";
+			theButton.parentElement.innerHTML=storage+display+thicknessBox+backButton;
+		}
+		
+		
+		function removeHollowInput(theButton){ 
+			console.log(getChildrenByTag(theButton.parentElement,"P")[0].innerHTML);
+			console.log(Number.parseFloat(getChildrenByTag(theButton.parentElement,"P")[0].innerHTML));
+			var storage="<text style='display: block;'>"+Number.parseFloat(getChildrenByTag(theButton.parentElement,"P")[0].innerHTML)+"</text>";
+			var backButton="<button onclick='insertHollowInput(this)'>Is Hollow</button>";
+			theButton.parentElement.innerHTML=storage+backButton;
+		}
+		
+		function updateVolumeDisplay(theBox){
+			console.log(theBox.parentElement);
+			console.log(getChildrenByTag(theBox.parentElement,"INPUT"));
+			var theThickness=Number.parseFloat(getChildrenByTag(theBox.parentElement,"INPUT")[0].value);
+			console.log(getChildrenByTag(theBox.parentElement.parentElement,"TD")[2]);
+			var area=Number.parseFloat(getChildrenByTag(theBox.parentElement.parentElement,"TD")[2].innerHTML);
+			var vol=theThickness*area;
+			getChildrenByTag(theBox.parentElement,"TEXT")[0].innerHTML=vol.toString()+"\n";
+		}
+		
+		function updateMassDisplay(theBox){
+			var theDensity=Number.parseFloat(getChildrenByTag(theBox.parentElement,"INPUT")[0].value);
+			console.log(getChildrenByTag(theBox.parentElement.parentElement,"TD")[1]);
+			console.log()
+			var theVolume=Number.parseFloat(getChildrenByTag(getChildrenByTag(theBox.parentElement.parentElement,"TD")[1],"TEXT")[0].innerHTML);
+			var mass=theDensity*theVolume;
+			getChildrenByTag(theBox.parentElement,"TEXT")[0].innerHTML=mass.toString()+"\n";
+		}
+		
+		
+		function doDensityDrop(theButton){
+			theButton.parentElement.innerHTML=undropDensityButton+densityMenu;
+		}
+		
+		function undoDensityDrop(theButton){
+			theButton.parentElement.innerHTML=dropDensityButton;
+		}
+		
+		
+		
+		
+		
+		function changeDensity(theButton){
+			
+			var mat=theButton.innerHTML;
+			var val;
+			if(mat=="Aluminum"){
+				val=2.7/1000;
+			}
+			else if(mat=="Glass"){
+				val=2.52/1000;
+			}
+			else if(mat=="Plastic (Hi-Density)"){
+				val=1.95/1000;
+			}
+			else if(mat=="Plastic (Med-Density)"){
+				val=1.1/1000;
+			}
+			else if(mat=="Plastic (Low-Density)"){
+				val=0.9/1000;
+			}
+			else if(mat=="Rubber"){
+				val=1.27/1000;
+			}
+			else if(mat=="Steel"){
+				val=7.859/1000;
+			}
+			else if(mat=="Titanium"){
+				val=4.507/1000;
+			}
+			else if(mat=="Wood"){
+				val=0.63/1000;
+			}
+			else{
+				return;
+			}
+			
+			getChildrenByTag(theButton.parentElement.parentElement.parentElement,"INPUT")[0].value=val;
+			updateMassDisplay(getChildrenByTag(theButton.parentElement.parentElement.parentElement,"INPUT")[0]);
+		
+		}
+		
+		function flipCheck(theBox){
+		
+			if(theBox.value=='on'){
+				theBox.value='off';
+			}
+			else{
+				theBox.value='on';
+			}
+			console.log(theBox.value);
+		
+		}
+		
+		
+	
+	</script>
+</html>
+
