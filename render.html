@@ -67,7 +67,7 @@
 				left: 10px;
 				height: 80%;
 				width: 250px;
-				font-size: 75%;
+				font-size: 150%;
 				font-family: "Lucida Console";
 				background: rgba(1, 1, 1, 0.3);
 				border-style: solid;
@@ -163,8 +163,9 @@
 		
 		
 		
-		
+		// Holds the state of button press inputs to smooth out control response
 		var inputState={
+			
 			W: false,
 			A: false,
 			S: false,
@@ -175,6 +176,8 @@
 		
 		}
 		
+		
+		// The color of the background of the scene
 		var skyColor= 0xFFFFFF;
 		var movementTree=null;
 		var theCenter= new THREE.Vector3(0,0,0);
@@ -189,24 +192,34 @@
 		var theDrag=0.96;
 		var camYaw=0;
 		var camPitch=Math.PI/2;
+		
+		// The momentum of the camera
 		var momentum= new THREE.Vector3(0,0,0);
+		
+		// The scene of the assembly animation
 		var scene = new THREE.Scene();
+		
+		// The camera
 		var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 1, 16000 );
 		camera.position.x=200;
 		camera.position.z=200;
 		camera.position.y=0;
-		var pointerIsLocked=false;
-		camera.position.y=0;
 		
-
+		// The variable holding the state of whether or not the pointer is locked
+		var pointerIsLocked=false;
+		
+		
+		// Setting up the renderer with the default color and display size
 		var renderer = new THREE.WebGLRenderer();
 		renderer.setClearColor( skyColor, 1 );
 		renderer.setSize( window.innerWidth*0.98, window.innerHeight*0.96);
 		document.body.appendChild( renderer.domElement );
 
-		
+		// Setting camera to Yaw-Pitch-Roll configuration
 		camera.rotation.reorder('YXZ');
 		
+		
+		// Adding in a whole bunch of lights for the scene
 		var directionalLight = new THREE.DirectionalLight( 0x888888 );
                 directionalLight.position.x = 0; 
                 directionalLight.position.y = 0; 
@@ -248,137 +261,13 @@
                 directionalLight.position.normalize();
                 scene.add( directionalLight );
 				
-				
+		
+		// Adds in one more light 
 		var sunLight = new THREE.SpotLight( 0xaa5533, 6, 32000, 1.2, 1, 1 );
 				sunLight.position.set( 4000, 4000, 4000 );
 				scene.add( sunLight );
 				
-		/*var globe= new THREE.Mesh( 
 		
-			new THREE.SphereGeometry(8000, 127, 32, 0, Math.PI*2, 0, 2.1),
-			new THREE.MeshStandardMaterial({
-					color:0x4444FF,
-					roughness: 1.0,
-					metalness: 0.0,
-					shading:THREE.SmoothShading
-				} )
-		
-		);
-		flipNormals(globe);
-		scene.add(globe);
-		*/
-		
-		
-		/*var ground=new THREE.Mesh( 
-		
-			new THREE.PlaneGeometry(16000, 16000, 32,32),
-			new THREE.MeshStandardMaterial({
-					color:0xC35817,
-					roughness: 1,
-					metalness: 0,
-					shading:THREE.SmoothShading,
-					refractionRatio: 0.3
-				} )
-		
-		);
-		ground.position.x=0;
-		ground.position.y=-2000;
-		ground.position.z=0;
-		ground.rotation.x=Math.PI/2;
-		flipNormals(ground);
-		addNoise(ground,new THREE.Vector3(0,0,800));
-		scene.add(ground);
-		*/
-		
-		/*
-		var water=new THREE.Mesh( 
-		
-			new THREE.PlaneGeometry(32000, 32000, 255,255),
-			new THREE.MeshStandardMaterial({
-					color:0x007BBC,
-					roughness: 0.2,
-					metalness: 0.75,
-					shading:THREE.FlatShading,
-					refractionRatio: 0.9,
-					transparent: true,
-					opacity: 0.90
-				} )
-			new THREE.MeshPhongMaterial({
-					color:0x007BBC,
-					shininess: 60,
-					shading:THREE.FlatShading,
-					refractionRatio: 0.5,
-					
-				} )
-		
-		);
-		water.position.x=0;
-		water.position.y=-2500;
-		water.position.z=0;
-		water.rotation.x=Math.PI/2;
-		addNoise(water,0,16);
-		smooth(water,255);
-		flipNormals(water);
-		scene.add(water);
-		*/
-		/*
-		var loader = new THREE.TextureLoader();
-
-		new THREE.TextureLoader().load( "textures/concrete.jpg",
-
-		(
-			function(texture){
-				console.log(texture);
-		
-				var concMaterial = new THREE.MeshBasicMaterial( {
-					map: texture
-				} );
-				 
-				var water=new THREE.Mesh( 
-				new THREE.PlaneGeometry(32000, 32000, 1,1),
-					concMaterial		
-				);
-				water.position.x=0;
-				water.position.y=-2500;
-				water.position.z=0;
-				water.rotation.x=Math.PI/2;
-				
-
-				water.geometry.faceVertexUvs[ 0 ].push(
-				[
-					new THREE.Vector2( 0, 0 ),
-					new THREE.Vector2( 0, 1 ),
-					new THREE.Vector2( 1, 0 )
-				] );
-
-				water.geometry.faces[ 0 ].materialIndex = 0;
-
-				water.geometry.faceVertexUvs[ 0 ].push(
-				[
-					new THREE.Vector2( 0, 1 ),
-					new THREE.Vector2( 1, 1 ),
-					new THREE.Vector2( 1, 0 )    
-				] );
-
-				water.geometry.faces[ 1 ].materialIndex = 0;
-
-				console.log(water);
-				
-				
-				scene.add(water);
-			}
-		),
-		function ( xhr ) {
-			console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
-		},
-		// Function called when download errors
-		function ( xhr ) {
-			console.log( 'An error happened' );
-		}
-
-		);
-		
-		 */
 		
 		
 
@@ -389,37 +278,28 @@
 		
 		
 		
-		/*var sunShadow= new THREE.OrthographicCamera(-800,800,500,-500,1,10000);
-		sunShadow.position.x=4000;
-		sunShadow.position.y=4000;
-		sunShadow.position.z=4000;
-		sunShadow.lookAt(new THREE.Vector3(0,0,0));
-		var shadowCast=new THREE.DirectionalLightShadow(sunShadow);
-		scene.add(shadowCast);*/
 		
 		
 		
 		
-		
-		
+		// Adding a whole bunch of event listeners for input
 		document.getElementById("theDisplay").addEventListener("wheel", zoomIt);
-		
 		document.addEventListener('pointerlockchange', lockChange, false);
 		document.addEventListener('mozpointerlockchange', lockChange, false);
 		document.addEventListener('webkitpointerlockchange', lockChange, false);
-		
-		//document.addEventListener('keypress', registerKeyPress , false);
 		document.addEventListener('keydown', registerDown , false);
 		document.addEventListener('keyup', registerUp , false);
 
 
-		
+		// Dialates time with the scrolling of the mouse
 		function zoomIt(e){
 			
 			zoom=zoom*Math.pow(1.001,e.wheelDelta);
 			//theTime+=e.wheelDelta*0.0001;
 		}
 		
+		
+		// Attempts to lock the mouse for scene navigation
 		function tryMouseLock(){
 			
 			var element= document.getElementById("theDisplay");
@@ -432,6 +312,8 @@
 		
 		}
 		
+		
+		// Activates/Deactivates inputs as the state of mouselock changes
 		function lockChange(e){
 		
 			var theTarget=document.getElementById("theDisplay");
@@ -452,6 +334,9 @@
 		
 		}
 		
+		
+		
+		// Changes camera orientation with mouse movement
 		function mouseMoved(e){
 		
 			var movementX = e.movementX ||
@@ -482,6 +367,8 @@
 		}
 		
 		
+		
+		// Changes key press states based off of key presses
 		function registerDown(e){
 			
 		
@@ -523,6 +410,7 @@
 			
 		}
 		
+		// Changes key press states based off of key releases
 		function registerUp(e){
 			
 			
@@ -564,7 +452,7 @@
 		}
 		
 		
-		
+		// Affects the state of the camera/animation based off of the state of the inputs
 		function manageControls(){
 		
 			var theRot= new THREE.Quaternion(0,0,0,0);
@@ -829,6 +717,8 @@
 							partGeom=parseStlBinary(fileReaders[pos].Reader.result);
 						}
 						
+						//console.log(partGeom);
+						
 						partMesh=new THREE.Mesh( 
 								partGeom,
 								new THREE.MeshNormalMaterial( )
@@ -854,8 +744,9 @@
 				treeQ=grab(treeQ,"Subassemblies");
 				//console.log(treeQ);
 				treeQ=grab(treeQ,"SubAssembly");
-				//console.log(treeQ);
+				console.log(treeQ);
 				var moveTree=getMovement(treeQ,0,0,0,0);
+				console.log(moveTree);
 				cutOffNames(moveTree,similarityCutoff(getNameList(moveTree)));
 				console.log(moveTree);
 				var theFrameLists=makeKeyFrames(moveTree,[],[]);
@@ -895,8 +786,7 @@
 				parts[pos].Mesh.rotation.z+=Math.random()*0.04-0.02;
 				pos++;
 			}
-			
-		
+
 		
 		}
 		

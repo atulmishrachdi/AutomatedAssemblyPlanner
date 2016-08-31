@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 
 <html>
-
 	<style>
 		
 		#theBody{
@@ -37,7 +36,7 @@
 	<body id="theBody">
 	
 		
-	
+		
 	
 		<input type="file" id="fileinput" multiple ></input>
 		<button style="display: inline;" onclick="renderXML()">Render XML</button>
@@ -88,16 +87,23 @@
 		var inputXML=null;
 		var textFile=null;
 		
+		
+	// Some HTML bits to insert into the table as needed
+		
+		// Starting Input for mass cells
 		var massElem="<button onclick='insertMassInput(this)'>Input By Mass</button><button onclick='insertDensityInput(this)'>Input By Volume+Density</button>";
 		
+		// Starting Input for Volume cells
 		var volElem="<button onclick='insertHollowInput(this)'>Is Hollow</button>";
 		
 		
-		
+		// The button for showing the sample density dropdown menu
 		var dropDensityButton="<button class='dropbtn' onclick='doDensityDrop(this)'>Sample Densities</button>";
-						
+			
+		// The button for removing the sample density dropdown menu
 		var undropDensityButton="<button class='dropbtn' onclick='undoDensityDrop(this)'>Sample Densities</button>";
 						
+		// The sample density dropdown menu
 		var densityMenu="<div class='dropdown-content' style='border-color: #666666; background-color: #DDDDDD; border-style: solid; padding: 10px 10px 10px 10px;'>"+
 							"<button onclick='changeDensity(this)'>Aluminum</button>"+
 							"<button onclick='changeDensity(this)'>Glass</button>"+
@@ -109,20 +115,24 @@
 							"<button onclick='changeDensity(this)'>Titanium</button>"+
 							"<button onclick='changeDensity(this)'>Wood</button>"+
 						"</div>";
-						
+		
+		// Starting input for density cells
 		var densityDiv= "\n<div class='dropdown'>"+dropDensityButton+"</div>";
 		
 	
-		
+		// Setting up the table
 		var theTable= $('#table_id').DataTable();
 		
 		//document.getElementById("downloadLink").setAttribute("style","display: none");
 		
 	
+		// A simple function for getting the extension from a file name (sans period)
 		function grabExtension(theName){
 			return (/[.]/.exec(theName)) ? /[^.]+$/.exec(theName) : undefined;
 		}
 		
+		
+		// Returns a list of all immediate children of the input html element which have the given tag name
 		function getChildrenByTag(theNode,tag){
 			var childs=theNode.children;
 			var pos=0;
@@ -137,6 +147,8 @@
 			return result;
 		}
 	
+	
+		// Upon a file upload event triggering, defines and attaches each file's onload function 
 		function readMultipleFiles(evt) {
 			//Retrieve all the files from the FileList object
 			var files = evt.target.files; 
@@ -176,11 +188,12 @@
 		}
 		
 		
+		// Sets up the file loading function
 		document.getElementById('fileinput').addEventListener('change', readMultipleFiles, false);
 		
 		
 		
-		
+		// Checks that all files are loaded. If so, fills out the table with the given information
 		function loadParts (){
 			var pos=0;
 			var lim=fileReaders.length;
@@ -201,7 +214,7 @@
 		
 		
 	
-	
+		// Returns the first child node in the given document element with the given class
 		function grab(theTree,theMember){
 			if($(theTree).children(theMember).length!=0){
 				return $(theTree).children(theMember)[0];
@@ -211,6 +224,8 @@
 			}
 		}
 
+		
+		// Returns the nth child from the list of children nodes in the given document element with the given class
 		function grabInd(theTree,theMember, theIndex){
 			if($(theTree).children(theMember).length>theIndex){
 				return $(theTree).children(theMember)[theIndex];
@@ -222,6 +237,7 @@
 		
 		
 		
+		// Adds an entry to the table with the information from the given document element
 		function addEntry(theEntry){
 		
 			var theName=grab(theEntry,"name").innerHTML;
@@ -252,7 +268,7 @@
 		}
 		
 		
-		
+		// Fills out the table with the information in the given xml document text
 		function fillOutTable(theXMLText){
 		
 			var theXML=$.parseXML(theXMLText);
@@ -272,7 +288,7 @@
 		}
 		
 		
-		
+		// Creates an XML file out of the information present in the table and then adds a download link to the page
 		function renderXML(){
 		
 			theTable.search("").draw();
@@ -327,7 +343,7 @@
 		
 		
 		
-		
+		// Converts the information in the given table entry to an XML element (as a plaintext string)
 		function renderEntry(theCells){
 		
 			var massCell=theCells[3];
@@ -406,14 +422,14 @@
 			}
 		}
 		
-		
+		// Adds in plain mass input
 		function insertMassInput(theButton){
 			theButton.parentElement.innerHTML=	"<text>Mass:</text> "+
 												"<input type='text'></input>"+
 												"<button onclick='insertDensityInput(this)'>Input By Volume+Density</button>";
 		}
 		
-		
+		// Adds in input by part density
 		function insertDensityInput(theButton){
 			theButton.parentElement.innerHTML=	"<text></text><text>Density:</text> "+
 												"<input type='text' onchange='updateMassDisplay(this)'></input>"+
@@ -422,7 +438,7 @@
 		}
 		
 
-		
+		// Adds in input for part surface thickness, hiding the origional volume
 		function insertHollowInput(theButton){
 			console.log(getChildrenByTag(theButton.parentElement,"TEXT")[0].innerHTML);
 			console.log(Number.parseFloat(getChildrenByTag(theButton.parentElement,"TEXT")[0].innerHTML));
@@ -434,6 +450,7 @@
 		}
 		
 		
+		// Removes thickness input and displays original volume
 		function removeHollowInput(theButton){ 
 			console.log(getChildrenByTag(theButton.parentElement,"P")[0].innerHTML);
 			console.log(Number.parseFloat(getChildrenByTag(theButton.parentElement,"P")[0].innerHTML));
@@ -442,6 +459,8 @@
 			theButton.parentElement.innerHTML=storage+backButton;
 		}
 		
+		
+		// Updates the displayed volume based off of the part's surface area and thickness
 		function updateVolumeDisplay(theBox){
 			console.log(theBox.parentElement);
 			console.log(getChildrenByTag(theBox.parentElement,"INPUT"));
@@ -452,6 +471,8 @@
 			getChildrenByTag(theBox.parentElement,"TEXT")[0].innerHTML=vol.toString()+"\n";
 		}
 		
+		
+		// Updates the displayed mass based off of volume and density
 		function updateMassDisplay(theBox){
 			var theDensity=Number.parseFloat(getChildrenByTag(theBox.parentElement,"INPUT")[0].value);
 			console.log(getChildrenByTag(theBox.parentElement.parentElement,"TD")[1]);
@@ -461,11 +482,13 @@
 			getChildrenByTag(theBox.parentElement,"TEXT")[0].innerHTML=mass.toString()+"\n";
 		}
 		
-		
+		// Adds in density dropdown
 		function doDensityDrop(theButton){
 			theButton.parentElement.innerHTML=undropDensityButton+densityMenu;
 		}
 		
+		
+		// Removes density dropdown
 		function undoDensityDrop(theButton){
 			theButton.parentElement.innerHTML=dropDensityButton;
 		}
@@ -473,7 +496,7 @@
 		
 		
 		
-		
+		// Sets the value of the density of the part to the density associated with the calling button
 		function changeDensity(theButton){
 			
 			var mat=theButton.innerHTML;
@@ -514,6 +537,8 @@
 		
 		}
 		
+		
+		// Sets the value of the checkbox to the appropriate value
 		function flipCheck(theBox){
 		
 			if(theBox.value=='on'){

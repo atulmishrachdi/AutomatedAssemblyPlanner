@@ -87,12 +87,16 @@ function getGeometries(theSTLs){
 function bindPartsToKeyFrames(theKeyFrameLists, theParts){
 	
 	console.log(theKeyFrameLists);
+	console.log (theParts);
 	
 	var pos=0;
 	var searchPos;
 	var lim=theKeyFrameLists.length;
 	var searchLim=theParts.length;
 	var result=[];
+	
+	
+	
 	while(pos<lim){
 		searchPos=0;
 		while(searchPos<searchLim){
@@ -100,6 +104,9 @@ function bindPartsToKeyFrames(theKeyFrameLists, theParts){
 				break;
 			}
 			searchPos++;
+		}
+		if(searchPos==searchLim){
+			continue;
 		}
 		result.push({
 			Name: theKeyFrameLists[pos].Name,
@@ -238,7 +245,11 @@ function makeKeyFrames(theTree, runningList, currentFrameList){
 	var isRoot=0;
 	if(runningList.length==0){
 		isRoot=1;
+		console.log("ROOT");
+		console.log(theTree);
 	}
+	
+	console.log(theTree);
 	
 	var newQuat= new THREE.Quaternion();
 	newQuat.setFromEuler(new THREE.Euler(0,0,0,'XYZ'));
@@ -255,11 +266,8 @@ function makeKeyFrames(theTree, runningList, currentFrameList){
 	if(theTree.Ref===null){
 		var copiedList= copyFrameList(runningList);
 		console.log("-----------");
-		console.log(runningList);
-		console.log(copiedList);
 		currentFrameList.push({Name: theTree.Name, Frames: copiedList});
 		runningList.pop();
-		return;
 	}
 	else{
 		makeKeyFrames(theTree.Ref,runningList,currentFrameList);

@@ -661,12 +661,12 @@ function insertTreequenceHTML(theTree,parentElement,theName){
 	if(theTree.Mov!=null){
 		var theMov=document.createElement("DIV");
 		parentElement.appendChild(theMov);
-		insertTreequenceHTML(theTree.Mov,theMov,theName+"M");
+		insertTreequenceHTML(theTree.Mov,theMov,theName+String.fromCharCode(0x16A0 + Math.random() * (0x16F8-0x16A0+1)));
 	}
 	if(theTree.Ref!=null){
 		var theRef=document.createElement("DIV");
 		parentElement.appendChild(theRef);
-		insertTreequenceHTML(theTree.Ref,theRef,theName+"R");
+		insertTreequenceHTML(theTree.Ref,theRef,theName+String.fromCharCode(0x16A0 + Math.random() * (0x16F8-0x16A0+1)));
 	}
 	
 	hideChildren(parentElement);

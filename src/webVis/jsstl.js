@@ -55,9 +55,38 @@ var parseStlBinary = function(stl) {
 };  
 
 
+function trim (str) {
+	str = str.replace(/^\s+/, '');
+	for (var i = str.length - 1; i >= 0; i--) {
+		if (/\S/.test(str.charAt(i))) {
+			str = str.substring(0, i + 1);
+			break;
+		}
+	}
+	return str;
+}
+			
+
+function arrayToString(buf) {
+	var pos=0;
+	var arr=new Uint8Array(buf);
+	var lim=arr.length;
+	var result="";
+	while(pos<lim){
+		result=result+String.fromCharCode(arr[pos]);
+		pos++;
+	}
+	return result;
+}
+
 
 var parseStl = function(stl) {
+	
 	var state = '';
+	
+	stl=arrayToString(stl);
+	
+	
 	var lines = stl.split('\n');
 	var geo = new THREE.Geometry();
 	var name, parts, line, normal, done, vertices = [];
@@ -74,7 +103,7 @@ var parseStl = function(stl) {
 				if (parts[0] !== 'solid') {
 					console.error(line);
 					console.error('Invalid state "' + parts[0] + '", should be "solid"');
-					return;
+					return null;
 				} else {
 					name = parts[1];
 					state = 'solid';
@@ -84,7 +113,7 @@ var parseStl = function(stl) {
 				if (parts[0] !== 'facet' || parts[1] !== 'normal') {
 					console.error(line);
 					console.error('Invalid state "' + parts[0] + '", should be "facet normal"');
-					return;
+					return null;
 				} else {
 					normal = [
 						parseFloat(parts[2]), 
@@ -98,7 +127,7 @@ var parseStl = function(stl) {
 				if (parts[0] !== 'outer' || parts[1] !== 'loop') {
 					console.error(line);
 					console.error('Invalid state "' + parts[0] + '", should be "outer loop"');
-					return;
+					return null;
 				} else {
 					state = 'vertex';
 				}
@@ -117,14 +146,14 @@ var parseStl = function(stl) {
 				} else {
 					console.error(line);
 					console.error('Invalid state "' + parts[0] + '", should be "vertex" or "endloop"');
-					return;
+					return null;
 				}
 				break;
 			case 'endloop':
 				if (parts[0] !== 'endfacet') {
 					console.error(line);
 					console.error('Invalid state "' + parts[0] + '", should be "endfacet"');
-					return;
+					return null;
 				} else {
 					state = 'endfacet';
 				}
@@ -146,7 +175,7 @@ var parseStl = function(stl) {
 				} else {
 					console.error(line);
 					console.error('Invalid state "' + parts[0] + '", should be "endsolid" or "facet normal"');
-					return;
+					return null;
 				}
 				break;
 			default:
