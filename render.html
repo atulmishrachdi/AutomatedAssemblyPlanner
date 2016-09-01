@@ -3,6 +3,8 @@
 	<output id="list"></output>
 <body id="theDisplay" >
 
+	<meta charset="UTF-16"></meta>
+
 	<head>
 		  <!--<style type="text/css">
 			#theDisplay {
@@ -66,8 +68,8 @@
 				top: 90px;
 				left: 10px;
 				height: 80%;
-				width: 250px;
-				font-size: 150%;
+				display: inline-block;
+				font-size: 100%;
 				font-family: "Lucida Console";
 				background: rgba(1, 1, 1, 0.3);
 				border-style: solid;
@@ -90,13 +92,29 @@
 				font-size: 12px;
 
 			}
+			
+			#showHide{
+				position: absolute;
+				top: 70px;
+				left: 10px;
+				background-color: #000000;
+				border: none;
+				color: white;
+				padding: 5px 5px;
+				text-align: center;
+				text-decoration: none;
+				display: inline-block;
+				font-size: 12px;
+
+			}
 
 		  </style>
 	</head>
 	<div id="HUD">
-		<input type="file" id="fileinput" multiple />
+		
 		<button id="lockButton" onclick="tryMouseLock()" >Mouse Lock</button>
-		<div id="treequenceDiv">
+		<button onclick='showHideTreequence()' id="showHide">Show/Hide</button>
+		<div id="treequenceDiv" state="shown" >
 			
 		</div>
 		<div id="infoDiv">
@@ -115,9 +133,6 @@
 	
 	<script src="./src/webVis/jsstl.js"></script>
 	<script src="./src/webVis/treequence.js"></script>
-	<script src="./src/webVis/sigma.min.js"></script>
-	<script src="./src/webVis/sigma.canvas.edges.curvedArrow.js"></script>
-	
 	<script src="./src/webVis/partRender.js"></script>
 	
 	<xmp id="warning"></xmp>
@@ -133,33 +148,88 @@
 	
 	<script>
 	
+	
+	//
+	//    Pretty Important: Keep this as true unless/until you've incorperated some other
+	//                      method of getting file input
+	//
+		var manualFileInput=true;
+	
+	
+		// Put recieved data about assembly into here. The code handles the rest.
+		// theXMLFile should be a string, and theSTLFiles as a binary ArrayBuffer
+		// Any text-based STL files should be in an 8-bit encoding
+		function renderData(theXMLFile, theSTLFiles){
+		
+			theXML=theXMLFile;
+		
+			parts.length=0;
+			var pos=0;
+			var lim=theSTLFiles.length;
+			var partGeom;
+			var partMesh;
+
+			while(pos<lim){
+				partGeom=null;
+				partGeom=theSTLFiles[pos];
+				if(partGeom===null){
+					partGeom=parseStlBinary(fileReaders[pos].Reader.result);
+				}
+				
+				//console.log(partGeom);
+				
+				partMesh=new THREE.Mesh( 
+						partGeom,
+						new THREE.MeshNormalMaterial( )
+				);
+				parts.push({
+					Mesh: partMesh,
+					Name: fileReaders[pos].Name
+				})
+				scene.add(partMesh);
+				
+				pos++;
+			}
+			
+			renderParts();
+		
+		}	
+		
+		
+		
+		
+		
+		if(manualFileInput){
+		
+			document.getElementById("HUD").innerHTML="<input type='file' id='fileinput' multiple />"+document.getElementById("HUD").innerHTML;
+
+		}
+		
+		
+	
+		// Holder for parsed-in XML documents
 		var theXML=null;
+		
+		// Array for storing fileReaders to keep track of them
 		var fileReaders=[];
+		
+		// Array for processed STLs
 		var STLs=[];
+		
+		//  Array for processed parts
 		var parts=[];
+		
+		// Holder for animation frames for parts
 		var partFrames=null;
+		
+		// Sets the time to 0, for the sake of starting the animation at the right time
 		var theTime=0;
-		var theme= {Main:'#fff',Mov:'#d00',Ref:'#00d',Time:'#888'};
 		
 		
+		// Holder for parsed-in javascript objects from the XML document
+		var theTreequence=null;
 		
-		/*var s = new sigma('container');
-		s = new sigma({
-		  graph: {nodes: [], edges: []},
-		  renderer: {
-			container: document.getElementById('container'),
-			type: 'canvas'
-		  },
-		  settings: {
-			minNodeSize: 1,
-			maxNodeSize: 10,
-			minEdgeSize: 0.1,
-			maxEdgeSize: 2,
-			enableEdgeHovering: false,
-			edgeHoverSizeRatio: 2,
-			defaultLabelColor:'#fff'
-		  }
-		});*/
+		
 		
 		
 		
@@ -179,17 +249,35 @@
 		
 		// The color of the background of the scene
 		var skyColor= 0xFFFFFF;
+		
+		// The tree structure holding animation data
 		var movementTree=null;
 		var theCenter= new THREE.Vector3(0,0,0);
+		
+		// The part directly in front of the camera, if any such part exists
 		var objectOfInterest=null;
+		
+		// The part being locked onto by using the 'F' key
 		var focusPoint=null;
+		
+		// Name of the part being looked at, if there is any such part
 		var mouseOverText="";
+		
+		// Time dialation coefficeint
 		var zoom=0.2;
+		
+		// Base Accelleration
 		var theSpeed=0.2;
-		var theBoost=1;
-		var boostLim=25;
-		var boostInc=0.1;
+		
+		// Accelleration bonus variables
+		var theBoost=1; // Initial accelleration bonus
+		var boostLim=25; // Limit to accelleration bonus
+		var boostInc=0.1; // Rate of accelleration bonus increase
+		
+		// Coefficient of drag camera experiences
 		var theDrag=0.96;
+		
+		// Angles of camera
 		var camYaw=0;
 		var camPitch=Math.PI/2;
 		
@@ -219,7 +307,7 @@
 		camera.rotation.reorder('YXZ');
 		
 		
-		// Adding in a whole bunch of lights for the scene
+		// Adding in a whole bunch of lights for the scene, so the parts are well-lit
 		var directionalLight = new THREE.DirectionalLight( 0x888888 );
                 directionalLight.position.x = 0; 
                 directionalLight.position.y = 0; 
@@ -262,23 +350,16 @@
                 scene.add( directionalLight );
 				
 		
-		// Adds in one more light 
+		// Adding in one more light 
 		var sunLight = new THREE.SpotLight( 0xaa5533, 6, 32000, 1.2, 1, 1 );
 				sunLight.position.set( 4000, 4000, 4000 );
 				scene.add( sunLight );
 				
 		
 		
-		
-
-		
-		
 		var theFog=new THREE.Fog( skyColor, 9000, 12000 );
 		scene.fog=theFog;
-		
-		
-		
-		
+				
 		
 		
 		
@@ -410,6 +491,8 @@
 			
 		}
 		
+		
+		
 		// Changes key press states based off of key releases
 		function registerUp(e){
 			
@@ -455,12 +538,13 @@
 		// Affects the state of the camera/animation based off of the state of the inputs
 		function manageControls(){
 		
+			// Set up rotation and relative position deltas
 			var theRot= new THREE.Quaternion(0,0,0,0);
 			theRot.setFromEuler(camera.rotation);
 			var theDir= new THREE.Vector3(0,0,0);
 			
 
-			
+			// 
 			if(inputState.A==true){
 				theDir.x-=1;
 			}
@@ -541,34 +625,33 @@
 		
 		
 		
-
+		// The main rendering function
 		var render = function () {
+		
+			// The function that will manage frame requests
 			requestAnimationFrame( render );
-			//console.log(partFrames);
 			
+			// Recieve input and set the appropriate state
 			manageControls();
 			
+			// Apply air friction to camera
 			momentum.multiplyScalar(theDrag);
 			
+			
+			// Moves the parts along the appropriate motions of the animation
 			theTime=animate(partFrames,theTime,zoom);
 			
-			/*
-			addNoise(water,0,4);
-			smooth(water,255);
-			smooth(water,255);
-			smooth(water,255);
-			smooth(water,255);
-			smooth(water,255);
-			*/
-			
+		
+			// Reset the appearence of the last object of interest
 			if(objectOfInterest!=null){
-			
 				objectOfInterest.Mesh.material=new THREE.MeshNormalMaterial( );
-			
 			}
 			
+			// Get the first part being directly looked at and sets it as object of interest
 			objectOfInterest=getFirstIntersect(scene,camera,partFrames);
 			
+			
+			// Change appearence of the object of interest and display the appropriate information
 			if(objectOfInterest!=null){
 			
 				mouseOverText=" "+objectOfInterest.Name;
@@ -586,6 +669,8 @@
 			
 			}
 			
+			
+			// Change appearence of the focus point mesh
 			if(focusPoint!=null){
 			
 				focusPoint.Mesh.material=new THREE.MeshStandardMaterial({
@@ -597,23 +682,26 @@
 			
 			}
 			
+			
+			// Display information about the object of interest
 			document.getElementById("mouseoverName").innerHTML="PART: "+mouseOverText;
 			document.getElementById("theTime").innerHTML=("TIME: "+ theTime.toFixed(10)).toString();
 			
+			// Update the installation trace lines
 			updateLines(movementTree,null,theTime);
-			//explodeParts();
 			
+			// Call for the render
 			renderer.render(scene, camera);
 		};
 
 		
 		
-		
+		// Returns the extension in the file name given
 		function grabExtension(theName){
 			return (/[.]/.exec(theName)) ? /[^.]+$/.exec(theName) : undefined;
 		}
 	
-	
+		// Returns from the given list of file readers those that have not completed loading
 		function whoIsLeft(theReaders){
 		
 			var pos=0;
@@ -630,6 +718,7 @@
 		}
 	
 	
+		// Catches file read events and assigns an appropriate onload function
 		function readMultipleFiles(evt) {
 			//Retrieve all the files from the FileList object
 			var files = evt.target.files; 
@@ -683,22 +772,28 @@
 		}
 		
 		
+		// Inserts the file loading manager into the document
 		document.getElementById('fileinput').addEventListener('change', readMultipleFiles, false);
 		
 		
-		
+		// File loading function (called every time an 'onload' is triggered)
 		function loadParts (){
 		
-			var pos=0;
-			var lim=fileReaders.length;
-			while(pos<lim){
-				if(!(fileReaders[pos].Reader.readyState===2)){
-					//console.log(pos);
-					//console.log(fileReaders[pos].Name);
-					break;
+			
+				// Looks for unloaded files
+				var pos=0;
+				var lim=fileReaders.length;
+				while(pos<lim){
+					if(!(fileReaders[pos].Reader.readyState===2)){
+						//console.log(pos);
+						//console.log(fileReaders[pos].Name);
+						break;
+					}
+					pos++;
 				}
-				pos++;
-			}
+			
+			
+			// Executes if all files are loaded
 			if(pos===lim){
 				console.log("ALL DONE");
 				parts.length=0;
@@ -734,60 +829,102 @@
 					pos++;
 				}
 				
-				cutoffPartNames(parts);
-				var treeQ = $.parseXML(theXML);
-				//console.log(treeQ);
-				treeQ=grab(treeQ,"AssemblyCandidate");
-				//console.log(treeQ);
-				treeQ=grab(treeQ,"Sequence");
-				//console.log(treeQ);
-				treeQ=grab(treeQ,"Subassemblies");
-				//console.log(treeQ);
-				treeQ=grab(treeQ,"SubAssembly");
-				console.log(treeQ);
-				var moveTree=getMovement(treeQ,0,0,0,0);
-				console.log(moveTree);
-				cutOffNames(moveTree,similarityCutoff(getNameList(moveTree)));
-				console.log(moveTree);
-				var theFrameLists=makeKeyFrames(moveTree,[],[]);
-				//return 0;
-				partFrames= bindPartsToKeyFrames(theFrameLists,parts);
-				showFrames(theFrameLists);
-				//console.log(partFrames);
-				//return 0;
-				theTime=0;
-				addLines(moveTree,null,scene);
-				movementTree=moveTree;
-				flipTreeTime(movementTree,getLongestTime(movementTree));
-				addDisplacement(movementTree, partFrames, 0);
-				insertTreequenceHTML(movementTree,document.getElementById("treequenceDiv"),"~");
-				getChildrenByTag(document.getElementById("treequenceDiv"),"BUTTON")[0].innerHTML="+";
-				render();
+				renderParts();
+				
 			}
-			else{
 			
-				//whoIsLeft(fileReaders);
-			
-			}
 		
 		}
 		
-		function explodeParts(){
 		
-			var pos=0;
+		function renderParts(){
+		
+			// Cuts of the common first characters from all the part names
+			cutoffPartNames(parts);
 			
-			var lim=parts.length;
-			while(pos<lim){
-				parts[pos].Mesh.position.x+=Math.random()*2-1;
-				parts[pos].Mesh.position.y+=Math.random()*2-1;
-				parts[pos].Mesh.position.z+=Math.random()*2-1;
-				parts[pos].Mesh.rotation.x+=Math.random()*0.04-0.02;
-				parts[pos].Mesh.rotation.y+=Math.random()*0.04-0.02;
-				parts[pos].Mesh.rotation.z+=Math.random()*0.04-0.02;
-				pos++;
-			}
-
+			// Parses in the xml of the treequence
+			var treeQ = $.parseXML(theXML);
+			//console.log(treeQ);
+			treeQ=grab(treeQ,"AssemblyCandidate");
+			//console.log(treeQ);
+			treeQ=grab(treeQ,"Sequence");
+			//console.log(treeQ);
+			treeQ=grab(treeQ,"Subassemblies");
+			//console.log(treeQ);
+			treeQ=grab(treeQ,"SubAssembly");
+			
+			// Turns the treequence into a tree storing the movement data of each subassembly
+			var moveTree=getMovement(treeQ,0,0,0,0);
+			console.log(moveTree);
+			
+			// Cuts off the common first characters of all the part names in the tree
+			cutOffNames(moveTree,similarityCutoff(getNameList(moveTree)));
+			console.log(moveTree);
+			
+			// Makes a series of keyframes for each part for evaluation in the animation
+			var theFrameLists=makeKeyFrames(moveTree,[],[]);
+			
+			// Links each key frame list object to the appropriate part object
+			partFrames= bindPartsToKeyFrames(theFrameLists,parts);
+			//showFrames(theFrameLists);
+			
+			// Zeroes the time, for obvious reasons
+			theTime=0;
+			
+			// Adds the movement trace lines to the scene
+			addLines(moveTree,null,scene);
+			
+			// Stores the movement tree for later use
+			movementTree=moveTree;
+			
+			// Mirrors the time measurements at each keyfram to turn the dissassembly into
+			// an assembly animation
+			flipTreeTime(movementTree,getLongestTime(movementTree));
+			addDisplacement(movementTree, partFrames, 0);
+			
+			// Populates the treequence graphic
+			insertTreequenceHTML(movementTree,document.getElementById("treequenceDiv"));
+			showHideTreequence();
+			
+			// Fixes a minor thing in the treequence graphic 
+			getChildrenByTag(document.getElementById("treequenceDiv"),"BUTTON")[0].innerHTML="+";
+			
+			// Begins to display the parts
+			render();
 		
+		}
+		
+		
+		
+		
+		// Toggles the display of the treequence graphic
+		function showHideTreequence(){
+		
+			TDiv=document.getElementById("treequenceDiv");
+			if(TDiv.state=="shown"){
+				TDiv.state="notShown";
+				document.getElementById("treequenceDiv").style=
+				"display: none;";				
+			}
+			else{
+				TDiv.state="shown";
+				document.getElementById("treequenceDiv").style=
+				"position: absolute;"+
+				"top: 90px;"+
+				"left: 10px;"+
+				"height: 75%;"+
+				"width: 95%;"+
+				"display: inline-block;"+
+				"font-size: 100%;"+
+				"font-family: 'Lucida Console';"+
+				"background: rgba(1, 1, 1, 0.3);"+
+				"border-style: solid;"+
+				"border-color: #000000;"+
+				"color: black;"+
+				"padding: 10px 10px 10px 10px;"+
+				"overflow: scroll;";
+			}
+						
 		}
 		
 		

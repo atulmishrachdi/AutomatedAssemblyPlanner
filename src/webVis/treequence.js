@@ -1,5 +1,6 @@
 ;
 
+
 function whatsIn(theTree){
 
 	document.getElementById("warning").innerHTML=$(theTree).children("*");
@@ -7,6 +8,7 @@ function whatsIn(theTree){
 }
 
 
+// returns the first child of the given element with the given tag 
 function grab(theTree,theMember){
 
 	if($(theTree).children(theMember).length!=0){
@@ -22,6 +24,7 @@ function grab(theTree,theMember){
 
 }
 
+// returns a list of all children of the given eleemnt with the same tag
 function grabInd(theTree,theMember, theIndex){
 
 	if($(theTree).children(theMember).length>theIndex){
@@ -39,7 +42,7 @@ function grabInd(theTree,theMember, theIndex){
 
 
 
-
+// Converts the given XML element into a javascript object
 function getMovement(theTree, myX, myY, myZ, myTime){
 
 	if(($(theTree).children("Install").length==0)){
@@ -68,44 +71,7 @@ function getMovement(theTree, myX, myY, myZ, myTime){
 
 
 
-
-
-function renderThis(theTreequence, theSigma, theTheme){
-
-	var treeQ = $.parseXML(theTreequence);
-	
-	treeQ=grab(treeQ,"AssemblyCandidate");
-	
-
-	treeQ=grab(treeQ,"Sequence");
-	
-
-	treeQ=grab(treeQ,"Subassemblies");
-	
-
-	treeQ=grab(treeQ,"SubAssembly");
-	
-
-	
-	times=getTimes(treeQ,0);
-	names=getNames(treeQ);
-	spaces=getSpaces(treeQ,3,-1);
-	
-
-	
-	theTree=mergeTrees(times,spaces,names);
-	
-	cutOffNames(theTree,similarityCutoff(getNameList(theTree)));
-	flipTreeTime(theTree,getLongestTime(theTree));
-	
-	//makePretty(theTree,0,0,0);
-	
-	drawFor(theTree,theSigma,theTheme);
-	
-	return;
-
-}
-
+// Gets the XML representing the reference subassembly of the given XML representation of it's parent assembly
 function getRef(theTree){
 
 	theTree=grab(theTree,"Install");
@@ -116,6 +82,7 @@ function getRef(theTree){
 
 }
 
+// Gets the XML representing the reference subassembly of the given XML representation of it's parent assembly
 function getMov(theTree){
 
 	theTree=grab(theTree,"Install");
@@ -126,6 +93,9 @@ function getMov(theTree){
 
 }
 
+
+
+// Returns a tree representing the times of all installations in the  given tree
 function getTimes(theTree, parentTime){
 
 
@@ -145,7 +115,8 @@ function getTimes(theTree, parentTime){
 }
 
 
-
+// Returns the longest period of time from a base parts initial installation to the
+// construction of the final product
 function getLongestTime(timeTree){
 
 	if(timeTree==null){
@@ -154,6 +125,7 @@ function getLongestTime(timeTree){
 	return Math.max(getLongestTime(timeTree.Ref),getLongestTime(timeTree.Mov),timeTree.Time);
 
 }
+
 
 function getWidestSpace(theTree){
 
@@ -165,6 +137,7 @@ function getWidestSpace(theTree){
 }
 
 
+// Returns a tree-based representation of the names in the given tree
 function getNames(theTree){
 
 
@@ -179,6 +152,7 @@ function getNames(theTree){
 	}
 
 }
+
 
 function getSpaces(theTree, underWidth, isMov){
 
@@ -239,6 +213,9 @@ function getSpaces(theTree, underWidth, isMov){
 	
 }
 
+
+// Merges the given tree representations of the time, space, and names associated with
+// each installation into one tree
 function mergeTrees(TimeTree,SpaceTree,NameTree){
 
 
@@ -285,6 +262,8 @@ function makePretty(theTree,trueCenter,prettyCenter,rightness){
 	}	
 
 }
+
+
 
 function getNameList(theTree){
 
@@ -628,15 +607,56 @@ function drawFor(theTree, theSigma,theTheme){
 }
 
 
-
-
-
-function insertTreequenceHTML(theTree,parentElement,theName){
-
-	if(theTree==null){
-		return;
+// Selects a random UTF symbol from the set of closed ranges supplied
+function getRandomUTF (selectSpace){
+	
+	// If there are no ranges or one is not a complete pair, return '?'
+	if(selectSpace.length%2==1 || selectSpace.length==0){
+		return '?';
 	}
+	
+	
+	// Count up the number of symbols available
+	var pos=0;
+	var lim=selectSpace.length/2;
+	var spaceSize=0;
+	while(pos<lim){
+		spaceSize=spaceSize+selectSpace[pos+1]-selectSpace[pos];
+		pos=pos+2;
+	}
+	
+	// Get a number in the range
+	var sel=Math.random() * (spaceSize);
+	
+	// Get the right symbol from the right list
+	pos=0;
+	while(sel>(selectSpace[pos+1]-selectSpace[pos])){
+		sel=sel-(selectSpace[pos+1]-selectSpace[pos]);
+		pos=pos+2;
+	}
+	
+	// convert the number to a character
+	var result= String.fromCharCode(selectSpace[pos] + Math.random() * (selectSpace[pos+1]-selectSpace[pos]+1));
+	
+	
+	return result;
+	
+}
+
+
+
+
+// Populates the given html element with a representation of the given tree structure
+function insertTreequenceHTML(theTree,parentElement){
+
+	
+	if(theTree==null){
+		return "";
+	}
+	
+	// Set up the show/hide button
 	var theButton=document.createElement("BUTTON");
+	var theName="";
 	theButton.innerHTML="-";
 	theButton.setAttribute("onclick","swapHiding(parentElement)");
 	theButton.setAttribute("style","background-color: #000000;\
@@ -646,34 +666,74 @@ function insertTreequenceHTML(theTree,parentElement,theName){
 							text-align: center;\
 							text-decoration: none;\
 							display: inline-block;\
-							font-size: 12px;")
+							font-size: 100% ;")
 
 	
+	// If not a leaf, attach button
 	if(theTree.Ref!=null || theTree.Mov!=null){
 		parentElement.appendChild(theButton);
 		//parentElement.appendChild(document.createElement("P"));
-		parentElement.appendChild(document.createTextNode("  "+theName));
 	}
+	// If a leaf, make a placeholder symbol
 	else{
-		parentElement.appendChild(document.createTextNode(theTree.Name));
+		theName=getRandomUTF([  
+								/*0x03B0,0x03FF,
+								0x0531,0x0556,
+								0x07C0,0x07EA,
+								0x10A0,0x10C5,
+								0x16A0,0x16EA,
+								0x1A00,0x1A16,
+								0x1B83,0x1BA0,
+								0x20A0,0x20BE,
+								0x2C00,0x2C2E,
+								0xA500,0xA62B*/
+								
+								0x2600,0x2625,
+								0x2639,0x2668,
+								0x2690,0x269D,
+								0x26B3,0x23BE
+								
+								/*0x1F300,0x1F3FA,
+								0x1F400,0x1F4FF,
+								0x1F600,0x1F64F,
+								0x1F910,0x1F91E,
+								0x1F920,0x1F927,
+								0x1F950,0x1F95E,
+								0x1F980,0x1F991*/
+								]);
+		parentElement.appendChild(document.createTextNode(theTree.Name+"("+theName+")"));
 	}
 	
+	var movName;
+	var refName;
+	
+	// Attach ref and mov branches and get their names
 	if(theTree.Mov!=null){
 		var theMov=document.createElement("DIV");
 		parentElement.appendChild(theMov);
-		insertTreequenceHTML(theTree.Mov,theMov,theName+String.fromCharCode(0x16A0 + Math.random() * (0x16F8-0x16A0+1)));
+		movName=insertTreequenceHTML(theTree.Mov,theMov);
 	}
 	if(theTree.Ref!=null){
 		var theRef=document.createElement("DIV");
 		parentElement.appendChild(theRef);
-		insertTreequenceHTML(theTree.Ref,theRef,theName+String.fromCharCode(0x16A0 + Math.random() * (0x16F8-0x16A0+1)));
+		refName=insertTreequenceHTML(theTree.Ref,theRef);
 	}
 	
+	// If not a leaf, make name and insert it
+	if(theTree.Ref!=null || theTree.Mov!=null){
+		theName="["+movName+refName+"]";
+		parentElement.insertBefore(document.createTextNode("  "+theName),theMov);
+	}
+	
+	// Hide all children of the element
 	hideChildren(parentElement);
+	
+	
+	return theName;
 	
 }
 
-
+// Shows/hides the given node based off of the text in its associated button
 function swapHiding(theNode){
 	
 	var buttonState=getChildrenByTag(theNode,"BUTTON");
@@ -695,6 +755,7 @@ function swapHiding(theNode){
 }
 
 
+// shows the given node
 function show(theNode){
 	
 	var theText=getChildrenByTag(theNode,"TEXT");
@@ -704,6 +765,8 @@ function show(theNode){
 	
 }
 
+
+// Hides the given node
 function hide(theNode){
 	
 	var theText=getChildrenByTag(theNode,"TEXT");
@@ -720,6 +783,7 @@ function hide(theNode){
 	
 }
 
+// shows the given node's child nodes
 function showChildren(theNode){
 	
 	var theChildren = getChildrenByTag(theNode,"DIV");
@@ -732,6 +796,7 @@ function showChildren(theNode){
 	}	
 }
 
+// hides the given node's child nodes
 function hideChildren(theNode){
 	
 	theNode.setAttribute("style","display: block; position: relative; left: 15px; border-left: solid #000000; padding: 10px 5px 0px 5px;");
@@ -745,6 +810,8 @@ function hideChildren(theNode){
 	}	
 }
 
+
+// returns a list of all the child nodes of the given node with the given tag type
 function getChildrenByTag(theNode,tag){
 	
 	var childs=theNode.children;

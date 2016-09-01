@@ -67,6 +67,8 @@ function trim (str) {
 }
 			
 
+			
+// Added this in to turn the input buffer into an actual string
 function arrayToString(buf) {
 	var pos=0;
 	var arr=new Uint8Array(buf);

@@ -8,9 +8,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrimitiveClassificationOfTessellatedSolids", "PrimitiveClassificationOfTessellatedSolids\PrimitiveClassificationOfTessellatedSolids.csproj", "{59F5FE35-E4B0-4C0C-8405-9E314CF48298}"
 EndProject
 Global
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Console Debug|Any CPU = Console Debug|Any CPU
 		Console Debug|x86 = Console Debug|x86
