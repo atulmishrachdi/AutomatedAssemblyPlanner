@@ -1,0 +1,304 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A7045F03-81DA-4784-A287-DD7C81EEF4E0}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Assembly_Planner</RootNamespace>
+    <AssemblyName>Assembly Planner</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;InputDialogOFF</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Externalconsole>true</Externalconsole>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Accord, Version=3.2.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.3.2.0\lib\net45\Accord.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Accord.MachineLearning, Version=3.2.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.MachineLearning.3.2.0\lib\net45\Accord.MachineLearning.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Accord.Math, Version=3.2.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.Math.3.2.0\lib\net45\Accord.Math.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Accord.Math.Core, Version=3.2.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.Math.3.2.0\lib\net45\Accord.Math.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Accord.Statistics, Version=3.2.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.Statistics.3.2.0\lib\net45\Accord.Statistics.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MIConvexHull, Version=1.0.16.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MIConvexHull.1.0.16.0000\lib\portable-net45+wp8+win8\MIConvexHull.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="OptimizationToolbox, Version=1.0.14.1031, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OOOT.1.0.16.0419\lib\OptimizationToolbox.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="RandomGen">
+      <HintPath>..\packages\RandomGen.0.4.0\lib\net40\RandomGen.dll</HintPath>
+    </Reference>
+    <Reference Include="StarMath, Version=2.0.14.1114, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\StarMath.2.0.16.0529\lib\portable-net45+wp8+win8\StarMath.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="TessellationAndVoxelizationGeometryLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TVGL.1.0.16.0624\lib\portable-net45+win8\TessellationAndVoxelizationGeometryLibrary.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DisassemblyProcess\AStarInspiredRecursiveOptimizedSearch.cs" />
+    <Compile Include="DisassemblyProcess\BeamSearch.cs" />
+    <Compile Include="DisassemblyProcess\DBG.cs" />
+    <Compile Include="DisassemblyProcess\DisConstants.cs" />
+    <Compile Include="DisassemblyProcess\BoostedSCC.cs" />
+    <Compile Include="DisassemblyProcess\LeapSearch\LeapSearch.cs" />
+    <Compile Include="DisassemblyProcess\OptionGenerator.cs" />
+    <Compile Include="DisassemblyProcess\OptionGeneratorPro.cs" />
+    <Compile Include="DisassemblyProcess\OrderedDFS.cs" />
+    <Compile Include="DisassemblyProcess\SCC.cs" />
+    <Compile Include="DisassemblyProcess\Updates.cs" />
+    <Compile Include="Evaluation\AssemblyEvaluator.cs" />
+    <Compile Include="Evaluation\Constants.cs" />
+    <Compile Include="Evaluation\ConvexHullEvaluator.cs" />
+    <Compile Include="Evaluation\FeasibilityEvaluator.cs" />
+    <Compile Include="Evaluation\FootprintFace.cs" />
+    <Compile Include="Evaluation\Math.cs" />
+    <Compile Include="Evaluation\MultiObj_optimizeSort.cs" />
+    <Compile Include="Evaluation\OutputXML\Action.cs" />
+    <Compile Include="Evaluation\OutputXML\AssemblyCandidate.cs" />
+    <Compile Include="Evaluation\OutputXML\AssemblySequence.cs" />
+    <Compile Include="Evaluation\OutputXML\Enumerators.cs" />
+    <Compile Include="Evaluation\OutputXML\Part_and_Subassembly.cs" />
+    <Compile Include="Evaluation\TimeEvaluator.cs" />
+    <Compile Include="GeometryReasoning\BoundingCylinder.cs" />
+    <Compile Include="GeometryReasoning\BoundingGeometry.cs" />
+    <Compile Include="GeometryReasoning\OBB.cs" />
+    <Compile Include="GPprocess\CalculateAssemblyTimeAndSD.cs" />
+    <Compile Include="GPprocess\CalculatRegression.cs" />
+    <Compile Include="GPprocess\GnuPlot.cs" />
+    <Compile Include="GPprocess\GPwithMeanfunction.cs" />
+    <Compile Include="GPprocess\Inequality.cs" />
+    <Compile Include="GPprocess\ObjectiveFunc - Copy.cs" />
+    <Compile Include="GPprocess\OneDObjectiveFunc.cs" />
+    <Compile Include="GPprocess\Optimization.cs" />
+    <Compile Include="GPprocess\readdata.cs" />
+    <Compile Include="GPprocess\Readwholedata.cs" />
+    <Compile Include="GPprocess\Start.cs" />
+    <Compile Include="GPprocess\StartWithoutInfer.cs" />
+    <Compile Include="GPprocess\ThreeDinput.cs" />
+    <Compile Include="GPprocess\XMLFUNCTION.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Component.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Connection.cs" />
+    <Compile Include="GraphSynth.BaseClasses\BasicGraphClasses\arc.cs" />
+    <Compile Include="GraphSynth.BaseClasses\BasicGraphClasses\candidate.cs" />
+    <Compile Include="GraphSynth.BaseClasses\BasicGraphClasses\designGraph.cs" />
+    <Compile Include="GraphSynth.BaseClasses\BasicGraphClasses\graphElement.cs" />
+    <Compile Include="GraphSynth.BaseClasses\BasicGraphClasses\hyperarc.cs" />
+    <Compile Include="GraphSynth.BaseClasses\BasicGraphClasses\node.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Fastener.cs" />
+    <Compile Include="GraphSynth.BaseClasses\FastenerBase.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Gear.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\BasicFiler.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\ComparerAndEnumerators.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\Converters\DoubleCollectionConverter.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\Converters\IntCollectionConverter.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\Converters\StringCollectionConverter.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\ErrorLogger.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\GlobalSettings.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\IMainWindow.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\MatrixMathFunctions.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\MyIOPath.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\SearchIO.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\SearchIOToTextWriter.cs" />
+    <Compile Include="GraphSynth.BaseClasses\Logistics\ShapeData.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\embeddingRule.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\grammarRule.Basic.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\grammarRule.MatchingMethods.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\grammarRule.NegativeRecognize.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\grammarRule.RecognizeApply.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\grammarRule.ShapeMethods.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\option.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\Relaxation.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\ruleArc.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\ruleHyperarc.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\ruleNode.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\ruleSet.Basic.cs" />
+    <Compile Include="GraphSynth.BaseClasses\RuleClasses\ruleSet.File.cs" />
+    <Compile Include="GraphSynth.BaseClasses\SearchProcess\LindenmayerChoose.cs" />
+    <Compile Include="GraphSynth.BaseClasses\SearchProcess\RandomChoose.cs" />
+    <Compile Include="GraphSynth.BaseClasses\SearchProcess\RandomChooseWithUndo.cs" />
+    <Compile Include="GraphSynth.BaseClasses\SearchProcess\RecognizeChooseApply.cs" />
+    <Compile Include="GraphSynth.BaseClasses\SearchProcess\SearchProcess.cs" />
+    <Compile Include="GraphSynth.BaseClasses\SecondaryConnection.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\AutoSemiThreadedFastenerDetection.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\FastenerBoundingBoxPartition.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\FastenerGaussianNaiveBayes.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\FastenerPerceptronLearner.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\NutBoundingCylinderPartition.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\NutPolynomialTrend.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\SpringDetector.cs" />
+    <Compile Include="InitialGraphMaker\GeometryFunctions.cs" />
+    <Compile Include="InitialGraphMaker\BlockingDetermination.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\AutoNonthreadedFastenerDetection.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\AutoThreadedFastenerDetection.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\BoltAndGearConstants.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\FastenerDetector.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\BoltAndGearUpdateFunctions.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\ClusteringDenseAndSparseEdges.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\FastenerPolynomialTrend.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\GearDetector.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\GearPolynomialTrend.cs" />
+    <Compile Include="InitialGraphMaker\DisassemblyDirections.cs" />
+    <Compile Include="InitialGraphMaker\BoltAndGearDetector\GearEdge.cs" />
+    <Compile Include="InitialGraphMaker\DisassemblyDirectionsWithFastener.cs" />
+    <Compile Include="InitialGraphMaker\Icosahedron.cs" />
+    <Compile Include="InitialGraphMaker\IcosahedronPro.cs" />
+    <Compile Include="InitialGraphMaker\NonadjacentBlockingWithPartitioning.cs" />
+    <Compile Include="InitialGraphMaker\OverlappingFuzzification.cs" />
+    <Compile Include="InitialGraphMaker\PartitioningSolid.cs" />
+    <Compile Include="InitialGraphMaker\PartsProperties.cs" />
+    <Compile Include="InitialGraphMaker\PrimitivePrimitiveInteractions.cs" />
+    <Compile Include="Input\consoleFrontEnd.cs" />
+    <Compile Include="Output\LoadingBar.cs" />
+    <Compile Include="Output\GraphSaving.cs" />
+    <Compile Include="PostProcessor\OptimalOrientation.cs" />
+    <Compile Include="PostProcessor\PostProcessingConstnts.cs" />
+    <Compile Include="PostProcessor\Scheduling.cs" />
+    <Compile Include="PostProcessor\Stabilityfucntions.cs" />
+    <Compile Include="PostProcessor\TasksClass.cs" />
+    <Compile Include="PostProcessor\UpdatePostProcessor.cs" />
+    <Compile Include="PostProcessor\WorkerAllocation.cs" />
+    <Compile Include="PostProcessor\WorkersClass.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DisassemblyProcess\RecursiveOptimizedSearch.cs" />
+    <Compile Include="Evaluation\EvaluationForBinaryTree.cs" />
+    <Compile Include="DisassemblyProcess\DBGBinary.cs" />
+    <Compile Include="DisassemblyProcess\OptionGeneratorProBinary.cs" />
+    <Compile Include="DisassemblyProcess\SCCBinary.cs" />
+    <Compile Include="InitialGraphMaker\NonadjacentBlockingDetermination.cs" />
+    <Compile Include="Evaluation\Statblity.cs" />
+    <Compile Include="InitialGraphMaker\NonadjacentBlockingDeterminationPro.cs" />
+    <Compile Include="InitialGraphMaker\3Dto2D.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="OldSubAssemblyActions.cd" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MIConvexHull.xml" />
+    <Content Include="OptimizationToolbox.XML" />
+    <Content Include="PropertyTools.dll" />
+    <Content Include="PropertyTools.Wpf.dll" />
+    <Content Include="StarMath.XML" />
+    <Content Include="TessellationAndVoxelizationGeometryLibrary.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PrimitiveClassificationOfTessellatedSolids\PrimitiveClassificationOfTessellatedSolids.csproj">
+      <Project>{59f5fe35-e4b0-4c0c-8405-9e314cf48298}</Project>
+      <Name>PrimitiveClassificationOfTessellatedSolids</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <Import Project="..\packages\Accord.3.2.0\build\Accord.targets" Condition="Exists('..\packages\Accord.3.2.0\build\Accord.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Accord.3.2.0\build\Accord.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Accord.3.2.0\build\Accord.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
