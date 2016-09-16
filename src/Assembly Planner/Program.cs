@@ -70,6 +70,8 @@ namespace Assembly_Planner
                 SolidsNoFastener = Solids;
             }
             SerializeSolidProperties();
+            Console.WriteLine("Press enter once input parts table generated >>");
+            Console.ReadLine();
             DeserializeSolidProperties();
             globalDirPool = DisassemblyDirectionsWithFastener.RunGraphGeneration(AssemblyGraph, SolidsNoFastener);
             // the second user interaction must happen here
