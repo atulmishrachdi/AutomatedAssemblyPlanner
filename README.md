@@ -23,12 +23,13 @@ particularly user-friendly. So, an external visualization has been created which
 ## How do I get set up? ##
 1. Clone the repository 
 2. Open the file "Assembly Planner.sln" in visual studio. 
-3. Build and run
+3. Build. This should create a file in the root folder called "AssemblyPlanner.exe".
 
 ## How to run the application ##
-1. The root directory
-2. Open the file "Assembly Planner.sln" in visual studio. 
-3. Build and run
+1. The root directory is populated with a number of folders and binaries. All the dll's are there to support the main exe, AssemblyPlanner.exe. 
+2. In the folder, "workspace", place your shape files for your assembly (stls, plys, AMFs or 3MFs). Remove all other files.
+3. Now, run AssemblyPlanner.exe. A console window will open and begin sending status updates about the process. Do not close this window.
+4. This process will pause with the following statement, "". At this time, go back to the folder and open the file "partTable.html" 
 
 ## Contribution guidelines ##
 Current efforts are being completed by the Design Engineering Lab at Oregon State University. If you are interested in contributing contact Prof. Matt Campbell at matt<dot>campbell<at>oregonstate<dot>edu.
