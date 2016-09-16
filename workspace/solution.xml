@@ -8,41 +8,41 @@
   <age>0</age>
   <Sequence>
     <Subassemblies>
-      <SubAssembly Name="subasm-PumpAssembly - Ring-1,PumpAssembly - Shaft-1,PumpAssembly - LargeScrew2-1,PumpAssembly - Pump-1,PumpAssembly - LargeScrew1-1,PumpAssembly - BackLid2-1,PumpAssembly - Screw1-1,PumpAssembly - PumpExtention-2 Side-2,PumpAssembly - ScrewLong-4,PumpAssembly - Screw5-1,PumpAssembly - ScrewLong-3,PumpAssembly - PumpExtention-2 ShaftThrough-1,PumpAssembly - PumpExtention-2 Pipe-1,PumpAssembly - PumpExtention-2 PinL-2,PumpAssembly - PumpExtention-2 PinL-1,PumpAssembly - Screw2-1,PumpAssembly - ScrewLong-2,PumpAssembly - Screw8-1,PumpAssembly - Screw6-1,PumpAssembly - PumpExtention-2 InnerRing-1,PumpAssembly - Screw3-1,PumpAssembly - Screw7-1,PumpAssembly - Screw4-1,PumpAssembly - Lid-1,PumpAssembly - ScrewLong-1,PumpAssembly - PumpExtention-2 Side-1">
-        <Mass>878668.02245297993</Mass>
-        <Volume>878668.02245297993</Volume>
+      <SubAssembly Name="subasm-PumpAssembly - BackLid2-1.STL,PumpAssembly - Lid-1.STL,PumpAssembly - PumpExtention-2 InnerRing-1.STL,PumpAssembly - PumpExtention-2 PinL-1.STL,PumpAssembly - PumpExtention-2 PinL-2.STL,PumpAssembly - PumpExtention-2 Pipe-1.STL,PumpAssembly - PumpExtention-2 ShaftThrough-1.STL,PumpAssembly - PumpExtention-2 Side-1.STL,PumpAssembly - PumpExtention-2 Side-2.STL,PumpAssembly - Pump-1.STL,PumpAssembly - Shaft-1.STL,PumpAssembly - Ring-1.STL">
+        <Mass>859777.60375605116</Mass>
+        <Volume>859777.60375605116</Volume>
         <InternalStabilityInfo>
-          <OverAllDOF>21</OverAllDOF>
-          <OverAllTippingScore>196.00000000000006</OverAllTippingScore>
+          <OverAllDOF>3</OverAllDOF>
+          <OverAllTippingScore>29.400000000000002</OverAllTippingScore>
           <OverAllSlidingScore>0</OverAllSlidingScore>
-          <MaxSingleDOF>2</MaxSingleDOF>
+          <MaxSingleDOF>1.5</MaxSingleDOF>
           <MinSingleTippingScore>9.8</MinSingleTippingScore>
           <MinSingleSlidingScore>0</MinSingleSlidingScore>
-          <Totalsecore>0.12083333333333335</Totalsecore>
+          <Totalsecore>0.07986111111111116</Totalsecore>
           <needfixture>false</needfixture>
         </InternalStabilityInfo>
         <Install>
-          <Time>0.00054810375908340733</Time>
-          <TimeSD>3.026286904547594</TimeSD>
-          <Reference xsi:type="SubAssembly" Name="subasm-PumpAssembly - Ring-1,PumpAssembly - Shaft-1,PumpAssembly - LargeScrew2-1,PumpAssembly - Pump-1,PumpAssembly - BackLid2-1,PumpAssembly - LargeScrew1-1">
-            <Mass>717635.12391580758</Mass>
-            <Volume>717635.12391580758</Volume>
+          <Time>0.53821506766532645</Time>
+          <TimeSD>6.2047562926671516</TimeSD>
+          <Reference xsi:type="SubAssembly" Name="subasm-PumpAssembly - BackLid2-1.STL,PumpAssembly - Lid-1.STL,PumpAssembly - PumpExtention-2 InnerRing-1.STL,PumpAssembly - PumpExtention-2 ShaftThrough-1.STL,PumpAssembly - PumpExtention-2 Side-2.STL,PumpAssembly - PumpExtention-2 Pipe-1.STL,PumpAssembly - PumpExtention-2 Side-1.STL,PumpAssembly - PumpExtention-2 PinL-2.STL,PumpAssembly - PumpExtention-2 PinL-1.STL">
+            <Mass>187773.09777652257</Mass>
+            <Volume>187773.09777652257</Volume>
             <InternalStabilityInfo>
               <OverAllDOF>3.5</OverAllDOF>
-              <OverAllTippingScore>9.8</OverAllTippingScore>
+              <OverAllTippingScore>68.6</OverAllTippingScore>
               <OverAllSlidingScore>0</OverAllSlidingScore>
-              <MaxSingleDOF>3.5</MaxSingleDOF>
+              <MaxSingleDOF>1</MaxSingleDOF>
               <MinSingleTippingScore>9.8</MinSingleTippingScore>
               <MinSingleSlidingScore>0</MinSingleSlidingScore>
-              <Totalsecore>0.20208333333333334</Totalsecore>
+              <Totalsecore>0.03125</Totalsecore>
               <needfixture>false</needfixture>
             </InternalStabilityInfo>
             <Install>
-              <Time>0.0020974696672568776</Time>
-              <TimeSD>3.0262866570671787</TimeSD>
-              <Reference xsi:type="SubAssembly" Name="subasm-PumpAssembly - Ring-1,PumpAssembly - Pump-1,PumpAssembly - Shaft-1,PumpAssembly - LargeScrew2-1,PumpAssembly - BackLid2-1">
-                <Mass>711372.76632355212</Mass>
-                <Volume>711372.76632355212</Volume>
+              <Time>2.2448173420724746</Time>
+              <TimeSD>13.645394369502029</TimeSD>
+              <Reference xsi:type="SubAssembly" Name="subasm-PumpAssembly - Lid-1.STL,PumpAssembly - BackLid2-1.STL">
+                <Mass>91410.704130435392</Mass>
+                <Volume>91410.704130435392</Volume>
                 <InternalStabilityInfo>
                   <OverAllDOF>3.5</OverAllDOF>
                   <OverAllTippingScore>9.8</OverAllTippingScore>
@@ -50,242 +50,32 @@
                   <MaxSingleDOF>3.5</MaxSingleDOF>
                   <MinSingleTippingScore>9.8</MinSingleTippingScore>
                   <MinSingleSlidingScore>0</MinSingleSlidingScore>
-                  <Totalsecore>0.203125</Totalsecore>
+                  <Totalsecore>0.29166666666666669</Totalsecore>
                   <needfixture>false</needfixture>
                 </InternalStabilityInfo>
                 <Install>
-                  <Time>0.0018278399012560806</Time>
-                  <TimeSD>3.0262868246890524</TimeSD>
-                  <Reference xsi:type="SubAssembly" Name="subasm-PumpAssembly - Ring-1,PumpAssembly - Pump-1,PumpAssembly - Shaft-1,PumpAssembly - LargeScrew2-1">
-                    <Mass>678111.83956327545</Mass>
-                    <Volume>678111.83956327545</Volume>
-                    <InternalStabilityInfo>
-                      <OverAllDOF>3.5</OverAllDOF>
-                      <OverAllTippingScore>9.8</OverAllTippingScore>
-                      <OverAllSlidingScore>0</OverAllSlidingScore>
-                      <MaxSingleDOF>3.5</MaxSingleDOF>
-                      <MinSingleTippingScore>9.8</MinSingleTippingScore>
-                      <MinSingleSlidingScore>0</MinSingleSlidingScore>
-                      <Totalsecore>0.20833333333333337</Totalsecore>
-                      <needfixture>false</needfixture>
-                    </InternalStabilityInfo>
-                    <Install>
-                      <Time>0.0024281573582272563</Time>
-                      <TimeSD>3.0262865891301574</TimeSD>
-                      <Reference xsi:type="SubAssembly" Name="subasm-PumpAssembly - Ring-1,PumpAssembly - Pump-1,PumpAssembly - Shaft-1">
-                        <Mass>671849.48366277968</Mass>
-                        <Volume>671849.48366277968</Volume>
-                        <InternalStabilityInfo>
-                          <OverAllDOF>3.5</OverAllDOF>
-                          <OverAllTippingScore>9.8</OverAllTippingScore>
-                          <OverAllSlidingScore>0</OverAllSlidingScore>
-                          <MaxSingleDOF>3.5</MaxSingleDOF>
-                          <MinSingleTippingScore>9.8</MinSingleTippingScore>
-                          <MinSingleSlidingScore>0</MinSingleSlidingScore>
-                          <Totalsecore>0.20833333333333337</Totalsecore>
-                          <needfixture>false</needfixture>
-                        </InternalStabilityInfo>
-                        <Install>
-                          <Time>0.0018681764769893439</Time>
-                          <TimeSD>3.0262868549688378</TimeSD>
-                          <Reference xsi:type="SubAssembly" Name="subasm-PumpAssembly - Pump-1,PumpAssembly - Ring-1">
-                            <Mass>514946.02602962928</Mass>
-                            <Volume>514946.02602962928</Volume>
-                            <InternalStabilityInfo>
-                              <OverAllDOF>3.5</OverAllDOF>
-                              <OverAllTippingScore>9.8</OverAllTippingScore>
-                              <OverAllSlidingScore>0</OverAllSlidingScore>
-                              <MaxSingleDOF>3.5</MaxSingleDOF>
-                              <MinSingleTippingScore>9.8</MinSingleTippingScore>
-                              <MinSingleSlidingScore>0</MinSingleSlidingScore>
-                              <Totalsecore>0.29166666666666669</Totalsecore>
-                              <needfixture>false</needfixture>
-                            </InternalStabilityInfo>
-                            <Install>
-                              <Time>0.0013764331774471629</Time>
-                              <TimeSD>3.0262867438947127</TimeSD>
-                              <Reference xsi:type="SubAssembly" Name="subasm-PumpAssembly - Pump-1">
-                                <Mass>513435.98930919461</Mass>
-                                <Volume>513435.98930919461</Volume>
-                                <InstallCharacter>Unknown</InstallCharacter>
-                              </Reference>
-                              <Moving xsi:type="SubAssembly" Name="subasm-PumpAssembly - Ring-1">
-                                <Mass>1510.0367204346724</Mass>
-                                <Volume>1510.0367204346724</Volume>
-                                <InstallCharacter>Unknown</InstallCharacter>
-                              </Moving>
-                              <InstallDirection>
-                                <double>0.0349</double>
-                                <double>0.9988</double>
-                                <double>0.0349</double>
-                              </InstallDirection>
-                              <InstallDistance>213.60674951999994</InstallDistance>
-                              <InstallDirectionRotated>
-                                <double>-5.9968866428885885</double>
-                                <double>-0.63157779631674327</double>
-                                <double>-1.0044785776592855</double>
-                              </InstallDirectionRotated>
-                            </Install>
-                            <Secure>
-                              <Time>0</Time>
-                              <TimeSD>0</TimeSD>
-                              <Fasteners />
-                            </Secure>
-                            <Rotate>
-                              <Time>0</Time>
-                              <TimeSD>0</TimeSD>
-                              <RotateMatrix>
-                                <ArrayOfDouble>
-                                  <double>-18.895076411133928</double>
-                                  <double>-5.3775925371929354</double>
-                                  <double>0.965356733761863</double>
-                                  <double>6986.7801597242351</double>
-                                </ArrayOfDouble>
-                                <ArrayOfDouble>
-                                  <double>-5.3775925371929354</double>
-                                  <double>-0.45355066240858832</double>
-                                  <double>0.26093366318017891</double>
-                                  <double>1815.9016993865655</double>
-                                </ArrayOfDouble>
-                                <ArrayOfDouble>
-                                  <double>-0.965356733761863</double>
-                                  <double>-0.26093366318017891</double>
-                                  <double>-20.348627073542513</double>
-                                  <double>3178.7891378675467</double>
-                                </ArrayOfDouble>
-                                <ArrayOfDouble>
-                                  <double>0</double>
-                                  <double>0</double>
-                                  <double>0</double>
-                                  <double>1</double>
-                                </ArrayOfDouble>
-                              </RotateMatrix>
-                            </Rotate>
-                            <InstallCharacter>MovingIsInsideReference</InstallCharacter>
-                          </Reference>
-                          <Moving xsi:type="SubAssembly" Name="subasm-PumpAssembly - Shaft-1">
-                            <Mass>156903.45763315045</Mass>
-                            <Volume>156903.45763315045</Volume>
-                            <InstallCharacter>Unknown</InstallCharacter>
-                          </Moving>
-                          <InstallDirection>
-                            <double>0.0174</double>
-                            <double>0.9974</double>
-                            <double>0.0698</double>
-                          </InstallDirection>
-                          <InstallDistance>359.64677340799994</InstallDistance>
-                          <InstallDirectionRotated>
-                            <double>220.13418587949653</double>
-                            <double>60.494451461136357</double>
-                            <double>63.511137518250436</double>
-                          </InstallDirectionRotated>
-                        </Install>
-                        <Secure>
-                          <Time>0</Time>
-                          <TimeSD>0</TimeSD>
-                          <Fasteners />
-                        </Secure>
-                        <Rotate>
-                          <Time>0</Time>
-                          <TimeSD>0</TimeSD>
-                          <RotateMatrix>
-                            <ArrayOfDouble>
-                              <double>772.74865540416465</double>
-                              <double>208.60185324885515</double>
-                              <double>-19.643684168253213</double>
-                              <double>-264686.1691085074</double>
-                            </ArrayOfDouble>
-                            <ArrayOfDouble>
-                              <double>208.60185324885509</double>
-                              <double>57.3845921520501</double>
-                              <double>-5.3096418029868113</double>
-                              <double>-71616.659922967636</double>
-                            </ArrayOfDouble>
-                            <ArrayOfDouble>
-                              <double>19.643684168253223</double>
-                              <double>5.3096418029868131</double>
-                              <double>829.13324755621466</double>
-                              <double>-13773.377023209498</double>
-                            </ArrayOfDouble>
-                            <ArrayOfDouble>
-                              <double>0</double>
-                              <double>0</double>
-                              <double>0</double>
-                              <double>1</double>
-                            </ArrayOfDouble>
-                          </RotateMatrix>
-                        </Rotate>
-                        <InstallCharacter>MovingIsInsideReference</InstallCharacter>
-                      </Reference>
-                      <Moving xsi:type="SubAssembly" Name="subasm-PumpAssembly - LargeScrew2-1">
-                        <Mass>6262.35590049573</Mass>
-                        <Volume>6262.35590049573</Volume>
-                        <InstallCharacter>Unknown</InstallCharacter>
-                      </Moving>
-                      <InstallDirection>
-                        <double>-0</double>
-                        <double>-0</double>
-                        <double>-1</double>
-                      </InstallDirection>
-                      <InstallDistance>182.883468</InstallDistance>
-                      <InstallDirectionRotated>
-                        <double>-1534.5061394961208</double>
-                        <double>-414.73246234205374</double>
-                        <double>30990.870603765419</double>
-                      </InstallDirectionRotated>
-                    </Install>
-                    <Secure>
-                      <Time>0</Time>
-                      <TimeSD>0</TimeSD>
-                      <Fasteners />
-                    </Secure>
-                    <Rotate>
-                      <Time>0</Time>
-                      <TimeSD>0</TimeSD>
-                      <RotateMatrix>
-                        <ArrayOfDouble>
-                          <double>-29151.378012153491</double>
-                          <double>-6622.8502174122468</double>
-                          <double>1534.5061394961208</double>
-                          <double>9542105.8247780111</double>
-                        </ArrayOfDouble>
-                        <ArrayOfDouble>
-                          <double>-7878.28629198739</double>
-                          <double>-1788.7908828660102</double>
-                          <double>414.73246234205374</double>
-                          <double>2578631.0527749588</double>
-                        </ArrayOfDouble>
-                        <ArrayOfDouble>
-                          <double>-1549.9242618417459</double>
-                          <double>-353.01086371866836</double>
-                          <double>-30990.870603765419</double>
-                          <double>4857439.77499352</double>
-                        </ArrayOfDouble>
-                        <ArrayOfDouble>
-                          <double>0</double>
-                          <double>0</double>
-                          <double>0</double>
-                          <double>1</double>
-                        </ArrayOfDouble>
-                      </RotateMatrix>
-                    </Rotate>
-                    <InstallCharacter>MovingIsInsideReference</InstallCharacter>
+                  <Time>19.836487487383902</Time>
+                  <TimeSD>13.946876471957472</TimeSD>
+                  <Reference xsi:type="SubAssembly" Name="subasm-PumpAssembly - Lid-1.STL">
+                    <Mass>58145.329444492272</Mass>
+                    <Volume>58145.329444492272</Volume>
+                    <InstallCharacter>Unknown</InstallCharacter>
                   </Reference>
-                  <Moving xsi:type="SubAssembly" Name="subasm-PumpAssembly - BackLid2-1">
-                    <Mass>33260.926760276627</Mass>
-                    <Volume>33260.926760276627</Volume>
+                  <Moving xsi:type="SubAssembly" Name="subasm-PumpAssembly - BackLid2-1.STL">
+                    <Mass>33265.374685943112</Mass>
+                    <Volume>33265.374685943112</Volume>
                     <InstallCharacter>Unknown</InstallCharacter>
                   </Moving>
                   <InstallDirection>
-                    <double>0</double>
-                    <double>0</double>
-                    <double>1</double>
+                    <double>-0.22</double>
+                    <double>0.9531</double>
+                    <double>0.2079</double>
                   </InstallDirection>
-                  <InstallDistance>268.766932</InstallDistance>
+                  <InstallDistance>241.32906639044998</InstallDistance>
                   <InstallDirectionRotated>
-                    <double>23467.885100834</double>
-                    <double>6333.7320063989209</double>
-                    <double>-1390991.0868827291</double>
+                    <double>-0.19089233838404848</double>
+                    <double>0.95309999999999984</double>
+                    <double>-0.2349096105872851</double>
                   </InstallDirectionRotated>
                 </Install>
                 <Secure>
@@ -296,108 +86,12 @@
                 <Rotate>
                   <Time>0</Time>
                   <TimeSD>0</TimeSD>
-                  <RotateMatrix>
-                    <ArrayOfDouble>
-                      <double>-1208725.2154051813</double>
-                      <double>-622704.6385287554</double>
-                      <double>23467.885100834</double>
-                      <double>436891392.66611642</double>
-                    </ArrayOfDouble>
-                    <ArrayOfDouble>
-                      <double>-326644.31258687587</double>
-                      <double>-168275.61376476413</double>
-                      <double>6333.7320063989209</double>
-                      <double>118064668.72666569</double>
-                    </ArrayOfDouble>
-                    <ArrayOfDouble>
-                      <double>-230890.79851055806</double>
-                      <double>222787.13472876209</double>
-                      <double>-1390991.0868827291</double>
-                      <double>64540505.3736597</double>
-                    </ArrayOfDouble>
-                    <ArrayOfDouble>
-                      <double>0</double>
-                      <double>0</double>
-                      <double>0</double>
-                      <double>1</double>
-                    </ArrayOfDouble>
-                  </RotateMatrix>
                 </Rotate>
                 <InstallCharacter>MovingReferenceSimiliar</InstallCharacter>
               </Reference>
-              <Moving xsi:type="SubAssembly" Name="subasm-PumpAssembly - LargeScrew1-1">
-                <Mass>6262.3575922555056</Mass>
-                <Volume>6262.3575922555056</Volume>
-                <InstallCharacter>Unknown</InstallCharacter>
-              </Moving>
-              <InstallDirection>
-                <double>-0</double>
-                <double>-0</double>
-                <double>-1</double>
-              </InstallDirection>
-              <InstallDistance>192.883464</InstallDistance>
-              <InstallDirectionRotated>
-                <double>-1213733.873544703</double>
-                <double>-328047.98628235981</double>
-                <double>-8819582.90548924</double>
-              </InstallDirectionRotated>
-            </Install>
-            <Secure>
-              <Time>0</Time>
-              <TimeSD>0</TimeSD>
-              <Fasteners />
-            </Secure>
-            <Rotate>
-              <Time>0</Time>
-              <TimeSD>0</TimeSD>
-              <RotateMatrix>
-                <ArrayOfDouble>
-                  <double>7551455.9262765944</double>
-                  <double>3867431.480409666</double>
-                  <double>1213733.873544703</double>
-                  <double>-3057413517.6729894</double>
-                </ArrayOfDouble>
-                <ArrayOfDouble>
-                  <double>2040679.4044430405</double>
-                  <double>1045122.3542055928</double>
-                  <double>328047.98628235981</double>
-                  <double>-826226888.00999284</double>
-                </ArrayOfDouble>
-                <ArrayOfDouble>
-                  <double>-661001.515473689</double>
-                  <double>-379790.63787551341</double>
-                  <double>8819582.90548924</double>
-                  <double>263637492.80907914</double>
-                </ArrayOfDouble>
-                <ArrayOfDouble>
-                  <double>0</double>
-                  <double>0</double>
-                  <double>0</double>
-                  <double>1</double>
-                </ArrayOfDouble>
-              </RotateMatrix>
-            </Rotate>
-            <InstallCharacter>MovingIsInsideReference</InstallCharacter>
-          </Reference>
-          <Moving xsi:type="SubAssembly" Name="subasm-PumpAssembly - PumpExtention-2 Pipe-1,PumpAssembly - Screw1-1,PumpAssembly - Lid-1,PumpAssembly - Screw4-1,PumpAssembly - Screw7-1,PumpAssembly - Screw3-1,PumpAssembly - Screw6-1,PumpAssembly - Screw8-1,PumpAssembly - Screw2-1,PumpAssembly - ScrewLong-3,PumpAssembly - PumpExtention-2 Side-2,PumpAssembly - ScrewLong-4,PumpAssembly - Screw5-1,PumpAssembly - PumpExtention-2 ShaftThrough-1,PumpAssembly - PumpExtention-2 PinL-1,PumpAssembly - PumpExtention-2 PinL-2,PumpAssembly - ScrewLong-2,PumpAssembly - PumpExtention-2 Side-1,PumpAssembly - ScrewLong-1,PumpAssembly - PumpExtention-2 InnerRing-1">
-            <Mass>161032.89853717232</Mass>
-            <Volume>161032.89853717232</Volume>
-            <InternalStabilityInfo>
-              <OverAllDOF>3.5</OverAllDOF>
-              <OverAllTippingScore>9.8</OverAllTippingScore>
-              <OverAllSlidingScore>0</OverAllSlidingScore>
-              <MaxSingleDOF>3.5</MaxSingleDOF>
-              <MinSingleTippingScore>9.8</MinSingleTippingScore>
-              <MinSingleSlidingScore>0</MinSingleSlidingScore>
-              <Totalsecore>0.19791666666666669</Totalsecore>
-              <needfixture>false</needfixture>
-            </InternalStabilityInfo>
-            <Install>
-              <Time>0.0028629990045665873</Time>
-              <TimeSD>3.026286596001138</TimeSD>
-              <Reference xsi:type="SubAssembly" Name="subasm-PumpAssembly - ScrewLong-4,PumpAssembly - Screw1-1,PumpAssembly - Screw4-1,PumpAssembly - Screw2-1,PumpAssembly - PumpExtention-2 PinL-1,PumpAssembly - PumpExtention-2 PinL-2,PumpAssembly - Screw3-1,PumpAssembly - ScrewLong-3,PumpAssembly - PumpExtention-2 Pipe-1,PumpAssembly - PumpExtention-2 Side-1,PumpAssembly - PumpExtention-2 ShaftThrough-1,PumpAssembly - PumpExtention-2 Side-2,PumpAssembly - Lid-1,PumpAssembly - ScrewLong-1,PumpAssembly - ScrewLong-2,PumpAssembly - Screw7-1,PumpAssembly - Screw6-1,PumpAssembly - Screw8-1,PumpAssembly - Screw5-1">
-                <Mass>149269.014583576</Mass>
-                <Volume>149269.014583576</Volume>
+              <Moving xsi:type="SubAssembly" Name="subasm-PumpAssembly - PumpExtention-2 ShaftThrough-1.STL,PumpAssembly - PumpExtention-2 PinL-2.STL,PumpAssembly - PumpExtention-2 PinL-1.STL,PumpAssembly - PumpExtention-2 Side-1.STL,PumpAssembly - PumpExtention-2 Pipe-1.STL,PumpAssembly - PumpExtention-2 Side-2.STL,PumpAssembly - PumpExtention-2 InnerRing-1.STL">
+                <Mass>96362.393646087148</Mass>
+                <Volume>96362.393646087148</Volume>
                 <InternalStabilityInfo>
                   <OverAllDOF>3.5</OverAllDOF>
                   <OverAllTippingScore>9.8</OverAllTippingScore>
@@ -405,31 +99,31 @@
                   <MaxSingleDOF>3.5</MaxSingleDOF>
                   <MinSingleTippingScore>9.8</MinSingleTippingScore>
                   <MinSingleSlidingScore>0</MinSingleSlidingScore>
-                  <Totalsecore>0.19733796296296297</Totalsecore>
+                  <Totalsecore>0.17881944444444442</Totalsecore>
                   <needfixture>false</needfixture>
                 </InternalStabilityInfo>
                 <Install>
-                  <Time>0.00030299226212319677</Time>
-                  <TimeSD>3.0262868994070846</TimeSD>
-                  <Reference xsi:type="SubAssembly" Name="subasm-PumpAssembly - Screw2-1,PumpAssembly - PumpExtention-2 PinL-2,PumpAssembly - Screw3-1,PumpAssembly - ScrewLong-3,PumpAssembly - ScrewLong-4,PumpAssembly - Screw1-1,PumpAssembly - PumpExtention-2 PinL-1,PumpAssembly - PumpExtention-2 Pipe-1,PumpAssembly - PumpExtention-2 Side-1,PumpAssembly - PumpExtention-2 ShaftThrough-1,PumpAssembly - PumpExtention-2 Side-2,PumpAssembly - Lid-1,PumpAssembly - ScrewLong-1,PumpAssembly - ScrewLong-2,PumpAssembly - Screw7-1,PumpAssembly - Screw6-1,PumpAssembly - Screw8-1,PumpAssembly - Screw4-1">
-                    <Mass>148783.13381188095</Mass>
-                    <Volume>148783.13381188095</Volume>
+                  <Time>1.8189924710522958</Time>
+                  <TimeSD>13.644391371181962</TimeSD>
+                  <Reference xsi:type="SubAssembly" Name="subasm-PumpAssembly - PumpExtention-2 ShaftThrough-1.STL,PumpAssembly - PumpExtention-2 PinL-2.STL,PumpAssembly - PumpExtention-2 PinL-1.STL,PumpAssembly - PumpExtention-2 Side-1.STL,PumpAssembly - PumpExtention-2 Pipe-1.STL,PumpAssembly - PumpExtention-2 Side-2.STL">
+                    <Mass>84596.800636929154</Mass>
+                    <Volume>84596.800636929154</Volume>
                     <InternalStabilityInfo>
-                      <OverAllDOF>3.5</OverAllDOF>
-                      <OverAllTippingScore>9.8</OverAllTippingScore>
+                      <OverAllDOF>3</OverAllDOF>
+                      <OverAllTippingScore>19.6</OverAllTippingScore>
                       <OverAllSlidingScore>0</OverAllSlidingScore>
-                      <MaxSingleDOF>3.5</MaxSingleDOF>
+                      <MaxSingleDOF>1.5</MaxSingleDOF>
                       <MinSingleTippingScore>9.8</MinSingleTippingScore>
                       <MinSingleSlidingScore>0</MinSingleSlidingScore>
-                      <Totalsecore>0.19669117647058826</Totalsecore>
+                      <Totalsecore>0.09635416666666663</Totalsecore>
                       <needfixture>false</needfixture>
                     </InternalStabilityInfo>
                     <Install>
-                      <Time>0.00033735013777752419</Time>
-                      <TimeSD>3.0262868961087763</TimeSD>
-                      <Reference xsi:type="SubAssembly" Name="subasm-PumpAssembly - Screw1-1,PumpAssembly - PumpExtention-2 PinL-1,PumpAssembly - Screw2-1,PumpAssembly - PumpExtention-2 PinL-2,PumpAssembly - ScrewLong-3,PumpAssembly - ScrewLong-4,PumpAssembly - PumpExtention-2 Pipe-1,PumpAssembly - PumpExtention-2 Side-1,PumpAssembly - PumpExtention-2 ShaftThrough-1,PumpAssembly - PumpExtention-2 Side-2,PumpAssembly - Lid-1,PumpAssembly - ScrewLong-1,PumpAssembly - ScrewLong-2,PumpAssembly - Screw7-1,PumpAssembly - Screw6-1,PumpAssembly - Screw8-1,PumpAssembly - Screw3-1">
-                        <Mass>148297.25339342514</Mass>
-                        <Volume>148297.25339342514</Volume>
+                      <Time>3.901699702208087</Time>
+                      <TimeSD>13.778167379572487</TimeSD>
+                      <Reference xsi:type="SubAssembly" Name="subasm-PumpAssembly - PumpExtention-2 ShaftThrough-1.STL,PumpAssembly - PumpExtention-2 PinL-2.STL,PumpAssembly - PumpExtention-2 PinL-1.STL,PumpAssembly - PumpExtention-2 Side-1.STL">
+                        <Mass>49653.9990458913</Mass>
+                        <Volume>49653.9990458913</Volume>
                         <InternalStabilityInfo>
                           <OverAllDOF>3.5</OverAllDOF>
                           <OverAllTippingScore>9.8</OverAllTippingScore>
@@ -437,15 +131,15 @@
                           <MaxSingleDOF>3.5</MaxSingleDOF>
                           <MinSingleTippingScore>9.8</MinSingleTippingScore>
                           <MinSingleSlidingScore>0</MinSingleSlidingScore>
-                          <Totalsecore>0.19596354166666669</Totalsecore>
+                          <Totalsecore>0.2013888888888889</Totalsecore>
                           <needfixture>false</needfixture>
                         </InternalStabilityInfo>
                         <Install>
-                          <Time>0.00040374282986803915</Time>
-                          <TimeSD>3.0262868885815024</TimeSD>
-                          <Reference xsi:type="SubAssembly" Name="subasm-PumpAssembly - Screw1-1,PumpAssembly - PumpExtention-2 PinL-1,PumpAssembly - PumpExtention-2 PinL-2,PumpAssembly - ScrewLong-3,PumpAssembly - ScrewLong-4,PumpAssembly - PumpExtention-2 Pipe-1,PumpAssembly - PumpExtention-2 Side-1,PumpAssembly - PumpExtention-2 ShaftThrough-1,PumpAssembly - PumpExtention-2 Side-2,PumpAssembly - Lid-1,PumpAssembly - ScrewLong-1,PumpAssembly - ScrewLong-2,PumpAssembly - Screw7-1,PumpAssembly - Screw6-1,PumpAssembly - Screw8-1,PumpAssembly - Screw2-1">
-                            <Mass>147811.37153516716</Mass>
-                            <Volume>147811.37153516716</Volume>
+                          <Time>2.3990618956934995</Time>
+                          <TimeSD>13.716169487079412</TimeSD>
+                          <Reference xsi:type="SubAssembly" Name="subasm-PumpAssembly - PumpExtention-2 PinL-1.STL,PumpAssembly - PumpExtention-2 ShaftThrough-1.STL,PumpAssembly - PumpExtention-2 PinL-2.STL">
+                            <Mass>38140.387393967671</Mass>
+                            <Volume>38140.387393967671</Volume>
                             <InternalStabilityInfo>
                               <OverAllDOF>3.5</OverAllDOF>
                               <OverAllTippingScore>9.8</OverAllTippingScore>
@@ -453,15 +147,15 @@
                               <MaxSingleDOF>3.5</MaxSingleDOF>
                               <MinSingleTippingScore>9.8</MinSingleTippingScore>
                               <MinSingleSlidingScore>0</MinSingleSlidingScore>
-                              <Totalsecore>0.19513888888888886</Totalsecore>
+                              <Totalsecore>0.203125</Totalsecore>
                               <needfixture>false</needfixture>
                             </InternalStabilityInfo>
                             <Install>
-                              <Time>0.00046918614827196775</Time>
-                              <TimeSD>3.0262868799427</TimeSD>
-                              <Reference xsi:type="SubAssembly" Name="subasm-PumpAssembly - Screw1-1,PumpAssembly - PumpExtention-2 PinL-1,PumpAssembly - PumpExtention-2 PinL-2,PumpAssembly - ScrewLong-4,PumpAssembly - PumpExtention-2 Pipe-1,PumpAssembly - PumpExtention-2 Side-1,PumpAssembly - PumpExtention-2 ShaftThrough-1,PumpAssembly - PumpExtention-2 Side-2,PumpAssembly - Lid-1,PumpAssembly - ScrewLong-1,PumpAssembly - ScrewLong-2,PumpAssembly - Screw7-1,PumpAssembly - Screw6-1,PumpAssembly - Screw8-1,PumpAssembly - ScrewLong-3">
-                                <Mass>147325.48946124507</Mass>
-                                <Volume>147325.48946124507</Volume>
+                              <Time>56.078089803719557</Time>
+                              <TimeSD>14.259715705305959</TimeSD>
+                              <Reference xsi:type="SubAssembly" Name="subasm-PumpAssembly - PumpExtention-2 ShaftThrough-1.STL,PumpAssembly - PumpExtention-2 PinL-1.STL">
+                                <Mass>37449.324460610827</Mass>
+                                <Volume>37449.324460610827</Volume>
                                 <InternalStabilityInfo>
                                   <OverAllDOF>3.5</OverAllDOF>
                                   <OverAllTippingScore>9.8</OverAllTippingScore>
@@ -469,930 +163,20 @@
                                   <MaxSingleDOF>3.5</MaxSingleDOF>
                                   <MinSingleTippingScore>9.8</MinSingleTippingScore>
                                   <MinSingleSlidingScore>0</MinSingleSlidingScore>
-                                  <Totalsecore>0.1941964285714286</Totalsecore>
+                                  <Totalsecore>0.29166666666666669</Totalsecore>
                                   <needfixture>false</needfixture>
                                 </InternalStabilityInfo>
                                 <Install>
-                                  <Time>0.00069021097421655456</Time>
-                                  <TimeSD>3.0262868483601455</TimeSD>
-                                  <Reference xsi:type="SubAssembly" Name="subasm-PumpAssembly - Screw1-1,PumpAssembly - PumpExtention-2 PinL-1,PumpAssembly - PumpExtention-2 PinL-2,PumpAssembly - PumpExtention-2 Pipe-1,PumpAssembly - PumpExtention-2 Side-1,PumpAssembly - PumpExtention-2 ShaftThrough-1,PumpAssembly - PumpExtention-2 Side-2,PumpAssembly - Lid-1,PumpAssembly - ScrewLong-1,PumpAssembly - ScrewLong-2,PumpAssembly - Screw7-1,PumpAssembly - Screw6-1,PumpAssembly - Screw8-1,PumpAssembly - ScrewLong-4">
-                                    <Mass>146466.37457303394</Mass>
-                                    <Volume>146466.37457303394</Volume>
-                                    <InternalStabilityInfo>
-                                      <OverAllDOF>3.5</OverAllDOF>
-                                      <OverAllTippingScore>9.8</OverAllTippingScore>
-                                      <OverAllSlidingScore>0</OverAllSlidingScore>
-                                      <MaxSingleDOF>3.5</MaxSingleDOF>
-                                      <MinSingleTippingScore>9.8</MinSingleTippingScore>
-                                      <MinSingleSlidingScore>0</MinSingleSlidingScore>
-                                      <Totalsecore>0.19310897435897434</Totalsecore>
-                                      <needfixture>false</needfixture>
-                                    </InternalStabilityInfo>
-                                    <Install>
-                                      <Time>0.00069129954051936509</Time>
-                                      <TimeSD>3.0262868482999723</TimeSD>
-                                      <Reference xsi:type="SubAssembly" Name="subasm-PumpAssembly - PumpExtention-2 PinL-1,PumpAssembly - PumpExtention-2 PinL-2,PumpAssembly - PumpExtention-2 Pipe-1,PumpAssembly - PumpExtention-2 Side-1,PumpAssembly - PumpExtention-2 ShaftThrough-1,PumpAssembly - PumpExtention-2 Side-2,PumpAssembly - ScrewLong-1,PumpAssembly - ScrewLong-2,PumpAssembly - Screw1-1,PumpAssembly - Lid-1,PumpAssembly - Screw7-1,PumpAssembly - Screw6-1,PumpAssembly - Screw8-1">
-                                        <Mass>145607.25999582387</Mass>
-                                        <Volume>145607.25999582387</Volume>
-                                        <InternalStabilityInfo>
-                                          <OverAllDOF>6.5</OverAllDOF>
-                                          <OverAllTippingScore>49</OverAllTippingScore>
-                                          <OverAllSlidingScore>0</OverAllSlidingScore>
-                                          <MaxSingleDOF>1.5</MaxSingleDOF>
-                                          <MinSingleTippingScore>9.8</MinSingleTippingScore>
-                                          <MinSingleSlidingScore>0</MinSingleSlidingScore>
-                                          <Totalsecore>0.10520833333333335</Totalsecore>
-                                          <needfixture>false</needfixture>
-                                        </InternalStabilityInfo>
-                                        <Install>
-                                          <Time>0.0040976863450005851</Time>
-                                          <TimeSD>3.0262866638766357</TimeSD>
-                                          <Reference xsi:type="SubAssembly" Name="subasm-PumpAssembly - PumpExtention-2 PinL-1,PumpAssembly - PumpExtention-2 PinL-2,PumpAssembly - ScrewLong-1,PumpAssembly - PumpExtention-2 Pipe-1,PumpAssembly - PumpExtention-2 Side-1,PumpAssembly - PumpExtention-2 ShaftThrough-1,PumpAssembly - PumpExtention-2 Side-2,PumpAssembly - ScrewLong-2">
-                                            <Mass>86280.803849100339</Mass>
-                                            <Volume>86280.803849100339</Volume>
-                                            <InternalStabilityInfo>
-                                              <OverAllDOF>3.5</OverAllDOF>
-                                              <OverAllTippingScore>9.8</OverAllTippingScore>
-                                              <OverAllSlidingScore>0</OverAllSlidingScore>
-                                              <MaxSingleDOF>3.5</MaxSingleDOF>
-                                              <MinSingleTippingScore>9.8</MinSingleTippingScore>
-                                              <MinSingleSlidingScore>0</MinSingleSlidingScore>
-                                              <Totalsecore>0.19047619047619047</Totalsecore>
-                                              <needfixture>false</needfixture>
-                                            </InternalStabilityInfo>
-                                            <Install>
-                                              <Time>0.00060702268312699608</Time>
-                                              <TimeSD>3.0262868640403235</TimeSD>
-                                              <Reference xsi:type="SubAssembly" Name="subasm-PumpAssembly - PumpExtention-2 PinL-1,PumpAssembly - PumpExtention-2 PinL-2,PumpAssembly - PumpExtention-2 Pipe-1,PumpAssembly - PumpExtention-2 Side-1,PumpAssembly - PumpExtention-2 ShaftThrough-1,PumpAssembly - PumpExtention-2 Side-2,PumpAssembly - ScrewLong-1">
-                                                <Mass>85421.690374555779</Mass>
-                                                <Volume>85421.690374555779</Volume>
-                                                <InternalStabilityInfo>
-                                                  <OverAllDOF>3.5</OverAllDOF>
-                                                  <OverAllTippingScore>9.8</OverAllTippingScore>
-                                                  <OverAllSlidingScore>0</OverAllSlidingScore>
-                                                  <MaxSingleDOF>3.5</MaxSingleDOF>
-                                                  <MinSingleTippingScore>9.8</MinSingleTippingScore>
-                                                  <MinSingleSlidingScore>0</MinSingleSlidingScore>
-                                                  <Totalsecore>0.19097222222222221</Totalsecore>
-                                                  <needfixture>false</needfixture>
-                                                </InternalStabilityInfo>
-                                                <Install>
-                                                  <Time>0.00062873665903884842</Time>
-                                                  <TimeSD>3.0262868596950367</TimeSD>
-                                                  <Reference xsi:type="SubAssembly" Name="subasm-PumpAssembly - PumpExtention-2 PinL-2,PumpAssembly - PumpExtention-2 Pipe-1,PumpAssembly - PumpExtention-2 Side-1,PumpAssembly - PumpExtention-2 ShaftThrough-1,PumpAssembly - PumpExtention-2 Side-2,PumpAssembly - PumpExtention-2 PinL-1">
-                                                    <Mass>84562.576770840271</Mass>
-                                                    <Volume>84562.576770840271</Volume>
-                                                    <InternalStabilityInfo>
-                                                      <OverAllDOF>3.5</OverAllDOF>
-                                                      <OverAllTippingScore>9.8</OverAllTippingScore>
-                                                      <OverAllSlidingScore>0</OverAllSlidingScore>
-                                                      <MaxSingleDOF>3.5</MaxSingleDOF>
-                                                      <MinSingleTippingScore>9.8</MinSingleTippingScore>
-                                                      <MinSingleSlidingScore>0</MinSingleSlidingScore>
-                                                      <Totalsecore>0.1958333333333333</Totalsecore>
-                                                      <needfixture>false</needfixture>
-                                                    </InternalStabilityInfo>
-                                                    <Install>
-                                                      <Time>0.00073134390931443394</Time>
-                                                      <TimeSD>3.02628684184936</TimeSD>
-                                                      <Reference xsi:type="SubAssembly" Name="subasm-PumpAssembly - PumpExtention-2 Pipe-1,PumpAssembly - PumpExtention-2 Side-1,PumpAssembly - PumpExtention-2 Side-2,PumpAssembly - PumpExtention-2 PinL-2,PumpAssembly - PumpExtention-2 ShaftThrough-1">
-                                                        <Mass>83871.8459511708</Mass>
-                                                        <Volume>83871.8459511708</Volume>
-                                                        <InternalStabilityInfo>
-                                                          <OverAllDOF>2</OverAllDOF>
-                                                          <OverAllTippingScore>19.6</OverAllTippingScore>
-                                                          <OverAllSlidingScore>0</OverAllSlidingScore>
-                                                          <MaxSingleDOF>1.5</MaxSingleDOF>
-                                                          <MinSingleTippingScore>9.8</MinSingleTippingScore>
-                                                          <MinSingleSlidingScore>0</MinSingleSlidingScore>
-                                                          <Totalsecore>0.1111111111111111</Totalsecore>
-                                                          <needfixture>false</needfixture>
-                                                        </InternalStabilityInfo>
-                                                        <Install>
-                                                          <Time>0.004334692960326474</Time>
-                                                          <TimeSD>3.0262864983723645</TimeSD>
-                                                          <Reference xsi:type="SubAssembly" Name="subasm-PumpAssembly - PumpExtention-2 Pipe-1,PumpAssembly - PumpExtention-2 Side-2,PumpAssembly - PumpExtention-2 Side-1">
-                                                            <Mass>46450.054793831005</Mass>
-                                                            <Volume>46450.054793831005</Volume>
-                                                            <InternalStabilityInfo>
-                                                              <OverAllDOF>3.5</OverAllDOF>
-                                                              <OverAllTippingScore>9.8</OverAllTippingScore>
-                                                              <OverAllSlidingScore>0</OverAllSlidingScore>
-                                                              <MaxSingleDOF>3.5</MaxSingleDOF>
-                                                              <MinSingleTippingScore>9.8</MinSingleTippingScore>
-                                                              <MinSingleSlidingScore>0</MinSingleSlidingScore>
-                                                              <Totalsecore>0.20833333333333337</Totalsecore>
-                                                              <needfixture>false</needfixture>
-                                                            </InternalStabilityInfo>
-                                                            <Install>
-                                                              <Time>0.0042745669762378913</Time>
-                                                              <TimeSD>3.0262863973980831</TimeSD>
-                                                              <Reference xsi:type="SubAssembly" Name="subasm-PumpAssembly - PumpExtention-2 Pipe-1,PumpAssembly - PumpExtention-2 Side-2">
-                                                                <Mass>34936.6089300676</Mass>
-                                                                <Volume>34936.6089300676</Volume>
-                                                                <InternalStabilityInfo>
-                                                                  <OverAllDOF>3.5</OverAllDOF>
-                                                                  <OverAllTippingScore>9.8</OverAllTippingScore>
-                                                                  <OverAllSlidingScore>0</OverAllSlidingScore>
-                                                                  <MaxSingleDOF>3.5</MaxSingleDOF>
-                                                                  <MinSingleTippingScore>9.8</MinSingleTippingScore>
-                                                                  <MinSingleSlidingScore>0</MinSingleSlidingScore>
-                                                                  <Totalsecore>0.29166666666666669</Totalsecore>
-                                                                  <needfixture>false</needfixture>
-                                                                </InternalStabilityInfo>
-                                                                <Install>
-                                                                  <Time>0.0042559413245682213</Time>
-                                                                  <TimeSD>3.0262864013462663</TimeSD>
-                                                                  <Reference xsi:type="SubAssembly" Name="subasm-PumpAssembly - PumpExtention-2 Pipe-1">
-                                                                    <Mass>23423.098346884388</Mass>
-                                                                    <Volume>23423.098346884388</Volume>
-                                                                    <InstallCharacter>Unknown</InstallCharacter>
-                                                                  </Reference>
-                                                                  <Moving xsi:type="SubAssembly" Name="subasm-PumpAssembly - PumpExtention-2 Side-2">
-                                                                    <Mass>11513.510583183215</Mass>
-                                                                    <Volume>11513.510583183215</Volume>
-                                                                    <InstallCharacter>Unknown</InstallCharacter>
-                                                                  </Moving>
-                                                                  <InstallDirection>
-                                                                    <double>-0.9986</double>
-                                                                    <double>-0</double>
-                                                                    <double>-0.0523</double>
-                                                                  </InstallDirection>
-                                                                  <InstallDistance>202.17303131349996</InstallDistance>
-                                                                  <InstallDirectionRotated>
-                                                                    <double>-0.0523</double>
-                                                                    <double>0</double>
-                                                                    <double>0.9986</double>
-                                                                  </InstallDirectionRotated>
-                                                                </Install>
-                                                                <Secure>
-                                                                  <Time>0</Time>
-                                                                  <TimeSD>0</TimeSD>
-                                                                  <Fasteners />
-                                                                </Secure>
-                                                                <Rotate>
-                                                                  <Time>0</Time>
-                                                                  <TimeSD>0</TimeSD>
-                                                                  <RotateMatrix>
-                                                                    <ArrayOfDouble>
-                                                                      <double>0</double>
-                                                                      <double>0</double>
-                                                                      <double>1</double>
-                                                                      <double>245.76003193216471</double>
-                                                                    </ArrayOfDouble>
-                                                                    <ArrayOfDouble>
-                                                                      <double>0</double>
-                                                                      <double>1</double>
-                                                                      <double>0</double>
-                                                                      <double>270.97667486675937</double>
-                                                                    </ArrayOfDouble>
-                                                                    <ArrayOfDouble>
-                                                                      <double>-1</double>
-                                                                      <double>0</double>
-                                                                      <double>0</double>
-                                                                      <double>333.86446705</double>
-                                                                    </ArrayOfDouble>
-                                                                    <ArrayOfDouble>
-                                                                      <double>0</double>
-                                                                      <double>0</double>
-                                                                      <double>0</double>
-                                                                      <double>1</double>
-                                                                    </ArrayOfDouble>
-                                                                  </RotateMatrix>
-                                                                </Rotate>
-                                                                <InstallCharacter>MovingReferenceSimiliar</InstallCharacter>
-                                                              </Reference>
-                                                              <Moving xsi:type="SubAssembly" Name="subasm-PumpAssembly - PumpExtention-2 Side-1">
-                                                                <Mass>11513.445863763398</Mass>
-                                                                <Volume>11513.445863763398</Volume>
-                                                                <InstallCharacter>Unknown</InstallCharacter>
-                                                              </Moving>
-                                                              <InstallDirection>
-                                                                <double>0.9986</double>
-                                                                <double>0</double>
-                                                                <double>0.0523</double>
-                                                              </InstallDirection>
-                                                              <InstallDistance>211.47592395699994</InstallDistance>
-                                                              <InstallDirectionRotated>
-                                                                <double>-0.55729771545759643</double>
-                                                                <double>0.56005885501207731</double>
-                                                                <double>46.396261488682569</double>
-                                                              </InstallDirectionRotated>
-                                                            </Install>
-                                                            <Secure>
-                                                              <Time>0</Time>
-                                                              <TimeSD>0</TimeSD>
-                                                              <Fasteners />
-                                                            </Secure>
-                                                            <Rotate>
-                                                              <Time>0</Time>
-                                                              <TimeSD>0</TimeSD>
-                                                              <RotateMatrix>
-                                                                <ArrayOfDouble>
-                                                                  <double>0.73639493528610067</double>
-                                                                  <double>23.626455094839152</double>
-                                                                  <double>-24.716284853428235</double>
-                                                                  <double>-1665.6987938313771</double>
-                                                                </ArrayOfDouble>
-                                                                <ArrayOfDouble>
-                                                                  <double>-0.67655191913479906</double>
-                                                                  <double>-20.706455015956006</double>
-                                                                  <double>23.626455094839152</double>
-                                                                  <double>2027.1011061341273</double>
-                                                                </ArrayOfDouble>
-                                                                <ArrayOfDouble>
-                                                                  <double>46.422739869384245</double>
-                                                                  <double>-0.67655191913479906</double>
-                                                                  <double>0.73639493528610067</double>
-                                                                  <double>-11179.989187389652</double>
-                                                                </ArrayOfDouble>
-                                                                <ArrayOfDouble>
-                                                                  <double>0</double>
-                                                                  <double>0</double>
-                                                                  <double>0</double>
-                                                                  <double>1</double>
-                                                                </ArrayOfDouble>
-                                                              </RotateMatrix>
-                                                            </Rotate>
-                                                            <InstallCharacter>MovingReferenceSimiliar</InstallCharacter>
-                                                          </Reference>
-                                                          <Moving xsi:type="SubAssembly" Name="subasm-PumpAssembly - PumpExtention-2 ShaftThrough-1,PumpAssembly - PumpExtention-2 PinL-2">
-                                                            <Mass>37421.791157339794</Mass>
-                                                            <Volume>37421.791157339794</Volume>
-                                                            <InternalStabilityInfo>
-                                                              <OverAllDOF>3.5</OverAllDOF>
-                                                              <OverAllTippingScore>9.8</OverAllTippingScore>
-                                                              <OverAllSlidingScore>0</OverAllSlidingScore>
-                                                              <MaxSingleDOF>3.5</MaxSingleDOF>
-                                                              <MinSingleTippingScore>9.8</MinSingleTippingScore>
-                                                              <MinSingleSlidingScore>0</MinSingleSlidingScore>
-                                                              <Totalsecore>0.29166666666666669</Totalsecore>
-                                                              <needfixture>false</needfixture>
-                                                            </InternalStabilityInfo>
-                                                            <Install>
-                                                              <Time>0.00082862039878203275</Time>
-                                                              <TimeSD>3.0262868214679011</TimeSD>
-                                                              <Reference xsi:type="SubAssembly" Name="subasm-PumpAssembly - PumpExtention-2 ShaftThrough-1">
-                                                                <Mass>36731.059988784269</Mass>
-                                                                <Volume>36731.059988784269</Volume>
-                                                                <InstallCharacter>Unknown</InstallCharacter>
-                                                              </Reference>
-                                                              <Moving xsi:type="SubAssembly" Name="subasm-PumpAssembly - PumpExtention-2 PinL-2">
-                                                                <Mass>690.73116855552348</Mass>
-                                                                <Volume>690.73116855552348</Volume>
-                                                                <InstallCharacter>Unknown</InstallCharacter>
-                                                              </Moving>
-                                                              <InstallDirection>
-                                                                <double>0.0349</double>
-                                                                <double>0.9988</double>
-                                                                <double>0.0349</double>
-                                                              </InstallDirection>
-                                                              <InstallDistance>77.160854452999985</InstallDistance>
-                                                              <InstallDirectionRotated>
-                                                                <double>-0.0349</double>
-                                                                <double>0.9988</double>
-                                                                <double>0.0349</double>
-                                                              </InstallDirectionRotated>
-                                                            </Install>
-                                                            <Secure>
-                                                              <Time>0</Time>
-                                                              <TimeSD>0</TimeSD>
-                                                              <Fasteners />
-                                                            </Secure>
-                                                            <Rotate>
-                                                              <Time>0</Time>
-                                                              <TimeSD>0</TimeSD>
-                                                              <RotateMatrix>
-                                                                <ArrayOfDouble>
-                                                                  <double>0</double>
-                                                                  <double>0</double>
-                                                                  <double>-1</double>
-                                                                  <double>330.47893952533752</double>
-                                                                </ArrayOfDouble>
-                                                                <ArrayOfDouble>
-                                                                  <double>0</double>
-                                                                  <double>1</double>
-                                                                  <double>0</double>
-                                                                  <double>-116.94079539428876</double>
-                                                                </ArrayOfDouble>
-                                                                <ArrayOfDouble>
-                                                                  <double>1</double>
-                                                                  <double>0</double>
-                                                                  <double>0</double>
-                                                                  <double>-228.37523295</double>
-                                                                </ArrayOfDouble>
-                                                                <ArrayOfDouble>
-                                                                  <double>0</double>
-                                                                  <double>0</double>
-                                                                  <double>0</double>
-                                                                  <double>1</double>
-                                                                </ArrayOfDouble>
-                                                              </RotateMatrix>
-                                                            </Rotate>
-                                                            <InstallCharacter>MovingReferenceSimiliar</InstallCharacter>
-                                                          </Moving>
-                                                          <InstallDirection>
-                                                            <double>-0.9986</double>
-                                                            <double>-0</double>
-                                                            <double>-0.0523</double>
-                                                          </InstallDirection>
-                                                          <InstallDistance>336.361343671</InstallDistance>
-                                                          <InstallDirectionRotated>
-                                                            <double>-35.688943951249783</double>
-                                                            <double>32.740637803781823</double>
-                                                            <double>118.86856533620593</double>
-                                                          </InstallDirectionRotated>
-                                                        </Install>
-                                                        <Secure>
-                                                          <Time>0</Time>
-                                                          <TimeSD>0</TimeSD>
-                                                          <Fasteners />
-                                                        </Secure>
-                                                        <Rotate>
-                                                          <Time>0</Time>
-                                                          <TimeSD>0</TimeSD>
-                                                          <RotateMatrix>
-                                                            <ArrayOfDouble>
-                                                              <double>32.286277715145431</double>
-                                                              <double>-59.648696289737529</double>
-                                                              <double>65.924799711387337</double>
-                                                              <double>-4107.7525975556855</double>
-                                                            </ArrayOfDouble>
-                                                            <ArrayOfDouble>
-                                                              <double>-29.66253854178705</double>
-                                                              <double>55.801354565308081</double>
-                                                              <double>-59.648696289737551</double>
-                                                              <double>4270.7017996916147</double>
-                                                            </ArrayOfDouble>
-                                                            <ArrayOfDouble>
-                                                              <double>-120.72615427669541</double>
-                                                              <double>-29.662538541787047</double>
-                                                              <double>32.286277715145438</double>
-                                                              <double>41842.105009386338</double>
-                                                            </ArrayOfDouble>
-                                                            <ArrayOfDouble>
-                                                              <double>0</double>
-                                                              <double>0</double>
-                                                              <double>0</double>
-                                                              <double>1</double>
-                                                            </ArrayOfDouble>
-                                                          </RotateMatrix>
-                                                        </Rotate>
-                                                        <InstallCharacter>MovingIsInsideReference</InstallCharacter>
-                                                      </Reference>
-                                                      <Moving xsi:type="SubAssembly" Name="subasm-PumpAssembly - PumpExtention-2 PinL-1">
-                                                        <Mass>690.730819669474</Mass>
-                                                        <Volume>690.730819669474</Volume>
-                                                        <InstallCharacter>Unknown</InstallCharacter>
-                                                      </Moving>
-                                                      <InstallDirection>
-                                                        <double>0.0349</double>
-                                                        <double>0.9988</double>
-                                                        <double>0.0349</double>
-                                                      </InstallDirection>
-                                                      <InstallDistance>150.01841187799994</InstallDistance>
-                                                      <InstallDirectionRotated>
-                                                        <double>2905.6550392509807</double>
-                                                        <double>-2749.0001027499034</double>
-                                                        <double>1645.6953075679817</double>
-                                                      </InstallDirectionRotated>
-                                                    </Install>
-                                                    <Secure>
-                                                      <Time>0</Time>
-                                                      <TimeSD>0</TimeSD>
-                                                      <Fasteners />
-                                                    </Secure>
-                                                    <Rotate>
-                                                      <Time>0</Time>
-                                                      <TimeSD>0</TimeSD>
-                                                      <RotateMatrix>
-                                                        <ArrayOfDouble>
-                                                          <double>-2172.9810602811385</double>
-                                                          <double>2959.3320443861153</double>
-                                                          <double>736.71152784929529</double>
-                                                          <double>262270.75195094885</double>
-                                                        </ArrayOfDouble>
-                                                        <ArrayOfDouble>
-                                                          <double>1995.2186357058663</double>
-                                                          <double>-2797.7809436134435</double>
-                                                          <double>-693.68557750517118</double>
-                                                          <double>-230319.70782248379</double>
-                                                        </ArrayOfDouble>
-                                                        <ArrayOfDouble>
-                                                          <double>8311.5153175624873</double>
-                                                          <double>1345.4479794189733</double>
-                                                          <double>337.82180920860748</double>
-                                                          <double>-2043318.8393512373</double>
-                                                        </ArrayOfDouble>
-                                                        <ArrayOfDouble>
-                                                          <double>0</double>
-                                                          <double>0</double>
-                                                          <double>0</double>
-                                                          <double>1</double>
-                                                        </ArrayOfDouble>
-                                                      </RotateMatrix>
-                                                    </Rotate>
-                                                    <InstallCharacter>MovingIsInsideReference</InstallCharacter>
-                                                  </Reference>
-                                                  <Moving xsi:type="SubAssembly" Name="subasm-PumpAssembly - ScrewLong-1">
-                                                    <Mass>859.11360371550529</Mass>
-                                                    <Volume>859.11360371550529</Volume>
-                                                    <InstallCharacter>Unknown</InstallCharacter>
-                                                  </Moving>
-                                                  <InstallDirection>
-                                                    <double>0.0349</double>
-                                                    <double>0.9988</double>
-                                                    <double>0.0349</double>
-                                                  </InstallDirection>
-                                                  <InstallDistance>102.50852034799995</InstallDistance>
-                                                  <InstallDirectionRotated>
-                                                    <double>13816.297978621076</double>
-                                                    <double>-13011.033259966047</double>
-                                                    <double>-1721.8320979147177</double>
-                                                  </InstallDirectionRotated>
-                                                </Install>
-                                                <Secure>
-                                                  <Time>0</Time>
-                                                  <TimeSD>0</TimeSD>
-                                                  <Fasteners />
-                                                </Secure>
-                                                <Rotate>
-                                                  <Time>0</Time>
-                                                  <TimeSD>0</TimeSD>
-                                                  <RotateMatrix>
-                                                    <ArrayOfDouble>
-                                                      <double>-5750.6049990990086</double>
-                                                      <double>14006.476309641312</double>
-                                                      <double>782.96719254700974</double>
-                                                      <double>-53308.18652828777</double>
-                                                    </ArrayOfDouble>
-                                                    <ArrayOfDouble>
-                                                      <double>5200.3072238691975</double>
-                                                      <double>-13182.687355788912</double>
-                                                      <double>-735.12467384282047</double>
-                                                      <double>107409.1067026846</double>
-                                                    </ArrayOfDouble>
-                                                    <ArrayOfDouble>
-                                                      <double>34537.149248602786</double>
-                                                      <double>-2930.651639691092</double>
-                                                      <double>-1.2535520771444908</double>
-                                                      <double>-7789861.2901615463</double>
-                                                    </ArrayOfDouble>
-                                                    <ArrayOfDouble>
-                                                      <double>0</double>
-                                                      <double>0</double>
-                                                      <double>0</double>
-                                                      <double>1</double>
-                                                    </ArrayOfDouble>
-                                                  </RotateMatrix>
-                                                </Rotate>
-                                                <InstallCharacter>MovingIsInsideReference</InstallCharacter>
-                                              </Reference>
-                                              <Moving xsi:type="SubAssembly" Name="subasm-PumpAssembly - ScrewLong-2">
-                                                <Mass>859.113474544562</Mass>
-                                                <Volume>859.113474544562</Volume>
-                                                <InstallCharacter>Unknown</InstallCharacter>
-                                              </Moving>
-                                              <InstallDirection>
-                                                <double>0.0349</double>
-                                                <double>0.9988</double>
-                                                <double>0.0349</double>
-                                              </InstallDirection>
-                                              <InstallDistance>143.41225476199998</InstallDistance>
-                                              <InstallDirectionRotated>
-                                                <double>16453.074785063669</double>
-                                                <double>-15709.211063092105</double>
-                                                <double>31743.904354530972</double>
-                                              </InstallDirectionRotated>
-                                            </Install>
-                                            <Secure>
-                                              <Time>0</Time>
-                                              <TimeSD>0</TimeSD>
-                                              <Fasteners />
-                                            </Secure>
-                                            <Rotate>
-                                              <Time>0</Time>
-                                              <TimeSD>0</TimeSD>
-                                              <RotateMatrix>
-                                                <ArrayOfDouble>
-                                                  <double>-23462.715479651695</double>
-                                                  <double>17253.045923602673</double>
-                                                  <double>1134.1342925261283</double>
-                                                  <double>4181352.4062014427</double>
-                                                </ArrayOfDouble>
-                                                <ArrayOfDouble>
-                                                  <double>21734.266031066913</double>
-                                                  <double>-16450.381033114</double>
-                                                  <double>-1062.9332865924316</double>
-                                                  <double>-3813622.2368057095</double>
-                                                </ArrayOfDouble>
-                                                <ArrayOfDouble>
-                                                  <double>59679.214084466381</double>
-                                                  <double>29714.197389122779</double>
-                                                  <double>-499.72977858844649</double>
-                                                  <double>-16529673.71013087</double>
-                                                </ArrayOfDouble>
-                                                <ArrayOfDouble>
-                                                  <double>0</double>
-                                                  <double>0</double>
-                                                  <double>0</double>
-                                                  <double>1</double>
-                                                </ArrayOfDouble>
-                                              </RotateMatrix>
-                                            </Rotate>
-                                            <InstallCharacter>MovingIsInsideReference</InstallCharacter>
-                                          </Reference>
-                                          <Moving xsi:type="SubAssembly" Name="subasm-PumpAssembly - Screw1-1,PumpAssembly - Screw6-1,PumpAssembly - Screw8-1,PumpAssembly - Lid-1,PumpAssembly - Screw7-1">
-                                            <Mass>59326.456146723533</Mass>
-                                            <Volume>59326.456146723533</Volume>
-                                            <InternalStabilityInfo>
-                                              <OverAllDOF>3.5</OverAllDOF>
-                                              <OverAllTippingScore>9.8</OverAllTippingScore>
-                                              <OverAllSlidingScore>0</OverAllSlidingScore>
-                                              <MaxSingleDOF>3.5</MaxSingleDOF>
-                                              <MinSingleTippingScore>9.8</MinSingleTippingScore>
-                                              <MinSingleSlidingScore>0</MinSingleSlidingScore>
-                                              <Totalsecore>0.203125</Totalsecore>
-                                              <needfixture>false</needfixture>
-                                            </InternalStabilityInfo>
-                                            <Install>
-                                              <Time>0.00050415441297185261</Time>
-                                              <TimeSD>3.0262868673439582</TimeSD>
-                                              <Reference xsi:type="SubAssembly" Name="subasm-PumpAssembly - Screw1-1,PumpAssembly - Screw8-1,PumpAssembly - Lid-1,PumpAssembly - Screw6-1">
-                                                <Mass>59094.166774437384</Mass>
-                                                <Volume>59094.166774437384</Volume>
-                                                <InternalStabilityInfo>
-                                                  <OverAllDOF>3.5</OverAllDOF>
-                                                  <OverAllTippingScore>9.8</OverAllTippingScore>
-                                                  <OverAllSlidingScore>0</OverAllSlidingScore>
-                                                  <MaxSingleDOF>3.5</MaxSingleDOF>
-                                                  <MinSingleTippingScore>9.8</MinSingleTippingScore>
-                                                  <MinSingleSlidingScore>0</MinSingleSlidingScore>
-                                                  <Totalsecore>0.2013888888888889</Totalsecore>
-                                                  <needfixture>false</needfixture>
-                                                </InternalStabilityInfo>
-                                                <Install>
-                                                  <Time>0.00048400821322154889</Time>
-                                                  <TimeSD>3.0262868709272479</TimeSD>
-                                                  <Reference xsi:type="SubAssembly" Name="subasm-PumpAssembly - Screw1-1,PumpAssembly - Lid-1,PumpAssembly - Screw8-1">
-                                                    <Mass>58861.8778531138</Mass>
-                                                    <Volume>58861.8778531138</Volume>
-                                                    <InternalStabilityInfo>
-                                                      <OverAllDOF>3.5</OverAllDOF>
-                                                      <OverAllTippingScore>9.8</OverAllTippingScore>
-                                                      <OverAllSlidingScore>0</OverAllSlidingScore>
-                                                      <MaxSingleDOF>3.5</MaxSingleDOF>
-                                                      <MinSingleTippingScore>9.8</MinSingleTippingScore>
-                                                      <MinSingleSlidingScore>0</MinSingleSlidingScore>
-                                                      <Totalsecore>0.20833333333333337</Totalsecore>
-                                                      <needfixture>false</needfixture>
-                                                    </InternalStabilityInfo>
-                                                    <Install>
-                                                      <Time>0.000522784594568596</Time>
-                                                      <TimeSD>3.026286863330375</TimeSD>
-                                                      <Reference xsi:type="SubAssembly" Name="subasm-PumpAssembly - Lid-1,PumpAssembly - Screw1-1">
-                                                        <Mass>58629.5890892038</Mass>
-                                                        <Volume>58629.5890892038</Volume>
-                                                        <InternalStabilityInfo>
-                                                          <OverAllDOF>3.5</OverAllDOF>
-                                                          <OverAllTippingScore>9.8</OverAllTippingScore>
-                                                          <OverAllSlidingScore>0</OverAllSlidingScore>
-                                                          <MaxSingleDOF>3.5</MaxSingleDOF>
-                                                          <MinSingleTippingScore>9.8</MinSingleTippingScore>
-                                                          <MinSingleSlidingScore>0</MinSingleSlidingScore>
-                                                          <Totalsecore>0.29166666666666669</Totalsecore>
-                                                          <needfixture>false</needfixture>
-                                                        </InternalStabilityInfo>
-                                                        <Install>
-                                                          <Time>0.00051027457224651451</Time>
-                                                          <TimeSD>3.0262868738857924</TimeSD>
-                                                          <Reference xsi:type="SubAssembly" Name="subasm-PumpAssembly - Lid-1">
-                                                            <Mass>58143.707594645588</Mass>
-                                                            <Volume>58143.707594645588</Volume>
-                                                            <InstallCharacter>Unknown</InstallCharacter>
-                                                          </Reference>
-                                                          <Moving xsi:type="SubAssembly" Name="subasm-PumpAssembly - Screw1-1">
-                                                            <Mass>485.88149455821372</Mass>
-                                                            <Volume>485.88149455821372</Volume>
-                                                            <InstallCharacter>Unknown</InstallCharacter>
-                                                          </Moving>
-                                                          <InstallDirection>
-                                                            <double>0.0349</double>
-                                                            <double>0.9988</double>
-                                                            <double>0.0349</double>
-                                                          </InstallDirection>
-                                                          <InstallDistance>42.506250212999987</InstallDistance>
-                                                          <InstallDirectionRotated>
-                                                            <double>0.0349</double>
-                                                            <double>0.0349</double>
-                                                            <double>-0.9988</double>
-                                                          </InstallDirectionRotated>
-                                                        </Install>
-                                                        <Secure>
-                                                          <Time>0</Time>
-                                                          <TimeSD>0</TimeSD>
-                                                          <Fasteners />
-                                                        </Secure>
-                                                        <Rotate>
-                                                          <Time>0</Time>
-                                                          <TimeSD>0</TimeSD>
-                                                          <RotateMatrix>
-                                                            <ArrayOfDouble>
-                                                              <double>1</double>
-                                                              <double>0</double>
-                                                              <double>0</double>
-                                                              <double>-193.96111312869976</double>
-                                                            </ArrayOfDouble>
-                                                            <ArrayOfDouble>
-                                                              <double>0</double>
-                                                              <double>0</double>
-                                                              <double>1</double>
-                                                              <double>115.69762465004442</double>
-                                                            </ArrayOfDouble>
-                                                            <ArrayOfDouble>
-                                                              <double>0</double>
-                                                              <double>-1</double>
-                                                              <double>0</double>
-                                                              <double>152.87076705</double>
-                                                            </ArrayOfDouble>
-                                                            <ArrayOfDouble>
-                                                              <double>0</double>
-                                                              <double>0</double>
-                                                              <double>0</double>
-                                                              <double>1</double>
-                                                            </ArrayOfDouble>
-                                                          </RotateMatrix>
-                                                        </Rotate>
-                                                        <InstallCharacter>MovingIsInsideReference</InstallCharacter>
-                                                      </Reference>
-                                                      <Moving xsi:type="SubAssembly" Name="subasm-PumpAssembly - Screw8-1">
-                                                        <Mass>232.2887639100029</Mass>
-                                                        <Volume>232.2887639100029</Volume>
-                                                        <InstallCharacter>Unknown</InstallCharacter>
-                                                      </Moving>
-                                                      <InstallDirection>
-                                                        <double>0.0349</double>
-                                                        <double>0.9988</double>
-                                                        <double>0.0349</double>
-                                                      </InstallDirection>
-                                                      <InstallDistance>68.00004893849993</InstallDistance>
-                                                      <InstallDirectionRotated>
-                                                        <double>0.095631988271794116</double>
-                                                        <double>0.470838558644127</double>
-                                                        <double>13.20911577982319</double>
-                                                      </InstallDirectionRotated>
-                                                    </Install>
-                                                    <Secure>
-                                                      <Time>0</Time>
-                                                      <TimeSD>0</TimeSD>
-                                                      <Fasteners />
-                                                    </Secure>
-                                                    <Rotate>
-                                                      <Time>0</Time>
-                                                      <TimeSD>0</TimeSD>
-                                                      <RotateMatrix>
-                                                        <ArrayOfDouble>
-                                                          <double>0.72992604178456411</double>
-                                                          <double>0.13798064224567677</double>
-                                                          <double>-1.9386102023343588</double>
-                                                          <double>62.887000394520157</double>
-                                                        </ArrayOfDouble>
-                                                        <ArrayOfDouble>
-                                                          <double>-1.9386102023343588</double>
-                                                          <double>0.99043492586109372</double>
-                                                          <double>-12.915482786374337</double>
-                                                          <double>1959.3717671575409</double>
-                                                        </ArrayOfDouble>
-                                                        <ArrayOfDouble>
-                                                          <double>0.13798064224567677</double>
-                                                          <double>13.185556744589771</double>
-                                                          <double>0.99043492586109372</double>
-                                                          <double>-2118.9002920390253</double>
-                                                        </ArrayOfDouble>
-                                                        <ArrayOfDouble>
-                                                          <double>0</double>
-                                                          <double>0</double>
-                                                          <double>0</double>
-                                                          <double>1</double>
-                                                        </ArrayOfDouble>
-                                                      </RotateMatrix>
-                                                    </Rotate>
-                                                    <InstallCharacter>MovingIsInsideReference</InstallCharacter>
-                                                  </Reference>
-                                                  <Moving xsi:type="SubAssembly" Name="subasm-PumpAssembly - Screw6-1">
-                                                    <Mass>232.28892132358251</Mass>
-                                                    <Volume>232.28892132358251</Volume>
-                                                    <InstallCharacter>Unknown</InstallCharacter>
-                                                  </Moving>
-                                                  <InstallDirection>
-                                                    <double>0.0349</double>
-                                                    <double>0.9988</double>
-                                                    <double>0.0349</double>
-                                                  </InstallDirection>
-                                                  <InstallDistance>70.272293184999938</InstallDistance>
-                                                  <InstallDirectionRotated>
-                                                    <double>-0.77529624245122086</double>
-                                                    <double>-5.78074661727217</double>
-                                                    <double>203.67733358691819</double>
-                                                  </InstallDirectionRotated>
-                                                </Install>
-                                                <Secure>
-                                                  <Time>0</Time>
-                                                  <TimeSD>0</TimeSD>
-                                                  <Fasteners />
-                                                </Secure>
-                                                <Rotate>
-                                                  <Time>0</Time>
-                                                  <TimeSD>0</TimeSD>
-                                                  <RotateMatrix>
-                                                    <ArrayOfDouble>
-                                                      <double>-2.8997908827578436</double>
-                                                      <double>0.30322526466421862</double>
-                                                      <double>-27.992978079931053</double>
-                                                      <double>2820.8331277120942</double>
-                                                    </ArrayOfDouble>
-                                                    <ArrayOfDouble>
-                                                      <double>-27.992978079931056</double>
-                                                      <double>2.1765726527941709</double>
-                                                      <double>-199.93560022617174</double>
-                                                      <double>21756.106466182031</double>
-                                                    </ArrayOfDouble>
-                                                    <ArrayOfDouble>
-                                                      <double>0.30322526466421906</double>
-                                                      <double>203.8353911089296</double>
-                                                      <double>2.1765726527941709</double>
-                                                      <double>-30288.408656050142</double>
-                                                    </ArrayOfDouble>
-                                                    <ArrayOfDouble>
-                                                      <double>0</double>
-                                                      <double>0</double>
-                                                      <double>0</double>
-                                                      <double>1</double>
-                                                    </ArrayOfDouble>
-                                                  </RotateMatrix>
-                                                </Rotate>
-                                                <InstallCharacter>MovingIsInsideReference</InstallCharacter>
-                                              </Reference>
-                                              <Moving xsi:type="SubAssembly" Name="subasm-PumpAssembly - Screw7-1">
-                                                <Mass>232.28937228614686</Mass>
-                                                <Volume>232.28937228614686</Volume>
-                                                <InstallCharacter>Unknown</InstallCharacter>
-                                              </Moving>
-                                              <InstallDirection>
-                                                <double>0.0349</double>
-                                                <double>0.9988</double>
-                                                <double>0.0349</double>
-                                              </InstallDirection>
-                                              <InstallDistance>69.607315565</InstallDistance>
-                                              <InstallDirectionRotated>
-                                                <double>-22.958979644082394</double>
-                                                <double>-162.39023633198184</double>
-                                                <double>-3040.467009521547</double>
-                                              </InstallDirectionRotated>
-                                            </Install>
-                                            <Secure>
-                                              <Time>0</Time>
-                                              <TimeSD>0</TimeSD>
-                                              <Fasteners />
-                                            </Secure>
-                                            <Rotate>
-                                              <Time>0</Time>
-                                              <TimeSD>0</TimeSD>
-                                              <RotateMatrix>
-                                                <ArrayOfDouble>
-                                                  <double>-156.14359406537682</double>
-                                                  <double>-29.154707387586868</double>
-                                                  <double>332.66915551636174</double>
-                                                  <double>25748.753456158447</double>
-                                                </ArrayOfDouble>
-                                                <ArrayOfDouble>
-                                                  <double>-1104.778434733852</double>
-                                                  <double>-205.54715881169918</double>
-                                                  <double>2334.2989473167545</double>
-                                                  <double>182973.45604280595</double>
-                                                </ArrayOfDouble>
-                                                <ArrayOfDouble>
-                                                  <double>91.750205431760662</double>
-                                                  <double>-3039.8816585348109</double>
-                                                  <double>-213.04559159158467</double>
-                                                  <double>527046.23455255711</double>
-                                                </ArrayOfDouble>
-                                                <ArrayOfDouble>
-                                                  <double>0</double>
-                                                  <double>0</double>
-                                                  <double>0</double>
-                                                  <double>1</double>
-                                                </ArrayOfDouble>
-                                              </RotateMatrix>
-                                            </Rotate>
-                                            <InstallCharacter>MovingIsInsideReference</InstallCharacter>
-                                          </Moving>
-                                          <InstallDirection>
-                                            <double>0.9698</double>
-                                            <double>-0.171</double>
-                                            <double>0.1736</double>
-                                          </InstallDirection>
-                                          <InstallDistance>360.38163130000004</InstallDistance>
-                                          <InstallDirectionRotated>
-                                            <double>3084668.3126057894</double>
-                                            <double>-2862517.5349338804</double>
-                                            <double>-7043357.0200590659</double>
-                                          </InstallDirectionRotated>
-                                        </Install>
-                                        <Secure>
-                                          <Time>0</Time>
-                                          <TimeSD>0</TimeSD>
-                                          <Fasteners />
-                                        </Secure>
-                                        <Rotate>
-                                          <Time>0</Time>
-                                          <TimeSD>0</TimeSD>
-                                          <RotateMatrix>
-                                            <ArrayOfDouble>
-                                              <double>3001078.5579374917</double>
-                                              <double>-1875921.8502246302</double>
-                                              <double>-844241.4128479379</double>
-                                              <double>-515321015.18915236</double>
-                                            </ArrayOfDouble>
-                                            <ArrayOfDouble>
-                                              <double>-2780194.4754292737</double>
-                                              <double>1788718.7507711276</double>
-                                              <double>804066.66888992884</double>
-                                              <double>469863286.41719764</double>
-                                            </ArrayOfDouble>
-                                            <ArrayOfDouble>
-                                              <double>-7601446.2422917392</double>
-                                              <double>-3262577.6785470438</double>
-                                              <double>-1321285.9292401059</double>
-                                              <double>3092638965.2129087</double>
-                                            </ArrayOfDouble>
-                                            <ArrayOfDouble>
-                                              <double>0</double>
-                                              <double>0</double>
-                                              <double>0</double>
-                                              <double>1</double>
-                                            </ArrayOfDouble>
-                                          </RotateMatrix>
-                                        </Rotate>
-                                        <InstallCharacter>MovingReferenceSimiliar</InstallCharacter>
-                                      </Reference>
-                                      <Moving xsi:type="SubAssembly" Name="subasm-PumpAssembly - ScrewLong-4">
-                                        <Mass>859.11457721006673</Mass>
-                                        <Volume>859.11457721006673</Volume>
-                                        <InstallCharacter>Unknown</InstallCharacter>
-                                      </Moving>
-                                      <InstallDirection>
-                                        <double>0.0349</double>
-                                        <double>0.9988</double>
-                                        <double>0.0349</double>
-                                      </InstallDirection>
-                                      <InstallDistance>150.56980874999994</InstallDistance>
-                                      <InstallDirectionRotated>
-                                        <double>88622952.409579158</double>
-                                        <double>-85097368.797087118</double>
-                                        <double>247695727.58987066</double>
-                                      </InstallDirectionRotated>
-                                    </Install>
-                                    <Secure>
-                                      <Time>0</Time>
-                                      <TimeSD>0</TimeSD>
-                                      <Fasteners />
-                                    </Secure>
-                                    <Rotate>
-                                      <Time>0</Time>
-                                      <TimeSD>0</TimeSD>
-                                      <RotateMatrix>
-                                        <ArrayOfDouble>
-                                          <double>-480178208.91652584</double>
-                                          <double>97268116.145909339</double>
-                                          <double>235810243.38772655</double>
-                                          <double>111942411860.82954</double>
-                                        </ArrayOfDouble>
-                                        <ArrayOfDouble>
-                                          <double>444676518.04346889</double>
-                                          <double>-92891568.4747738</double>
-                                          <double>-224540993.81662208</double>
-                                          <double>-102943526909.96799</double>
-                                        </ArrayOfDouble>
-                                        <ArrayOfDouble>
-                                          <double>1241425663.4592195</double>
-                                          <double>191980423.95407289</double>
-                                          <double>361602420.91163075</double>
-                                          <double>-315035538415.05469</double>
-                                        </ArrayOfDouble>
-                                        <ArrayOfDouble>
-                                          <double>0</double>
-                                          <double>0</double>
-                                          <double>0</double>
-                                          <double>1</double>
-                                        </ArrayOfDouble>
-                                      </RotateMatrix>
-                                    </Rotate>
-                                    <InstallCharacter>MovingIsInsideReference</InstallCharacter>
+                                  <Time>75.18144822383718</Time>
+                                  <TimeSD>14.31553059956271</TimeSD>
+                                  <Reference xsi:type="SubAssembly" Name="subasm-PumpAssembly - PumpExtention-2 ShaftThrough-1.STL">
+                                    <Mass>36758.261797917548</Mass>
+                                    <Volume>36758.261797917548</Volume>
+                                    <InstallCharacter>Unknown</InstallCharacter>
                                   </Reference>
-                                  <Moving xsi:type="SubAssembly" Name="subasm-PumpAssembly - ScrewLong-3">
-                                    <Mass>859.11488821111914</Mass>
-                                    <Volume>859.11488821111914</Volume>
+                                  <Moving xsi:type="SubAssembly" Name="subasm-PumpAssembly - PumpExtention-2 PinL-1.STL">
+                                    <Mass>691.06266269328171</Mass>
+                                    <Volume>691.06266269328171</Volume>
                                     <InstallCharacter>Unknown</InstallCharacter>
                                   </Moving>
                                   <InstallDirection>
@@ -1400,11 +184,11 @@
                                     <double>0.9988</double>
                                     <double>0.0349</double>
                                   </InstallDirection>
-                                  <InstallDistance>148.82623127399989</InstallDistance>
+                                  <InstallDistance>81.048609752999965</InstallDistance>
                                   <InstallDirectionRotated>
-                                    <double>274398583.39938956</double>
-                                    <double>-268185015.5017449</double>
-                                    <double>1507753799.9018161</double>
+                                    <double>-0.0349</double>
+                                    <double>0.9988</double>
+                                    <double>0.0349</double>
                                   </InstallDirectionRotated>
                                 </Install>
                                 <Secure>
@@ -1415,38 +199,12 @@
                                 <Rotate>
                                   <Time>0</Time>
                                   <TimeSD>0</TimeSD>
-                                  <RotateMatrix>
-                                    <ArrayOfDouble>
-                                      <double>5800486814.6970148</double>
-                                      <double>74386520.930268526</double>
-                                      <double>-66924456.695944428</double>
-                                      <double>-1827910043494.2031</double>
-                                    </ArrayOfDouble>
-                                    <ArrayOfDouble>
-                                      <double>-5376293760.0693636</double>
-                                      <double>-82868602.843595028</double>
-                                      <double>63518545.69795382</double>
-                                      <double>1696255140678.8687</double>
-                                    </ArrayOfDouble>
-                                    <ArrayOfDouble>
-                                      <double>-14261736094.071749</double>
-                                      <double>2010341024.9155574</double>
-                                      <double>-69920518.64580369</double>
-                                      <double>4645973231219.79</double>
-                                    </ArrayOfDouble>
-                                    <ArrayOfDouble>
-                                      <double>0</double>
-                                      <double>0</double>
-                                      <double>0</double>
-                                      <double>1</double>
-                                    </ArrayOfDouble>
-                                  </RotateMatrix>
                                 </Rotate>
-                                <InstallCharacter>MovingIsInsideReference</InstallCharacter>
+                                <InstallCharacter>MovingReferenceSimiliar</InstallCharacter>
                               </Reference>
-                              <Moving xsi:type="SubAssembly" Name="subasm-PumpAssembly - Screw2-1">
-                                <Mass>485.88207392210006</Mass>
-                                <Volume>485.88207392210006</Volume>
+                              <Moving xsi:type="SubAssembly" Name="subasm-PumpAssembly - PumpExtention-2 PinL-2.STL">
+                                <Mass>691.06293335684632</Mass>
+                                <Volume>691.06293335684632</Volume>
                                 <InstallCharacter>Unknown</InstallCharacter>
                               </Moving>
                               <InstallDirection>
@@ -1454,11 +212,11 @@
                                 <double>0.9988</double>
                                 <double>0.0349</double>
                               </InstallDirection>
-                              <InstallDistance>138.81005758799995</InstallDistance>
+                              <InstallDistance>90.533252173999955</InstallDistance>
                               <InstallDirectionRotated>
-                                <double>-4963180253.3266411</double>
-                                <double>4707188191.9932575</double>
-                                <double>-4648471945.1637421</double>
+                                <double>0.052281642758633895</double>
+                                <double>0.99728513023364229</double>
+                                <double>0.052215503878886835</double>
                               </InstallDirectionRotated>
                             </Install>
                             <Secure>
@@ -1469,50 +227,24 @@
                             <Rotate>
                               <Time>0</Time>
                               <TimeSD>0</TimeSD>
-                              <RotateMatrix>
-                                <ArrayOfDouble>
-                                  <double>-63805704049.482956</double>
-                                  <double>-3014257728.3105292</double>
-                                  <double>7859009657.2169466</double>
-                                  <double>19796902165327.641</double>
-                                </ArrayOfDouble>
-                                <ArrayOfDouble>
-                                  <double>59121725596.642288</double>
-                                  <double>2904359935.4142604</double>
-                                  <double>-7364892115.2241106</double>
-                                  <double>-18354358384431.711</double>
-                                </ArrayOfDouble>
-                                <ArrayOfDouble>
-                                  <double>159688738138.94946</double>
-                                  <double>-10002471376.26968</double>
-                                  <double>-6622936836.5307283</double>
-                                  <double>-34936369016787.516</double>
-                                </ArrayOfDouble>
-                                <ArrayOfDouble>
-                                  <double>0</double>
-                                  <double>0</double>
-                                  <double>0</double>
-                                  <double>1</double>
-                                </ArrayOfDouble>
-                              </RotateMatrix>
                             </Rotate>
-                            <InstallCharacter>MovingIsInsideReference</InstallCharacter>
+                            <InstallCharacter>MovingReferenceSimiliar</InstallCharacter>
                           </Reference>
-                          <Moving xsi:type="SubAssembly" Name="subasm-PumpAssembly - Screw3-1">
-                            <Mass>485.88185825797092</Mass>
-                            <Volume>485.88185825797092</Volume>
+                          <Moving xsi:type="SubAssembly" Name="subasm-PumpAssembly - PumpExtention-2 Side-1.STL">
+                            <Mass>11513.611651923633</Mass>
+                            <Volume>11513.611651923633</Volume>
                             <InstallCharacter>Unknown</InstallCharacter>
                           </Moving>
                           <InstallDirection>
-                            <double>0.0349</double>
-                            <double>0.9988</double>
-                            <double>0.0349</double>
+                            <double>-0.9768</double>
+                            <double>-0.2076</double>
+                            <double>-0.0523</double>
                           </InstallDirection>
-                          <InstallDistance>136.53849685799997</InstallDistance>
+                          <InstallDistance>171.72653651199991</InstallDistance>
                           <InstallDirectionRotated>
-                            <double>-44013130202.575645</double>
-                            <double>40565899058.290421</double>
-                            <double>144216903218.68527</double>
+                            <double>0.9550420148393205</double>
+                            <double>0.28032155418937355</double>
+                            <double>-0.096363199140047859</double>
                           </InstallDirectionRotated>
                         </Install>
                         <Secure>
@@ -1523,50 +255,68 @@
                         <Rotate>
                           <Time>0</Time>
                           <TimeSD>0</TimeSD>
-                          <RotateMatrix>
-                            <ArrayOfDouble>
-                              <double>339298256583.16876</double>
-                              <double>-54275445961.947906</double>
-                              <double>-47115298869.188072</double>
-                              <double>-77514757449515.859</double>
-                            </ArrayOfDouble>
-                            <ArrayOfDouble>
-                              <double>-314494199695.04431</double>
-                              <double>50086939953.532425</double>
-                              <double>43407192036.082626</double>
-                              <double>71902260984015.625</double>
-                            </ArrayOfDouble>
-                            <ArrayOfDouble>
-                              <double>-832815197985.715</double>
-                              <double>167997385345.61</double>
-                              <double>157202439690.29953</double>
-                              <double>261121118437923.16</double>
-                            </ArrayOfDouble>
-                            <ArrayOfDouble>
-                              <double>0</double>
-                              <double>0</double>
-                              <double>0</double>
-                              <double>1</double>
-                            </ArrayOfDouble>
-                          </RotateMatrix>
                         </Rotate>
-                        <InstallCharacter>MovingIsInsideReference</InstallCharacter>
+                        <InstallCharacter>MovingReferenceSimiliar</InstallCharacter>
                       </Reference>
-                      <Moving xsi:type="SubAssembly" Name="subasm-PumpAssembly - Screw4-1">
-                        <Mass>485.88041845585093</Mass>
-                        <Volume>485.88041845585093</Volume>
-                        <InstallCharacter>Unknown</InstallCharacter>
+                      <Moving xsi:type="SubAssembly" Name="subasm-PumpAssembly - PumpExtention-2 Pipe-1.STL,PumpAssembly - PumpExtention-2 Side-2.STL">
+                        <Mass>34942.801591037853</Mass>
+                        <Volume>34942.801591037853</Volume>
+                        <InternalStabilityInfo>
+                          <OverAllDOF>3.5</OverAllDOF>
+                          <OverAllTippingScore>9.8</OverAllTippingScore>
+                          <OverAllSlidingScore>0</OverAllSlidingScore>
+                          <MaxSingleDOF>3.5</MaxSingleDOF>
+                          <MinSingleTippingScore>9.8</MinSingleTippingScore>
+                          <MinSingleSlidingScore>0</MinSingleSlidingScore>
+                          <Totalsecore>0.29166666666666669</Totalsecore>
+                          <needfixture>false</needfixture>
+                        </InternalStabilityInfo>
+                        <Install>
+                          <Time>2.7759470661732033</Time>
+                          <TimeSD>13.741799160477957</TimeSD>
+                          <Reference xsi:type="SubAssembly" Name="subasm-PumpAssembly - PumpExtention-2 Pipe-1.STL">
+                            <Mass>23429.125261533027</Mass>
+                            <Volume>23429.125261533027</Volume>
+                            <InstallCharacter>Unknown</InstallCharacter>
+                          </Reference>
+                          <Moving xsi:type="SubAssembly" Name="subasm-PumpAssembly - PumpExtention-2 Side-2.STL">
+                            <Mass>11513.676329504828</Mass>
+                            <Volume>11513.676329504828</Volume>
+                            <InstallCharacter>Unknown</InstallCharacter>
+                          </Moving>
+                          <InstallDirection>
+                            <double>-0.9986</double>
+                            <double>-0</double>
+                            <double>-0.0523</double>
+                          </InstallDirection>
+                          <InstallDistance>202.17303131349996</InstallDistance>
+                          <InstallDirectionRotated>
+                            <double>-0.9986</double>
+                            <double>0.0030432646025521765</double>
+                            <double>0.052211383246940059</double>
+                          </InstallDirectionRotated>
+                        </Install>
+                        <Secure>
+                          <Time>0</Time>
+                          <TimeSD>0</TimeSD>
+                          <Fasteners />
+                        </Secure>
+                        <Rotate>
+                          <Time>0</Time>
+                          <TimeSD>0</TimeSD>
+                        </Rotate>
+                        <InstallCharacter>MovingReferenceSimiliar</InstallCharacter>
                       </Moving>
                       <InstallDirection>
-                        <double>0.0349</double>
-                        <double>0.9988</double>
-                        <double>0.0349</double>
+                        <double>-0.9768</double>
+                        <double>-0.2076</double>
+                        <double>-0.0523</double>
                       </InstallDirection>
-                      <InstallDistance>138.53461387499993</InstallDistance>
+                      <InstallDistance>348.97334665499977</InstallDistance>
                       <InstallDirectionRotated>
-                        <double>-51316850997.392647</double>
-                        <double>49397153144.099434</double>
-                        <double>-162613937692.65155</double>
+                        <double>-0.26272173678014688</double>
+                        <double>-0.94704739038424479</double>
+                        <double>-0.18452593148285207</double>
                       </InstallDirectionRotated>
                     </Install>
                     <Secure>
@@ -1577,50 +327,24 @@
                     <Rotate>
                       <Time>0</Time>
                       <TimeSD>0</TimeSD>
-                      <RotateMatrix>
-                        <ArrayOfDouble>
-                          <double>-2211071186847.6274</double>
-                          <double>19549136968.90451</double>
-                          <double>181199295674.71982</double>
-                          <double>667761886940303.37</double>
-                        </ArrayOfDouble>
-                        <ArrayOfDouble>
-                          <double>2049054509406.2334</double>
-                          <double>-16303707610.279877</double>
-                          <double>-167068941920.64667</double>
-                          <double>-619172947529765.62</double>
-                        </ArrayOfDouble>
-                        <ArrayOfDouble>
-                          <double>5486759445532.0283</double>
-                          <double>-334120666212.08051</double>
-                          <double>-584014926335.05115</double>
-                          <double>-1183711106423768.2</double>
-                        </ArrayOfDouble>
-                        <ArrayOfDouble>
-                          <double>0</double>
-                          <double>0</double>
-                          <double>0</double>
-                          <double>1</double>
-                        </ArrayOfDouble>
-                      </RotateMatrix>
                     </Rotate>
-                    <InstallCharacter>MovingIsInsideReference</InstallCharacter>
+                    <InstallCharacter>MovingReferenceSimiliar</InstallCharacter>
                   </Reference>
-                  <Moving xsi:type="SubAssembly" Name="subasm-PumpAssembly - Screw5-1">
-                    <Mass>485.88077169501327</Mass>
-                    <Volume>485.88077169501327</Volume>
+                  <Moving xsi:type="SubAssembly" Name="subasm-PumpAssembly - PumpExtention-2 InnerRing-1.STL">
+                    <Mass>11765.593009157988</Mass>
+                    <Volume>11765.593009157988</Volume>
                     <InstallCharacter>Unknown</InstallCharacter>
                   </Moving>
                   <InstallDirection>
-                    <double>0.0349</double>
-                    <double>0.9988</double>
-                    <double>0.0349</double>
+                    <double>0.9768</double>
+                    <double>0.2076</double>
+                    <double>0.0523</double>
                   </InstallDirection>
-                  <InstallDistance>141.74541387499994</InstallDistance>
+                  <InstallDistance>242.05406522400006</InstallDistance>
                   <InstallDirectionRotated>
-                    <double>-1759446744116.6709</double>
-                    <double>1618012088990.38</double>
-                    <double>6336984039095.9678</double>
+                    <double>0.65879525675700923</double>
+                    <double>0.75230146424208766</double>
+                    <double>0.0016144886733238293</double>
                   </InstallDirectionRotated>
                 </Install>
                 <Secure>
@@ -1631,50 +355,19 @@
                 <Rotate>
                   <Time>0</Time>
                   <TimeSD>0</TimeSD>
-                  <RotateMatrix>
-                    <ArrayOfDouble>
-                      <double>17852111035602.379</double>
-                      <double>-2347009050317.5469</double>
-                      <double>-1097214320975.0098</double>
-                      <double>-5139158167184986</double>
-                    </ArrayOfDouble>
-                    <ArrayOfDouble>
-                      <double>-16544689430155.529</double>
-                      <double>2162398457937.7634</double>
-                      <double>1020577945976.2092</double>
-                      <double>4764342148805986</double>
-                    </ArrayOfDouble>
-                    <ArrayOfDouble>
-                      <double>-44190358749991.117</double>
-                      <double>7814266296591.3984</double>
-                      <double>2130039611322.8843</double>
-                      <double>14160473721069620</double>
-                    </ArrayOfDouble>
-                    <ArrayOfDouble>
-                      <double>0</double>
-                      <double>0</double>
-                      <double>0</double>
-                      <double>1</double>
-                    </ArrayOfDouble>
-                  </RotateMatrix>
                 </Rotate>
                 <InstallCharacter>MovingIsInsideReference</InstallCharacter>
-              </Reference>
-              <Moving xsi:type="SubAssembly" Name="subasm-PumpAssembly - PumpExtention-2 InnerRing-1">
-                <Mass>11763.883953596356</Mass>
-                <Volume>11763.883953596356</Volume>
-                <InstallCharacter>Unknown</InstallCharacter>
               </Moving>
               <InstallDirection>
-                <double>0.9768</double>
-                <double>0.2076</double>
-                <double>0.0523</double>
+                <double>-0</double>
+                <double>-0</double>
+                <double>-1</double>
               </InstallDirection>
-              <InstallDistance>245.43925320700009</InstallDistance>
+              <InstallDistance>255.999964</InstallDistance>
               <InstallDirectionRotated>
-                <double>-178508749175020.75</double>
-                <double>165450288616282.69</double>
-                <double>439533524114979.75</double>
+                <double>-0.87513418435034585</double>
+                <double>-0.39348828439818284</double>
+                <double>0.28161521518346577</double>
               </InstallDirectionRotated>
             </Install>
             <Secure>
@@ -1685,81 +378,531 @@
             <Rotate>
               <Time>0</Time>
               <TimeSD>0</TimeSD>
-              <RotateMatrix>
-                <ArrayOfDouble>
-                  <double>-185119370499233.03</double>
-                  <double>6920895159953.7979</double>
-                  <double>16808300065461.639</double>
-                  <double>46049968041262560</double>
-                </ArrayOfDouble>
-                <ArrayOfDouble>
-                  <double>171550037263423.28</double>
-                  <double>-6280528146952.3516</double>
-                  <double>-15601341096020.312</double>
-                  <double>-42691911846188104</double>
-                </ArrayOfDouble>
-                <ArrayOfDouble>
-                  <double>460109033244244.37</double>
-                  <double>-38163992673653.961</double>
-                  <double>-37822842809704.562</double>
-                  <double>-9.86577278942908E+16</double>
-                </ArrayOfDouble>
-                <ArrayOfDouble>
-                  <double>0</double>
-                  <double>0</double>
-                  <double>0</double>
-                  <double>1</double>
-                </ArrayOfDouble>
-              </RotateMatrix>
+            </Rotate>
+            <InstallCharacter>MovingIsOnOutsideOfReference</InstallCharacter>
+          </Reference>
+          <Moving xsi:type="SubAssembly" Name="subasm-PumpAssembly - Shaft-1.STL,PumpAssembly - Pump-1.STL,PumpAssembly - Ring-1.STL">
+            <Mass>672004.50597952865</Mass>
+            <Volume>672004.50597952865</Volume>
+            <InternalStabilityInfo>
+              <OverAllDOF>3.5</OverAllDOF>
+              <OverAllTippingScore>9.8</OverAllTippingScore>
+              <OverAllSlidingScore>0</OverAllSlidingScore>
+              <MaxSingleDOF>3.5</MaxSingleDOF>
+              <MinSingleTippingScore>9.8</MinSingleTippingScore>
+              <MinSingleSlidingScore>0</MinSingleSlidingScore>
+              <Totalsecore>0.16666666666666669</Totalsecore>
+              <needfixture>false</needfixture>
+            </InternalStabilityInfo>
+            <Install>
+              <Time>9.6326465572084476</Time>
+              <TimeSD>13.99450555994393</TimeSD>
+              <Reference xsi:type="SubAssembly" Name="subasm-PumpAssembly - Pump-1.STL,PumpAssembly - Shaft-1.STL">
+                <Mass>670494.28354808362</Mass>
+                <Volume>670494.28354808362</Volume>
+                <InternalStabilityInfo>
+                  <OverAllDOF>3.5</OverAllDOF>
+                  <OverAllTippingScore>9.8</OverAllTippingScore>
+                  <OverAllSlidingScore>0</OverAllSlidingScore>
+                  <MaxSingleDOF>3.5</MaxSingleDOF>
+                  <MinSingleTippingScore>9.8</MinSingleTippingScore>
+                  <MinSingleSlidingScore>0</MinSingleSlidingScore>
+                  <Totalsecore>0.29166666666666669</Totalsecore>
+                  <needfixture>false</needfixture>
+                </InternalStabilityInfo>
+                <Install>
+                  <Time>1.0383985636905804</Time>
+                  <TimeSD>12.949781727982373</TimeSD>
+                  <Reference xsi:type="SubAssembly" Name="subasm-PumpAssembly - Pump-1.STL">
+                    <Mass>513533.45727260364</Mass>
+                    <Volume>513533.45727260364</Volume>
+                    <InstallCharacter>Unknown</InstallCharacter>
+                  </Reference>
+                  <Moving xsi:type="SubAssembly" Name="subasm-PumpAssembly - Shaft-1.STL">
+                    <Mass>156960.82627547998</Mass>
+                    <Volume>156960.82627547998</Volume>
+                    <InstallCharacter>Unknown</InstallCharacter>
+                  </Moving>
+                  <InstallDirection>
+                    <double>0.0349</double>
+                    <double>0.9988</double>
+                    <double>0.0349</double>
+                  </InstallDirection>
+                  <InstallDistance>361.07669030399995</InstallDistance>
+                  <InstallDirectionRotated>
+                    <double>-0.24933924453822681</double>
+                    <double>-0.93272174613254144</double>
+                    <double>-0.26057157447536233</double>
+                  </InstallDirectionRotated>
+                </Install>
+                <Secure>
+                  <Time>0</Time>
+                  <TimeSD>0</TimeSD>
+                  <Fasteners />
+                </Secure>
+                <Rotate>
+                  <Time>0</Time>
+                  <TimeSD>0</TimeSD>
+                </Rotate>
+                <InstallCharacter>MovingIsInsideReference</InstallCharacter>
+              </Reference>
+              <Moving xsi:type="SubAssembly" Name="subasm-PumpAssembly - Ring-1.STL">
+                <Mass>1510.2224314450004</Mass>
+                <Volume>1510.2224314450004</Volume>
+                <InstallCharacter>Unknown</InstallCharacter>
+              </Moving>
+              <InstallDirection>
+                <double>0.0349</double>
+                <double>0.9988</double>
+                <double>0.0349</double>
+              </InstallDirection>
+              <InstallDistance>213.60674951999994</InstallDistance>
+              <InstallDirectionRotated>
+                <double>0.034899999999999896</double>
+                <double>0.99880000000000024</double>
+                <double>0.0349</double>
+              </InstallDirectionRotated>
+            </Install>
+            <Secure>
+              <Time>0</Time>
+              <TimeSD>0</TimeSD>
+              <Fasteners />
+            </Secure>
+            <Rotate>
+              <Time>0</Time>
+              <TimeSD>0</TimeSD>
             </Rotate>
             <InstallCharacter>MovingIsInsideReference</InstallCharacter>
           </Moving>
           <InstallDirection>
-            <double>0.0349</double>
-            <double>0.9988</double>
-            <double>0.0349</double>
+            <double>-0</double>
+            <double>-0</double>
+            <double>-1</double>
           </InstallDirection>
-          <InstallDistance>423.57450993829991</InstallDistance>
+          <InstallDistance>393.76690399999995</InstallDistance>
           <InstallDirectionRotated>
-            <double>-60429654.913163342</double>
-            <double>-16330496.817444824</double>
-            <double>-27963912.509878639</double>
+            <double>0.95771803937559141</double>
+            <double>-0.19914545911500423</double>
+            <double>0.20764691947738417</double>
           </InstallDirectionRotated>
         </Install>
         <Secure>
           <Time>0</Time>
           <TimeSD>0</TimeSD>
-          <Fasteners />
+          <Fasteners>
+            <Fastener>
+              <Time>0</Time>
+              <TimeSD>0</TimeSD>
+              <InstallDirection>
+                <double>-0</double>
+                <double>-0</double>
+                <double>-1</double>
+              </InstallDirection>
+              <InstallDistance>186.99996199999998</InstallDistance>
+              <InstallDirectionRotated>
+                <double>0.95771803937559141</double>
+                <double>-0.19914545911500423</double>
+                <double>0.20764691947738417</double>
+              </InstallDirectionRotated>
+              <RemovalDirection>0</RemovalDirection>
+              <Certainty>0</Certainty>
+              <Tool>HexWrench</Tool>
+              <ToolSize>0</ToolSize>
+              <Diameter>10.015863786841985</Diameter>
+              <OverallLength>0</OverallLength>
+              <EngagedLength>0</EngagedLength>
+              <AccessCylinderRadius>0</AccessCylinderRadius>
+              <FastenerType>Bolt</FastenerType>
+              <NumberOfThreads>0</NumberOfThreads>
+              <Nuts />
+              <Washer />
+              <PartsLockedByFastener />
+            </Fastener>
+            <Fastener>
+              <Time>0</Time>
+              <TimeSD>0</TimeSD>
+              <InstallDirection>
+                <double>-0</double>
+                <double>-0</double>
+                <double>-1</double>
+              </InstallDirection>
+              <InstallDistance>186.99996199999998</InstallDistance>
+              <InstallDirectionRotated>
+                <double>0.95771803937559141</double>
+                <double>-0.19914545911500423</double>
+                <double>0.20764691947738417</double>
+              </InstallDirectionRotated>
+              <RemovalDirection>0</RemovalDirection>
+              <Certainty>0</Certainty>
+              <Tool>HexWrench</Tool>
+              <ToolSize>0</ToolSize>
+              <Diameter>10.015863786926548</Diameter>
+              <OverallLength>0</OverallLength>
+              <EngagedLength>0</EngagedLength>
+              <AccessCylinderRadius>0</AccessCylinderRadius>
+              <FastenerType>Bolt</FastenerType>
+              <NumberOfThreads>0</NumberOfThreads>
+              <Nuts />
+              <Washer />
+              <PartsLockedByFastener />
+            </Fastener>
+            <Fastener>
+              <Time>0</Time>
+              <TimeSD>0</TimeSD>
+              <InstallDirection>
+                <double>0.0166</double>
+                <double>0.9509</double>
+                <double>0.309</double>
+              </InstallDirection>
+              <InstallDistance>320.65444684299996</InstallDistance>
+              <InstallDirectionRotated>
+                <double>-0.13506587763779279</double>
+                <double>0.98743286341035441</double>
+                <double>0.081859140938326788</double>
+              </InstallDirectionRotated>
+              <RemovalDirection>4199</RemovalDirection>
+              <Certainty>0</Certainty>
+              <Tool>HexWrench</Tool>
+              <ToolSize>0</ToolSize>
+              <Diameter>3.7000615648566013</Diameter>
+              <OverallLength>0</OverallLength>
+              <EngagedLength>0</EngagedLength>
+              <AccessCylinderRadius>0</AccessCylinderRadius>
+              <FastenerType>Bolt</FastenerType>
+              <NumberOfThreads>0</NumberOfThreads>
+              <Nuts />
+              <Washer />
+              <PartsLockedByFastener />
+            </Fastener>
+            <Fastener>
+              <Time>0</Time>
+              <TimeSD>0</TimeSD>
+              <InstallDirection>
+                <double>0.0166</double>
+                <double>0.9509</double>
+                <double>0.309</double>
+              </InstallDirection>
+              <InstallDistance>325.35758128299994</InstallDistance>
+              <InstallDirectionRotated>
+                <double>-0.13506587763779279</double>
+                <double>0.98743286341035441</double>
+                <double>0.081859140938326788</double>
+              </InstallDirectionRotated>
+              <RemovalDirection>4199</RemovalDirection>
+              <Certainty>0</Certainty>
+              <Tool>HexWrench</Tool>
+              <ToolSize>0</ToolSize>
+              <Diameter>3.7000882961747936</Diameter>
+              <OverallLength>0</OverallLength>
+              <EngagedLength>0</EngagedLength>
+              <AccessCylinderRadius>0</AccessCylinderRadius>
+              <FastenerType>Bolt</FastenerType>
+              <NumberOfThreads>0</NumberOfThreads>
+              <Nuts />
+              <Washer />
+              <PartsLockedByFastener />
+            </Fastener>
+            <Fastener>
+              <Time>0</Time>
+              <TimeSD>0</TimeSD>
+              <InstallDirection>
+                <double>0.0166</double>
+                <double>0.9509</double>
+                <double>0.309</double>
+              </InstallDirection>
+              <InstallDistance>324.27768820299991</InstallDistance>
+              <InstallDirectionRotated>
+                <double>-0.13506587763779279</double>
+                <double>0.98743286341035441</double>
+                <double>0.081859140938326788</double>
+              </InstallDirectionRotated>
+              <RemovalDirection>4199</RemovalDirection>
+              <Certainty>0</Certainty>
+              <Tool>HexWrench</Tool>
+              <ToolSize>0</ToolSize>
+              <Diameter>3.7000427596874887</Diameter>
+              <OverallLength>0</OverallLength>
+              <EngagedLength>0</EngagedLength>
+              <AccessCylinderRadius>0</AccessCylinderRadius>
+              <FastenerType>Bolt</FastenerType>
+              <NumberOfThreads>0</NumberOfThreads>
+              <Nuts />
+              <Washer />
+              <PartsLockedByFastener />
+            </Fastener>
+            <Fastener>
+              <Time>0</Time>
+              <TimeSD>0</TimeSD>
+              <InstallDirection>
+                <double>0.0166</double>
+                <double>0.9509</double>
+                <double>0.309</double>
+              </InstallDirection>
+              <InstallDistance>334.1048715629999</InstallDistance>
+              <InstallDirectionRotated>
+                <double>-0.13506587763779279</double>
+                <double>0.98743286341035441</double>
+                <double>0.081859140938326788</double>
+              </InstallDirectionRotated>
+              <RemovalDirection>4199</RemovalDirection>
+              <Certainty>0</Certainty>
+              <Tool>HexWrench</Tool>
+              <ToolSize>0</ToolSize>
+              <Diameter>3.7000373242575564</Diameter>
+              <OverallLength>0</OverallLength>
+              <EngagedLength>0</EngagedLength>
+              <AccessCylinderRadius>0</AccessCylinderRadius>
+              <FastenerType>Bolt</FastenerType>
+              <NumberOfThreads>0</NumberOfThreads>
+              <Nuts />
+              <Washer />
+              <PartsLockedByFastener />
+            </Fastener>
+            <Fastener>
+              <Time>0</Time>
+              <TimeSD>0</TimeSD>
+              <InstallDirection>
+                <double>0.0166</double>
+                <double>0.9509</double>
+                <double>0.309</double>
+              </InstallDirection>
+              <InstallDistance>335.632071563</InstallDistance>
+              <InstallDirectionRotated>
+                <double>-0.13506587763779279</double>
+                <double>0.98743286341035441</double>
+                <double>0.081859140938326788</double>
+              </InstallDirectionRotated>
+              <RemovalDirection>4199</RemovalDirection>
+              <Certainty>0</Certainty>
+              <Tool>HexWrench</Tool>
+              <ToolSize>0</ToolSize>
+              <Diameter>3.7000518730821264</Diameter>
+              <OverallLength>0</OverallLength>
+              <EngagedLength>0</EngagedLength>
+              <AccessCylinderRadius>0</AccessCylinderRadius>
+              <FastenerType>Bolt</FastenerType>
+              <NumberOfThreads>0</NumberOfThreads>
+              <Nuts />
+              <Washer />
+              <PartsLockedByFastener />
+            </Fastener>
+            <Fastener>
+              <Time>0</Time>
+              <TimeSD>0</TimeSD>
+              <InstallDirection>
+                <double>0.0166</double>
+                <double>0.9509</double>
+                <double>0.309</double>
+              </InstallDirection>
+              <InstallDistance>333.098885983</InstallDistance>
+              <InstallDirectionRotated>
+                <double>-0.13506587763779279</double>
+                <double>0.98743286341035441</double>
+                <double>0.081859140938326788</double>
+              </InstallDirectionRotated>
+              <RemovalDirection>4199</RemovalDirection>
+              <Certainty>0</Certainty>
+              <Tool>HexWrench</Tool>
+              <ToolSize>0</ToolSize>
+              <Diameter>3.7000310816646165</Diameter>
+              <OverallLength>0</OverallLength>
+              <EngagedLength>0</EngagedLength>
+              <AccessCylinderRadius>0</AccessCylinderRadius>
+              <FastenerType>Bolt</FastenerType>
+              <NumberOfThreads>0</NumberOfThreads>
+              <Nuts />
+              <Washer />
+              <PartsLockedByFastener />
+            </Fastener>
+            <Fastener>
+              <Time>0</Time>
+              <TimeSD>0</TimeSD>
+              <InstallDirection>
+                <double>0.0166</double>
+                <double>0.9509</double>
+                <double>0.309</double>
+              </InstallDirection>
+              <InstallDistance>336.72211807299993</InstallDistance>
+              <InstallDirectionRotated>
+                <double>-0.13506587763779279</double>
+                <double>0.98743286341035441</double>
+                <double>0.081859140938326788</double>
+              </InstallDirectionRotated>
+              <RemovalDirection>4199</RemovalDirection>
+              <Certainty>0</Certainty>
+              <Tool>HexWrench</Tool>
+              <ToolSize>0</ToolSize>
+              <Diameter>3.7000084640209874</Diameter>
+              <OverallLength>0</OverallLength>
+              <EngagedLength>0</EngagedLength>
+              <AccessCylinderRadius>0</AccessCylinderRadius>
+              <FastenerType>Bolt</FastenerType>
+              <NumberOfThreads>0</NumberOfThreads>
+              <Nuts />
+              <Washer />
+              <PartsLockedByFastener />
+            </Fastener>
+            <Fastener>
+              <Time>0</Time>
+              <TimeSD>0</TimeSD>
+              <InstallDirection>
+                <double>0.0166</double>
+                <double>0.9509</double>
+                <double>0.309</double>
+              </InstallDirection>
+              <InstallDistance>332.01899290299997</InstallDistance>
+              <InstallDirectionRotated>
+                <double>-0.13506587763779279</double>
+                <double>0.98743286341035441</double>
+                <double>0.081859140938326788</double>
+              </InstallDirectionRotated>
+              <RemovalDirection>4199</RemovalDirection>
+              <Certainty>0</Certainty>
+              <Tool>HexWrench</Tool>
+              <ToolSize>0</ToolSize>
+              <Diameter>3.7000625719337559</Diameter>
+              <OverallLength>0</OverallLength>
+              <EngagedLength>0</EngagedLength>
+              <AccessCylinderRadius>0</AccessCylinderRadius>
+              <FastenerType>Bolt</FastenerType>
+              <NumberOfThreads>0</NumberOfThreads>
+              <Nuts />
+              <Washer />
+              <PartsLockedByFastener />
+            </Fastener>
+            <Fastener>
+              <Time>0</Time>
+              <TimeSD>0</TimeSD>
+              <InstallDirection>
+                <double>0.0166</double>
+                <double>0.9509</double>
+                <double>0.309</double>
+              </InstallDirection>
+              <InstallDistance>353.35539909299996</InstallDistance>
+              <InstallDirectionRotated>
+                <double>-0.13506587763779279</double>
+                <double>0.98743286341035441</double>
+                <double>0.081859140938326788</double>
+              </InstallDirectionRotated>
+              <RemovalDirection>4199</RemovalDirection>
+              <Certainty>0</Certainty>
+              <Tool>HexWrench</Tool>
+              <ToolSize>0</ToolSize>
+              <Diameter>4.0027867399038461</Diameter>
+              <OverallLength>0</OverallLength>
+              <EngagedLength>0</EngagedLength>
+              <AccessCylinderRadius>0</AccessCylinderRadius>
+              <FastenerType>Bolt</FastenerType>
+              <NumberOfThreads>0</NumberOfThreads>
+              <Nuts />
+              <Washer />
+              <PartsLockedByFastener>
+                <int>1</int>
+                <int>2</int>
+                <int>8</int>
+              </PartsLockedByFastener>
+            </Fastener>
+            <Fastener>
+              <Time>0</Time>
+              <TimeSD>0</TimeSD>
+              <InstallDirection>
+                <double>0.0166</double>
+                <double>0.9509</double>
+                <double>0.309</double>
+              </InstallDirection>
+              <InstallDistance>368.80632507299993</InstallDistance>
+              <InstallDirectionRotated>
+                <double>-0.13506587763779279</double>
+                <double>0.98743286341035441</double>
+                <double>0.081859140938326788</double>
+              </InstallDirectionRotated>
+              <RemovalDirection>4199</RemovalDirection>
+              <Certainty>0</Certainty>
+              <Tool>HexWrench</Tool>
+              <ToolSize>0</ToolSize>
+              <Diameter>4.0028209482256933</Diameter>
+              <OverallLength>0</OverallLength>
+              <EngagedLength>0</EngagedLength>
+              <AccessCylinderRadius>0</AccessCylinderRadius>
+              <FastenerType>Bolt</FastenerType>
+              <NumberOfThreads>0</NumberOfThreads>
+              <Nuts />
+              <Washer />
+              <PartsLockedByFastener>
+                <int>1</int>
+                <int>2</int>
+                <int>8</int>
+              </PartsLockedByFastener>
+            </Fastener>
+            <Fastener>
+              <Time>0</Time>
+              <TimeSD>0</TimeSD>
+              <InstallDirection>
+                <double>0.0166</double>
+                <double>0.9509</double>
+                <double>0.309</double>
+              </InstallDirection>
+              <InstallDistance>351.811599093</InstallDistance>
+              <InstallDirectionRotated>
+                <double>-0.13506587763779279</double>
+                <double>0.98743286341035441</double>
+                <double>0.081859140938326788</double>
+              </InstallDirectionRotated>
+              <RemovalDirection>4199</RemovalDirection>
+              <Certainty>0</Certainty>
+              <Tool>HexWrench</Tool>
+              <ToolSize>0</ToolSize>
+              <Diameter>4.0028088776564745</Diameter>
+              <OverallLength>0</OverallLength>
+              <EngagedLength>0</EngagedLength>
+              <AccessCylinderRadius>0</AccessCylinderRadius>
+              <FastenerType>Bolt</FastenerType>
+              <NumberOfThreads>0</NumberOfThreads>
+              <Nuts />
+              <Washer />
+              <PartsLockedByFastener>
+                <int>1</int>
+                <int>2</int>
+                <int>9</int>
+              </PartsLockedByFastener>
+            </Fastener>
+            <Fastener>
+              <Time>0</Time>
+              <TimeSD>0</TimeSD>
+              <InstallDirection>
+                <double>0.0166</double>
+                <double>0.9509</double>
+                <double>0.309</double>
+              </InstallDirection>
+              <InstallDistance>367.261592913</InstallDistance>
+              <InstallDirectionRotated>
+                <double>-0.13506587763779279</double>
+                <double>0.98743286341035441</double>
+                <double>0.081859140938326788</double>
+              </InstallDirectionRotated>
+              <RemovalDirection>4199</RemovalDirection>
+              <Certainty>0</Certainty>
+              <Tool>HexWrench</Tool>
+              <ToolSize>0</ToolSize>
+              <Diameter>4.002808917625992</Diameter>
+              <OverallLength>0</OverallLength>
+              <EngagedLength>0</EngagedLength>
+              <AccessCylinderRadius>0</AccessCylinderRadius>
+              <FastenerType>Bolt</FastenerType>
+              <NumberOfThreads>0</NumberOfThreads>
+              <Nuts />
+              <Washer />
+              <PartsLockedByFastener>
+                <int>1</int>
+                <int>2</int>
+                <int>9</int>
+              </PartsLockedByFastener>
+            </Fastener>
+          </Fasteners>
         </Secure>
         <Rotate>
           <Time>0</Time>
           <TimeSD>0</TimeSD>
-          <RotateMatrix>
-            <ArrayOfDouble>
-              <double>-1194152653.364449</double>
-              <double>-12630708.552178923</double>
-              <double>-175878957.27300179</double>
-              <double>396231289146.17</double>
-            </ArrayOfDouble>
-            <ArrayOfDouble>
-              <double>-322703751.02542865</double>
-              <double>-3413183.9231427209</double>
-              <double>-47537186.367404394</double>
-              <double>107076497835.81366</double>
-            </ArrayOfDouble>
-            <ArrayOfDouble>
-              <double>95455400.829115108</double>
-              <double>17019220.466442913</double>
-              <double>-1383785197.7277346</double>
-              <double>126545162753.34506</double>
-            </ArrayOfDouble>
-            <ArrayOfDouble>
-              <double>0</double>
-              <double>0</double>
-              <double>0</double>
-              <double>1</double>
-            </ArrayOfDouble>
-          </RotateMatrix>
         </Rotate>
         <InstallCharacter>MovingIsOnOutsideOfReference</InstallCharacter>
       </SubAssembly>

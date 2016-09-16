@@ -197,7 +197,7 @@
 		
 		
 		
-		if(manualFileInput){
+		if(manualFileInput==true){
 		
 			document.getElementById("HUD").innerHTML="<input type='file' id='fileinput' multiple />"+document.getElementById("HUD").innerHTML;
 
@@ -652,7 +652,7 @@
 			// Change appearence of the object of interest and display the appropriate information
 			if(objectOfInterest!=null){
 			
-				mouseOverText=" "+objectOfInterest.Name;
+				mouseOverText=" "+objectOfInterest.Name.substring(0,objectOfInterest.Name.length-4);
 				objectOfInterest.Mesh.material=new THREE.MeshStandardMaterial({
 					color:0xbbbbbb,
 					roughness: 1.0,
@@ -837,6 +837,8 @@
 		
 		function renderParts(){
 		
+			
+		
 			// Cuts of the common first characters from all the part names
 			cutoffPartNames(parts);
 			
@@ -864,7 +866,7 @@
 			
 			// Links each key frame list object to the appropriate part object
 			partFrames= bindPartsToKeyFrames(theFrameLists,parts);
-			//showFrames(theFrameLists);
+			showFrames(theFrameLists);
 			
 			// Zeroes the time, for obvious reasons
 			theTime=0;
@@ -886,7 +888,6 @@
 			
 			// Fixes a minor thing in the treequence graphic 
 			getChildrenByTag(document.getElementById("treequenceDiv"),"BUTTON")[0].innerHTML="+";
-			
 			// Begins to display the parts
 			render();
 		
