@@ -29,7 +29,15 @@ particularly user-friendly. So, an external visualization has been created which
 1. The root directory is populated with a number of folders and binaries. All the dll's are there to support the main exe, AssemblyPlanner.exe. 
 2. In the folder, "workspace", place your shape files for your assembly (stls, plys, AMFs or 3MFs). Remove all other files.
 3. Now, run AssemblyPlanner.exe. A console window will open and begin sending status updates about the process. Do not close this window.
-4. This process will pause with the following statement, "". At this time, go back to the folder and open the file "partTable.html" 
+4. This process will pause with the following statement, "Press enter once input parts table generated". At this time, go back to the root folder and open the file "partTable.html"
+5. In the newly opened web page, click on the "choose files" button in the upper-left corner of the screen and select the file named "parts_properties.xml" in the folder "workspace" (which should have just been generate by the program).
+6. In the resulting table, enter the density/mass information for each part and correct the fastener classification of each part, as needed, using the check boxes of each corresponding entry.
+7. Once the entire table has been filled out, click the button labeled "Render XML". This should cause a "download" link to appear next to the button. Click on this and move the downloaded file (which should be called "parts_properties2.xml") into the "workspace" folder.
+8. Navigate back to the console application and press enter.
+9. Once the process finishes, producing a notification giving the total time of the process, the console application may be closed.
+10. Open the file in the root folder named "render.html".
+11. In the newly opened web page, click on the "choose files" button and select all models in the "workspace" folder as well as the file labeled "solution.xml". Do not select any files beyond this. Then press "Open".
+12. 
 
 ## Contribution guidelines ##
 Current efforts are being completed by the Design Engineering Lab at Oregon State University. If you are interested in contributing contact Prof. Matt Campbell at matt<dot>campbell<at>oregonstate<dot>edu.
