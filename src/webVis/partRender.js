@@ -100,12 +100,15 @@ function bindPartsToKeyFrames(theKeyFrameLists, theParts){
 	while(pos<lim){
 		searchPos=0;
 		while(searchPos<searchLim){
-			if(theKeyFrameLists[pos].Name===theParts[searchPos].Name){
+			if(theKeyFrameLists[pos].Name===theParts[searchPos].Name+".STL"){
 				break;
 			}
+			//console.log(theKeyFrameLists[pos].Name);
+			//console.log(theParts[searchPos].Name);
 			searchPos++;
 		}
 		if(searchPos==searchLim){
+			pos++;
 			continue;
 		}
 		result.push({
@@ -113,16 +116,18 @@ function bindPartsToKeyFrames(theKeyFrameLists, theParts){
 			Frames: theKeyFrameLists[pos].Frames,
 			Mesh: theParts[searchPos].Mesh
 		});
-		/*console.log({
+		console.log({
 			Name: theKeyFrameLists[pos].Name,
-			Frames: theKeyFrameLists.Frames,
-			Mesh: theParts.Mesh
-		});*/
+			Frames: theKeyFrameLists[pos].Frames,
+			Mesh: theParts[searchPos].Mesh
+		});
 		pos++;
 	}
 	
 	flipTheTimes(result);
 	console.log(result);
+	
+	console.log("AAAAAARG");
 	return result;
 	
 }
