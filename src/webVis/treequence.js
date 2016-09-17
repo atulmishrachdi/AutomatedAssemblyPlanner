@@ -701,7 +701,7 @@ function insertTreequenceHTML(theTree,parentElement){
 								0x1F950,0x1F95E,
 								0x1F980,0x1F991*/
 								]);
-		parentElement.appendChild(document.createTextNode(theTree.Name+"("+theName+")"));
+		parentElement.appendChild(document.createTextNode(theTree.Name.substring(0,theTree.Name.length-4)+"("+theName+")"));
 	}
 	
 	var movName;
@@ -721,7 +721,7 @@ function insertTreequenceHTML(theTree,parentElement){
 	
 	// If not a leaf, make name and insert it
 	if(theTree.Ref!=null || theTree.Mov!=null){
-		theName="["+movName+refName+"]";
+		theName=movName+refName;
 		parentElement.insertBefore(document.createTextNode("  "+theName),theMov);
 	}
 	
