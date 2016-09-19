@@ -1,18 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>src\webVis\partRender.js</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="icon" href="../assets/favicon.ico">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+                <h1><img src="../assets/css/logo.png" title="" width="117" height="52"></h1>
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: </em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+                    <h2 class="off-left">APIs</h2>
+                    <div id="api-tabview" class="tabview">
+                        <ul class="tabs">
+                            <li><a href="#api-classes">Classes</a></li>
+                            <li><a href="#api-elements">Elements</a></li>
+                            <li><a href="#api-modules">Modules</a></li>
+                        </ul>
+                
+                        <div id="api-tabview-filter">
+                            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+                        </div>
+                
+                        <div id="api-tabview-panel">
+                            <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/renderGlobal.html">renderGlobal</a></li>
+                            </ul>
+                
+                                <ul id="api-elements" class="apis elements">
+                                    <li><a href="../elements/inputState.html">&lt;inputState&gt;</a></li>
+                                </ul>
+                
+                            <ul id="api-modules" class="apis modules">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+                    Show:
+                    <label for="api-show-inherited">
+                        <input type="checkbox" id="api-show-inherited" checked>
+                        Inherited
+                    </label>
+            
+                    <label for="api-show-protected">
+                        <input type="checkbox" id="api-show-protected">
+                        Protected
+                    </label>
+            
+                    <label for="api-show-private">
+                        <input type="checkbox" id="api-show-private">
+                        Private
+                    </label>
+                    <label for="api-show-deprecated">
+                        <input type="checkbox" id="api-show-deprecated">
+                        Deprecated
+                    </label>
+            
+                </div>
+            
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+<h1 class="file-heading">File: src\webVis\partRender.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
 ;
 
 
 
 /**
 *
-* Accepts an array of objects containing a string property called "Name" and returns
-* the first index where any two "Name" properties in the array have different characters.
+* Accepts an array of objects containing a string property called &quot;Name&quot; and returns
+* the first index where any two &quot;Name&quot; properties in the array have different characters.
 *
 *
 * @method getPartNameCutoff
 * @for renderGlobal
 * @param {Object Array} partFrames An array of objects, each of which should containin
-* a property called "Name" with a non-null string.
-* @return {Int} The first index where any two "Name" properties in the array are different.
+* a property called &quot;Name&quot; with a non-null string.
+* @return {Int} The first index where any two &quot;Name&quot; properties in the array are different.
 * 
 */
 function getPartNameCutoff(partFrames){
@@ -21,9 +107,9 @@ function getPartNameCutoff(partFrames){
 	var lim=partFrames.length;
 	var checkPos;
 	var checkLim=partFrames[0].Name.length;
-	while(pos<lim){
+	while(pos&lt;lim){
 		checkPos=0;
-		while(checkPos<checkLim){
+		while(checkPos&lt;checkLim){
 			if(partFrames[pos].Name[checkPos]!=partFrames[0].Name[checkPos]){
 				checkLim=checkPos;
 			}
@@ -39,15 +125,15 @@ function getPartNameCutoff(partFrames){
 
 /**
 *
-* Accepts an array of objects containing a string property called "Name" removes
+* Accepts an array of objects containing a string property called &quot;Name&quot; removes
 * the first N characters in each string, where N is the first index where any two
-* "Name" properties in the array have different characters.
+* &quot;Name&quot; properties in the array have different characters.
 *
 *
 * @method cutoffPartNames
 * @for renderGlobal
 * @param {Object Array} partFrames An array of objects, each of which should containin
-* a property called "Name" with a non-null string.
+* a property called &quot;Name&quot; with a non-null string.
 * @return {Void}
 * 
 */
@@ -57,7 +143,7 @@ function cutoffPartNames(partFrames){
 	
 	var pos=0;
 	var lim=partFrames.length;
-	while(pos<lim){
+	while(pos&lt;lim){
 		partFrames[pos].Name=partFrames[pos].Name.substr(cut,partFrames[pos].Name.length-(cut+4));
 		pos++;
 	}
@@ -88,7 +174,7 @@ function centerGeometry(theGeo){
 	if(lim==0){
 		return new THREE.Vector3(avgX,avgY,avgZ);
 	}
-	while(pos<lim){
+	while(pos&lt;lim){
 		avgX+=verts[pos].x;
 		avgY+=verts[pos].y;
 		avgZ+=verts[pos].z;
@@ -101,7 +187,7 @@ function centerGeometry(theGeo){
 	avgY/=lim;
 	avgZ/=lim;
 	pos=0;
-	while(pos<lim){
+	while(pos&lt;lim){
 		verts[pos].x-=avgX;
 		verts[pos].y-=avgY;
 		verts[pos].z-=avgZ;
@@ -120,7 +206,7 @@ function getGeometries(theSTLs){
 	var result=[];
 	var pos=0;
 	var lim=theSTLs.length;
-	while(pos<lim){
+	while(pos&lt;lim){
 		result.push(parseStlBinary(theSTLs[pos]));
 		pos++;
 	}
@@ -140,9 +226,9 @@ function getGeometries(theSTLs){
 * @method bindPartsToKeyFrames
 * @for renderGlobal
 * @param {Array} theKeyFrameLists An array of objects, each containing an array of keyframe objects 
-* called "Frames" and a string property called "Name")
-* @param {Array} theParts An array of objects, each containing a threeJS mesh object called "Mesh" and
-* a string property called "Name"
+* called &quot;Frames&quot; and a string property called &quot;Name&quot;)
+* @param {Array} theParts An array of objects, each containing a threeJS mesh object called &quot;Mesh&quot; and
+* a string property called &quot;Name&quot;
 * @return {Array} 
 *
 */
@@ -159,10 +245,10 @@ function bindPartsToKeyFrames(theKeyFrameLists, theParts){
 	
 	
 	
-	while(pos<lim){
+	while(pos&lt;lim){
 		searchPos=0;
-		while(searchPos<searchLim){
-			if(theKeyFrameLists[pos].Name===theParts[searchPos].Name+".STL"){
+		while(searchPos&lt;searchLim){
+			if(theKeyFrameLists[pos].Name===theParts[searchPos].Name+&quot;.STL&quot;){
 				break;
 			}
 			//console.log(theKeyFrameLists[pos].Name);
@@ -189,7 +275,7 @@ function bindPartsToKeyFrames(theKeyFrameLists, theParts){
 	flipTheTimes(result);
 	console.log(result);
 	
-	console.log("AAAAAARG");
+	console.log(&quot;AAAAAARG&quot;);
 	return result;
 	
 }
@@ -199,12 +285,12 @@ function bindPartsToKeyFrames(theKeyFrameLists, theParts){
 /**
 *
 * Combines a jagged array of objects, each object at least possessing a numeric
-* property called "Time", returns the value of the greatest "Time" property
+* property called &quot;Time&quot;, returns the value of the greatest &quot;Time&quot; property
 *
 * @method longestTimeFromFrames
 * @for renderGlobal
 * @param {Array} partFrames The jagged array
-* @return {Int} The greatest "Time" value in the jagged array
+* @return {Int} The greatest &quot;Time&quot; value in the jagged array
 *
 */
 function longestTimeFromFrames(partFrames){
@@ -214,10 +300,10 @@ function longestTimeFromFrames(partFrames){
 	var xLim=partFrames.length;
 	var yLim;
 	var best=0;
-	while(x<xLim){
+	while(x&lt;xLim){
 		y=0;
 		yLim=partFrames[x].Frames.length;
-		while(y<yLim){
+		while(y&lt;yLim){
 			best=Math.max(best,partFrames[x].Frames[y].Time);
 			y++;
 		}
@@ -232,14 +318,14 @@ function longestTimeFromFrames(partFrames){
 /**
 *
 * Given a jagged array of objects, each object at least possessing a numeric
-* property called "Time", sets each Time property to the greatest Time value in
+* property called &quot;Time&quot;, sets each Time property to the greatest Time value in
 * the jagged array minus the origional value, thus effectively reversing the
 * temporal order of each object
 *
 * @method flipTheTimes
 * @for renderGlobal
 * @param {Array} partFrames The jagged array
-* @return {Int} The greatest "Time" value in the jagged array
+* @return {Int} The greatest &quot;Time&quot; value in the jagged array
 *
 */
 function flipTheTimes(partFrames){
@@ -249,10 +335,10 @@ function flipTheTimes(partFrames){
 	var xLim=partFrames.length;
 	var yLim;
 	var tFlip=longestTimeFromFrames(partFrames);
-	while(x<xLim){
+	while(x&lt;xLim){
 		y=0;
 		yLim=partFrames[x].Frames.length;
-		while(y<yLim){
+		while(y&lt;yLim){
 			partFrames[x].Frames[y].Time=tFlip-partFrames[x].Frames[y].Time;
 			y++;
 		}
@@ -266,8 +352,8 @@ function flipTheTimes(partFrames){
 
 /**
 *
-* Logs the contents of the given jagged array of keyFrame objects, each containing numeric properties "X",
-* "Y", "Z", and "Time", to the console as a string.
+* Logs the contents of the given jagged array of keyFrame objects, each containing numeric properties &quot;X&quot;,
+* &quot;Y&quot;, &quot;Z&quot;, and &quot;Time&quot;, to the console as a string.
 *
 * @method showFrames
 * @for renderGlobal
@@ -284,13 +370,13 @@ function showFrames(partFrames){
 	var tFlip=longestTimeFromFrames(partFrames);
 	var timeList;
 	var listList=[];
-	while(x<xLim){
+	while(x&lt;xLim){
 		timeList=[];
 		y=0;
 		yLim=partFrames[x].Frames.length;
-		while(y<yLim){
+		while(y&lt;yLim){
 			theFrame=partFrames[x].Frames[y];
-			timeList.push("X: "+theFrame.Position.x+" Y: "+theFrame.Position.y+" Z: "+theFrame.Position.z+" Time: "+theFrame.Time);
+			timeList.push(&quot;X: &quot;+theFrame.Position.x+&quot; Y: &quot;+theFrame.Position.y+&quot; Z: &quot;+theFrame.Position.z+&quot; Time: &quot;+theFrame.Time);
 			y++;
 		}
 		listList.push(timeList);
@@ -304,8 +390,8 @@ function showFrames(partFrames){
 
 /**
 *
-* Logs the contents of a given keyFrame object, containing numeric properties "X",
-* "Y", "Z", and "Time", to the console as a string.
+* Logs the contents of a given keyFrame object, containing numeric properties &quot;X&quot;,
+* &quot;Y&quot;, &quot;Z&quot;, and &quot;Time&quot;, to the console as a string.
 *
 * @method showFrames
 * @for renderGlobal
@@ -315,7 +401,7 @@ function showFrames(partFrames){
 */
 function sayFrame(theFrame){
 	
-	console.log("X: "+theFrame.Position.x+" Y: "+theFrame.Position.y+" Z: "+theFrame.Position.z+" Time: "+theFrame.Time);
+	console.log(&quot;X: &quot;+theFrame.Position.x+&quot; Y: &quot;+theFrame.Position.y+&quot; Z: &quot;+theFrame.Position.z+&quot; Time: &quot;+theFrame.Time);
 	
 }
 
@@ -367,7 +453,7 @@ function copyFrameList (theFrameList){
 	var pos=0;
 	var lim=theFrameList.length;
 	var result=[];
-	while(pos<lim){		
+	while(pos&lt;lim){		
 		result.push(copyFrame(theFrameList[pos]));
 		pos++;
 	}
@@ -382,14 +468,14 @@ function makeKeyFrames(theTree, runningList, currentFrameList){
 	var isRoot=0;
 	if(runningList.length==0){
 		isRoot=1;
-		console.log("ROOT");
+		console.log(&quot;ROOT&quot;);
 		console.log(theTree);
 	}
 	
 	console.log(theTree);
 	
 	var newQuat= new THREE.Quaternion();
-	newQuat.setFromEuler(new THREE.Euler(0,0,0,'XYZ'));
+	newQuat.setFromEuler(new THREE.Euler(0,0,0,&#x27;XYZ&#x27;));
 	
 	var presentFrame={
 						Quat: newQuat, 
@@ -402,7 +488,7 @@ function makeKeyFrames(theTree, runningList, currentFrameList){
 	
 	if(theTree.Ref===null){
 		var copiedList= copyFrameList(runningList);
-		console.log("-----------");
+		console.log(&quot;-----------&quot;);
 		currentFrameList.push({Name: theTree.Name, Frames: copiedList});
 		runningList.pop();
 	}
@@ -433,17 +519,17 @@ function interpolate(keyFrame1, keyFrame2, proportion, posit){
 	result.Position.z=keyFrame1.Position.z*(1-proportion)+keyFrame2.Position.z*proportion;
 	result.Time=keyFrame1.Time*(1-proportion)+keyFrame2.Time*proportion;
 	
-	if(posit.distanceTo(result)>0.00001){
-		console.log("DISTANCE: "+posit.distanceTo(result).toString());
+	if(posit.distanceTo(result)&gt;0.00001){
+		console.log(&quot;DISTANCE: &quot;+posit.distanceTo(result).toString());
 	}
 	
 	if(hasNaN(result)){
-		console.log("vvvvvvvvvvvv");
-		console.log("Prop: "+proportion);
+		console.log(&quot;vvvvvvvvvvvv&quot;);
+		console.log(&quot;Prop: &quot;+proportion);
 		sayFrame(keyFrame1);
 		sayFrame(keyFrame2);
 		sayFrame(result);
-		console.log("^^^^^^^^^^^^");
+		console.log(&quot;^^^^^^^^^^^^&quot;);
 	}	
 	
 	return result;
@@ -455,28 +541,28 @@ function grabInterp(frameList, time, posit){
 
 	var pos=0;
 	var lim=frameList.length;
-	//var timeReport="";
-	while((pos<lim) && (time>frameList[pos].Time)){
-		//timeReport=timeReport+" -> "+frameList[pos].Time.toString();
+	//var timeReport=&quot;&quot;;
+	while((pos&lt;lim) &amp;&amp; (time&gt;frameList[pos].Time)){
+		//timeReport=timeReport+&quot; -&gt; &quot;+frameList[pos].Time.toString();
 		pos++; 
 	}
 	
 	
-	/*if(pos<lim){
-		timeReport=timeReport+" -> "+time+" <- "+frameList[pos].Time.toString();
+	/*if(pos&lt;lim){
+		timeReport=timeReport+&quot; -&gt; &quot;+time+&quot; &lt;- &quot;+frameList[pos].Time.toString();
 	}
 	else{
-		timeReport=timeReport+" -> "+frameList[lim-1].Time.toString()+" -> "+time;
+		timeReport=timeReport+&quot; -&gt; &quot;+frameList[lim-1].Time.toString()+&quot; -&gt; &quot;+time;
 	}
 	console.log(timeReport);*/
 	
 	if(pos==0){
-		//console.log(time.toString()+"<"+frameList[0].Time.toString());
+		//console.log(time.toString()+&quot;&lt;&quot;+frameList[0].Time.toString());
 		var theResult= copyFrame(frameList[0]);
 		
 	}
 	else if(pos==lim){
-		//console.log(time.toString()+">"+frameList[lim-1].Time.toString());
+		//console.log(time.toString()+&quot;&gt;&quot;+frameList[lim-1].Time.toString());
 		var theResult= copyFrame(frameList[lim-1]);
 	}
 	else{
@@ -485,8 +571,8 @@ function grabInterp(frameList, time, posit){
 		var theResult=interpolate(frameList[pos-1],frameList[pos],prop, posit);
 	}
 	
-	if(posit.distanceTo(theResult)>0.00001){
-		console.log("DISTANCE: "+posit.distanceTo(thResult).toString());
+	if(posit.distanceTo(theResult)&gt;0.00001){
+		console.log(&quot;DISTANCE: &quot;+posit.distanceTo(thResult).toString());
 	}
 	
 	//sayFrame(theResult);
@@ -501,14 +587,14 @@ function animate(partFrames, time, timeWarp){
 	var interp;
 	var eul= new THREE.Euler();
 	var delt=new THREE.Vector3();
-	while(pos<lim){
+	while(pos&lt;lim){
 		
 		interp=grabInterp(partFrames[pos].Frames,time,partFrames[pos].Mesh.position);
 		
 		/*delt=partFrames[pos].Mesh.position.sub(interp.Position);
 		
 		
-		if(delt.length()>0.00000001){
+		if(delt.length()&gt;0.00000001){
 			console.log(delt.length());
 			console.log(delt);
 		}*/
@@ -558,7 +644,7 @@ function getGlobBounds(partFrames){
 	
 	var pos=1;
 	var lim=partFrames.length;
-	while(pos<lim){
+	while(pos&lt;lim){
 		partFrames[pos].Mesh.geometry.computeBoundingBox();
 		runningBound=combineBounds(runningBound,partFrames[pos].Mesh.geometry.boundingBox);
 		pos++;
@@ -574,7 +660,7 @@ function getMaxDist(pointList,theCenter){
 	var pos=1;
 	var lim=pointList.length;
 	var dst= pointList[0].distanceTo(theCenter);
-	while(pos<lim){
+	while(pos&lt;lim){
 		dst=Math.max(dst,pointList[pos].distanceTo(theCenter));
 		pos++;
 	}
@@ -621,14 +707,14 @@ function getFirstIntersect(theScene, theCamera, partFrames){
 		var pos=0;
 		var lim=partFrames.length;
 		var part=intersectList[0].object;
-		while(pos<lim){
+		while(pos&lt;lim){
 			if(part===partFrames[pos].Mesh){
 				return partFrames[pos];
 			}
-			/*console.log("vvvvvvvvv");
+			/*console.log(&quot;vvvvvvvvv&quot;);
 			console.log(part);
 			console.log(partFrames[pos].Mesh);
-			console.log("^^^^^^^^^");*/
+			console.log(&quot;^^^^^^^^^&quot;);*/
 			pos++;
 		}
 		return null;		
@@ -643,7 +729,7 @@ function flipNormals(theMesh){
 	var pos=0;
 	var lim=trigs.length;
 	var holder;
-	while(pos<lim){
+	while(pos&lt;lim){
 		holder=trigs[pos].c;
 		trigs[pos].c=trigs[pos].b;
 		trigs[pos].b=holder;
@@ -660,7 +746,7 @@ function addNoise(theMesh,avg,noiseLevel){
 	var pos=0;
 	var lim=verts.length;
 	
-	while(pos<lim){
+	while(pos&lt;lim){
 		//console.log(pos);
 
 		verts[pos].z+=(Math.random()*noiseLevel*2-noiseLevel)/(1+Math.abs(verts[pos].z-avg))+(avg-verts[pos].z)*Math.abs(avg-verts[pos].z)*0.01;
@@ -679,10 +765,10 @@ function smooth (theMesh, dim){
 	var verts=theMesh.geometry.vertices;
 	var xpos;
 	var ypos=0;
-	while(ypos<dim){
+	while(ypos&lt;dim){
 		xpos=0;
-		while(xpos<dim){
-			if(xpos>0 & xpos<dim-1 & ypos>0 & ypos<dim-1){
+		while(xpos&lt;dim){
+			if(xpos&gt;0 &amp; xpos&lt;dim-1 &amp; ypos&gt;0 &amp; ypos&lt;dim-1){
 				verts[xpos+dim*ypos].y=verts[xpos+dim*ypos].y;
 				verts[xpos+dim*ypos].y+=verts[(xpos+1)+dim*ypos].y;
 				verts[xpos+dim*ypos].y+=verts[(xpos-1)+dim*ypos].y;
@@ -784,16 +870,16 @@ function updateLines(movTree,parentNode,theTime){
 		return;
 	}
 	else{
-		if(movTree.Line!=null && parentNode!=null){
-			if(theTime<=parentNode.Time){
-				if(theTime>=movTree.Time){
+		if(movTree.Line!=null &amp;&amp; parentNode!=null){
+			if(theTime&lt;=parentNode.Time){
+				if(theTime&gt;=movTree.Time){
 					var normTime=(parentNode.Time-theTime)/(parentNode.Time-movTree.Time);
 					movTree.Line.geometry.vertices[0].x=(movTree.X+movTree.Disp.x)*(normTime)+(parentNode.X+movTree.Disp.x)*(1-normTime);
 					movTree.Line.geometry.vertices[0].y=(movTree.Y+movTree.Disp.y)*(normTime)+(parentNode.Y+movTree.Disp.y)*(1-normTime);
 					movTree.Line.geometry.vertices[0].z=(movTree.Z+movTree.Disp.z)*(normTime)+(parentNode.Z+movTree.Disp.z)*(1-normTime);
-					/*console.log("X: "+movTree.Line.geometry.vertices[0].x+
-					" Y: "+movTree.Line.geometry.vertices[0].y+
-					" Z: "+movTree.Line.geometry.vertices[0].z);*/
+					/*console.log(&quot;X: &quot;+movTree.Line.geometry.vertices[0].x+
+					&quot; Y: &quot;+movTree.Line.geometry.vertices[0].y+
+					&quot; Z: &quot;+movTree.Line.geometry.vertices[0].z);*/
 
 				}
 				else{
@@ -803,7 +889,7 @@ function updateLines(movTree,parentNode,theTime){
 				}
 			}
 			else{
-				//console.log("time: "+theTime+" mov: "+movTree.Time+" parent: "+parentNode.Time);
+				//console.log(&quot;time: &quot;+theTime+&quot; mov: &quot;+movTree.Time+&quot; parent: &quot;+parentNode.Time);
 				movTree.Line.geometry.vertices[0]=movTree.Line.geometry.vertices[1].clone();
 			}
 			movTree.Line.geometry.verticesNeedUpdate=true;
@@ -819,3 +905,22 @@ function updateLines(movTree,parentNode,theTime){
 
 
 
+
+    </pre>
+</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

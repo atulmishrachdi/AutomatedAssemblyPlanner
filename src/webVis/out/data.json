@@ -1,15 +1,15 @@
 {
     "project": {},
     "files": {
-        "src\\webVis\\jquery.js": {
-            "name": "src\\webVis\\jquery.js",
+        "jquery.js": {
+            "name": "jquery.js",
             "modules": {},
             "classes": {},
             "fors": {},
             "namespaces": {}
         },
-        "src\\webVis\\renderScript.js": {
-            "name": "src\\webVis\\renderScript.js",
+        "renderScript.js": {
+            "name": "renderScript.js",
             "modules": {},
             "classes": {
                 "renderGlobal": 1
@@ -19,8 +19,8 @@
             },
             "namespaces": {}
         },
-        "src\\webVis\\sigma.canvas.edges.curvedArrow.js": {
-            "name": "src\\webVis\\sigma.canvas.edges.curvedArrow.js",
+        "sigma.canvas.edges.curvedArrow.js": {
+            "name": "sigma.canvas.edges.curvedArrow.js",
             "modules": {},
             "classes": {},
             "fors": {},
@@ -37,7 +37,7 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
-            "file": "src\\webVis\\renderScript.js",
+            "file": "renderScript.js",
             "line": 6,
             "description": "Class containing all the methods used in the 3d visual assembly",
             "static": 1
@@ -47,7 +47,7 @@
         "inputState": {
             "name": "inputState",
             "attributes": [],
-            "file": "src\\webVis\\renderScript.js",
+            "file": "renderScript.js",
             "line": 116,
             "description": "Contains a representation of the last keyboard events reported by the \n web page for each given key that acts as input for manipulating the\n visulization: 'W','A','S','D','R','F', and the 'Space' key",
             "return": {
@@ -58,7 +58,7 @@
     },
     "classitems": [
         {
-            "file": "src\\webVis\\jquery.js",
+            "file": "jquery.js",
             "line": 890,
             "description": "Create key-value caches of limited size",
             "return": {
@@ -68,7 +68,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\jquery.js",
+            "file": "jquery.js",
             "line": 910,
             "description": "Mark a function for special use by Sizzle",
             "params": [
@@ -81,7 +81,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\jquery.js",
+            "file": "jquery.js",
             "line": 919,
             "description": "Support testing using an element",
             "params": [
@@ -94,7 +94,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\jquery.js",
+            "file": "jquery.js",
             "line": 940,
             "description": "Adds the same handler for all of the specified attrs",
             "params": [
@@ -112,7 +112,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\jquery.js",
+            "file": "jquery.js",
             "line": 954,
             "description": "Checks document order of two siblings",
             "params": [
@@ -134,7 +134,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\jquery.js",
+            "file": "jquery.js",
             "line": 982,
             "description": "Returns a function to use in pseudos for input types",
             "params": [
@@ -147,7 +147,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\jquery.js",
+            "file": "jquery.js",
             "line": 993,
             "description": "Returns a function to use in pseudos for buttons",
             "params": [
@@ -160,7 +160,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\jquery.js",
+            "file": "jquery.js",
             "line": 1004,
             "description": "Returns a function to use in pseudos for :enabled/:disabled",
             "params": [
@@ -173,7 +173,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\jquery.js",
+            "file": "jquery.js",
             "line": 1032,
             "description": "Returns a function to use in pseudos for positionals",
             "params": [
@@ -186,7 +186,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\jquery.js",
+            "file": "jquery.js",
             "line": 1054,
             "description": "Checks a node for validity as a Sizzle context",
             "params": [
@@ -203,7 +203,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\jquery.js",
+            "file": "jquery.js",
             "line": 1066,
             "description": "Detects XML nodes",
             "params": [
@@ -220,7 +220,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\jquery.js",
+            "file": "jquery.js",
             "line": 1078,
             "description": "Sets document-related variables once based on the current document",
             "params": [
@@ -238,7 +238,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\jquery.js",
+            "file": "jquery.js",
             "line": 1532,
             "description": "Document sorting and removing duplicates",
             "params": [
@@ -251,7 +251,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\jquery.js",
+            "file": "jquery.js",
             "line": 1565,
             "description": "Utility function for retrieving the text value of an array of DOM nodes",
             "params": [
@@ -264,7 +264,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\jquery.js",
+            "file": "jquery.js",
             "line": 2594,
             "description": "A low-level selection function that works with Sizzle's compiled\n selector functions",
             "params": [
@@ -294,19 +294,19 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\jquery.js",
+            "file": "jquery.js",
             "line": 9606,
             "description": "Load a url into a page",
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\jquery.js",
+            "file": "jquery.js",
             "line": 9698,
             "description": "Gets a window from an element",
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\renderScript.js",
+            "file": "renderScript.js",
             "line": 26,
             "description": "The function which handles the actual rendering of the solution file animation\n and loading in the models",
             "itemtype": "method",
@@ -330,7 +330,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\renderScript.js",
+            "file": "renderScript.js",
             "line": 273,
             "description": "Attempts to lock the mouse for camera manupulation",
             "itemtype": "method",
@@ -342,11 +342,11 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\renderScript.js",
+            "file": "renderScript.js",
             "line": 295,
             "description": "Adds or Removes event listeners for input meant for camera manipulation.\n Is triggered by a change in the state of the mouse locking or unlocking. \n The mouse locking results in input listeners being added to the webpage,\n whereas the unlocking of the mouse results in the removal of appropriate\n listeners.",
             "itemtype": "method",
-            "name": "tryMouseLock",
+            "name": "lockChange",
             "params": [
                 {
                     "name": "e",
@@ -361,7 +361,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\renderScript.js",
+            "file": "renderScript.js",
             "line": 335,
             "description": "Changes the orientation of the camera based off of the mouse movement\n contained in the supplied mouse movement event. X-axis movement\n corresponds to change in the yaw of the camera whereas Y-axis movement\n corresponds to a change in the pitch of the camera.",
             "itemtype": "method",
@@ -380,9 +380,9 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\renderScript.js",
+            "file": "renderScript.js",
             "line": 382,
-            "description": "Accepts a key press event and, if the key press corresponds to one\n of the keys used for manipulating the view, sets the proper components\n of inputState to true",
+            "description": "Accepts a key press event and, if the key press corresponds to one\n of the keys used for manipulating the view, sets the proper components\n of \"inputState\" to true",
             "itemtype": "method",
             "name": "registerDown",
             "params": [
@@ -399,9 +399,9 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\renderScript.js",
+            "file": "renderScript.js",
             "line": 441,
-            "description": "Accepts a key press release and, if the key release corresponds to one\n of the keys used for manipulating the view, sets the proper components\n of inputState to false",
+            "description": "Accepts a key press release and, if the key release corresponds to one\n of the keys used for manipulating the view, sets the proper components\n of \"inputState\" to false",
             "itemtype": "method",
             "name": "registerDown",
             "params": [
@@ -418,7 +418,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\renderScript.js",
+            "file": "renderScript.js",
             "line": 498,
             "description": "Once called, interprets the current state of registered inputs and manipulates \n the visualization accordingly, including the accelleration of the camera, as\n affected by the W,S,A, and D keys, and the rotation of the camera if the F key\n is depressed and there currently is a highlighted object of interest",
             "itemtype": "method",
@@ -430,7 +430,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\renderScript.js",
+            "file": "renderScript.js",
             "line": 599,
             "description": "The main portion of the visualization's rendering cycle, managing frame rate,\n input, camera decelleration, keyframe manipulation, model animation, object highlighting,\n and informational display.",
             "itemtype": "method",
@@ -442,7 +442,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\renderScript.js",
+            "file": "renderScript.js",
             "line": 680,
             "description": "Accepts a string and outputs the string of all characters following the final '.' symbol\n in the string. This is used internally to extract file extensions from file names.",
             "itemtype": "method",
@@ -461,8 +461,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\renderScript.js",
-            "line": 714,
+            "file": "renderScript.js",
+            "line": 713,
             "description": "Accepts a fileinput event, presumably from a file upload event listener, and assigns\n functions to each file reader listed in the event to be called upon the full loading\n of that given reader's files",
             "itemtype": "method",
             "name": "readMultipleFiles",
@@ -480,7 +480,43 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\sigma.canvas.edges.curvedArrow.js",
+            "file": "renderScript.js",
+            "line": 782,
+            "description": "Called internally upon every recieved fileload event. Checks if every file reader in the \n array \"fileReaders\" has fully read each of their files. If so, then the function converts\n all recieved stl files into threeJS models and executes \"renderParts\".",
+            "itemtype": "method",
+            "name": "loadParts",
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "renderScript.js",
+            "line": 852,
+            "description": "Called internally by \"loadParts\". Parses the text stored in \"theXML\" into a tree\n structure composed of nested javascript objects and converts that structure into a\n series of keyframe arrays, each of which are stored alongside their respective \n parts in \"partFrames\". Additionally, generates the path lines for each subassembly\n and inserts those lines into \"scene\".",
+            "itemtype": "method",
+            "name": "renderParts",
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "renderScript.js",
+            "line": 927,
+            "description": "Toggles the display of the HTML div element containing the treequence representation of\n the assembly.",
+            "itemtype": "method",
+            "name": "showHideTreequence",
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "sigma.canvas.edges.curvedArrow.js",
             "line": 6,
             "description": "This edge renderer will display edges as curves with arrow heading.",
             "params": [
@@ -516,95 +552,95 @@
     "warnings": [
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src\\webVis\\jquery.js:890"
+            "line": " jquery.js:890"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src\\webVis\\jquery.js:954"
+            "line": " jquery.js:954"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src\\webVis\\jquery.js:1054"
+            "line": " jquery.js:1054"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src\\webVis\\jquery.js:1066"
+            "line": " jquery.js:1066"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src\\webVis\\jquery.js:1078"
+            "line": " jquery.js:1078"
         },
         {
             "message": "Missing item type\nCreate key-value caches of limited size",
-            "line": " src\\webVis\\jquery.js:890"
+            "line": " jquery.js:890"
         },
         {
             "message": "Missing item type\nMark a function for special use by Sizzle",
-            "line": " src\\webVis\\jquery.js:910"
+            "line": " jquery.js:910"
         },
         {
             "message": "Missing item type\nSupport testing using an element",
-            "line": " src\\webVis\\jquery.js:919"
+            "line": " jquery.js:919"
         },
         {
             "message": "Missing item type\nAdds the same handler for all of the specified attrs",
-            "line": " src\\webVis\\jquery.js:940"
+            "line": " jquery.js:940"
         },
         {
             "message": "Missing item type\nChecks document order of two siblings",
-            "line": " src\\webVis\\jquery.js:954"
+            "line": " jquery.js:954"
         },
         {
             "message": "Missing item type\nReturns a function to use in pseudos for input types",
-            "line": " src\\webVis\\jquery.js:982"
+            "line": " jquery.js:982"
         },
         {
             "message": "Missing item type\nReturns a function to use in pseudos for buttons",
-            "line": " src\\webVis\\jquery.js:993"
+            "line": " jquery.js:993"
         },
         {
             "message": "Missing item type\nReturns a function to use in pseudos for :enabled/:disabled",
-            "line": " src\\webVis\\jquery.js:1004"
+            "line": " jquery.js:1004"
         },
         {
             "message": "Missing item type\nReturns a function to use in pseudos for positionals",
-            "line": " src\\webVis\\jquery.js:1032"
+            "line": " jquery.js:1032"
         },
         {
             "message": "Missing item type\nChecks a node for validity as a Sizzle context",
-            "line": " src\\webVis\\jquery.js:1054"
+            "line": " jquery.js:1054"
         },
         {
             "message": "Missing item type\nDetects XML nodes",
-            "line": " src\\webVis\\jquery.js:1066"
+            "line": " jquery.js:1066"
         },
         {
             "message": "Missing item type\nSets document-related variables once based on the current document",
-            "line": " src\\webVis\\jquery.js:1078"
+            "line": " jquery.js:1078"
         },
         {
             "message": "Missing item type\nDocument sorting and removing duplicates",
-            "line": " src\\webVis\\jquery.js:1532"
+            "line": " jquery.js:1532"
         },
         {
             "message": "Missing item type\nUtility function for retrieving the text value of an array of DOM nodes",
-            "line": " src\\webVis\\jquery.js:1565"
+            "line": " jquery.js:1565"
         },
         {
             "message": "Missing item type\nA low-level selection function that works with Sizzle's compiled\n selector functions",
-            "line": " src\\webVis\\jquery.js:2594"
+            "line": " jquery.js:2594"
         },
         {
             "message": "Missing item type\nLoad a url into a page",
-            "line": " src\\webVis\\jquery.js:9606"
+            "line": " jquery.js:9606"
         },
         {
             "message": "Missing item type\nGets a window from an element",
-            "line": " src\\webVis\\jquery.js:9698"
+            "line": " jquery.js:9698"
         },
         {
             "message": "Missing item type\nThis edge renderer will display edges as curves with arrow heading.",
-            "line": " src\\webVis\\sigma.canvas.edges.curvedArrow.js:6"
+            "line": " sigma.canvas.edges.curvedArrow.js:6"
         }
     ]
 }

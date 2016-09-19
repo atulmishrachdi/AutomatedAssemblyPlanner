@@ -85,7 +85,7 @@
 
 
         <div class="foundat">
-            Defined in: <a href="../files/src_webVis_renderScript.js.html#l6"><code>src\webVis\renderScript.js:6</code></a>
+            Defined in: <a href="../files/renderScript.js.html#l6"><code>renderScript.js:6</code></a>
         </div>
 
 
@@ -118,6 +118,14 @@
 
                             </li>
                             <li class="index-item method">
+                                <a href="#method_loadParts">loadParts</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_lockChange">lockChange</a>
+
+                            </li>
+                            <li class="index-item method">
                                 <a href="#method_manageControls">manageControls</a>
 
                             </li>
@@ -146,7 +154,11 @@
 
                             </li>
                             <li class="index-item method">
-                                <a href="#method_tryMouseLock">tryMouseLock</a>
+                                <a href="#method_renderParts">renderParts</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_showHideTreequence">showHideTreequence</a>
 
                             </li>
                             <li class="index-item method">
@@ -187,7 +199,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_webVis_renderScript.js.html#l680"><code>src\webVis\renderScript.js:680</code></a>
+        <a href="../files/renderScript.js.html#l680"><code>renderScript.js:680</code></a>
         </p>
 
 
@@ -231,6 +243,118 @@ in the string. This is used internally to extract file extensions from file name
 
 
 </div>
+<div id="method_loadParts" class="method item">
+    <h3 class="name"><code>loadParts</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/renderScript.js.html#l782"><code>renderScript.js:782</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Called internally upon every recieved fileload event. Checks if every file reader in the
+array &quot;fileReaders&quot; has fully read each of their files. If so, then the function converts
+all recieved stl files into threeJS models and executes &quot;renderParts&quot;.</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_lockChange" class="method item">
+    <h3 class="name"><code>lockChange</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>e</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/renderScript.js.html#l295"><code>renderScript.js:295</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Adds or Removes event listeners for input meant for camera manipulation.
+Is triggered by a change in the state of the mouse locking or unlocking.
+The mouse locking results in input listeners being added to the webpage,
+whereas the unlocking of the mouse results in the removal of appropriate
+listeners.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">e</code>
+                        <span class="type">Event</span>
+
+
+                    <div class="param-description">
+                        <p>The event that is to be applied to the function by event listeners upon
+a change in the state of mouselock</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
 <div id="method_manageControls" class="method item">
     <h3 class="name"><code>manageControls</code></h3>
 
@@ -249,7 +373,7 @@ in the string. This is used internally to extract file extensions from file name
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_webVis_renderScript.js.html#l498"><code>src\webVis\renderScript.js:498</code></a>
+        <a href="../files/renderScript.js.html#l498"><code>renderScript.js:498</code></a>
         </p>
 
 
@@ -299,7 +423,7 @@ is depressed and there currently is a highlighted object of interest</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_webVis_renderScript.js.html#l335"><code>src\webVis\renderScript.js:335</code></a>
+        <a href="../files/renderScript.js.html#l335"><code>renderScript.js:335</code></a>
         </p>
 
 
@@ -367,7 +491,7 @@ movement event listener on the web page</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_webVis_renderScript.js.html#l714"><code>src\webVis\renderScript.js:714</code></a>
+        <a href="../files/renderScript.js.html#l713"><code>renderScript.js:713</code></a>
         </p>
 
 
@@ -433,7 +557,7 @@ of that given reader's files</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_webVis_renderScript.js.html#l382"><code>src\webVis\renderScript.js:382</code></a>
+        <a href="../files/renderScript.js.html#l382"><code>renderScript.js:382</code></a>
         </p>
 
 
@@ -443,7 +567,7 @@ of that given reader's files</p>
     <div class="description">
         <p>Accepts a key press event and, if the key press corresponds to one
 of the keys used for manipulating the view, sets the proper components
-of inputState to true</p>
+of &quot;inputState&quot; to true</p>
 
     </div>
 
@@ -500,7 +624,7 @@ listener on the web page</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_webVis_renderScript.js.html#l441"><code>src\webVis\renderScript.js:441</code></a>
+        <a href="../files/renderScript.js.html#l441"><code>renderScript.js:441</code></a>
         </p>
 
 
@@ -510,7 +634,7 @@ listener on the web page</p>
     <div class="description">
         <p>Accepts a key press release and, if the key release corresponds to one
 of the keys used for manipulating the view, sets the proper components
-of inputState to false</p>
+of &quot;inputState&quot; to false</p>
 
     </div>
 
@@ -561,7 +685,7 @@ listener on the web page</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_webVis_renderScript.js.html#l599"><code>src\webVis\renderScript.js:599</code></a>
+        <a href="../files/renderScript.js.html#l599"><code>renderScript.js:599</code></a>
         </p>
 
 
@@ -613,7 +737,7 @@ and informational display.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_webVis_renderScript.js.html#l26"><code>src\webVis\renderScript.js:26</code></a>
+        <a href="../files/renderScript.js.html#l26"><code>renderScript.js:26</code></a>
         </p>
 
 
@@ -663,6 +787,93 @@ and loading in the models</p>
 
 
 </div>
+<div id="method_renderParts" class="method item">
+    <h3 class="name"><code>renderParts</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/renderScript.js.html#l852"><code>renderScript.js:852</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Called internally by &quot;loadParts&quot;. Parses the text stored in &quot;theXML&quot; into a tree
+structure composed of nested javascript objects and converts that structure into a
+series of keyframe arrays, each of which are stored alongside their respective
+parts in &quot;partFrames&quot;. Additionally, generates the path lines for each subassembly
+and inserts those lines into &quot;scene&quot;.</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_showHideTreequence" class="method item">
+    <h3 class="name"><code>showHideTreequence</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/renderScript.js.html#l927"><code>renderScript.js:927</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Toggles the display of the HTML div element containing the treequence representation of
+the assembly.</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
 <div id="method_tryMouseLock" class="method item">
     <h3 class="name"><code>tryMouseLock</code></h3>
 
@@ -681,7 +892,7 @@ and loading in the models</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_webVis_renderScript.js.html#l273"><code>src\webVis\renderScript.js:273</code></a>
+        <a href="../files/renderScript.js.html#l273"><code>renderScript.js:273</code></a>
         </p>
 
 
@@ -693,75 +904,6 @@ and loading in the models</p>
 
     </div>
 
-
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                        <span class="type">Void</span>:
-            </div>
-        </div>
-
-
-</div>
-<div id="method_tryMouseLock" class="method item">
-    <h3 class="name"><code>tryMouseLock</code></h3>
-
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
-                        <code>e</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
-
-        <span class="returns-inline">
-            <span class="type">Void</span>
-        </span>
-
-
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_webVis_renderScript.js.html#l295"><code>src\webVis\renderScript.js:295</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Adds or Removes event listeners for input meant for camera manipulation.
-Is triggered by a change in the state of the mouse locking or unlocking.
-The mouse locking results in input listeners being added to the webpage,
-whereas the unlocking of the mouse results in the removal of appropriate
-listeners.</p>
-
-    </div>
-
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name">e</code>
-                        <span class="type">Event</span>
-
-
-                    <div class="param-description">
-                        <p>The event that is to be applied to the function by event listeners upon
-a change in the state of mouselock</p>
-
-                    </div>
-
-                </li>
-            </ul>
-        </div>
 
         <div class="returns">
             <h4>Returns:</h4>

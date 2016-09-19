@@ -199,8 +199,10 @@ var theTreequence=null;
 
 
 // Holds the state of button press inputs to smooth out control response
+
+
 /**
-* 
+*
 * Contains a representation of the last keyboard events reported by the 
 * web page for each given key that acts as input for manipulating the
 * visulization: &#x27;W&#x27;,&#x27;A&#x27;,&#x27;S&#x27;,&#x27;D&#x27;,&#x27;R&#x27;,&#x27;F&#x27;, and the &#x27;Space&#x27; key
@@ -386,7 +388,7 @@ function tryMouseLock(){
 * whereas the unlocking of the mouse results in the removal of appropriate
 * listeners. 
 *
-* @method tryMouseLock
+* @method lockChange
 * @for renderGlobal
 *
 * 
@@ -469,7 +471,7 @@ function mouseMoved(e){
 *
 * Accepts a key press event and, if the key press corresponds to one
 * of the keys used for manipulating the view, sets the proper components
-* of inputState to true 
+* of &quot;inputState&quot; to true.
 *
 * @method registerDown
 * @for renderGlobal
@@ -528,7 +530,7 @@ function registerDown(e){
 *
 * Accepts a key press release and, if the key release corresponds to one
 * of the keys used for manipulating the view, sets the proper components
-* of inputState to false 
+* of &quot;inputState&quot; to false 
 *
 * @method registerDown
 * @for renderGlobal
@@ -796,7 +798,6 @@ function whoIsLeft(theReaders){
 }
 
 
-// Catches file read events and assigns an appropriate onload function
 /**
 *
 * Accepts a fileinput event, presumably from a file upload event listener, and assigns
@@ -866,7 +867,17 @@ function readMultipleFiles(evt) {
 document.getElementById(&#x27;fileinput&#x27;).addEventListener(&#x27;change&#x27;, readMultipleFiles, false);
 
 
-// File loading function (called every time an &#x27;onload&#x27; is triggered)
+/**
+*
+* Called internally upon every recieved fileload event. Checks if every file reader in the 
+* array &quot;fileReaders&quot; has fully read each of their files. If so, then the function converts
+* all recieved stl files into threeJS models and executes &quot;renderParts&quot;.
+*
+* @method loadParts
+* @for renderGlobal
+* @return {Void}
+* 
+*/
 function loadParts (){
 
 	
@@ -926,7 +937,19 @@ function loadParts (){
 
 }
 
-
+/**
+*
+* Called internally by &quot;loadParts&quot;. Parses the text stored in &quot;theXML&quot; into a tree
+* structure composed of nested javascript objects and converts that structure into a
+* series of keyframe arrays, each of which are stored alongside their respective 
+* parts in &quot;partFrames&quot;. Additionally, generates the path lines for each subassembly
+* and inserts those lines into &quot;scene&quot;.
+*
+* @method renderParts
+* @for renderGlobal
+* @return {Void}
+* 
+*/
 function renderParts(){
 
 	
@@ -958,7 +981,7 @@ function renderParts(){
 	
 	// Links each key frame list object to the appropriate part object
 	partFrames= bindPartsToKeyFrames(theFrameLists,parts);
-	showFrames(theFrameLists);
+	//showFrames(theFrameLists);
 	
 	// Zeroes the time, for obvious reasons
 	theTime=0;
@@ -989,6 +1012,16 @@ function renderParts(){
 
 
 // Toggles the display of the treequence graphic
+/**
+*
+* Toggles the display of the HTML div element containing the treequence representation of
+* the assembly.
+*
+* @method showHideTreequence
+* @for renderGlobal
+* @return {Void}
+* 
+*/
 function showHideTreequence(){
 
 	TDiv=document.getElementById(&quot;treequenceDiv&quot;);
@@ -1017,32 +1050,6 @@ function showHideTreequence(){
 	}
 				
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
