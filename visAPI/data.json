@@ -34,6 +34,15 @@
             "classes": {},
             "fors": {},
             "namespaces": {}
+        },
+        "src\\webVis\\treequence.js": {
+            "name": "src\\webVis\\treequence.js",
+            "modules": {},
+            "classes": {},
+            "fors": {
+                "renderGlobal": 1
+            },
+            "namespaces": {}
         }
     },
     "modules": {},
@@ -457,11 +466,11 @@
             "line": 305,
             "description": "Logs the contents of a given keyFrame object, containing numeric properties \"X\",\n \"Y\", \"Z\", and \"Time\", to the console as a string.",
             "itemtype": "method",
-            "name": "showFrames",
+            "name": "showFrame",
             "params": [
                 {
-                    "name": "partFrames",
-                    "description": "A jagged array of keyframe objects",
+                    "name": "theFrame",
+                    "description": "the keyFrame object to be logged",
                     "type": "Array"
                 }
             ],
@@ -479,7 +488,7 @@
             "name": "hasNaN",
             "params": [
                 {
-                    "name": "partFrames",
+                    "name": "theFrame",
                     "description": "A keyFrame object",
                     "type": "Object"
                 }
@@ -498,7 +507,7 @@
             "name": "copyFrame",
             "params": [
                 {
-                    "name": "partFrames",
+                    "name": "theFrame",
                     "description": "A keyFrame object",
                     "type": "Object"
                 }
@@ -506,6 +515,319 @@
             "return": {
                 "description": "The copy",
                 "type": "Object"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\partRender.js",
+            "line": 364,
+            "description": "Returns a copy of the provided array of keyframe objects",
+            "itemtype": "method",
+            "name": "copyFrameList",
+            "params": [
+                {
+                    "name": "partFrames",
+                    "description": "A keyFrame object array",
+                    "type": "Array"
+                }
+            ],
+            "return": {
+                "description": "The copy",
+                "type": "Array"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\partRender.js",
+            "line": 389,
+            "description": "Given a tree representation of the assembly process through nested javascript objects, returns an array\n of keyframe array objects, with each keyframe array object being a representation of the movement of each part \n in the tree representation throughout the assembly proceess, with a list of keyframe objects and a given part name",
+            "itemtype": "method",
+            "name": "makeKeyFrames",
+            "params": [
+                {
+                    "name": "theTree",
+                    "description": "Tree representation of the assembly process through nested javascript objects",
+                    "type": "Object"
+                },
+                {
+                    "name": "runningList",
+                    "description": "Internally used variable. Should be an empty array for outside use.",
+                    "type": "Array"
+                },
+                {
+                    "name": "currentFrameList",
+                    "description": "Internally used variable. Should be an empty array for outside use.",
+                    "type": "Array"
+                }
+            ],
+            "return": {
+                "description": "The jagged array of keyFrame objects",
+                "type": "Array"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\partRender.js",
+            "line": 448,
+            "description": "Given two keyFrames and a normalized float \"proportion\", returns an interpolation\n between the two keyframes with a weight towards the second keyframe proportional\n to \"proportion\"",
+            "itemtype": "method",
+            "name": "interpolate",
+            "params": [
+                {
+                    "name": "keyFrame1",
+                    "description": "The earlier keyFrame",
+                    "type": "Object"
+                },
+                {
+                    "name": "keyFrame2",
+                    "description": "The later keyFrame",
+                    "type": "Object"
+                },
+                {
+                    "name": "proportion",
+                    "description": "A normalized value representing what proportion of the path of\n interpolation is between the result and the earlier keyFrame",
+                    "type": "Float"
+                }
+            ],
+            "return": {
+                "description": "The jagged array of keyFrame objects",
+                "type": "Object"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\partRender.js",
+            "line": 490,
+            "description": "Given a list of keyframes and a time quantity, returns a keyframe object interpolating\n between the two temporally closest keyframes. In cases where the provide time is beyond the\n range of times represented by the list, returns the closest keyframe",
+            "itemtype": "method",
+            "name": "grabInterp",
+            "params": [
+                {
+                    "name": "frameList",
+                    "description": "A list of keyframes. Must be organized from least time value to greatest time value",
+                    "type": "Array"
+                },
+                {
+                    "name": "time",
+                    "description": "Floating-point representation of what time in the keyframe progression the interpolation\n should occur",
+                    "type": "Float"
+                }
+            ],
+            "return": {
+                "description": "The interpolated keyframe",
+                "type": "Object"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\partRender.js",
+            "line": 546,
+            "description": "Given an array of objects (each containing a threeJS mesh object and an array of \n keyFrame objects), and two floating points \"time\" and \"timeWarp\", will animate each\n mesh in the array along the keyframes in their associate objects according to the \n given \"time\" and returns the new time as given by the standard time step multiplied\n by \"timeWarp\"",
+            "itemtype": "method",
+            "name": "interpolate",
+            "params": [
+                {
+                    "name": "partFrames",
+                    "description": "List of objects relating threeJS mesh objects with their \n respective keyframe arrays",
+                    "type": "Array"
+                },
+                {
+                    "name": "time",
+                    "description": "The time to be used when interpolating keyFrames for the models",
+                    "type": "Float"
+                },
+                {
+                    "name": "timeWarp",
+                    "description": "The coefficeint to be applied to the timestep in the\n animation",
+                    "type": "Float"
+                }
+            ],
+            "return": {
+                "description": "The new value of time in the animation",
+                "type": "Float"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\partRender.js",
+            "line": 605,
+            "description": "Given two threeJS boundingBox objects, returns the smallest bounding box\n encompassing the two",
+            "itemtype": "method",
+            "name": "combineBounds",
+            "params": [
+                {
+                    "name": "a",
+                    "description": "The first bounding box",
+                    "type": "Object"
+                },
+                {
+                    "name": "b",
+                    "description": "The second bounding box",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "The combined bounds",
+                "type": "Object"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\partRender.js",
+            "line": 634,
+            "description": "Given two threeJS boundingBox objects, returns the smallest bounding box\n encompassing the two",
+            "itemtype": "method",
+            "name": "getGlobBounds",
+            "params": [
+                {
+                    "name": "a",
+                    "description": "The first bounding box",
+                    "type": "Object"
+                },
+                {
+                    "name": "b",
+                    "description": "The second bounding box",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "The combined bounds",
+                "type": "Object"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\partRender.js",
+            "line": 668,
+            "description": "Given an object, containing a threeJS mesh object as \"Mesh\", will\n return the center of the mesh's bounding box",
+            "itemtype": "method",
+            "name": "getPartCenter",
+            "params": [
+                {
+                    "name": "a",
+                    "description": "The object containing the threeJS mesh object",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "The center of the mesh's bounding box, represented as\n a threeJS Vector3 object",
+                "type": "Object"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\partRender.js",
+            "line": 699,
+            "description": "Given a threeJS scene object, a threeJS camera object, and an array of objects containing\n threeJS mesh objects, finds the first mesh in the scene which is intersected the ray extending\n through the center of the camera's field of vision. If this mesh is in the provided array of \n objects, then that object is returned, otherwise null is returned instead",
+            "itemtype": "method",
+            "name": "getFirstIntersect",
+            "params": [
+                {
+                    "name": "theScene",
+                    "description": "The threeJS scene object in which intersections should\n be tested",
+                    "type": "Object"
+                },
+                {
+                    "name": "theCamera",
+                    "description": "The threeJS camera object to be used to test for \n ray intersections",
+                    "type": "Object"
+                },
+                {
+                    "name": "partFrames",
+                    "description": "An array containing a series of objects, each of which\n contain a threeJS mesh object (under the property \"Mesh\") to be tested for intersections",
+                    "type": "Array"
+                }
+            ],
+            "return": {
+                "description": "The intersecting mesh (or null in case of no valid intersection)",
+                "type": "Object"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\partRender.js",
+            "line": 754,
+            "description": "Given an tree representation of the movement of parts in an assembly sequence, the\n parent node of that node, and a threeJS scene object, inserts a line for each subassembly\n path along the path of movement",
+            "itemtype": "method",
+            "name": "addLines",
+            "params": [
+                {
+                    "name": "movTree",
+                    "description": "Tree of nested objects representing the movement of each subassembly\n in it's assembly sequence",
+                    "type": "Object"
+                },
+                {
+                    "name": "parentNode",
+                    "description": "Used for internal use. Null should be applied for external use.",
+                    "type": "Object"
+                },
+                {
+                    "name": "theScene",
+                    "description": "the threeJS scene to which the line representations will be added",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\partRender.js",
+            "line": 808,
+            "description": "Given an tree representation of the movement of parts in an assembly sequence, an \n array of Objects each associating a list of keyframes with a threeJS mesh object and aLinkcolor\n string, and the index of the keyframe associated with the tree's root node, displaces the movement\n line points associated with that particular part of the assembly to match the displacement of the\n model",
+            "itemtype": "method",
+            "name": "addDisplacement",
+            "params": [
+                {
+                    "name": "movTree",
+                    "description": "Tree of nested objects representing the movement of each subassembly\n in it's assembly sequence",
+                    "type": "Object"
+                },
+                {
+                    "name": "partFrames",
+                    "description": "An array of Objects each associating a list of keyframes with a threeJS\n mesh object and a string",
+                    "type": "Array"
+                },
+                {
+                    "name": "it",
+                    "description": "The index of the keyframe associated with the root node of movTree. Used internally.\n For external use, apply 0.",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\partRender.js",
+            "line": 863,
+            "description": "Given an tree representation of the movement of parts in an assembly sequence, the\n parent node of that node, and the current time in the animation, updates the ends of the\n movement lines such that the portion of lines which have already been traversed are not shown",
+            "itemtype": "method",
+            "name": "updateLines",
+            "params": [
+                {
+                    "name": "movTree",
+                    "description": "Tree of nested objects representing the movement of each subassembly\n in it's assembly sequence",
+                    "type": "Object"
+                },
+                {
+                    "name": "parentNode",
+                    "description": "Used for internal use. Null should be applied for external use.",
+                    "type": "Object"
+                },
+                {
+                    "name": "theTime",
+                    "description": "the threeeJS scene to which the line representations will be added",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
             },
             "class": "renderGlobal"
         },
@@ -607,7 +929,7 @@
             "line": 443,
             "description": "Accepts a key press release and, if the key release corresponds to one\n of the keys used for manipulating the view, sets the proper components\n of \"inputState\" to false",
             "itemtype": "method",
-            "name": "registerDown",
+            "name": "registerUp",
             "params": [
                 {
                     "name": "e",
@@ -750,7 +1072,184 @@
                     "type": "Configurable"
                 }
             ],
-            "class": ""
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\treequence.js",
+            "line": 6,
+            "description": "Given a jQuery object, returns a full list of all of its children.",
+            "itemtype": "method",
+            "name": "whatsIn",
+            "params": [
+                {
+                    "name": "theTree",
+                    "description": "The jQuery object whose children should be returned",
+                    "type": "JQuery Object"
+                }
+            ],
+            "return": {
+                "description": "Array of the object's children",
+                "type": "Array"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\treequence.js",
+            "line": 27,
+            "description": "Given a jQuery object and a string, returns the first child of the given element with\n a tag equivalent to the given string.",
+            "itemtype": "method",
+            "name": "grab",
+            "params": [
+                {
+                    "name": "theTree",
+                    "description": "The jQuery object whose child is to be returned",
+                    "type": "JQuery Object"
+                },
+                {
+                    "name": "theMember",
+                    "description": "The name of the tag being searched",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "The first child with the given tag. If such a child does not \n exist, null is returned.",
+                "type": "JQuery Object"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\treequence.js",
+            "line": 55,
+            "description": "Given a jQuery object and an integer \"N\", returns the Nth child of the given element with\n the given tag.",
+            "itemtype": "method",
+            "name": "grab",
+            "params": [
+                {
+                    "name": "theTree",
+                    "description": "The jQuery object whose child is to be returned",
+                    "type": "JQuery Object"
+                },
+                {
+                    "name": "theMember",
+                    "description": "The name of the tag being searched",
+                    "type": "String"
+                },
+                {
+                    "name": "theIndex",
+                    "description": "The ordinal of the matching child to be returned",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "The child meeting the tag and ordinal requirement. \n If such a child does not exist, null is returned.",
+                "type": "JQuery Object"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\treequence.js",
+            "line": 87,
+            "description": "Given a jQuery object derived from parsing an XML document, extracts all information\n relevant to part movement and composes it into an identically structured tree of \n nested javascript objects which is then returned",
+            "itemtype": "method",
+            "name": "getMovement",
+            "params": [
+                {
+                    "name": "theTree",
+                    "description": "The jQuery object to be parsed over",
+                    "type": "JQuery Object"
+                },
+                {
+                    "name": "myX",
+                    "description": "The X position of the subassembly represented by the root node of theTree",
+                    "type": "Float"
+                },
+                {
+                    "name": "myY",
+                    "description": "The Y position of the subassembly represented by the root node of theTree",
+                    "type": "Float"
+                },
+                {
+                    "name": "myZ",
+                    "description": "The Z position of the subassembly represented by the root node of theTree",
+                    "type": "Float"
+                },
+                {
+                    "name": "myTime",
+                    "description": "The time value of the subassembly represented by the root node of theTree",
+                    "type": "Float"
+                },
+                {
+                    "name": "The",
+                    "description": "root node of the tree of extracted movement data",
+                    "type": "Object"
+                }
+            ],
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\treequence.js",
+            "line": 132,
+            "description": "Given a jQuery Object, will return the first child with the tag \"Reference\" of the first child with\n the tag \"Install\" of the object. If no such child exists, null is returned.",
+            "itemtype": "method",
+            "name": "getRef",
+            "params": [
+                {
+                    "name": "theTree",
+                    "description": "The jQuery object to be accessed",
+                    "type": "JQuery Object"
+                },
+                {
+                    "name": "The",
+                    "description": "resulting child",
+                    "type": "JQuery Object"
+                }
+            ],
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\treequence.js",
+            "line": 154,
+            "description": "Given a jQuery Object, will return the first child with the tag \"Moving\" of the first child with\n the tag \"Install\" of the object. If no such child exists, null is returned.",
+            "itemtype": "method",
+            "name": "getRef",
+            "params": [
+                {
+                    "name": "theTree",
+                    "description": "The jQuery object to be accessed",
+                    "type": "JQuery Object"
+                },
+                {
+                    "name": "The",
+                    "description": "resulting child",
+                    "type": "JQuery Object"
+                }
+            ],
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\treequence.js",
+            "line": 178,
+            "description": "Given a jQuery object derived from parsing an XML document, extracts all information\n relevant to installation timing and composes it into an identically structured tree of \n nested javascript objects which is then returned",
+            "itemtype": "method",
+            "name": "getMovement",
+            "params": [
+                {
+                    "name": "theTree",
+                    "description": "The jQuery object to be parsed over",
+                    "type": "JQuery Object"
+                },
+                {
+                    "name": "parentTime",
+                    "description": "The time value of the subassembly represented by the root node of theTree",
+                    "type": "Float"
+                },
+                {
+                    "name": "The",
+                    "description": "root node of the tree of extracted time data",
+                    "type": "Object"
+                }
+            ],
+            "class": "renderGlobal"
         }
     ],
     "warnings": [

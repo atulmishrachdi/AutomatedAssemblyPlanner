@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>src\webVis\treequence.js</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="icon" href="../assets/favicon.ico">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+                <h1><img src="../assets/css/logo.png" title="" width="117" height="52"></h1>
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: </em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+                    <h2 class="off-left">APIs</h2>
+                    <div id="api-tabview" class="tabview">
+                        <ul class="tabs">
+                            <li><a href="#api-classes">Classes</a></li>
+                            <li><a href="#api-elements">Elements</a></li>
+                            <li><a href="#api-modules">Modules</a></li>
+                        </ul>
+                
+                        <div id="api-tabview-filter">
+                            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+                        </div>
+                
+                        <div id="api-tabview-panel">
+                            <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/renderGlobal.html">renderGlobal</a></li>
+                            </ul>
+                
+                                <ul id="api-elements" class="apis elements">
+                                    <li><a href="../elements/inputState.html">&lt;inputState&gt;</a></li>
+                                </ul>
+                
+                            <ul id="api-modules" class="apis modules">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+                    Show:
+                    <label for="api-show-inherited">
+                        <input type="checkbox" id="api-show-inherited" checked>
+                        Inherited
+                    </label>
+            
+                    <label for="api-show-protected">
+                        <input type="checkbox" id="api-show-protected">
+                        Protected
+                    </label>
+            
+                    <label for="api-show-private">
+                        <input type="checkbox" id="api-show-private">
+                        Private
+                    </label>
+                    <label for="api-show-deprecated">
+                        <input type="checkbox" id="api-show-deprecated">
+                        Deprecated
+                    </label>
+            
+                </div>
+            
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+<h1 class="file-heading">File: src\webVis\treequence.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+;
+
+
+
+
+/**
+*
+* Given a jQuery object, returns a full list of all of its children.
+*
+* @method whatsIn
+* @for renderGlobal
+* @param {jQuery Object} theTree The jQuery object whose children should be returned
+* @return {Array} Array of the object&#x27;s children
+* 
+*/
+function whatsIn(theTree){
+
+	return document.getElementById(&quot;warning&quot;).innerHTML=$(theTree).children(&quot;*&quot;);
+
+}
+
+
+
+
+
+
+/**
+*
+* Given a jQuery object and a string, returns the first child of the given element with
+* a tag equivalent to the given string.
+*
+* @method grab
+* @for renderGlobal
+* @param {jQuery Object} theTree The jQuery object whose child is to be returned
+* @param {String} theMember The name of the tag being searched
+* @return {jQuery Object} The first child with the given tag. If such a child does not 
+* exist, null is returned.
+* 
+*/
+function grab(theTree,theMember){
+
+	if($(theTree).children(theMember).length!=0){
+		return $(theTree).children(theMember)[0];
+	}
+	else{
+		return null;
+	}
+
+}
+
+
+
+
+// returns a list of all children of the given eleemnt with the same tagName
+/**
+*
+* Given a jQuery object and an integer &quot;N&quot;, returns the Nth child of the given element with
+* the given tag. 
+*
+* @method grab
+* @for renderGlobal
+* @param {jQuery Object} theTree The jQuery object whose child is to be returned
+* @param {String} theMember The name of the tag being searched
+* @param {String} theIndex The ordinal of the matching child to be returned
+* @return {jQuery Object} The child meeting the tag and ordinal requirement. 
+* If such a child does not exist, null is returned.
+* 
+*/
+function grabInd(theTree,theMember, theIndex){
+
+	if($(theTree).children(theMember).length&gt;theIndex){
+		
+		return $(theTree).children(theMember)[theIndex];
+		
+	}
+	else{
+	
+		return null;
+	
+	}
+
+}
+
+
+
+// Converts the given XML element into a javascript object
+/**
+*
+* Given a jQuery object derived from parsing an XML document, extracts all information
+* relevant to part movement and composes it into an identically structured tree of 
+* nested javascript objects which is then returned
+*
+* @method getMovement
+* @for renderGlobal
+* @param {jQuery Object} theTree The jQuery object to be parsed over
+* @param {Float} myX The X position of the subassembly represented by the root node of theTree
+* @param {Float} myY The Y position of the subassembly represented by the root node of theTree
+* @param {Float} myZ The Z position of the subassembly represented by the root node of theTree
+* @param {Float} myTime The time value of the subassembly represented by the root node of theTree
+* @param {Object} The root node of the tree of extracted movement data 
+* 
+*/
+function getMovement(theTree, myX, myY, myZ, myTime){
+
+	if(($(theTree).children(&quot;Install&quot;).length==0)){
+		return { Name: $(theTree).attr(&quot;Name&quot;), X: myX, Y: myY, Z: myZ, Time: myTime, Ref: null, Mov: null };
+	}
+	else{
+		var childTime=parseFloat(grab(grab(theTree,&quot;Install&quot;),&quot;Time&quot;).innerHTML)+myTime;
+		var movDirection=grab(grab(theTree,&quot;Install&quot;),&quot;InstallDirection&quot;);
+		var movXDir=parseFloat(grabInd(movDirection,&quot;double&quot;,0).innerHTML);
+		var movYDir=parseFloat(grabInd(movDirection,&quot;double&quot;,1).innerHTML);
+		var movZDir=parseFloat(grabInd(movDirection,&quot;double&quot;,2).innerHTML);
+		var movDistance=parseFloat(grab(grab(theTree,&quot;Install&quot;),&quot;InstallDistance&quot;).innerHTML);
+		var movX=myX-movXDir*movDistance;
+		var movY=myY-movYDir*movDistance;
+		var movZ=myZ-movZDir*movDistance;
+		var ref=getMovement(getRef(theTree), myX, myY, myZ, childTime);
+		var mov=getMovement(getMov(theTree), movX, movY, movZ, childTime);
+		
+		//console.log({ Name: &quot;&quot;, X: myX, Y: myY, Z: myZ, Time: myTime, Ref: ref, Mov: mov});
+		return { Name: &quot;&quot;, X: myX, Y: myY, Z: myZ, Time: myTime, Ref: ref, Mov: mov};
+		
+	}
+
+}
+
+
+
+
+// Gets the XML representing the reference subassembly of the given XML representation of it&#x27;s parent assembly
+/**
+*
+* Given a jQuery Object, will return the first child with the tag &quot;Reference&quot; of the first child with
+* the tag &quot;Install&quot; of the object. If no such child exists, null is returned. 
+*
+* @method getRef
+* @for renderGlobal
+* @param {jQuery Object} theTree The jQuery object to be accessed
+* @param {jQuery Object} The resulting child
+* 
+*/
+function getRef(theTree){
+
+	theTree=grab(theTree,&quot;Install&quot;);
+	
+	theTree=grab(theTree,&quot;Reference&quot;);
+	
+	return theTree;
+
+}
+
+// Gets the XML representing the reference subassembly of the given XML representation of it&#x27;s parent assembly
+/**
+*
+* Given a jQuery Object, will return the first child with the tag &quot;Moving&quot; of the first child with
+* the tag &quot;Install&quot; of the object. If no such child exists, null is returned. 
+*
+* @method getRef
+* @for renderGlobal
+* @param {jQuery Object} theTree The jQuery object to be accessed
+* @param {jQuery Object} The resulting child
+* 
+*/
+function getMov(theTree){
+
+	theTree=grab(theTree,&quot;Install&quot;);
+	
+	theTree=grab(theTree,&quot;Moving&quot;);
+	
+	return theTree;
+
+}
+
+
+
+// Returns a tree representing the times of all installations in the  given tree
+/**
+*
+* Given a jQuery object derived from parsing an XML document, extracts all information
+* relevant to installation timing and composes it into an identically structured tree of 
+* nested javascript objects which is then returned
+*
+* @method getMovement
+* @for renderGlobal
+* @param {jQuery Object} theTree The jQuery object to be parsed over
+* @param {Float} parentTime The time value of the subassembly represented by the root node of theTree
+* @param {Object} The root node of the tree of extracted time data 
+* 
+*/
+function getTimes(theTree, parentTime){
+
+
+
+	if(($(theTree).children(&quot;Install&quot;).length==0)){
+		return { Time: parentTime, Ref: null, Mov: null };
+	}
+	else{
+		var myTime=parseFloat(grab(grab(theTree,&quot;Install&quot;),&quot;Time&quot;).innerHTML)+parentTime;
+		var ref=getTimes(getRef(theTree),myTime);
+		var mov=getTimes(getMov(theTree),myTime);
+		
+		
+		return { Time: parentTime, Ref: ref, Mov: mov};
+	}
+
+}
+
+
+// Returns the longest period of time from a base parts initial installation to the
+// construction of the final product
+function getLongestTime(timeTree){
+
+	if(timeTree==null){
+		return 0;
+	}
+	return Math.max(getLongestTime(timeTree.Ref),getLongestTime(timeTree.Mov),timeTree.Time);
+
+}
+
+
+function getWidestSpace(theTree){
+
+	if(theTree==null){
+		return 0;
+	}
+	return Math.max(getWidestSpace(theTree.Ref),getWidestSpace(theTree.Mov),theTree.Space);
+
+}
+
+
+// Returns a tree-based representation of the names in the given tree
+function getNames(theTree){
+
+
+
+	if(($(theTree).children(&quot;Install&quot;).length==0)){
+		return {Name: $(theTree).attr(&quot;Name&quot;), Ref: null, Mov: null};
+	}
+	else{
+		var ref=getNames(getRef(theTree));
+		var mov=getNames(getMov(theTree));
+		return {Name: &quot;&quot;, Ref: ref, Mov: mov};
+	}
+
+}
+
+
+function getSpaces(theTree, underWidth, isMov){
+
+
+
+	if(($(theTree).children(&quot;Install&quot;).length==0)){
+	
+		
+
+		if(isMov==1){
+		
+			return {theNode: {Space: underWidth+1, Ref: null, Mov: null}, Width: underWidth};
+		
+		}
+		else{
+		
+			return {theNode: {Space: underWidth, Ref: null, Mov: null}, Width: underWidth};
+		
+		}
+	}
+	else{
+	
+
+
+		var mySpace=underWidth;
+		if(isMov==1){
+		
+			underWidth=underWidth+2;
+		
+		}
+		
+
+		var ref=getSpaces(getRef(theTree),underWidth,0);
+
+		
+		if(($(getMov(theTree)).children(&quot;Install&quot;).length==0)){
+			var mov=getSpaces(getMov(theTree),underWidth,1);
+		}
+		else{
+			var mov=getSpaces(getMov(theTree),ref.Width,1);
+		}
+
+		
+		
+		if(isMov!=-1){
+			
+			return {theNode:{Space: underWidth, Ref: ref.theNode, Mov: mov.theNode},Width: Math.max(mov.Width,ref.Width)};
+			
+		}
+		else{
+		
+			return {Space: underWidth, Ref: ref.theNode, Mov: mov.theNode};
+		
+		}
+		
+		
+	}
+	
+}
+
+
+// Merges the given tree representations of the time, space, and names associated with
+// each installation into one tree
+function mergeTrees(TimeTree,SpaceTree,NameTree){
+
+
+	if(TimeTree==null || SpaceTree==null || NameTree==null){
+	
+		return null;
+	
+	}
+	else{
+	
+		var ref=mergeTrees(TimeTree.Ref,SpaceTree.Ref,NameTree.Ref);
+		var mov=mergeTrees(TimeTree.Mov,SpaceTree.Mov,NameTree.Mov);
+		
+		
+		
+		return {Time: TimeTree.Time, Space: SpaceTree.Space, Name: NameTree.Name, Ref: ref, Mov: mov};
+	
+	
+	}
+	
+
+}
+
+function makePretty(theTree,trueCenter,prettyCenter,rightness){
+
+	if(theTree==null){
+		return 0;
+	}
+	else{
+	
+		var oldSpace=theTree.Space;
+	
+		if(rightness==0){
+			theTree.Space=prettyCenter+(theTree.Space-trueCenter);
+			makePretty(theTree.Ref,oldSpace,theTree.Space,1);
+			makePretty(theTree.Mov,oldSpace,theTree.Space,1);
+		}
+		else{
+			theTree.Space=prettyCenter-(theTree.Space-trueCenter);
+			makePretty(theTree.Ref,oldSpace,theTree.Space,0);
+			makePretty(theTree.Mov,oldSpace,theTree.Space,0);
+		}
+		
+	}	
+
+}
+
+
+
+function getNameList(theTree){
+
+
+	if(theTree==null){
+	
+		return [];
+	
+	}
+	else{
+		
+		var result;
+		
+		if(theTree.Name===&quot;&quot;){
+			result=[];
+		}
+		else{
+			result=[theTree.Name];
+		}
+		
+		result=result.concat(getNameList(theTree.Ref));
+		result=result.concat(getNameList(theTree.Mov));
+					
+	
+		return result;
+	
+	
+	}
+
+
+}
+
+function similarityCutoff(theList){
+
+
+	var pos;
+	var it=1;
+	var lim=theList[0].length;
+	var finish=theList.length;
+	while(it&lt;finish &amp;&amp; lim!=0){
+		pos=0;
+		while(pos&lt;lim){
+		
+			if(theList[it][pos]!=theList[0][pos]){
+				lim=pos;
+			}
+			pos=pos+1;
+		}
+	
+		it=it+1;
+	}
+	
+	return lim;
+
+}
+
+function cutOffNames(theTree,theCutOff){
+
+	if(theTree==null){
+	
+		return;
+	
+	}
+	else{
+	
+	
+		if(theCutOff&lt;theTree.Name.length){
+		
+			theTree.Name=theTree.Name.substr(theCutOff,theTree.Name.length);
+		
+		}
+		
+		cutOffNames(theTree.Ref,theCutOff);
+		cutOffNames(theTree.Mov,theCutOff);
+		
+		return;
+	
+	
+	}
+
+
+}
+
+
+function drawTime(theTree,theGraph, theTheme){
+
+	var theTime=getLongestTime(theTree);
+	var theWidth=getWidestSpace(theTree);
+	var step=Math.pow(10,Math.floor(Math.log10(theTime)))/2;
+	var pos=step;
+	
+	var maxim=Math.ceil(theTime/step)*step;
+	
+	
+	
+	var presNode={ 
+		id: &quot;n&quot;+theGraph.nodes().length.toString(),
+		label: &quot;0s&quot;,
+		x: 0,
+		y: 1,
+		size: 0.4,
+		color:theTheme.Time
+	};
+	theGraph.addNode(presNode);
+	var presFarNode={ 
+		id: &quot;n&quot;+theGraph.nodes().length.toString(),
+		label: &quot;0s&quot;,
+		x: 0,
+		y: theWidth+1,
+		size: 0.4,
+		color:theTheme.Time
+	};
+	theGraph.addNode(presFarNode);
+	theGraph.addEdge({
+		id: &quot;e&quot;+theGraph.edges().length.toString(),
+		source: presNode.id,
+		target: presFarNode.id,
+		type: &#x27;dashed&#x27;,
+		color:theTheme.Time,
+		label:&quot;0s&quot;
+	});
+	
+	
+	var lastNode;
+	var lastFarNode;
+	
+	while(pos&lt;=maxim){
+		lastNode=presNode;
+		lastFarNode=presFarNode;
+		presNode={ 
+			id: &quot;n&quot;+theGraph.nodes().length.toString(),
+			label: pos.toString()+&quot;s&quot;,
+			x: pos,
+			y: 1,
+			size: 0.4,
+			color:theTheme.Time
+		};
+		theGraph.addNode(presNode);
+		presFarNode={ 
+			id: &quot;n&quot;+theGraph.nodes().length.toString(),
+			label: pos.toString()+&quot;s&quot;,
+			x: pos,
+			y: theWidth+1,
+			size: 0.4,
+			color:theTheme.Time
+		};
+		
+		theGraph.addNode(presFarNode);
+		
+		theGraph.addEdge({
+			id: &quot;e&quot;+theGraph.edges().length.toString(),
+			source: lastNode.id,
+			target: presNode.id,
+			type: &#x27;dashed&#x27;,
+			color: theTheme.Time
+		});
+		
+		theGraph.addEdge({
+			id: &quot;e&quot;+theGraph.edges().length.toString(),
+			source: lastFarNode.id,
+			target: presFarNode.id,
+			type: &#x27;dashed&#x27;,
+			color: theTheme.Time
+		});
+		
+		theGraph.addEdge({
+			id: &quot;e&quot;+theGraph.edges().length.toString(),
+			source: presNode.id,
+			target: presFarNode.id,
+			type: &#x27;dashed&#x27;,
+			color: theTheme.Time,
+			label: pos.toString()+&quot;s&quot;
+		});
+		
+		pos=pos+step;
+	}
+
+}
+
+function scaleGraph(theGraph, xScale, yScale){
+
+	var pos=0;
+	var lim=theGraph.nodes().length;
+	theNodes=theGraph.nodes();
+	while(pos&lt;lim){
+		theNodes[pos].x=theNodes[pos].x*xScale;
+		theNodes[pos].y=theNodes[pos].y*yScale;
+		pos++;
+	}
+	
+}
+
+function flipTreeTime(theTree,axis){
+
+	if(theTree==null){
+		return;
+	}
+	else{
+		theTree.Time=axis-theTree.Time;
+		flipTreeTime(theTree.Ref,axis);
+		flipTreeTime(theTree.Mov,axis);
+		return;
+	}
+
+}
+
+function flipAxis(theSigma){
+
+	var theGraph=theSigma.graph;
+	var pos=0;
+	var holder;
+	var lim=theGraph.nodes().length;
+	theNodes=theGraph.nodes();
+	while(pos&lt;lim){
+		holder=theNodes[pos].x;
+		theNodes[pos].x=theNodes[pos].y;
+		theNodes[pos].y=holder;
+		pos++;
+	}
+	theSigma.refresh();
+
+}
+
+function getDepth(theTree){
+
+	if(theTree==null){
+		return 0;			
+	}
+	return 1+Math.max(getDepth(theTree.Ref, theTree.Mov));
+
+}
+
+
+function adjustGraph(theTree,theGraph){
+
+	var xAdjust=getDepth(theTree)/getLongestTime(theTree);
+	scaleGraph(theGraph,xAdjust,1);
+	return;
+
+}
+
+function curveEdges(theGraph){
+
+	var pos=0;
+	var holder;
+	var theChild;
+	var theParent;
+	var lim=theGraph.edges().length;
+	theEdges=theGraph.edges();
+	while(pos&lt;lim){
+		theChild=theGraph.nodes(theEdges[pos].source);
+		theParent=theGraph.nodes(theEdges[pos].target);
+		if((Math.abs(theChild.x-theParent.x) &lt; Math.abs(theChild.y-theParent.y)) &amp;&amp; theEdges[pos].type===&#x27;arrow&#x27;){
+			theEdges[pos].type=&#x27;curvedArrow&#x27;;
+		}
+		pos++;
+	}
+	s.refresh();
+
+}
+
+
+
+
+
+function fillGraph(theTree, theGraph, theTheme, parentNode, isMov){
+
+	if(theTree==null){			
+		return;			
+	}
+	else{
+	
+		var myNode= { 
+			id: &quot;n&quot;+theGraph.nodes().length.toString(),
+			label: theTree.Name,
+			x: theTree.Time,
+			y: theTree.Space,
+			size: 0,
+			color: theTheme.Main
+		}
+		
+		if(theTree.Ref===null){
+		
+			if(isMov){
+				myNode.size=1;
+				myNode.color= theTheme.Mov;
+			}
+			else{
+				myNode.size=1;
+				myNode.color= theTheme.Ref;					
+			}
+			
+		}
+		
+		theGraph.addNode(myNode);
+		
+		fillGraph(theTree.Ref,theGraph,theTheme,myNode.id,0);
+		fillGraph(theTree.Mov,theGraph,theTheme,myNode.id,1);
+		
+		
+		if(!(parentNode === null)){
+			var myEdge
+			if(isMov==0){
+				myEdge={
+					id: &quot;e&quot;+theGraph.edges().length.toString(),
+					source: myNode.id,
+					target: parentNode,
+					type: &#x27;arrow&#x27;,
+					size: 1
+				}
+			}
+			else{
+				myEdge={
+					id: &quot;e&quot;+theGraph.edges().length.toString(),
+					source: myNode.id,
+					target: parentNode,
+					type: &#x27;arrow&#x27;,
+					size: 1
+				}
+			}
+			theGraph.addEdge(myEdge);					
+		}
+		return;
+		
+	}
+}
+
+
+
+
+function drawFor(theTree, theSigma,theTheme){
+
+	theGraph=theSigma.graph;
+	theGraph.clear();
+	drawTime(theTree,theGraph,theTheme);
+	fillGraph(theTree,theGraph,theTheme,null,0);
+	adjustGraph(theTree,theGraph);
+	curveEdges(theGraph);
+	theSigma.refresh();			
+
+}
+
+
+// Selects a random UTF symbol from the set of closed ranges supplied
+function getRandomUTF (selectSpace){
+	
+	// If there are no ranges or one is not a complete pair, return &#x27;?&#x27;
+	if(selectSpace.length%2==1 || selectSpace.length==0){
+		return &#x27;?&#x27;;
+	}
+	
+	
+	// Count up the number of symbols available
+	var pos=0;
+	var lim=selectSpace.length/2;
+	var spaceSize=0;
+	while(pos&lt;lim){
+		spaceSize=spaceSize+selectSpace[pos+1]-selectSpace[pos];
+		pos=pos+2;
+	}
+	
+	// Get a number in the range
+	var sel=Math.random() * (spaceSize);
+	
+	// Get the right symbol from the right list
+	pos=0;
+	while(sel&gt;(selectSpace[pos+1]-selectSpace[pos])){
+		sel=sel-(selectSpace[pos+1]-selectSpace[pos]);
+		pos=pos+2;
+	}
+	
+	// convert the number to a character
+	var result= String.fromCharCode(selectSpace[pos] + Math.random() * (selectSpace[pos+1]-selectSpace[pos]+1));
+	
+	
+	return result;
+	
+}
+
+
+
+
+// Populates the given html element with a representation of the given tree structure
+function insertTreequenceHTML(theTree,parentElement){
+
+	
+	if(theTree==null){
+		return &quot;&quot;;
+	}
+	
+	// Set up the show/hide button
+	var theButton=document.createElement(&quot;BUTTON&quot;);
+	var theName=&quot;&quot;;
+	theButton.innerHTML=&quot;-&quot;;
+	theButton.setAttribute(&quot;onclick&quot;,&quot;swapHiding(parentElement)&quot;);
+	theButton.setAttribute(&quot;style&quot;,&quot;background-color: #000000;\
+							border: none;\
+							color: white;\
+							padding: 2px 4px 2px 4px;\
+							text-align: center;\
+							text-decoration: none;\
+							display: inline-block;\
+							font-size: 100% ;&quot;)
+
+	
+	// If not a leaf, attach button
+	if(theTree.Ref!=null || theTree.Mov!=null){
+		parentElement.appendChild(theButton);
+		//parentElement.appendChild(document.createElement(&quot;P&quot;));
+	}
+	// If a leaf, make a placeholder symbol
+	else{
+		theName=getRandomUTF([  
+								/*0x03B0,0x03FF,
+								0x0531,0x0556,
+								0x07C0,0x07EA,
+								0x10A0,0x10C5,
+								0x16A0,0x16EA,
+								0x1A00,0x1A16,
+								0x1B83,0x1BA0,
+								0x20A0,0x20BE,
+								0x2C00,0x2C2E,
+								0xA500,0xA62B*/
+								
+								0x2600,0x2625,
+								0x2639,0x2668,
+								0x2690,0x269D,
+								0x26B3,0x23BE
+								
+								/*0x1F300,0x1F3FA,
+								0x1F400,0x1F4FF,
+								0x1F600,0x1F64F,
+								0x1F910,0x1F91E,
+								0x1F920,0x1F927,
+								0x1F950,0x1F95E,
+								0x1F980,0x1F991*/
+								]);
+		parentElement.appendChild(document.createTextNode(theTree.Name.substring(0,theTree.Name.length-4)+&quot;(&quot;+theName+&quot;)&quot;));
+	}
+	
+	var movName;
+	var refName;
+	
+	// Attach ref and mov branches and get their names
+	if(theTree.Mov!=null){
+		var theMov=document.createElement(&quot;DIV&quot;);
+		parentElement.appendChild(theMov);
+		movName=insertTreequenceHTML(theTree.Mov,theMov);
+	}
+	if(theTree.Ref!=null){
+		var theRef=document.createElement(&quot;DIV&quot;);
+		parentElement.appendChild(theRef);
+		refName=insertTreequenceHTML(theTree.Ref,theRef);
+	}
+	
+	// If not a leaf, make name and insert it
+	if(theTree.Ref!=null || theTree.Mov!=null){
+		theName=movName+refName;
+		parentElement.insertBefore(document.createTextNode(&quot;  &quot;+theName),theMov);
+	}
+	
+	// Hide all children of the element
+	hideChildren(parentElement);
+	
+	
+	return theName;
+	
+}
+
+// Shows/hides the given node based off of the text in its associated button
+function swapHiding(theNode){
+	
+	var buttonState=getChildrenByTag(theNode,&quot;BUTTON&quot;);
+	if(buttonState==null || buttonState.length&lt;1){
+		return;
+	}
+	var theButton=buttonState[0];
+	
+	if(theButton.innerHTML==&quot;+&quot;){
+		theButton.innerHTML=&quot;-&quot;;
+		showChildren(theNode);
+	}
+	else{
+		theButton.innerHTML=&quot;+&quot;;
+		hideChildren(theNode);
+	}
+
+	
+}
+
+
+// shows the given node
+function show(theNode){
+	
+	var theText=getChildrenByTag(theNode,&quot;TEXT&quot;);
+
+	theNode.setAttribute(&quot;style&quot;,&quot;display: block; position: relative; left: 15px; border-style: solid; border-color: #000000;&quot;);
+	//console.log(&quot;Just Showed: &quot;+theNode.innerHTML);
+	
+}
+
+
+// Hides the given node
+function hide(theNode){
+	
+	var theText=getChildrenByTag(theNode,&quot;TEXT&quot;);
+	if(!(theText==null || theText.length&lt;1)){
+		console.log(&quot;Hiding: &quot;+theText[0].innerHTML);
+	}
+	var buttonState=getChildrenByTag(theNode,&quot;BUTTON&quot;);
+	if(!(buttonState==null || buttonState.length&lt;1)){
+		buttonState[0].innerHTML=&#x27;+&#x27;;
+	}
+	theNode.setAttribute(&quot;style&quot;,&quot;display: none;&quot;);
+	
+	//console.log(&quot;Just Hid: &quot;+theNode.innerHTML);
+	
+}
+
+// shows the given node&#x27;s child nodes
+function showChildren(theNode){
+	
+	var theChildren = getChildrenByTag(theNode,&quot;DIV&quot;);
+	var pos=0;
+	var lim=theChildren.length;
+	while(pos&lt;lim){
+		show(theChildren[pos]);
+		hideChildren(theChildren[pos]);
+		pos++;
+	}	
+}
+
+// hides the given node&#x27;s child nodes
+function hideChildren(theNode){
+	
+	theNode.setAttribute(&quot;style&quot;,&quot;display: block; position: relative; left: 15px; border-left: solid #000000; padding: 10px 5px 0px 5px;&quot;);
+	var theChildren = getChildrenByTag(theNode,&quot;DIV&quot;);
+	var pos=0;
+	var lim=theChildren.length;
+	while(pos&lt;lim){
+		hideChildren(theChildren[pos]);
+		hide(theChildren[pos]);
+		pos++;
+	}	
+}
+
+
+// returns a list of all the child nodes of the given node with the given tag type
+function getChildrenByTag(theNode,tag){
+	
+	var childs=theNode.children;
+	var pos=0;
+	var lim=childs.length;
+	var result=[];
+	while(pos&lt;lim){
+		if(childs[pos].tagName===tag){
+			result.push(childs[pos]);
+		}
+		pos++;
+	}
+	return result;
+}
+
+
+    </pre>
+</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

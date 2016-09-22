@@ -307,9 +307,9 @@ function showFrames(partFrames){
 * Logs the contents of a given keyFrame object, containing numeric properties "X",
 * "Y", "Z", and "Time", to the console as a string.
 *
-* @method showFrames
+* @method showFrame
 * @for renderGlobal
-* @param {Array} partFrames A jagged array of keyframe objects
+* @param {Array} theFrame the keyFrame object to be logged
 * @return {Void}
 *
 */
@@ -326,7 +326,7 @@ function sayFrame(theFrame){
 *
 * @method hasNaN
 * @for renderGlobal
-* @param {Object} partFrames A keyFrame object
+* @param {Object} theFrame A keyFrame object
 * @return {Boolean}
 *
 */
@@ -343,7 +343,7 @@ function hasNaN(theFrame){
 *
 * @method copyFrame
 * @for renderGlobal
-* @param {Object} partFrames A keyFrame object
+* @param {Object} theFrame A keyFrame object
 * @return {Object} The copy
 *
 */
@@ -361,7 +361,16 @@ function copyFrame(theFrame){
 }
 
 
-
+/**
+*
+* Returns a copy of the provided array of keyframe objects
+*
+* @method copyFrameList
+* @for renderGlobal
+* @param {Array} partFrames A keyFrame object array
+* @return {Array} The copy
+*
+*/
 function copyFrameList (theFrameList){
 	
 	var pos=0;
@@ -377,6 +386,20 @@ function copyFrameList (theFrameList){
 }
 
 
+/**
+*
+* Given a tree representation of the assembly process through nested javascript objects, returns an array
+* of keyframe array objects, with each keyframe array object being a representation of the movement of each part 
+* in the tree representation throughout the assembly proceess, with a list of keyframe objects and a given part name
+*
+* @method makeKeyFrames
+* @for renderGlobal
+* @param {Object} theTree Tree representation of the assembly process through nested javascript objects
+* @param {Array} runningList Internally used variable. Should be an empty array for outside use.
+* @param {Array} currentFrameList Internally used variable. Should be an empty array for outside use.
+* @return {Array} The jagged array of keyFrame objects
+*
+*/
 function makeKeyFrames(theTree, runningList, currentFrameList){
 
 	var isRoot=0;
@@ -422,7 +445,22 @@ function makeKeyFrames(theTree, runningList, currentFrameList){
 
 
 
-function interpolate(keyFrame1, keyFrame2, proportion, posit){
+/**
+*
+* Given two keyFrames and a normalized float "proportion", returns an interpolation
+* between the two keyframes with a weight towards the second keyframe proportional
+* to "proportion"
+*
+* @method interpolate
+* @for renderGlobal
+* @param {Object} keyFrame1 The earlier keyFrame
+* @param {Object} keyFrame2 The later keyFrame
+* @param {Float} proportion A normalized value representing what proportion of the path of
+* interpolation is between the result and the earlier keyFrame
+* @return {Object} The jagged array of keyFrame objects
+*
+*/
+function interpolate(keyFrame1, keyFrame2, proportion){
 	
 	var result={ Quat: new THREE.Quaternion(), Position: new THREE.Vector3(0,0,0), Time: null };
 	
@@ -433,9 +471,6 @@ function interpolate(keyFrame1, keyFrame2, proportion, posit){
 	result.Position.z=keyFrame1.Position.z*(1-proportion)+keyFrame2.Position.z*proportion;
 	result.Time=keyFrame1.Time*(1-proportion)+keyFrame2.Time*proportion;
 	
-	if(posit.distanceTo(result)>0.00001){
-		console.log("DISTANCE: "+posit.distanceTo(result).toString());
-	}
 	
 	if(hasNaN(result)){
 		console.log("vvvvvvvvvvvv");
@@ -450,7 +485,23 @@ function interpolate(keyFrame1, keyFrame2, proportion, posit){
 	
 }
 
-function grabInterp(frameList, time, posit){
+
+
+/**
+*
+* Given a list of keyframes and a time quantity, returns a keyframe object interpolating
+* between the two temporally closest keyframes. In cases where the provide time is beyond the
+* range of times represented by the list, returns the closest keyframe
+*
+* @method grabInterp
+* @for renderGlobal
+* @param {Array} frameList A list of keyframes. Must be organized from least time value to greatest time value
+* @param {Float} time Floating-point representation of what time in the keyframe progression the interpolation
+* should occur
+* @return {Object} The interpolated keyframe
+*
+*/
+function grabInterp(frameList, time){
 	
 
 	var pos=0;
@@ -482,11 +533,7 @@ function grabInterp(frameList, time, posit){
 	else{
 		
 		var prop=(time-frameList[pos-1].Time)/(frameList[pos].Time-frameList[pos-1].Time);
-		var theResult=interpolate(frameList[pos-1],frameList[pos],prop, posit);
-	}
-	
-	if(posit.distanceTo(theResult)>0.00001){
-		console.log("DISTANCE: "+posit.distanceTo(thResult).toString());
+		var theResult=interpolate(frameList[pos-1],frameList[pos],prop);
 	}
 	
 	//sayFrame(theResult);
@@ -494,6 +541,26 @@ function grabInterp(frameList, time, posit){
 	
 }
 
+
+
+/**
+*
+* Given an array of objects (each containing a threeJS mesh object and an array of 
+* keyFrame objects), and two floating points "time" and "timeWarp", will animate each
+* mesh in the array along the keyframes in their associate objects according to the 
+* given "time" and returns the new time as given by the standard time step multiplied
+* by "timeWarp" 
+*
+* @method interpolate
+* @for renderGlobal
+* @param {Array} partFrames List of objects relating threeJS mesh objects with their 
+* respective keyframe arrays 
+* @param {Float} time The time to be used when interpolating keyFrames for the models
+* @param {Float} timeWarp The coefficeint to be applied to the timestep in the
+* animation
+* @return {Float} The new value of time in the animation
+*
+*/
 function animate(partFrames, time, timeWarp){
 	
 	var pos=0;
@@ -534,6 +601,19 @@ function animate(partFrames, time, timeWarp){
 
 
 
+
+/**
+*
+* Given two threeJS boundingBox objects, returns the smallest bounding box
+* encompassing the two
+*
+* @method combineBounds
+* @for renderGlobal
+* @param {Object} a The first bounding box
+* @param {Object} b The second bounding box
+* @return {Object} The combined bounds
+*
+*/
 function combineBounds(a,b){
 	
 	var r={};
@@ -550,6 +630,19 @@ function combineBounds(a,b){
 }
 
 
+
+/**
+*
+* Given two threeJS boundingBox objects, returns the smallest bounding box
+* encompassing the two
+*
+* @method getGlobBounds
+* @for renderGlobal
+* @param {Object} a The first bounding box
+* @param {Object} b The second bounding box
+* @return {Object} The combined bounds
+*
+*/
 function getGlobBounds(partFrames){
 	
 	
@@ -569,27 +662,21 @@ function getGlobBounds(partFrames){
 }
 
 
-function getMaxDist(pointList,theCenter){
-	
-	var pos=1;
-	var lim=pointList.length;
-	var dst= pointList[0].distanceTo(theCenter);
-	while(pos<lim){
-		dst=Math.max(dst,pointList[pos].distanceTo(theCenter));
-		pos++;
-	}
-	return dst;
-	
-}
 
-function getCenter(partFrames){
-	
-	var bound= getGlobBounds(partFrames);
-	var centerPoint= new THREE.Vector3((bound.min.x+bound.max.x)/2,(bound.min.y+bound.max.y)/2,(bound.min.z+bound.max.z)/2);
-	return centerPoint;
-	
-}
 
+
+/**
+*
+* Given an object, containing a threeJS mesh object as "Mesh", will
+* return the center of the mesh's bounding box
+*
+* @method getPartCenter
+* @for renderGlobal
+* @param {Object} a The object containing the threeJS mesh object
+* @return {Object} The center of the mesh's bounding box, represented as
+* a threeJS Vector3 object
+*
+*/
 function getPartCenter(part){
 	
 	part.Mesh.geometry.computeBoundingBox();
@@ -604,6 +691,29 @@ function getPartCenter(part){
 }
 
 
+
+
+
+
+
+/**
+*
+* Given a threeJS scene object, a threeJS camera object, and an array of objects containing
+* threeJS mesh objects, finds the first mesh in the scene which is intersected the ray extending
+* through the center of the camera's field of vision. If this mesh is in the provided array of 
+* objects, then that object is returned, otherwise null is returned instead
+*
+* @method getFirstIntersect
+* @for renderGlobal
+* @param {Object} theScene The threeJS scene object in which intersections should
+* be tested
+* @param {Object} theCamera The threeJS camera object to be used to test for 
+* ray intersections
+* @param {Array} partFrames An array containing a series of objects, each of which
+* contain a threeJS mesh object (under the property "Mesh") to be tested for intersections
+* @return {Object} The intersecting mesh (or null in case of no valid intersection)
+*
+*/
 function getFirstIntersect(theScene, theCamera, partFrames){
 	
 	var caster= new THREE.Raycaster();
@@ -637,76 +747,25 @@ function getFirstIntersect(theScene, theCamera, partFrames){
 }
 
 
-function flipNormals(theMesh){
-	
-	var trigs=theMesh.geometry.faces;
-	var pos=0;
-	var lim=trigs.length;
-	var holder;
-	while(pos<lim){
-		holder=trigs[pos].c;
-		trigs[pos].c=trigs[pos].b;
-		trigs[pos].b=holder;
-		pos++;
-	}
-	return;
-	
-}
-
-function addNoise(theMesh,avg,noiseLevel){
-	
-	
-	var verts=theMesh.geometry.vertices;
-	var pos=0;
-	var lim=verts.length;
-	
-	while(pos<lim){
-		//console.log(pos);
-
-		verts[pos].z+=(Math.random()*noiseLevel*2-noiseLevel)/(1+Math.abs(verts[pos].z-avg))+(avg-verts[pos].z)*Math.abs(avg-verts[pos].z)*0.01;
-		
-		//console.log(verts[pos]);
-		pos++;
-	}
-	
-	theMesh.geometry.verticesNeedUpdate=true;
-	return;
-	
-}
-
-function smooth (theMesh, dim){
-	
-	var verts=theMesh.geometry.vertices;
-	var xpos;
-	var ypos=0;
-	while(ypos<dim){
-		xpos=0;
-		while(xpos<dim){
-			if(xpos>0 & xpos<dim-1 & ypos>0 & ypos<dim-1){
-				verts[xpos+dim*ypos].y=verts[xpos+dim*ypos].y;
-				verts[xpos+dim*ypos].y+=verts[(xpos+1)+dim*ypos].y;
-				verts[xpos+dim*ypos].y+=verts[(xpos-1)+dim*ypos].y;
-				verts[xpos+dim*ypos].y+=verts[xpos+dim*(ypos+1)].y;
-				verts[xpos+dim*ypos].y+=verts[xpos+dim*(ypos-1)].y;
-				verts[xpos+dim*ypos].y+=verts[(xpos+1)+dim*(ypos+1)].y;
-				verts[xpos+dim*ypos].y+=verts[(xpos-1)+dim*(ypos+1)].y;
-				verts[xpos+dim*ypos].y+=verts[(xpos+1)+dim*(ypos-1)].y;
-				verts[xpos+dim*ypos].y+=verts[(xpos-1)+dim*(ypos-1)].y;
-				verts[xpos+dim*ypos].y/=9;
-			}
-			xpos++;
-		}		
-		ypos++;
-	}
-	theMesh.geometry.verticesNeedUpdate=true;
-	
-}
 
 
 
 
-
-
+/**
+*
+* Given an tree representation of the movement of parts in an assembly sequence, the
+* parent node of that node, and a threeJS scene object, inserts a line for each subassembly
+* path along the path of movement
+*
+* @method addLines
+* @for renderGlobal
+* @param {Object} movTree Tree of nested objects representing the movement of each subassembly
+* in it's assembly sequence
+* @param {Object} parentNode Used for internal use. Null should be applied for external use.
+* @param {Object} theScene the threeJS scene to which the line representations will be added
+* @return {Void}
+*
+*/
 function addLines(movTree,parentNode,theScene){
 	
 	if(movTree==null){
@@ -743,6 +802,28 @@ function addLines(movTree,parentNode,theScene){
 	
 }
 
+
+
+
+/**
+*
+* Given an tree representation of the movement of parts in an assembly sequence, an 
+* array of Objects each associating a list of keyframes with a threeJS mesh object and aLinkcolor
+* string, and the index of the keyframe associated with the tree's root node, displaces the movement
+* line points associated with that particular part of the assembly to match the displacement of the
+* model
+*
+* @method addDisplacement
+* @for renderGlobal
+* @param {Object} movTree Tree of nested objects representing the movement of each subassembly
+* in it's assembly sequence
+* @param {Array} partFrames An array of Objects each associating a list of keyframes with a threeJS
+* mesh object and a string
+* @param {Object} it The index of the keyframe associated with the root node of movTree. Used internally.
+* For external use, apply 0.
+* @return {Void}
+*
+*/
 function addDisplacement(movTree, partFrames, it){
 	
 	if(movTree==null){
@@ -778,6 +859,22 @@ function addDisplacement(movTree, partFrames, it){
 	
 }
 
+
+/**
+*
+* Given an tree representation of the movement of parts in an assembly sequence, the
+* parent node of that node, and the current time in the animation, updates the ends of the
+* movement lines such that the portion of lines which have already been traversed are not shown
+*
+* @method updateLines
+* @for renderGlobal
+* @param {Object} movTree Tree of nested objects representing the movement of each subassembly
+* in it's assembly sequence
+* @param {Object} parentNode Used for internal use. Null should be applied for external use.
+* @param {Object} theTime the threeeJS scene to which the line representations will be added
+* @return {Void}
+*
+*/
 function updateLines(movTree,parentNode,theTime){
 	
 	if(movTree==null){

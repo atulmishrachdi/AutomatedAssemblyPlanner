@@ -446,7 +446,7 @@ function registerDown(e){
 * of the keys used for manipulating the view, sets the proper components
 * of "inputState" to false 
 *
-* @method registerDown
+* @method registerUp
 * @for renderGlobal
 *
 * 

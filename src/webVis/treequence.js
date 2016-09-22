@@ -1,30 +1,71 @@
 ;
 
 
+
+
+/**
+*
+* Given a jQuery object, returns a full list of all of its children.
+*
+* @method whatsIn
+* @for renderGlobal
+* @param {jQuery Object} theTree The jQuery object whose children should be returned
+* @return {Array} Array of the object's children
+* 
+*/
 function whatsIn(theTree){
 
-	document.getElementById("warning").innerHTML=$(theTree).children("*");
+	return document.getElementById("warning").innerHTML=$(theTree).children("*");
 
 }
 
 
-// returns the first child of the given element with the given tag 
+
+
+
+
+/**
+*
+* Given a jQuery object and a string, returns the first child of the given element with
+* a tag equivalent to the given string.
+*
+* @method grab
+* @for renderGlobal
+* @param {jQuery Object} theTree The jQuery object whose child is to be returned
+* @param {String} theMember The name of the tag being searched
+* @return {jQuery Object} The first child with the given tag. If such a child does not 
+* exist, null is returned.
+* 
+*/
 function grab(theTree,theMember){
 
 	if($(theTree).children(theMember).length!=0){
-		
 		return $(theTree).children(theMember)[0];
-		
 	}
 	else{
-	
 		return null;
-	
 	}
 
 }
 
-// returns a list of all children of the given eleemnt with the same tag
+
+
+
+// returns a list of all children of the given eleemnt with the same tagName
+/**
+*
+* Given a jQuery object and an integer "N", returns the Nth child of the given element with
+* the given tag. 
+*
+* @method grab
+* @for renderGlobal
+* @param {jQuery Object} theTree The jQuery object whose child is to be returned
+* @param {String} theMember The name of the tag being searched
+* @param {String} theIndex The ordinal of the matching child to be returned
+* @return {jQuery Object} The child meeting the tag and ordinal requirement. 
+* If such a child does not exist, null is returned.
+* 
+*/
 function grabInd(theTree,theMember, theIndex){
 
 	if($(theTree).children(theMember).length>theIndex){
@@ -43,6 +84,22 @@ function grabInd(theTree,theMember, theIndex){
 
 
 // Converts the given XML element into a javascript object
+/**
+*
+* Given a jQuery object derived from parsing an XML document, extracts all information
+* relevant to part movement and composes it into an identically structured tree of 
+* nested javascript objects which is then returned
+*
+* @method getMovement
+* @for renderGlobal
+* @param {jQuery Object} theTree The jQuery object to be parsed over
+* @param {Float} myX The X position of the subassembly represented by the root node of theTree
+* @param {Float} myY The Y position of the subassembly represented by the root node of theTree
+* @param {Float} myZ The Z position of the subassembly represented by the root node of theTree
+* @param {Float} myTime The time value of the subassembly represented by the root node of theTree
+* @param {Object} The root node of the tree of extracted movement data 
+* 
+*/
 function getMovement(theTree, myX, myY, myZ, myTime){
 
 	if(($(theTree).children("Install").length==0)){
@@ -72,6 +129,17 @@ function getMovement(theTree, myX, myY, myZ, myTime){
 
 
 // Gets the XML representing the reference subassembly of the given XML representation of it's parent assembly
+/**
+*
+* Given a jQuery Object, will return the first child with the tag "Reference" of the first child with
+* the tag "Install" of the object. If no such child exists, null is returned. 
+*
+* @method getRef
+* @for renderGlobal
+* @param {jQuery Object} theTree The jQuery object to be accessed
+* @param {jQuery Object} The resulting child
+* 
+*/
 function getRef(theTree){
 
 	theTree=grab(theTree,"Install");
@@ -83,6 +151,17 @@ function getRef(theTree){
 }
 
 // Gets the XML representing the reference subassembly of the given XML representation of it's parent assembly
+/**
+*
+* Given a jQuery Object, will return the first child with the tag "Moving" of the first child with
+* the tag "Install" of the object. If no such child exists, null is returned. 
+*
+* @method getRef
+* @for renderGlobal
+* @param {jQuery Object} theTree The jQuery object to be accessed
+* @param {jQuery Object} The resulting child
+* 
+*/
 function getMov(theTree){
 
 	theTree=grab(theTree,"Install");
@@ -96,9 +175,20 @@ function getMov(theTree){
 
 
 // Returns a tree representing the times of all installations in the  given tree
+/**
+*
+* Given a jQuery object derived from parsing an XML document, extracts all information
+* relevant to installation timing and composes it into an identically structured tree of 
+* nested javascript objects which is then returned
+*
+* @method getTimes
+* @for renderGlobal
+* @param {jQuery Object} theTree The jQuery object to be parsed over
+* @param {Float} parentTime The time value of the subassembly represented by the root node of theTree
+* @param {Object} The root node of the tree of extracted time data 
+* 
+*/
 function getTimes(theTree, parentTime){
-
-
 
 	if(($(theTree).children("Install").length==0)){
 		return { Time: parentTime, Ref: null, Mov: null };
@@ -117,6 +207,16 @@ function getTimes(theTree, parentTime){
 
 // Returns the longest period of time from a base parts initial installation to the
 // construction of the final product
+/**
+*
+* Given a tree of nested objects, returns the highest "Time" value from all the nodes
+*
+* @method getLongestTime
+* @for renderGlobal
+* @param {Object} timeTree The tree of time values
+* @param {Object} The highest time value in the tree
+* 
+*/
 function getLongestTime(timeTree){
 
 	if(timeTree==null){
@@ -127,17 +227,20 @@ function getLongestTime(timeTree){
 }
 
 
-function getWidestSpace(theTree){
-
-	if(theTree==null){
-		return 0;
-	}
-	return Math.max(getWidestSpace(theTree.Ref),getWidestSpace(theTree.Mov),theTree.Space);
-
-}
-
 
 // Returns a tree-based representation of the names in the given tree
+/**
+*
+* Given a jQuery object derived from parsing an XML document, extracts all part name 
+* information and composes it into an identically structured tree of nested javascript
+* objects which is then returned
+*
+* @method getNames
+* @for renderGlobal
+* @param {jQuery Object} theTree The jQuery object to be parsed over
+* @param {Object} The root node of the tree of extracted name data 
+* 
+*/
 function getNames(theTree){
 
 
@@ -154,66 +257,6 @@ function getNames(theTree){
 }
 
 
-function getSpaces(theTree, underWidth, isMov){
-
-
-
-	if(($(theTree).children("Install").length==0)){
-	
-		
-
-		if(isMov==1){
-		
-			return {theNode: {Space: underWidth+1, Ref: null, Mov: null}, Width: underWidth};
-		
-		}
-		else{
-		
-			return {theNode: {Space: underWidth, Ref: null, Mov: null}, Width: underWidth};
-		
-		}
-	}
-	else{
-	
-
-
-		var mySpace=underWidth;
-		if(isMov==1){
-		
-			underWidth=underWidth+2;
-		
-		}
-		
-
-		var ref=getSpaces(getRef(theTree),underWidth,0);
-
-		
-		if(($(getMov(theTree)).children("Install").length==0)){
-			var mov=getSpaces(getMov(theTree),underWidth,1);
-		}
-		else{
-			var mov=getSpaces(getMov(theTree),ref.Width,1);
-		}
-
-		
-		
-		if(isMov!=-1){
-			
-			return {theNode:{Space: underWidth, Ref: ref.theNode, Mov: mov.theNode},Width: Math.max(mov.Width,ref.Width)};
-			
-		}
-		else{
-		
-			return {Space: underWidth, Ref: ref.theNode, Mov: mov.theNode};
-		
-		}
-		
-		
-	}
-	
-}
-
-
 // Merges the given tree representations of the time, space, and names associated with
 // each installation into one tree
 function mergeTrees(TimeTree,SpaceTree,NameTree){
@@ -227,42 +270,14 @@ function mergeTrees(TimeTree,SpaceTree,NameTree){
 	else{
 	
 		var ref=mergeTrees(TimeTree.Ref,SpaceTree.Ref,NameTree.Ref);
-		var mov=mergeTrees(TimeTree.Mov,SpaceTree.Mov,NameTree.Mov);
-		
-		
+		var mov=mergeTrees(TimeTree.Mov,SpaceTree.Mov,NameTree.Mov);		
 		
 		return {Time: TimeTree.Time, Space: SpaceTree.Space, Name: NameTree.Name, Ref: ref, Mov: mov};
-	
-	
+
 	}
 	
 
 }
-
-function makePretty(theTree,trueCenter,prettyCenter,rightness){
-
-	if(theTree==null){
-		return 0;
-	}
-	else{
-	
-		var oldSpace=theTree.Space;
-	
-		if(rightness==0){
-			theTree.Space=prettyCenter+(theTree.Space-trueCenter);
-			makePretty(theTree.Ref,oldSpace,theTree.Space,1);
-			makePretty(theTree.Mov,oldSpace,theTree.Space,1);
-		}
-		else{
-			theTree.Space=prettyCenter-(theTree.Space-trueCenter);
-			makePretty(theTree.Ref,oldSpace,theTree.Space,0);
-			makePretty(theTree.Mov,oldSpace,theTree.Space,0);
-		}
-		
-	}	
-
-}
-
 
 
 function getNameList(theTree){
@@ -348,113 +363,7 @@ function cutOffNames(theTree,theCutOff){
 }
 
 
-function drawTime(theTree,theGraph, theTheme){
 
-	var theTime=getLongestTime(theTree);
-	var theWidth=getWidestSpace(theTree);
-	var step=Math.pow(10,Math.floor(Math.log10(theTime)))/2;
-	var pos=step;
-	
-	var maxim=Math.ceil(theTime/step)*step;
-	
-	
-	
-	var presNode={ 
-		id: "n"+theGraph.nodes().length.toString(),
-		label: "0s",
-		x: 0,
-		y: 1,
-		size: 0.4,
-		color:theTheme.Time
-	};
-	theGraph.addNode(presNode);
-	var presFarNode={ 
-		id: "n"+theGraph.nodes().length.toString(),
-		label: "0s",
-		x: 0,
-		y: theWidth+1,
-		size: 0.4,
-		color:theTheme.Time
-	};
-	theGraph.addNode(presFarNode);
-	theGraph.addEdge({
-		id: "e"+theGraph.edges().length.toString(),
-		source: presNode.id,
-		target: presFarNode.id,
-		type: 'dashed',
-		color:theTheme.Time,
-		label:"0s"
-	});
-	
-	
-	var lastNode;
-	var lastFarNode;
-	
-	while(pos<=maxim){
-		lastNode=presNode;
-		lastFarNode=presFarNode;
-		presNode={ 
-			id: "n"+theGraph.nodes().length.toString(),
-			label: pos.toString()+"s",
-			x: pos,
-			y: 1,
-			size: 0.4,
-			color:theTheme.Time
-		};
-		theGraph.addNode(presNode);
-		presFarNode={ 
-			id: "n"+theGraph.nodes().length.toString(),
-			label: pos.toString()+"s",
-			x: pos,
-			y: theWidth+1,
-			size: 0.4,
-			color:theTheme.Time
-		};
-		
-		theGraph.addNode(presFarNode);
-		
-		theGraph.addEdge({
-			id: "e"+theGraph.edges().length.toString(),
-			source: lastNode.id,
-			target: presNode.id,
-			type: 'dashed',
-			color: theTheme.Time
-		});
-		
-		theGraph.addEdge({
-			id: "e"+theGraph.edges().length.toString(),
-			source: lastFarNode.id,
-			target: presFarNode.id,
-			type: 'dashed',
-			color: theTheme.Time
-		});
-		
-		theGraph.addEdge({
-			id: "e"+theGraph.edges().length.toString(),
-			source: presNode.id,
-			target: presFarNode.id,
-			type: 'dashed',
-			color: theTheme.Time,
-			label: pos.toString()+"s"
-		});
-		
-		pos=pos+step;
-	}
-
-}
-
-function scaleGraph(theGraph, xScale, yScale){
-
-	var pos=0;
-	var lim=theGraph.nodes().length;
-	theNodes=theGraph.nodes();
-	while(pos<lim){
-		theNodes[pos].x=theNodes[pos].x*xScale;
-		theNodes[pos].y=theNodes[pos].y*yScale;
-		pos++;
-	}
-	
-}
 
 function flipTreeTime(theTree,axis){
 
@@ -470,22 +379,7 @@ function flipTreeTime(theTree,axis){
 
 }
 
-function flipAxis(theSigma){
 
-	var theGraph=theSigma.graph;
-	var pos=0;
-	var holder;
-	var lim=theGraph.nodes().length;
-	theNodes=theGraph.nodes();
-	while(pos<lim){
-		holder=theNodes[pos].x;
-		theNodes[pos].x=theNodes[pos].y;
-		theNodes[pos].y=holder;
-		pos++;
-	}
-	theSigma.refresh();
-
-}
 
 function getDepth(theTree){
 
@@ -525,86 +419,6 @@ function curveEdges(theGraph){
 
 }
 
-
-
-
-
-function fillGraph(theTree, theGraph, theTheme, parentNode, isMov){
-
-	if(theTree==null){			
-		return;			
-	}
-	else{
-	
-		var myNode= { 
-			id: "n"+theGraph.nodes().length.toString(),
-			label: theTree.Name,
-			x: theTree.Time,
-			y: theTree.Space,
-			size: 0,
-			color: theTheme.Main
-		}
-		
-		if(theTree.Ref===null){
-		
-			if(isMov){
-				myNode.size=1;
-				myNode.color= theTheme.Mov;
-			}
-			else{
-				myNode.size=1;
-				myNode.color= theTheme.Ref;					
-			}
-			
-		}
-		
-		theGraph.addNode(myNode);
-		
-		fillGraph(theTree.Ref,theGraph,theTheme,myNode.id,0);
-		fillGraph(theTree.Mov,theGraph,theTheme,myNode.id,1);
-		
-		
-		if(!(parentNode === null)){
-			var myEdge
-			if(isMov==0){
-				myEdge={
-					id: "e"+theGraph.edges().length.toString(),
-					source: myNode.id,
-					target: parentNode,
-					type: 'arrow',
-					size: 1
-				}
-			}
-			else{
-				myEdge={
-					id: "e"+theGraph.edges().length.toString(),
-					source: myNode.id,
-					target: parentNode,
-					type: 'arrow',
-					size: 1
-				}
-			}
-			theGraph.addEdge(myEdge);					
-		}
-		return;
-		
-	}
-}
-
-
-
-
-function drawFor(theTree, theSigma,theTheme){
-
-	theGraph=theSigma.graph;
-	theGraph.clear();
-	drawTime(theTree,theGraph,theTheme);
-	fillGraph(theTree,theGraph,theTheme,null,0);
-	adjustGraph(theTree,theGraph);
-	curveEdges(theGraph);
-	theSigma.refresh();			
-
-}
 
 
 // Selects a random UTF symbol from the set of closed ranges supplied
