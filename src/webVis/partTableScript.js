@@ -1,0 +1,566 @@
+;
+
+
+
+//
+//    Pretty Important: Keep this as true unless/until you've incorperated some other
+//                      method of getting file input
+//
+var manualFileInput=true;
+
+
+
+// Put recieved data about the parts in here. 
+// Fills out the table with the information in the given xml document text (as a string, mind you)
+/**
+*
+* Given the contents of a part table XML file (as a string), fills out the table in the web page.
+*
+* @method recieveData
+* @for partTableGlobal
+* @param {String} theXMLText The contents of a part table
+* @return {Void}
+* 
+*/
+function recieveData(theXMLText){
+
+	var theXML=$.parseXML(theXMLText);
+	console.log(theXML);
+	//console.log(theXML);
+	var theEntries=grab(theXML,"parts_properties");
+	var theEntries=$(theEntries).children("part_properties");
+	var pos=0;
+	var lim=theEntries.length;
+	var name;
+	var classif;
+	while(pos<lim){
+		addEntry(theEntries[pos]);
+		pos++;
+	}
+
+}
+
+
+// Gets called when the user submits the table and everything is properly filled out
+/**
+*
+* Is called whenever the user submits the part table and every entry has been
+* properly filled out.
+*
+* @method sendData
+* @for partTableGlobal
+* @param {String} theXMLText The contents of the part table in the webpage, as a string
+* in XML formatting
+* @return {Void}
+* 
+*/
+function sendData(theXMLText){
+
+	// Do whatever you want with the resulting data to send it off, if you want
+	
+
+}
+
+
+
+
+
+
+
+
+
+var fileReaders=[];
+var inputXML=null;
+var textFile=null;
+
+
+// Some HTML bits to insert into the table as needed
+
+// Starting Input for mass cells
+var massElem="<button onclick='insertMassInput(this)'>Input By Mass</button><button onclick='insertDensityInput(this)'>Input By Volume+Density</button>";
+
+// Starting Input for Volume cells
+var volElem="<button onclick='insertHollowInput(this)'>Is Hollow</button>";
+
+
+// The button for showing the sample density dropdown menu
+var dropDensityButton="<button class='dropbtn' onclick='doDensityDrop(this)'>Sample Densities</button>";
+	
+// The button for removing the sample density dropdown menu
+var undropDensityButton="<button class='dropbtn' onclick='undoDensityDrop(this)'>Sample Densities</button>";
+				
+// The sample density dropdown menu
+var densityMenu="<div class='dropdown-content' style='border-color: #666666; background-color: #DDDDDD; border-style: solid; padding: 10px 10px 10px 10px;'>"+
+					"<button onclick='changeDensity(this)'>Aluminum</button>"+
+					"<button onclick='changeDensity(this)'>Glass</button>"+
+					"<button onclick='changeDensity(this)'>Plastic (Hi-Density)</button>"+
+					"<button onclick='changeDensity(this)'>Plastic (Med-Density)</button>"+
+					"<button onclick='changeDensity(this)'>Plastic (Low-Density)</button>"+
+					"<button onclick='changeDensity(this)'>Rubber</button>"+
+					"<button onclick='changeDensity(this)'>Steel</button>"+
+					"<button onclick='changeDensity(this)'>Titanium</button>"+
+					"<button onclick='changeDensity(this)'>Wood</button>"+
+				"</div>";
+
+// Starting input for density cells
+var densityDiv= "\n<div class='dropdown'>"+dropDensityButton+"</div>";
+
+
+var manualIO="<input type='file' id='fileinput' multiple ></input>"+
+"<button style='display: inline;' onclick='renderXML()'>Render XML</button>"+
+"<a href='' id='downloadLink' download='parts_properties2.xml' ></a>";
+
+
+if(manualFileInput==true){
+
+	document.getElementById("theBody").innerHTML=manualIO+document.getElementById("theBody").innerHTML;
+
+}
+
+
+// Setting up the table
+var theTable= $('#table_id').DataTable();
+
+//document.getElementById("downloadLink").setAttribute("style","display: none");
+
+
+
+// A simple function for getting the extension from a file name (sans period)
+/**
+*
+* Accepts a string and outputs the string of all characters following the final '.' symbol
+* in the string. This is used internally to extract file extensions from file names.
+*
+* @method grabExtension
+* @for partTableGlobal
+* @param {String} theName The file name to be processed
+* @return {String} the extension in the given file name. If no extension is found, the 
+* 'undefined' value is returned.
+* 
+*/
+function grabExtension(theName){
+	return (/[.]/.exec(theName)) ? /[^.]+$/.exec(theName) : undefined;
+}
+
+
+// Returns a list of all immediate children of the input html element which have the given tag name
+/**
+*
+* Given an HTML element and a string, returns a list containing all child elements
+* of the given element with a tag equivalent to the given string
+*
+* @method getChildrenByTag
+* @for partTableGlobal
+* @param {HTML Element} theNode The HTML element whose children are to be searched
+* @param {String} tag The string to be used when searching for element children
+* @return {Void}
+* 
+*/
+function getChildrenByTag(theNode,tag){
+	var childs=theNode.children;
+	var pos=0;
+	var lim=childs.length;
+	var result=[];
+	while(pos<lim){
+		if(childs[pos].tagName===tag){
+			result.push(childs[pos]);
+		}
+		pos++;
+	}
+	return result;
+}
+
+
+// Upon a file upload event triggering, defines and attaches each file's onload function 
+function readMultipleFiles(evt) {
+	//Retrieve all the files from the FileList object
+	var files = evt.target.files; 
+			
+	if (files) {
+		for (var i=0, f; f=files[i]; i++) {
+			
+			var r = new FileReader();
+			var extension=grabExtension(f.name)[0];
+			console.log(f.name);
+			
+			if(extension===undefined){
+				continue;
+			}
+			if(extension.toLowerCase()==="xml"){
+				if(!(inputXML===null)){
+					console.log("Warning: More than one XML file provided");
+				}
+				r.onload = (function(f) {
+					return function(e) {
+						console.log(f.name);
+						var contents = e.target.result;
+						inputXML=r.result;
+						loadParts();
+					};
+				})(f);
+				r.readAsText(f,"US-ASCII");
+				fileReaders.push({Reader: r, Name: f.name});
+			}
+						
+		}
+		console.log(fileReaders);
+	} 
+	else {
+		  alert("Failed to load files"); 
+	}
+}
+
+
+// Sets up the file loading function
+document.getElementById('fileinput').addEventListener('change', readMultipleFiles, false);
+
+
+
+// Checks that all files are loaded. If so, fills out the table with the given information
+function loadParts (){
+	var pos=0;
+	var lim=fileReaders.length;
+	while(pos<lim){
+		if(!(fileReaders[pos].Reader.readyState===2)){
+			console.log(pos);
+			console.log(fileReaders[pos].Name);
+			break;
+		}
+		pos++;
+	}
+	if(pos===lim){
+		console.log("ALL DONE");
+		recieveData(inputXML);				
+	}
+}
+
+
+
+
+// Returns the first child node in the given document element with the given class
+function grab(theTree,theMember){
+	if($(theTree).children(theMember).length!=0){
+		return $(theTree).children(theMember)[0];
+	}
+	else{
+		return null;
+	}
+}
+
+
+// Returns the nth child from the list of children nodes in the given document element with the given class
+function grabInd(theTree,theMember, theIndex){
+	if($(theTree).children(theMember).length>theIndex){
+		return $(theTree).children(theMember)[theIndex];
+	}
+	else{
+		return null;
+	}
+}
+
+
+
+// Adds an entry to the table with the information from the given document element
+function addEntry(theEntry){
+
+	var theName=grab(theEntry,"name").innerHTML;
+	var theVolume="<text>"+Number.parseFloat(grab(theEntry,"volume").innerHTML)+"</text>\n"+volElem;
+	
+	var theMass=massElem;
+	var theCertainty=Number.parseFloat(grab(theEntry,"fastener_certainty").innerHTML);
+	var theSurfaceArea=Number.parseFloat(grab(theEntry,"surface_area").innerHTML);
+	
+	var fstChecked="<input type='checkbox' onchange='flipCheck(this)' value='false'></input>";
+	if(theCertainty>0.5){
+		fstChecked="<input type='checkbox' onchange='flipCheck(this) value='true' checked></input>";
+	}
+	
+	var theAmbiguity=1-2*Math.abs(theCertainty-0.5);
+	theAmbiguity=theAmbiguity.toFixed(2);
+	
+	
+	theTable.row.add( [
+		theName,
+		theVolume,
+		theSurfaceArea,
+		theMass,
+		fstChecked,
+		theAmbiguity
+	] ).draw();
+	
+}
+
+
+
+
+
+// Creates an XML file out of the information present in the table and then adds a download link to the page
+function renderXML(){
+
+	theTable.search("").draw();
+	
+	var result="<?xml version='1.0' encoding='utf-8'?>\n<parts_properties xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>\n";
+	
+	theTable=document.getElementById("body_id");
+	console.log(theTable);
+	
+	var theEntries=getChildrenByTag(theTable,"TR");
+	console.log(theEntries);
+	var entryPos=0;
+	var entryLim=theEntries.length;
+	
+	var theCells;
+	var thisResult;
+	
+	
+	while(entryPos<entryLim){
+		
+		thisResult=renderEntry(getChildrenByTag(theEntries[entryPos],"TD"));
+		if(thisResult!=null){
+			result=result+thisResult;
+		}
+		else{
+			return null;
+		}
+		
+		entryPos++;
+	}
+	
+	result+="</parts_properties>";
+	
+	console.log(result);
+	
+	sendData(result);
+	
+	
+	if(manualFileInput){
+	
+		var data = new Blob([result], {type: 'text/plain'});
+
+		if (textFile !== null) {
+		  window.URL.revokeObjectURL(textFile);
+		}
+
+		textFile = window.URL.createObjectURL(data);
+
+		document.getElementById("downloadLink").setAttribute("style","color: white; display: inline;");
+		document.getElementById("downloadLink").innerHTML="Download";
+		document.getElementById("downloadLink").href=textFile;
+	
+	}
+
+
+}
+
+
+
+
+// Converts the information in the given table entry to an XML element (as a plaintext string)
+function renderEntry(theCells){
+
+	var massCell=theCells[3];
+	console.log(massCell);
+	var texts=getChildrenByTag(massCell,"TEXT");
+	var inputs=getChildrenByTag(massCell,"INPUT");
+	
+	var massText="";
+	if(inputs.length==0 || isNaN(Number.parseFloat(inputs[0].value))){
+		alert("Mass data not provided for one or more cells");
+		return null;
+	}
+	else if(texts.length==1){
+		if(inputs.length==1){
+			console.log(inputs);
+			if(inputs[0].value.toString()===""){
+				return null;
+			}
+			massText="  <mass>"+inputs[0].value+"</mass>\n";
+		}
+		else{
+			alert("HTML Corrupted");
+		}
+	}
+	else if(texts.length==2){
+		console.log(texts);
+		if(texts[0].innerHTML.toString()==="" || isNaN(Number.parseFloat(texts[0].innerHTML))){
+			return null;
+		}
+		massText="  <mass>"+texts[0].innerHTML+"</mass>\n";
+	}
+	else{
+		alert("HTML Corrupted");
+	}
+	
+	
+	var checkText="  <fastener_certainty>0</fastener_certainty>\n";
+	console.log(getChildrenByTag(theCells[4],"INPUT"));
+	console.log(getChildrenByTag(theCells[4],"INPUT")[0]);
+	console.log(getChildrenByTag(theCells[4],"INPUT")[0].value);
+	if(getChildrenByTag(theCells[4],"INPUT")[0].value=="on"){
+		checkText="  <fastener_certainty>1</fastener_certainty>\n";
+		console.log("aaaaargh!");
+	}
+	else{
+		console.log(theCells[4]);
+	}
+	
+
+	var result="";
+	result=result+"<part_properties>\n";
+	result=result+"  <name>"+theCells[0].innerHTML+"</name>\n";
+	result=result+massText;
+	if(getChildrenByTag(theCells[1],"TEXT")[0].innerHTML=="" || isNaN(Number.parseFloat(getChildrenByTag(theCells[1],"TEXT")[0].innerHTML))){
+		alert("Volume data not provided for one or more cells");
+		return null;
+	}
+	result=result+"  <volume>"+getChildrenByTag(theCells[1],"TEXT")[0].innerHTML+"</volume>\n";
+	result=result+"  <surface_area>"+theCells[2].innerHTML+"</surface_area>\n";
+	result=result+checkText;
+	result=result+"</part_properties>\n";
+	return result;
+
+}
+
+
+
+function hollowOpt(theCheckBox){
+	theCheckBox.parentElement.innerHTML="<input type='text' onchange='revertHollowOpt(this)'> </input>";
+}
+
+
+function revertHollowOpt(theTextBox){
+	if(isNaN(Number.parseFloat(theTextBox.value))){
+		theTextBox.parentElement.innerHTML="<text>hollow </text><input type='checkbox' onchange='hollowOpt(this)'> </input>";
+	}
+}
+
+// Adds in plain mass input
+function insertMassInput(theButton){
+	theButton.parentElement.innerHTML=	"<text>Mass:</text> "+
+										"<input type='text'></input>"+
+										"<button onclick='insertDensityInput(this)'>Input By Volume+Density</button>";
+}
+
+// Adds in input by part density
+function insertDensityInput(theButton){
+	theButton.parentElement.innerHTML=	"<text></text><text>Density:</text> "+
+										"<input type='text' onchange='updateMassDisplay(this)'></input>"+
+										densityDiv+
+										"<button onclick='insertMassInput(this)' >Input By Mass</button>";
+}
+
+
+// Adds in input for part surface thickness, hiding the origional volume
+function insertHollowInput(theButton){
+	console.log(getChildrenByTag(theButton.parentElement,"TEXT")[0].innerHTML);
+	console.log(Number.parseFloat(getChildrenByTag(theButton.parentElement,"TEXT")[0].innerHTML));
+	var storage="<p style='display: none;'>"+Number.parseFloat(getChildrenByTag(theButton.parentElement,"TEXT")[0].innerHTML)+"</p>";
+	var display="<text></text>";
+	var backButton="<button onclick='removeHollowInput(this)'>Is Not Hollow</button>";
+	var thicknessBox="Thickness: <input type='text' onchange='updateVolumeDisplay(this)'></input>";
+	theButton.parentElement.innerHTML=storage+display+thicknessBox+backButton;
+}
+
+
+// Removes thickness input and displays original volume
+function removeHollowInput(theButton){ 
+	console.log(getChildrenByTag(theButton.parentElement,"P")[0].innerHTML);
+	console.log(Number.parseFloat(getChildrenByTag(theButton.parentElement,"P")[0].innerHTML));
+	var storage="<text style='display: block;'>"+Number.parseFloat(getChildrenByTag(theButton.parentElement,"P")[0].innerHTML)+"</text>";
+	var backButton="<button onclick='insertHollowInput(this)'>Is Hollow</button>";
+	theButton.parentElement.innerHTML=storage+backButton;
+}
+
+
+// Updates the displayed volume based off of the part's surface area and thickness
+function updateVolumeDisplay(theBox){
+	console.log(theBox.parentElement);
+	console.log(getChildrenByTag(theBox.parentElement,"INPUT"));
+	var theThickness=Number.parseFloat(getChildrenByTag(theBox.parentElement,"INPUT")[0].value);
+	console.log(getChildrenByTag(theBox.parentElement.parentElement,"TD")[2]);
+	var area=Number.parseFloat(getChildrenByTag(theBox.parentElement.parentElement,"TD")[2].innerHTML);
+	var vol=theThickness*area;
+	getChildrenByTag(theBox.parentElement,"TEXT")[0].innerHTML=vol.toString()+"\n";
+}
+
+
+// Updates the displayed mass based off of volume and density
+function updateMassDisplay(theBox){
+	var theDensity=Number.parseFloat(getChildrenByTag(theBox.parentElement,"INPUT")[0].value);
+	console.log(getChildrenByTag(theBox.parentElement.parentElement,"TD")[1]);
+	console.log()
+	var theVolume=Number.parseFloat(getChildrenByTag(getChildrenByTag(theBox.parentElement.parentElement,"TD")[1],"TEXT")[0].innerHTML);
+	var mass=theDensity*theVolume;
+	getChildrenByTag(theBox.parentElement,"TEXT")[0].innerHTML=mass.toString()+"\n";
+}
+
+// Adds in density dropdown
+function doDensityDrop(theButton){
+	theButton.parentElement.innerHTML=undropDensityButton+densityMenu;
+}
+
+
+// Removes density dropdown
+function undoDensityDrop(theButton){
+	theButton.parentElement.innerHTML=dropDensityButton;
+}
+
+
+
+
+// Sets the value of the density of the part to the density associated with the calling button
+function changeDensity(theButton){
+	
+	var mat=theButton.innerHTML;
+	var val;
+	if(mat=="Aluminum"){
+		val=2.7/1000;
+	}
+	else if(mat=="Glass"){
+		val=2.52/1000;
+	}
+	else if(mat=="Plastic (Hi-Density)"){
+		val=1.95/1000;
+	}
+	else if(mat=="Plastic (Med-Density)"){
+		val=1.1/1000;
+	}
+	else if(mat=="Plastic (Low-Density)"){
+		val=0.9/1000;
+	}
+	else if(mat=="Rubber"){
+		val=1.27/1000;
+	}
+	else if(mat=="Steel"){
+		val=7.859/1000;
+	}
+	else if(mat=="Titanium"){
+		val=4.507/1000;
+	}
+	else if(mat=="Wood"){
+		val=0.63/1000;
+	}
+	else{
+		return;
+	}
+	
+	getChildrenByTag(theButton.parentElement.parentElement.parentElement,"INPUT")[0].value=val;
+	updateMassDisplay(getChildrenByTag(theButton.parentElement.parentElement.parentElement,"INPUT")[0]);
+
+}
+
+
+// Sets the value of the checkbox to the appropriate value
+function flipCheck(theBox){
+
+	if(theBox.value=='on'){
+		theBox.value='off';
+	}
+	else{
+		theBox.value='on';
+	}
+	console.log(theBox.value);
+
+}
+
+

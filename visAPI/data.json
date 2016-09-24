@@ -17,6 +17,15 @@
             },
             "namespaces": {}
         },
+        "src\\webVis\\partTableScript.js": {
+            "name": "src\\webVis\\partTableScript.js",
+            "modules": {},
+            "classes": {},
+            "fors": {
+                "partTableGlobal": 1
+            },
+            "namespaces": {}
+        },
         "src\\webVis\\renderScript.js": {
             "name": "src\\webVis\\renderScript.js",
             "modules": {},
@@ -59,6 +68,15 @@
             "line": 6,
             "description": "Class containing all the methods used in the 3d visual assembly",
             "static": 1
+        },
+        "partTableGlobal": {
+            "name": "partTableGlobal",
+            "shortname": "partTableGlobal",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": []
         }
     },
     "elements": {
@@ -624,7 +642,7 @@
             "line": 546,
             "description": "Given an array of objects (each containing a threeJS mesh object and an array of \n keyFrame objects), and two floating points \"time\" and \"timeWarp\", will animate each\n mesh in the array along the keyframes in their associate objects according to the \n given \"time\" and returns the new time as given by the standard time step multiplied\n by \"timeWarp\"",
             "itemtype": "method",
-            "name": "interpolate",
+            "name": "animate",
             "params": [
                 {
                     "name": "partFrames",
@@ -830,6 +848,87 @@
                 "type": "Void"
             },
             "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\partTableScript.js",
+            "line": 15,
+            "description": "Given the contents of a part table XML file (as a string), fills out the table in the web page.",
+            "itemtype": "method",
+            "name": "recieveData",
+            "params": [
+                {
+                    "name": "theXMLText",
+                    "description": "The contents of a part table",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "partTableGlobal"
+        },
+        {
+            "file": "src\\webVis\\partTableScript.js",
+            "line": 45,
+            "description": "Is called whenever the user submits the part table and every entry has been\n properly filled out.",
+            "itemtype": "method",
+            "name": "sendData",
+            "params": [
+                {
+                    "name": "theXMLText",
+                    "description": "The contents of the part table in the webpage, as a string\n in XML formatting",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "partTableGlobal"
+        },
+        {
+            "file": "src\\webVis\\partTableScript.js",
+            "line": 129,
+            "description": "Accepts a string and outputs the string of all characters following the final '.' symbol\n in the string. This is used internally to extract file extensions from file names.",
+            "itemtype": "method",
+            "name": "grabExtension",
+            "params": [
+                {
+                    "name": "theName",
+                    "description": "The file name to be processed",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "the extension in the given file name. If no extension is found, the \n 'undefined' value is returned.",
+                "type": "String"
+            },
+            "class": "partTableGlobal"
+        },
+        {
+            "file": "src\\webVis\\partTableScript.js",
+            "line": 147,
+            "description": "Given an HTML element and a string, returns a list containing all child elements\n of the given element with a tag equivalent to the given string",
+            "itemtype": "method",
+            "name": "getChildrenByTag",
+            "params": [
+                {
+                    "name": "theNode",
+                    "description": "The HTML element whose children are to be searched",
+                    "type": "HTML Element"
+                },
+                {
+                    "name": "tag",
+                    "description": "The string to be used when searching for element children",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "partTableGlobal"
         },
         {
             "file": "src\\webVis\\renderScript.js",
@@ -1122,7 +1221,7 @@
             "line": 55,
             "description": "Given a jQuery object and an integer \"N\", returns the Nth child of the given element with\n the given tag.",
             "itemtype": "method",
-            "name": "grab",
+            "name": "grabInd",
             "params": [
                 {
                     "name": "theTree",
@@ -1177,13 +1276,12 @@
                     "name": "myTime",
                     "description": "The time value of the subassembly represented by the root node of theTree",
                     "type": "Float"
-                },
-                {
-                    "name": "The",
-                    "description": "root node of the tree of extracted movement data",
-                    "type": "Object"
                 }
             ],
+            "return": {
+                "description": "The root node of the tree of extracted movement data",
+                "type": "Object"
+            },
             "class": "renderGlobal"
         },
         {
@@ -1197,13 +1295,12 @@
                     "name": "theTree",
                     "description": "The jQuery object to be accessed",
                     "type": "JQuery Object"
-                },
-                {
-                    "name": "The",
-                    "description": "resulting child",
-                    "type": "JQuery Object"
                 }
             ],
+            "return": {
+                "description": "The resulting child",
+                "type": "JQuery Object"
+            },
             "class": "renderGlobal"
         },
         {
@@ -1211,19 +1308,18 @@
             "line": 154,
             "description": "Given a jQuery Object, will return the first child with the tag \"Moving\" of the first child with\n the tag \"Install\" of the object. If no such child exists, null is returned.",
             "itemtype": "method",
-            "name": "getRef",
+            "name": "getMov",
             "params": [
                 {
                     "name": "theTree",
                     "description": "The jQuery object to be accessed",
                     "type": "JQuery Object"
-                },
-                {
-                    "name": "The",
-                    "description": "resulting child",
-                    "type": "JQuery Object"
                 }
             ],
+            "return": {
+                "description": "The resulting child",
+                "type": "JQuery Object"
+            },
             "class": "renderGlobal"
         },
         {
@@ -1231,7 +1327,7 @@
             "line": 178,
             "description": "Given a jQuery object derived from parsing an XML document, extracts all information\n relevant to installation timing and composes it into an identically structured tree of \n nested javascript objects which is then returned",
             "itemtype": "method",
-            "name": "getMovement",
+            "name": "getTimes",
             "params": [
                 {
                     "name": "theTree",
@@ -1242,13 +1338,351 @@
                     "name": "parentTime",
                     "description": "The time value of the subassembly represented by the root node of theTree",
                     "type": "Float"
-                },
+                }
+            ],
+            "return": {
+                "description": "The root node of the tree of extracted time data",
+                "type": "Object"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\treequence.js",
+            "line": 210,
+            "description": "Given a tree of nested objects, returns the highest \"Time\" value from all the nodes",
+            "itemtype": "method",
+            "name": "getLongestTime",
+            "params": [
                 {
-                    "name": "The",
-                    "description": "root node of the tree of extracted time data",
+                    "name": "timeTree",
+                    "description": "The tree of time values",
                     "type": "Object"
                 }
             ],
+            "return": {
+                "description": "The highest time value in the tree",
+                "type": "Object"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\treequence.js",
+            "line": 232,
+            "description": "Given a jQuery object derived from parsing an XML document, extracts all part name \n information and composes it into an identically structured tree of nested javascript\n objects which is then returned",
+            "itemtype": "method",
+            "name": "getNames",
+            "params": [
+                {
+                    "name": "theTree",
+                    "description": "The jQuery object to be parsed over",
+                    "type": "JQuery Object"
+                }
+            ],
+            "return": {
+                "description": "The root node of the tree of extracted name data",
+                "type": "Object"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\treequence.js",
+            "line": 262,
+            "description": "Given a three trees of nested javascript objects, one holding time data, one holding\n movement data, and one holding part name data",
+            "itemtype": "method",
+            "name": "mergeTrees",
+            "params": [
+                {
+                    "name": "TimeTree",
+                    "description": "The root node of the tree containing time data",
+                    "type": "Object"
+                },
+                {
+                    "name": "SpaceTree",
+                    "description": "The root node of the tree containing movement data",
+                    "type": "Object"
+                },
+                {
+                    "name": "NameTree",
+                    "description": "The root node of the tree containing name data",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "The root node of the resulting tree",
+                "type": "Object"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\treequence.js",
+            "line": 298,
+            "description": "Given a three trees of nested javascript objects, one holding time data, one holding\n movement data, and one holding part name data",
+            "itemtype": "method",
+            "name": "getNameList",
+            "params": [
+                {
+                    "name": "TimeTree",
+                    "description": "The root node of the tree containing time data",
+                    "type": "Object"
+                },
+                {
+                    "name": "SpaceTree",
+                    "description": "The root node of the tree containing movement data",
+                    "type": "Object"
+                },
+                {
+                    "name": "NameTree",
+                    "description": "The root node of the tree containing name data",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "The root node of the resulting tree",
+                "type": "Object"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\treequence.js",
+            "line": 344,
+            "description": "Given an array of strings, returns the first index at which at least \n two of the included strings are different",
+            "itemtype": "method",
+            "name": "similarityCutoff",
+            "params": [
+                {
+                    "name": "theList",
+                    "description": "The list of strings to be anylized",
+                    "type": "Array"
+                }
+            ],
+            "return": {
+                "description": "The computed index",
+                "type": "Index"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\treequence.js",
+            "line": 380,
+            "description": "Given a tree of nested javascript objects (each with a string attribute \"Name\") and an\n integer \"N\", removes the first N characters of each Name attribute",
+            "itemtype": "method",
+            "name": "cutOffNames",
+            "params": [
+                {
+                    "name": "theTree",
+                    "description": "The structure containing name data",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\treequence.js",
+            "line": 422,
+            "description": "Given a tree of nested javascript objects (each with a float attribute \"Time\") and a\n float \"N\", sets each Time value to N minus that value",
+            "itemtype": "method",
+            "name": "flipTreeTime",
+            "params": [
+                {
+                    "name": "theTree",
+                    "description": "The structure containing time data",
+                    "type": "Object"
+                },
+                {
+                    "name": "axis",
+                    "description": "The value used to mirror the time values",
+                    "type": "Float"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\treequence.js",
+            "line": 451,
+            "description": "Given a tree of nested javascript objects, returns the depth of the tree",
+            "itemtype": "method",
+            "name": "getDepth",
+            "params": [
+                {
+                    "name": "theTree",
+                    "description": "The object structure",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "The depth of the object",
+                "type": "Int"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\treequence.js",
+            "line": 476,
+            "description": "Given a staggered array of integer pairs, returns a random UTF character with a UTF value\n within one of the given integer ranges (inclusive)",
+            "itemtype": "method",
+            "name": "getRandomUTF",
+            "params": [
+                {
+                    "name": "selectSpace",
+                    "description": "A staggered array of integer range limits",
+                    "type": "Array"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\treequence.js",
+            "line": 526,
+            "description": "Given a tree of nested javascript objects and an html element, inserts the contents\n of the root node of the given tree as an html element into the given element. Returns\n the name of the generated node.",
+            "itemtype": "method",
+            "name": "insertTreequenceHTML",
+            "params": [
+                {
+                    "name": "theTree",
+                    "description": "The tree structure",
+                    "type": "Object"
+                },
+                {
+                    "name": "parentElement",
+                    "description": "The html element to contain the node information",
+                    "type": "HTML Element"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\treequence.js",
+            "line": 630,
+            "description": "Given an html node containing a button, hides all child treequence elements\n if the button text is not \"+\" and shows them if it is.",
+            "itemtype": "method",
+            "name": "swapHiding",
+            "params": [
+                {
+                    "name": "theNode",
+                    "description": "The html element whose treequence elements are to be manipulated.",
+                    "type": "HTML Element"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\treequence.js",
+            "line": 667,
+            "description": "Given an HTML element, sets the style attributes of that element to display it's contents.",
+            "itemtype": "method",
+            "name": "show",
+            "params": [
+                {
+                    "name": "theNode",
+                    "description": "The HTML element to be shown.",
+                    "type": "HTML Element"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\treequence.js",
+            "line": 690,
+            "description": "Given an HTML element, sets the style attributes of that element to hide it's contents.",
+            "itemtype": "method",
+            "name": "hide",
+            "params": [
+                {
+                    "name": "theNode",
+                    "description": "The HTML element to be hidden.",
+                    "type": "HTML Element"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\treequence.js",
+            "line": 722,
+            "description": "Given an HTML element, sets the style attributes of that element's children\n to display their contents.",
+            "itemtype": "method",
+            "name": "showChildren",
+            "params": [
+                {
+                    "name": "theNode",
+                    "description": "The HTML element whose children are to be shown.",
+                    "type": "HTML Element"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\treequence.js",
+            "line": 750,
+            "description": "Given an HTML element, sets the style attributes of that element's children\n to hide their contents.",
+            "itemtype": "method",
+            "name": "hideChildren",
+            "params": [
+                {
+                    "name": "theNode",
+                    "description": "The HTML element whose children are to be hidden.",
+                    "type": "HTML Element"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\treequence.js",
+            "line": 779,
+            "description": "Given an HTML element and a string, returns a list containing all child elements\n of the given element with a tag equivalent to the given string",
+            "itemtype": "method",
+            "name": "getChildrenByTag",
+            "params": [
+                {
+                    "name": "theNode",
+                    "description": "The HTML element whose children are to be searched",
+                    "type": "HTML Element"
+                },
+                {
+                    "name": "tag",
+                    "description": "The string to be used when searching for element children",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
             "class": "renderGlobal"
         }
     ],

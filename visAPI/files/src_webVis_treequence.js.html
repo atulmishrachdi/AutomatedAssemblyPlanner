@@ -39,6 +39,7 @@
                 
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/partTableGlobal.html">partTableGlobal</a></li>
                                 <li><a href="../classes/renderGlobal.html">renderGlobal</a></li>
                             </ul>
                 
@@ -143,7 +144,7 @@ function grab(theTree,theMember){
 * Given a jQuery object and an integer &quot;N&quot;, returns the Nth child of the given element with
 * the given tag. 
 *
-* @method grab
+* @method grabInd
 * @for renderGlobal
 * @param {jQuery Object} theTree The jQuery object whose child is to be returned
 * @param {String} theMember The name of the tag being searched
@@ -183,7 +184,7 @@ function grabInd(theTree,theMember, theIndex){
 * @param {Float} myY The Y position of the subassembly represented by the root node of theTree
 * @param {Float} myZ The Z position of the subassembly represented by the root node of theTree
 * @param {Float} myTime The time value of the subassembly represented by the root node of theTree
-* @param {Object} The root node of the tree of extracted movement data 
+* @return {Object} The root node of the tree of extracted movement data 
 * 
 */
 function getMovement(theTree, myX, myY, myZ, myTime){
@@ -223,7 +224,7 @@ function getMovement(theTree, myX, myY, myZ, myTime){
 * @method getRef
 * @for renderGlobal
 * @param {jQuery Object} theTree The jQuery object to be accessed
-* @param {jQuery Object} The resulting child
+* @return {jQuery Object} The resulting child
 * 
 */
 function getRef(theTree){
@@ -242,10 +243,10 @@ function getRef(theTree){
 * Given a jQuery Object, will return the first child with the tag &quot;Moving&quot; of the first child with
 * the tag &quot;Install&quot; of the object. If no such child exists, null is returned. 
 *
-* @method getRef
+* @method getMov
 * @for renderGlobal
 * @param {jQuery Object} theTree The jQuery object to be accessed
-* @param {jQuery Object} The resulting child
+* @return {jQuery Object} The resulting child
 * 
 */
 function getMov(theTree){
@@ -267,16 +268,14 @@ function getMov(theTree){
 * relevant to installation timing and composes it into an identically structured tree of 
 * nested javascript objects which is then returned
 *
-* @method getMovement
+* @method getTimes
 * @for renderGlobal
 * @param {jQuery Object} theTree The jQuery object to be parsed over
 * @param {Float} parentTime The time value of the subassembly represented by the root node of theTree
-* @param {Object} The root node of the tree of extracted time data 
+* @return {Object} The root node of the tree of extracted time data 
 * 
 */
 function getTimes(theTree, parentTime){
-
-
 
 	if(($(theTree).children(&quot;Install&quot;).length==0)){
 		return { Time: parentTime, Ref: null, Mov: null };
@@ -295,6 +294,16 @@ function getTimes(theTree, parentTime){
 
 // Returns the longest period of time from a base parts initial installation to the
 // construction of the final product
+/**
+*
+* Given a tree of nested objects, returns the highest &quot;Time&quot; value from all the nodes
+*
+* @method getLongestTime
+* @for renderGlobal
+* @param {Object} timeTree The tree of time values
+* @return {Object} The highest time value in the tree
+* 
+*/
 function getLongestTime(timeTree){
 
 	if(timeTree==null){
@@ -305,17 +314,20 @@ function getLongestTime(timeTree){
 }
 
 
-function getWidestSpace(theTree){
-
-	if(theTree==null){
-		return 0;
-	}
-	return Math.max(getWidestSpace(theTree.Ref),getWidestSpace(theTree.Mov),theTree.Space);
-
-}
-
 
 // Returns a tree-based representation of the names in the given tree
+/**
+*
+* Given a jQuery object derived from parsing an XML document, extracts all part name 
+* information and composes it into an identically structured tree of nested javascript
+* objects which is then returned
+*
+* @method getNames
+* @for renderGlobal
+* @param {jQuery Object} theTree The jQuery object to be parsed over
+* @return {Object} The root node of the tree of extracted name data 
+* 
+*/
 function getNames(theTree){
 
 
@@ -332,68 +344,21 @@ function getNames(theTree){
 }
 
 
-function getSpaces(theTree, underWidth, isMov){
-
-
-
-	if(($(theTree).children(&quot;Install&quot;).length==0)){
-	
-		
-
-		if(isMov==1){
-		
-			return {theNode: {Space: underWidth+1, Ref: null, Mov: null}, Width: underWidth};
-		
-		}
-		else{
-		
-			return {theNode: {Space: underWidth, Ref: null, Mov: null}, Width: underWidth};
-		
-		}
-	}
-	else{
-	
-
-
-		var mySpace=underWidth;
-		if(isMov==1){
-		
-			underWidth=underWidth+2;
-		
-		}
-		
-
-		var ref=getSpaces(getRef(theTree),underWidth,0);
-
-		
-		if(($(getMov(theTree)).children(&quot;Install&quot;).length==0)){
-			var mov=getSpaces(getMov(theTree),underWidth,1);
-		}
-		else{
-			var mov=getSpaces(getMov(theTree),ref.Width,1);
-		}
-
-		
-		
-		if(isMov!=-1){
-			
-			return {theNode:{Space: underWidth, Ref: ref.theNode, Mov: mov.theNode},Width: Math.max(mov.Width,ref.Width)};
-			
-		}
-		else{
-		
-			return {Space: underWidth, Ref: ref.theNode, Mov: mov.theNode};
-		
-		}
-		
-		
-	}
-	
-}
-
-
 // Merges the given tree representations of the time, space, and names associated with
 // each installation into one tree
+/**
+*
+* Given a three trees of nested javascript objects, one holding time data, one holding
+* movement data, and one holding part name data
+*
+* @method mergeTrees
+* @for renderGlobal
+* @param {Object} TimeTree The root node of the tree containing time data
+* @param {Object} SpaceTree The root node of the tree containing movement data
+* @param {Object} NameTree The root node of the tree containing name data
+* @return {Object} The root node of the resulting tree
+* 
+*/
 function mergeTrees(TimeTree,SpaceTree,NameTree){
 
 
@@ -405,44 +370,31 @@ function mergeTrees(TimeTree,SpaceTree,NameTree){
 	else{
 	
 		var ref=mergeTrees(TimeTree.Ref,SpaceTree.Ref,NameTree.Ref);
-		var mov=mergeTrees(TimeTree.Mov,SpaceTree.Mov,NameTree.Mov);
-		
-		
+		var mov=mergeTrees(TimeTree.Mov,SpaceTree.Mov,NameTree.Mov);		
 		
 		return {Time: TimeTree.Time, Space: SpaceTree.Space, Name: NameTree.Name, Ref: ref, Mov: mov};
-	
-	
+
 	}
 	
 
 }
 
-function makePretty(theTree,trueCenter,prettyCenter,rightness){
-
-	if(theTree==null){
-		return 0;
-	}
-	else{
-	
-		var oldSpace=theTree.Space;
-	
-		if(rightness==0){
-			theTree.Space=prettyCenter+(theTree.Space-trueCenter);
-			makePretty(theTree.Ref,oldSpace,theTree.Space,1);
-			makePretty(theTree.Mov,oldSpace,theTree.Space,1);
-		}
-		else{
-			theTree.Space=prettyCenter-(theTree.Space-trueCenter);
-			makePretty(theTree.Ref,oldSpace,theTree.Space,0);
-			makePretty(theTree.Mov,oldSpace,theTree.Space,0);
-		}
-		
-	}	
-
-}
 
 
 
+/**
+*
+* Given a three trees of nested javascript objects, one holding time data, one holding
+* movement data, and one holding part name data
+*
+* @method getNameList
+* @for renderGlobal
+* @param {Object} TimeTree The root node of the tree containing time data
+* @param {Object} SpaceTree The root node of the tree containing movement data
+* @param {Object} NameTree The root node of the tree containing name data
+* @return {Object} The root node of the resulting tree
+* 
+*/
 function getNameList(theTree){
 
 
@@ -474,6 +426,19 @@ function getNameList(theTree){
 
 }
 
+
+
+/**
+*
+* Given an array of strings, returns the first index at which at least 
+* two of the included strings are different
+*
+* @method similarityCutoff
+* @for renderGlobal
+* @param {Array} theList The list of strings to be anylized
+* @return {Index} The computed index
+* 
+*/
 function similarityCutoff(theList){
 
 
@@ -498,6 +463,18 @@ function similarityCutoff(theList){
 
 }
 
+
+/**
+*
+* Given a tree of nested javascript objects (each with a string attribute &quot;Name&quot;) and an
+* integer &quot;N&quot;, removes the first N characters of each Name attribute
+*
+* @method cutOffNames
+* @for renderGlobal
+* @param {Object} theTree The structure containing name data
+* @return {Void}
+* 
+*/
 function cutOffNames(theTree,theCutOff){
 
 	if(theTree==null){
@@ -526,114 +503,21 @@ function cutOffNames(theTree,theCutOff){
 }
 
 
-function drawTime(theTree,theGraph, theTheme){
 
-	var theTime=getLongestTime(theTree);
-	var theWidth=getWidestSpace(theTree);
-	var step=Math.pow(10,Math.floor(Math.log10(theTime)))/2;
-	var pos=step;
-	
-	var maxim=Math.ceil(theTime/step)*step;
-	
-	
-	
-	var presNode={ 
-		id: &quot;n&quot;+theGraph.nodes().length.toString(),
-		label: &quot;0s&quot;,
-		x: 0,
-		y: 1,
-		size: 0.4,
-		color:theTheme.Time
-	};
-	theGraph.addNode(presNode);
-	var presFarNode={ 
-		id: &quot;n&quot;+theGraph.nodes().length.toString(),
-		label: &quot;0s&quot;,
-		x: 0,
-		y: theWidth+1,
-		size: 0.4,
-		color:theTheme.Time
-	};
-	theGraph.addNode(presFarNode);
-	theGraph.addEdge({
-		id: &quot;e&quot;+theGraph.edges().length.toString(),
-		source: presNode.id,
-		target: presFarNode.id,
-		type: &#x27;dashed&#x27;,
-		color:theTheme.Time,
-		label:&quot;0s&quot;
-	});
-	
-	
-	var lastNode;
-	var lastFarNode;
-	
-	while(pos&lt;=maxim){
-		lastNode=presNode;
-		lastFarNode=presFarNode;
-		presNode={ 
-			id: &quot;n&quot;+theGraph.nodes().length.toString(),
-			label: pos.toString()+&quot;s&quot;,
-			x: pos,
-			y: 1,
-			size: 0.4,
-			color:theTheme.Time
-		};
-		theGraph.addNode(presNode);
-		presFarNode={ 
-			id: &quot;n&quot;+theGraph.nodes().length.toString(),
-			label: pos.toString()+&quot;s&quot;,
-			x: pos,
-			y: theWidth+1,
-			size: 0.4,
-			color:theTheme.Time
-		};
-		
-		theGraph.addNode(presFarNode);
-		
-		theGraph.addEdge({
-			id: &quot;e&quot;+theGraph.edges().length.toString(),
-			source: lastNode.id,
-			target: presNode.id,
-			type: &#x27;dashed&#x27;,
-			color: theTheme.Time
-		});
-		
-		theGraph.addEdge({
-			id: &quot;e&quot;+theGraph.edges().length.toString(),
-			source: lastFarNode.id,
-			target: presFarNode.id,
-			type: &#x27;dashed&#x27;,
-			color: theTheme.Time
-		});
-		
-		theGraph.addEdge({
-			id: &quot;e&quot;+theGraph.edges().length.toString(),
-			source: presNode.id,
-			target: presFarNode.id,
-			type: &#x27;dashed&#x27;,
-			color: theTheme.Time,
-			label: pos.toString()+&quot;s&quot;
-		});
-		
-		pos=pos+step;
-	}
 
-}
 
-function scaleGraph(theGraph, xScale, yScale){
-
-	var pos=0;
-	var lim=theGraph.nodes().length;
-	theNodes=theGraph.nodes();
-	while(pos&lt;lim){
-		theNodes[pos].x=theNodes[pos].x*xScale;
-		theNodes[pos].y=theNodes[pos].y*yScale;
-		pos++;
-	}
-	
-}
-
+/**
+*
+* Given a tree of nested javascript objects (each with a float attribute &quot;Time&quot;) and a
+* float &quot;N&quot;, sets each Time value to N minus that value
+*
+* @method flipTreeTime
+* @for renderGlobal
+* @param {Object} theTree The structure containing time data
+* @param {Float} axis The value used to mirror the time values
+* @return {Void}
+* 
+*/
 function flipTreeTime(theTree,axis){
 
 	if(theTree==null){
@@ -648,23 +532,19 @@ function flipTreeTime(theTree,axis){
 
 }
 
-function flipAxis(theSigma){
 
-	var theGraph=theSigma.graph;
-	var pos=0;
-	var holder;
-	var lim=theGraph.nodes().length;
-	theNodes=theGraph.nodes();
-	while(pos&lt;lim){
-		holder=theNodes[pos].x;
-		theNodes[pos].x=theNodes[pos].y;
-		theNodes[pos].y=holder;
-		pos++;
-	}
-	theSigma.refresh();
 
-}
 
+/**
+*
+* Given a tree of nested javascript objects, returns the depth of the tree
+*
+* @method getDepth
+* @for renderGlobal
+* @param {Object} theTree The object structure
+* @return {Int} The depth of the object
+* 
+*/
 function getDepth(theTree){
 
 	if(theTree==null){
@@ -675,117 +555,22 @@ function getDepth(theTree){
 }
 
 
-function adjustGraph(theTree,theGraph){
-
-	var xAdjust=getDepth(theTree)/getLongestTime(theTree);
-	scaleGraph(theGraph,xAdjust,1);
-	return;
-
-}
-
-function curveEdges(theGraph){
-
-	var pos=0;
-	var holder;
-	var theChild;
-	var theParent;
-	var lim=theGraph.edges().length;
-	theEdges=theGraph.edges();
-	while(pos&lt;lim){
-		theChild=theGraph.nodes(theEdges[pos].source);
-		theParent=theGraph.nodes(theEdges[pos].target);
-		if((Math.abs(theChild.x-theParent.x) &lt; Math.abs(theChild.y-theParent.y)) &amp;&amp; theEdges[pos].type===&#x27;arrow&#x27;){
-			theEdges[pos].type=&#x27;curvedArrow&#x27;;
-		}
-		pos++;
-	}
-	s.refresh();
-
-}
 
 
-
-
-
-function fillGraph(theTree, theGraph, theTheme, parentNode, isMov){
-
-	if(theTree==null){			
-		return;			
-	}
-	else{
-	
-		var myNode= { 
-			id: &quot;n&quot;+theGraph.nodes().length.toString(),
-			label: theTree.Name,
-			x: theTree.Time,
-			y: theTree.Space,
-			size: 0,
-			color: theTheme.Main
-		}
-		
-		if(theTree.Ref===null){
-		
-			if(isMov){
-				myNode.size=1;
-				myNode.color= theTheme.Mov;
-			}
-			else{
-				myNode.size=1;
-				myNode.color= theTheme.Ref;					
-			}
-			
-		}
-		
-		theGraph.addNode(myNode);
-		
-		fillGraph(theTree.Ref,theGraph,theTheme,myNode.id,0);
-		fillGraph(theTree.Mov,theGraph,theTheme,myNode.id,1);
-		
-		
-		if(!(parentNode === null)){
-			var myEdge
-			if(isMov==0){
-				myEdge={
-					id: &quot;e&quot;+theGraph.edges().length.toString(),
-					source: myNode.id,
-					target: parentNode,
-					type: &#x27;arrow&#x27;,
-					size: 1
-				}
-			}
-			else{
-				myEdge={
-					id: &quot;e&quot;+theGraph.edges().length.toString(),
-					source: myNode.id,
-					target: parentNode,
-					type: &#x27;arrow&#x27;,
-					size: 1
-				}
-			}
-			theGraph.addEdge(myEdge);					
-		}
-		return;
-		
-	}
-}
-
-
-
-
-function drawFor(theTree, theSigma,theTheme){
-
-	theGraph=theSigma.graph;
-	theGraph.clear();
-	drawTime(theTree,theGraph,theTheme);
-	fillGraph(theTree,theGraph,theTheme,null,0);
-	adjustGraph(theTree,theGraph);
-	curveEdges(theGraph);
-	theSigma.refresh();			
-
-}
 
 
 // Selects a random UTF symbol from the set of closed ranges supplied
+/**
+*
+* Given a staggered array of integer pairs, returns a random UTF character with a UTF value
+* within one of the given integer ranges (inclusive)
+*
+* @method getRandomUTF
+* @for renderGlobal
+* @param {Array} selectSpace A staggered array of integer range limits
+* @return {Void}
+* 
+*/
 function getRandomUTF (selectSpace){
 	
 	// If there are no ranges or one is not a complete pair, return &#x27;?&#x27;
@@ -825,6 +610,19 @@ function getRandomUTF (selectSpace){
 
 
 // Populates the given html element with a representation of the given tree structure
+/**
+*
+* Given a tree of nested javascript objects and an html element, inserts the contents
+* of the root node of the given tree as an html element into the given element. Returns
+* the name of the generated node.
+*
+* @method insertTreequenceHTML
+* @for renderGlobal
+* @param {Object} theTree The tree structure
+* @param {HTML Element} parentElement The html element to contain the node information
+* @return {Void}
+* 
+*/
 function insertTreequenceHTML(theTree,parentElement){
 
 	
@@ -911,7 +709,22 @@ function insertTreequenceHTML(theTree,parentElement){
 	
 }
 
+
+
+
+
 // Shows/hides the given node based off of the text in its associated button
+/**
+*
+* Given an html node containing a button, hides all child treequence elements
+* if the button text is not &quot;+&quot; and shows them if it is.
+*
+* @method swapHiding
+* @for renderGlobal
+* @param {HTML Element} theNode The html element whose treequence elements are to be manipulated.
+* @return {Void}
+* 
+*/
 function swapHiding(theNode){
 	
 	var buttonState=getChildrenByTag(theNode,&quot;BUTTON&quot;);
@@ -933,7 +746,21 @@ function swapHiding(theNode){
 }
 
 
+
+
+
+
 // shows the given node
+/**
+*
+* Given an HTML element, sets the style attributes of that element to display it&#x27;s contents.
+*
+* @method show
+* @for renderGlobal
+* @param {HTML Element} theNode The HTML element to be shown.
+* @return {Void}
+* 
+*/
 function show(theNode){
 	
 	var theText=getChildrenByTag(theNode,&quot;TEXT&quot;);
@@ -944,7 +771,19 @@ function show(theNode){
 }
 
 
+
+
 // Hides the given node
+/**
+*
+* Given an HTML element, sets the style attributes of that element to hide it&#x27;s contents.
+*
+* @method hide
+* @for renderGlobal
+* @param {HTML Element} theNode The HTML element to be hidden.
+* @return {Void}
+* 
+*/
 function hide(theNode){
 	
 	var theText=getChildrenByTag(theNode,&quot;TEXT&quot;);
@@ -961,7 +800,23 @@ function hide(theNode){
 	
 }
 
+
+
+
+
+
 // shows the given node&#x27;s child nodes
+/**
+*
+* Given an HTML element, sets the style attributes of that element&#x27;s children
+* to display their contents.
+*
+* @method showChildren
+* @for renderGlobal
+* @param {HTML Element} theNode The HTML element whose children are to be shown.
+* @return {Void}
+* 
+*/
 function showChildren(theNode){
 	
 	var theChildren = getChildrenByTag(theNode,&quot;DIV&quot;);
@@ -974,7 +829,22 @@ function showChildren(theNode){
 	}	
 }
 
+
+
+
+
 // hides the given node&#x27;s child nodes
+/**
+*
+* Given an HTML element, sets the style attributes of that element&#x27;s children
+* to hide their contents.
+*
+* @method hideChildren
+* @for renderGlobal
+* @param {HTML Element} theNode The HTML element whose children are to be hidden.
+* @return {Void}
+* 
+*/
 function hideChildren(theNode){
 	
 	theNode.setAttribute(&quot;style&quot;,&quot;display: block; position: relative; left: 15px; border-left: solid #000000; padding: 10px 5px 0px 5px;&quot;);
@@ -989,7 +859,22 @@ function hideChildren(theNode){
 }
 
 
+
+
+
 // returns a list of all the child nodes of the given node with the given tag type
+/**
+*
+* Given an HTML element and a string, returns a list containing all child elements
+* of the given element with a tag equivalent to the given string
+*
+* @method getChildrenByTag
+* @for renderGlobal
+* @param {HTML Element} theNode The HTML element whose children are to be searched
+* @param {String} tag The string to be used when searching for element children
+* @return {Void}
+* 
+*/
 function getChildrenByTag(theNode,tag){
 	
 	var childs=theNode.children;

@@ -57,7 +57,7 @@ function grab(theTree,theMember){
 * Given a jQuery object and an integer "N", returns the Nth child of the given element with
 * the given tag. 
 *
-* @method grab
+* @method grabInd
 * @for renderGlobal
 * @param {jQuery Object} theTree The jQuery object whose child is to be returned
 * @param {String} theMember The name of the tag being searched
@@ -97,7 +97,7 @@ function grabInd(theTree,theMember, theIndex){
 * @param {Float} myY The Y position of the subassembly represented by the root node of theTree
 * @param {Float} myZ The Z position of the subassembly represented by the root node of theTree
 * @param {Float} myTime The time value of the subassembly represented by the root node of theTree
-* @param {Object} The root node of the tree of extracted movement data 
+* @return {Object} The root node of the tree of extracted movement data 
 * 
 */
 function getMovement(theTree, myX, myY, myZ, myTime){
@@ -137,7 +137,7 @@ function getMovement(theTree, myX, myY, myZ, myTime){
 * @method getRef
 * @for renderGlobal
 * @param {jQuery Object} theTree The jQuery object to be accessed
-* @param {jQuery Object} The resulting child
+* @return {jQuery Object} The resulting child
 * 
 */
 function getRef(theTree){
@@ -156,10 +156,10 @@ function getRef(theTree){
 * Given a jQuery Object, will return the first child with the tag "Moving" of the first child with
 * the tag "Install" of the object. If no such child exists, null is returned. 
 *
-* @method getRef
+* @method getMov
 * @for renderGlobal
 * @param {jQuery Object} theTree The jQuery object to be accessed
-* @param {jQuery Object} The resulting child
+* @return {jQuery Object} The resulting child
 * 
 */
 function getMov(theTree){
@@ -185,7 +185,7 @@ function getMov(theTree){
 * @for renderGlobal
 * @param {jQuery Object} theTree The jQuery object to be parsed over
 * @param {Float} parentTime The time value of the subassembly represented by the root node of theTree
-* @param {Object} The root node of the tree of extracted time data 
+* @return {Object} The root node of the tree of extracted time data 
 * 
 */
 function getTimes(theTree, parentTime){
@@ -214,7 +214,7 @@ function getTimes(theTree, parentTime){
 * @method getLongestTime
 * @for renderGlobal
 * @param {Object} timeTree The tree of time values
-* @param {Object} The highest time value in the tree
+* @return {Object} The highest time value in the tree
 * 
 */
 function getLongestTime(timeTree){
@@ -238,7 +238,7 @@ function getLongestTime(timeTree){
 * @method getNames
 * @for renderGlobal
 * @param {jQuery Object} theTree The jQuery object to be parsed over
-* @param {Object} The root node of the tree of extracted name data 
+* @return {Object} The root node of the tree of extracted name data 
 * 
 */
 function getNames(theTree){
@@ -259,6 +259,19 @@ function getNames(theTree){
 
 // Merges the given tree representations of the time, space, and names associated with
 // each installation into one tree
+/**
+*
+* Given a three trees of nested javascript objects, one holding time data, one holding
+* movement data, and one holding part name data
+*
+* @method mergeTrees
+* @for renderGlobal
+* @param {Object} TimeTree The root node of the tree containing time data
+* @param {Object} SpaceTree The root node of the tree containing movement data
+* @param {Object} NameTree The root node of the tree containing name data
+* @return {Object} The root node of the resulting tree
+* 
+*/
 function mergeTrees(TimeTree,SpaceTree,NameTree){
 
 
@@ -280,6 +293,21 @@ function mergeTrees(TimeTree,SpaceTree,NameTree){
 }
 
 
+
+
+/**
+*
+* Given a three trees of nested javascript objects, one holding time data, one holding
+* movement data, and one holding part name data
+*
+* @method getNameList
+* @for renderGlobal
+* @param {Object} TimeTree The root node of the tree containing time data
+* @param {Object} SpaceTree The root node of the tree containing movement data
+* @param {Object} NameTree The root node of the tree containing name data
+* @return {Object} The root node of the resulting tree
+* 
+*/
 function getNameList(theTree){
 
 
@@ -311,6 +339,19 @@ function getNameList(theTree){
 
 }
 
+
+
+/**
+*
+* Given an array of strings, returns the first index at which at least 
+* two of the included strings are different
+*
+* @method similarityCutoff
+* @for renderGlobal
+* @param {Array} theList The list of strings to be anylized
+* @return {Index} The computed index
+* 
+*/
 function similarityCutoff(theList){
 
 
@@ -335,6 +376,18 @@ function similarityCutoff(theList){
 
 }
 
+
+/**
+*
+* Given a tree of nested javascript objects (each with a string attribute "Name") and an
+* integer "N", removes the first N characters of each Name attribute
+*
+* @method cutOffNames
+* @for renderGlobal
+* @param {Object} theTree The structure containing name data
+* @return {Void}
+* 
+*/
 function cutOffNames(theTree,theCutOff){
 
 	if(theTree==null){
@@ -365,6 +418,19 @@ function cutOffNames(theTree,theCutOff){
 
 
 
+
+/**
+*
+* Given a tree of nested javascript objects (each with a float attribute "Time") and a
+* float "N", sets each Time value to N minus that value
+*
+* @method flipTreeTime
+* @for renderGlobal
+* @param {Object} theTree The structure containing time data
+* @param {Float} axis The value used to mirror the time values
+* @return {Void}
+* 
+*/
 function flipTreeTime(theTree,axis){
 
 	if(theTree==null){
@@ -381,6 +447,17 @@ function flipTreeTime(theTree,axis){
 
 
 
+
+/**
+*
+* Given a tree of nested javascript objects, returns the depth of the tree
+*
+* @method getDepth
+* @for renderGlobal
+* @param {Object} theTree The object structure
+* @return {Int} The depth of the object
+* 
+*/
 function getDepth(theTree){
 
 	if(theTree==null){
@@ -391,37 +468,22 @@ function getDepth(theTree){
 }
 
 
-function adjustGraph(theTree,theGraph){
 
-	var xAdjust=getDepth(theTree)/getLongestTime(theTree);
-	scaleGraph(theGraph,xAdjust,1);
-	return;
-
-}
-
-function curveEdges(theGraph){
-
-	var pos=0;
-	var holder;
-	var theChild;
-	var theParent;
-	var lim=theGraph.edges().length;
-	theEdges=theGraph.edges();
-	while(pos<lim){
-		theChild=theGraph.nodes(theEdges[pos].source);
-		theParent=theGraph.nodes(theEdges[pos].target);
-		if((Math.abs(theChild.x-theParent.x) < Math.abs(theChild.y-theParent.y)) && theEdges[pos].type==='arrow'){
-			theEdges[pos].type='curvedArrow';
-		}
-		pos++;
-	}
-	s.refresh();
-
-}
 
 
 
 // Selects a random UTF symbol from the set of closed ranges supplied
+/**
+*
+* Given a staggered array of integer pairs, returns a random UTF character with a UTF value
+* within one of the given integer ranges (inclusive)
+*
+* @method getRandomUTF
+* @for renderGlobal
+* @param {Array} selectSpace A staggered array of integer range limits
+* @return {Void}
+* 
+*/
 function getRandomUTF (selectSpace){
 	
 	// If there are no ranges or one is not a complete pair, return '?'
@@ -461,6 +523,19 @@ function getRandomUTF (selectSpace){
 
 
 // Populates the given html element with a representation of the given tree structure
+/**
+*
+* Given a tree of nested javascript objects and an html element, inserts the contents
+* of the root node of the given tree as an html element into the given element. Returns
+* the name of the generated node.
+*
+* @method insertTreequenceHTML
+* @for renderGlobal
+* @param {Object} theTree The tree structure
+* @param {HTML Element} parentElement The html element to contain the node information
+* @return {Void}
+* 
+*/
 function insertTreequenceHTML(theTree,parentElement){
 
 	
@@ -547,7 +622,22 @@ function insertTreequenceHTML(theTree,parentElement){
 	
 }
 
+
+
+
+
 // Shows/hides the given node based off of the text in its associated button
+/**
+*
+* Given an html node containing a button, hides all child treequence elements
+* if the button text is not "+" and shows them if it is.
+*
+* @method swapHiding
+* @for renderGlobal
+* @param {HTML Element} theNode The html element whose treequence elements are to be manipulated.
+* @return {Void}
+* 
+*/
 function swapHiding(theNode){
 	
 	var buttonState=getChildrenByTag(theNode,"BUTTON");
@@ -569,7 +659,21 @@ function swapHiding(theNode){
 }
 
 
+
+
+
+
 // shows the given node
+/**
+*
+* Given an HTML element, sets the style attributes of that element to display it's contents.
+*
+* @method show
+* @for renderGlobal
+* @param {HTML Element} theNode The HTML element to be shown.
+* @return {Void}
+* 
+*/
 function show(theNode){
 	
 	var theText=getChildrenByTag(theNode,"TEXT");
@@ -580,7 +684,19 @@ function show(theNode){
 }
 
 
+
+
 // Hides the given node
+/**
+*
+* Given an HTML element, sets the style attributes of that element to hide it's contents.
+*
+* @method hide
+* @for renderGlobal
+* @param {HTML Element} theNode The HTML element to be hidden.
+* @return {Void}
+* 
+*/
 function hide(theNode){
 	
 	var theText=getChildrenByTag(theNode,"TEXT");
@@ -597,7 +713,23 @@ function hide(theNode){
 	
 }
 
+
+
+
+
+
 // shows the given node's child nodes
+/**
+*
+* Given an HTML element, sets the style attributes of that element's children
+* to display their contents.
+*
+* @method showChildren
+* @for renderGlobal
+* @param {HTML Element} theNode The HTML element whose children are to be shown.
+* @return {Void}
+* 
+*/
 function showChildren(theNode){
 	
 	var theChildren = getChildrenByTag(theNode,"DIV");
@@ -610,7 +742,22 @@ function showChildren(theNode){
 	}	
 }
 
+
+
+
+
 // hides the given node's child nodes
+/**
+*
+* Given an HTML element, sets the style attributes of that element's children
+* to hide their contents.
+*
+* @method hideChildren
+* @for renderGlobal
+* @param {HTML Element} theNode The HTML element whose children are to be hidden.
+* @return {Void}
+* 
+*/
 function hideChildren(theNode){
 	
 	theNode.setAttribute("style","display: block; position: relative; left: 15px; border-left: solid #000000; padding: 10px 5px 0px 5px;");
@@ -625,7 +772,22 @@ function hideChildren(theNode){
 }
 
 
+
+
+
 // returns a list of all the child nodes of the given node with the given tag type
+/**
+*
+* Given an HTML element and a string, returns a list containing all child elements
+* of the given element with a tag equivalent to the given string
+*
+* @method getChildrenByTag
+* @for renderGlobal
+* @param {HTML Element} theNode The HTML element whose children are to be searched
+* @param {String} tag The string to be used when searching for element children
+* @return {Void}
+* 
+*/
 function getChildrenByTag(theNode,tag){
 	
 	var childs=theNode.children;

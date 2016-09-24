@@ -551,7 +551,7 @@ function grabInterp(frameList, time){
 * given "time" and returns the new time as given by the standard time step multiplied
 * by "timeWarp" 
 *
-* @method interpolate
+* @method animate
 * @for renderGlobal
 * @param {Array} partFrames List of objects relating threeJS mesh objects with their 
 * respective keyframe arrays 
