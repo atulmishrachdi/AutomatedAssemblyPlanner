@@ -171,7 +171,21 @@ function getChildrenByTag(theNode,tag){
 }
 
 
+
+
 // Upon a file upload event triggering, defines and attaches each file's onload function 
+/**
+*
+* Accepts a fileinput event, presumably from a file upload event listener, and assigns
+* functions to each file reader listed in the event to be called upon the full loading
+* of that given reader's files 
+*
+* @method readMultipleFiles
+* @for partTableGlobal
+* @param {Event} evt A fileinput event, to be given by a fileinput event listener
+* @return {Void}
+* 
+*/
 function readMultipleFiles(evt) {
 	//Retrieve all the files from the FileList object
 	var files = evt.target.files; 
@@ -217,6 +231,17 @@ document.getElementById('fileinput').addEventListener('change', readMultipleFile
 
 
 // Checks that all files are loaded. If so, fills out the table with the given information
+/**
+*
+* Called internally upon every recieved fileload event. Checks if every file reader in the 
+* array "fileReaders" has fully read each of their files. If so, then the function calls
+* "recieveData".
+*
+* @method loadParts
+* @for partTableGlobal
+* @return {Void}
+* 
+*/
 function loadParts (){
 	var pos=0;
 	var lim=fileReaders.length;
@@ -238,6 +263,19 @@ function loadParts (){
 
 
 // Returns the first child node in the given document element with the given class
+/**
+*
+* Given a jQuery object and a string, returns the first child of the given element with
+* a tag equivalent to the given string.
+*
+* @method grab
+* @for partTableGlobal
+* @param {jQuery Object} theTree The jQuery object whose child is to be returned
+* @param {String} theMember The name of the tag being searched
+* @return {jQuery Object} The first child with the given tag. If such a child does not 
+* exist, null is returned.
+* 
+*/
 function grab(theTree,theMember){
 	if($(theTree).children(theMember).length!=0){
 		return $(theTree).children(theMember)[0];
@@ -249,6 +287,20 @@ function grab(theTree,theMember){
 
 
 // Returns the nth child from the list of children nodes in the given document element with the given class
+/**
+*
+* Given a jQuery object and an integer "N", returns the Nth child of the given element with
+* the given tag. 
+*
+* @method grabInd
+* @for partTableGlobal
+* @param {jQuery Object} theTree The jQuery object whose child is to be returned
+* @param {String} theMember The name of the tag being searched
+* @param {String} theIndex The ordinal of the matching child to be returned
+* @return {jQuery Object} The child meeting the tag and ordinal requirement. 
+* If such a child does not exist, null is returned.
+* 
+*/
 function grabInd(theTree,theMember, theIndex){
 	if($(theTree).children(theMember).length>theIndex){
 		return $(theTree).children(theMember)[theIndex];
@@ -261,6 +313,18 @@ function grabInd(theTree,theMember, theIndex){
 
 
 // Adds an entry to the table with the information from the given document element
+/**
+*
+* Given a jQuery object representation of a part entry, inserts an html representation
+* of that entry in the table 
+*
+* @method addEntry
+* @for partTableGlobal
+* @param {jQuery Object} theEntry The jQuery object containing the representation of a table
+* entry, as extracted from an XML document
+* @return {Void}
+* 
+*/
 function addEntry(theEntry){
 
 	var theName=grab(theEntry,"name").innerHTML;
@@ -295,6 +359,16 @@ function addEntry(theEntry){
 
 
 // Creates an XML file out of the information present in the table and then adds a download link to the page
+/**
+*
+* Parses through each entry in the table and, if all entries are fully filled out, converts the table into an
+* XML file and adds a download link for that file to the webpage
+*
+* @method renderXML
+* @for partTableGlobal
+* @return {Void}
+* 
+*/
 function renderXML(){
 
 	theTable.search("").draw();

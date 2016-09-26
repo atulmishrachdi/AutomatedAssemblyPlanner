@@ -111,7 +111,15 @@
 
                     <ul class="index-list methods">
                             <li class="index-item method">
+                                <a href="#method_addEntry">addEntry</a>
+
+                            </li>
+                            <li class="index-item method">
                                 <a href="#method_getChildrenByTag">getChildrenByTag</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_grab">grab</a>
 
                             </li>
                             <li class="index-item method">
@@ -119,7 +127,23 @@
 
                             </li>
                             <li class="index-item method">
+                                <a href="#method_grabInd">grabInd</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_loadParts">loadParts</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_readMultipleFiles">readMultipleFiles</a>
+
+                            </li>
+                            <li class="index-item method">
                                 <a href="#method_recieveData">recieveData</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_renderXML">renderXML</a>
 
                             </li>
                             <li class="index-item method">
@@ -136,6 +160,72 @@
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
 
+<div id="method_addEntry" class="method item">
+    <h3 class="name"><code>addEntry</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theEntry</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_webVis_partTableScript.js.html#l316"><code>src\webVis\partTableScript.js:316</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given a jQuery object representation of a part entry, inserts an html representation
+of that entry in the table</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theEntry</code>
+                        <span class="type">JQuery Object</span>
+
+
+                    <div class="param-description">
+                        <p>The jQuery object containing the representation of a table
+entry, as extracted from an XML document</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
 <div id="method_getChildrenByTag" class="method item">
     <h3 class="name"><code>getChildrenByTag</code></h3>
 
@@ -215,6 +305,88 @@ of the given element with a tag equivalent to the given string</p>
 
 
 </div>
+<div id="method_grab" class="method item">
+    <h3 class="name"><code>grab</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theTree</code>
+                </li>
+                <li class="arg">
+                        <code>theMember</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">JQuery Object</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_webVis_partTableScript.js.html#l266"><code>src\webVis\partTableScript.js:266</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given a jQuery object and a string, returns the first child of the given element with
+a tag equivalent to the given string.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theTree</code>
+                        <span class="type">JQuery Object</span>
+
+
+                    <div class="param-description">
+                        <p>The jQuery object whose child is to be returned</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">theMember</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                        <p>The name of the tag being searched</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">JQuery Object</span>:
+                    <p>The first child with the given tag. If such a child does not
+exist, null is returned.</p>
+
+            </div>
+        </div>
+
+
+</div>
 <div id="method_grabExtension" class="method item">
     <h3 class="name"><code>grabExtension</code></h3>
 
@@ -283,6 +455,211 @@ in the string. This is used internally to extract file extensions from file name
 
 
 </div>
+<div id="method_grabInd" class="method item">
+    <h3 class="name"><code>grabInd</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theTree</code>
+                </li>
+                <li class="arg">
+                        <code>theMember</code>
+                </li>
+                <li class="arg">
+                        <code>theIndex</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">JQuery Object</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_webVis_partTableScript.js.html#l290"><code>src\webVis\partTableScript.js:290</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given a jQuery object and an integer &quot;N&quot;, returns the Nth child of the given element with
+the given tag.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theTree</code>
+                        <span class="type">JQuery Object</span>
+
+
+                    <div class="param-description">
+                        <p>The jQuery object whose child is to be returned</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">theMember</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                        <p>The name of the tag being searched</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">theIndex</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                        <p>The ordinal of the matching child to be returned</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">JQuery Object</span>:
+                    <p>The child meeting the tag and ordinal requirement.
+If such a child does not exist, null is returned.</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_loadParts" class="method item">
+    <h3 class="name"><code>loadParts</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_webVis_partTableScript.js.html#l234"><code>src\webVis\partTableScript.js:234</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Called internally upon every recieved fileload event. Checks if every file reader in the
+array &quot;fileReaders&quot; has fully read each of their files. If so, then the function calls
+&quot;recieveData&quot;.</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_readMultipleFiles" class="method item">
+    <h3 class="name"><code>readMultipleFiles</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>evt</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_webVis_partTableScript.js.html#l177"><code>src\webVis\partTableScript.js:177</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Accepts a fileinput event, presumably from a file upload event listener, and assigns
+functions to each file reader listed in the event to be called upon the full loading
+of that given reader's files</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">evt</code>
+                        <span class="type">Event</span>
+
+
+                    <div class="param-description">
+                        <p>A fileinput event, to be given by a fileinput event listener</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
 <div id="method_recieveData" class="method item">
     <h3 class="name"><code>recieveData</code></h3>
 
@@ -336,6 +713,48 @@ in the string. This is used internally to extract file extensions from file name
                 </li>
             </ul>
         </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_renderXML" class="method item">
+    <h3 class="name"><code>renderXML</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_webVis_partTableScript.js.html#l362"><code>src\webVis\partTableScript.js:362</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Parses through each entry in the table and, if all entries are fully filled out, converts the table into an
+XML file and adds a download link for that file to the webpage</p>
+
+    </div>
+
 
         <div class="returns">
             <h4>Returns:</h4>

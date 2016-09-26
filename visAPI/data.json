@@ -931,6 +931,121 @@
             "class": "partTableGlobal"
         },
         {
+            "file": "src\\webVis\\partTableScript.js",
+            "line": 177,
+            "description": "Accepts a fileinput event, presumably from a file upload event listener, and assigns\n functions to each file reader listed in the event to be called upon the full loading\n of that given reader's files",
+            "itemtype": "method",
+            "name": "readMultipleFiles",
+            "params": [
+                {
+                    "name": "evt",
+                    "description": "A fileinput event, to be given by a fileinput event listener",
+                    "type": "Event"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "partTableGlobal"
+        },
+        {
+            "file": "src\\webVis\\partTableScript.js",
+            "line": 234,
+            "description": "Called internally upon every recieved fileload event. Checks if every file reader in the \n array \"fileReaders\" has fully read each of their files. If so, then the function calls\n \"recieveData\".",
+            "itemtype": "method",
+            "name": "loadParts",
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "partTableGlobal"
+        },
+        {
+            "file": "src\\webVis\\partTableScript.js",
+            "line": 266,
+            "description": "Given a jQuery object and a string, returns the first child of the given element with\n a tag equivalent to the given string.",
+            "itemtype": "method",
+            "name": "grab",
+            "params": [
+                {
+                    "name": "theTree",
+                    "description": "The jQuery object whose child is to be returned",
+                    "type": "JQuery Object"
+                },
+                {
+                    "name": "theMember",
+                    "description": "The name of the tag being searched",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "The first child with the given tag. If such a child does not \n exist, null is returned.",
+                "type": "JQuery Object"
+            },
+            "class": "partTableGlobal"
+        },
+        {
+            "file": "src\\webVis\\partTableScript.js",
+            "line": 290,
+            "description": "Given a jQuery object and an integer \"N\", returns the Nth child of the given element with\n the given tag.",
+            "itemtype": "method",
+            "name": "grabInd",
+            "params": [
+                {
+                    "name": "theTree",
+                    "description": "The jQuery object whose child is to be returned",
+                    "type": "JQuery Object"
+                },
+                {
+                    "name": "theMember",
+                    "description": "The name of the tag being searched",
+                    "type": "String"
+                },
+                {
+                    "name": "theIndex",
+                    "description": "The ordinal of the matching child to be returned",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "The child meeting the tag and ordinal requirement. \n If such a child does not exist, null is returned.",
+                "type": "JQuery Object"
+            },
+            "class": "partTableGlobal"
+        },
+        {
+            "file": "src\\webVis\\partTableScript.js",
+            "line": 316,
+            "description": "Given a jQuery object representation of a part entry, inserts an html representation\n of that entry in the table",
+            "itemtype": "method",
+            "name": "addEntry",
+            "params": [
+                {
+                    "name": "theEntry",
+                    "description": "The jQuery object containing the representation of a table\n entry, as extracted from an XML document",
+                    "type": "JQuery Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "partTableGlobal"
+        },
+        {
+            "file": "src\\webVis\\partTableScript.js",
+            "line": 362,
+            "description": "Parses through each entry in the table and, if all entries are fully filled out, converts the table into an\n XML file and adds a download link for that file to the webpage",
+            "itemtype": "method",
+            "name": "renderXML",
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "partTableGlobal"
+        },
+        {
             "file": "src\\webVis\\renderScript.js",
             "line": 26,
             "description": "The function which handles the actual rendering of the solution file animation\n and loading in the models",
