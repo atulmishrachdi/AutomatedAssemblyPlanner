@@ -8,6 +8,15 @@
             "fors": {},
             "namespaces": {}
         },
+        "src\\webVis\\jsstl.js": {
+            "name": "src\\webVis\\jsstl.js",
+            "modules": {},
+            "classes": {},
+            "fors": {
+                "renderGlobal": 1
+            },
+            "namespaces": {}
+        },
         "src\\webVis\\partRender.js": {
             "name": "src\\webVis\\partRender.js",
             "modules": {},
@@ -339,6 +348,82 @@
             "file": "src\\webVis\\jquery.js",
             "line": 9698,
             "description": "Gets a window from an element",
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\jsstl.js",
+            "line": 14,
+            "description": "Converts a given block of binary stl data (as an arraybuffer) to a threeJS representation\n of the geometry. Function courtesy of 'tonylukasavage' from Github, who released this to\n the public domain.",
+            "itemtype": "method",
+            "name": "parseStlBinary",
+            "params": [
+                {
+                    "name": "stl",
+                    "description": "The binary stl data",
+                    "type": "Arraybuffer"
+                }
+            ],
+            "return": {
+                "description": "threeJS geometry object",
+                "type": "Object"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\jsstl.js",
+            "line": 71,
+            "description": "Processes a given string to make it parsible for parseStl and returns\n the results",
+            "itemtype": "method",
+            "name": "trim",
+            "params": [
+                {
+                    "name": "str",
+                    "description": "ASCII STL data",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "processed string",
+                "type": "String"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\jsstl.js",
+            "line": 96,
+            "description": "Converts an arraybuffer into a string of equivalent binary content",
+            "itemtype": "method",
+            "name": "arrayToString",
+            "params": [
+                {
+                    "name": "buf",
+                    "description": "The arraybuffer",
+                    "type": "Arraybuffer"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "src\\webVis\\jsstl.js",
+            "line": 119,
+            "description": "Converts a given block of ASCII stl data (as an arraybuffer) to a threeJS representation\n of the geometry. Function courtesy of 'tonylukasavage' from Github, who released this to\n the public domain.",
+            "itemtype": "method",
+            "name": "parseStl",
+            "params": [
+                {
+                    "name": "stl",
+                    "description": "The ASCII stl data",
+                    "type": "Arraybuffer"
+                }
+            ],
+            "return": {
+                "description": "threeJS geometry object",
+                "type": "Object"
+            },
             "class": "renderGlobal"
         },
         {
@@ -1039,6 +1124,215 @@
             "description": "Parses through each entry in the table and, if all entries are fully filled out, converts the table into an\n XML file and adds a download link for that file to the webpage",
             "itemtype": "method",
             "name": "renderXML",
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "partTableGlobal"
+        },
+        {
+            "file": "src\\webVis\\partTableScript.js",
+            "line": 433,
+            "description": "Given an html row element containing data regarding a part, converts the information into an\n xml formatted string and returns it",
+            "itemtype": "method",
+            "name": "renderEntry",
+            "params": [
+                {
+                    "name": "theCells",
+                    "description": "An html row element containing information about a part",
+                    "type": "HTML Element"
+                }
+            ],
+            "return": {
+                "description": "XML representation of the table entry",
+                "type": "String"
+            },
+            "class": "partTableGlobal"
+        },
+        {
+            "file": "src\\webVis\\partTableScript.js",
+            "line": 525,
+            "description": "A function automatically called by button elements associated with the mass option\n in an entry's mass section when pressed. Changes the parent mass section to contain a\n text input element and a button allowing the user to switch over to density input.",
+            "itemtype": "method",
+            "name": "insertMassInput",
+            "params": [
+                {
+                    "name": "theButton",
+                    "description": "The button that calls this function",
+                    "type": "HTML Element"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "partTableGlobal"
+        },
+        {
+            "file": "src\\webVis\\partTableScript.js",
+            "line": 544,
+            "description": "A function automatically called by button elements associated with the density option\n in an entry's mass section when pressed. Changes the parent mass section to contain a\n text input element and a button allowing the user to switch over to mass input.",
+            "itemtype": "method",
+            "name": "insertDensityInput",
+            "params": [
+                {
+                    "name": "theButton",
+                    "description": "The button that calls this function",
+                    "type": "HTML Element"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "partTableGlobal"
+        },
+        {
+            "file": "src\\webVis\\partTableScript.js",
+            "line": 565,
+            "description": "A function automatically called by button elements associated with the hollow option\n in an entry's volume section when pressed. Changes the parent volume section to contain a\n text input element and a button allowing the user to indicate the part is not hollow.",
+            "itemtype": "method",
+            "name": "insertHollowInput",
+            "params": [
+                {
+                    "name": "theButton",
+                    "description": "The button that calls this function",
+                    "type": "HTML Element"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "partTableGlobal"
+        },
+        {
+            "file": "src\\webVis\\partTableScript.js",
+            "line": 589,
+            "description": "A function automatically called by button elements associated with the hollow option\n in an entry's volume section when pressed. Changes the parent volume section to contain\n only a mass value and a button allowing the user to indicate the part is hollow.",
+            "itemtype": "method",
+            "name": "removeHollowInput",
+            "params": [
+                {
+                    "name": "theButton",
+                    "description": "The button that calls this function",
+                    "type": "HTML Element"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "partTableGlobal"
+        },
+        {
+            "file": "src\\webVis\\partTableScript.js",
+            "line": 613,
+            "description": "A function automatically called by text input elements associated with the hollow option\n in an entry's volume section when changed. Changes the currently displayed volume to \n match the given thickness",
+            "itemtype": "method",
+            "name": "updateVolumeDisplay",
+            "params": [
+                {
+                    "name": "theBox",
+                    "description": "The text input element that calls this function",
+                    "type": "HTML Element"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "partTableGlobal"
+        },
+        {
+            "file": "src\\webVis\\partTableScript.js",
+            "line": 637,
+            "description": "A function automatically called by text input elements associated with the density option\n in an entry's mass section when changed. Changes the currently displayed mass to \n match the given density",
+            "itemtype": "method",
+            "name": "updateMassDisplay",
+            "params": [
+                {
+                    "name": "theBox",
+                    "description": "The text input element that calls this function",
+                    "type": "HTML Element"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "partTableGlobal"
+        },
+        {
+            "file": "src\\webVis\\partTableScript.js",
+            "line": 662,
+            "description": "A function automatically called by button elements associated with accessing sample densities.\n Adds a div element containing several sample density options.",
+            "itemtype": "method",
+            "name": "doDensityDrop",
+            "params": [
+                {
+                    "name": "theButton",
+                    "description": "The button element that called this function",
+                    "type": "HTML Element"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "partTableGlobal"
+        },
+        {
+            "file": "src\\webVis\\partTableScript.js",
+            "line": 679,
+            "description": "A function automatically called by button elements associated with accessing sample densities.\n Removes the sample density option div element.",
+            "itemtype": "method",
+            "name": "undoDensityDrop",
+            "params": [
+                {
+                    "name": "theButton",
+                    "description": "The button element that called this function",
+                    "type": "HTML Element"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "partTableGlobal"
+        },
+        {
+            "file": "src\\webVis\\partTableScript.js",
+            "line": 698,
+            "description": "A function automatically called by button elements associated with sample densities. Will fill\n the associated density input box with the value associated with the inner text of the button.",
+            "itemtype": "method",
+            "name": "changeDensity",
+            "params": [
+                {
+                    "name": "theButton",
+                    "description": "The button element that called this function",
+                    "type": "HTML Element"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "partTableGlobal"
+        },
+        {
+            "file": "src\\webVis\\partTableScript.js",
+            "line": 751,
+            "description": "A function automatically called by text box elements upon becoming checked/unchecked.\n Sets an internal value to indicate the checked state of the element.",
+            "itemtype": "method",
+            "name": "flipCheck",
+            "params": [
+                {
+                    "name": "theBox",
+                    "description": "The checkbox element calling this function",
+                    "type": "HTML Element"
+                }
+            ],
             "return": {
                 "description": "",
                 "type": "Void"

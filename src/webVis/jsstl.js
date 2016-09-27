@@ -11,6 +11,18 @@
 // - STL file format: http://en.wikipedia.org/wiki/STL_(file_format)
 // - 80 byte unused header
 // - All binary STLs are assumed to be little endian, as per wiki doc
+/**
+*
+* Converts a given block of binary stl data (as an arraybuffer) to a threeJS representation
+* of the geometry. Function courtesy of 'tonylukasavage' from Github, who released this to
+* the public domain. 
+*
+* @method parseStlBinary
+* @for renderGlobal
+* @param {Arraybuffer} stl The binary stl data
+* @return {Object} threeJS geometry object
+* 
+*/
 var parseStlBinary = function(stl) {
 	var geo = new THREE.Geometry();
 	var dv = new DataView(stl, 80); // 80 == unused header
@@ -55,6 +67,18 @@ var parseStlBinary = function(stl) {
 };  
 
 
+
+/**
+*
+* Processes a given string to make it parsible for parseStl and returns
+* the results
+*
+* @method trim
+* @for renderGlobal
+* @param {String} str ASCII STL data
+* @return {String} processed string
+* 
+*/
 function trim (str) {
 	str = str.replace(/^\s+/, '');
 	for (var i = str.length - 1; i >= 0; i--) {
@@ -69,6 +93,15 @@ function trim (str) {
 
 			
 // Added this in to turn the input buffer into an actual string
+/**
+*
+* Converts an arraybuffer into a string of equivalent binary content
+* @method arrayToString
+* @for renderGlobal
+* @param {Arraybuffer} buf The arraybuffer
+* @return {String} 
+* 
+*/
 function arrayToString(buf) {
 	var pos=0;
 	var arr=new Uint8Array(buf);
@@ -82,6 +115,19 @@ function arrayToString(buf) {
 }
 
 
+
+/**
+*
+* Converts a given block of ASCII stl data (as an arraybuffer) to a threeJS representation
+* of the geometry. Function courtesy of 'tonylukasavage' from Github, who released this to
+* the public domain. 
+*
+* @method parseStl
+* @for renderGlobal
+* @param {Arraybuffer} stl The ASCII stl data
+* @return {Object} threeJS geometry object
+* 
+*/
 var parseStl = function(stl) {
 	
 	var state = '';

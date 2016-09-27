@@ -127,6 +127,10 @@
 
                             </li>
                             <li class="index-item method">
+                                <a href="#method_arrayToString">arrayToString</a>
+
+                            </li>
+                            <li class="index-item method">
                                 <a href="#method_bindPartsToKeyFrames">bindPartsToKeyFrames</a>
 
                             </li>
@@ -283,6 +287,14 @@
 
                             </li>
                             <li class="index-item method">
+                                <a href="#method_parseStl">parseStl</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_parseStlBinary">parseStlBinary</a>
+
+                            </li>
+                            <li class="index-item method">
                                 <a href="#method_readMultipleFiles">readMultipleFiles</a>
 
                             </li>
@@ -332,6 +344,10 @@
                             </li>
                             <li class="index-item method">
                                 <a href="#method_swapHiding">swapHiding</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_trim">trim</a>
 
                             </li>
                             <li class="index-item method">
@@ -645,6 +661,70 @@ animation</p>
                         <span class="type">Float</span>:
                     <p>The new value of time in the animation</p>
 
+            </div>
+        </div>
+
+
+</div>
+<div id="method_arrayToString" class="method item">
+    <h3 class="name"><code>arrayToString</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>buf</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">String</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_webVis_jsstl.js.html#l96"><code>src\webVis\jsstl.js:96</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Converts an arraybuffer into a string of equivalent binary content</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">buf</code>
+                        <span class="type">Arraybuffer</span>
+
+
+                    <div class="param-description">
+                        <p>The arraybuffer</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">String</span>:
             </div>
         </div>
 
@@ -3569,6 +3649,142 @@ movement event listener on the web page</p>
 
 
 </div>
+<div id="method_parseStl" class="method item">
+    <h3 class="name"><code>parseStl</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>stl</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_webVis_jsstl.js.html#l119"><code>src\webVis\jsstl.js:119</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Converts a given block of ASCII stl data (as an arraybuffer) to a threeJS representation
+of the geometry. Function courtesy of 'tonylukasavage' from Github, who released this to
+the public domain.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">stl</code>
+                        <span class="type">Arraybuffer</span>
+
+
+                    <div class="param-description">
+                        <p>The ASCII stl data</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Object</span>:
+                    <p>threeJS geometry object</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_parseStlBinary" class="method item">
+    <h3 class="name"><code>parseStlBinary</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>stl</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_webVis_jsstl.js.html#l14"><code>src\webVis\jsstl.js:14</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Converts a given block of binary stl data (as an arraybuffer) to a threeJS representation
+of the geometry. Function courtesy of 'tonylukasavage' from Github, who released this to
+the public domain.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">stl</code>
+                        <span class="type">Arraybuffer</span>
+
+
+                    <div class="param-description">
+                        <p>The binary stl data</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Object</span>:
+                    <p>threeJS geometry object</p>
+
+            </div>
+        </div>
+
+
+</div>
 <div id="method_readMultipleFiles" class="method item">
     <h3 class="name"><code>readMultipleFiles</code></h3>
 
@@ -4362,6 +4578,73 @@ if the button text is not &quot;+&quot; and shows them if it is.</p>
 
             <div class="returns-description">
                         <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_trim" class="method item">
+    <h3 class="name"><code>trim</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>str</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">String</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_webVis_jsstl.js.html#l71"><code>src\webVis\jsstl.js:71</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Processes a given string to make it parsible for parseStl and returns
+the results</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">str</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                        <p>ASCII STL data</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">String</span>:
+                    <p>processed string</p>
+
             </div>
         </div>
 

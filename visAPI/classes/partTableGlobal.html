@@ -115,6 +115,18 @@
 
                             </li>
                             <li class="index-item method">
+                                <a href="#method_changeDensity">changeDensity</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_doDensityDrop">doDensityDrop</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_flipCheck">flipCheck</a>
+
+                            </li>
+                            <li class="index-item method">
                                 <a href="#method_getChildrenByTag">getChildrenByTag</a>
 
                             </li>
@@ -131,6 +143,18 @@
 
                             </li>
                             <li class="index-item method">
+                                <a href="#method_insertDensityInput">insertDensityInput</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_insertHollowInput">insertHollowInput</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_insertMassInput">insertMassInput</a>
+
+                            </li>
+                            <li class="index-item method">
                                 <a href="#method_loadParts">loadParts</a>
 
                             </li>
@@ -143,11 +167,31 @@
 
                             </li>
                             <li class="index-item method">
+                                <a href="#method_removeHollowInput">removeHollowInput</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_renderEntry">renderEntry</a>
+
+                            </li>
+                            <li class="index-item method">
                                 <a href="#method_renderXML">renderXML</a>
 
                             </li>
                             <li class="index-item method">
                                 <a href="#method_sendData">sendData</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_undoDensityDrop">undoDensityDrop</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_updateMassDisplay">updateMassDisplay</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_updateVolumeDisplay">updateVolumeDisplay</a>
 
                             </li>
                     </ul>
@@ -209,6 +253,201 @@ of that entry in the table</p>
                     <div class="param-description">
                         <p>The jQuery object containing the representation of a table
 entry, as extracted from an XML document</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_changeDensity" class="method item">
+    <h3 class="name"><code>changeDensity</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theButton</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_webVis_partTableScript.js.html#l698"><code>src\webVis\partTableScript.js:698</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>A function automatically called by button elements associated with sample densities. Will fill
+the associated density input box with the value associated with the inner text of the button.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theButton</code>
+                        <span class="type">HTML Element</span>
+
+
+                    <div class="param-description">
+                        <p>The button element that called this function</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_doDensityDrop" class="method item">
+    <h3 class="name"><code>doDensityDrop</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theButton</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_webVis_partTableScript.js.html#l662"><code>src\webVis\partTableScript.js:662</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>A function automatically called by button elements associated with accessing sample densities.
+Adds a div element containing several sample density options.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theButton</code>
+                        <span class="type">HTML Element</span>
+
+
+                    <div class="param-description">
+                        <p>The button element that called this function</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_flipCheck" class="method item">
+    <h3 class="name"><code>flipCheck</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theBox</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_webVis_partTableScript.js.html#l751"><code>src\webVis\partTableScript.js:751</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>A function automatically called by text box elements upon becoming checked/unchecked.
+Sets an internal value to indicate the checked state of the element.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theBox</code>
+                        <span class="type">HTML Element</span>
+
+
+                    <div class="param-description">
+                        <p>The checkbox element calling this function</p>
 
                     </div>
 
@@ -551,6 +790,204 @@ If such a child does not exist, null is returned.</p>
 
 
 </div>
+<div id="method_insertDensityInput" class="method item">
+    <h3 class="name"><code>insertDensityInput</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theButton</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_webVis_partTableScript.js.html#l544"><code>src\webVis\partTableScript.js:544</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>A function automatically called by button elements associated with the density option
+in an entry's mass section when pressed. Changes the parent mass section to contain a
+text input element and a button allowing the user to switch over to mass input.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theButton</code>
+                        <span class="type">HTML Element</span>
+
+
+                    <div class="param-description">
+                        <p>The button that calls this function</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_insertHollowInput" class="method item">
+    <h3 class="name"><code>insertHollowInput</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theButton</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_webVis_partTableScript.js.html#l565"><code>src\webVis\partTableScript.js:565</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>A function automatically called by button elements associated with the hollow option
+in an entry's volume section when pressed. Changes the parent volume section to contain a
+text input element and a button allowing the user to indicate the part is not hollow.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theButton</code>
+                        <span class="type">HTML Element</span>
+
+
+                    <div class="param-description">
+                        <p>The button that calls this function</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_insertMassInput" class="method item">
+    <h3 class="name"><code>insertMassInput</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theButton</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_webVis_partTableScript.js.html#l525"><code>src\webVis\partTableScript.js:525</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>A function automatically called by button elements associated with the mass option
+in an entry's mass section when pressed. Changes the parent mass section to contain a
+text input element and a button allowing the user to switch over to density input.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theButton</code>
+                        <span class="type">HTML Element</span>
+
+
+                    <div class="param-description">
+                        <p>The button that calls this function</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
 <div id="method_loadParts" class="method item">
     <h3 class="name"><code>loadParts</code></h3>
 
@@ -724,6 +1161,139 @@ of that given reader's files</p>
 
 
 </div>
+<div id="method_removeHollowInput" class="method item">
+    <h3 class="name"><code>removeHollowInput</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theButton</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_webVis_partTableScript.js.html#l589"><code>src\webVis\partTableScript.js:589</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>A function automatically called by button elements associated with the hollow option
+in an entry's volume section when pressed. Changes the parent volume section to contain
+only a mass value and a button allowing the user to indicate the part is hollow.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theButton</code>
+                        <span class="type">HTML Element</span>
+
+
+                    <div class="param-description">
+                        <p>The button that calls this function</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_renderEntry" class="method item">
+    <h3 class="name"><code>renderEntry</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theCells</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">String</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_webVis_partTableScript.js.html#l433"><code>src\webVis\partTableScript.js:433</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given an html row element containing data regarding a part, converts the information into an
+xml formatted string and returns it</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theCells</code>
+                        <span class="type">HTML Element</span>
+
+
+                    <div class="param-description">
+                        <p>An html row element containing information about a part</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">String</span>:
+                    <p>XML representation of the table entry</p>
+
+            </div>
+        </div>
+
+
+</div>
 <div id="method_renderXML" class="method item">
     <h3 class="name"><code>renderXML</code></h3>
 
@@ -815,6 +1385,203 @@ properly filled out.</p>
                     <div class="param-description">
                         <p>The contents of the part table in the webpage, as a string
 in XML formatting</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_undoDensityDrop" class="method item">
+    <h3 class="name"><code>undoDensityDrop</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theButton</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_webVis_partTableScript.js.html#l679"><code>src\webVis\partTableScript.js:679</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>A function automatically called by button elements associated with accessing sample densities.
+Removes the sample density option div element.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theButton</code>
+                        <span class="type">HTML Element</span>
+
+
+                    <div class="param-description">
+                        <p>The button element that called this function</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_updateMassDisplay" class="method item">
+    <h3 class="name"><code>updateMassDisplay</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theBox</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_webVis_partTableScript.js.html#l637"><code>src\webVis\partTableScript.js:637</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>A function automatically called by text input elements associated with the density option
+in an entry's mass section when changed. Changes the currently displayed mass to
+match the given density</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theBox</code>
+                        <span class="type">HTML Element</span>
+
+
+                    <div class="param-description">
+                        <p>The text input element that calls this function</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_updateVolumeDisplay" class="method item">
+    <h3 class="name"><code>updateVolumeDisplay</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theBox</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_webVis_partTableScript.js.html#l613"><code>src\webVis\partTableScript.js:613</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>A function automatically called by text input elements associated with the hollow option
+in an entry's volume section when changed. Changes the currently displayed volume to
+match the given thickness</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theBox</code>
+                        <span class="type">HTML Element</span>
+
+
+                    <div class="param-description">
+                        <p>The text input element that calls this function</p>
 
                     </div>
 

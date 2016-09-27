@@ -430,6 +430,17 @@ function renderXML(){
 
 
 // Converts the information in the given table entry to an XML element (as a plaintext string)
+/**
+*
+* Given an html row element containing data regarding a part, converts the information into an
+* xml formatted string and returns it
+*
+* @method renderEntry
+* @for partTableGlobal
+* @param {HTML Element} theCells An html row element containing information about a part
+* @return {String} XML representation of the table entry
+* 
+*/
 function renderEntry(theCells){
 
 	var massCell=theCells[3];
@@ -497,18 +508,32 @@ function renderEntry(theCells){
 
 
 
+
+/*
 function hollowOpt(theCheckBox){
 	theCheckBox.parentElement.innerHTML="<input type='text' onchange='revertHollowOpt(this)'> </input>";
 }
-
 
 function revertHollowOpt(theTextBox){
 	if(isNaN(Number.parseFloat(theTextBox.value))){
 		theTextBox.parentElement.innerHTML="<text>hollow </text><input type='checkbox' onchange='hollowOpt(this)'> </input>";
 	}
 }
+*/
 
 // Adds in plain mass input
+/**
+*
+* A function automatically called by button elements associated with the mass option
+* in an entry's mass section when pressed. Changes the parent mass section to contain a
+* text input element and a button allowing the user to switch over to density input.
+*
+* @method insertMassInput
+* @for partTableGlobal
+* @param {HTML Element} theButton The button that calls this function
+* @return {Void}
+* 
+*/
 function insertMassInput(theButton){
 	theButton.parentElement.innerHTML=	"<text>Mass:</text> "+
 										"<input type='text'></input>"+
@@ -516,6 +541,18 @@ function insertMassInput(theButton){
 }
 
 // Adds in input by part density
+/**
+*
+* A function automatically called by button elements associated with the density option
+* in an entry's mass section when pressed. Changes the parent mass section to contain a
+* text input element and a button allowing the user to switch over to mass input.
+*
+* @method insertDensityInput
+* @for partTableGlobal
+* @param {HTML Element} theButton The button that calls this function
+* @return {Void}
+* 
+*/
 function insertDensityInput(theButton){
 	theButton.parentElement.innerHTML=	"<text></text><text>Density:</text> "+
 										"<input type='text' onchange='updateMassDisplay(this)'></input>"+
@@ -525,6 +562,18 @@ function insertDensityInput(theButton){
 
 
 // Adds in input for part surface thickness, hiding the origional volume
+/**
+*
+* A function automatically called by button elements associated with the hollow option
+* in an entry's volume section when pressed. Changes the parent volume section to contain a
+* text input element and a button allowing the user to indicate the part is not hollow.
+*
+* @method insertHollowInput
+* @for partTableGlobal
+* @param {HTML Element} theButton The button that calls this function
+* @return {Void}
+* 
+*/
 function insertHollowInput(theButton){
 	console.log(getChildrenByTag(theButton.parentElement,"TEXT")[0].innerHTML);
 	console.log(Number.parseFloat(getChildrenByTag(theButton.parentElement,"TEXT")[0].innerHTML));
@@ -537,6 +586,18 @@ function insertHollowInput(theButton){
 
 
 // Removes thickness input and displays original volume
+/**
+*
+* A function automatically called by button elements associated with the hollow option
+* in an entry's volume section when pressed. Changes the parent volume section to contain
+* only a mass value and a button allowing the user to indicate the part is hollow.
+*
+* @method removeHollowInput
+* @for partTableGlobal
+* @param {HTML Element} theButton The button that calls this function
+* @return {Void}
+* 
+*/
 function removeHollowInput(theButton){ 
 	console.log(getChildrenByTag(theButton.parentElement,"P")[0].innerHTML);
 	console.log(Number.parseFloat(getChildrenByTag(theButton.parentElement,"P")[0].innerHTML));
@@ -546,7 +607,21 @@ function removeHollowInput(theButton){
 }
 
 
+
+
 // Updates the displayed volume based off of the part's surface area and thickness
+/**
+*
+* A function automatically called by text input elements associated with the hollow option
+* in an entry's volume section when changed. Changes the currently displayed volume to 
+* match the given thickness
+*
+* @method updateVolumeDisplay
+* @for partTableGlobal
+* @param {HTML Element} theBox The text input element that calls this function
+* @return {Void}
+* 
+*/
 function updateVolumeDisplay(theBox){
 	console.log(theBox.parentElement);
 	console.log(getChildrenByTag(theBox.parentElement,"INPUT"));
@@ -559,6 +634,18 @@ function updateVolumeDisplay(theBox){
 
 
 // Updates the displayed mass based off of volume and density
+/**
+*
+* A function automatically called by text input elements associated with the density option
+* in an entry's mass section when changed. Changes the currently displayed mass to 
+* match the given density
+*
+* @method updateMassDisplay
+* @for partTableGlobal
+* @param {HTML Element} theBox The text input element that calls this function
+* @return {Void}
+* 
+*/
 function updateMassDisplay(theBox){
 	var theDensity=Number.parseFloat(getChildrenByTag(theBox.parentElement,"INPUT")[0].value);
 	console.log(getChildrenByTag(theBox.parentElement.parentElement,"TD")[1]);
@@ -568,13 +655,38 @@ function updateMassDisplay(theBox){
 	getChildrenByTag(theBox.parentElement,"TEXT")[0].innerHTML=mass.toString()+"\n";
 }
 
+
+
+
 // Adds in density dropdown
+/**
+*
+* A function automatically called by button elements associated with accessing sample densities.
+* Adds a div element containing several sample density options.
+*
+* @method doDensityDrop
+* @for partTableGlobal
+* @param {HTML Element} theButton The button element that called this function
+* @return {Void}
+* 
+*/
 function doDensityDrop(theButton){
 	theButton.parentElement.innerHTML=undropDensityButton+densityMenu;
 }
 
 
 // Removes density dropdown
+/**
+*
+* A function automatically called by button elements associated with accessing sample densities.
+* Removes the sample density option div element.
+*
+* @method undoDensityDrop
+* @for partTableGlobal
+* @param {HTML Element} theButton The button element that called this function
+* @return {Void}
+* 
+*/
 function undoDensityDrop(theButton){
 	theButton.parentElement.innerHTML=dropDensityButton;
 }
@@ -583,6 +695,17 @@ function undoDensityDrop(theButton){
 
 
 // Sets the value of the density of the part to the density associated with the calling button
+/**
+*
+* A function automatically called by button elements associated with sample densities. Will fill
+* the associated density input box with the value associated with the inner text of the button.
+*
+* @method changeDensity
+* @for partTableGlobal
+* @param {HTML Element} theButton The button element that called this function
+* @return {Void}
+* 
+*/
 function changeDensity(theButton){
 	
 	var mat=theButton.innerHTML;
@@ -625,6 +748,17 @@ function changeDensity(theButton){
 
 
 // Sets the value of the checkbox to the appropriate value
+/**
+*
+* A function automatically called by text box elements upon becoming checked/unchecked.
+* Sets an internal value to indicate the checked state of the element.
+*
+* @method flipCheck
+* @for partTableGlobal
+* @param {HTML Element} theBox The checkbox element calling this function
+* @return {Void}
+* 
+*/
 function flipCheck(theBox){
 
 	if(theBox.value=='on'){
