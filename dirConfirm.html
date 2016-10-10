@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<body style="background-color:#444444; font-family: arial; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px; height:100%; width:100%;">
+
+<div style="width: 100%; height: 15%; background-color:#44AAFF; margin: 0px 0px 0px 0px;">
+	<h1  style="margin: 0px 0px 0px 0px;">Dissassembly Direction Confirmation</h1>
+	<input type='file' id='fileinput' multiple />
+</div>
+
+<div style="width: 100%; height:85%; background-color:#AAAAAA; margin: 0px 0px 0px 0px; overflow:hidden;">
+
+<div style="width:20%; height: 100%; float:left;  margin: 0px 0px 0px 0px;">
+	<div style="height:47%; background-color:#CCAAAA; margin: 0px 0px 0px 0px;" >
+		<h3 style="margin: 0px 0px 0px 0px;">Unconfirmed Directions</h3>
+		<div id="unconfirmed" style="margin: 0px 10px 10px 10px; background-color:#EECCCC; overflow:scroll;">
+		</div>
+	</div>
+	<div style="height:6%;  background-color:#AAAACC; margin: 0px 0px 0px 0px;">
+		<text style="padding: 2px 2px 2px 2px;">Opacity</text>
+		<input style="display:inline;" type="range" name="External Opacity" min="0" max="1" step="0.01" onchange="fixOpacity(this)"></input>
+	</div>
+	<div style="height:47%;  background-color:#AACCAA; margin: 0px 0px 0px 0px;" >
+		<h3 style="margin: 0px 0px 0px 0px;">Confirmed Directions</h3>
+		<div id="confirmed" style="margin: 0px 10px 10px 10px; background-color:#CCEECC; overflow:scroll;">
+		</div>
+	</div>
+</div>
+
+<div style="width: 80%; height: 500px; float:right;  margin: 0px 0px 0px 0px; background-color:#AAAACC;" id="display" 
+     onmousedown="doMouseDown()" onmouseup="doMouseUp()" onmouseleave="doMouseLeave()" >
+
+</div>
+
+</div>
+
+</body>
+
+<script src="./src/webVis/jsstl.js"></script>
+<script src="./src/webVis/jquery.js"></script>
+<script src="./src/webVis/three.min.js"></script>
+<script src="./src/webVis/dirConfirmScript.js"></script>
+
+</html>
+
