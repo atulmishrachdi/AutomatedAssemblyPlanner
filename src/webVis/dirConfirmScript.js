@@ -599,6 +599,7 @@ function insertAssemblyPairs(){
 		theDiv.appendChild(theText);
 		theDiv.appendChild(theHighlightBut);
 		theDiv.appendChild(theConfBut);
+		theDiv.class="dirPair";
 		document.getElementById("unconfirmed").appendChild(theDiv);
 		pos++;
 	}
