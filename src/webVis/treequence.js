@@ -118,7 +118,6 @@ function getMovement(theTree, myX, myY, myZ, myTime){
 		var ref=getMovement(getRef(theTree), myX, myY, myZ, childTime);
 		var mov=getMovement(getMov(theTree), movX, movY, movZ, childTime);
 		
-		//console.log({ Name: "", X: myX, Y: myY, Z: myZ, Time: myTime, Ref: ref, Mov: mov});
 		return { Name: "", X: myX, Y: myY, Z: myZ, Time: myTime, Ref: ref, Mov: mov};
 		
 	}
@@ -679,7 +678,6 @@ function show(theNode){
 	var theText=getChildrenByTag(theNode,"TEXT");
 
 	theNode.setAttribute("style","display: block; position: relative; left: 15px; border-style: solid; border-color: #000000;");
-	//console.log("Just Showed: "+theNode.innerHTML);
 	
 }
 
@@ -700,9 +698,11 @@ function show(theNode){
 function hide(theNode){
 	
 	var theText=getChildrenByTag(theNode,"TEXT");
+	/*
 	if(!(theText==null || theText.length<1)){
 		console.log("Hiding: "+theText[0].innerHTML);
 	}
+	*/
 	var buttonState=getChildrenByTag(theNode,"BUTTON");
 	if(!(buttonState==null || buttonState.length<1)){
 		buttonState[0].innerHTML='+';

@@ -26,7 +26,6 @@ function recieveData(theXMLText){
 
 	var theXML=$.parseXML(theXMLText);
 	console.log(theXML);
-	//console.log(theXML);
 	var theEntries=grab(theXML,"parts_properties");
 	var theEntries=$(theEntries).children("part_properties");
 	var pos=0;
@@ -195,7 +194,6 @@ function readMultipleFiles(evt) {
 			
 			var r = new FileReader();
 			var extension=grabExtension(f.name)[0];
-			console.log(f.name);
 			
 			if(extension===undefined){
 				continue;
@@ -206,7 +204,6 @@ function readMultipleFiles(evt) {
 				}
 				r.onload = (function(f) {
 					return function(e) {
-						console.log(f.name);
 						var contents = e.target.result;
 						inputXML=r.result;
 						loadParts();
@@ -217,7 +214,6 @@ function readMultipleFiles(evt) {
 			}
 						
 		}
-		console.log(fileReaders);
 	} 
 	else {
 		  alert("Failed to load files"); 
@@ -247,14 +243,12 @@ function loadParts (){
 	var lim=fileReaders.length;
 	while(pos<lim){
 		if(!(fileReaders[pos].Reader.readyState===2)){
-			console.log(pos);
-			console.log(fileReaders[pos].Name);
 			break;
 		}
 		pos++;
 	}
 	if(pos===lim){
-		console.log("ALL DONE");
+		console.log("Done loading parts");
 		recieveData(inputXML);				
 	}
 }
@@ -376,10 +370,10 @@ function renderXML(){
 	var result="<?xml version='1.0' encoding='utf-8'?>\n<parts_properties xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>\n";
 	
 	theTable=document.getElementById("body_id");
-	console.log(theTable);
+
 	
 	var theEntries=getChildrenByTag(theTable,"TR");
-	console.log(theEntries);
+
 	var entryPos=0;
 	var entryLim=theEntries.length;
 	
@@ -402,7 +396,7 @@ function renderXML(){
 	
 	result+="</parts_properties>";
 	
-	console.log(result);
+
 	
 	sendData(result);
 	
@@ -444,7 +438,7 @@ function renderXML(){
 function renderEntry(theCells){
 
 	var massCell=theCells[3];
-	console.log(massCell);
+
 	var texts=getChildrenByTag(massCell,"TEXT");
 	var inputs=getChildrenByTag(massCell,"INPUT");
 	
@@ -455,7 +449,7 @@ function renderEntry(theCells){
 	}
 	else if(texts.length==1){
 		if(inputs.length==1){
-			console.log(inputs);
+
 			if(inputs[0].value.toString()===""){
 				return null;
 			}
@@ -466,7 +460,7 @@ function renderEntry(theCells){
 		}
 	}
 	else if(texts.length==2){
-		console.log(texts);
+
 		if(texts[0].innerHTML.toString()==="" || isNaN(Number.parseFloat(texts[0].innerHTML))){
 			return null;
 		}
@@ -478,15 +472,9 @@ function renderEntry(theCells){
 	
 	
 	var checkText="  <fastener_certainty>0</fastener_certainty>\n";
-	console.log(getChildrenByTag(theCells[4],"INPUT"));
-	console.log(getChildrenByTag(theCells[4],"INPUT")[0]);
-	console.log(getChildrenByTag(theCells[4],"INPUT")[0].value);
+
 	if(getChildrenByTag(theCells[4],"INPUT")[0].value=="on"){
 		checkText="  <fastener_certainty>1</fastener_certainty>\n";
-		console.log("aaaaargh!");
-	}
-	else{
-		console.log(theCells[4]);
 	}
 	
 
@@ -575,8 +563,6 @@ function insertDensityInput(theButton){
 * 
 */
 function insertHollowInput(theButton){
-	console.log(getChildrenByTag(theButton.parentElement,"TEXT")[0].innerHTML);
-	console.log(Number.parseFloat(getChildrenByTag(theButton.parentElement,"TEXT")[0].innerHTML));
 	var storage="<p style='display: none;'>"+Number.parseFloat(getChildrenByTag(theButton.parentElement,"TEXT")[0].innerHTML)+"</p>";
 	var display="<text></text>";
 	var backButton="<button onclick='removeHollowInput(this)'>Is Not Hollow</button>";
@@ -599,8 +585,6 @@ function insertHollowInput(theButton){
 * 
 */
 function removeHollowInput(theButton){ 
-	console.log(getChildrenByTag(theButton.parentElement,"P")[0].innerHTML);
-	console.log(Number.parseFloat(getChildrenByTag(theButton.parentElement,"P")[0].innerHTML));
 	var storage="<text style='display: block;'>"+Number.parseFloat(getChildrenByTag(theButton.parentElement,"P")[0].innerHTML)+"</text>";
 	var backButton="<button onclick='insertHollowInput(this)'>Is Hollow</button>";
 	theButton.parentElement.innerHTML=storage+backButton;
@@ -623,10 +607,7 @@ function removeHollowInput(theButton){
 * 
 */
 function updateVolumeDisplay(theBox){
-	console.log(theBox.parentElement);
-	console.log(getChildrenByTag(theBox.parentElement,"INPUT"));
 	var theThickness=Number.parseFloat(getChildrenByTag(theBox.parentElement,"INPUT")[0].value);
-	console.log(getChildrenByTag(theBox.parentElement.parentElement,"TD")[2]);
 	var area=Number.parseFloat(getChildrenByTag(theBox.parentElement.parentElement,"TD")[2].innerHTML);
 	var vol=theThickness*area;
 	getChildrenByTag(theBox.parentElement,"TEXT")[0].innerHTML=vol.toString()+"\n";
@@ -648,8 +629,6 @@ function updateVolumeDisplay(theBox){
 */
 function updateMassDisplay(theBox){
 	var theDensity=Number.parseFloat(getChildrenByTag(theBox.parentElement,"INPUT")[0].value);
-	console.log(getChildrenByTag(theBox.parentElement.parentElement,"TD")[1]);
-	console.log()
 	var theVolume=Number.parseFloat(getChildrenByTag(getChildrenByTag(theBox.parentElement.parentElement,"TD")[1],"TEXT")[0].innerHTML);
 	var mass=theDensity*theVolume;
 	getChildrenByTag(theBox.parentElement,"TEXT")[0].innerHTML=mass.toString()+"\n";
@@ -767,7 +746,6 @@ function flipCheck(theBox){
 	else{
 		theBox.value='on';
 	}
-	console.log(theBox.value);
 
 }
 

@@ -148,8 +148,8 @@ function getGeometries(theSTLs){
 */
 function bindPartsToKeyFrames(theKeyFrameLists, theParts){
 	
-	console.log(theKeyFrameLists);
-	console.log (theParts);
+	//console.log(theKeyFrameLists);
+	//console.log (theParts);
 	
 	var pos=0;
 	var searchPos;
@@ -178,18 +178,16 @@ function bindPartsToKeyFrames(theKeyFrameLists, theParts){
 			Frames: theKeyFrameLists[pos].Frames,
 			Mesh: theParts[searchPos].Mesh
 		});
-		console.log({
+		/*console.log({
 			Name: theKeyFrameLists[pos].Name,
 			Frames: theKeyFrameLists[pos].Frames,
 			Mesh: theParts[searchPos].Mesh
-		});
+		});*/
 		pos++;
 	}
 	
 	flipTheTimes(result);
-	console.log(result);
-	
-	console.log("AAAAAARG");
+
 	return result;
 	
 }
@@ -296,7 +294,7 @@ function showFrames(partFrames){
 		listList.push(timeList);
 		x++;
 	}
-	console.log(listList);
+
 	return;
 	
 }
@@ -405,11 +403,11 @@ function makeKeyFrames(theTree, runningList, currentFrameList){
 	var isRoot=0;
 	if(runningList.length==0){
 		isRoot=1;
-		console.log("ROOT");
-		console.log(theTree);
+		/*console.log("ROOT");
+		console.log(theTree);*/
 	}
 	
-	console.log(theTree);
+	//console.log(theTree);
 	
 	var newQuat= new THREE.Quaternion();
 	newQuat.setFromEuler(new THREE.Euler(0,0,0,'XYZ'));
@@ -425,7 +423,7 @@ function makeKeyFrames(theTree, runningList, currentFrameList){
 	
 	if(theTree.Ref===null){
 		var copiedList= copyFrameList(runningList);
-		console.log("-----------");
+		//console.log("-----------");
 		currentFrameList.push({Name: theTree.Name, Frames: copiedList});
 		runningList.pop();
 	}
@@ -471,7 +469,7 @@ function interpolate(keyFrame1, keyFrame2, proportion){
 	result.Position.z=keyFrame1.Position.z*(1-proportion)+keyFrame2.Position.z*proportion;
 	result.Time=keyFrame1.Time*(1-proportion)+keyFrame2.Time*proportion;
 	
-	
+	/*
 	if(hasNaN(result)){
 		console.log("vvvvvvvvvvvv");
 		console.log("Prop: "+proportion);
@@ -480,7 +478,7 @@ function interpolate(keyFrame1, keyFrame2, proportion){
 		sayFrame(result);
 		console.log("^^^^^^^^^^^^");
 	}	
-	
+	*/
 	return result;
 	
 }

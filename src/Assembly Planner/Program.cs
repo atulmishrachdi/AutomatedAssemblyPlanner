@@ -75,6 +75,12 @@ namespace Assembly_Planner
             DeserializeSolidProperties();
             globalDirPool = DisassemblyDirectionsWithFastener.RunGraphGeneration(AssemblyGraph, SolidsNoFastener);
             // the second user interaction must happen here
+
+            saveDirections();
+            Console.WriteLine("Press enter once input parts table generated >>");
+            Console.ReadLine();
+            loadDirections();
+
             NonadjacentBlockingWithPartitioning.Run(AssemblyGraph, SolidsNoFastener, globalDirPool);
             Stabilityfunctions.GenerateReactionForceInfo(AssemblyGraph);
             var leapSearch = new LeapSearch();
@@ -116,6 +122,28 @@ namespace Assembly_Planner
                 var userUpdated = partsProperties.parts.First(p => p.Name == solidName);
                 SolidsMass.Add(solidName,userUpdated.Mass);
             }
+        }
+
+        internal static void saveDirections()
+        {
+
+            XmlSerializer ser = new XmlSerializer(typeof(DirectionSaveStructure));
+            var writer = new StreamWriter("workspace/directionList.xml");
+            var theData = new DirectionSaveStructure();
+            theData.arcs = AssemblyGraph.arcs;
+            theData.Directions = DisassemblyDirectionsWithFastener.Directions;
+            ser.Serialize(writer, theData);
+
+        }
+
+        internal static void loadDirections()
+        {
+
+            XmlSerializer ser = new XmlSerializer(typeof(DirectionSaveStructure));
+            var reader = new StreamReader("workspace/directionList2.xml");
+            var theData = (DirectionSaveStructure)ser.Deserialize(reader);
+            AssemblyGraph.arcs = theData.arcs;
+
         }
 
         private static void UpdateFasteners(PartsProperties partsProperties)

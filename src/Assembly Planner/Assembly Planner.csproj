@@ -219,6 +219,7 @@
     <Compile Include="InitialGraphMaker\PartsProperties.cs" />
     <Compile Include="InitialGraphMaker\PrimitivePrimitiveInteractions.cs" />
     <Compile Include="Input\consoleFrontEnd.cs" />
+    <Compile Include="Output\DirectionSaving.cs" />
     <Compile Include="Output\LoadingBar.cs" />
     <Compile Include="Output\GraphSaving.cs" />
     <Compile Include="PostProcessor\OptimalOrientation.cs" />

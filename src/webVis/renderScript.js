@@ -884,11 +884,11 @@ function renderParts(){
 	
 	// Turns the treequence into a tree storing the movement data of each subassembly
 	var moveTree=getMovement(treeQ,0,0,0,0);
-	console.log(moveTree);
+	//console.log(moveTree);
 	
 	// Cuts off the common first characters of all the part names in the tree
 	cutOffNames(moveTree,similarityCutoff(getNameList(moveTree)));
-	console.log(moveTree);
+	//console.log(moveTree);
 	
 	// Makes a series of keyframes for each part for evaluation in the animation
 	var theFrameLists=makeKeyFrames(moveTree,[],[]);

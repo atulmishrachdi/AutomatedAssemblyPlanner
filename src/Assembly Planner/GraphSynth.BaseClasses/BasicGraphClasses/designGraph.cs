@@ -103,7 +103,7 @@ namespace GraphSynth.Representation
         public List<arc> arcs
         {
             get { return _arcs ?? (_arcs = new List<arc>()); }
-            //set { arcs = value; }
+            set { arcs = value; }
         }
 
         /// <summary>

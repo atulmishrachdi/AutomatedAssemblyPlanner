@@ -1,0 +1,723 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfArc xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <arc xsi:type="Connection">
+    <name>a0</name>
+    <localLabels />
+    <localVariables />
+    <From>PumpAssembly - Lid-1.STL</From>
+    <To>PumpAssembly - BackLid2-1.STL</To>
+    <directed>false</directed>
+    <doublyDirected>false</doublyDirected>
+    <InfiniteDirections>
+      <int>0</int>
+      <int>116</int>
+      <int>120</int>
+      <int>124</int>
+      <int>330</int>
+      <int>336</int>
+      <int>340</int>
+      <int>450</int>
+      <int>477</int>
+      <int>481</int>
+      <int>725</int>
+      <int>762</int>
+      <int>765</int>
+      <int>780</int>
+      <int>798</int>
+      <int>974</int>
+      <int>1017</int>
+      <int>1032</int>
+      <int>1241</int>
+      <int>1257</int>
+      <int>1277</int>
+      <int>1364</int>
+      <int>1401</int>
+      <int>1465</int>
+      <int>1566</int>
+      <int>4581</int>
+      <int>4584</int>
+      <int>4587</int>
+      <int>4591</int>
+      <int>4595</int>
+      <int>4598</int>
+      <int>4601</int>
+      <int>5089</int>
+      <int>5096</int>
+      <int>5112</int>
+      <int>5128</int>
+      <int>5143</int>
+      <int>5344</int>
+      <int>5568</int>
+      <int>5608</int>
+      <int>5615</int>
+      <int>5642</int>
+      <int>5835</int>
+      <int>5948</int>
+      <int>6105</int>
+    </InfiniteDirections>
+    <FiniteDirections>
+      <int>1583</int>
+    </FiniteDirections>
+    <Fasteners />
+    <Certainty>1</Certainty>
+    <ConnectionType>Loose</ConnectionType>
+  </arc>
+  <arc xsi:type="Connection">
+    <name>a1</name>
+    <localLabels />
+    <localVariables />
+    <From>PumpAssembly - Pump-1.STL</From>
+    <To>PumpAssembly - BackLid2-1.STL</To>
+    <directed>false</directed>
+    <doublyDirected>false</doublyDirected>
+    <InfiniteDirections>
+      <int>0</int>
+      <int>116</int>
+      <int>120</int>
+      <int>124</int>
+      <int>330</int>
+      <int>336</int>
+      <int>340</int>
+      <int>450</int>
+      <int>477</int>
+      <int>481</int>
+      <int>725</int>
+      <int>762</int>
+      <int>765</int>
+      <int>780</int>
+      <int>798</int>
+      <int>974</int>
+      <int>1017</int>
+      <int>1032</int>
+      <int>1241</int>
+      <int>1257</int>
+      <int>1277</int>
+      <int>1364</int>
+      <int>1401</int>
+      <int>1465</int>
+      <int>1566</int>
+      <int>5089</int>
+      <int>5096</int>
+      <int>5112</int>
+      <int>5128</int>
+      <int>5143</int>
+      <int>5344</int>
+      <int>5568</int>
+      <int>5608</int>
+      <int>5615</int>
+      <int>5642</int>
+      <int>5835</int>
+      <int>5948</int>
+      <int>6105</int>
+    </InfiniteDirections>
+    <FiniteDirections>
+      <int>1583</int>
+      <int>4581</int>
+      <int>4584</int>
+      <int>4587</int>
+      <int>4591</int>
+      <int>4595</int>
+      <int>4598</int>
+      <int>4601</int>
+    </FiniteDirections>
+    <Fasteners>
+      <Fastener>
+        <Time>0</Time>
+        <TimeSD>0</TimeSD>
+        <InstallDistance>0</InstallDistance>
+        <RemovalDirection>0</RemovalDirection>
+        <Certainty>0</Certainty>
+        <Tool>HexWrench</Tool>
+        <ToolSize>0</ToolSize>
+        <Diameter>10.015863786841985</Diameter>
+        <OverallLength>0</OverallLength>
+        <EngagedLength>0</EngagedLength>
+        <AccessCylinderRadius>0</AccessCylinderRadius>
+        <FastenerType>Bolt</FastenerType>
+        <NumberOfThreads>0</NumberOfThreads>
+        <PartsLockedByFastener />
+      </Fastener>
+      <Fastener>
+        <Time>0</Time>
+        <TimeSD>0</TimeSD>
+        <InstallDistance>0</InstallDistance>
+        <RemovalDirection>0</RemovalDirection>
+        <Certainty>0</Certainty>
+        <Tool>HexWrench</Tool>
+        <ToolSize>0</ToolSize>
+        <Diameter>10.015863786926548</Diameter>
+        <OverallLength>0</OverallLength>
+        <EngagedLength>0</EngagedLength>
+        <AccessCylinderRadius>0</AccessCylinderRadius>
+        <FastenerType>Bolt</FastenerType>
+        <NumberOfThreads>0</NumberOfThreads>
+        <PartsLockedByFastener />
+      </Fastener>
+    </Fasteners>
+    <Certainty>1</Certainty>
+    <ConnectionType>Loose</ConnectionType>
+  </arc>
+  <arc xsi:type="Connection">
+    <name>a2</name>
+    <localLabels />
+    <localVariables />
+    <From>PumpAssembly - Pump-1.STL</From>
+    <To>PumpAssembly - Lid-1.STL</To>
+    <directed>false</directed>
+    <doublyDirected>false</doublyDirected>
+    <InfiniteDirections>
+      <int>0</int>
+      <int>116</int>
+      <int>120</int>
+      <int>124</int>
+      <int>330</int>
+      <int>336</int>
+      <int>340</int>
+      <int>450</int>
+      <int>477</int>
+      <int>481</int>
+      <int>725</int>
+      <int>762</int>
+      <int>765</int>
+      <int>780</int>
+      <int>798</int>
+      <int>974</int>
+      <int>1017</int>
+      <int>1032</int>
+      <int>1241</int>
+      <int>1257</int>
+      <int>1277</int>
+      <int>1364</int>
+      <int>1401</int>
+      <int>1465</int>
+      <int>1566</int>
+      <int>1583</int>
+      <int>1801</int>
+      <int>1817</int>
+      <int>1835</int>
+      <int>1941</int>
+      <int>1976</int>
+      <int>2036</int>
+      <int>2129</int>
+      <int>2168</int>
+      <int>2233</int>
+      <int>2332</int>
+      <int>2339</int>
+      <int>2416</int>
+      <int>2468</int>
+      <int>2560</int>
+      <int>2637</int>
+      <int>2686</int>
+      <int>2777</int>
+      <int>2804</int>
+      <int>2887</int>
+      <int>2891</int>
+      <int>3016</int>
+      <int>3097</int>
+    </InfiniteDirections>
+    <FiniteDirections />
+    <Fasteners>
+      <Fastener>
+        <Time>0</Time>
+        <TimeSD>0</TimeSD>
+        <InstallDistance>0</InstallDistance>
+        <RemovalDirection>4199</RemovalDirection>
+        <Certainty>0</Certainty>
+        <Tool>HexWrench</Tool>
+        <ToolSize>0</ToolSize>
+        <Diameter>3.7000615648566013</Diameter>
+        <OverallLength>0</OverallLength>
+        <EngagedLength>0</EngagedLength>
+        <AccessCylinderRadius>0</AccessCylinderRadius>
+        <FastenerType>Bolt</FastenerType>
+        <NumberOfThreads>0</NumberOfThreads>
+        <PartsLockedByFastener />
+      </Fastener>
+      <Fastener>
+        <Time>0</Time>
+        <TimeSD>0</TimeSD>
+        <InstallDistance>0</InstallDistance>
+        <RemovalDirection>4199</RemovalDirection>
+        <Certainty>0</Certainty>
+        <Tool>HexWrench</Tool>
+        <ToolSize>0</ToolSize>
+        <Diameter>3.7000882961747936</Diameter>
+        <OverallLength>0</OverallLength>
+        <EngagedLength>0</EngagedLength>
+        <AccessCylinderRadius>0</AccessCylinderRadius>
+        <FastenerType>Bolt</FastenerType>
+        <NumberOfThreads>0</NumberOfThreads>
+        <PartsLockedByFastener />
+      </Fastener>
+      <Fastener>
+        <Time>0</Time>
+        <TimeSD>0</TimeSD>
+        <InstallDistance>0</InstallDistance>
+        <RemovalDirection>4199</RemovalDirection>
+        <Certainty>0</Certainty>
+        <Tool>HexWrench</Tool>
+        <ToolSize>0</ToolSize>
+        <Diameter>3.7000427596874887</Diameter>
+        <OverallLength>0</OverallLength>
+        <EngagedLength>0</EngagedLength>
+        <AccessCylinderRadius>0</AccessCylinderRadius>
+        <FastenerType>Bolt</FastenerType>
+        <NumberOfThreads>0</NumberOfThreads>
+        <PartsLockedByFastener />
+      </Fastener>
+      <Fastener>
+        <Time>0</Time>
+        <TimeSD>0</TimeSD>
+        <InstallDistance>0</InstallDistance>
+        <RemovalDirection>4199</RemovalDirection>
+        <Certainty>0</Certainty>
+        <Tool>HexWrench</Tool>
+        <ToolSize>0</ToolSize>
+        <Diameter>3.7000373242575564</Diameter>
+        <OverallLength>0</OverallLength>
+        <EngagedLength>0</EngagedLength>
+        <AccessCylinderRadius>0</AccessCylinderRadius>
+        <FastenerType>Bolt</FastenerType>
+        <NumberOfThreads>0</NumberOfThreads>
+        <PartsLockedByFastener />
+      </Fastener>
+      <Fastener>
+        <Time>0</Time>
+        <TimeSD>0</TimeSD>
+        <InstallDistance>0</InstallDistance>
+        <RemovalDirection>4199</RemovalDirection>
+        <Certainty>0</Certainty>
+        <Tool>HexWrench</Tool>
+        <ToolSize>0</ToolSize>
+        <Diameter>3.7000518730821264</Diameter>
+        <OverallLength>0</OverallLength>
+        <EngagedLength>0</EngagedLength>
+        <AccessCylinderRadius>0</AccessCylinderRadius>
+        <FastenerType>Bolt</FastenerType>
+        <NumberOfThreads>0</NumberOfThreads>
+        <PartsLockedByFastener />
+      </Fastener>
+      <Fastener>
+        <Time>0</Time>
+        <TimeSD>0</TimeSD>
+        <InstallDistance>0</InstallDistance>
+        <RemovalDirection>4199</RemovalDirection>
+        <Certainty>0</Certainty>
+        <Tool>HexWrench</Tool>
+        <ToolSize>0</ToolSize>
+        <Diameter>3.7000310816646165</Diameter>
+        <OverallLength>0</OverallLength>
+        <EngagedLength>0</EngagedLength>
+        <AccessCylinderRadius>0</AccessCylinderRadius>
+        <FastenerType>Bolt</FastenerType>
+        <NumberOfThreads>0</NumberOfThreads>
+        <PartsLockedByFastener />
+      </Fastener>
+      <Fastener>
+        <Time>0</Time>
+        <TimeSD>0</TimeSD>
+        <InstallDistance>0</InstallDistance>
+        <RemovalDirection>4199</RemovalDirection>
+        <Certainty>0</Certainty>
+        <Tool>HexWrench</Tool>
+        <ToolSize>0</ToolSize>
+        <Diameter>3.7000084640209874</Diameter>
+        <OverallLength>0</OverallLength>
+        <EngagedLength>0</EngagedLength>
+        <AccessCylinderRadius>0</AccessCylinderRadius>
+        <FastenerType>Bolt</FastenerType>
+        <NumberOfThreads>0</NumberOfThreads>
+        <PartsLockedByFastener />
+      </Fastener>
+      <Fastener>
+        <Time>0</Time>
+        <TimeSD>0</TimeSD>
+        <InstallDistance>0</InstallDistance>
+        <RemovalDirection>4199</RemovalDirection>
+        <Certainty>0</Certainty>
+        <Tool>HexWrench</Tool>
+        <ToolSize>0</ToolSize>
+        <Diameter>3.7000625719337559</Diameter>
+        <OverallLength>0</OverallLength>
+        <EngagedLength>0</EngagedLength>
+        <AccessCylinderRadius>0</AccessCylinderRadius>
+        <FastenerType>Bolt</FastenerType>
+        <NumberOfThreads>0</NumberOfThreads>
+        <PartsLockedByFastener />
+      </Fastener>
+      <Fastener>
+        <Time>0</Time>
+        <TimeSD>0</TimeSD>
+        <InstallDistance>0</InstallDistance>
+        <RemovalDirection>4199</RemovalDirection>
+        <Certainty>0</Certainty>
+        <Tool>HexWrench</Tool>
+        <ToolSize>0</ToolSize>
+        <Diameter>4.0027867399038461</Diameter>
+        <OverallLength>0</OverallLength>
+        <EngagedLength>0</EngagedLength>
+        <AccessCylinderRadius>0</AccessCylinderRadius>
+        <FastenerType>Bolt</FastenerType>
+        <NumberOfThreads>0</NumberOfThreads>
+        <PartsLockedByFastener>
+          <int>1</int>
+          <int>2</int>
+          <int>5</int>
+        </PartsLockedByFastener>
+      </Fastener>
+      <Fastener>
+        <Time>0</Time>
+        <TimeSD>0</TimeSD>
+        <InstallDistance>0</InstallDistance>
+        <RemovalDirection>4199</RemovalDirection>
+        <Certainty>0</Certainty>
+        <Tool>HexWrench</Tool>
+        <ToolSize>0</ToolSize>
+        <Diameter>4.0028209482256933</Diameter>
+        <OverallLength>0</OverallLength>
+        <EngagedLength>0</EngagedLength>
+        <AccessCylinderRadius>0</AccessCylinderRadius>
+        <FastenerType>Bolt</FastenerType>
+        <NumberOfThreads>0</NumberOfThreads>
+        <PartsLockedByFastener>
+          <int>1</int>
+          <int>2</int>
+          <int>5</int>
+        </PartsLockedByFastener>
+      </Fastener>
+      <Fastener>
+        <Time>0</Time>
+        <TimeSD>0</TimeSD>
+        <InstallDistance>0</InstallDistance>
+        <RemovalDirection>4199</RemovalDirection>
+        <Certainty>0</Certainty>
+        <Tool>HexWrench</Tool>
+        <ToolSize>0</ToolSize>
+        <Diameter>4.0028088776564745</Diameter>
+        <OverallLength>0</OverallLength>
+        <EngagedLength>0</EngagedLength>
+        <AccessCylinderRadius>0</AccessCylinderRadius>
+        <FastenerType>Bolt</FastenerType>
+        <NumberOfThreads>0</NumberOfThreads>
+        <PartsLockedByFastener>
+          <int>1</int>
+          <int>2</int>
+          <int>6</int>
+        </PartsLockedByFastener>
+      </Fastener>
+      <Fastener>
+        <Time>0</Time>
+        <TimeSD>0</TimeSD>
+        <InstallDistance>0</InstallDistance>
+        <RemovalDirection>4199</RemovalDirection>
+        <Certainty>0</Certainty>
+        <Tool>HexWrench</Tool>
+        <ToolSize>0</ToolSize>
+        <Diameter>4.002808917625992</Diameter>
+        <OverallLength>0</OverallLength>
+        <EngagedLength>0</EngagedLength>
+        <AccessCylinderRadius>0</AccessCylinderRadius>
+        <FastenerType>Bolt</FastenerType>
+        <NumberOfThreads>0</NumberOfThreads>
+        <PartsLockedByFastener>
+          <int>1</int>
+          <int>2</int>
+          <int>6</int>
+        </PartsLockedByFastener>
+      </Fastener>
+    </Fasteners>
+    <Certainty>1</Certainty>
+    <ConnectionType>Loose</ConnectionType>
+  </arc>
+  <arc xsi:type="Connection">
+    <name>a3</name>
+    <localLabels />
+    <localVariables />
+    <From>PumpAssembly - PumpExtention-2 Side-1.STL</From>
+    <To>PumpAssembly - Lid-1.STL</To>
+    <directed>false</directed>
+    <doublyDirected>false</doublyDirected>
+    <InfiniteDirections>
+      <int>0</int>
+      <int>116</int>
+      <int>481</int>
+      <int>974</int>
+      <int>1046</int>
+      <int>1490</int>
+      <int>1678</int>
+      <int>1941</int>
+      <int>2468</int>
+      <int>2887</int>
+      <int>3159</int>
+      <int>3293</int>
+      <int>3412</int>
+      <int>3465</int>
+      <int>3581</int>
+      <int>3624</int>
+      <int>3820</int>
+      <int>3893</int>
+      <int>3952</int>
+      <int>4029</int>
+      <int>4045</int>
+      <int>4205</int>
+      <int>4357</int>
+      <int>4377</int>
+      <int>4601</int>
+      <int>4478</int>
+      <int>4581</int>
+      <int>4754</int>
+      <int>4759</int>
+      <int>4935</int>
+      <int>5128</int>
+      <int>5036</int>
+      <int>5148</int>
+      <int>5267</int>
+      <int>5307</int>
+      <int>5441</int>
+      <int>5568</int>
+      <int>5615</int>
+      <int>5608</int>
+      <int>5948</int>
+      <int>5855</int>
+      <int>6024</int>
+    </InfiniteDirections>
+    <FiniteDirections>
+      <int>126</int>
+      <int>500</int>
+      <int>2332</int>
+      <int>2777</int>
+      <int>3061</int>
+    </FiniteDirections>
+    <Fasteners>
+      <Fastener>
+        <Time>0</Time>
+        <TimeSD>0</TimeSD>
+        <InstallDistance>0</InstallDistance>
+        <RemovalDirection>4199</RemovalDirection>
+        <Certainty>0</Certainty>
+        <Tool>HexWrench</Tool>
+        <ToolSize>0</ToolSize>
+        <Diameter>4.0027867399038461</Diameter>
+        <OverallLength>0</OverallLength>
+        <EngagedLength>0</EngagedLength>
+        <AccessCylinderRadius>0</AccessCylinderRadius>
+        <FastenerType>Bolt</FastenerType>
+        <NumberOfThreads>0</NumberOfThreads>
+        <PartsLockedByFastener>
+          <int>1</int>
+          <int>2</int>
+          <int>5</int>
+        </PartsLockedByFastener>
+      </Fastener>
+      <Fastener>
+        <Time>0</Time>
+        <TimeSD>0</TimeSD>
+        <InstallDistance>0</InstallDistance>
+        <RemovalDirection>4199</RemovalDirection>
+        <Certainty>0</Certainty>
+        <Tool>HexWrench</Tool>
+        <ToolSize>0</ToolSize>
+        <Diameter>4.0028209482256933</Diameter>
+        <OverallLength>0</OverallLength>
+        <EngagedLength>0</EngagedLength>
+        <AccessCylinderRadius>0</AccessCylinderRadius>
+        <FastenerType>Bolt</FastenerType>
+        <NumberOfThreads>0</NumberOfThreads>
+        <PartsLockedByFastener>
+          <int>1</int>
+          <int>2</int>
+          <int>5</int>
+        </PartsLockedByFastener>
+      </Fastener>
+    </Fasteners>
+    <Certainty>1</Certainty>
+    <ConnectionType>Loose</ConnectionType>
+  </arc>
+  <arc xsi:type="Connection">
+    <name>a4</name>
+    <localLabels />
+    <localVariables />
+    <From>PumpAssembly - PumpExtention-2 Side-2.STL</From>
+    <To>PumpAssembly - Lid-1.STL</To>
+    <directed>false</directed>
+    <doublyDirected>false</doublyDirected>
+    <InfiniteDirections>
+      <int>0</int>
+      <int>116</int>
+      <int>481</int>
+      <int>974</int>
+      <int>1490</int>
+      <int>1941</int>
+      <int>2468</int>
+      <int>2887</int>
+      <int>3159</int>
+      <int>3293</int>
+      <int>3412</int>
+      <int>3465</int>
+      <int>3581</int>
+      <int>3624</int>
+      <int>3820</int>
+      <int>3893</int>
+      <int>3952</int>
+      <int>4029</int>
+      <int>4045</int>
+      <int>4205</int>
+      <int>4357</int>
+      <int>4377</int>
+      <int>4601</int>
+      <int>4478</int>
+      <int>4581</int>
+      <int>4754</int>
+      <int>4759</int>
+      <int>4935</int>
+      <int>5128</int>
+      <int>5036</int>
+      <int>5148</int>
+      <int>5267</int>
+      <int>5307</int>
+      <int>5441</int>
+      <int>5568</int>
+      <int>5615</int>
+      <int>5608</int>
+      <int>5948</int>
+      <int>5855</int>
+      <int>6024</int>
+    </InfiniteDirections>
+    <FiniteDirections>
+      <int>126</int>
+      <int>500</int>
+      <int>1046</int>
+      <int>1678</int>
+      <int>2332</int>
+      <int>2777</int>
+      <int>3061</int>
+    </FiniteDirections>
+    <Fasteners>
+      <Fastener>
+        <Time>0</Time>
+        <TimeSD>0</TimeSD>
+        <InstallDistance>0</InstallDistance>
+        <RemovalDirection>4199</RemovalDirection>
+        <Certainty>0</Certainty>
+        <Tool>HexWrench</Tool>
+        <ToolSize>0</ToolSize>
+        <Diameter>4.0028088776564745</Diameter>
+        <OverallLength>0</OverallLength>
+        <EngagedLength>0</EngagedLength>
+        <AccessCylinderRadius>0</AccessCylinderRadius>
+        <FastenerType>Bolt</FastenerType>
+        <NumberOfThreads>0</NumberOfThreads>
+        <PartsLockedByFastener>
+          <int>1</int>
+          <int>2</int>
+          <int>6</int>
+        </PartsLockedByFastener>
+      </Fastener>
+      <Fastener>
+        <Time>0</Time>
+        <TimeSD>0</TimeSD>
+        <InstallDistance>0</InstallDistance>
+        <RemovalDirection>4199</RemovalDirection>
+        <Certainty>0</Certainty>
+        <Tool>HexWrench</Tool>
+        <ToolSize>0</ToolSize>
+        <Diameter>4.002808917625992</Diameter>
+        <OverallLength>0</OverallLength>
+        <EngagedLength>0</EngagedLength>
+        <AccessCylinderRadius>0</AccessCylinderRadius>
+        <FastenerType>Bolt</FastenerType>
+        <NumberOfThreads>0</NumberOfThreads>
+        <PartsLockedByFastener>
+          <int>1</int>
+          <int>2</int>
+          <int>6</int>
+        </PartsLockedByFastener>
+      </Fastener>
+    </Fasteners>
+    <Certainty>1</Certainty>
+    <ConnectionType>Loose</ConnectionType>
+  </arc>
+  <arc xsi:type="Connection">
+    <name>a5</name>
+    <localLabels />
+    <localVariables />
+    <From>PumpAssembly - Ring-1.STL</From>
+    <To>PumpAssembly - Pump-1.STL</To>
+    <directed>false</directed>
+    <doublyDirected>false</doublyDirected>
+    <InfiniteDirections>
+      <int>4618</int>
+    </InfiniteDirections>
+    <FiniteDirections />
+    <Fasteners />
+    <Certainty>1</Certainty>
+    <ConnectionType>Loose</ConnectionType>
+  </arc>
+  <arc xsi:type="Connection">
+    <name>a6</name>
+    <localLabels />
+    <localVariables />
+    <From>PumpAssembly - Shaft-1.STL</From>
+    <To>PumpAssembly - Pump-1.STL</To>
+    <directed>false</directed>
+    <doublyDirected>false</doublyDirected>
+    <InfiniteDirections>
+      <int>4618</int>
+    </InfiniteDirections>
+    <FiniteDirections />
+    <Fasteners />
+    <Certainty>1</Certainty>
+    <ConnectionType>Loose</ConnectionType>
+  </arc>
+  <arc xsi:type="Connection">
+    <name>a7</name>
+    <localLabels />
+    <localVariables />
+    <From>PumpAssembly - PumpExtention-2 ShaftThrough-1.STL</From>
+    <To>PumpAssembly - PumpExtention-2 InnerRing-1.STL</To>
+    <directed>false</directed>
+    <doublyDirected>false</doublyDirected>
+    <InfiniteDirections>
+      <int>1463</int>
+      <int>4578</int>
+    </InfiniteDirections>
+    <FiniteDirections />
+    <Fasteners />
+    <Certainty>1</Certainty>
+    <ConnectionType>Loose</ConnectionType>
+  </arc>
+  <arc xsi:type="Connection">
+    <name>a8</name>
+    <localLabels />
+    <localVariables />
+    <From>PumpAssembly - PumpExtention-2 Side-1.STL</From>
+    <To>PumpAssembly - PumpExtention-2 ShaftThrough-1.STL</To>
+    <directed>false</directed>
+    <doublyDirected>false</doublyDirected>
+    <InfiniteDirections>
+      <int>1463</int>
+      <int>4578</int>
+    </InfiniteDirections>
+    <FiniteDirections />
+    <Fasteners />
+    <Certainty>1</Certainty>
+    <ConnectionType>Loose</ConnectionType>
+  </arc>
+  <arc xsi:type="Connection">
+    <name>a9</name>
+    <localLabels />
+    <localVariables />
+    <From>PumpAssembly - PumpExtention-2 Side-2.STL</From>
+    <To>PumpAssembly - PumpExtention-2 ShaftThrough-1.STL</To>
+    <directed>false</directed>
+    <doublyDirected>false</doublyDirected>
+    <InfiniteDirections>
+      <int>1463</int>
+      <int>4578</int>
+    </InfiniteDirections>
+    <FiniteDirections />
+    <Fasteners />
+    <Certainty>1</Certainty>
+    <ConnectionType>Loose</ConnectionType>
+  </arc>
+</ArrayOfArc>

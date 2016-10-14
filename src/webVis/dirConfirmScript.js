@@ -4,18 +4,18 @@ var assemblyPairs=[];
 var namePairs=[];
 var confDirs=null;
 var unconfDirs=null;
+var theDirections=[];
 var theXML=null;
 var thePos= new THREE.Vector3(1,0,0);
 var lastMouse=null;
 var theDistance= 300;
-var theVec= new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0x0000ff}));
+var theVectors= []; //new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0x0000ff}))
 var theEul= new THREE.Euler(0,0,0,'XYZ');
 var baseQuat = new THREE.Quaternion(1,0,0,0);
 var deltaQuat = new THREE.Quaternion(1,0,0,0);
 
 var dragInp=false;
 
-theVec.geometry.vertices.push(new THREE.Vector3( 0, 0, 0 ),new THREE.Vector3( 0, 0, 0 ));
 
 var wireSettings={transparent: true, opacity: 0.1, color: 0x444444, wireframe: false};
 
@@ -38,8 +38,6 @@ var theHeight= document.getElementById("display").clientHeight;
 
 // The scene of the assembly animation
 var scene = new THREE.Scene();
-
-scene.add( theVec );
 
 // The camera
 var camera = new THREE.PerspectiveCamera( 75, theWidth/theHeight, 1, 16000 );
@@ -192,7 +190,6 @@ var render = function () {
 	
 	thePos.applyEuler(theEul);
 	theEul.set(0,0,0,'XYZ');
-	console.log(thePos);
 	thePos.multiplyScalar(theDistance);
 	camera.position.copy(thePos);
 	camera.position.add(focusPoint);
@@ -389,7 +386,7 @@ function loadParts (){
 			pos++;
 		}
 		
-		getAssemblyPairs();
+		parseData();
 		linkParts();
 		console.log(assemblyPairs);
 		highlight(assemblyPairs[0]);
@@ -407,7 +404,12 @@ function loadParts (){
 
 function linkPair(a,b,vec){
 	
-	var thePair={Ref: null, Mov: null, Vec: null};
+	var thePair={Ref: null,
+				 Mov: null,
+				 Vec: null,
+				 Directed: null,
+				 DoublyDirected: null,
+				 InfiniteDirections: null};
 	
 	//console.log(parts);
 	
@@ -440,9 +442,12 @@ function linkParts(){
 	var pos=0;
 	var lim=namePairs.length;
 	var thePair=null;
-	//console.log(namePairs);
+	console.log(namePairs);
 	while(pos<lim){
 		thePair=linkPair(namePairs[pos].Ref,namePairs[pos].Mov,namePairs[pos].Vec);
+		thePair.Directed = namePairs[pos].Directed;
+		thePair.DoublyDirected = namePairs[pos].DoublyDirected;
+		thePair.InfiniteDirections = namePairs[pos].InfiniteDirections;
 		if(thePair!=null){
 			assemblyPairs.push(thePair)
 		}
@@ -451,15 +456,18 @@ function linkParts(){
 	//console.log(assemblyPairs);
 }
 
-function getAssemblyPairs(){
+function parseData(){
 	
 	//console.log(theXML);
 	var doc = $.parseXML(theXML);
 	//console.log(doc);
-	var thePairs=grab(doc,"pairList");
+	doc = grab(doc,"DirectionSaveStructure");
+	var directions = grab(doc,"Directions");
+	directions = $(directions).children("ArrayOfDouble");
+	var thePairs=grab(doc,"arcs");
 	//console.log(thePairs);
 
-	thePairs=$(thePairs).children("pair");
+	thePairs=$(thePairs).children("arc");
 	//console.log(thePairs);
 	var pos=0;
 	var lim=thePairs.length;
@@ -467,21 +475,91 @@ function getAssemblyPairs(){
 	var theMov;
 	var theRef;
 	var theVec;
+	var vecPos;
+	var vecLim;
+	var directed;
+	var docDirs;
+	var doublyDirected;
+	var docDubDirs;
+	var infiniteDirections;
+	var docInfDirs;
+	
 	while(pos<lim){
-		theRef=grab(thePairs[pos],"reference");
-		theMov=grab(thePairs[pos],"moving");
+		theRef=grab(thePairs[pos],"To");
+		theMov=grab(thePairs[pos],"From");
+		
+		
+		docDirs=grab(thePairs[pos],"directed");
+		directed=[];
+		
+		docDubDirs=grab(thePairs[pos],"doublyDirected");
+		doublyDirected=[];
+		
+		
+		docInfDirs=grab(thePairs[pos],"InfiniteDirections");
+		infiniteDirections=[];
+		
+		
+		
+		if($(docDirs[vecPos]).innerHTML != "false"){
+			docDirs = $(docDirs).children("int");
+			vecPos=0;
+			vecLim=docDirs.length;
+			while(vecPos<vecLim){
+				theVec=parseInt(docDirs[vecPos].innerHTML);
+				directed.push(theVec);
+				vecPos++;
+			}
+		}
+		
+		
+		if($(docDubDirs[vecPos]).innerHTML != "false"){
+			docDubDirs = $(docDubDirs).children("int");
+			vecPos=0;
+			vecLim=docDubDirs.length;
+			while(vecPos<vecLim){
+				theVec=parseInt(docDubDirs[vecPos].innerHTML);
+				doublyDirected.push(theVec);
+				vecPos++;
+			}
+		}
+		
+		if($(docInfDirs[vecPos]).innerHTML != "false"){
+			docInfDirs = $(docInfDirs).children("int");
+			vecPos=0;
+			vecLim=docInfDirs.length;
+			while(vecPos<vecLim){
+				theVec=parseInt(docInfDirs[vecPos].innerHTML);
+				infiniteDirections.push(theVec);
+				vecPos++;
+			}
+		}
+		
 		theVec=grab(thePairs[pos],"vector");
 		namePairs.push({
-			Ref: $(theRef).attr("name"),
-			Mov: $(theMov).attr("name"),
-			Vec: {
-				X: $(theVec).attr("x"),
-				Y: $(theVec).attr("y"),
-				Z: $(theVec).attr("z")
-			}
+			Ref: theRef.innerHTML,
+			Mov: theMov.innerHTML,
+			Directed: directed,
+			DoublyDirected: doublyDirected,
+			InfiniteDirections: infiniteDirections
 		});
 		pos++;
 	}
+	
+	
+	pos=0;
+	lim=directions.length;
+	var theDirection;
+	while(pos<lim){
+		theDirection=$(directions[pos]).children("double");
+		theDirections.push({
+			X: parseFloat(theDirection[0].innerHTML),
+			Y: parseFloat(theDirection[1].innerHTML),
+			Z: parseFloat(theDirection[2].innerHTML)
+		});
+		pos++;
+	}	
+	
 	//console.log(namePairs);
 	
 }
@@ -541,16 +619,85 @@ function highlight(thePair){
 	thePair.Mov.Mesh.material=new THREE.MeshLambertMaterial({color: 0xFF4444 /*, transparent: true, opacity: 0.6, depthTest: false */});
 	thePair.Ref.Mesh.geometry.computeBoundingBox();
 	thePair.Mov.Mesh.geometry.computeBoundingBox();
-	var theBox=thePair.Ref.Mesh.geometry.boundingBox.clone();
-	theBox.union(thePair.Mov.Mesh.geometry.boundingBox);
-	theVec.geometry.vertices[0]=new THREE.Vector3(
+	var theBox=thePair.Mov.Mesh.geometry.boundingBox.clone();
+	var distBox = thePair.Mov.Mesh.geometry.boundingBox.clone()
+	distBox.union(thePair.Ref.Mesh.geometry.boundingBox);
+	var pos=0;
+	var lim=theVectors.length;
+	while(pos<lim){
+		scene.remove( theVectors[pos] );
+		delete theVectors[pos];
+		pos++;
+	}
+	
+	
+	theVectors.length=0;
+	var theVec;
+	
+	var theDist = Math.sqrt(Math.pow(distBox.max.x-distBox.min.x,2)+
+							Math.pow(distBox.max.y-distBox.min.y,2)+
+							Math.pow(distBox.max.y-distBox.min.y,2));
+	
+	theDist=theDist*1.1;
+	
+	pos=0;
+	lim=thePair.Directed.length;
+	while(pos<lim){
+		theVec = new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0x0000ff}));
+		theVec.geometry.vertices[0]=new THREE.Vector3(
 								  (theBox.min.x+theBox.max.x)/2,
 								  (theBox.min.y+theBox.max.y)/2,
 								  (theBox.min.z+theBox.max.z)/2
 								 );
-	theVec.geometry.vertices[1]=new THREE.Vector3(100*thePair.Vec.X,100*thePair.Vec.Y,100*thePair.Vec.Z);
-	theVec.geometry.vertices[1].add(theVec.geometry.vertices[0]);
-	theVec.geometry.verticesNeedUpdate=true;
+		theVec.geometry.vertices[1]=new THREE.Vector3(theDist*theDirections[thePair.Directed[pos]].X,
+													  theDist*theDirections[thePair.Directed[pos]].Y,
+													  theDist*theDirections[thePair.Directed[pos]].Z);
+		theVec.geometry.vertices[1].add(theVec.geometry.vertices[0]);
+		theVec.geometry.verticesNeedUpdate=true;
+		scene.add(theVec);
+		theVectors.push(theVec);
+		pos++;
+	}
+	
+	pos=0;
+	lim=thePair.DoublyDirected.length;
+	while(pos<lim){
+		theVec = new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0x00ff00}));
+		theVec.geometry.vertices[0]=new THREE.Vector3(
+								  (theBox.min.x+theBox.max.x)/2,
+								  (theBox.min.y+theBox.max.y)/2,
+								  (theBox.min.z+theBox.max.z)/2
+								 );
+		theVec.geometry.vertices[1]=new THREE.Vector3(theDist*theDirections[thePair.DoublyDirected[pos]].X,
+													  theDist*theDirections[thePair.DoublyDirected[pos]].Y,
+													  theDist*theDirections[thePair.DoublyDirected[pos]].Z);
+		theVec.geometry.vertices[1].add(theVec.geometry.vertices[0]);
+		theVec.geometry.verticesNeedUpdate=true;
+		scene.add(theVec);
+		theVectors.push(theVec);
+		pos++;
+	}
+	
+	pos=0;
+	lim=thePair.InfiniteDirections.length;
+	while(pos<lim){
+		theVec = new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0xff0000}));
+		theVec.geometry.vertices[0]=new THREE.Vector3(
+								  (theBox.min.x+theBox.max.x)/2,
+								  (theBox.min.y+theBox.max.y)/2,
+								  (theBox.min.z+theBox.max.z)/2
+								 );
+		theVec.geometry.vertices[1]=new THREE.Vector3(theDist*theDirections[thePair.InfiniteDirections[pos]].X,
+													  theDist*theDirections[thePair.InfiniteDirections[pos]].Y,
+													  theDist*theDirections[thePair.InfiniteDirections[pos]].Z);
+		theVec.geometry.vertices[1].add(theVec.geometry.vertices[0]);
+		theVec.geometry.verticesNeedUpdate=true;
+		scene.add(theVec);
+		theVectors.push(theVec);
+		pos++;
+	}
+
+	
 }
 
 
@@ -588,13 +735,18 @@ function doDrag(theEvent){
 	if(dragInp==true){
 		thePos.normalize();
 		theEul.set(theEvent.movementY*(-0.02)*Math.cos(Math.atan2(thePos.x,thePos.z)),
-				   theEvent.movementX*(-0.01),
-				   theEvent.movementY*(0.02)*Math.sin(Math.atan2(thePos.x,thePos.z))
-				   ,'ZYX'); 
+				   theEvent.movementX*(-0.02),
+				   theEvent.movementY*(0.02)*Math.sin(Math.atan2(thePos.x,thePos.z)),
+				   'ZYX'); 
 	}
 }
 
 document.getElementById("display").addEventListener("mousemove", doDrag);
 
 
+function doZoom(theEvent){
+	theDistance=theDistance*Math.pow(1.001,theEvent.wheelDelta);	
+}
+
+document.getElementById("display").addEventListener("wheel", doZoom);
 
