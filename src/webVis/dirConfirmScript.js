@@ -596,10 +596,14 @@ function insertAssemblyPairs(){
 				console.log ("Doing the focus thing");
 			}
 		})(pos);
+		theText.className="pairText";
+		theConfBut.className="dirButton";
+		theHighlightBut.className="dirButton";
 		theDiv.appendChild(theText);
+		theDiv.appendChild(document.createElement("br"));
 		theDiv.appendChild(theHighlightBut);
 		theDiv.appendChild(theConfBut);
-		theDiv.class="dirPair";
+		theDiv.className="dirPair";
 		document.getElementById("unconfirmed").appendChild(theDiv);
 		pos++;
 	}
