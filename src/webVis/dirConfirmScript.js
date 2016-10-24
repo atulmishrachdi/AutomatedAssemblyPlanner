@@ -10,6 +10,7 @@ var thePos= new THREE.Vector3(1,0,0);
 var lastMouse=null;
 var theDistance= 300;
 var theVectors= []; //new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0x0000ff}))
+
 var theEul= new THREE.Euler(0,0,0,'XYZ');
 var baseQuat = new THREE.Quaternion(1,0,0,0);
 var deltaQuat = new THREE.Quaternion(1,0,0,0);
@@ -578,7 +579,7 @@ function insertAssemblyPairs(){
 		console.log(assemblyPairs[pos]);
 		var theDiv = document.createElement("div");
 		var theText = document.createElement("text");
-		theText.innerHTML = assemblyPairs[pos].Ref.Name + " <--- " + assemblyPairs[pos].Mov.Name;
+		theText.innerHTML = assemblyPairs[pos].Ref.Name + " \n<---\n " + assemblyPairs[pos].Mov.Name;
 		var theConfBut = document.createElement("button");
 		theConfBut.innerHTML = "confirm";
 		theConfBut.onclick = function (){
@@ -614,9 +615,11 @@ function insertAssemblyPairs(){
 
 function deHighlight(thePair){
 	console.log(thePair);
+	removeVectorView(document.getElementById("expandButton"));
 	thePair.Ref.Mesh.material=new THREE.MeshLambertMaterial(wireSettings);
 	thePair.Mov.Mesh.material=new THREE.MeshLambertMaterial(wireSettings);
 }
+
 
 function highlight(thePair){
 	console.log(thePair);
@@ -627,6 +630,9 @@ function highlight(thePair){
 	var theBox=thePair.Mov.Mesh.geometry.boundingBox.clone();
 	var distBox = thePair.Mov.Mesh.geometry.boundingBox.clone()
 	distBox.union(thePair.Ref.Mesh.geometry.boundingBox);
+	
+	
+	
 	var pos=0;
 	var lim=theVectors.length;
 	while(pos<lim){
@@ -643,7 +649,6 @@ function highlight(thePair){
 							Math.pow(distBox.max.y-distBox.min.y,2)+
 							Math.pow(distBox.max.y-distBox.min.y,2));
 	
-	theDist=theDist*1.1;
 	
 	pos=0;
 	lim=thePair.Directed.length;
@@ -701,6 +706,8 @@ function highlight(thePair){
 		theVectors.push(theVec);
 		pos++;
 	}
+	
+	insertVectorView(document.getElementById("expandButton"));
 
 	
 }
@@ -754,4 +761,247 @@ function doZoom(theEvent){
 }
 
 document.getElementById("display").addEventListener("wheel", doZoom);
+
+function insertVectorView(theButton){
+	
+	console.log("doing insertVectorView");
+	
+	if(currentPair==null){
+		return;
+	}
+	
+	currentPair.Ref.Mesh.geometry.computeBoundingBox();
+	currentPair.Mov.Mesh.geometry.computeBoundingBox();
+	var theBox=currentPair.Mov.Mesh.geometry.boundingBox.clone();
+	var distBox = currentPair.Mov.Mesh.geometry.boundingBox.clone()
+	distBox.union(currentPair.Ref.Mesh.geometry.boundingBox);
+	
+	var theDist = Math.sqrt(Math.pow(distBox.max.x-distBox.min.x,2)+
+							Math.pow(distBox.max.y-distBox.min.y,2)+
+							Math.pow(distBox.max.y-distBox.min.y,2));
+	
+	var theDiv=theButton.parentElement;
+	console.log(theDiv);
+	theButton.onclick=function () {removeVectorView(this);};
+	var theVecList=document.createElement("div");
+	theVecList.id="vecList";
+	var addButton=document.createElement("button");
+	addButton.innerHTML="Add Vector";
+	addButton.id="addButton";
+	addButton.onclick=function () {addVectorToPair(this);};
+	
+	var pos=0;
+	var lim=theVectors.length;
+	var theEntry;
+	var remBut;
+	var xLab;
+	var xInp;
+	var yLab;
+	var yInp;
+	var zLabl;
+	var zInp;
+	while(pos<lim){
+		console.log(theVectors[pos]);
+		theEntry=document.createElement("div");
+		remBut=document.createElement("button");
+		remBut.innerHTML="Remove";
+		remBut.onclick=function () {remVectorFromPair(this);};
+		xLab=document.createElement("text");
+		xLab.innerHTML="X";
+		xInp=document.createElement("input");
+		xInp.type="number";
+		xInp.step=0.01;
+		xInp.value=(theVectors[pos].geometry.vertices[1].x-theVectors[pos].geometry.vertices[0].x)/theDist;
+		xInp.onchange=function () {vecEntryUpdate(this);};
+		yLab=document.createElement("text");
+		yLab.innerHTML="Y";
+		yInp=document.createElement("input");
+		yInp.type="number";
+		yInp.step=0.01;
+		yInp.value=(theVectors[pos].geometry.vertices[1].y-theVectors[pos].geometry.vertices[0].y)/theDist;
+		yInp.onchange=function () {vecEntryUpdate(this);};
+		zLab=document.createElement("text");
+		zLab.innerHTML="Z";
+		zInp=document.createElement("input");
+		zInp.type="number";
+		zInp.step=0.01;
+		zInp.value=(theVectors[pos].geometry.vertices[1].z-theVectors[pos].geometry.vertices[0].z)/theDist;
+		zInp.onchange=function () {vecEntryUpdate(this);};
+		
+		theEntry.appendChild(xLab);
+		theEntry.appendChild(xInp);
+		theEntry.appendChild(document.createElement("br"));
+		theEntry.appendChild(yLab);
+		theEntry.appendChild(yInp);
+		theEntry.appendChild(document.createElement("br"));
+		theEntry.appendChild(zLab);
+		theEntry.appendChild(zInp);
+		theEntry.appendChild(document.createElement("br"));
+		theEntry.appendChild(remBut);
+		
+		theEntry.counterPart=theVectors[pos];
+		theEntry.className="vecEntry";
+		
+		theVecList.appendChild(theEntry);
+		pos++;
+	}
+	theDiv.appendChild(addButton);
+	theDiv.appendChild(theVecList);
+	
+}
+
+function removeVectorView(theButton){
+	
+	console.log("doing removeVectorView");
+	
+	var theDiv=theButton.parentElement;
+	var vecListHolder=document.getElementById("vecList");
+	if(vecListHolder!=null){
+		theDiv.removeChild(vecListHolder);
+		theDiv.removeChild(document.getElementById("addButton"));
+	}
+
+	theButton.onclick=function () {insertVectorView(this);};
+	
+}
+
+function addVectorToPair(theButton){
+	
+	console.log("doing addVectorToPair");
+	
+	var theDiv=theButton.parentElement;
+	var theVecList=document.getElementById("vecList");
+	console.log(theVecList);
+	
+	var theEntry=document.createElement("div");
+	var remBut=document.createElement("button");
+	remBut.innerHTML="Remove";
+	remBut.onclick=function () {remVectorFromPair(this);};
+	var xLab=document.createElement("text");
+	xLab.innerHTML="X";
+	var xInp=document.createElement("input");
+	xInp.type="number";
+	xInp.step=0.01;
+	xInp.onchange=function () {vecEntryUpdate(this);};
+	var yLab=document.createElement("text");
+	yLab.innerHTML="Y";
+	var yInp=document.createElement("input");
+	yInp.type="number";
+	yInp.step=0.01;
+	yInp.onchange=function () {vecEntryUpdate(this);};
+	var zLab=document.createElement("text");
+	zLab.innerHTML="Z";
+	var zInp=document.createElement("input");
+	zInp.type="number";
+	zInp.step=0.01;
+	zInp.onchange=function () {vecEntryUpdate(this);};
+	
+	theEntry.appendChild(xLab);
+	theEntry.appendChild(xInp);
+	theEntry.appendChild(document.createElement("br"));
+	theEntry.appendChild(yLab);
+	theEntry.appendChild(yInp);
+	theEntry.appendChild(document.createElement("br"));
+	theEntry.appendChild(zLab);
+	theEntry.appendChild(zInp);
+	theEntry.appendChild(document.createElement("br"));
+	theEntry.appendChild(remBut);
+	
+	theEntry.counterPart=null;
+	theEntry.className="vecEntry";
+	
+	theVecList.appendChild(theEntry);
+	
+}
+
+
+function remVectorFromPair(theButton){
+	
+	console.log("doing remVectorFromPair");
+	if(theButton.parentElement.counterPart!=null){
+		scene.remove(theButton.parentElement.counterPart);
+	}
+	
+	theVectors.splice(theVectors.indexOf(theButton.parentElement.counterPart),1);
+	theButton.parentElement.parentElement.removeChild(theButton.parentElement);
+	
+}
+
+function vecEntryUpdate(theInput){
+	
+	console.log("doing vecEntryUpdate");
+	
+	var theBox=currentPair.Mov.Mesh.geometry.boundingBox.clone();
+	
+	currentPair.Ref.Mesh.geometry.computeBoundingBox();
+	currentPair.Mov.Mesh.geometry.computeBoundingBox();
+	var theBox=currentPair.Mov.Mesh.geometry.boundingBox.clone();
+	var distBox = currentPair.Mov.Mesh.geometry.boundingBox.clone()
+	distBox.union(currentPair.Ref.Mesh.geometry.boundingBox);
+	
+	var theDist = Math.sqrt(Math.pow(distBox.max.x-distBox.min.x,2)+
+							Math.pow(distBox.max.y-distBox.min.y,2)+
+							Math.pow(distBox.max.y-distBox.min.y,2));
+							
+	
+	var theEntry=theInput.parentElement;
+	var theInputs=theEntry.getElementsByTagName("INPUT");
+	var pos=0;
+	var lim=theInputs.length;
+	var current;
+	while(pos<lim){
+		current=theInputs[pos];
+		if(theInputs[pos].value===""){
+			return;
+		}
+		pos++;
+	}
+	
+	var theMag = Math.sqrt( Math.pow(parseFloat(theInputs[0].value),2)+
+							Math.pow(parseFloat(theInputs[1].value),2)+
+							Math.pow(parseFloat(theInputs[2].value),2));
+	theInputs[0].value = theInputs[0].value/theMag;
+	theInputs[1].value = theInputs[1].value/theMag;
+	theInputs[2].value = theInputs[2].value/theMag;
+	
+	console.log(theInputs);
+	if(theEntry.counterPart==null){
+		var theVec = new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0xff0000}));
+		theVec.geometry.vertices[0]=new THREE.Vector3(
+								  (theBox.min.x+theBox.max.x)/2,
+								  (theBox.min.y+theBox.max.y)/2,
+								  (theBox.min.z+theBox.max.z)/2
+								 );
+		theVec.geometry.vertices[1]=new THREE.Vector3(theVec.geometry.vertices[0].x+parseFloat(theInputs[0].value)*theDist,
+													  theVec.geometry.vertices[0].y+parseFloat(theInputs[1].value)*theDist,
+													  theVec.geometry.vertices[0].z+parseFloat(theInputs[2].value)*theDist);
+		theVec.geometry.vertices[1].add(theVec.geometry.vertices[0]);
+		scene.add(theVec);
+		theVectors.push(theVec);
+		theVec.geometry.verticesNeedUpdate=true;
+		theEntry.counterPart=theVec;
+	}
+	else{
+		var theVerts=theEntry.counterPart.geometry.vertices;
+		theVerts[1].x=theVerts[0].x+parseFloat(theInputs[0].value)*theDist;
+		theVerts[1].y=theVerts[0].y+parseFloat(theInputs[1].value)*theDist;
+		theVerts[1].z=theVerts[0].z+parseFloat(theInputs[2].value)*theDist;
+		theEntry.counterPart.geometry.verticesNeedUpdate=true;
+		
+	}
+	
+	pos=1;
+	lim=theDirections.length;
+	var best=theDirections[0];
+	var ang=1000;
+	while(pos<lim){
+		pos++;
+	}
+	
+	console.log(theEntry.counterPart.geometry.vertices);
+	
+}
+
+
+
 
