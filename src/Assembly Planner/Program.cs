@@ -76,10 +76,13 @@ namespace Assembly_Planner
             globalDirPool = DisassemblyDirectionsWithFastener.RunGraphGeneration(AssemblyGraph, SolidsNoFastener);
             // the second user interaction must happen here
 
+            
             saveDirections();
-            Console.WriteLine("Press enter once input parts table generated >>");
+            /*
+            Console.WriteLine("Press enter once input directions generated >>");
             Console.ReadLine();
             loadDirections();
+            */
 
             NonadjacentBlockingWithPartitioning.Run(AssemblyGraph, SolidsNoFastener, globalDirPool);
             Stabilityfunctions.GenerateReactionForceInfo(AssemblyGraph);

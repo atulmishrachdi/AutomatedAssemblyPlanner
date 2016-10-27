@@ -171,7 +171,10 @@ var render = function () {
 	requestAnimationFrame( render );
 	
 	if(lastPair!==null){
-		deHighlight(lastPair);
+		var holder=currentPair;
+		currentPair=lastPair;
+		deHighlight(currentPair);
+		currentPair=holder;
 		highlight(currentPair);
 		lastPair=null;
 	}
@@ -570,13 +573,7 @@ function insertAssemblyPairs(){
 	
 	var pos=0;
 	var lim=assemblyPairs.length;
-	console.log("Logging Assembly Pairs")
-	console.log(lim);
-	console.log(assemblyPairs);
 	while(pos<lim){
-		console.log("logging a pair");
-		console.log(pos);
-		console.log(assemblyPairs[pos]);
 		var theDiv = document.createElement("div");
 		var theText = document.createElement("text");
 		theText.innerHTML = assemblyPairs[pos].Ref.Name + " \n<---\n " + assemblyPairs[pos].Mov.Name;
@@ -613,22 +610,26 @@ function insertAssemblyPairs(){
 }
 
 
+
 function deHighlight(thePair){
-	console.log(thePair);
+	console.log("The vectors are: ",theVectors);
 	removeVectorView(document.getElementById("expandButton"));
 	thePair.Ref.Mesh.material=new THREE.MeshLambertMaterial(wireSettings);
 	thePair.Mov.Mesh.material=new THREE.MeshLambertMaterial(wireSettings);
 }
 
 
+
 function highlight(thePair){
+	
+	
 	console.log(thePair);
 	thePair.Ref.Mesh.material=new THREE.MeshLambertMaterial({color: 0x4444FF /*, transparent: true, opacity: 0.6, depthTest: false */});
 	thePair.Mov.Mesh.material=new THREE.MeshLambertMaterial({color: 0xFF4444 /*, transparent: true, opacity: 0.6, depthTest: false */});
 	thePair.Ref.Mesh.geometry.computeBoundingBox();
 	thePair.Mov.Mesh.geometry.computeBoundingBox();
 	var theBox=thePair.Mov.Mesh.geometry.boundingBox.clone();
-	var distBox = thePair.Mov.Mesh.geometry.boundingBox.clone()
+	var distBox = thePair.Mov.Mesh.geometry.boundingBox.clone();
 	distBox.union(thePair.Ref.Mesh.geometry.boundingBox);
 	
 	
@@ -666,6 +667,7 @@ function highlight(thePair){
 		theVec.geometry.verticesNeedUpdate=true;
 		scene.add(theVec);
 		theVectors.push(theVec);
+		console.log("Vector List Size is: ",theVectors.length);
 		pos++;
 	}
 	
@@ -685,6 +687,7 @@ function highlight(thePair){
 		theVec.geometry.verticesNeedUpdate=true;
 		scene.add(theVec);
 		theVectors.push(theVec);
+		console.log("Vector List Size is: ",theVectors.length);
 		pos++;
 	}
 	
@@ -704,6 +707,7 @@ function highlight(thePair){
 		theVec.geometry.verticesNeedUpdate=true;
 		scene.add(theVec);
 		theVectors.push(theVec);
+		console.log("Vector List Size is: ",theVectors.length);
 		pos++;
 	}
 	
@@ -711,6 +715,7 @@ function highlight(thePair){
 
 	
 }
+
 
 
 function fixOpacity(theSlider){
@@ -801,7 +806,6 @@ function insertVectorView(theButton){
 	var zLabl;
 	var zInp;
 	while(pos<lim){
-		console.log(theVectors[pos]);
 		theEntry=document.createElement("div");
 		remBut=document.createElement("button");
 		remBut.innerHTML="Remove";
@@ -845,6 +849,7 @@ function insertVectorView(theButton){
 		theVecList.appendChild(theEntry);
 		pos++;
 	}
+	
 	theDiv.appendChild(addButton);
 	theDiv.appendChild(theVecList);
 	
@@ -856,7 +861,48 @@ function removeVectorView(theButton){
 	
 	var theDiv=theButton.parentElement;
 	var vecListHolder=document.getElementById("vecList");
-	if(vecListHolder!=null){
+	
+	currentPair.InfiniteDirections.length=0;
+	currentPair.DoublyDirected.length=0;
+	currentPair.Directed.length=0;
+	
+	if(vecListHolder!=null){	
+		var vecPos=0;
+		var vecLim=theVectors.length;
+		console.log(theVectors);
+		
+		var best;
+		var ang;
+		var testVector;
+		currentPair.Directed.length=0;
+		currentPair.DoublyDirected.length=0;
+		currentPair.InfiniteDirections.length=0;
+		while(vecPos<vecLim){
+			testVector==new THREE.Vector3(1,1,1);
+			//
+			testVector.copy(theVectors[vecPos].geometry.vertices[1]);
+			testVector.sub(theVectors[vecPos].geometry.vertices[0]);
+			testVector.normalize();
+			//console.log(testVector);
+			pos=getDir(testVector);
+			console.log(theVectors[vecPos]);
+			if(theVectors[vecPos].color===0x0000FF){
+				currentPair.InfiniteDirections.push[pos];
+				console.log("<--->");
+			}
+			if(theVectors[vecPos].color===0x00FF00){
+				currentPair.DoublyDirected.push[pos];
+				console.log("<--->");
+			}
+			if(theVectors[vecPos].color===0xFF0000){
+				currentPair.Directed.push[pos];
+				console.log("<--->");
+			}
+			
+			console.log("Vector List Size is: ",theVectors.length);
+			vecPos++;
+		}
+		
 		theDiv.removeChild(vecListHolder);
 		theDiv.removeChild(document.getElementById("addButton"));
 	}
@@ -980,6 +1026,8 @@ function vecEntryUpdate(theInput){
 		theVectors.push(theVec);
 		theVec.geometry.verticesNeedUpdate=true;
 		theEntry.counterPart=theVec;
+		
+
 	}
 	else{
 		var theVerts=theEntry.counterPart.geometry.vertices;
@@ -990,17 +1038,31 @@ function vecEntryUpdate(theInput){
 		
 	}
 	
-	pos=1;
-	lim=theDirections.length;
-	var best=theDirections[0];
-	var ang=1000;
-	while(pos<lim){
-		pos++;
-	}
+	
 	
 	console.log(theEntry.counterPart.geometry.vertices);
 	
 }
+
+
+function getDir(theVec){
+	
+	var maxDot=-1;
+	var theDot;
+	var best=-1;
+	var pos=0;
+	var lim=theDirections.length;
+	while(pos<lim){
+		theDot=theDirections[pos].X*theVec.x+theDirections[pos].Y*theVec.y+theDirections[pos].Z*theVec.z;
+		if(theDot>maxDot){
+			maxDot=theDot;
+			best=pos;
+		}
+		pos++;
+	}
+	return best;
+}
+
 
 
 
