@@ -453,7 +453,7 @@ function linkParts(){
 		thePair.DoublyDirected = namePairs[pos].DoublyDirected;
 		thePair.InfiniteDirections = namePairs[pos].InfiniteDirections;
 		if(thePair!=null){
-			assemblyPairs.push(thePair)
+			assemblyPairs.push(thePair);
 		}
 		pos++;
 	}
@@ -503,6 +503,9 @@ function parseData(){
 		docInfDirs=grab(thePairs[pos],"InfiniteDirections");
 		infiniteDirections=[];
 		
+		docFinDirs=grab(thePairs[pos],"FiniteDirections");
+		finiteDirections=[];
+		
 		
 		
 		if($(docDirs[vecPos]).innerHTML != "false"){
@@ -539,13 +542,29 @@ function parseData(){
 			}
 		}
 		
+		/*
+		if($(docFinDirs[vecPos]).innerHTML != "false"){
+			docFinDirs = $(docInfDirs).children("int");
+			vecPos=0;
+			vecLim=docFinDirs.length;
+			while(vecPos<vecLim){
+				theVec=parseInt(docFinDirs[vecPos].innerHTML);
+				finiteDirections.push(theVec);
+				vecPos++;
+			}
+		}
+		*/
 		theVec=grab(thePairs[pos],"vector");
 		namePairs.push({
 			Ref: theRef.innerHTML,
 			Mov: theMov.innerHTML,
 			Directed: directed,
 			DoublyDirected: doublyDirected,
-			InfiniteDirections: infiniteDirections
+			InfiniteDirections: infiniteDirections,
+			FiniteDirections: null /*finiteDirections*/,
+			Fasteners: grab(thePairs[pos],"Fasteners").innerHTML,
+			Certainty: grab(thePairs[pos],"Certainty").innerHTML,
+			ConnectionType: grab(thePairs[pos],"ConnectionType").innerHTML
 		});
 		pos++;
 	}
@@ -612,7 +631,7 @@ function insertAssemblyPairs(){
 
 
 function deHighlight(thePair){
-	console.log("The vectors are: ",theVectors);
+	console.log("The number of vectors is ",theVectors.length);
 	removeVectorView(document.getElementById("expandButton"));
 	thePair.Ref.Mesh.material=new THREE.MeshLambertMaterial(wireSettings);
 	thePair.Mov.Mesh.material=new THREE.MeshLambertMaterial(wireSettings);
@@ -638,12 +657,13 @@ function highlight(thePair){
 	var lim=theVectors.length;
 	while(pos<lim){
 		scene.remove( theVectors[pos] );
-		delete theVectors[pos];
 		pos++;
 	}
 	
-	
+
 	theVectors.length=0;
+	console.log("Just set the Vectors to 0");
+	console.log("The pair is: ", thePair);
 	var theVec;
 	
 	var theDist = Math.sqrt(Math.pow(distBox.max.x-distBox.min.x,2)+
@@ -710,6 +730,28 @@ function highlight(thePair){
 		console.log("Vector List Size is: ",theVectors.length);
 		pos++;
 	}
+	
+	/*
+	pos=0;
+	lim=thePair.FiniteDirections.length;
+	while(pos<lim){
+		theVec = new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0xffff00}));
+		theVec.geometry.vertices[0]=new THREE.Vector3(
+								  (theBox.min.x+theBox.max.x)/2,
+								  (theBox.min.y+theBox.max.y)/2,
+								  (theBox.min.z+theBox.max.z)/2
+								 );
+		theVec.geometry.vertices[1]=new THREE.Vector3(theDist*theDirections[thePair.FiniteDirections[pos]].X,
+													  theDist*theDirections[thePair.FiniteDirections[pos]].Y,
+													  theDist*theDirections[thePair.FiniteDirections[pos]].Z);
+		theVec.geometry.vertices[1].add(theVec.geometry.vertices[0]);
+		theVec.geometry.verticesNeedUpdate=true;
+		scene.add(theVec);
+		theVectors.push(theVec);
+		console.log("Vector List Size is: ",theVectors.length);
+		pos++;
+	}
+	*/
 	
 	insertVectorView(document.getElementById("expandButton"));
 
@@ -862,9 +904,7 @@ function removeVectorView(theButton){
 	var theDiv=theButton.parentElement;
 	var vecListHolder=document.getElementById("vecList");
 	
-	currentPair.InfiniteDirections.length=0;
-	currentPair.DoublyDirected.length=0;
-	currentPair.Directed.length=0;
+
 	
 	if(vecListHolder!=null){	
 		var vecPos=0;
@@ -878,7 +918,7 @@ function removeVectorView(theButton){
 		currentPair.DoublyDirected.length=0;
 		currentPair.InfiniteDirections.length=0;
 		while(vecPos<vecLim){
-			testVector==new THREE.Vector3(1,1,1);
+			testVector=new THREE.Vector3(1,1,1);
 			//
 			testVector.copy(theVectors[vecPos].geometry.vertices[1]);
 			testVector.sub(theVectors[vecPos].geometry.vertices[0]);
@@ -886,20 +926,23 @@ function removeVectorView(theButton){
 			//console.log(testVector);
 			pos=getDir(testVector);
 			console.log(theVectors[vecPos]);
-			if(theVectors[vecPos].color===0x0000FF){
-				currentPair.InfiniteDirections.push[pos];
+			if(theVectors[vecPos].material.color.r===1){
+				currentPair.InfiniteDirections.push(pos);
 				console.log("<--->");
 			}
-			if(theVectors[vecPos].color===0x00FF00){
-				currentPair.DoublyDirected.push[pos];
+			if(theVectors[vecPos].material.color.g===1){
+				currentPair.DoublyDirected.push(pos);
 				console.log("<--->");
 			}
-			if(theVectors[vecPos].color===0xFF0000){
-				currentPair.Directed.push[pos];
+			if(theVectors[vecPos].material.color.b===1){
+				currentPair.Directed.push(pos);
 				console.log("<--->");
 			}
 			
 			console.log("Vector List Size is: ",theVectors.length);
+			console.log("InfDir List Size is: ",currentPair.InfiniteDirections.length);
+			console.log("DubDir List Size is: ",currentPair.DoublyDirected.length);
+			console.log("Direct List Size is: ",currentPair.Directed.length);
 			vecPos++;
 		}
 		
@@ -968,7 +1011,10 @@ function remVectorFromPair(theButton){
 		scene.remove(theButton.parentElement.counterPart);
 	}
 	
+	console.log("The vector length before splice: ",theVectors.lenth);
 	theVectors.splice(theVectors.indexOf(theButton.parentElement.counterPart),1);
+	console.log("The vector length after splice: ",theVectors.lenth);
+	
 	theButton.parentElement.parentElement.removeChild(theButton.parentElement);
 	
 }
@@ -1024,6 +1070,7 @@ function vecEntryUpdate(theInput){
 		theVec.geometry.vertices[1].add(theVec.geometry.vertices[0]);
 		scene.add(theVec);
 		theVectors.push(theVec);
+		console.log("theVectors Updated. New length is: ",theVectors.length);
 		theVec.geometry.verticesNeedUpdate=true;
 		theEntry.counterPart=theVec;
 		
@@ -1063,6 +1110,40 @@ function getDir(theVec){
 	return best;
 }
 
+
+
+
+function renderXML(){
+	
+	var start= "<?xml version='1.0' encoding='utf-8'?>\n"+
+				"<DirectionSaveStructure xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>\n";
+	var end= "</DirectionSaveStructure>\n";
+	
+	var dirContent= "<Directions>\n";
+	var pos=0;
+	var lim=theDirections.length;
+	while(pos<lim){
+		dirContent=dirContent+"<ArrayOfDouble>\n";
+		dirContent=dirContent+"<double>"+theDirections[pos].X.toString()+"</double>\n";
+		dirContent=dirContent+"<double>"+theDirections[pos].Y.toString()+"</double>\n";
+		dirContent=dirContent+"<double>"+theDirections[pos].Z.toString()+"</double>\n";
+		dirContent=dirContent+"</ArrayOfDouble>\n";
+		pos++;
+	}
+	dirContent = dirContent + "</Directions>\n";
+	
+	var arcContent = "<arcs>\n";
+	pos=0;
+	lim=assemblyPairs.length;
+	while(pos<lim){
+		arcContent = "<arc xsi:type='Connection'>\n";
+		arcContent = "</arc>\n";
+		pos++;
+	}
+	arcContent= arcContent + "</arcs>\n";
+	
+	
+}
 
 
 
