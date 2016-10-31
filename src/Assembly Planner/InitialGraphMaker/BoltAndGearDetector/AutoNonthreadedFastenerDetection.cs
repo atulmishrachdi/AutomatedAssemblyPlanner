@@ -55,6 +55,12 @@ namespace Assembly_Planner
             {
                 var initialCertainty = FastenerGaussianNaiveBayes.GaussianNaiveBayesClassifier(solidPrimitive[solid],
                     solid);
+                /*
+                if (FastenerDetector.SolidHasFastenerKeyword(solid))
+                {
+                    initialCertainty = initialCertainty + 0.2;
+                }
+                */
                 FastenerDetector.PotentialFastener[solid] = 0.1 + initialCertainty;
                 foreach (var up in multipleRefs[solid])
                     FastenerDetector.PotentialFastener[up] = 0.1 + initialCertainty;

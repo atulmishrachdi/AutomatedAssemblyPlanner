@@ -38,8 +38,8 @@ namespace Assembly_Planner
                 // if the csv containing weights and votes exists or not.
                 // Even if the trainingData csv doesnt exist but the csv of w and votes exist,
                 // we can run the classifier. 
-                // In TrainingDataGenerator, if user says dont regenerate the training data, now check and
-                // see if the WeightsAndVotes.csv exists or not.
+                // In TrainingDataGenerator, if user says dont regenerate the training data,
+                // now check and see if the WeightsAndVotes.csv exists or not.
             }
             var fastener = new HashSet<TessellatedSolid>();
             if (multipleRefs.Count == 1) return fastener;
@@ -379,7 +379,32 @@ namespace Assembly_Planner
             }
             return approvedFasteners;
         }
+
+        internal static bool SolidHasFastenerKeyword(TessellatedSolid solid)
+        {
+            string[] keyWordList ={ "screw",
+                                    "washer",
+                                    "pin",
+                                    "bolt",
+                                    "nut",
+                                    "rivet",
+                                    "grommet"
+            };
+            int pos = 0;
+            int lim = keyWordList.Length;
+            while (pos < lim)
+            {
+                if (solid.FileName.Contains(keyWordList[pos]))
+                {
+                    return true;
+                }
+                pos++;
+            }
+
+            return false;
+        }
     }
+
     internal class TemporaryFlat
     {
         internal List<PolygonalFace> Faces;

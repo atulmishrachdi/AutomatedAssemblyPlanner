@@ -329,8 +329,10 @@ function addEntry(theEntry){
 	var theSurfaceArea=Number.parseFloat(grab(theEntry,"surface_area").innerHTML);
 	
 	var fstChecked="<input type='checkbox' onchange='flipCheck(this)' value='false'></input>";
+	console.log(theCertainty);
 	if(theCertainty>0.5){
-		fstChecked="<input type='checkbox' onchange='flipCheck(this) value='true' checked></input>";
+		console.log("Box is checked");
+		fstChecked="<input type='checkbox' onchange='flipCheck(this) value=true checked></input>";
 	}
 	
 	var theAmbiguity=1-2*Math.abs(theCertainty-0.5);
