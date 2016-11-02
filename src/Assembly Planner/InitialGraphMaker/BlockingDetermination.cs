@@ -133,6 +133,7 @@ namespace Assembly_Planner
                             }
                         }
                         localDirInd.Clear();
+                        AddSixMainAxes(finalLocalDirInd, globalDirPool);
                         foreach (var i in finalLocalDirInd)
                             localDirInd.Add(i);
                         return true;
@@ -195,7 +196,44 @@ namespace Assembly_Planner
             certainty = 1.0;
             return false;
         }
-
+        private static void AddSixMainAxes(List<int> finalLocalDirInd, List<int> globalDirPool)
+        {
+            var temp = new List<int>(finalLocalDirInd);
+            var mainDris = new List<double[]>
+            {
+                new[] {0, 0, 1.0},
+                new[] {0, 1.0, 0},
+                new[] {1.0, 0, 0},
+                new[] {0, 0, -1.0},
+                new[] {0, -1.0, 0},
+                new[] {-1.0, 0, 0}
+            };
+            foreach (var dir in mainDris)
+            {
+                var index = -1;
+                for (var i = 0; i < DisassemblyDirections.Directions.Count; i++)
+                {
+                    var d = DisassemblyDirections.Directions[i];
+                    if (d[0] == dir[0] && d[1] == dir[1] && d[2] == dir[2]) index = i;
+                }
+                if (!finalLocalDirInd.Contains(index))
+                {
+                    var firstFilter = temp.Where(d => 1 - dir.dotProduct(DisassemblyDirections.Directions[d]) <= 0.07).ToList();
+                    if (firstFilter.Any())
+                    {
+                        var secondFilter =
+                            firstFilter.Where(d => 1 - dir.dotProduct(DisassemblyDirections.Directions[d]) <= 0.007)
+                                .ToList();
+                        finalLocalDirInd.Add(index);
+                        if (!globalDirPool.Contains(index)) globalDirPool.Add(index);
+                        if (secondFilter.Any())
+                            foreach (var i in secondFilter)
+                                finalLocalDirInd.Remove(i);
+                        continue;
+                    }
+                }
+            }
+        }
         internal static bool ProximityBoosted(TessellatedSolid solid1, TessellatedSolid solid2, List<int> localDirInd, out double certainty)
         {
             var OverlapAABBPartitions = new List<PartitionAABB[]>();
