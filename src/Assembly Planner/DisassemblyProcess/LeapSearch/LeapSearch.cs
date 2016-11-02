@@ -43,6 +43,7 @@ namespace Assembly_Planner
         internal AssemblySequence Run(designGraph graph, Dictionary<string, List<TessellatedSolid>> solids,
             List<int> globalDirPool)
         {
+            Console.WriteLine("\n\nLeap Optimization Search ....");
             Graph = graph;
             TimeEstm = 50;
             TimeEstmCounter = 0;
@@ -218,6 +219,7 @@ namespace Assembly_Planner
                 }
                 if (tree != null) break;
             }
+            Console.WriteLine("Sequence is generated.");
             return tree;
         }
 

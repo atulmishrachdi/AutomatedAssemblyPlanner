@@ -41,6 +41,7 @@ namespace Assembly_Planner
 
         public static Dictionary<string, double> Dijkstra2(AssemblySequence candidate)
         {
+            Console.WriteLine("\n\nOptimal Orientation Search....");
             var taskCommands = new Dictionary<string, double>();
 
             InstTasks = new Dictionary<string, SubAssembly>();

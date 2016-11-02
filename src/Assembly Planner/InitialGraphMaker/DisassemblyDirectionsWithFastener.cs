@@ -99,15 +99,13 @@ namespace Assembly_Planner
 
             // Part to part interaction to obtain removal directions between every connected pair
             //------------------------------------------------------------------------------------------
-            //var s = Stopwatch.StartNew();
-            //s.Start();
-            //Console.WriteLine();
-            //Console.WriteLine("Blocking Determination is running ....");
-            //Bridge.StatusReporter.ReportStatusMessage("Generating the Liaison Graph - Adjacent Blocking Determination ...", 0.5f);
-            //Bridge.StatusReporter.ReportProgress(0);
+
+            Console.WriteLine(" \n\nAdjacent Blocking Determination ...");
+            var width = 55;
+            LoadingBar.start(width, 0);
+
             BlockingDetermination.OverlappingSurfaces = new List<OverlappedSurfaces>();
             var solidNofastenerList = solidsNoFastener.ToList();
-            //var totalCases = ((solidsNoFastener.Count - 1) * (solidsNoFastener.Count)) / 2.0;
             long totalTriTobeChecked = 0;
             var overlapCheck = new HashSet<KeyValuePair<string, List<TessellatedSolid>>[]>();
             for (var i = 0; i < solidsNoFastener.Count - 1; i++)
@@ -122,10 +120,19 @@ namespace Assembly_Planner
                     totalTriTobeChecked += tri2Sub1 * tri2Sub2;
                 }
             }
+            var total = overlapCheck.Count;
+            var refresh = (int)Math.Ceiling(((float)total) / ((float)(width * 4)));
+            var check = 0;
             long counter = 0;
+            
             //foreach (var each in overlapCheck)
             Parallel.ForEach(overlapCheck, each =>
             {
+                if (check % refresh == 0)
+                {
+                    LoadingBar.refresh(width, ((float)check) / ((float)total));
+                }
+                check++;
                 var localDirInd = new List<int>();
                 for (var t = 0; t < DisassemblyDirections.Directions.Count; t++)
                     localDirInd.Add(t);
@@ -164,12 +171,10 @@ namespace Assembly_Planner
                         AddInformationToArc(a, finDirs, infDirs);
                     }
                 }
-                //if (counter < totalTriTobeChecked)
-                //Bridge.StatusReporter.ReportProgress(counter / (float)totalTriTobeChecked);
             }//
             );
-            //Bridge.StatusReporter.ReportProgress(1);
-            //if (Bridge.SavedSessionIsStarted) return globalDirPool;
+            LoadingBar.refresh(width, 1);
+            Console.WriteLine("\n");
             Fastener.AddFastenersInformation(assemblyGraph, solidsNoFastener, SolidPrimitive);
             // create oppositeDirections for global direction pool.
             FindingOppositeDirectionsForGlobalPool(globalDirPool);

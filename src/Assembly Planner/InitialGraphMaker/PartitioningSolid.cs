@@ -400,16 +400,22 @@ namespace Assembly_Planner
 
         internal static void CreatePartitions(Dictionary<string, List<TessellatedSolid>> solids)
         {
-            var s1 = new Stopwatch();
-            s1.Start();
-            Console.WriteLine();
-            Console.WriteLine("Octree is being generated ....");
+            Console.WriteLine("\nUpdating Bounding Geometries ....");
+            int width = 55;
+            int refresh = (int)Math.Ceiling(((float)solids.Count) / ((float)(width * 4)));
+            int check = 0;
+            LoadingBar.start(width, 0);
             var solidGeometries = solids.SelectMany(s => s.Value).ToList();
             var solidGeometries2 = Program.Solids.SelectMany(s => s.Value).ToList();
             var totalVerts = solidGeometries.Sum(s => s.Vertices.Count());
             //foreach(var solid in solids)
             Parallel.ForEach(solidGeometries, solid =>
             {
+                if (check % refresh == 0)
+                {
+                    LoadingBar.refresh(width, ((float)check) / ((float)solidGeometries.Count));
+                }
+                check++;
                 //solid.SimplifyByPercentage(0.5);
                 var prtn = Run(new HashSet<Vertex>(solid.Vertices), new HashSet<PolygonalFace>(solid.Faces),
                     BoundingGeometry.OrientedBoundingBoxDic[solid].CornerVertices.Select(
@@ -440,8 +446,7 @@ namespace Assembly_Planner
                     PartitionsAABB.Add(solid, prtn);
                 }
             });//
-            s1.Stop();
-            Console.WriteLine("Octree Generation is done in:" + "     " + s1.Elapsed);
+            LoadingBar.refresh(width, 1);
         }
     }
 

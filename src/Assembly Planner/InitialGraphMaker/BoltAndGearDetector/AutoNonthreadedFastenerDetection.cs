@@ -22,6 +22,9 @@ namespace Assembly_Planner
             //      1. Find the small objects using all of the solids
             //      2. Group them using small objects
             //      3. Detect the fasteners using multiple references. (for each similar object, detect one of them) 
+            var width = 55;
+            var check = 0;
+            LoadingBar.start(width, 0);
 
             var smallParts = FastenerDetector.SmallObjectsDetector(DisassemblyDirectionsWithFastener.PartsWithOneGeom);
                 //new List<TessellatedSolid>(DisassemblyDirectionsWithFastener.PartsWithOneGeom);
@@ -49,10 +52,16 @@ namespace Assembly_Planner
                 solidPrimitive);
             var checkedSolids = new HashSet<TessellatedSolid>();
             FastenerGaussianNaiveBayes.GNB();
-
+            var refresh = (int)Math.Ceiling((float)uniqueParts.Count / (float)(width * 4));
             Parallel.ForEach(uniqueParts, solid =>
                 //foreach (var solid in uniqueParts)
             {
+                if (check % refresh == 0)
+                {
+                    LoadingBar.refresh(width, ((float)check) / ((float)uniqueParts.Count));
+                }
+                check++;
+
                 var initialCertainty = FastenerGaussianNaiveBayes.GaussianNaiveBayesClassifier(solidPrimitive[solid],
                     solid);
                 /*
@@ -117,6 +126,8 @@ namespace Assembly_Planner
             // I will try to look for that.
             // Is there anyway to detect more?
             ConnectFastenersNutsAndWashers(groupedPotentialFasteners);
+            LoadingBar.refresh(width, 1);
+            Console.WriteLine("\n");
         }
 
         private static void PreSelectedFastenerToFastenerClass(

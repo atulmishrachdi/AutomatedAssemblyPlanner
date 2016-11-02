@@ -13,6 +13,10 @@ namespace Assembly_Planner
             Dictionary<TessellatedSolid, List<PrimitiveSurface>> solidPrimitive,
             Dictionary<TessellatedSolid, List<TessellatedSolid>> multipleRefs)
         {
+            var width = 55;
+            var check = 0;
+            LoadingBar.start(width, 0);
+
             var smallParts = FastenerDetector.SmallObjectsDetector(DisassemblyDirectionsWithFastener.PartsWithOneGeom);
 
             PreSelectedFastenerToFastenerClass(solidPrimitive, multipleRefs);
@@ -37,11 +41,17 @@ namespace Assembly_Planner
                 solidPrimitive);
             List<int> learnerVotes;
             var learnerWeights = FastenerPerceptronLearner.ReadingLearnerWeightsAndVotesFromCsv(out learnerVotes);
-
+            var refresh = (int)Math.Ceiling((float)uniqueParts.Count / (float)(width * 4));
 
             Parallel.ForEach(uniqueParts, solid =>
                 //foreach (var solid in uniqueParts)
             {
+                if (check % refresh == 0)
+                {
+                    LoadingBar.refresh(width, ((float)check) / ((float)uniqueParts.Count));
+                }
+                check++;
+
                 double toolSize;
                 var commonHead = AutoThreadedFastenerDetection.CommonHeadCheck(solid, solidPrimitive[solid],
                     equalPrimitivesForEveryUniqueSolid[solid], out toolSize);
@@ -196,6 +206,8 @@ namespace Assembly_Planner
                 );
             // now use groupped small objects:
             AutoNonthreadedFastenerDetection.ConnectFastenersNutsAndWashers(groupedPotentialFasteners);
+            LoadingBar.refresh(width, 1);
+            Console.WriteLine("\n");
         }
 
         private static void AddThreadedOrNonthreadedFastener(TessellatedSolid solid, List<TessellatedSolid> repeated,

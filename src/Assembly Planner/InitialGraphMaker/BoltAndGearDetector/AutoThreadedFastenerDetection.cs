@@ -21,6 +21,9 @@ namespace Assembly_Planner
 
             // Important: if the fasteners are threaded using solidworks Fastener toolbox, it will not
             //            have helix. The threads will be small cones with the same axis and equal area.
+            var width = 55;
+            var check = 0;
+            LoadingBar.start(width, 0);
 
             var smallParts = FastenerDetector.SmallObjectsDetector(DisassemblyDirectionsWithFastener.PartsWithOneGeom);
 
@@ -47,10 +50,16 @@ namespace Assembly_Planner
             List<int> learnerVotes;
             var learnerWeights = FastenerPerceptronLearner.ReadingLearnerWeightsAndVotesFromCsv(out learnerVotes);
             FastenerGaussianNaiveBayes.GNB();
-
+            var refresh = (int)Math.Ceiling((float)uniqueParts.Count / (float)(width * 4));
             Parallel.ForEach(uniqueParts, solid =>
             //foreach (var solid in uniqueParts)
             {
+                if (check % refresh == 0)
+                {
+                    LoadingBar.refresh(width, ((float)check) / ((float)uniqueParts.Count));
+                }
+                check++;
+
                 var initialCertainty = FastenerGaussianNaiveBayes.GaussianNaiveBayesClassifier(solidPrimitive[solid], solid);
                 FastenerDetector.PotentialFastener[solid] = initialCertainty;
                 foreach (var up in multipleRefs[solid])
@@ -219,6 +228,8 @@ namespace Assembly_Planner
                 ); //
             // now use groupped small objects:
             AutoNonthreadedFastenerDetection.ConnectFastenersNutsAndWashers(groupedPotentialFasteners);
+            LoadingBar.refresh(width, 1);
+            Console.WriteLine("\n");
         }
 
         private static void PreSelectedFastenerToFastenerClass(

@@ -26,7 +26,7 @@ namespace Assembly_Planner
             var s = Stopwatch.StartNew();
             s.Start();
             Console.WriteLine();
-            Console.WriteLine("Detecting Fasteners ....");
+            Console.WriteLine("\nDetecting Fasteners ....");
             Fasteners.Clear();
             Nuts.Clear();
             Washers.Clear();
@@ -53,9 +53,6 @@ namespace Assembly_Planner
                     AutoSemiThreadedFastenerDetection.Run(solidPrimitive, multipleRefs);
             }
             RemoveDetectedFastenersFromPotentialFasteners();
-            //s.Stop();
-            //Console.WriteLine("Fastener Detection:" + "     " + s.Elapsed);
-            //ReportStats();
             return fastener;
         }
 

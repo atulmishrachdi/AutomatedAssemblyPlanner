@@ -34,10 +34,7 @@ namespace Assembly_Planner
         //       our search space into k number of sections obtained originally from OBB of the solid.
         internal static void Run(designGraph graph, Dictionary<string, List<TessellatedSolid>> subAssems, List<int> gDir)
         {
-            Console.WriteLine();
-            Console.WriteLine("Nonadjacent Blocking Determination is running ....");
-            var stopWat = Stopwatch.StartNew();
-            stopWat.Start();
+            Console.WriteLine("\n\nNonadjacent Blocking Determination is running ....");
             long totalCases = 0;
             var subAssemsToList = subAssems.ToList();
             for (var i = 0; i < subAssems.Count - 1; i++)
@@ -205,12 +202,7 @@ namespace Assembly_Planner
                 }
             }
             LoadingBar.refresh(width, 1);
-            //stopWat.Stop();
-            //Console.WriteLine("Nonadjacent Blocking Determination is done in:" + "     " + stopWat.Elapsed);
-            //PrintOutSomeStats(graph);
             CreateSameDirectionDictionary(gDir);
-            stopWat.Stop();
-            Console.WriteLine("\nNonadjacent Blocking Determination is done in:" + "     " + stopWat.Elapsed);
         }
 
         private static node GetNode(designGraph graph, string solidName)

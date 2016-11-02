@@ -21,8 +21,6 @@ namespace Assembly_Planner
 
         internal static Dictionary<TessellatedSolid, List<PrimitiveSurface>> PrimitiveMaker(List<TessellatedSolid> parts)
         {
-            var s = Stopwatch.StartNew();
-            s.Start();
             Console.WriteLine();
             Console.WriteLine("Classifying Primitives for " + parts.Count + " unique parts ....");
             var partPrimitive = new Dictionary<TessellatedSolid, List<PrimitiveSurface>>();
@@ -49,8 +47,6 @@ namespace Assembly_Planner
             }
              );//
             LoadingBar.refresh(width, 1);
-            s.Stop();
-            Console.WriteLine("\nPrimitive classification is done in:" + "     " + s.Elapsed);
             return partPrimitive;
         }
 

@@ -54,8 +54,6 @@ namespace Assembly_Planner
             //"src/Test/FoodPackagingMachine/FPMSTL2";
             //"src/Test/test8";
 #endif
-            var s = Stopwatch.StartNew();
-            s.Start();
             Solids = GetSTLs(inputDir);
             var detectFasteners = true; //TBI
             var threaded = 0; // 0:none, 1: all, 2: subset
@@ -93,9 +91,7 @@ namespace Assembly_Planner
             var cand = new AssemblyCandidate() { Sequence = solutions };
             cand.SaveToDisk(Directory.GetCurrentDirectory() + "\\workspace\\solution.xml");
             //WorkerAllocation.Run(solutions, reorientation);
-            s.Stop();
-            Console.WriteLine();
-            Console.WriteLine("TOTAL TIME:" + "     " + s.Elapsed);
+            Console.WriteLine("\n\nDone");
             Console.ReadLine();
         }
 
