@@ -4,8 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AssemblyEvaluation;
-//using Cudafy;
-//using Cudafy.Translator;
 using StarMathLib;
 using TVGL;
 using Vertex = TVGL.Vertex;
@@ -123,6 +121,27 @@ namespace Assembly_Planner
             return sorted;
         }
 
+        internal static Edge[] SortedEdgesOfTriangle2(PolygonalFace triangle)
+        {
+            // the first one is the shortest edge, the last one is the longest
+            var sorted = new Edge[3];
+            var dic = new Dictionary<double, Edge>();
+            double dis0 = triangle.Edges[0].Length;
+            double dis1 = triangle.Edges[1].Length;
+            double dis2 = triangle.Edges[2].Length;
+            dic.Add(dis0, triangle.Edges[0]);
+            if (dic.ContainsKey(dis1)) dis1 += 1e-6;
+            dic.Add(dis1, triangle.Edges[1]);
+            if (dic.ContainsKey(dis2)) dis2 += 1e-6;
+            dic.Add(dis2, triangle.Edges[2]);
+            var sortedKey = dic.Keys.ToList();
+            sortedKey.Sort();
+            sorted[0] = dic[sortedKey[0]];
+            sorted[1] = dic[sortedKey[1]];
+            sorted[2] = dic[sortedKey[2]];
+            return sorted;
+        }
+
         public static double[] RayIntersectionPointWithFace(Ray ray, PolygonalFace face)
         {
             // this is exclusively for fastener detection -> Partitioning bounding box and cylinder
@@ -188,7 +207,7 @@ namespace Assembly_Planner
 
         public static bool RayIntersectsWithFaceFinInf(Ray ray, PolygonalFace face)
         {
-            if (ray.Direction.dotProduct(face.Normal) > -0.15) return false;
+            if (ray.Direction.dotProduct(face.Normal) > -0.37) return false; // -0.15
             var w = ray.Position.subtract(face.Vertices[0].Position);
             var s1 = (face.Normal.dotProduct(w)) / (face.Normal.dotProduct(ray.Direction));
             //var v = new double[] { w[0] + s1 * ray.Direction[0] + point[0], w[1] + s1 * ray.Direction[1] + point[1], w[2] + s1 * ray.Direction[2] + point[2] };
@@ -232,7 +251,7 @@ namespace Assembly_Planner
 
         public static bool RayIntersectsWithFaceNABD(Ray ray, PolygonalFace face)
         {
-            if (ray.Direction.dotProduct(face.Normal) > -0.15) return false;
+            if (ray.Direction.dotProduct(face.Normal) > -0.37) return false; //-0.15
             var w = ray.Position.subtract(face.Vertices[0].Position);
             var s1 = (face.Normal.dotProduct(w)) / (face.Normal.dotProduct(ray.Direction));
             //var v = new double[] { w[0] + s1 * ray.Direction[0] + point[0], w[1] + s1 * ray.Direction[1] + point[1], w[2] + s1 * ray.Direction[2] + point[2] };
@@ -255,34 +274,6 @@ namespace Assembly_Planner
             dot = crossv1v2.dotProduct(crossv2v0);
             return (dot >= -0.001);
         }
-
-        /*public static void RayIntersectsWithFaceNABD(GThread thread,  double[] rayPos, double[] rayDir, PolygonalFace face)
-        {
-
-
-            if (ray.Direction.dotProduct(face.Normal) > -0.15) return false;
-            var w = ray.Position.subtract(face.Vertices[0].Position);
-            var s1 = (face.Normal.dotProduct(w)) / (face.Normal.dotProduct(ray.Direction));
-            //var v = new double[] { w[0] + s1 * ray.Direction[0] + point[0], w[1] + s1 * ray.Direction[1] + point[1], w[2] + s1 * ray.Direction[2] + point[2] };
-            //var v = new double[] { ray.Position[0] - s1 * ray.Direction[0], ray.Position[1] - s1 * ray.Direction[1], ray.Position[2] - s1 * ray.Direction[2] };
-            var pointOnTrianglesPlane = new[]
-            {
-                ray.Position[0] - s1*ray.Direction[0], ray.Position[1] - s1*ray.Direction[1],
-                ray.Position[2] - s1*ray.Direction[2]
-            };
-            if (pointOnTrianglesPlane.subtract(ray.Position).dotProduct(ray.Direction) < 0.001)
-                return false; // on the opposite side
-            var v0 = face.Vertices[0].Position.subtract(pointOnTrianglesPlane);
-            var v1 = face.Vertices[1].Position.subtract(pointOnTrianglesPlane);
-            var v2 = face.Vertices[2].Position.subtract(pointOnTrianglesPlane);
-            var crossv0v1 = v0.crossProduct(v1).normalize();
-            var crossv1v2 = v1.crossProduct(v2).normalize();
-            var dot = crossv0v1.dotProduct(crossv1v2);
-            if (dot < -0.001 || double.IsNaN(dot)) return false;
-            var crossv2v0 = v2.crossProduct(v0).normalize();
-            dot = crossv1v2.dotProduct(crossv2v0);
-            return (dot >= -0.001);
-        }*/
 
         internal static PolygonalFace[] LongestPlaneOfObbDetector(BoundingBox obb, out PolygonalFace facePrepToRD1,
     out PolygonalFace facePrepToRD2)

@@ -173,20 +173,17 @@ namespace Assembly_Planner
             Fastener.AddFastenersInformation(assemblyGraph, solidsNoFastener, SolidPrimitive);
             // create oppositeDirections for global direction pool.
             FindingOppositeDirectionsForGlobalPool(globalDirPool);
-            //sw.Stop();
+            
             // Simplify the solids, before doing anything
             //------------------------------------------------------------------------------------------
-            //if (solidsNoFastener.Count == 20)
-            {
-                SimplifySolids(solidsNoFastener);
-                // Implementing region octree for every solid
-                //------------------------------------------------------------------------------------------
-                PartitioningSolid.Partitions = new Dictionary<TessellatedSolid, Partition[]>();
-                PartitioningSolid.PartitionsAABB = new Dictionary<TessellatedSolid, PartitionAABB[]>();
-                PartitioningSolid.CreatePartitions(solidsNoFastener);
-            }
-            //s.Stop();
-            //Console.WriteLine("Blocking Determination is done in:" + "     " + s.Elapsed);
+            SimplifySolids(solidsNoFastener, 0.7);
+
+            // Implementing region octree for every solid
+            //------------------------------------------------------------------------------------------
+            PartitioningSolid.Partitions = new Dictionary<TessellatedSolid, Partition[]>();
+            PartitioningSolid.PartitionsAABB = new Dictionary<TessellatedSolid, PartitionAABB[]>();
+            PartitioningSolid.CreatePartitions(solidsNoFastener);
+            
             return globalDirPool;
         }
 
@@ -234,28 +231,27 @@ namespace Assembly_Planner
         }
 
 
-        private static void SimplifySolids(Dictionary<string, List<TessellatedSolid>> subAssems)
+        private static void SimplifySolids(Dictionary<string, List<TessellatedSolid>> subAssems, double percentage)
         {
             foreach (var sa in subAssems)
             {
-                //using (var fileStream = File.Create(sa.Key + ".amf"))
-                //    IO.Save(fileStream, sa.Value, FileType.AMF);
                 foreach (var ts in sa.Value)
                 {
                     if (ts.Errors == null || ((ts.Errors.EdgesThatDoNotLinkBackToFace == null ||
                                                ts.Errors.EdgesThatDoNotLinkBackToFace.Count < 2) &&
-                                              ts.Errors.SingledSidedEdges.Count < 5))
+                                              (ts.Errors.SingledSidedEdges == null ||
+                                               ts.Errors.SingledSidedEdges.Count < 5)))
                     {
                         gCounter++;
-                        //if (ts.Faces.Count() == 410) continue;
-                        //var perc = (ts.Faces.Length - 1000)/(double)ts.Faces.Length;
-                        ts.SimplifyByPercentage(0.7);
-                        //ts.Repair();
-                        //continue;
+                        try
+                        {
+                            ts.SimplifyByPercentage(percentage);
+                        }
+                        catch (Exception)
+                        {
+                            continue;
+                        }
                     }
-                    //if (ts.Faces.Length <= 800) continue;
-                    //ts.SimplifyByPercentage(0.5);
-                    //ts.Repair();
                 }
             }
         }

@@ -260,7 +260,7 @@ namespace Assembly_Planner
         private static bool BlockingDeterminationWithCvhOverlapping(double[] direction, List<TessellatedSolid> subAssemMoving,
             List<TessellatedSolid> subAssemBlocking)
         {
-            var rays = RayGenerator(subAssemMoving, direction);
+            var rays = RayGeneratorForCVHOverlap(subAssemMoving, direction);
             foreach (var ray in rays)
             {
                 foreach (var solidBlocking in subAssemBlocking)
@@ -311,7 +311,7 @@ namespace Assembly_Planner
             List<TessellatedSolid> subAssemBlocking)
         {
             //direction = DisassemblyDirections.Directions[0];
-            var rays = RayGenerator(subAssemMoving, direction);
+            var rays = RayGeneratorForNoCVHOverlap(subAssemMoving, direction);
             foreach (var ray in rays)
             {
                 foreach (var solidBlocking in subAssemBlocking)
@@ -436,7 +436,18 @@ namespace Assembly_Planner
 
         }
 
-        private static List<Ray> RayGenerator(List<TessellatedSolid> solidMoving, double[] direction)
+        private static List<Ray> RayGeneratorForCVHOverlap(List<TessellatedSolid> solidMoving, double[] direction)
+        {
+            var rays = CombinedCVHForMultipleGeometries[solidMoving[0].Name].Vertices.Select(
+                vertex =>
+                    new Ray(
+                        new Vertex(new[]{vertex.Position[0], vertex.Position[1],
+                            vertex.Position[2]}),
+                        new[] { direction[0], direction[1], direction[2] })).ToList();
+            // and shuffle them:
+            return rays.OrderBy(a => Guid.NewGuid()).ToList();
+        }
+        private static List<Ray> RayGeneratorForNoCVHOverlap(List<TessellatedSolid> solidMoving, double[] direction)
         {
             var rays = CombinedCVHForMultipleGeometries[solidMoving[0].Name].Vertices.Select(
                 vertex =>
@@ -449,7 +460,7 @@ namespace Assembly_Planner
                 NonadjacentBlockingDetermination.AddingMoreRays(
                     CombinedCVHForMultipleGeometries[solidMoving[0].Name].Edges.Where(
                     e => e != null && e.Length > 2).ToArray(), direction));
-            return rays;
+            return rays.OrderBy(a => Guid.NewGuid()).ToList();
         }
 
         public static bool RayIntersectsForObb(Ray ray, PolygonalFace face)
