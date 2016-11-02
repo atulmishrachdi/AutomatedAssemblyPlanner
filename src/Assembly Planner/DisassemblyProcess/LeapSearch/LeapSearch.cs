@@ -362,7 +362,17 @@ namespace Assembly_Planner
 
         private static void GenerateOptions(HashSet<Component> A, Dictionary<option, HashSet<int>> gOptions, bool relaxingSc = false)
         {
-            foreach (var cndDirInd in DirPool)
+            // I can filter the directions here. I dunno how important is this step, but let's do it
+            // TBT
+            var filteredDirections = new List<int>();
+            var tempHy = Graph.addHyperArc(A.Cast<node>().ToList());
+            foreach (Connection arc in tempHy.IntraArcs.Where(a => a is Connection))
+                filteredDirections.AddRange(arc.InfiniteDirections.Where(id => !filteredDirections.Contains(id)));
+            filteredDirections.AddRange(
+                filteredDirections.Select(f => DisassemblyDirections.DirectionsAndOppositsForGlobalpool[f])
+                    .Where(id => !filteredDirections.Contains(id)).ToList());
+            Graph.removeHyperArc(tempHy);
+            foreach (var cndDirInd in filteredDirections)
             {
                 SCCBinary.StronglyConnectedComponents(Graph, A, cndDirInd);
                 var blockingDic = DBGBinary.DirectionalBlockingGraph(Graph, cndDirInd, relaxingSc);
