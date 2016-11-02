@@ -208,6 +208,7 @@ namespace Assembly_Planner
             //stopWat.Stop();
             //Console.WriteLine("Nonadjacent Blocking Determination is done in:" + "     " + stopWat.Elapsed);
             //PrintOutSomeStats(graph);
+            CreateSameDirectionDictionary(gDir);
             stopWat.Stop();
             Console.WriteLine("\nNonadjacent Blocking Determination is done in:" + "     " + stopWat.Elapsed);
         }
@@ -216,6 +217,25 @@ namespace Assembly_Planner
         {
             return graph.nodes.Where(n => n.name == solidName).Cast<Component>().ToList()[0];
         }
+
+        private static void CreateSameDirectionDictionary(List<int> gDir)
+        {
+            DisassemblyDirections.DirectionsAndSame = new Dictionary<int, HashSet<int>>();
+            foreach (var gD in gDir)
+            {
+                if (DisassemblyDirections.DirectionsAndSame.ContainsKey(gD)) continue;
+                var sameDirs =
+                    gDir.Where(
+                        d =>
+                            /*d != gD &&*/
+                            Math.Abs(1 -
+                                     DisassemblyDirections.Directions[d].dotProduct(DisassemblyDirections.Directions[gD])) <
+                            OverlappingFuzzification.CheckWithGlobDirsParall2);
+
+                DisassemblyDirections.DirectionsAndSame.Add(gD, new HashSet<int>(sameDirs));
+            }
+        }
+
         private static List<int> FinalSetOfDirectionsFinder(designGraph graph, List<TessellatedSolid> solid, List<int> filteredDirections)
         {
             var dirs = new List<int>();

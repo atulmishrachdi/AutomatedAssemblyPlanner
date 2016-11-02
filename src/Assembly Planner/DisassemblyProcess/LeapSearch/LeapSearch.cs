@@ -642,8 +642,8 @@ namespace Assembly_Planner
         private void FillingParallelDirections(List<int> globalDirPool)
         {
             SCCBinary.ParallelDirections = new Dictionary<int, HashSet<int>>();
-            //DBGBinary.ParallelAndSame = new Dictionary<int, HashSet<int>>();
-            //DBGBinary.ParallelAndOpposite = new Dictionary<int, HashSet<int>>();
+            DBGBinary.ParallelAndSame = new Dictionary<int, HashSet<int>>();
+            DBGBinary.ParallelAndOpposite = new Dictionary<int, HashSet<int>>();
             foreach (var dir in globalDirPool)
             {
                 var parallelAndSame =
@@ -663,8 +663,8 @@ namespace Assembly_Planner
                 var parallels = new HashSet<int>(parallelAndSame);
                 parallels.UnionWith(parallelAndOppos);
                 SCCBinary.ParallelDirections.Add(dir, parallels);
-                //DBGBinary.ParallelAndSame.Add(dir, new HashSet<int>(parallelAndSame));
-                //DBGBinary.ParallelAndOpposite.Add(dir, new HashSet<int>(parallelAndOppos));
+                DBGBinary.ParallelAndSame.Add(dir, new HashSet<int>(parallelAndSame));
+                DBGBinary.ParallelAndOpposite.Add(dir, new HashSet<int>(parallelAndOppos));
             }
         }
     }

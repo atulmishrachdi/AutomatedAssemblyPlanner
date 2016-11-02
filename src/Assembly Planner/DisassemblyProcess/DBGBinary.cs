@@ -12,8 +12,10 @@ namespace Assembly_Planner
     internal class DBGBinary
     {
         static List<hyperarc> Preceedings = new List<hyperarc>();
-        private static int co;
-        private static List<hyperarc> visited = new List<hyperarc>();
+        private static int Counter0;
+        private static List<hyperarc> Visited = new List<hyperarc>();
+        public static Dictionary<int, HashSet<int>> ParallelAndSame;
+        public static Dictionary<int, HashSet<int>> ParallelAndOpposite;
         internal static Dictionary<hyperarc, List<hyperarc>> DirectionalBlockingGraph(designGraph assemblyGraph, int cndDirInd, bool relaxingSc = false)
         {
             // So, I am trying to make the DBG for for each seperate hyperarc. 
@@ -79,13 +81,11 @@ namespace Assembly_Planner
             dbgDictionary = UpdateBlockingDic(dbgDictionary);
             //if (MutualBlocking(assemblyGraph, dbgDictionary))
             //    dbgDictionary = DirectionalBlockingGraph(assemblyGraph, seperate, cndDirInd); // This is expensive. Get rid of it.
-            dbgDictionary = SolveMutualBlocking(assemblyGraph, dbgDictionary, dbgDictionaryAdjacent, relaxingSc);
             if (MutualBlocking2(assemblyGraph, dbgDictionary))
-            {
-                var df = 2;
-            }
+                dbgDictionary = SolveMutualBlocking(assemblyGraph, dbgDictionary, dbgDictionaryAdjacent, relaxingSc);
             return dbgDictionary;
         }
+
 
         private static Dictionary<hyperarc, List<hyperarc>> CombineWithNonAdjacentBlockingsUsingSecondaryConnections(
             Dictionary<hyperarc, List<hyperarc>> dbgDictionary, designGraph assemblyGraph, int cndDirInd,
@@ -94,8 +94,8 @@ namespace Assembly_Planner
             var oppositeDir = new List<int> { DisassemblyDirections.DirectionsAndOppositsForGlobalpool[cndDirInd] };
             foreach (SecondaryConnection SC in assemblyGraph.arcs.Where(a => a is SecondaryConnection))
             {
-                var blockedScc = dbgDictionary.Keys.ToList().Where(scc => scc.nodes.Contains(SC.From));
-                var blockingScc = dbgDictionary.Keys.ToList().Where(scc => scc.nodes.Contains(SC.To));
+                var blockedScc = dbgDictionary.Keys.Where(scc => scc.nodes.Contains(SC.From));
+                var blockingScc = dbgDictionary.Keys.Where(scc => scc.nodes.Contains(SC.To));
                 if (!blockedScc.Any() || !blockingScc.Any())
                     continue;
                 if (ContainsADirection(new HashSet<int>(SC.Directions), cndDirInd) &&
@@ -141,12 +141,7 @@ namespace Assembly_Planner
 
         private static bool ContainsADirection(HashSet<int> dirs, int d)
         {
-            if (
-                dirs.Any(
-                    dir =>
-                        Math.Abs(1 -
-                                 DisassemblyDirections.Directions[dir].dotProduct(DisassemblyDirections.Directions[d])) <
-                        OverlappingFuzzification.CheckWithGlobDirsParall2)) return true;
+            if (dirs.Any(DisassemblyDirections.DirectionsAndSame[d].Contains)) return true;
             return false;
         }
 
@@ -369,15 +364,17 @@ namespace Assembly_Planner
             // -1: parallel but opposite direction
             //  0: not parallel. 
             //  2: parralel same direction and opposite direction
-            var cndDir = DisassemblyDirections.Directions[cndDirInd];
+            //var cndDir = DisassemblyDirections.Directions[cndDirInd];
             var paralAndSame = false;
             var paralButOppose = false;
             foreach (var dirInd in borderArc.InfiniteDirections)
             {
-                var arcDisDir = DisassemblyDirections.Directions[dirInd];
-                if (Math.Abs(1 - arcDisDir.dotProduct(cndDir)) < OverlappingFuzzification.CheckWithGlobDirsParall2)
+                if (ParallelAndSame[cndDirInd].Contains(dirInd))
+                    //var arcDisDir = DisassemblyDirections.Directions[dirInd];
+                    //if (Math.Abs(1 - arcDisDir.dotProduct(cndDir)) < OverlappingFuzzification.CheckWithGlobDirsParall2)
                     paralAndSame = true;
-                if (Math.Abs(1 + arcDisDir.dotProduct(cndDir)) < OverlappingFuzzification.CheckWithGlobDirsParall2)
+                if (ParallelAndOpposite[cndDirInd].Contains(dirInd))
+                    //if (Math.Abs(1 + arcDisDir.dotProduct(cndDir)) < OverlappingFuzzification.CheckWithGlobDirsParall2)
                     paralButOppose = true;
             }
             if (paralAndSame && paralButOppose) return 2;
@@ -410,10 +407,10 @@ namespace Assembly_Planner
             var borders = new List<Connection>();
             foreach (Component node in sccHy.nodes)
             {
-                foreach (Connection arc in node.arcs.Where(a => a.GetType() == typeof(Connection)))
+                foreach (Connection arc in node.arcs.Where(a => a is Connection))
                 {
-                    var otherNode = arc.From == node ? arc.To : arc.From;
-                    if (sccHy.nodes.Contains(otherNode)) continue;
+                    //var otherNode = arc.otherNode(node); //arc.From == node ? arc.To : arc.From;
+                    if (sccHy.nodes.Contains(arc.otherNode(node))) continue;
                     borders.Add(arc);
                 }
             }
@@ -425,10 +422,10 @@ namespace Assembly_Planner
             foreach (var sccHy in blockingDic.Keys)
             {
                 Preceedings.Clear();
-                co = 0;
+                Counter0 = 0;
                 PreceedingFinder(sccHy, blockingDic);
                 Preceedings = Updates.UpdatePreceedings(Preceedings);
-                visited.Clear();
+                Visited.Clear();
                 var cpy = new List<hyperarc>(Preceedings);
                 newBlocking.Add(sccHy, cpy);
             }
@@ -436,13 +433,13 @@ namespace Assembly_Planner
         }
         private static void PreceedingFinder(hyperarc sccHy, Dictionary<hyperarc, List<hyperarc>> blockingDic)
         {
-            co++;
-            if (co != 1)
+            Counter0++;
+            if (Counter0 != 1)
                 Preceedings.Add(sccHy);
             foreach (var value in blockingDic[sccHy].Where(v => v != null))
             {
-                if (visited.Contains(value)) continue;
-                visited.Add(value);
+                if (Visited.Contains(value)) continue;
+                Visited.Add(value);
                 PreceedingFinder(value, blockingDic);
             }
         }
