@@ -405,6 +405,7 @@ namespace Assembly_Planner
             Console.WriteLine();
             Console.WriteLine("Octree is being generated ....");
             var solidGeometries = solids.SelectMany(s => s.Value).ToList();
+            var solidGeometries2 = Program.Solids.SelectMany(s => s.Value).ToList();
             var totalVerts = solidGeometries.Sum(s => s.Vertices.Count());
             //foreach(var solid in solids)
             Parallel.ForEach(solidGeometries, solid =>
@@ -418,19 +419,20 @@ namespace Assembly_Planner
                     Partitions.Add(solid, prtn);
                 }
             });//
-            //foreach (var solid in solidGeometries)
-            Parallel.ForEach(solidGeometries, solid =>
+
+            // partition of AABB:
+            Parallel.ForEach(solidGeometries2, solid =>
             {
                 var cornerVer = new[]
                 {
-                    new Vertex(new []{solid.XMin,solid.YMin, solid.ZMin}), 
-                    new Vertex(new []{solid.XMin,solid.YMin, solid.ZMax}), 
-                    new Vertex(new []{solid.XMin,solid.YMax, solid.ZMin}), 
-                    new Vertex(new []{solid.XMin,solid.YMax, solid.ZMax}), 
-                    new Vertex(new []{solid.XMax,solid.YMin, solid.ZMin}), 
-                    new Vertex(new []{solid.XMax,solid.YMin, solid.ZMax}), 
-                    new Vertex(new []{solid.XMax,solid.YMax, solid.ZMin}), 
-                    new Vertex(new []{solid.XMax,solid.YMax, solid.ZMax}), 
+                    new Vertex(new []{solid.XMin,solid.YMin, solid.ZMin}),
+                    new Vertex(new []{solid.XMin,solid.YMin, solid.ZMax}),
+                    new Vertex(new []{solid.XMin,solid.YMax, solid.ZMin}),
+                    new Vertex(new []{solid.XMin,solid.YMax, solid.ZMax}),
+                    new Vertex(new []{solid.XMax,solid.YMin, solid.ZMin}),
+                    new Vertex(new []{solid.XMax,solid.YMin, solid.ZMax}),
+                    new Vertex(new []{solid.XMax,solid.YMax, solid.ZMin}),
+                    new Vertex(new []{solid.XMax,solid.YMax, solid.ZMax}),
                 };
                 var prtn = RunForAABB(new HashSet<Vertex>(solid.Vertices), new HashSet<PolygonalFace>(solid.Faces), cornerVer);
                 lock (PartitionsAABB)
