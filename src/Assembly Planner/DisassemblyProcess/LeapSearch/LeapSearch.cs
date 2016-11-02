@@ -34,6 +34,7 @@ namespace Assembly_Planner
         protected static List<double> InitialStablyH = new List<double>();
         protected static double FinalTimeWeight;
         protected static double FinalStableWeight;
+
         protected static Dictionary<HashSet<Component>, MemoData> Memo =
             new Dictionary<HashSet<Component>, MemoData>(HashSet<Component>.CreateSetComparer());
 
@@ -44,14 +45,13 @@ namespace Assembly_Planner
             List<int> globalDirPool, int beamWidth)
         {
             Graph = graph;
-            AssemblyEvaluator = new EvaluationForBinaryTree(solids);
             TimeEstm = 50;
             TimeEstmCounter = 0;
             BeamWidth = beamWidth;
-            Constants.Values = new Constants();
             DirPool = globalDirPool;
             FirstRun = true;
-            var initialMemo = InitializeMemoInitial();
+
+            InitializeDataStructures(graph, solids, globalDirPool);
             /*SubAssembly tree = null;
             
             var tokenSource = new CancellationTokenSource();
@@ -68,7 +68,7 @@ namespace Assembly_Planner
             tokenSource.Dispose();
             InitializeMemo();*/
             var tree = LeapOptimizationSearch();
-            return new AssemblySequence { Subassemblies = new List<SubAssembly> { tree } };
+            return new AssemblySequence {Subassemblies = new List<SubAssembly> {tree}};
         }
 
         private static SubAssembly LeapOptimizationSearch()
@@ -78,7 +78,7 @@ namespace Assembly_Planner
             var beamChildern = new SortedList<double, HashSet<TreeCandidate>>(new CandidateComparer());
             var cands = GetCandidates(new HashSet<Component>(Graph.nodes.Cast<Component>()), 0);
             foreach (var c in cands)
-                SortedStack.Add(c.G + c.H, new HashSet<TreeCandidate> { c });
+                SortedStack.Add(c.G + c.H, new HashSet<TreeCandidate> {c});
             while (SortedStack.Any())
             {
                 TimeEstmCounter++;
@@ -131,7 +131,7 @@ namespace Assembly_Planner
                         foreach (var rC in refCands)
                         {
                             rC.parent = treeCandidate;
-                            localSorted.Add(rC.G + rC.H, new HashSet<TreeCandidate> { rC });
+                            localSorted.Add(rC.G + rC.H, new HashSet<TreeCandidate> {rC});
                         }
                         var otherTC1 = cand.Where(c => c != treeCandidate);
                         var cost1 = otherTC1.Sum(tc => tc.G + tc.H);
@@ -153,7 +153,7 @@ namespace Assembly_Planner
                         foreach (var mC in movCands)
                         {
                             mC.parent = treeCandidate;
-                            localSorted.Add(mC.G + mC.H, new HashSet<TreeCandidate> { mC });
+                            localSorted.Add(mC.G + mC.H, new HashSet<TreeCandidate> {mC});
                         }
                         //all.Add(localSorted);
                         var otherTC2 = cand.Where(c => c != treeCandidate);
@@ -182,7 +182,7 @@ namespace Assembly_Planner
                         foreach (var mC in movCandsF)
                         {
                             mC.parent = treeCandidate;
-                            localSorted.Add(rC.G + rC.H + mC.G + mC.H, new HashSet<TreeCandidate> { rC, mC });
+                            localSorted.Add(rC.G + rC.H + mC.G + mC.H, new HashSet<TreeCandidate> {rC, mC});
                         }
                     }
 
@@ -210,7 +210,8 @@ namespace Assembly_Planner
                     if (FirstRun)
                     {
                         FirstRun = false;
-                        AssignNewWeight(InitialTimes, InitialStableScores, Program.StabilityWeightChosenByUser, out FinalTimeWeight, out FinalStableWeight);
+                        AssignNewWeight(InitialTimes, InitialStableScores, Program.StabilityWeightChosenByUser,
+                            out FinalTimeWeight, out FinalStableWeight);
                         //    out FinalTimeWeight, out FinalStableWeight);
                         //tree = LeapOptimizationSearch();
                     }
@@ -222,13 +223,14 @@ namespace Assembly_Planner
             return tree;
         }
 
-        private static void AssignNewWeight(List<double> initialTimes, List<double> initialStableScores, double stabilityWeightChosenByUser, out double finalTimeWeight, out double finalStableWeight)
+        private static void AssignNewWeight(List<double> initialTimes, List<double> initialStableScores,
+            double stabilityWeightChosenByUser, out double finalTimeWeight, out double finalStableWeight)
         {
-            var meantime = initialTimes.Sum() / initialTimes.Count;
-            var meanSB = initialStableScores.Sum() / initialStableScores.Count;
-            var scale = meantime / meanSB;
+            var meantime = initialTimes.Sum()/initialTimes.Count;
+            var meanSB = initialStableScores.Sum()/initialStableScores.Count;
+            var scale = meantime/meanSB;
             finalTimeWeight = 1 - stabilityWeightChosenByUser;
-            finalStableWeight = scale * stabilityWeightChosenByUser;
+            finalStableWeight = scale*stabilityWeightChosenByUser;
         }
 
         private static SubAssembly CreateTheSequence(HashSet<TreeCandidate> cand)
@@ -302,6 +304,7 @@ namespace Assembly_Planner
                     FillUpMemo(sa.parent);
             }
         }
+
         private static void UpdateSortedStackWithBeamWidth(int beamWidth)
         {
             if (FirstRun) beamWidth = 1;
@@ -310,7 +313,8 @@ namespace Assembly_Planner
                     SortedStack.RemoveAt(i);
         }
 
-        private static HashSet<TreeCandidate> GetCandidates(HashSet<Component> nodes, double parentTransitionCost, bool relaxingSc = false)
+        private static HashSet<TreeCandidate> GetCandidates(HashSet<Component> nodes, double parentTransitionCost,
+            bool relaxingSc = false)
         {
             var gOptions = new Dictionary<option, HashSet<int>>();
             var candidates = new HashSet<TreeCandidate>();
@@ -329,14 +333,15 @@ namespace Assembly_Planner
                     continue;
                 }
                 TC.RefNodes =
-                    new HashSet<Component>(TC.sa.Install.Reference.PartNames.Select(n => (Component)Graph[n]));
+                    new HashSet<Component>(TC.sa.Install.Reference.PartNames.Select(n => (Component) Graph[n]));
                 TC.MovNodes =
-                    new HashSet<Component>(TC.sa.Install.Moving.PartNames.Select(n => (Component)Graph[n]));
+                    new HashSet<Component>(TC.sa.Install.Moving.PartNames.Select(n => (Component) Graph[n]));
                 //if (Math.Min (TC.RefNodes.Count, TC.MovNodes.Count) > 21)	//example constraint
                 //	continue;
                 var HR = H(TC.RefNodes);
                 var HM = H(TC.MovNodes);
-                TC.G = parentTransitionCost + TC.sa.Install.Time + Constants.Innerstabilityweight * TC.sa.InternalStabilityInfo.Totalsecore;
+                TC.G = parentTransitionCost + TC.sa.Install.Time +
+                       Constants.Innerstabilityweight*TC.sa.InternalStabilityInfo.Totalsecore;
                 TC.H = Math.Max(HR, HM);
                 if (FirstRun)
                 {
@@ -360,7 +365,8 @@ namespace Assembly_Planner
             return candidates;
         }
 
-        private static void GenerateOptions(HashSet<Component> A, Dictionary<option, HashSet<int>> gOptions, bool relaxingSc = false)
+        private static void GenerateOptions(HashSet<Component> A, Dictionary<option, HashSet<int>> gOptions,
+            bool relaxingSc = false)
         {
             // I can filter the directions here. I dunno how important is this step, but let's do it
             // TBT
@@ -378,7 +384,7 @@ namespace Assembly_Planner
                 var blockingDic = DBGBinary.DirectionalBlockingGraph(Graph, cndDirInd, relaxingSc);
                 var options = OptionGeneratorProBinary.GenerateOptions(Graph, A, blockingDic, gOptions, cndDirInd);
                 foreach (var opt in options)
-                    gOptions.Add(opt, new HashSet<int> { cndDirInd });
+                    gOptions.Add(opt, new HashSet<int> {cndDirInd});
             }
         }
 
@@ -398,7 +404,7 @@ namespace Assembly_Planner
             foreach (Connection arc in hy.IntraArcs.Where(a => a is Connection))
             {
                 HashSet<Component> arcnodes =
-                    new HashSet<Component>(new Component[] { (Component)arc.From, (Component)arc.To });
+                    new HashSet<Component>(new Component[] {(Component) arc.From, (Component) arc.To});
                 Values.Add(Memo[arcnodes].Value);
             }
             Graph.removeHyperArc(hy);
@@ -415,8 +421,8 @@ namespace Assembly_Planner
         {
             foreach (Connection arc in Graph.arcs.Where(a => a is Connection))
             {
-                var Asm = new HashSet<Component>(new Component[] { (Component)arc.From, (Component)arc.To });
-                var Fr = new List<Component>(new Component[] { (Component)arc.From });
+                var Asm = new HashSet<Component>(new Component[] {(Component) arc.From, (Component) arc.To});
+                var Fr = new List<Component>(new Component[] {(Component) arc.From});
                 var dirs = new HashSet<int>(arc.InfiniteDirections);
                 SubAssembly sa;
                 if (AssemblyEvaluator.EvaluateSub(Graph, Asm, Fr, dirs, out sa) > 0)
@@ -432,8 +438,8 @@ namespace Assembly_Planner
 
             foreach (var node in Graph.nodes)
             {
-                var component = (Component)node;
-                var N = new HashSet<Component>(new[] { component });
+                var component = (Component) node;
+                var N = new HashSet<Component>(new[] {component});
                 var sa = new SubAssembly(N, EvaluationForBinaryTree.ConvexHullsForParts[component.name], component.Mass,
                     component.Volume, new Vertex(component.CenterOfMass));
                 MemoData D = new MemoData(0, sa);
@@ -451,7 +457,7 @@ namespace Assembly_Planner
                 var combinations = CombinationFinder(i);
                 var column = new HashSet<HashSet<Component>>();
                 foreach (var comb in combinations)
-                //Parallel.ForEach(combinations, comb =>
+                    //Parallel.ForEach(combinations, comb =>
                 {
                     foreach (var subAssem1 in newMemo[comb[0] - 1])
                     {
@@ -525,8 +531,8 @@ namespace Assembly_Planner
             var column = new HashSet<HashSet<Component>>();
             foreach (var node in Graph.nodes)
             {
-                var component = (Component)node;
-                var N = new HashSet<Component>(new[] { component });
+                var component = (Component) node;
+                var N = new HashSet<Component>(new[] {component});
                 var sa = new SubAssembly(N, EvaluationForBinaryTree.ConvexHullsForParts[component.name], component.Mass,
                     component.Volume, new Vertex(component.CenterOfMass));
                 MemoData D = new MemoData(0, sa);
@@ -540,8 +546,8 @@ namespace Assembly_Planner
             column = new HashSet<HashSet<Component>>();
             foreach (Connection arc in Graph.arcs.Where(a => a is Connection))
             {
-                var Asm = new HashSet<Component>(new Component[] { (Component)arc.From, (Component)arc.To });
-                var Fr = new List<Component>(new Component[] { (Component)arc.From });
+                var Asm = new HashSet<Component>(new Component[] {(Component) arc.From, (Component) arc.To});
+                var Fr = new List<Component>(new Component[] {(Component) arc.From});
                 var dirs = new HashSet<int>(arc.InfiniteDirections);
                 SubAssembly sa;
                 if (AssemblyEvaluator.EvaluateSub(Graph, Asm, Fr, dirs, out sa) > 0)
@@ -588,12 +594,14 @@ namespace Assembly_Planner
                 else
                 {
                     var opposities =
-                        connection.InfiniteDirections.Select(inD => DisassemblyDirections.DirectionsAndOppositsForGlobalpool[inD]);
+                        connection.InfiniteDirections.Select(
+                            inD => DisassemblyDirections.DirectionsAndOppositsForGlobalpool[inD]);
                     union.UnionWith(opposities.Where(d => !union.Contains(d)));
                 }
             }
             return union;
         }
+
         private static bool ContainsADirection(HashSet<int> dirs, int d)
         {
             if (
@@ -604,20 +612,60 @@ namespace Assembly_Planner
                         OverlappingFuzzification.CheckWithGlobDirsParall2)) return true;
             return false;
         }
+
         private static List<int[]> CombinationFinder(int num)
         {
             var list = new List<int[]>();
             if (num == 1) return list;
             for (var i = 1; i < num; i++)
                 for (var j = i; j < num; j++)
-                    if (i + j == num) list.Add(new[] { i, j });
+                    if (i + j == num) list.Add(new[] {i, j});
             return list;
         }
+
         private static void ClearEveryThing()
         {
             Memo.Clear();
             MemoCandidates.Clear();
             EvaluationForBinaryTree.AdjacentParts.Clear();
+        }
+
+        private void InitializeDataStructures(designGraph graph, Dictionary<string, List<TessellatedSolid>> solids,
+            List<int> globalDirPool)
+        {
+            AssemblyEvaluator = new EvaluationForBinaryTree(solids);
+            Constants.Values = new Constants();
+            InitializeMemoInitial();
+            FillingParallelDirections(globalDirPool);
+        }
+
+        private void FillingParallelDirections(List<int> globalDirPool)
+        {
+            SCCBinary.ParallelDirections = new Dictionary<int, HashSet<int>>();
+            //DBGBinary.ParallelAndSame = new Dictionary<int, HashSet<int>>();
+            //DBGBinary.ParallelAndOpposite = new Dictionary<int, HashSet<int>>();
+            foreach (var dir in globalDirPool)
+            {
+                var parallelAndSame =
+                    globalDirPool.Where(
+                        dir2 =>
+                            Math.Abs(1 -
+                                     DisassemblyDirections.Directions[dir2].dotProduct(
+                                         DisassemblyDirections.Directions[dir])) <
+                            OverlappingFuzzification.CheckWithGlobDirsParall2);
+                var parallelAndOppos =
+                    globalDirPool.Where(
+                        dir2 =>
+                            Math.Abs(1 +
+                                     DisassemblyDirections.Directions[dir2].dotProduct(
+                                         DisassemblyDirections.Directions[dir])) <
+                            OverlappingFuzzification.CheckWithGlobDirsParall2);
+                var parallels = new HashSet<int>(parallelAndSame);
+                parallels.UnionWith(parallelAndOppos);
+                SCCBinary.ParallelDirections.Add(dir, parallels);
+                //DBGBinary.ParallelAndSame.Add(dir, new HashSet<int>(parallelAndSame));
+                //DBGBinary.ParallelAndOpposite.Add(dir, new HashSet<int>(parallelAndOppos));
+            }
         }
     }
 

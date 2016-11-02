@@ -11,6 +11,7 @@ namespace Assembly_Planner
 {
     internal class SCCBinary
     {
+        public static Dictionary<int, HashSet<int>> ParallelDirections;
         internal static void StronglyConnectedComponents(designGraph graph, HashSet<Component> seperate, int cndDir)
         {
             // The function takes every hyperarc with "seperate" lable and generates its SCCs with respect to 
@@ -59,18 +60,7 @@ namespace Assembly_Planner
             // The function returns "true" if the local variables of the"pNodeArc" 
             // contains a direction that is parralel to the candidate direction. 
 
-            foreach (var dir in pNodeArc.InfiniteDirections)
-            {
-                var arcDisDir = DisassemblyDirections.Directions[dir];
-                if (Math.Abs(1 - Math.Abs(arcDisDir.dotProduct(DisassemblyDirections.Directions[cndDirInd]))) <
-                    OverlappingFuzzification.CheckWithGlobDirsParall2 ||
-                    Math.Abs(1 + Math.Abs(arcDisDir.dotProduct(DisassemblyDirections.Directions[cndDirInd]))) <
-                    OverlappingFuzzification.CheckWithGlobDirsParall2)
-                    //var dirInd = pNodeArc.localVariables[i];
-                    //if (dirInd == cndDirInd)
-                    return true;
-            }
-            return false;
+            return pNodeArc.InfiniteDirections.Any(dir => ParallelDirections[cndDirInd].Contains(dir));
         }
 
         private static IList<Connection> HyperBorderArcs(designGraph graph, hyperarc pNodeHy)
