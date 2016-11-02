@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<pairList>
+
+	<pair>
+		<reference name="PumpAssembly - Pump-1.STL" />
+		<moving name="PumpAssembly - Lid-1.STL" />
+		<vector x="0" y="1" z="0" />		
+	</pair>
+	<pair>
+		<reference name="PumpAssembly - Pump-1.STL" />
+		<moving name="PumpAssembly - Shaft-1.STL" />
+		<vector x="0" y="1" z="0" />		
+	</pair>
+	<pair>
+		<reference name="PumpAssembly - Pump-1.STL" />
+		<moving name="PumpAssembly - BackLid2-1.STL" />
+		<vector x="0" y="0" z="1" />		
+	</pair>
+</pairList>
+
+
+
