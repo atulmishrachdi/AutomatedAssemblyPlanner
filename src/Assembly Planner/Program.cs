@@ -29,6 +29,7 @@ namespace Assembly_Planner
         public static double StabilityWeightChosenByUser = 0;
         public const double MeshMagnifier = 1;
         public static double[] PointInMagicBox = {0,0,0.0};
+        public static int BeamWidth;
 
         public static List<int> globalDirPool = new List<int>();
         public static List<double> allmtime = new List<double>();
@@ -77,7 +78,7 @@ namespace Assembly_Planner
             // the second user interaction must happen here
 
             
-            saveDirections();
+            //saveDirections();
             /*
             Console.WriteLine("Press enter once input directions generated >>");
             Console.ReadLine();
@@ -87,7 +88,7 @@ namespace Assembly_Planner
             NonadjacentBlockingWithPartitioning.Run(AssemblyGraph, SolidsNoFastener, globalDirPool);
             Stabilityfunctions.GenerateReactionForceInfo(AssemblyGraph);
             var leapSearch = new LeapSearch();
-            var solutions = leapSearch.Run(AssemblyGraph, Solids, globalDirPool, 1);
+            var solutions = leapSearch.Run(AssemblyGraph, Solids, globalDirPool);
             OptimalOrientation.Run(solutions);
             var cand = new AssemblyCandidate() { Sequence = solutions };
             cand.SaveToDisk(Directory.GetCurrentDirectory() + "\\workspace\\solution.xml");

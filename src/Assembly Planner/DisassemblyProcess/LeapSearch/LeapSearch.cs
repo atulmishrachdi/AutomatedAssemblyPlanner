@@ -27,7 +27,6 @@ namespace Assembly_Planner
         protected static int TimeEstm;
         protected static int TimeEstmCounter;
         protected static SortedList<double, HashSet<TreeCandidate>> SortedStack;
-        protected static int BeamWidth;
         protected static bool FirstRun;
         protected static List<double> InitialStableScores = new List<double>();
         protected static List<double> InitialTimes = new List<double>();
@@ -42,15 +41,14 @@ namespace Assembly_Planner
             new Dictionary<HashSet<Component>, HashSet<TreeCandidate>>(HashSet<Component>.CreateSetComparer());
 
         internal AssemblySequence Run(designGraph graph, Dictionary<string, List<TessellatedSolid>> solids,
-            List<int> globalDirPool, int beamWidth)
+            List<int> globalDirPool)
         {
             Graph = graph;
             TimeEstm = 50;
             TimeEstmCounter = 0;
-            BeamWidth = beamWidth;
             DirPool = globalDirPool;
             FirstRun = true;
-
+            DetermineBeamWidth();
             InitializeDataStructures(graph, solids, globalDirPool);
             /*SubAssembly tree = null;
             
@@ -83,7 +81,7 @@ namespace Assembly_Planner
             {
                 TimeEstmCounter++;
                 TimeEstm++;
-                UpdateSortedStackWithBeamWidth(BeamWidth);
+                UpdateSortedStackWithBeamWidth(Program.BeamWidth);
                 var cand = SortedStack.First().Value;
                 SortedStack.RemoveAt(0);
                 //var all = new List<SortedList<double, HashSet<TreeCandidate>>>();
@@ -105,7 +103,7 @@ namespace Assembly_Planner
                         {
                             lock (Memo)
                             {
-                                if (BeamWidth == 1 || (BeamWidth > 1 && !FirstRun))
+                                if (Program.BeamWidth == 1 || (Program.BeamWidth > 1 && !FirstRun))
                                 {
                                     Memo.Add(a, d);
                                     FillUpMemo(treeCandidate.parent);
@@ -666,6 +664,16 @@ namespace Assembly_Planner
                 DBGBinary.ParallelAndSame.Add(dir, new HashSet<int>(parallelAndSame));
                 DBGBinary.ParallelAndOpposite.Add(dir, new HashSet<int>(parallelAndOppos));
             }
+        }
+
+        private void DetermineBeamWidth()
+        {
+            var partsCount = Program.AssemblyGraph.nodes.Count;
+            var baseCount = 8 - Math.Log(partsCount);
+            if (baseCount < 0) Program.BeamWidth = 1;
+            else if (partsCount < 12) Program.BeamWidth = (int)Math.Floor(baseCount);
+            else if (partsCount < 25) Program.BeamWidth = (int)Math.Floor(baseCount / 2.0) + 1;
+            else Program.BeamWidth = (int)Math.Floor(baseCount / 2.0);
         }
     }
 
