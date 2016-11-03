@@ -420,14 +420,14 @@ function linkPair(a,b,vec){
 	var pos=0;
 	var lim=parts.length;
 	while(pos<lim){
-		//console.log(a);
-		//console.log(b);
+		console.log(a);
+		console.log(b);
 		//console.log(vec);
-		//console.log(parts[pos].Name);
-		if(parts[pos].Name===a){
+		console.log(parts[pos].Name);
+		if(parts[pos].Name===a+".STL"){
 			thePair.Ref=parts[pos];
 		}
-		if(parts[pos].Name===b){
+		if(parts[pos].Name===b+".STL"){
 			thePair.Mov=parts[pos];
 		}
 		if(thePair.Ref!=null & thePair.Mov!=null){

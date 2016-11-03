@@ -62,7 +62,7 @@ namespace Assembly_Planner
 
             foreach (var part in uniqueParts)
             {
-                FastenerDetector.SolidHasFastenerKeyword(part);
+                FastenerDetector.SolidHasFastenerKeyword(part,preCutoff,postCutoff);
             }
 
             var refresh = (int)Math.Ceiling((float)uniqueParts.Count / (float)(width * 4));

@@ -208,7 +208,7 @@ namespace Assembly_Planner
                 }
                 while (sufPos < sufLim)
                 {
-                    if (stringList[pos][sufLim - 1 - sufPos] != stringList[0][sufLim - 1 - sufPos])
+                    if (stringList[pos][stringList[pos].Count() - 1 - sufPos] != stringList[0][stringList[0].Count() - 1 - sufPos])
                     {
                         sufLim = sufPos;
                         break;

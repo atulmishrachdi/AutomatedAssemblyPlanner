@@ -379,7 +379,7 @@ namespace Assembly_Planner
             return approvedFasteners;
         }
 
-        internal static bool SolidHasFastenerKeyword(TessellatedSolid solid)
+        internal static bool SolidHasFastenerKeyword(TessellatedSolid solid , int preCutoff, int postCutoff)
         {
             string[] keyWordList ={ "screw",
                                     "washer",
@@ -393,7 +393,9 @@ namespace Assembly_Planner
             int lim = keyWordList.Length;
             while (pos < lim)
             {
-                PartNameAnalysis.stringInclusionDistance(keyWordList[pos].ToLower(), solid.Name.ToLower());
+                PartNameAnalysis.stringInclusionDistance(  keyWordList[pos].ToLower(), 
+                                                           (solid.Name.ToLower()).Substring(preCutoff,postCutoff)
+                                                        );
                 pos++;
             }
 

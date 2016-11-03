@@ -42,9 +42,18 @@ namespace Assembly_Planner
             List<int> learnerVotes;
             var learnerWeights = FastenerPerceptronLearner.ReadingLearnerWeightsAndVotesFromCsv(out learnerVotes);
 
+            List<string> nameList = new List<string>();
             foreach (var part in uniqueParts)
             {
-                FastenerDetector.SolidHasFastenerKeyword(part);
+                nameList.Add(part.Name);
+            }
+            int preCutoff = 0;
+            int postCutoff = 0;
+            PartNameAnalysis.findCommonPreSuffixes(nameList, ref preCutoff, ref postCutoff);
+
+            foreach (var part in uniqueParts)
+            {
+                FastenerDetector.SolidHasFastenerKeyword(part, preCutoff, postCutoff);
             }
 
 

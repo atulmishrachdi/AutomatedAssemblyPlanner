@@ -54,10 +54,21 @@ namespace Assembly_Planner
             FastenerGaussianNaiveBayes.GNB();
 
 
+            /*
+            List<string> nameList = new List<string>();
             foreach (var part in uniqueParts)
             {
-                FastenerDetector.SolidHasFastenerKeyword(part);
+                nameList.Add(part.Name);
             }
+            int preCutoff = 0;
+            int postCutoff = 0;
+            PartNameAnalysis.findCommonPreSuffixes(nameList, ref preCutoff, ref postCutoff);
+
+            foreach (var part in uniqueParts)
+            {
+                FastenerDetector.SolidHasFastenerKeyword(part,preCutoff,postCutoff);
+            }
+            */
 
 
             var refresh = (int)Math.Ceiling((float)uniqueParts.Count / (float)(width * 4));
