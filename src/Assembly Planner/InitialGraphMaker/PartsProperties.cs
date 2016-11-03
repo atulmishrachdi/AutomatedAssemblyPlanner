@@ -18,7 +18,13 @@ namespace Assembly_Planner
             this.parts = new List<PartProperties>();
             foreach (var solidName in Program.Solids.Keys)
             {
-                var part = new PartProperties {Name = solidName, Mass = 0.0, SurfaceArea = Program.Solids[solidName].Sum(s => s.SurfaceArea), Volume = Program.Solids[solidName].Sum(s=> s.Volume) };
+                var part = new PartProperties
+                {
+                    Name = solidName,
+                    Mass = 0.0,
+                    SurfaceArea = Program.Solids[solidName].Sum(s => s.SurfaceArea)/Math.Pow(Program.MeshMagnifier, 2.0),
+                    Volume = Program.Solids[solidName].Sum(s => s.Volume)/Math.Pow(Program.MeshMagnifier, 3.0)
+                };
                 if (Program.Solids[solidName].Count > 1)
                 {
                     part.FastenerCertainty = 0.0;

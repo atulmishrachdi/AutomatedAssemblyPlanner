@@ -43,17 +43,7 @@ namespace Assembly_Planner
 #else
             inputDir = "workspace";
             //"src/Test/PumpWExtention";
-            //"src/Test/PumpWithThreadedBolts";
-            //"src/Test/Cube";
-            //"src/Test/TXT-Binary";
-            //"src/Test/FastenerTest/new/test";
-            //"src/Test/Double";
-            //"src/Test/test7";
-            //"src/Test/FPM2";
-            //"src/Test/Mc Cormik/STL2";
-            //"src/Test/Truck -TXT-1/STL";
-            //"src/Test/FoodPackagingMachine/FPMSTL2";
-            //"src/Test/test8";
+
 #endif
             Solids = GetSTLs(inputDir);
             //EnlargeTheSolid();
@@ -71,14 +61,10 @@ namespace Assembly_Planner
             DeserializeSolidProperties();
             globalDirPool = DisassemblyDirectionsWithFastener.RunGraphGeneration(AssemblyGraph, SolidsNoFastener);
             // the second user interaction must happen here
-
-            
-            //saveDirections();
-            /*
-            Console.WriteLine("Press enter once input directions generated >>");
+            SaveDirections();
+            Console.WriteLine("\n\nPress enter once input directions generated >>");
             Console.ReadLine();
-            loadDirections();
-            */
+            LoadDirections();
 
             NonadjacentBlockingWithPartitioning.Run(AssemblyGraph, SolidsNoFastener, globalDirPool);
             Stabilityfunctions.GenerateReactionForceInfo(AssemblyGraph);
@@ -124,7 +110,7 @@ namespace Assembly_Planner
             }
         }
 
-        internal static void saveDirections()
+        internal static void SaveDirections()
         {
 
             XmlSerializer ser = new XmlSerializer(typeof(DirectionSaveStructure));
@@ -136,14 +122,26 @@ namespace Assembly_Planner
 
         }
 
-        internal static void loadDirections()
+        internal static void LoadDirections()
         {
-
             XmlSerializer ser = new XmlSerializer(typeof(DirectionSaveStructure));
             var reader = new StreamReader("workspace/directionList2.xml");
             var theData = (DirectionSaveStructure)ser.Deserialize(reader);
-            AssemblyGraph.arcs = theData.arcs;
+            var reviewedArc = theData.arcs;
+            UpdateGraphArcs(reviewedArc);
+        }
 
+        private static void UpdateGraphArcs(List<arc> reviewedArc)
+        {
+            foreach (Connection arc in reviewedArc)
+            {
+                var counterpart =
+                    AssemblyGraph.arcs.Cast<Connection>().First(c => c.XmlFrom == arc.XmlFrom && c.XmlTo == arc.XmlTo);
+                if (arc.Certainty == 0)
+                    AssemblyGraph.arcs.Remove(counterpart);
+                counterpart.FiniteDirections = arc.FiniteDirections;
+                counterpart.InfiniteDirections = arc.InfiniteDirections;
+            }
         }
 
         private static void UpdateFasteners(PartsProperties partsProperties)
