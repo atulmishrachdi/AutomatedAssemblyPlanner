@@ -142,8 +142,8 @@ namespace Assembly_Planner
                             beamChildern.Add(cost1 + lsl.Key, merged);
                         }
                         //all.Add(localSorted);
-                        //continue;
-                        break;
+                        continue;
+                        //break;
                     }
                     if (Memo.ContainsKey(treeCandidate.RefNodes))
                     {
@@ -164,8 +164,8 @@ namespace Assembly_Planner
                             merged.UnionWith(temp);
                             beamChildern.Add(cost2 + lsl.Key, merged);
                         }
-                        //continue;
-                        break;
+                        continue;
+                        //break;
                     }
                     /*HashSet<TreeCandidate> refCandsF = null, movCandsF = null;
                     var tasks = new Task[2];
@@ -196,7 +196,8 @@ namespace Assembly_Planner
                         merged.UnionWith(temp);
                         beamChildern.Add(cost + lsl.Key, merged);
                     }
-                    break;
+                    //break;
+                    continue;
                     //all.Add(localSorted);
                 }
 
