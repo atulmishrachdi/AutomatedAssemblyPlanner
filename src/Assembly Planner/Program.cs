@@ -27,7 +27,7 @@ namespace Assembly_Planner
         public static Dictionary<string, double> SolidsMass = new Dictionary<string, double>();
         public static designGraph AssemblyGraph;
         public static double StabilityWeightChosenByUser = 0;
-        public const double MeshMagnifier = 1;
+        public static double MeshMagnifier = 1;
         public static double[] PointInMagicBox = {0,0,0.0};
         public static int BeamWidth;
 
@@ -43,6 +43,7 @@ namespace Assembly_Planner
 #else
             inputDir =
             "src/Test/PumpWExtention";
+            //"src/Test/PumpWithThreadedBolts";
             //"src/Test/Cube";
             //"src/Test/TXT-Binary";
             //"src/Test/FastenerTest/new/test";
@@ -55,19 +56,15 @@ namespace Assembly_Planner
             //"src/Test/test8";
 #endif
             Solids = GetSTLs(inputDir);
+            //EnlargeTheSolid();
             var detectFasteners = true; //TBI
             var threaded = 0; // 0:none, 1: all, 2: subset
-
             AssemblyGraph = new designGraph();
             DisassemblyDirectionsWithFastener.RunGeometricReasoning(Solids);
             if (detectFasteners)
-            {
                 DisassemblyDirectionsWithFastener.RunFastenerDetection(Solids, threaded);
-            }
             else
-            {
                 SolidsNoFastener = Solids;
-            }
             SerializeSolidProperties();
             Console.WriteLine("Press enter once input parts table generated >>");
             Console.ReadLine();
@@ -120,7 +117,10 @@ namespace Assembly_Planner
             foreach (var solidName in Solids.Keys)
             {
                 var userUpdated = partsProperties.parts.First(p => p.Name == solidName);
-                SolidsMass.Add(solidName,userUpdated.Mass);
+                SolidsMass.Add(solidName,
+                    userUpdated.Mass > 0
+                        ? userUpdated.Mass*Math.Pow(MeshMagnifier, 3)
+                        : userUpdated.Volume*Math.Pow(MeshMagnifier, 3));
             }
         }
 
@@ -151,7 +151,7 @@ namespace Assembly_Planner
             foreach (var solidName in Solids.Keys)
             {
                 var userUpdated = partsProperties.parts.First(p => p.Name == solidName);
-                if (userUpdated.FastenerCertainty == 0)
+                if (userUpdated.FastenerCertainty < 1)
                     SolidsNoFastener.Add(solidName, Solids[solidName]);
             }
             FastenerDetector.Fasteners =
@@ -183,7 +183,7 @@ namespace Assembly_Planner
                 var ts = IO.Open(fileInfo.Open(FileMode.Open), fileInfo.Name);
                 //ts.Name = ts.Name.Remove(0, 1);
                 //lock (parts) 
-                parts.Add(EnlargeTheSolid(ts[0]));
+                parts.Add(ts[0]);
                 i++;
             }
             //);
@@ -193,27 +193,55 @@ namespace Assembly_Planner
             return parts.ToDictionary(tessellatedSolid => tessellatedSolid.Name, tessellatedSolid => new List<TessellatedSolid> { tessellatedSolid });
         }
 
-        private static TessellatedSolid EnlargeTheSolid(TessellatedSolid ts)
+        private static void EnlargeTheSolid()
         {
-            var newVer = ts.Vertices.Select(vertex => new TempVer {Ver = vertex, IndexInList = 0}).ToList();
-            var newFace = ts.Faces.Select(face => new TempFace { Face = face, Vers = face.Vertices.Select(v=>newVer.First(nv=> nv.Ver ==v)).ToArray()}).ToList();
-            var tvglVertices = new List<Vertex>();
-            var tvglFaces = new List<PolygonalFace>();
-            for (var i = 0; i < newVer.Count; i++)
+            MeshMagnifier = DetermineTheMagnifier();
+            var solidsMagnified = new Dictionary<string, List<TessellatedSolid>>();
+            foreach (var dic in Solids)
             {
-                var v = newVer[i];
-                //var vTransformed = MultiplyByTrans(vapPart.OriginalTransformation, v);
-                v.IndexInList = i;
-                tvglVertices.Add(new Vertex(v.Ver.Position.multiply(MeshMagnifier)));
+                var solids = new List<TessellatedSolid>();
+                foreach (var ts in dic.Value)
+                {
+                    var newVer = ts.Vertices.Select(vertex => new TempVer { Ver = vertex, IndexInList = 0 }).ToList();
+                    var newFace = ts.Faces.Select(face => new TempFace { Face = face, Vers = face.Vertices.Select(v => newVer.First(nv => nv.Ver == v)).ToArray() }).ToList();
+                    var tvglVertices = new List<Vertex>();
+                    var tvglFaces = new List<PolygonalFace>();
+                    for (var i = 0; i < newVer.Count; i++)
+                    {
+                        var v = newVer[i];
+                        //var vTransformed = MultiplyByTrans(vapPart.OriginalTransformation, v);
+                        v.IndexInList = i;
+                        tvglVertices.Add(new Vertex(v.Ver.Position.multiply(MeshMagnifier)));
+                    }
+                    foreach (var tri in newFace)
+                    {
+                        tvglFaces.Add(
+                            new PolygonalFace(tri.Vers.Select(v => tvglVertices[v.IndexInList]).ToList(), null));
+                    }
+                    var tsM = new TessellatedSolid(tvglFaces, tvglVertices, null, UnitType.millimeter, ts.FileName);
+                    tsM.Repair();
+                    solids.Add(tsM);
+                }
+                solidsMagnified.Add(solids[0].Name, solids);
             }
-            foreach (var tri in newFace)
-            {
-                tvglFaces.Add(
-                    new PolygonalFace(tri.Vers.Select(v => tvglVertices[v.IndexInList]).ToList(), null));
-            }
-            var tsM = new TessellatedSolid(tvglFaces, tvglVertices, null, UnitType.millimeter, ts.FileName);
-            tsM.Repair();
-            return tsM;
+            Solids = solidsMagnified;
+        }
+        private static double DetermineTheMagnifier()
+        {
+            // Regardless of the actual size of the assembly, I will fit it in a box with
+            // a diagonal length of 500,000
+            var allVertices = Solids.SelectMany(p => p.Value).SelectMany(g => g.Vertices);
+            var maxX = (double)allVertices.Max(v => v.X);
+            var maxY = (double)allVertices.Max(v => v.Y);
+            var maxZ = (double)allVertices.Max(v => v.Z);
+
+            var minX = (double)allVertices.Min(v => v.X);
+            var minY = (double)allVertices.Min(v => v.Y);
+            var minZ = (double)allVertices.Min(v => v.Z);
+
+            var diagonalLength = GeometryFunctions.DistanceBetweenTwoVertices(new[] { maxX, maxY, maxZ },
+                new[] { minX, minY, minZ });
+            return 500000 / diagonalLength;
         }
     }
 
