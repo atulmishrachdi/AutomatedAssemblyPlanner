@@ -52,11 +52,15 @@ namespace Assembly_Planner
                 solidPrimitive);
             var checkedSolids = new HashSet<TessellatedSolid>();
             FastenerGaussianNaiveBayes.GNB();
-            var refresh = (int)Math.Ceiling((float)uniqueParts.Count / (float)(width * 4));
+
+
             /*foreach( var part in uniqueParts)
             {
                 FastenerDetector.SolidHasFastenerKeyword(part);
             }*/
+
+
+            var refresh = (int)Math.Ceiling((float)uniqueParts.Count / (float)(width * 4));
 
             Parallel.ForEach(uniqueParts, solid =>
                 //foreach (var solid in uniqueParts)

@@ -320,6 +320,9 @@ function grabInd(theTree,theMember, theIndex){
 * 
 */
 function addEntry(theEntry){
+	
+	
+	
 
 	var theName=grab(theEntry,"name").innerHTML;
 	var theVolume="<text>"+Number.parseFloat(grab(theEntry,"volume").innerHTML)+"</text>\n"+volElem;
@@ -328,11 +331,13 @@ function addEntry(theEntry){
 	var theCertainty=Number.parseFloat(grab(theEntry,"fastener_certainty").innerHTML);
 	var theSurfaceArea=Number.parseFloat(grab(theEntry,"surface_area").innerHTML);
 	
-	var fstChecked="<input type='checkbox' onchange='flipCheck(this)' value='false'></input>";
+	console.log(theCertainty);
+	
+	var fstChecked="<input type='checkbox' onchange='flipCheck(this)'></input>";
 	console.log(theCertainty);
 	if(theCertainty>0.5){
 		console.log("Box is checked");
-		fstChecked="<input type='checkbox' onchange='flipCheck(this) value=true checked></input>";
+		fstChecked="<input type='checkbox' onchange='flipCheck(this)' checked></input>";
 	}
 	
 	var theAmbiguity=1-2*Math.abs(theCertainty-0.5);
