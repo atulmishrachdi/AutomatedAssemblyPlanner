@@ -50,7 +50,7 @@ namespace Assembly_Planner
             //Bridge.StatusReporter.PrintMessage("BOUNDING GEOMETRIES ARE SUCCESSFULLY CREATED.", 0.5f);
 
             // Detecting Springs
-            SpringDetector.DetectSprings(solids);
+            //SpringDetector.DetectSprings(solids);
 
             // Primitive Classification
             //------------------------------------------------------------------------------------------
