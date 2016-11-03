@@ -50,10 +50,10 @@ namespace Assembly_Planner
             var checkedSolids = new HashSet<TessellatedSolid>();
             FastenerGaussianNaiveBayes.GNB();
 
-            foreach( var part in uniqueParts)
+            /*foreach( var part in uniqueParts)
             {
                 FastenerDetector.SolidHasFastenerKeyword(part);
-            }
+            }*/
 
             Parallel.ForEach(uniqueParts, solid =>
                 //foreach (var solid in uniqueParts)
