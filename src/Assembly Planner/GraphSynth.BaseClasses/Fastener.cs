@@ -151,6 +151,7 @@ namespace Assembly_Planner
         /// <summary>
         /// The Secure time input for this fastener
         /// </summary>
+        [XmlIgnore]
         public double[,] SecureModelInputs;
         /// <summary>
         /// for every part that is locked by this fastener, (if they are more than 2), I add one triangle that is touching the
