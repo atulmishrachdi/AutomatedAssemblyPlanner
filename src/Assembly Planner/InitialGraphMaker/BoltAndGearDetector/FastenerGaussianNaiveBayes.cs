@@ -127,7 +127,7 @@ namespace Assembly_Planner
             class2 = new double[Training, Features];
             var reader =
                 new StreamReader(
-                    File.OpenRead("src/InitialGraphMaker/BoltAndGearDetector/ClassifierFiles/TrainingData.csv"));
+                    File.OpenRead("src/Assembly Planner/InitialGraphMaker/BoltAndGearDetector/ClassifierFiles/TrainingData.csv"));
             var counter = 0;
             while (!reader.EndOfStream)
             {

@@ -30,6 +30,7 @@ namespace Assembly_Planner
             Fasteners.Clear();
             Nuts.Clear();
             Washers.Clear();
+            PotentialFastener.Clear();
             if (threaded != 0) // either all of them or some of them are threaded 
             {
                 FastenerPerceptronLearner.RunPerecptronLearner(regenerateTrainingData);

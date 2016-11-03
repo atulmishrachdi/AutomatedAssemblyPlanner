@@ -145,7 +145,7 @@ namespace Assembly_Planner
             var reader =
                 new StreamReader(
                     File.OpenRead(
-                        "../../InitialGraphMaker/BoltAndGearDetector/ClassifierFiles/TrainingData.csv"));
+                        "src/Assembly Planner/InitialGraphMaker/BoltAndGearDetector/ClassifierFiles/TrainingData.csv"));
             var counter = 0;
             while (!reader.EndOfStream)
             {
@@ -181,7 +181,7 @@ namespace Assembly_Planner
         {
             // the first m columns are weights (with m features (real features+1))
             // the last column is the vote
-            var path = "../../InitialGraphMaker/BoltAndGearDetector/ClassifierFiles";
+            var path = "src/Assembly Planner/InitialGraphMaker/BoltAndGearDetector/ClassifierFiles";
 
             //Path to write the csv to:
             var weightsAndVotesPath = path + "/WeightsAndVotes.csv";
@@ -224,7 +224,7 @@ namespace Assembly_Planner
             //    2. if the csv doesnt exist or the user has new training stls, we can run it and
             //       improve the classifier.
 
-            var path = "../../InitialGraphMaker/BoltAndGearDetector";
+            var path = "src/Assembly Planner/InitialGraphMaker/BoltAndGearDetector";
             
             //Path to write the csv to:
             var trainingDataPath = path + "/ClassifierFiles/TrainingData.csv";
@@ -323,7 +323,7 @@ namespace Assembly_Planner
             var reader =
                 new StreamReader(
                     File.OpenRead(
-                        "../../InitialGraphMaker/BoltAndGearDetector/ClassifierFiles/WeightsAndVotes.csv"));
+                        "src/Assembly Planner/InitialGraphMaker/BoltAndGearDetector/ClassifierFiles/WeightsAndVotes.csv"));
             while (!reader.EndOfStream)
             {
                 var line = reader.ReadLine();

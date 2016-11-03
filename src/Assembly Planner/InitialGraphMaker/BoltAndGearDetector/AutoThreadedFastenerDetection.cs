@@ -321,7 +321,7 @@ namespace Assembly_Planner
             return false;
         }
 
-        internal static bool SolidHasHelix(TessellatedSolid solid)
+        private static bool SolidHasHelix(TessellatedSolid solid)
         {
             // Idea: find an edge which has an internal angle equal to one of the following cases.
             // This only works if at least one of outer or inner threads have a sharo edge.
@@ -341,7 +341,7 @@ namespace Assembly_Planner
                 gVisited.Add(edge);
                 var visited = new HashSet<Edge> { edge };
                 var stack = new Stack<Edge>();
-                var possibleHelixEdges = FindHelixEdgesConnectedToAnEdge(edge.From.Edges, edge.To.Edges, edge, visited);
+                var possibleHelixEdges = FindHelixEdgesConnectedToAnEdge(solid.Edges, edge, visited);
                 // It can have 0, 1 or 2 edges
                 if (possibleHelixEdges == null) continue;
                 foreach (var e in possibleHelixEdges)
@@ -351,13 +351,13 @@ namespace Assembly_Planner
                 {
                     var e = stack.Pop();
                     visited.Add(e);
-                    var cand = FindHelixEdgesConnectedToAnEdge(e.From.Edges, e.To.Edges, e, visited);
+                    var cand = FindHelixEdgesConnectedToAnEdge(solid.Edges, e, visited);
                     // if yes, it will only have one edge.
                     if (cand == null) continue;
                     stack.Push(cand[0]);
                 }
                 gVisited.UnionWith(visited);
-                if (visited.Count < 500) // Is it very big?
+                if (visited.Count < 1000) // Is it very big?
                     continue;
                 return true;
             }
@@ -378,10 +378,9 @@ namespace Assembly_Planner
             return false;
         }
 
-        private static Edge[] FindHelixEdgesConnectedToAnEdge(List<Edge> edges1, List<Edge> edges2, Edge edge, HashSet<Edge> visited)
+        private static Edge[] FindHelixEdgesConnectedToAnEdge(Edge[] edges, Edge edge, HashSet<Edge> visited)
         {
-            var edges = new List<Edge>(edges1);
-            edges.AddRange(edges2);
+
             var m = new List<Edge>();
             var e1 =
                 edges.Where(
@@ -400,7 +399,7 @@ namespace Assembly_Planner
         }
 
         internal static int CommonHeadCheck(TessellatedSolid solid, List<PrimitiveSurface> solidPrim,
-                    Dictionary<TemporaryFlat, List<TemporaryFlat>> equalPrimitives, out double toolSize)
+            Dictionary<TemporaryFlat, List<TemporaryFlat>> equalPrimitives, out double toolSize)
         {
             // 0: false (doesnt have any common head shape)
             // 1: HexBolt or Nut
