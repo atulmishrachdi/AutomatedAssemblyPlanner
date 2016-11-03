@@ -53,6 +53,11 @@ namespace Assembly_Planner
             var checkedSolids = new HashSet<TessellatedSolid>();
             FastenerGaussianNaiveBayes.GNB();
             var refresh = (int)Math.Ceiling((float)uniqueParts.Count / (float)(width * 4));
+            /*foreach( var part in uniqueParts)
+            {
+                FastenerDetector.SolidHasFastenerKeyword(part);
+            }*/
+
             Parallel.ForEach(uniqueParts, solid =>
                 //foreach (var solid in uniqueParts)
             {
@@ -64,12 +69,9 @@ namespace Assembly_Planner
 
                 var initialCertainty = FastenerGaussianNaiveBayes.GaussianNaiveBayesClassifier(solidPrimitive[solid],
                     solid);
-                /*
-                if (FastenerDetector.SolidHasFastenerKeyword(solid))
-                {
-                    initialCertainty = initialCertainty + 0.2;
-                }
-                */
+                
+               
+                
                 FastenerDetector.PotentialFastener[solid] = 0.1 + initialCertainty;
                 foreach (var up in multipleRefs[solid])
                     FastenerDetector.PotentialFastener[up] = 0.1 + initialCertainty;
