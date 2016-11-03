@@ -29,7 +29,7 @@ namespace Assembly_Planner
 
 
             int width = 55;
-            int refresh = (int) Math.Ceiling(((float) parts.Count) / ((float)(width * 4)) );
+            int refresh = (int) Math.Ceiling(((float) parts.Count) / ((float)(width)) );
             int check = 0;
             LoadingBar.start(width, 0);
 

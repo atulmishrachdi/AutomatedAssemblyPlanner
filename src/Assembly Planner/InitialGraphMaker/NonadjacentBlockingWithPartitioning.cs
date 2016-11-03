@@ -77,7 +77,7 @@ namespace Assembly_Planner
 
             int width = 55;
             int total = (solidsL.Count + 1) * (solidsL.Count / 2);
-            int refresh = (int)Math.Ceiling(((float)total) / ((float)(width * 4)));
+            int refresh = (int)Math.Ceiling(((float)total) / ((float)(width)));
             int check = 0;
             LoadingBar.start(width, 0);
 

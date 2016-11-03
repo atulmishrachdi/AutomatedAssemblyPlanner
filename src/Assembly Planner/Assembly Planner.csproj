@@ -216,6 +216,7 @@
     <Compile Include="InitialGraphMaker\NonadjacentBlockingWithPartitioning.cs" />
     <Compile Include="InitialGraphMaker\OverlappingFuzzification.cs" />
     <Compile Include="InitialGraphMaker\PartitioningSolid.cs" />
+    <Compile Include="InitialGraphMaker\PartNameAnalysis.cs" />
     <Compile Include="InitialGraphMaker\PartsProperties.cs" />
     <Compile Include="InitialGraphMaker\PrimitivePrimitiveInteractions.cs" />
     <Compile Include="Input\consoleFrontEnd.cs" />

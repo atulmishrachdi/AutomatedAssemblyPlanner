@@ -40,8 +40,8 @@ namespace Assembly_Planner
 #if InputDialog
              inputDir = consoleFrontEnd.getPartsDirectory();
 #else
-            inputDir =
-            "src/Test/PumpWExtention";
+            inputDir = "workspace";
+            //"src/Test/PumpWExtention";
             //"src/Test/Cube";
             //"src/Test/TXT-Binary";
             //"src/Test/FastenerTest/new/test";

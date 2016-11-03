@@ -394,10 +394,7 @@ namespace Assembly_Planner
             int lim = keyWordList.Length;
             while (pos < lim)
             {
-                if (solid.FileName.Contains(keyWordList[pos]))
-                {
-                    return true;
-                }
+                PartNameAnalysis.stringInclusionDistance(keyWordList[pos].ToLower(), solid.Name.ToLower());
                 pos++;
             }
 
