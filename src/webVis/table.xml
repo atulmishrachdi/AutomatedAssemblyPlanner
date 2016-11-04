@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<table>
+
+	<entry>
+		<name>Screw1</name>
+		<volume>1254.5</volume>
+		<classification>fastener</classification>
+		<certainty>0.75</certainty>
+	</entry>
+	
+	<entry>
+		<name>Screw2</name>
+		<volume>25.36</volume>
+		<classification>fastener</classification>
+		<certainty>0.90</certainty>
+	</entry>
+	
+	<entry>
+		<name>NotAScrew</name>
+		<volume>79.42</volume>
+		<classification>fastener</classification>
+		<certainty>0.20</certainty>
+	</entry>
+	
+	<entry>
+		<name>IsAScrew</name>
+		<volume>15.3</volume>
+		<classification>other</classification>
+		<certainty>0.67</certainty>
+	</entry>
+	
+	<entry>
+		<name>Box</name>
+		<volume>9.45</volume>
+		<classification>other</classification>
+		<certainty>0.45</certainty>
+	</entry>
+
+</table>
+

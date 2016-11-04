@@ -1,0 +1,219 @@
+<?xml version='1.0' encoding='utf-8'?>
+<parts_properties xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>
+<part_properties>
+  <name>PumpWithRealBoltsAndNuts - Ext-Ring</name>
+  <mass>11763.746764586478
+</mass>
+  <volume>11763.746764586478</volume>
+  <surface_area>5492.6597414231655</surface_area>
+  <fastener_certainty>0</fastener_certainty>
+</part_properties>
+<part_properties>
+  <name>PumpWithRealBoltsAndNuts - Backlid</name>
+  <mass>33260.98045029297
+</mass>
+  <volume>33260.98045029297</volume>
+  <surface_area>34573.484925292265</surface_area>
+  <fastener_certainty>0</fastener_certainty>
+</part_properties>
+<part_properties>
+  <name>PumpWithRealBoltsAndNuts - Bolt1</name>
+  <mass>661.5473405421271
+</mass>
+  <volume>661.5473405421271</volume>
+  <surface_area>839.003718926172</surface_area>
+  <fastener_certainty>1</fastener_certainty>
+</part_properties>
+<part_properties>
+  <name>PumpWithRealBoltsAndNuts - Bolt10</name>
+  <mass>621.14228419804
+</mass>
+  <volume>621.14228419804</volume>
+  <surface_area>799.4011105909965</surface_area>
+  <fastener_certainty>1</fastener_certainty>
+</part_properties>
+<part_properties>
+  <name>PumpWithRealBoltsAndNuts - Bolt11L</name>
+  <mass>11841.286528044386
+</mass>
+  <volume>11841.286528044386</volume>
+  <surface_area>4795.341945507097</surface_area>
+  <fastener_certainty>1</fastener_certainty>
+</part_properties>
+<part_properties>
+  <name>PumpWithRealBoltsAndNuts - Bolt12L</name>
+  <mass>11841.31626642397
+</mass>
+  <volume>11841.31626642397</volume>
+  <surface_area>4795.263472431323</surface_area>
+  <fastener_certainty>1</fastener_certainty>
+</part_properties>
+<part_properties>
+  <name>PumpWithRealBoltsAndNuts - Bolt13</name>
+  <mass>980.1928803579447
+</mass>
+  <volume>980.1928803579447</volume>
+  <surface_area>1016.1432303180715</surface_area>
+  <fastener_certainty>1</fastener_certainty>
+</part_properties>
+<part_properties>
+  <name>PumpWithRealBoltsAndNuts - Bolt14</name>
+  <mass>980.3237088651391
+</mass>
+  <volume>980.3237088651391</volume>
+  <surface_area>1016.1787486970904</surface_area>
+  <fastener_certainty>1</fastener_certainty>
+</part_properties>
+<part_properties>
+  <name>PumpWithRealBoltsAndNuts - Bolt15</name>
+  <mass>980.2564597341066
+</mass>
+  <volume>980.2564597341066</volume>
+  <surface_area>1016.1386300036118</surface_area>
+  <fastener_certainty>1</fastener_certainty>
+</part_properties>
+<part_properties>
+  <name>PumpWithRealBoltsAndNuts - Bolt16</name>
+  <mass>980.2452302715211
+</mass>
+  <volume>980.2452302715211</volume>
+  <surface_area>1016.1627485537159</surface_area>
+  <fastener_certainty>1</fastener_certainty>
+</part_properties>
+<part_properties>
+  <name>PumpWithRealBoltsAndNuts - Bolt2</name>
+  <mass>661.5397697591825
+</mass>
+  <volume>661.5397697591825</volume>
+  <surface_area>838.9868112640002</surface_area>
+  <fastener_certainty>1</fastener_certainty>
+</part_properties>
+<part_properties>
+  <name>PumpWithRealBoltsAndNuts - Bolt3</name>
+  <mass>661.485031050131
+</mass>
+  <volume>661.485031050131</volume>
+  <surface_area>838.9902253975214</surface_area>
+  <fastener_certainty>1</fastener_certainty>
+</part_properties>
+<part_properties>
+  <name>PumpWithRealBoltsAndNuts - Bolt4</name>
+  <mass>661.566340497781
+</mass>
+  <volume>661.566340497781</volume>
+  <surface_area>839.0046033577258</surface_area>
+  <fastener_certainty>1</fastener_certainty>
+</part_properties>
+<part_properties>
+  <name>PumpWithRealBoltsAndNuts - Bolt5</name>
+  <mass>661.5256941533454
+</mass>
+  <volume>661.5256941533454</volume>
+  <surface_area>839.0095025459112</surface_area>
+  <fastener_certainty>1</fastener_certainty>
+</part_properties>
+<part_properties>
+  <name>PumpWithRealBoltsAndNuts - Bolt6</name>
+  <mass>661.4785648262737
+</mass>
+  <volume>661.4785648262737</volume>
+  <surface_area>838.9990873902673</surface_area>
+  <fastener_certainty>1</fastener_certainty>
+</part_properties>
+<part_properties>
+  <name>PumpWithRealBoltsAndNuts - Bolt7</name>
+  <mass>661.5485489345822
+</mass>
+  <volume>661.5485489345822</volume>
+  <surface_area>839.0044592920772</surface_area>
+  <fastener_certainty>1</fastener_certainty>
+</part_properties>
+<part_properties>
+  <name>PumpWithRealBoltsAndNuts - Bolt8</name>
+  <mass>661.5824097988982
+</mass>
+  <volume>661.5824097988982</volume>
+  <surface_area>839.0180317664028</surface_area>
+  <fastener_certainty>1</fastener_certainty>
+</part_properties>
+<part_properties>
+  <name>PumpWithRealBoltsAndNuts - Bolt9</name>
+  <mass>621.0681335867845
+</mass>
+  <volume>621.0681335867845</volume>
+  <surface_area>799.320075665792</surface_area>
+  <fastener_certainty>1</fastener_certainty>
+</part_properties>
+<part_properties>
+  <name>PumpWithRealBoltsAndNuts - Ext-Pipe</name>
+  <mass>23429.171811320935
+</mass>
+  <volume>23429.171811320935</volume>
+  <surface_area>19271.062276100733</surface_area>
+  <fastener_certainty>0</fastener_certainty>
+</part_properties>
+<part_properties>
+  <name>PumpWithRealBoltsAndNuts - Ext-Shaft</name>
+  <mass>36730.362429800196
+</mass>
+  <volume>36730.362429800196</volume>
+  <surface_area>8692.847553996906</surface_area>
+  <fastener_certainty>0</fastener_certainty>
+</part_properties>
+<part_properties>
+  <name>PumpWithRealBoltsAndNuts - Ext-Side1</name>
+  <mass>11513.44724433074
+</mass>
+  <volume>11513.44724433074</volume>
+  <surface_area>6072.099019021003</surface_area>
+  <fastener_certainty>0</fastener_certainty>
+</part_properties>
+<part_properties>
+  <name>PumpWithRealBoltsAndNuts - Ext-Side2</name>
+  <mass>11513.512025722346
+</mass>
+  <volume>11513.512025722346</volume>
+  <surface_area>6072.094297745764</surface_area>
+  <fastener_certainty>0</fastener_certainty>
+</part_properties>
+<part_properties>
+  <name>PumpWithRealBoltsAndNuts - Lid</name>
+  <mass>58143.73509857812
+</mass>
+  <volume>58143.73509857812</volume>
+  <surface_area>26315.28781281746</surface_area>
+  <fastener_certainty>0</fastener_certainty>
+</part_properties>
+<part_properties>
+  <name>PumpWithRealBoltsAndNuts - Nut1</name>
+  <mass>6474.8418466957055
+</mass>
+  <volume>6474.8418466957055</volume>
+  <surface_area>3739.524017692665</surface_area>
+  <fastener_certainty>1</fastener_certainty>
+</part_properties>
+<part_properties>
+  <name>PumpWithRealBoltsAndNuts - Nut2</name>
+  <mass>6474.741508038489
+</mass>
+  <volume>6474.741508038489</volume>
+  <surface_area>3739.7767360939815</surface_area>
+  <fastener_certainty>1</fastener_certainty>
+</part_properties>
+<part_properties>
+  <name>PumpWithRealBoltsAndNuts - Pump</name>
+  <mass>513435.1122686875
+</mass>
+  <volume>513435.1122686875</volume>
+  <surface_area>111755.35526088112</surface_area>
+  <fastener_certainty>0</fastener_certainty>
+</part_properties>
+<part_properties>
+  <name>PumpWithRealBoltsAndNuts - Shaft</name>
+  <mass>156903.409576311
+</mass>
+  <volume>156903.409576311</volume>
+  <surface_area>19087.237463211135</surface_area>
+  <fastener_certainty>0</fastener_certainty>
+</part_properties>
+</parts_properties>
