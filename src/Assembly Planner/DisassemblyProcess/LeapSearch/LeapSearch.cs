@@ -86,11 +86,11 @@ namespace Assembly_Planner
                 var cand = SortedStack.First().Value;
                 SortedStack.RemoveAt(0);
                 //var all = new List<SortedList<double, HashSet<TreeCandidate>>>();
-                //Parallel.ForEach(cand, treeCandidate =>
                 // if all the members of cand have moving and references that exist in the memo, this is the goal
                 var counter = 0;
                 var temp = new HashSet<TreeCandidate>();
-                foreach (var treeCandidate in cand)
+                //Parallel.ForEach(cand, treeCandidate =>
+                    foreach (var treeCandidate in cand)
                 {
                     var localSorted = new SortedList<double, HashSet<TreeCandidate>>(new CandidateComparer());
                     if (Memo.ContainsKey(treeCandidate.MovNodes) && Memo.ContainsKey(treeCandidate.RefNodes))
@@ -116,12 +116,14 @@ namespace Assembly_Planner
                             if (Memo[a].Value > d.Value)
                                 Memo[a] = d;
                         }
-                        temp.Add(treeCandidate);
+                        lock (temp)
+                            temp.Add(treeCandidate);
                         treeCandidate.sa.Install.Moving = Memo[treeCandidate.MovNodes].sa;
                         treeCandidate.sa.Install.Reference = Memo[treeCandidate.RefNodes].sa;
 
                         counter++;
                         continue;
+                        //return;
                     }
                     if (Memo.ContainsKey(treeCandidate.MovNodes))
                     {
@@ -143,7 +145,7 @@ namespace Assembly_Planner
                         }
                         //all.Add(localSorted);
                         continue;
-                        //break;
+                        //return;
                     }
                     if (Memo.ContainsKey(treeCandidate.RefNodes))
                     {
@@ -165,7 +167,7 @@ namespace Assembly_Planner
                             beamChildern.Add(cost2 + lsl.Key, merged);
                         }
                         continue;
-                        //break;
+                        //return;
                     }
                     /*HashSet<TreeCandidate> refCandsF = null, movCandsF = null;
                     var tasks = new Task[2];
@@ -196,11 +198,11 @@ namespace Assembly_Planner
                         merged.UnionWith(temp);
                         beamChildern.Add(cost + lsl.Key, merged);
                     }
-                    //break;
+                    //return;
                     continue;
                     //all.Add(localSorted);
                 }
-
+                    //);
                 if (!SortedStack.Any())
                     foreach (var child in beamChildern)
                         SortedStack.Add(child.Key, child.Value);

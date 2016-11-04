@@ -30,12 +30,14 @@ namespace Assembly_Planner
         public static double MeshMagnifier = 1;
         public static double[] PointInMagicBox = {0,0,0.0};
         public static int BeamWidth;
-
+        protected static bool DetectFasteners = true;
+        protected static int FastenersAreThreaded = 0; // 0: none, 1: all, 2: subset
         public static List<int> globalDirPool = new List<int>();
         public static List<double> allmtime = new List<double>();
         public static List<double> allitime = new List<double>();
         private static void Main(string[] args)
         {
+            InititalConfigurations();
 
             string inputDir;
 #if InputDialog
@@ -47,11 +49,11 @@ namespace Assembly_Planner
 #endif
             Solids = GetSTLs(inputDir);
             //EnlargeTheSolid();
-            var detectFasteners = true; //TBI
+
             var threaded = 0; // 0:none, 1: all, 2: subset
             AssemblyGraph = new designGraph();
             DisassemblyDirectionsWithFastener.RunGeometricReasoning(Solids);
-            if (detectFasteners)
+            if (DetectFasteners)
                 DisassemblyDirectionsWithFastener.RunFastenerDetection(Solids, threaded);
             else
                 SolidsNoFastener = Solids;
@@ -76,6 +78,29 @@ namespace Assembly_Planner
             //WorkerAllocation.Run(solutions, reorientation);
             Console.WriteLine("\n\nDone");
             Console.ReadLine();
+        }
+
+        private static void InititalConfigurations()
+        {
+            var autoFastenersDetect = "m";
+            while (autoFastenersDetect != "y" && autoFastenersDetect != "n" && autoFastenersDetect != "Y" &&
+                   autoFastenersDetect != "N")
+            {
+                Console.WriteLine("Do you want the AAP tool to automatically detect the fasteners? (y/n)");
+                autoFastenersDetect = Console.ReadLine();
+            }
+            if (autoFastenersDetect == "y" || autoFastenersDetect == "Y")
+            {
+                DetectFasteners = true;
+                var threaded = 5;
+                while (threaded != 0 && threaded != 1 && threaded != 2)
+                {
+                    Console.WriteLine("Are the fasteners of the input model threaded? (0: none, 1: all, 2: subset)");
+                    threaded = Convert.ToInt32(Console.ReadLine());
+                }
+                FastenersAreThreaded = threaded;
+            }
+            else DetectFasteners = false;
         }
 
 
