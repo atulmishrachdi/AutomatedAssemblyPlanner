@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>TVGL</id>
+    <version>1.0.15.1215</version>
+    <title>Tesselation and Voxelization Geometry Library</title>
+    <authors>Matt Campbell</authors>
+    <owners>Matt Campbell</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>This new dynamic library is focused on Computational Geometry functions likes the ones you would find in CGAL. As opposed to copying directly others work, we have sought to create functions from scratch that are optimized or straightforward as a C# implementation. As a .NET managed library (and a portable class library at that), the functions can be accessed from other managed code.</description>
+    <summary>A library of three-dimensional geometry functions.</summary>
+    <copyright>2015</copyright>
+    <language>en-US</language>
+    <tags>3d geometry mesh tessellation voxelization</tags>
+  </metadata>
+</package>
