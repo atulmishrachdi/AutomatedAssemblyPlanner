@@ -31232,22 +31232,6 @@
       <name>a1</name>
       <localLabels />
       <localVariables />
-      <From>PumpWithRealBoltsAndNuts - Ext-Side2</From>
-      <To>PumpWithRealBoltsAndNuts - Ext-Pipe</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>1463</int>
-      </InfiniteDirections>
-      <FiniteDirections />
-      <Fasteners />
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a2</name>
-      <localLabels />
-      <localVariables />
       <From>PumpWithRealBoltsAndNuts - Ext-Side1</From>
       <To>PumpWithRealBoltsAndNuts - Ext-Pipe</To>
       <directed>false</directed>
@@ -31261,7 +31245,7 @@
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a3</name>
+      <name>a2</name>
       <localLabels />
       <localVariables />
       <From>PumpWithRealBoltsAndNuts - Ext-Ring</From>
@@ -31278,7 +31262,7 @@
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a4</name>
+      <name>a3</name>
       <localLabels />
       <localVariables />
       <From>PumpWithRealBoltsAndNuts - Ext-Shaft</From>
@@ -31288,6 +31272,22 @@
       <InfiniteDirections>
         <int>1463</int>
         <int>4578</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a4</name>
+      <localLabels />
+      <localVariables />
+      <From>PumpWithRealBoltsAndNuts - Ext-Side2</From>
+      <To>PumpWithRealBoltsAndNuts - Ext-Pipe</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1463</int>
       </InfiniteDirections>
       <FiniteDirections />
       <Fasteners />
@@ -31305,55 +31305,55 @@
       <InfiniteDirections>
         <int>0</int>
         <int>116</int>
-        <int>340</int>
         <int>120</int>
+        <int>124</int>
+        <int>330</int>
+        <int>336</int>
+        <int>340</int>
         <int>450</int>
         <int>477</int>
         <int>481</int>
         <int>725</int>
-        <int>124</int>
         <int>762</int>
         <int>765</int>
-        <int>330</int>
         <int>780</int>
-        <int>336</int>
         <int>798</int>
-        <int>1241</int>
         <int>974</int>
-        <int>1257</int>
-        <int>1277</int>
         <int>1017</int>
         <int>1032</int>
-        <int>1566</int>
+        <int>1241</int>
+        <int>1257</int>
+        <int>1277</int>
         <int>1364</int>
         <int>1401</int>
-        <int>1583</int>
         <int>1465</int>
+        <int>1583</int>
         <int>1801</int>
         <int>1817</int>
+        <int>1566</int>
         <int>1976</int>
         <int>1835</int>
         <int>2036</int>
-        <int>2129</int>
         <int>1941</int>
+        <int>2129</int>
         <int>2168</int>
         <int>2233</int>
         <int>2339</int>
         <int>2332</int>
         <int>2416</int>
+        <int>6230</int>
         <int>2777</int>
+        <int>1544</int>
         <int>2560</int>
-        <int>2804</int>
+        <int>3115</int>
+        <int>4659</int>
         <int>2637</int>
+        <int>2804</int>
         <int>2686</int>
         <int>2887</int>
-        <int>6230</int>
-        <int>1544</int>
         <int>2891</int>
         <int>3016</int>
-        <int>3115</int>
         <int>3097</int>
-        <int>4659</int>
       </InfiniteDirections>
       <FiniteDirections>
         <int>2468</int>
@@ -31415,57 +31415,57 @@
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
         <int>0</int>
-        <int>116</int>
-        <int>120</int>
-        <int>124</int>
-        <int>330</int>
-        <int>336</int>
         <int>340</int>
         <int>450</int>
         <int>477</int>
         <int>481</int>
         <int>725</int>
-        <int>762</int>
         <int>765</int>
-        <int>780</int>
+        <int>762</int>
+        <int>116</int>
         <int>1241</int>
+        <int>120</int>
         <int>1257</int>
+        <int>780</int>
         <int>1277</int>
-        <int>1364</int>
         <int>798</int>
-        <int>974</int>
-        <int>1401</int>
-        <int>1465</int>
+        <int>1364</int>
         <int>1566</int>
-        <int>1017</int>
+        <int>974</int>
         <int>1583</int>
+        <int>1401</int>
+        <int>1017</int>
+        <int>1465</int>
         <int>1032</int>
-        <int>1976</int>
         <int>1801</int>
-        <int>2036</int>
-        <int>2129</int>
+        <int>1976</int>
         <int>1817</int>
-        <int>2168</int>
-        <int>2233</int>
         <int>2339</int>
+        <int>2036</int>
         <int>1835</int>
-        <int>2332</int>
-        <int>2560</int>
+        <int>2129</int>
+        <int>124</int>
         <int>2416</int>
-        <int>2468</int>
-        <int>2637</int>
+        <int>2168</int>
+        <int>330</int>
         <int>1941</int>
-        <int>2777</int>
+        <int>2233</int>
+        <int>2468</int>
+        <int>2332</int>
         <int>6230</int>
-        <int>2804</int>
-        <int>3097</int>
-        <int>2686</int>
+        <int>2560</int>
         <int>1544</int>
+        <int>2637</int>
+        <int>2777</int>
+        <int>336</int>
+        <int>2686</int>
+        <int>3115</int>
+        <int>4659</int>
+        <int>2804</int>
         <int>2887</int>
         <int>2891</int>
-        <int>3115</int>
         <int>3016</int>
-        <int>4659</int>
+        <int>3097</int>
       </InfiniteDirections>
       <FiniteDirections />
       <Fasteners>
@@ -31519,23 +31519,6 @@
       <name>a7</name>
       <localLabels />
       <localVariables />
-      <From>PumpWithRealBoltsAndNuts - Ext-Shaft</From>
-      <To>PumpWithRealBoltsAndNuts - Ext-Pipe</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>1463</int>
-        <int>4578</int>
-      </InfiniteDirections>
-      <FiniteDirections />
-      <Fasteners />
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a8</name>
-      <localLabels />
-      <localVariables />
       <From>PumpWithRealBoltsAndNuts - Ext-Side1</From>
       <To>PumpWithRealBoltsAndNuts - Ext-Shaft</To>
       <directed>false</directed>
@@ -31550,7 +31533,41 @@
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
+      <name>a8</name>
+      <localLabels />
+      <localVariables />
+      <From>PumpWithRealBoltsAndNuts - Ext-Shaft</From>
+      <To>PumpWithRealBoltsAndNuts - Ext-Pipe</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>4578</int>
+        <int>1463</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
       <name>a9</name>
+      <localLabels />
+      <localVariables />
+      <From>PumpWithRealBoltsAndNuts - Ext-Side2</From>
+      <To>PumpWithRealBoltsAndNuts - Ext-Shaft</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1463</int>
+        <int>4578</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a10</name>
       <localLabels />
       <localVariables />
       <From>PumpWithRealBoltsAndNuts - Pump</From>
@@ -31558,45 +31575,45 @@
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
+        <int>765</int>
         <int>0</int>
         <int>340</int>
-        <int>765</int>
-        <int>116</int>
-        <int>450</int>
-        <int>5089</int>
-        <int>120</int>
-        <int>477</int>
-        <int>5096</int>
         <int>1241</int>
-        <int>124</int>
         <int>780</int>
-        <int>5112</int>
-        <int>1257</int>
-        <int>330</int>
-        <int>481</int>
-        <int>5128</int>
-        <int>798</int>
-        <int>1277</int>
-        <int>336</int>
-        <int>725</int>
+        <int>450</int>
         <int>5143</int>
+        <int>477</int>
+        <int>1257</int>
+        <int>798</int>
+        <int>116</int>
         <int>5344</int>
+        <int>1277</int>
+        <int>481</int>
+        <int>1566</int>
         <int>1364</int>
-        <int>974</int>
-        <int>762</int>
         <int>5568</int>
         <int>1401</int>
-        <int>1566</int>
+        <int>120</int>
+        <int>725</int>
         <int>5835</int>
-        <int>1465</int>
-        <int>1017</int>
-        <int>5608</int>
-        <int>4659</int>
+        <int>974</int>
         <int>5948</int>
-        <int>1032</int>
+        <int>762</int>
+        <int>124</int>
+        <int>1465</int>
+        <int>5608</int>
+        <int>5089</int>
+        <int>5096</int>
         <int>5615</int>
         <int>6105</int>
+        <int>5112</int>
+        <int>330</int>
+        <int>1017</int>
+        <int>5128</int>
+        <int>1032</int>
         <int>5642</int>
+        <int>336</int>
+        <int>4659</int>
         <int>6230</int>
         <int>1544</int>
         <int>6231</int>
@@ -31684,23 +31701,6 @@
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a10</name>
-      <localLabels />
-      <localVariables />
-      <From>PumpWithRealBoltsAndNuts - Ext-Side2</From>
-      <To>PumpWithRealBoltsAndNuts - Ext-Shaft</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>1463</int>
-        <int>4578</int>
-      </InfiniteDirections>
-      <FiniteDirections />
-      <Fasteners />
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
       <name>a11</name>
       <localLabels />
       <localVariables />
@@ -31726,59 +31726,59 @@
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
         <int>1241</int>
-        <int>0</int>
+        <int>765</int>
         <int>1566</int>
+        <int>0</int>
         <int>1976</int>
         <int>340</int>
-        <int>1583</int>
-        <int>450</int>
-        <int>2036</int>
         <int>2339</int>
-        <int>477</int>
         <int>120</int>
+        <int>780</int>
+        <int>1583</int>
+        <int>124</int>
+        <int>2416</int>
+        <int>798</int>
+        <int>1257</int>
+        <int>2036</int>
         <int>1801</int>
+        <int>450</int>
+        <int>1817</int>
         <int>2129</int>
         <int>2777</int>
-        <int>124</int>
-        <int>1817</int>
-        <int>2168</int>
-        <int>2416</int>
-        <int>2804</int>
-        <int>330</int>
-        <int>765</int>
-        <int>2233</int>
-        <int>1257</int>
-        <int>1835</int>
-        <int>2560</int>
-        <int>2332</int>
-        <int>2891</int>
-        <int>780</int>
-        <int>6230</int>
-        <int>336</int>
-        <int>725</int>
         <int>1277</int>
-        <int>2637</int>
-        <int>798</int>
-        <int>2686</int>
+        <int>477</int>
         <int>1364</int>
-        <int>3016</int>
+        <int>1835</int>
+        <int>330</int>
         <int>1017</int>
-        <int>762</int>
+        <int>2560</int>
+        <int>336</int>
         <int>1401</int>
         <int>1032</int>
+        <int>6230</int>
+        <int>2168</int>
+        <int>2637</int>
+        <int>2891</int>
+        <int>2804</int>
         <int>1465</int>
+        <int>2233</int>
+        <int>3016</int>
+        <int>2686</int>
+        <int>725</int>
+        <int>762</int>
+        <int>2332</int>
       </InfiniteDirections>
       <FiniteDirections>
         <int>116</int>
-        <int>481</int>
         <int>2468</int>
-        <int>2887</int>
         <int>974</int>
-        <int>1941</int>
         <int>1544</int>
+        <int>481</int>
+        <int>2887</int>
         <int>3115</int>
-        <int>4659</int>
         <int>3097</int>
+        <int>1941</int>
+        <int>4659</int>
       </FiniteDirections>
       <Fasteners>
         <Fastener>

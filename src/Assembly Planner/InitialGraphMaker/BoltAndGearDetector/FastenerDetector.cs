@@ -379,28 +379,7 @@ namespace Assembly_Planner
             return approvedFasteners;
         }
 
-        internal static bool SolidHasFastenerKeyword(TessellatedSolid solid , int preCutoff, int postCutoff)
-        {
-            string[] keyWordList ={ "screw",
-                                    "washer",
-                                    "pin",
-                                    "bolt",
-                                    "nut",
-                                    "rivet",
-                                    "grommet"
-            };
-            int pos = 0;
-            int lim = keyWordList.Length;
-            while (pos < lim)
-            {
-                PartNameAnalysis.stringInclusionDistance(  keyWordList[pos].ToLower(), 
-                                                           (solid.Name.ToLower()).Substring(preCutoff,postCutoff)
-                                                        );
-                pos++;
-            }
 
-            return false;
-        }
     }
 
     internal class TemporaryFlat

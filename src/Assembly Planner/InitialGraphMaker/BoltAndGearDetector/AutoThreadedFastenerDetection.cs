@@ -51,6 +51,7 @@ namespace Assembly_Planner
             var learnerWeights = FastenerPerceptronLearner.ReadingLearnerWeightsAndVotesFromCsv(out learnerVotes);
             FastenerGaussianNaiveBayes.GNB();
 
+            
             List<string> nameList = new List<string>();
             foreach (var part in uniqueParts)
             {
@@ -62,8 +63,9 @@ namespace Assembly_Planner
 
             foreach (var part in uniqueParts)
             {
-                FastenerDetector.SolidHasFastenerKeyword(part,preCutoff,postCutoff);
+                PartNameAnalysis.SolidHasFastenerKeyword(part,preCutoff,postCutoff);
             }
+            
 
             var refresh = (int)Math.Ceiling((float)uniqueParts.Count / (float)(width * 4));
             Parallel.ForEach(uniqueParts, solid =>

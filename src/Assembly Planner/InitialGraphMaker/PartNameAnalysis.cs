@@ -64,8 +64,8 @@ namespace Assembly_Planner
                 }
                 widthPos++;
             }
-            Console.Write("With term '" + term + "' and content '" + content + "'\n   yeilded distance : " 
-                          + best.ToString() + " with match " + match + "\n\n\n");
+            //Console.Write("With term '" + term + "' and content '" + content + "'\n   yeilded distance : " 
+                         // + best.ToString() + " with match " + match + "\n\n\n");
             return best;
         }
 
@@ -108,11 +108,11 @@ namespace Assembly_Planner
                                 term[termPos - 1] == 'y' 
                                 )
                             {
-                                cost = 0.5f;
+                                cost = 0.4f;
                             }
                             else
                             {
-                                cost = 1.5f;
+                                cost = 1.0f;
                             }
                         }
                     }
@@ -145,7 +145,7 @@ namespace Assembly_Planner
                 termPos++;
             }
             grid = printGrid(diffGrid, contentLim + 1);
-            float result = diffGrid.Last();
+            float result = diffGrid.Last()/(2.0f*Math.Max(term.Count(),content.Count()));
             return result;
         }
 
@@ -186,6 +186,7 @@ namespace Assembly_Planner
                 {
                     preLim = stringList[pos].Count();
                 }
+                prePos = 0;
                 while (prePos < preLim)
                 {
                     if (stringList[pos][prePos] != stringList[0][prePos])
@@ -206,6 +207,7 @@ namespace Assembly_Planner
                 {
                    sufLim = stringList[pos].Count();
                 }
+                sufPos = 0;
                 while (sufPos < sufLim)
                 {
                     if (stringList[pos][stringList[pos].Count() - 1 - sufPos] != stringList[0][stringList[0].Count() - 1 - sufPos])
@@ -222,6 +224,36 @@ namespace Assembly_Planner
             sufCutoff = sufLim;
 
         }
+
+
+        internal static float SolidHasFastenerKeyword(TVGL.TessellatedSolid solid, int preCutoff, int postCutoff)
+        {
+            string[] keyWordList ={ "screw",
+                                    "washer",
+                                    "bolt",
+                                    "nut",
+                                    "rivet",
+                                    "grommet",
+                                    "fastener"
+            };
+            int pos = 0;
+            int lim = keyWordList.Length;
+            float best=1000.0f;
+            while (pos < lim)
+            {
+                //Console.WriteLine(solid.Name);
+                best = Math.Min ( best,
+                                  PartNameAnalysis.stringInclusionDistance(
+                                      keyWordList[pos].ToLower(),
+                                      (solid.Name.ToLower()).Substring(preCutoff, solid.Name.Count() - postCutoff - preCutoff)
+                                  )
+                );
+                pos++;
+            }
+
+            return best;
+        }
+
 
     }
 }

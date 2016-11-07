@@ -42,6 +42,7 @@ namespace Assembly_Planner
             List<int> learnerVotes;
             var learnerWeights = FastenerPerceptronLearner.ReadingLearnerWeightsAndVotesFromCsv(out learnerVotes);
 
+            
             List<string> nameList = new List<string>();
             foreach (var part in uniqueParts)
             {
@@ -53,8 +54,9 @@ namespace Assembly_Planner
 
             foreach (var part in uniqueParts)
             {
-                FastenerDetector.SolidHasFastenerKeyword(part, preCutoff, postCutoff);
+                PartNameAnalysis.SolidHasFastenerKeyword(part,preCutoff,postCutoff);
             }
+            
 
 
             var refresh = (int)Math.Ceiling((float)uniqueParts.Count / (float)(width * 4));

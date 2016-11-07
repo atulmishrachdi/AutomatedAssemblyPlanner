@@ -54,7 +54,7 @@ namespace Assembly_Planner
             FastenerGaussianNaiveBayes.GNB();
 
 
-            /*
+            
             List<string> nameList = new List<string>();
             foreach (var part in uniqueParts)
             {
@@ -64,11 +64,8 @@ namespace Assembly_Planner
             int postCutoff = 0;
             PartNameAnalysis.findCommonPreSuffixes(nameList, ref preCutoff, ref postCutoff);
 
-            foreach (var part in uniqueParts)
-            {
-                FastenerDetector.SolidHasFastenerKeyword(part,preCutoff,postCutoff);
-            }
-            */
+            float nameRating;
+            
 
 
             var refresh = (int)Math.Ceiling((float)uniqueParts.Count / (float)(width * 4));
@@ -85,11 +82,11 @@ namespace Assembly_Planner
                 var initialCertainty = FastenerGaussianNaiveBayes.GaussianNaiveBayesClassifier(solidPrimitive[solid],
                     solid);
                 
-               
-                
-                FastenerDetector.PotentialFastener[solid] = 0.1 + initialCertainty;
+               nameRating = PartNameAnalysis.SolidHasFastenerKeyword(solid, preCutoff, postCutoff); 
+
+                FastenerDetector.PotentialFastener[solid] = (0.1 + initialCertainty)*0.6 + (1-nameRating)*0.4;
                 foreach (var up in multipleRefs[solid])
-                    FastenerDetector.PotentialFastener[up] = 0.1 + initialCertainty;
+                    FastenerDetector.PotentialFastener[up] = (0.1 + initialCertainty) * 0.6 + (1 - nameRating) * 0.4;
                 if (solidPrimitive[solid].Count == 0) return;
                 if (HexBoltNutAllen(solid, solidPrimitive[solid], equalPrimitivesForEveryUniqueSolid[solid],
                     multipleRefs[solid]))

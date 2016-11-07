@@ -556,8 +556,11 @@ function parseData(){
 		*/
 		theVec=grab(thePairs[pos],"vector");
 		namePairs.push({
+			name: grab(thePairs[pos],"name").innerHTML,
 			Ref: theRef.innerHTML,
 			Mov: theMov.innerHTML,
+			localLabels: grab(thePairs[pos],"localLabels").innerHTML,
+			localVariables: grab(thePairs[pos],"localVariables").innerHTML,
 			Directed: directed,
 			DoublyDirected: doublyDirected,
 			InfiniteDirections: infiniteDirections,
@@ -1112,8 +1115,9 @@ function getDir(theVec){
 
 
 
-
+/*
 function renderXML(){
+	
 	
 	var start= "<?xml version='1.0' encoding='utf-8'?>\n"+
 				"<DirectionSaveStructure xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>\n";
@@ -1132,19 +1136,46 @@ function renderXML(){
 	}
 	dirContent = dirContent + "</Directions>\n";
 	
+	
+	namePairs.push({
+			name: grab(thePairs[pos],"name").innerHTML,
+			Ref: theRef.innerHTML,
+			Mov: theMov.innerHTML,
+			localLabels: grab(thePairs[pos],"localLabels").innerHTML,
+			localVariables: grab(thePairs[pos],"localVariables").innerHTML,
+			Directed: directed,
+			DoublyDirected: doublyDirected,
+			InfiniteDirections: infiniteDirections,
+			FiniteDirections: null finiteDirections,
+			Fasteners: grab(thePairs[pos],"Fasteners").innerHTML,
+			Certainty: grab(thePairs[pos],"Certainty").innerHTML,
+			ConnectionType: grab(thePairs[pos],"ConnectionType").innerHTML
+		});
+	
 	var arcContent = "<arcs>\n";
+	
 	pos=0;
-	lim=assemblyPairs.length;
+	lim=namePairs.length;
 	while(pos<lim){
-		arcContent = "<arc xsi:type='Connection'>\n";
-		arcContent = "</arc>\n";
+		arcContent = arcContent+"<arc xsi:type='Connection'>\n";
+		arcContent = arcContent+"<name> "+namePairs[pos].name+" </name>";
+		arcContent = arcContent+"<localLabels> "+namePairs[pos].localLabels+" </localLabels>";
+		arcContent = arcContent+"<localVariables> "+namePairs[pos].localVariables+" </localVariables>";
+		arcContent = arcContent+"<From> "+namePairs[pos].Mov+" </From>";
+		arcContent = arcContent+"<directed> "+namePairs[pos].Ref+" </To>";
+		arcContent = arcContent+"<doublyDirected> "+namePairs[pos].name+" </name>";
+		arcContent = arcContent+"<To> "+namePairs[pos].name+" </name>";
+		arcContent = arcContent+"<To> "+namePairs[pos].name+" </name>";
+		arcContent = arcContent+"<To> "+namePairs[pos].name+" </name>";
+		
+		arcContent = arcContent+"</arc>\n";
 		pos++;
 	}
 	arcContent= arcContent + "</arcs>\n";
 	
 	
 }
-
+*/
 
 
 
