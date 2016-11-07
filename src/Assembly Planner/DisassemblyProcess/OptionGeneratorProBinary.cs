@@ -22,7 +22,7 @@ namespace Assembly_Planner
             //AddingOptionsToGraph(assemblyGraph, combinations, seperate.nodes.Count);
             options.UnionWith(AddingOptionsToGraph(combinations, seperate, options, gOptions, cndDirInd));
             var counter = 0;
-            var cp1 = new HashSet<HashSet<hyperarc>>();
+            var cp1 = new HashSet<HashSet<hyperarc>>(HashSet<hyperarc>.CreateSetComparer());
             var cp2 = new HashSet<HashSet<hyperarc>>();
 
             do
@@ -37,8 +37,8 @@ namespace Assembly_Planner
                     {
                         if (opt.Contains(key) || blockingDic[key].Count == 0) continue;
                         if (!blockingDic[key].All(bl => opt.Contains(bl))) continue;
-                        var newOp = new List<hyperarc>(opt) { key };
-                        if (!cp1.Where(cp => cp.All(hy => newOp.Contains(hy))).Any(cp => newOp.All(cp.Contains)))
+                        var newOp = new HashSet<hyperarc>(opt) { key };
+                        if (!cp1.Contains(newOp))
                             freeSCCs.Add(key);
                     }
 
