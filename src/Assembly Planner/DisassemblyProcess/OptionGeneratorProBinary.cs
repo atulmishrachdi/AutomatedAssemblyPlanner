@@ -76,18 +76,18 @@ namespace Assembly_Planner
                 var otherHalf = seperate.Where(n => !nodes.Contains(n)).ToList();
 
                 if (nodes.Count == seperate.Count) continue;
-                if (optionList.Any(o => o.nodes.All(nodes.Contains) && nodes.All(o.nodes.Contains))) continue;
-                if (optionList.Any(o => o.nodes.All(otherHalf.Contains) && otherHalf.All(o.nodes.Contains))) continue;
-                if (options.Any(o => o.nodes.All(nodes.Contains) && nodes.All(o.nodes.Contains))) continue;
-                if (options.Any(o => o.nodes.All(otherHalf.Contains) && otherHalf.All(o.nodes.Contains))) continue;
+                if (optionList.Any(o => o.nodes.Count ==nodes.Count && nodes.All(o.nodes.Contains))) continue;
+                if (optionList.Any(o => o.nodes.Count == otherHalf.Count && otherHalf.All(o.nodes.Contains))) continue;
+                if (options.Any(o => o.nodes.Count == nodes.Count && nodes.All(o.nodes.Contains))) continue;
+                if (options.Any(o => o.nodes.Count == otherHalf.Count && otherHalf.All(o.nodes.Contains))) continue;
                 var exist =
-                    gOptions.Keys.Where(o => o.nodes.All(nodes.Contains) && nodes.All(o.nodes.Contains)).ToList();
+                    gOptions.Keys.Where(o => o.nodes.Count == nodes.Count && nodes.All(o.nodes.Contains)).ToList();
                 if (exist.Any())
                 {
                     gOptions[exist[0]].Add(cndDirInd);
                     continue;
                 }
-                if (gOptions.Keys.Any(o => o.nodes.All(otherHalf.Contains) && otherHalf.All(o.nodes.Contains)))
+                if (gOptions.Keys.Any(o => o.nodes.Count == otherHalf.Count && otherHalf.All(o.nodes.Contains)))
                     continue;
 
                 newOption.nodes.AddRange(nodes);
@@ -121,7 +121,7 @@ namespace Assembly_Planner
             var i = 0;
             while (i < freeSCCs.Count - 1)
             {
-                var newGroup = new HashSet<HashSet<hyperarc>>();
+                var newGroup = new HashSet<HashSet<hyperarc>>(HashSet<hyperarc>.CreateSetComparer());
                 for (var j = 0; j < freeSCCs.Count - 1; j++)
                 {
                     var hy1 = freeSCCs[j];
@@ -130,7 +130,7 @@ namespace Assembly_Planner
                         var hy2 = lastGroup[k];
                         var com = new HashSet<hyperarc> { hy1 };
                         com.UnionWith(hy2);
-                        if ((newGroup.Any(hy => hy.All(com.Contains) && com.All(hy.Contains))) || hy2.Contains(hy1))
+                        if (newGroup.Contains(com) || hy2.Contains(hy1))
                             continue;
                         newGroup.Add(com);
                     }
@@ -185,23 +185,24 @@ namespace Assembly_Planner
         {
             // ACCEPTABLE COMBINATIONS:
             // Screwed to each other
-            var finalCombination = new HashSet<HashSet<hyperarc>>();
+            var finalCombination = new HashSet<HashSet<hyperarc>>(HashSet<hyperarc>.CreateSetComparer());
             var dic = new Dictionary<hyperarc, List<hyperarc>>();
             foreach (var scc in freeSCCs)
                 dic.Add(scc, PhisicallyConnected(assemblyGraph, freeSCCs, scc));
 
-            var generated = new Queue<HashSet<hyperarc>>();
+            var generated = new HashSet<HashSet<hyperarc>>(HashSet<hyperarc>.CreateSetComparer());
             var screwed = new List<hyperarc>();
             foreach (var parent in parents)
                 screwed.AddRange(PhisicallyConnected(assemblyGraph, freeSCCs, parent));
             var combin = CombinationsCreator(screwed);
             foreach (var comb in combin)
-                generated.Enqueue(comb);
+                generated.Add(comb);
 
             while (generated.Any())
             {
-                var opt = generated.Dequeue();
-                if (!(finalCombination.Any(hys => hys.All(opt.Contains) && opt.All(hys.Contains))))
+                var opt = generated.First();
+                generated.Remove(opt);
+                if (!finalCombination.Contains(opt))
                     finalCombination.Add(opt);
                 if (finalCombination.Count > 100) break;
                 var screwedToOption = ScrewedToOption(dic, opt);
@@ -210,9 +211,9 @@ namespace Assembly_Planner
                 {
                     var merged = new HashSet<hyperarc>(com);
                     merged.UnionWith(opt);
-                    if (generated.Any(hys => hys.All(merged.Contains) && merged.All(hys.Contains)))
+                    if (generated.Contains(merged))
                         continue;
-                    generated.Enqueue(merged);
+                    generated.Add(merged);
                 }
             }
 
@@ -278,7 +279,7 @@ namespace Assembly_Planner
                     // Merge them:
                     var n = new List<hyperarc>(groupsOfHyperarcs[i]);
                     n.AddRange(groupsOfHyperarcs[j].Where(hy => !n.Contains(hy)));
-                    if (merged.Any(g => g.All(n.Contains) && n.All(g.Contains))) continue;
+                    if (merged.Any(g => g.Count == n.Count && n.All(g.Contains))) continue;
                     merged.Add(n);
                 }
             }
