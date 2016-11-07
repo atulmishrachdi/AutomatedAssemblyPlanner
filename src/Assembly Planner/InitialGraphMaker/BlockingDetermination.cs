@@ -34,7 +34,6 @@ namespace Assembly_Planner
             Parallel.ForEach(parts, solid =>
             //foreach (var solid in parts)
             {
-                
                 if (check % refresh == 0)
                 {
                     LoadingBar.refresh(width, ((float)check) / ((float)parts.Count));

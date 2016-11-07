@@ -31,6 +31,7 @@ namespace Assembly_Planner
         public static double[] PointInMagicBox = {0,0,0.0};
         public static int BeamWidth;
         protected static bool DetectFasteners = true;
+        protected internal static int AvailableWorkers = 0;
         protected static int FastenersAreThreaded = 0; // 0: none, 1: all, 2: subset
         public static List<int> globalDirPool = new List<int>();
         public static List<double> allmtime = new List<double>();
@@ -55,10 +56,8 @@ namespace Assembly_Planner
             DisassemblyDirectionsWithFastener.RunGeometricReasoning(Solids);
             if (DetectFasteners)
                 DisassemblyDirectionsWithFastener.RunFastenerDetection(Solids, threaded);
-            else
-                SolidsNoFastener = Solids;
             SerializeSolidProperties();
-            Console.WriteLine("Press enter once input parts table generated >>");
+            Console.WriteLine("\nPress enter once input parts table generated >>");
             Console.ReadLine();
             DeserializeSolidProperties();
             globalDirPool = DisassemblyDirectionsWithFastener.RunGraphGeneration(AssemblyGraph, SolidsNoFastener);
@@ -75,7 +74,7 @@ namespace Assembly_Planner
             OptimalOrientation.Run(solutions);
             var cand = new AssemblyCandidate() { Sequence = solutions };
             cand.SaveToDisk(Directory.GetCurrentDirectory() + "\\workspace\\solution.xml");
-            //WorkerAllocation.Run(solutions, reorientation);
+            WorkerAllocation.Run(solutions);
             Console.WriteLine("\n\nDone");
             Console.ReadLine();
         }

@@ -13,7 +13,7 @@ namespace Assembly_Planner
 
         public static void start(int width, float completion)
         {
-            string bar = "\n[";
+            string bar = "[";
             int pos = 0;
             int loadCutOff = (int) (completion * width);
             while (pos < loadCutOff)
