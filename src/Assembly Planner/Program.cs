@@ -62,10 +62,10 @@ namespace Assembly_Planner
             DeserializeSolidProperties();
             globalDirPool = DisassemblyDirectionsWithFastener.RunGraphGeneration(AssemblyGraph, SolidsNoFastener);
             // the second user interaction must happen here
-            SaveDirections();
-            Console.WriteLine("\n\nPress enter once input directions generated >>");
-            Console.ReadLine();
-            LoadDirections();
+            //SaveDirections();
+            //Console.WriteLine("\n\nPress enter once input directions generated >>");
+            //Console.ReadLine();
+            //LoadDirections();
 
             NonadjacentBlockingWithPartitioning.Run(AssemblyGraph, SolidsNoFastener, globalDirPool);
             Stabilityfunctions.GenerateReactionForceInfo(AssemblyGraph);
