@@ -97,44 +97,47 @@ namespace Assembly_Planner
                                             DisassemblyDirections.Directions[i]) < 0.07)) continue;
                             final.Add(i);
                         }
-                        if (final.Count < 3)
+                        lock (globalDirPool)
                         {
-                            localDirInd.Clear();
+                            if (final.Count < 3)
+                            {
+                                localDirInd.Clear();
+                                foreach (var i in final)
+                                {
+                                    if (!globalDirPool.Contains(i))
+                                        globalDirPool.Add(i);
+                                    if (!localDirInd.Contains(i))
+                                        localDirInd.Add(i);
+                                }
+                                return true;
+                            }
+                            var finalLocalDirInd = new List<int>();
                             foreach (var i in final)
                             {
-                                if (!globalDirPool.Contains(i))
-                                    globalDirPool.Add(i);
-                                if (!localDirInd.Contains(i))
-                                    localDirInd.Add(i);
+                                var temp =
+                                    globalDirPool.Where(
+                                        d =>
+                                            1 -
+                                            DisassemblyDirections.Directions[d].dotProduct(
+                                                DisassemblyDirections.Directions[i]) < 0.01).ToList();
+                                if (!temp.Any())
+                                {
+                                    if (!finalLocalDirInd.Contains(i))
+                                        finalLocalDirInd.Add(i);
+                                    if (!globalDirPool.Contains(i))
+                                        globalDirPool.Add(i);
+                                }
+                                else
+                                {
+                                    if (!finalLocalDirInd.Contains(temp[0]))
+                                        finalLocalDirInd.Add(temp[0]);
+                                }
                             }
-                            return true;
+                            localDirInd.Clear();
+                            AddSixMainAxes(finalLocalDirInd, globalDirPool);
+                            foreach (var i in finalLocalDirInd)
+                                localDirInd.Add(i);
                         }
-                        var finalLocalDirInd = new List<int>();
-                        foreach (var i in final)
-                        {
-                            var temp =
-                                globalDirPool.Where(
-                                    d =>
-                                        1 -
-                                        DisassemblyDirections.Directions[d].dotProduct(
-                                            DisassemblyDirections.Directions[i]) < 0.01).ToList();
-                            if (!temp.Any())
-                            {
-                                if (!finalLocalDirInd.Contains(i))
-                                    finalLocalDirInd.Add(i);
-                                if (!globalDirPool.Contains(i))
-                                    globalDirPool.Add(i);
-                            }
-                            else
-                            {
-                                if (!finalLocalDirInd.Contains(temp[0]))
-                                    finalLocalDirInd.Add(temp[0]);
-                            }
-                        }
-                        localDirInd.Clear();
-                        AddSixMainAxes(finalLocalDirInd, globalDirPool);
-                        foreach (var i in finalLocalDirInd)
-                            localDirInd.Add(i);
                         return true;
                     }
                     //if (GearGear(assemblyGraph, solid1, solid2))
