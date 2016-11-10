@@ -33,6 +33,7 @@ namespace Assembly_Planner
         protected static List<double> InitialStablyH = new List<double>();
         protected static double FinalTimeWeight;
         protected static double FinalStableWeight;
+        protected static int FalseLoop;
 
         protected static Dictionary<HashSet<Component>, MemoData> Memo =
             new Dictionary<HashSet<Component>, MemoData>(HashSet<Component>.CreateSetComparer());
@@ -43,6 +44,8 @@ namespace Assembly_Planner
         internal AssemblySequence Run(designGraph graph, Dictionary<string, List<TessellatedSolid>> solids,
             List<int> globalDirPool)
         {
+            var s = new Stopwatch();
+            s.Start();
             Console.WriteLine("\n\nLeap Optimization Search ....");
             Graph = graph;
             TimeEstm = 50;
@@ -67,6 +70,7 @@ namespace Assembly_Planner
             tokenSource.Dispose();
             InitializeMemo();*/
             var tree = LeapOptimizationSearch();
+            s.Stop();
             return new AssemblySequence {Subassemblies = new List<SubAssembly> {tree}};
         }
 
@@ -78,6 +82,7 @@ namespace Assembly_Planner
             var cands = GetCandidates(new HashSet<Component>(Graph.nodes.Cast<Component>()), 0);
             foreach (var c in cands)
                 SortedStack.Add(c.G + c.H, new HashSet<TreeCandidate> {c});
+            FalseLoop = 0;
             while (SortedStack.Any())
             {
                 TimeEstmCounter++;
@@ -128,6 +133,7 @@ namespace Assembly_Planner
                     if (Memo.ContainsKey(treeCandidate.MovNodes))
                     {
                         treeCandidate.sa.Install.Moving = Memo[treeCandidate.MovNodes].sa;
+                        FalseLoop = 0;
                         var refCands = GetCandidates(treeCandidate.RefNodes, treeCandidate.G);
                         foreach (var rC in refCands)
                         {
@@ -150,6 +156,7 @@ namespace Assembly_Planner
                     if (Memo.ContainsKey(treeCandidate.RefNodes))
                     {
                         treeCandidate.sa.Install.Reference = Memo[treeCandidate.RefNodes].sa;
+                        FalseLoop = 0;
                         var movCands = GetCandidates(treeCandidate.MovNodes, treeCandidate.G);
                         foreach (var mC in movCands)
                         {
@@ -174,7 +181,9 @@ namespace Assembly_Planner
                     tasks[0] = Task.Factory.StartNew(() => refCandsF = GetCandidates(treeCandidate.RefNodes));
                     tasks[1] = Task.Factory.StartNew(() => movCandsF = GetCandidates(treeCandidate.MovNodes));
                     Task.WaitAll(tasks);*/
+                    FalseLoop = 0;
                     var refCandsF = GetCandidates(treeCandidate.RefNodes, treeCandidate.G);
+                    FalseLoop = 0;
                     var movCandsF = GetCandidates(treeCandidate.MovNodes, treeCandidate.G);
 
                     foreach (var rC in refCandsF)
@@ -317,13 +326,13 @@ namespace Assembly_Planner
         }
 
         private static HashSet<TreeCandidate> GetCandidates(HashSet<Component> nodes, double parentTransitionCost,
-            bool relaxingSc = false)
+            bool relaxingSc = false, bool relaxingConnectionsWithFasteners = false)
         {
             var gOptions = new Dictionary<option, HashSet<int>>();
             var candidates = new HashSet<TreeCandidate>();
             if (MemoCandidates.ContainsKey(nodes))
                 return MemoCandidates[nodes];
-            GenerateOptions(nodes, gOptions, relaxingSc);
+            GenerateOptions(nodes, gOptions, relaxingSc, relaxingConnectionsWithFasteners);
             var c = 0;
 
             foreach (var opt in gOptions.Keys)
@@ -360,7 +369,29 @@ namespace Assembly_Planner
             // since user is checking the removal directions, we can simply assume the problem is only with secondary connections. 
             if (c == gOptions.Count)
             {
-                candidates = GetCandidates(nodes, parentTransitionCost, true);
+                if (c > 0)
+                {
+                    candidates = GetCandidates(nodes, parentTransitionCost, false, true);
+                }
+                else
+                {
+                    FalseLoop++;
+                    if (FalseLoop > 3)
+                    {
+                        Console.WriteLine("OOPS, I cannot disassemble these parts:\n");
+                        foreach (var n in nodes)
+                            Console.WriteLine("    - " + n.name);
+                        throw new Exception("Nodes cannot be disassembled.");
+                    }
+                    try
+                    {
+                        candidates = GetCandidates(nodes, parentTransitionCost, true);
+                    }
+                    catch (Exception)
+                    {
+                        //Bridge.StatusReporter.PrintMessage("I CANNOT CONTINUE ...", (float)1.0);
+                    }
+                }
             }
             if (MemoCandidates.ContainsKey(nodes))
                 return MemoCandidates[nodes];
@@ -369,7 +400,7 @@ namespace Assembly_Planner
         }
 
         private static void GenerateOptions(HashSet<Component> A, Dictionary<option, HashSet<int>> gOptions,
-            bool relaxingSc = false)
+            bool relaxingSc = false, bool relaxingConnectionsWithFasteners = false)
         {
             // I can filter the directions here. I dunno how important is this step, but let's do it
             // TBT
@@ -384,10 +415,12 @@ namespace Assembly_Planner
             foreach (var cndDirInd in filteredDirections)
             {
                 SCCBinary.StronglyConnectedComponents(Graph, A, cndDirInd);
+                //ChooseFromSCCMemo(A, cndDirInd);
                 var blockingDic = DBGBinary.DirectionalBlockingGraph(Graph, cndDirInd, relaxingSc);
-                var options = OptionGeneratorProBinary.GenerateOptions(Graph, A, blockingDic, gOptions, cndDirInd);
+                var options = OptionGeneratorProBinary.GenerateOptions(Graph, A, blockingDic, gOptions, cndDirInd,
+                    relaxingConnectionsWithFasteners);
                 foreach (var opt in options)
-                    gOptions.Add(opt, new HashSet<int> {cndDirInd});
+                    gOptions.Add(opt, new HashSet<int> { cndDirInd });
             }
         }
 

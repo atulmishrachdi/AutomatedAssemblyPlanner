@@ -12,7 +12,11 @@ namespace Assembly_Planner
     public class OptimalOrientation
     {
         public static Dictionary<string, List<string>> SucTasks;
+        public static Dictionary<string, double> TaskTime;
+        public static List<List<string>> SucSubassems;
+        public static List<string> TempSucSubassem;
         public static Dictionary<string, SubAssembly> InstTasks;
+        public static Dictionary<string, SubAssembly> SubAssemAndParts;
         public static List<Part> RefWithOneNode;
         public static List<SubAssembly> RefPrec;
         public static List<SubAssembly> Movings;
@@ -45,6 +49,8 @@ namespace Assembly_Planner
             var taskCommands = new Dictionary<string, double>();
 
             InstTasks = new Dictionary<string, SubAssembly>();
+            SubAssemAndParts = new Dictionary<string, SubAssembly>();
+            TaskTime = new Dictionary<string, double>();
             UpdatePostProcessor.BuildingInstallationTaskDictionary(candidate.Subassemblies[0]);
 
             SucTasks = new Dictionary<string, List<string>>();
@@ -97,14 +103,18 @@ namespace Assembly_Planner
             var lastTask = InstTasks[SucTasks.Keys.Where(sucT => SucTasks[sucT].Count == 0).ToList()[0]];
             var loopMakingSubAsse = new List<SubAssembly> { lastTask };
             var counter = 0;
-
+            SucSubassems = new List<List<string>>();
             for (var h = 0; h < loopMakingSubAsse.Count; h++)
             {
                 var lastSubAssEachMoving = loopMakingSubAsse[h];
                 RefPrec = new List<SubAssembly>();
                 Movings = new List<SubAssembly>();
+                TempSucSubassem = new List<string>();
                 UpdatePostProcessor.BuildingListOfReferencePreceedings(loopMakingSubAsse[h]);
-
+                var tempSucSubassem = new List<string>();
+                for (var i = TempSucSubassem.Count - 1; i >= 0; i--)
+                    tempSucSubassem.Add(TempSucSubassem[i]);
+                SucSubassems.Add(tempSucSubassem);
                 var ftask = RefPrec[RefPrec.Count - 1];
 
                 var initialFaces = ftask.Install.Reference.CVXHull.Faces.ToList();
@@ -223,6 +233,7 @@ namespace Assembly_Planner
                 h--;
                 loopMakingSubAsse.AddRange(Movings);
             }
+            Console.WriteLine("Optimal Orientation Search is done.");
             return taskCommands;
         }
 

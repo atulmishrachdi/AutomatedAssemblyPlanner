@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Reflection;
 using System.Security.Policy;
@@ -14,15 +15,16 @@ namespace Assembly_Planner
     internal class OptionGeneratorProBinary
     {
         internal static List<option> GenerateOptions(designGraph assemblyGraph, HashSet<Component> seperate,
-            Dictionary<hyperarc, List<hyperarc>> blockingDic, Dictionary<option, HashSet<int>> gOptions, int cndDirInd)
+            Dictionary<hyperarc, List<hyperarc>> blockingDic, Dictionary<option, HashSet<int>> gOptions, int cndDirInd,
+             bool relaxingConnectionsWithFasteners = false)
         {
             var freeSCCs = blockingDic.Keys.Where(k => blockingDic[k].Count == 0).ToList();
-            var combinations = CombinationsCreatorPro(assemblyGraph, freeSCCs);
+            var combinations = CombinationsCreatorPro(assemblyGraph, freeSCCs, relaxingConnectionsWithFasteners);
             var options = new HashSet<option>();
             //AddingOptionsToGraph(assemblyGraph, combinations, seperate.nodes.Count);
             options.UnionWith(AddingOptionsToGraph(combinations, seperate, options, gOptions, cndDirInd));
             var counter = 0;
-            var cp1 = new HashSet<HashSet<hyperarc>>();
+            var cp1 = new HashSet<HashSet<hyperarc>>(HashSet<hyperarc>.CreateSetComparer());
             var cp2 = new HashSet<HashSet<hyperarc>>();
 
             do
@@ -37,13 +39,13 @@ namespace Assembly_Planner
                     {
                         if (opt.Contains(key) || blockingDic[key].Count == 0) continue;
                         if (!blockingDic[key].All(bl => opt.Contains(bl))) continue;
-                        var newOp = new List<hyperarc>(opt) { key };
-                        if (!cp1.Where(cp => cp.All(hy => newOp.Contains(hy))).Any(cp => newOp.All(cp.Contains)))
+                        var newOp = new HashSet<hyperarc>(opt) { key };
+                        if (!cp1.Contains(newOp))
                             freeSCCs.Add(key);
                     }
 
                     if (freeSCCs.Count == 0) continue;
-                    combinations = CombinationsCreatorPro2(assemblyGraph, freeSCCs, opt);
+                    combinations = CombinationsCreatorPro2(assemblyGraph, freeSCCs, opt, relaxingConnectionsWithFasteners);
                     var combAndPar = AddingParents(opt, combinations);
                     options.UnionWith(AddingOptionsToGraph(combAndPar, seperate, options, gOptions, cndDirInd));
                     cp2.UnionWith(combAndPar);
@@ -76,18 +78,18 @@ namespace Assembly_Planner
                 var otherHalf = seperate.Where(n => !nodes.Contains(n)).ToList();
 
                 if (nodes.Count == seperate.Count) continue;
-                if (optionList.Any(o => o.nodes.All(nodes.Contains) && nodes.All(o.nodes.Contains))) continue;
-                if (optionList.Any(o => o.nodes.All(otherHalf.Contains) && otherHalf.All(o.nodes.Contains))) continue;
-                if (options.Any(o => o.nodes.All(nodes.Contains) && nodes.All(o.nodes.Contains))) continue;
-                if (options.Any(o => o.nodes.All(otherHalf.Contains) && otherHalf.All(o.nodes.Contains))) continue;
+                if (optionList.Any(o => o.nodes.Count == nodes.Count && nodes.All(o.nodes.Contains))) continue;
+                if (optionList.Any(o => o.nodes.Count == otherHalf.Count && otherHalf.All(o.nodes.Contains))) continue;
+                if (options.Any(o => o.nodes.Count == nodes.Count && nodes.All(o.nodes.Contains))) continue;
+                if (options.Any(o => o.nodes.Count == otherHalf.Count && otherHalf.All(o.nodes.Contains))) continue;
                 var exist =
-                    gOptions.Keys.Where(o => o.nodes.All(nodes.Contains) && nodes.All(o.nodes.Contains)).ToList();
+                    gOptions.Keys.Where(o => o.nodes.Count == nodes.Count && nodes.All(o.nodes.Contains)).ToList();
                 if (exist.Any())
                 {
                     gOptions[exist[0]].Add(cndDirInd);
                     continue;
                 }
-                if (gOptions.Keys.Any(o => o.nodes.All(otherHalf.Contains) && otherHalf.All(o.nodes.Contains)))
+                if (gOptions.Keys.Any(o => o.nodes.Count == otherHalf.Count && otherHalf.All(o.nodes.Contains)))
                     continue;
 
                 newOption.nodes.AddRange(nodes);
@@ -121,7 +123,7 @@ namespace Assembly_Planner
             var i = 0;
             while (i < freeSCCs.Count - 1)
             {
-                var newGroup = new HashSet<HashSet<hyperarc>>();
+                var newGroup = new HashSet<HashSet<hyperarc>>(HashSet<hyperarc>.CreateSetComparer());
                 for (var j = 0; j < freeSCCs.Count - 1; j++)
                 {
                     var hy1 = freeSCCs[j];
@@ -130,7 +132,7 @@ namespace Assembly_Planner
                         var hy2 = lastGroup[k];
                         var com = new HashSet<hyperarc> { hy1 };
                         com.UnionWith(hy2);
-                        if ((newGroup.Any(hy => hy.All(com.Contains) && com.All(hy.Contains))) || hy2.Contains(hy1))
+                        if (newGroup.Contains(com) || hy2.Contains(hy1))
                             continue;
                         newGroup.Add(com);
                     }
@@ -144,7 +146,8 @@ namespace Assembly_Planner
             return comb;
         }
 
-        internal static HashSet<HashSet<hyperarc>> CombinationsCreatorPro(designGraph assemblyGraph, List<hyperarc> freeSCCs)
+        internal static HashSet<HashSet<hyperarc>> CombinationsCreatorPro(designGraph assemblyGraph,
+            List<hyperarc> freeSCCs, bool relaxingConnectionsWithFasteners = false)
         {
             // The combinations must meet these two conditions:
             //   1. The SCCs in the combinations must be physically connected to each other and connected to their parent.
@@ -158,13 +161,26 @@ namespace Assembly_Planner
             {
                 for (var j = i + 1; j < freeSCCs.Count; j++)
                 {
-                    if (
-                        !assemblyGraph.arcs.Where(a => a is Connection).Cast<Connection>().Any(
-                            a =>
-                                ((freeSCCs[i].nodes.Contains(a.From) && freeSCCs[j].nodes.Contains(a.To)) ||
-                                (freeSCCs[j].nodes.Contains(a.From) && freeSCCs[i].nodes.Contains(a.To))) /*&&
-                                (a.Fasteners.Count > 0)*/))
-                        continue;
+                    if (!relaxingConnectionsWithFasteners)
+                    {
+                        if (
+                            !assemblyGraph.arcs.Where(a => a is Connection).Cast<Connection>().Any(
+                                a =>
+                                    ((freeSCCs[i].nodes.Contains(a.From) && freeSCCs[j].nodes.Contains(a.To)) ||
+                                     (freeSCCs[j].nodes.Contains(a.From) && freeSCCs[i].nodes.Contains(a.To))) &&
+                                    (a.Fasteners.Count > 0)))
+                            continue;
+                    }
+                    else
+                    {
+                        if (
+                            !assemblyGraph.arcs.Where(a => a is Connection).Cast<Connection>().Any(
+                                a =>
+                                    ((freeSCCs[i].nodes.Contains(a.From) && freeSCCs[j].nodes.Contains(a.To)) ||
+                                     (freeSCCs[j].nodes.Contains(a.From) && freeSCCs[i].nodes.Contains(a.To)))))
+                            continue;
+                    }
+
                     doubleConnected.Add(new List<hyperarc> { freeSCCs[i], freeSCCs[j] });
                 }
             }
@@ -181,27 +197,36 @@ namespace Assembly_Planner
             return combinationsHash;
         }
 
-        internal static HashSet<HashSet<hyperarc>> CombinationsCreatorPro2(designGraph assemblyGraph, List<hyperarc> freeSCCs, HashSet<hyperarc> parents)
+        internal static HashSet<HashSet<hyperarc>> CombinationsCreatorPro2(designGraph assemblyGraph,
+            List<hyperarc> freeSCCs, HashSet<hyperarc> parents, bool relaxingConnectionsWithFasteners = false)
         {
             // ACCEPTABLE COMBINATIONS:
             // Screwed to each other
-            var finalCombination = new HashSet<HashSet<hyperarc>>();
+            var finalCombination = new HashSet<HashSet<hyperarc>>(HashSet<hyperarc>.CreateSetComparer());
             var dic = new Dictionary<hyperarc, List<hyperarc>>();
-            foreach (var scc in freeSCCs)
-                dic.Add(scc, PhisicallyConnected(assemblyGraph, freeSCCs, scc));
-
-            var generated = new Queue<HashSet<hyperarc>>();
+            if (!relaxingConnectionsWithFasteners)
+                foreach (var scc in freeSCCs)
+                    dic.Add(scc, ScrewedToScc(assemblyGraph, freeSCCs, scc));
+            else
+                foreach (var scc in freeSCCs)
+                    dic.Add(scc, ConnectedToScc(assemblyGraph, freeSCCs, scc));
+            var generated = new HashSet<HashSet<hyperarc>>(HashSet<hyperarc>.CreateSetComparer());
             var screwed = new List<hyperarc>();
-            foreach (var parent in parents)
-                screwed.AddRange(PhisicallyConnected(assemblyGraph, freeSCCs, parent));
+            if (!relaxingConnectionsWithFasteners)
+                foreach (var parent in parents)
+                    screwed.AddRange(ScrewedToScc(assemblyGraph, freeSCCs, parent));
+            else
+                foreach (var parent in parents)
+                    screwed.AddRange(ConnectedToScc(assemblyGraph, freeSCCs, parent));
             var combin = CombinationsCreator(screwed);
             foreach (var comb in combin)
-                generated.Enqueue(comb);
+                generated.Add(comb);
 
             while (generated.Any())
             {
-                var opt = generated.Dequeue();
-                if (!(finalCombination.Any(hys => hys.All(opt.Contains) && opt.All(hys.Contains))))
+                var opt = generated.First();
+                generated.Remove(opt);
+                if (!finalCombination.Contains(opt))
                     finalCombination.Add(opt);
                 if (finalCombination.Count > 100) break;
                 var screwedToOption = ScrewedToOption(dic, opt);
@@ -210,14 +235,15 @@ namespace Assembly_Planner
                 {
                     var merged = new HashSet<hyperarc>(com);
                     merged.UnionWith(opt);
-                    if (generated.Any(hys => hys.All(merged.Contains) && merged.All(hys.Contains)))
+                    if (generated.Contains(merged))
                         continue;
-                    generated.Enqueue(merged);
+                    generated.Add(merged);
                 }
             }
 
             return finalCombination;
         }
+
 
         private static List<hyperarc> ScrewedToOption(Dictionary<hyperarc, List<hyperarc>> dic, HashSet<hyperarc> opt)
         {
@@ -249,6 +275,20 @@ namespace Assembly_Planner
             }
             return screwed;
         }
+        private static List<hyperarc> ConnectedToScc(designGraph assemblyGraph, List<hyperarc> freeSccs, hyperarc hy)
+        {
+            var connected = new List<hyperarc>();
+            foreach (var scc in freeSccs)
+            {
+                if (
+                    assemblyGraph.arcs.Where(a => a is Connection).Cast<Connection>().Any(
+                        a =>
+                            ((hy.nodes.Contains(a.From) && scc.nodes.Contains(a.To)) ||
+                            (scc.nodes.Contains(a.From) && hy.nodes.Contains(a.To)))))
+                    connected.Add(scc);
+            }
+            return connected;
+        }
 
         private static List<hyperarc> PhisicallyConnected(designGraph assemblyGraph, List<hyperarc> freeSccs, hyperarc hy)
         {
@@ -278,12 +318,22 @@ namespace Assembly_Planner
                     // Merge them:
                     var n = new List<hyperarc>(groupsOfHyperarcs[i]);
                     n.AddRange(groupsOfHyperarcs[j].Where(hy => !n.Contains(hy)));
-                    if (merged.Any(g => g.All(n.Contains) && n.All(g.Contains))) continue;
+                    if (merged.Any(g => g.Count == n.Count && n.All(g.Contains))) continue;
                     merged.Add(n);
                 }
             }
             return merged;
         }
-
+        /*private static bool CompareTwoLists(IEnumerable<object> list1, IEnumerable<object> list2)
+        {
+            if (list1.Count() != list2.Count()) return false;
+            for (var i = 0; i < list1.Count() - 1; i++)
+            {
+                for (var j = i+1; j < list2.Count(); j++)
+                {
+                    if ()
+                }
+            }
+        }*/
     }
 }

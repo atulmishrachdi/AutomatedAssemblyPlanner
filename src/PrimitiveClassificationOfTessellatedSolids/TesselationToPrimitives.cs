@@ -73,8 +73,8 @@ namespace PrimitiveClassificationOfTessellatedSolids
             }
             var primitives = MakeSurfaces(plannedSurfaces.OrderByDescending(s => s.Metric).ToList());
             primitives = MinorCorrections(primitives, allEdgeWithScores);
-            PaintSurfaces(primitives, ts);
-            ReportStats(primitives);
+            //PaintSurfaces(primitives, ts);
+            //ReportStats(primitives);
             return primitives;
         }
 
