@@ -70,12 +70,12 @@ namespace AssemblyEvaluation
         //}
 
 
-        public override candidate copy()
-        {
-            var ac = new AssemblyCandidate(base.copy());
-            ac.Sequence = Sequence.copy();
-            return ac;
-        }
+        //public override candidate copy()
+        //{
+        //    var ac = new AssemblyCandidate(base.copy());
+        //    ac.Sequence = Sequence.copy();
+        //    return ac;
+        //}
         public void SaveToDisk(string filename)
         {
             // c1.graph.checkForRepeatNames();

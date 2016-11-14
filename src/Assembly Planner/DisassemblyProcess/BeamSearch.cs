@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using AssemblyEvaluation;
 using GraphSynth;
 using GraphSynth.Representation;
-using GraphSynth.Search;
+//using GraphSynth.Search;
 using Assembly_Planner.GraphSynth.BaseClasses;
 using TVGL;
 
@@ -54,14 +54,14 @@ namespace Assembly_Planner
                     //var ruleChoices = recogRule.recognize(current.graph);
                     foreach (var opt in options)
                     {
-                        var child = (AssemblyCandidate)current.copy();
-                        SearchProcess.transferLmappingToChild(child.graph, current.graph, opt);
-                        var rest = Updates.AddSecondHyperToOption(child,opt);
-                        Updates.ApplyChild(child, opt);
-                        //if (assemblyEvaluator.Evaluate(child, opt,rest) > 0)
-                            lock (candidates)
-                                candidates.Add(child.performanceParams, child);
-                        child.addToRecipe(opt);
+                        //var child = (AssemblyCandidate)current.copy();
+                        //SearchProcess.transferLmappingToChild(child.graph, current.graph, opt);
+                        //var rest = Updates.AddSecondHyperToOption(child,opt);
+                        //Updates.ApplyChild(child, opt);
+                        ////if (assemblyEvaluator.Evaluate(child, opt,rest) > 0)
+                        //    lock (candidates)
+                        //        candidates.Add(child.performanceParams, child);
+                        //child.addToRecipe(opt);
                     }
                 }
                 beam.Clear();

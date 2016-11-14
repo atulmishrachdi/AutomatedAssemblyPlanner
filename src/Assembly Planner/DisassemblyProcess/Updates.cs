@@ -21,14 +21,14 @@ namespace Assembly_Planner
             for (var i = 0; i < child.graph.hyperarcs.Count; i++)
             {
                 var hy = child.graph.hyperarcs[i];
-                if (hy.localLabels.Contains(DisConstants.SeperateHyperarcs) && hy.nodes.Any(n => opt.nodes.Contains(n)))
+                if (hy.localLabels.Contains(DisConstants.SeperateHyperarcs) && hy.nodes.Any(n => opt.Nodes.Contains(n)))
                 {
                     child.graph.removeHyperArc(hy);
                     i--;
                     continue;
                 }
                 if ((hy.localLabels.Contains(DisConstants.SeperateHyperarcs) &&
-                     !hy.nodes.Any(n => opt.nodes.Contains(n))) || hy.localLabels.Contains(DisConstants.SingleNode))
+                     !hy.nodes.Any(n => opt.Nodes.Contains(n))) || hy.localLabels.Contains(DisConstants.SingleNode))
                     continue;
 
                 if (!hy.localLabels.Contains(DisConstants.Removable)) // Maybe all of them contain "Removable"
@@ -75,8 +75,8 @@ namespace Assembly_Planner
                     child.graph.hyperarcs.Where(
                         a =>
                             a.localLabels.Contains(DisConstants.SeperateHyperarcs) &&
-                            opt.nodes.All(n => a.nodes.Contains(n)))) //
-                return sepHy.nodes.Where(n => !opt.nodes.Contains(n)).Cast<Component>().ToList();
+                            opt.Nodes.All(n => a.nodes.Contains(n)))) //
+                return sepHy.nodes.Where(n => !opt.Nodes.Contains(n)).Cast<Component>().ToList();
             return null;
         }
 

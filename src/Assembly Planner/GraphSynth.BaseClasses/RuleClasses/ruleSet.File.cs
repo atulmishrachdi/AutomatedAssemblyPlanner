@@ -65,51 +65,51 @@ namespace GraphSynth.Representation
         ///   Gets or sets the generation method after normal.
         /// </summary>
         /// <value>The generation after normal.</value>
-        public nextGenerationSteps generationAfterNormal
-        {
-            get { return nextGenerationStep[0]; }
-            set { nextGenerationStep[0] = value; }
-        }
+        //public nextGenerationSteps generationAfterNormal
+        //{
+        //    get { return nextGenerationStep[0]; }
+        //    set { nextGenerationStep[0] = value; }
+        //}
 
         /// <summary>
         ///   Gets or sets the generation method after choice.
         /// </summary>
         /// <value>The generation after choice.</value>
-        public nextGenerationSteps generationAfterChoice
-        {
-            get { return nextGenerationStep[1]; }
-            set { nextGenerationStep[1] = value; }
-        }
+        //public nextGenerationSteps generationAfterChoice
+        //{
+        //    get { return nextGenerationStep[1]; }
+        //    set { nextGenerationStep[1] = value; }
+        //}
 
         /// <summary>
         ///   Gets or sets the generation method after cycle limit.
         /// </summary>
         /// <value>The generation after cycle limit.</value>
-        public nextGenerationSteps generationAfterCycleLimit
-        {
-            get { return nextGenerationStep[2]; }
-            set { nextGenerationStep[2] = value; }
-        }
+        //public nextGenerationSteps generationAfterCycleLimit
+        //{
+        //    get { return nextGenerationStep[2]; }
+        //    set { nextGenerationStep[2] = value; }
+        //}
 
-        /// <summary>
-        ///   Gets or sets the generation method after no rules.
-        /// </summary>
-        /// <value>The generation after no rules.</value>
-        public nextGenerationSteps generationAfterNoRules
-        {
-            get { return nextGenerationStep[3]; }
-            set { nextGenerationStep[3] = value; }
-        }
+        ///// <summary>
+        /////   Gets or sets the generation method after no rules.
+        ///// </summary>
+        ///// <value>The generation after no rules.</value>
+        //public nextGenerationSteps generationAfterNoRules
+        //{
+        //    get { return nextGenerationStep[3]; }
+        //    set { nextGenerationStep[3] = value; }
+        //}
 
         /// <summary>
         ///   Gets or sets the generation method after trigger rule.
         /// </summary>
         /// <value>The generation after trigger rule.</value>
-        public nextGenerationSteps generationAfterTriggerRule
-        {
-            get { return nextGenerationStep[4]; }
-            set { nextGenerationStep[4] = value; }
-        }
+        //public nextGenerationSteps generationAfterTriggerRule
+        //{
+        //    get { return nextGenerationStep[4]; }
+        //    set { nextGenerationStep[4] = value; }
+        //}
 
         #endregion
 
@@ -166,27 +166,27 @@ namespace GraphSynth.Representation
             {
                 if (assem != null)
                 {
-                    var compiledFunctions = assem.CreateInstance("GraphSynth.ParamRules.ParamRules");
-                    foreach (var rule in rulesets.SelectMany(set => set.rules))
-                    {
-                        rule.DLLofFunctions = compiledFunctions;
-                        rule.recognizeFuncs.Clear();
-                        foreach (var functionName in rule.recognizeFunctions)
-                        {
-                            var func = compiledFunctions.GetType().GetMethod(functionName);
-                            if (func != null) rule.recognizeFuncs.Add(func);
-                            else
-                                SearchIO.MessageBoxShow("Unable to locate function, " + functionName + ", in assembly, " + filenames[0] + ".");
-                        }
-                        rule.applyFuncs.Clear();
-                        foreach (var functionName in rule.applyFunctions)
-                        {
-                            var func = compiledFunctions.GetType().GetMethod(functionName);
-                            if (func != null) rule.applyFuncs.Add(func);
-                            else
-                                SearchIO.MessageBoxShow("Unable to locate function, " + functionName + ", in assembly, " + filenames[0] + ".");
-                        }
-                    }
+                    //var compiledFunctions = assem.CreateInstance("GraphSynth.ParamRules.ParamRules");
+                    //foreach (var rule in rulesets.SelectMany(set => set.rules))
+                    //{
+                    //    rule.DLLofFunctions = compiledFunctions;
+                    //    rule.recognizeFuncs.Clear();
+                    //    foreach (var functionName in rule.recognizeFunctions)
+                    //    {
+                    //        var func = compiledFunctions.GetType().GetMethod(functionName);
+                    //        if (func != null) rule.recognizeFuncs.Add(func);
+                    //        else
+                    //            SearchIO.MessageBoxShow("Unable to locate function, " + functionName + ", in assembly, " + filenames[0] + ".");
+                    //    }
+                    //    rule.applyFuncs.Clear();
+                    //    foreach (var functionName in rule.applyFunctions)
+                    //    {
+                    //        var func = compiledFunctions.GetType().GetMethod(functionName);
+                    //        if (func != null) rule.applyFuncs.Add(func);
+                    //        else
+                    //            SearchIO.MessageBoxShow("Unable to locate function, " + functionName + ", in assembly, " + filenames[0] + ".");
+                    //    }
+                    //}
                 }
             }
             catch (Exception e)
@@ -210,40 +210,40 @@ namespace GraphSynth.Representation
 
             foreach (var a in rulesets.Where(a => a != null))
             {
-                foreach (var file in a.recognizeSourceFiles)
-                {
-                    var fileLower = file.ToLower();
-                    if (File.Exists(rulesDirectory + fileLower))
-                    {
-                        if (!allSourceFiles.Contains(rulesDirectory + fileLower))
-                            allSourceFiles.Add(rulesDirectory + fileLower);
-                    }
-                    else
-                    {
-                        SearchIO.MessageBoxShow("Missing source file: " + fileLower +
-                                                ". Cancelling compilation of C# recognize source file.",
-                                                "Missing File", "Error");
-                        filesFound = false;
-                        break;
-                    }
-                }
-                foreach (var file in a.applySourceFiles)
-                {
-                    var fileLower = file.ToLower();
-                    if (File.Exists(rulesDirectory + fileLower))
-                    {
-                        if (!allSourceFiles.Contains(rulesDirectory + fileLower))
-                            allSourceFiles.Add(rulesDirectory + fileLower);
-                    }
-                    else
-                    {
-                        SearchIO.MessageBoxShow("Missing source file: " + fileLower +
-                                                ". Cancelling compilation of C# apply source file.",
-                                                "Missing File", "Error");
-                        filesFound = false;
-                        break;
-                    }
-                }
+                //foreach (var file in a.recognizeSourceFiles)
+                //{
+                //    var fileLower = file.ToLower();
+                //    if (File.Exists(rulesDirectory + fileLower))
+                //    {
+                //        if (!allSourceFiles.Contains(rulesDirectory + fileLower))
+                //            allSourceFiles.Add(rulesDirectory + fileLower);
+                //    }
+                //    else
+                //    {
+                //        SearchIO.MessageBoxShow("Missing source file: " + fileLower +
+                //                                ". Cancelling compilation of C# recognize source file.",
+                //                                "Missing File", "Error");
+                //        filesFound = false;
+                //        break;
+                //    }
+                //}
+                //foreach (var file in a.applySourceFiles)
+                //{
+                //    var fileLower = file.ToLower();
+                //    if (File.Exists(rulesDirectory + fileLower))
+                //    {
+                //        if (!allSourceFiles.Contains(rulesDirectory + fileLower))
+                //            allSourceFiles.Add(rulesDirectory + fileLower);
+                //    }
+                //    else
+                //    {
+                //        SearchIO.MessageBoxShow("Missing source file: " + fileLower +
+                //                                ". Cancelling compilation of C# apply source file.",
+                //                                "Missing File", "Error");
+                //        filesFound = false;
+                //        break;
+                //    }
+                //}
             }
             return filesFound;
         }
@@ -300,11 +300,11 @@ namespace GraphSynth.Representation
 
         private static Boolean compiledFunctionsAlreadyLoaded(IEnumerable<ruleSet> rulesets)
         {
-            return rulesets
+            return /*rulesets
                 .Where(set => set != null)
                 .All(set =>
                     !(set.rules.Any(rule => rule.recognizeFuncs.Count + rule.applyFuncs.Count
-                        != rule.recognizeFunctions.Count + rule.applyFunctions.Count)));
+                        != rule.recognizeFunctions.Count + rule.applyFunctions.Count)))*/ false;
         }
 
         #endregion

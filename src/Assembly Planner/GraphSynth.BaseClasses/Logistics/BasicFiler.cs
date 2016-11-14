@@ -135,8 +135,8 @@ namespace GraphSynth
                 || (doc.DocumentElement.Attributes["Tag"] != null
                 && doc.DocumentElement.Attributes["Tag"].Value == "Rule"))
                 return new object[] { OpenRule(filename) };
-            if (doc.SelectNodes("/ruleSet", nsMgr).Count > 0)
-                return new object[] { OpenRuleSet(filename) };
+            //if (doc.SelectNodes("/ruleSet", nsMgr).Count > 0)
+            //    return new object[] { OpenRuleSet(filename) };
             if (doc.SelectNodes("/candidate", nsMgr).Count > 0)
                 return new object[] { OpenCandidate(filename) };
 
@@ -688,7 +688,7 @@ namespace GraphSynth
             StreamWriter ruleWriter = null;
             try
             {
-                ruleSetToSave.name = Path.GetFileNameWithoutExtension(filename);
+                //ruleSetToSave.name = Path.GetFileNameWithoutExtension(filename);
                 ruleWriter = new StreamWriter(filename);
                 var ruleSerializer = new XmlSerializer(typeof(ruleSet));
                 ruleSerializer.Serialize(ruleWriter, ruleSetToSave);
@@ -709,43 +709,43 @@ namespace GraphSynth
         /// </summary>
         /// <param name = "filename">The filename.</param>
         /// <returns></returns>
-        public virtual ruleSet OpenRuleSet(string filename)
-        {
-            ruleSet newRuleSet = null;
-            StreamReader ruleReader = null;
-            try
-            {
-                ruleReader = new StreamReader(filename);
-                var ruleDeserializer = new XmlSerializer(typeof(ruleSet));
-                newRuleSet = (ruleSet)ruleDeserializer.Deserialize(ruleReader);
-                newRuleSet.rulesDir = Path.GetDirectoryName(filename) + Path.DirectorySeparatorChar;
-                newRuleSet.filer = this;
-                var numRules = newRuleSet.ruleFileNames.Count;
-                int numLoaded;
-                newRuleSet.rules = LoadRulesFromFileNames(newRuleSet.rulesDir,
-                                                          newRuleSet.ruleFileNames, out numLoaded);
+        //public virtual ruleSet OpenRuleSet(string filename)
+        //{
+        //    ruleSet newRuleSet = null;
+        //    StreamReader ruleReader = null;
+        //    try
+        //    {
+        //        ruleReader = new StreamReader(filename);
+        //        var ruleDeserializer = new XmlSerializer(typeof(ruleSet));
+        //        newRuleSet = (ruleSet)ruleDeserializer.Deserialize(ruleReader);
+        //        newRuleSet.rulesDir = Path.GetDirectoryName(filename) + Path.DirectorySeparatorChar;
+        //        newRuleSet.filer = this;
+        //        var numRules = newRuleSet.ruleFileNames.Count;
+        //        int numLoaded;
+        //        newRuleSet.rules = LoadRulesFromFileNames(newRuleSet.rulesDir,
+        //                                                  newRuleSet.ruleFileNames, out numLoaded);
 
-                SearchIO.output(Path.GetFileName(filename) + " successfully loaded");
-                if (numRules == numLoaded) SearchIO.output(" and all (" + numLoaded + ") rules loaded successfully.");
-                else
-                    SearchIO.output("     but "
-                                    + (numRules - numLoaded) + " rules did not load.");
+        //        SearchIO.output(Path.GetFileName(filename) + " successfully loaded");
+        //        if (numRules == numLoaded) SearchIO.output(" and all (" + numLoaded + ") rules loaded successfully.");
+        //        else
+        //            SearchIO.output("     but "
+        //                            + (numRules - numLoaded) + " rules did not load.");
 
-                if ((string.IsNullOrWhiteSpace(newRuleSet.name)) || (newRuleSet.name == "Untitled"))
-                    newRuleSet.name = Path.GetFileNameWithoutExtension(filename);
-            }
-            catch (Exception ioe)
-            {
-                SearchIO.output("***XML Serialization Error***");
-                SearchIO.output(ioe.ToString());
-            }
-            finally
-            {
-                if (ruleReader != null) ruleReader.Close();
-            }
+        //        if ((string.IsNullOrWhiteSpace(newRuleSet.name)) || (newRuleSet.name == "Untitled"))
+        //            newRuleSet.name = Path.GetFileNameWithoutExtension(filename);
+        //    }
+        //    catch (Exception ioe)
+        //    {
+        //        SearchIO.output("***XML Serialization Error***");
+        //        SearchIO.output(ioe.ToString());
+        //    }
+        //    finally
+        //    {
+        //        if (ruleReader != null) ruleReader.Close();
+        //    }
 
-            return newRuleSet;
-        }
+        //    return newRuleSet;
+        //}
 
         /// <summary>
         ///   Loads the rules from file names.
@@ -788,17 +788,17 @@ namespace GraphSynth
         /// </summary>
         /// <param name = "rs">The rs.</param>
         /// <param name = "i">The i.</param>
-        public virtual void ReloadSpecificRule(ruleSet rs, int i)
-        {
-            var rulePath = rs.rulesDir + rs.ruleFileNames[i];
-            SearchIO.output("Loading " + rs.ruleFileNames[i]);
-            object ruleObj = Open(rulePath);
-            if (ruleObj is grammarRule)
-                rs.rules[i] = (grammarRule)ruleObj;
-            else if (ruleObj is object[] &&
-                     ((object[])ruleObj)[0] is grammarRule)
-                rs.rules[i] = ((grammarRule)((object[])ruleObj)[0]);
-        }
+        //public virtual void ReloadSpecificRule(ruleSet rs, int i)
+        //{
+        //    var rulePath = rs.rulesDir + rs.ruleFileNames[i];
+        //    SearchIO.output("Loading " + rs.ruleFileNames[i]);
+        //    object ruleObj = Open(rulePath);
+        //    if (ruleObj is grammarRule)
+        //        rs.rules[i] = (grammarRule)ruleObj;
+        //    else if (ruleObj is object[] &&
+        //             ((object[])ruleObj)[0] is grammarRule)
+        //        rs.rules[i] = ((grammarRule)((object[])ruleObj)[0]);
+        //}
 
         #endregion
 

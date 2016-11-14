@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using AssemblyEvaluation;
 using GraphSynth;
 using GraphSynth.Representation;
-using GraphSynth.Search;
+//using GraphSynth.Search;
 using TVGL.IOFunctions;
 using TVGL;
 using Assembly_Planner.GraphSynth.BaseClasses;
@@ -60,13 +60,13 @@ namespace Assembly_Planner
                 }
                 foreach (var opt in options)
                 {
-                    var child = (AssemblyCandidate) current.copy();
-                    SearchProcess.transferLmappingToChild(child.graph, current.graph, opt);
-                    var rest = Updates.AddSecondHyperToOption(child, opt);
-                    Updates.ApplyChild(child, opt);
-                    if (assemblyEvaluator.Evaluate(child, opt, rest, solides) > 0)
-                        candidates.Add(child.performanceParams, child);
-                    child.addToRecipe(opt);
+                    //var child = (AssemblyCandidate) current.copy();
+                    //SearchProcess.transferLmappingToChild(child.graph, current.graph, opt);
+                    //var rest = Updates.AddSecondHyperToOption(child, opt);
+                    //Updates.ApplyChild(child, opt);
+                    //if (assemblyEvaluator.Evaluate(child, opt, rest, solides) > 0)
+                    //    candidates.Add(child.performanceParams, child);
+                    //child.addToRecipe(opt);
                 }
             }
             solutions.Add(goal);
