@@ -163,8 +163,8 @@ namespace Assembly_Planner
                     AssemblyGraph.arcs.Cast<Connection>().First(c => c.XmlFrom == arc.XmlFrom && c.XmlTo == arc.XmlTo);
                 if (arc.Certainty == 0)
                     AssemblyGraph.arcs.Remove(counterpart);
-                counterpart.FiniteDirections = arc.FiniteDirections;
-                counterpart.InfiniteDirections = arc.InfiniteDirections;
+                counterpart.FiniteDirections = AddDirections(arc.FiniteDirections);
+                counterpart.InfiniteDirections = AddDirections(arc.InfiniteDirections);
             }
         }
 
@@ -213,6 +213,43 @@ namespace Assembly_Planner
             Console.WriteLine("    * Number of tessellated solids:   " + parts.Count);
             Console.WriteLine("    * Total Number of Triangles:   " + parts.Sum(s => s.Faces.Count()));
             return parts.ToDictionary(tessellatedSolid => tessellatedSolid.Name, tessellatedSolid => new List<TessellatedSolid> { tessellatedSolid });
+        }
+
+        private static List<int> AddDirections(List<int> reviewedDirections)
+        {
+            var dirInds = new List<int>();
+            if (reviewedDirections == null) return dirInds;
+            var toBeAddedToGDir = new List<int>();
+            foreach (var dir in reviewedDirections)
+            {
+                dirInds.Add(dir);
+                if (!globalDirPool.Contains(dir))
+                {
+                    globalDirPool.Add(dir);
+                    var temp =
+                        globalDirPool.Where(
+                            d =>
+                                Math.Abs(1 +
+                                         DisassemblyDirections.Directions[d].dotProduct(
+                                             DisassemblyDirections.Directions[dir])) < 0.01).ToList();
+                    if (temp.Any())
+                        DisassemblyDirections.DirectionsAndOppositsForGlobalpool.Add(dir, temp[0]);
+                    else
+                    {
+                        var dir2 = DisassemblyDirections.Directions[dir];
+                        DisassemblyDirections.Directions.Add(dir2.multiply(-1));
+                        DisassemblyDirections.DirectionsAndOppositsForGlobalpool.Add(dir, DisassemblyDirections.Directions.Count - 1);
+                        toBeAddedToGDir.Add(DisassemblyDirections.Directions.Count - 1);
+                    }
+                }
+            }
+            foreach (var newD in toBeAddedToGDir)
+            {
+                globalDirPool.Add(newD);
+                var key = DisassemblyDirections.DirectionsAndOppositsForGlobalpool.Where(k => k.Value == newD).ToList();
+                DisassemblyDirections.DirectionsAndOppositsForGlobalpool.Add(newD, key[0].Key);
+            }
+            return dirInds;
         }
 
         private static void EnlargeTheSolid()
