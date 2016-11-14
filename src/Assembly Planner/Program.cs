@@ -61,11 +61,13 @@ namespace Assembly_Planner
             Console.ReadLine();
             DeserializeSolidProperties();
             globalDirPool = DisassemblyDirectionsWithFastener.RunGraphGeneration(AssemblyGraph, SolidsNoFastener);
-            // the second user interaction must happen here
-            //SaveDirections();
-            //Console.WriteLine("\n\nPress enter once input directions generated >>");
-            //Console.ReadLine();
-            //LoadDirections();
+
+
+            //the second user interaction must happen here
+            SaveDirections();
+            Console.WriteLine("\n\nPress enter once input directions generated >>");
+            Console.ReadLine();
+            LoadDirections();
 
             NonadjacentBlockingWithPartitioning.Run(AssemblyGraph, SolidsNoFastener, globalDirPool);
             Stabilityfunctions.GenerateReactionForceInfo(AssemblyGraph);
@@ -211,7 +213,7 @@ namespace Assembly_Planner
             //);
             Console.WriteLine("All the files are loaded successfully");
             Console.WriteLine("    * Number of tessellated solids:   " + parts.Count);
-            Console.WriteLine("    * Total Number of Triangles:   " + parts.Sum(s => s.Faces.Count()));
+            Console.WriteLine("    * Total Number of Triangles:   " + parts.Sum(s => s.Faces.Count()));            
             return parts.ToDictionary(tessellatedSolid => tessellatedSolid.Name, tessellatedSolid => new List<TessellatedSolid> { tessellatedSolid });
         }
 

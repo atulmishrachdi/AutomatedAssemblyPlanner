@@ -31167,15 +31167,37 @@
       <name>a0</name>
       <localLabels />
       <localVariables />
-      <From>PumpWithRealBoltsAndNuts - Ext-Side1</From>
-      <To>PumpWithRealBoltsAndNuts - Ext-Pipe</To>
+      <From>TXT-1 - Chassis-1 Demi chassis-2 G2 support amortisseur-1</From>
+      <To>TXT-1 - C3 platine RC-1</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
-        <int>4578</int>
+        <int>3115</int>
+        <int>3236</int>
+        <int>3567</int>
+        <int>4053</int>
+        <int>6231</int>
       </InfiniteDirections>
       <FiniteDirections />
-      <Fasteners />
+      <Fasteners>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>1530</RemovalDirection>
+          <Certainty>1</Certainty>
+          <Tool>PhillipsBlade</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>2.9979178760409111</Diameter>
+          <Name>TXT-1 - MB2 vis M3 x 12-5</Name>
+          <OverallLength>14.354210274377124</OverallLength>
+          <EngagedLength>11.400010579161753</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener />
+        </Fastener>
+      </Fasteners>
       <Certainty>1</Certainty>
       <ConnectionType>Loose</ConnectionType>
     </arc>
@@ -31183,16 +31205,37 @@
       <name>a1</name>
       <localLabels />
       <localVariables />
-      <From>PumpWithRealBoltsAndNuts - Ext-Ring</From>
-      <To>PumpWithRealBoltsAndNuts - Ext-Pipe</To>
+      <From>TXT-1 - Chassis-1 Demi chassis-1 G2 support amortisseur-1</From>
+      <To>TXT-1 - C3 platine RC-1</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
-        <int>1463</int>
-        <int>4578</int>
+        <int>0</int>
+        <int>5315</int>
+        <int>5698</int>
+        <int>6074</int>
+        <int>6231</int>
       </InfiniteDirections>
       <FiniteDirections />
-      <Fasteners />
+      <Fasteners>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>1530</RemovalDirection>
+          <Certainty>1</Certainty>
+          <Tool>PhillipsBlade</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>2.9979178760409111</Diameter>
+          <Name>TXT-1 - MB2 vis M3 x 12-8</Name>
+          <OverallLength>14.354210274377124</OverallLength>
+          <EngagedLength>11.400010579161753</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener />
+        </Fastener>
+      </Fasteners>
       <Certainty>1</Certainty>
       <ConnectionType>Loose</ConnectionType>
     </arc>
@@ -31200,64 +31243,58 @@
       <name>a2</name>
       <localLabels />
       <localVariables />
-      <From>PumpWithRealBoltsAndNuts - Lid</From>
-      <To>PumpWithRealBoltsAndNuts - Backlid</To>
+      <From>TXT-1 - F1 support de carro-3</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-1 F5 support de carro-1</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
-        <int>0</int>
-        <int>116</int>
-        <int>120</int>
-        <int>124</int>
-        <int>330</int>
-        <int>336</int>
-        <int>340</int>
-        <int>450</int>
-        <int>477</int>
-        <int>481</int>
-        <int>725</int>
-        <int>762</int>
-        <int>765</int>
-        <int>780</int>
-        <int>798</int>
-        <int>974</int>
-        <int>1017</int>
-        <int>1032</int>
-        <int>1241</int>
-        <int>1257</int>
-        <int>1277</int>
-        <int>1364</int>
-        <int>1401</int>
-        <int>1465</int>
-        <int>1566</int>
-        <int>4581</int>
-        <int>4584</int>
-        <int>4587</int>
-        <int>4595</int>
-        <int>4598</int>
-        <int>4601</int>
-        <int>5089</int>
-        <int>5096</int>
-        <int>5112</int>
-        <int>5128</int>
-        <int>5143</int>
-        <int>5344</int>
-        <int>5568</int>
-        <int>5608</int>
-        <int>5615</int>
-        <int>5642</int>
-        <int>5835</int>
-        <int>5948</int>
-        <int>6105</int>
-        <int>6230</int>
-        <int>1544</int>
-        <int>6231</int>
-        <int>4659</int>
+        <int>3112</int>
       </InfiniteDirections>
-      <FiniteDirections>
-        <int>1583</int>
-      </FiniteDirections>
-      <Fasteners />
+      <FiniteDirections />
+      <Fasteners>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>0</RemovalDirection>
+          <Certainty>1</Certainty>
+          <Tool>PhillipsBlade</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>3.0000159514767613</Diameter>
+          <Name>TXT-1 - MC1 vis M3 x 16-10</Name>
+          <OverallLength>18.372900585442761</OverallLength>
+          <EngagedLength>15.5</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>4</int>
+            <int>23</int>
+            <int>25</int>
+          </PartsLockedByFastener>
+        </Fastener>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>0</RemovalDirection>
+          <Certainty>1</Certainty>
+          <Tool>PhillipsBlade</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>3.0000159514767613</Diameter>
+          <Name>TXT-1 - MC1 vis M3 x 16-12</Name>
+          <OverallLength>18.372900585442761</OverallLength>
+          <EngagedLength>15.5</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>4</int>
+            <int>23</int>
+            <int>25</int>
+          </PartsLockedByFastener>
+        </Fastener>
+      </Fasteners>
       <Certainty>1</Certainty>
       <ConnectionType>Loose</ConnectionType>
     </arc>
@@ -31265,15 +31302,53 @@
       <name>a3</name>
       <localLabels />
       <localVariables />
-      <From>PumpWithRealBoltsAndNuts - Ext-Side2</From>
-      <To>PumpWithRealBoltsAndNuts - Ext-Pipe</To>
+      <From>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-1</From>
+      <To>TXT-1 - C3 platine RC-1</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
-        <int>1463</int>
+        <int>6231</int>
+        <int>4705</int>
+        <int>4571</int>
+        <int>1544</int>
       </InfiniteDirections>
       <FiniteDirections />
-      <Fasteners />
+      <Fasteners>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>1530</RemovalDirection>
+          <Certainty>1</Certainty>
+          <Tool>PhillipsBlade</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>2.9979178760409111</Diameter>
+          <Name>TXT-1 - MB2 vis M3 x 12-1</Name>
+          <OverallLength>14.354210274377124</OverallLength>
+          <EngagedLength>11.400010579161753</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener />
+        </Fastener>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>1530</RemovalDirection>
+          <Certainty>1</Certainty>
+          <Tool>PhillipsBlade</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>2.9979178760409111</Diameter>
+          <Name>TXT-1 - MB2 vis M3 x 12-1</Name>
+          <OverallLength>14.354210274377124</OverallLength>
+          <EngagedLength>11.400010579161753</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener />
+        </Fastener>
+      </Fasteners>
       <Certainty>1</Certainty>
       <ConnectionType>Loose</ConnectionType>
     </arc>
@@ -31281,107 +31356,55 @@
       <name>a4</name>
       <localLabels />
       <localVariables />
-      <From>PumpWithRealBoltsAndNuts - Lid</From>
-      <To>PumpWithRealBoltsAndNuts - Ext-Side2</To>
+      <From>TXT-1 - F1 support de carro-2</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-1 F5 support de carro-2</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
-        <int>340</int>
-        <int>0</int>
-        <int>116</int>
-        <int>120</int>
-        <int>124</int>
-        <int>330</int>
-        <int>450</int>
-        <int>336</int>
-        <int>477</int>
-        <int>481</int>
-        <int>765</int>
-        <int>725</int>
-        <int>780</int>
-        <int>762</int>
-        <int>798</int>
-        <int>1017</int>
-        <int>974</int>
-        <int>1032</int>
-        <int>1241</int>
-        <int>1566</int>
-        <int>1257</int>
-        <int>1277</int>
-        <int>1583</int>
-        <int>1364</int>
-        <int>1801</int>
-        <int>1817</int>
-        <int>1401</int>
-        <int>1465</int>
-        <int>1835</int>
-        <int>1976</int>
-        <int>1941</int>
-        <int>2036</int>
-        <int>2129</int>
-        <int>2339</int>
-        <int>2416</int>
-        <int>2560</int>
-        <int>2637</int>
-        <int>2168</int>
-        <int>2686</int>
-        <int>2233</int>
-        <int>2777</int>
-        <int>2332</int>
-        <int>6230</int>
-        <int>2804</int>
-        <int>2887</int>
-        <int>1544</int>
-        <int>2891</int>
-        <int>3016</int>
-        <int>3115</int>
-        <int>4659</int>
-        <int>3097</int>
+        <int>3112</int>
       </InfiniteDirections>
-      <FiniteDirections>
-        <int>2468</int>
-      </FiniteDirections>
+      <FiniteDirections />
       <Fasteners>
         <Fastener>
           <Time>0</Time>
           <TimeSD>0</TimeSD>
           <InstallDistance>0</InstallDistance>
-          <RemovalDirection>4645</RemovalDirection>
+          <RemovalDirection>0</RemovalDirection>
           <Certainty>1</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>10.000017032134281</ToolSize>
-          <Diameter>8.7500019391243118</Diameter>
-          <Name>PumpWithRealBoltsAndNuts - Bolt15</Name>
-          <OverallLength>29.808724676225363</OverallLength>
-          <EngagedLength>0.7419735001332739</EngagedLength>
+          <Tool>PhillipsBlade</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>3.0000159514767613</Diameter>
+          <Name>TXT-1 - MC1 vis M3 x 16-13</Name>
+          <OverallLength>18.372900585442761</OverallLength>
+          <EngagedLength>15.5</EngagedLength>
           <AccessCylinderRadius>0</AccessCylinderRadius>
           <FastenerType>Bolt</FastenerType>
           <NumberOfThreads>0</NumberOfThreads>
           <PartsLockedByFastener>
             <int>5</int>
-            <int>6</int>
-            <int>7</int>
+            <int>22</int>
+            <int>26</int>
           </PartsLockedByFastener>
         </Fastener>
         <Fastener>
           <Time>0</Time>
           <TimeSD>0</TimeSD>
           <InstallDistance>0</InstallDistance>
-          <RemovalDirection>6231</RemovalDirection>
+          <RemovalDirection>0</RemovalDirection>
           <Certainty>1</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>10.000017032134281</ToolSize>
-          <Diameter>8.7500019391243118</Diameter>
-          <Name>PumpWithRealBoltsAndNuts - Bolt13</Name>
-          <OverallLength>29.808724676225363</OverallLength>
-          <EngagedLength>0.7419735001332739</EngagedLength>
+          <Tool>PhillipsBlade</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>3.0000159514767613</Diameter>
+          <Name>TXT-1 - MC1 vis M3 x 16-16</Name>
+          <OverallLength>18.372900585442761</OverallLength>
+          <EngagedLength>15.5</EngagedLength>
           <AccessCylinderRadius>0</AccessCylinderRadius>
           <FastenerType>Bolt</FastenerType>
           <NumberOfThreads>0</NumberOfThreads>
           <PartsLockedByFastener>
             <int>5</int>
-            <int>6</int>
-            <int>7</int>
+            <int>22</int>
+            <int>26</int>
           </PartsLockedByFastener>
         </Fastener>
       </Fasteners>
@@ -31392,63 +31415,15 @@
       <name>a5</name>
       <localLabels />
       <localVariables />
-      <From>PumpWithRealBoltsAndNuts - Lid</From>
-      <To>PumpWithRealBoltsAndNuts - Ext-Side1</To>
+      <From>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-2</From>
+      <To>TXT-1 - C3 platine RC-1</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
-        <int>0</int>
-        <int>116</int>
-        <int>340</int>
-        <int>120</int>
-        <int>450</int>
-        <int>477</int>
-        <int>481</int>
-        <int>725</int>
-        <int>1241</int>
-        <int>762</int>
-        <int>1257</int>
-        <int>124</int>
-        <int>330</int>
-        <int>780</int>
-        <int>336</int>
-        <int>798</int>
-        <int>765</int>
-        <int>1277</int>
-        <int>1364</int>
-        <int>1566</int>
-        <int>974</int>
-        <int>1583</int>
-        <int>1017</int>
-        <int>1976</int>
-        <int>1032</int>
-        <int>1401</int>
-        <int>2036</int>
-        <int>1801</int>
-        <int>2129</int>
-        <int>1465</int>
-        <int>2233</int>
-        <int>2168</int>
-        <int>1817</int>
-        <int>2332</int>
-        <int>6230</int>
+        <int>6231</int>
+        <int>4705</int>
+        <int>4571</int>
         <int>1544</int>
-        <int>1835</int>
-        <int>1941</int>
-        <int>3115</int>
-        <int>4659</int>
-        <int>2339</int>
-        <int>2777</int>
-        <int>2416</int>
-        <int>2468</int>
-        <int>2804</int>
-        <int>2887</int>
-        <int>2891</int>
-        <int>3016</int>
-        <int>2560</int>
-        <int>3097</int>
-        <int>2637</int>
-        <int>2686</int>
       </InfiniteDirections>
       <FiniteDirections />
       <Fasteners>
@@ -31456,43 +31431,18 @@
           <Time>0</Time>
           <TimeSD>0</TimeSD>
           <InstallDistance>0</InstallDistance>
-          <RemovalDirection>4645</RemovalDirection>
+          <RemovalDirection>1530</RemovalDirection>
           <Certainty>1</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>10.000017032134281</ToolSize>
-          <Diameter>8.7500019391243118</Diameter>
-          <Name>PumpWithRealBoltsAndNuts - Bolt14</Name>
-          <OverallLength>29.808724676225363</OverallLength>
-          <EngagedLength>0.7419735001332739</EngagedLength>
+          <Tool>PhillipsBlade</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>2.9979178760409111</Diameter>
+          <Name>TXT-1 - MB2 vis M3 x 12-2</Name>
+          <OverallLength>14.354210274377124</OverallLength>
+          <EngagedLength>11.400010579161753</EngagedLength>
           <AccessCylinderRadius>0</AccessCylinderRadius>
           <FastenerType>Bolt</FastenerType>
           <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener>
-            <int>4</int>
-            <int>6</int>
-            <int>7</int>
-          </PartsLockedByFastener>
-        </Fastener>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>4645</RemovalDirection>
-          <Certainty>1</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>10.000017032134281</ToolSize>
-          <Diameter>8.7500019391243118</Diameter>
-          <Name>PumpWithRealBoltsAndNuts - Bolt16</Name>
-          <OverallLength>29.808724676225363</OverallLength>
-          <EngagedLength>0.7419735001332739</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener>
-            <int>4</int>
-            <int>6</int>
-            <int>7</int>
-          </PartsLockedByFastener>
+          <PartsLockedByFastener />
         </Fastener>
       </Fasteners>
       <Certainty>1</Certainty>
@@ -31502,114 +31452,20 @@
       <name>a6</name>
       <localLabels />
       <localVariables />
-      <From>PumpWithRealBoltsAndNuts - Ext-Shaft</From>
-      <To>PumpWithRealBoltsAndNuts - Ext-Ring</To>
+      <From>TXT-1 - G5 support de carrosserie-2</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-1 F5 support de carro-2</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
-        <int>1463</int>
-        <int>4578</int>
-      </InfiniteDirections>
-      <FiniteDirections />
-      <Fasteners />
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a7</name>
-      <localLabels />
-      <localVariables />
-      <From>PumpWithRealBoltsAndNuts - Ext-Side1</From>
-      <To>PumpWithRealBoltsAndNuts - Ext-Shaft</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>1382</int>
-        <int>4578</int>
-      </InfiniteDirections>
-      <FiniteDirections />
-      <Fasteners />
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a8</name>
-      <localLabels />
-      <localVariables />
-      <From>PumpWithRealBoltsAndNuts - Ext-Shaft</From>
-      <To>PumpWithRealBoltsAndNuts - Ext-Pipe</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>1463</int>
-        <int>4578</int>
-      </InfiniteDirections>
-      <FiniteDirections />
-      <Fasteners />
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a9</name>
-      <localLabels />
-      <localVariables />
-      <From>PumpWithRealBoltsAndNuts - Pump</From>
-      <To>PumpWithRealBoltsAndNuts - Backlid</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>765</int>
-        <int>0</int>
-        <int>1241</int>
-        <int>780</int>
-        <int>116</int>
-        <int>340</int>
-        <int>798</int>
-        <int>450</int>
-        <int>974</int>
-        <int>1257</int>
-        <int>120</int>
-        <int>1277</int>
-        <int>477</int>
-        <int>1017</int>
-        <int>124</int>
-        <int>481</int>
-        <int>1032</int>
-        <int>5089</int>
-        <int>330</int>
-        <int>725</int>
-        <int>1364</int>
-        <int>5096</int>
-        <int>336</int>
-        <int>1401</int>
-        <int>762</int>
-        <int>5143</int>
-        <int>5112</int>
-        <int>1465</int>
-        <int>5835</int>
-        <int>5128</int>
-        <int>5344</int>
-        <int>1566</int>
-        <int>5948</int>
-        <int>5568</int>
-        <int>6105</int>
-        <int>5608</int>
-        <int>4659</int>
-        <int>5615</int>
-        <int>5642</int>
+        <int>453</int>
+        <int>1161</int>
         <int>6230</int>
-        <int>1544</int>
-        <int>6231</int>
+        <int>2320</int>
+        <int>2786</int>
+        <int>3089</int>
+        <int>3115</int>
       </InfiniteDirections>
-      <FiniteDirections>
-        <int>4598</int>
-        <int>4601</int>
-        <int>1583</int>
-        <int>4581</int>
-        <int>4584</int>
-        <int>4587</int>
-        <int>4595</int>
-      </FiniteDirections>
+      <FiniteDirections />
       <Fasteners>
         <Fastener>
           <Time>0</Time>
@@ -31617,33 +31473,20 @@
           <InstallDistance>0</InstallDistance>
           <RemovalDirection>0</RemovalDirection>
           <Certainty>1</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>24.00001728477838</ToolSize>
-          <Diameter>23.999989377477391</Diameter>
-          <Name>PumpWithRealBoltsAndNuts - Bolt12L</Name>
-          <OverallLength>50.35049587593241</OverallLength>
-          <EngagedLength>1.7121120115226192</EngagedLength>
+          <Tool>PhillipsBlade</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>3.0000159514767613</Diameter>
+          <Name>TXT-1 - MC1 vis M3 x 16-13</Name>
+          <OverallLength>18.372900585442761</OverallLength>
+          <EngagedLength>15.5</EngagedLength>
           <AccessCylinderRadius>0</AccessCylinderRadius>
           <FastenerType>Bolt</FastenerType>
           <NumberOfThreads>0</NumberOfThreads>
-          <Nuts>
-            <Nut>
-              <Time>0</Time>
-              <TimeSD>0</TimeSD>
-              <InstallDistance>0</InstallDistance>
-              <RemovalDirection>3115</RemovalDirection>
-              <Certainty>1</Certainty>
-              <Tool>HexWrench</Tool>
-              <ToolSize>23.999978733625085</ToolSize>
-              <Diameter>23.999989377477391</Diameter>
-              <Name>PumpWithRealBoltsAndNuts - Nut2</Name>
-              <OverallLength>4.04131194989944</OverallLength>
-              <NumberOfThreads>0</NumberOfThreads>
-              <NutType>Hex</NutType>
-            </Nut>
-          </Nuts>
-          <Washer />
-          <PartsLockedByFastener />
+          <PartsLockedByFastener>
+            <int>5</int>
+            <int>22</int>
+            <int>26</int>
+          </PartsLockedByFastener>
         </Fastener>
         <Fastener>
           <Time>0</Time>
@@ -31651,32 +31494,80 @@
           <InstallDistance>0</InstallDistance>
           <RemovalDirection>0</RemovalDirection>
           <Certainty>1</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>24.00001728477838</ToolSize>
-          <Diameter>23.999989377477391</Diameter>
-          <Name>PumpWithRealBoltsAndNuts - Bolt11L</Name>
-          <OverallLength>50.35049587593241</OverallLength>
-          <EngagedLength>1.7121120115226192</EngagedLength>
+          <Tool>PhillipsBlade</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>3.0000159514767613</Diameter>
+          <Name>TXT-1 - MC1 vis M3 x 16-16</Name>
+          <OverallLength>18.372900585442761</OverallLength>
+          <EngagedLength>15.5</EngagedLength>
           <AccessCylinderRadius>0</AccessCylinderRadius>
           <FastenerType>Bolt</FastenerType>
           <NumberOfThreads>0</NumberOfThreads>
-          <Nuts>
-            <Nut>
-              <Time>0</Time>
-              <TimeSD>0</TimeSD>
-              <InstallDistance>0</InstallDistance>
-              <RemovalDirection>3115</RemovalDirection>
-              <Certainty>1</Certainty>
-              <Tool>HexWrench</Tool>
-              <ToolSize>23.999978733625085</ToolSize>
-              <Diameter>23.999989377477391</Diameter>
-              <Name>PumpWithRealBoltsAndNuts - Nut1</Name>
-              <OverallLength>4.04131194989944</OverallLength>
-              <NumberOfThreads>0</NumberOfThreads>
-              <NutType>Hex</NutType>
-            </Nut>
-          </Nuts>
-          <Washer />
+          <PartsLockedByFastener>
+            <int>5</int>
+            <int>22</int>
+            <int>26</int>
+          </PartsLockedByFastener>
+        </Fastener>
+      </Fasteners>
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a7</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-1 G2 support amortisseur-1</From>
+      <To>TXT-1 - C2 boitier batterie-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>116</int>
+        <int>120</int>
+        <int>453</int>
+        <int>481</int>
+        <int>974</int>
+        <int>1307</int>
+        <int>4811</int>
+        <int>5069</int>
+        <int>5128</int>
+        <int>5344</int>
+        <int>5698</int>
+        <int>5467</int>
+        <int>5800</int>
+        <int>6074</int>
+        <int>1544</int>
+        <int>6231</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>340</int>
+        <int>591</int>
+        <int>762</int>
+        <int>914</int>
+        <int>956</int>
+        <int>1235</int>
+        <int>1523</int>
+        <int>4571</int>
+        <int>4601</int>
+        <int>6230</int>
+      </FiniteDirections>
+      <Fasteners>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>1530</RemovalDirection>
+          <Certainty>1</Certainty>
+          <Tool>PhillipsBlade</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>2.9979178760409111</Diameter>
+          <Name>TXT-1 - MB2 vis M3 x 12-6</Name>
+          <OverallLength>14.354210274377124</OverallLength>
+          <EngagedLength>11.400010579161753</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
           <PartsLockedByFastener />
         </Fastener>
       </Fasteners>
@@ -31684,16 +31575,151 @@
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a10</name>
+      <name>a8</name>
       <localLabels />
       <localVariables />
-      <From>PumpWithRealBoltsAndNuts - Ext-Side2</From>
-      <To>PumpWithRealBoltsAndNuts - Ext-Shaft</To>
+      <From>TXT-1 - G5 support de carrosserie-1</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-1 F5 support de carro-1</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
-        <int>1463</int>
-        <int>4578</int>
+        <int>453</int>
+        <int>1161</int>
+        <int>6230</int>
+        <int>2320</int>
+        <int>2786</int>
+        <int>3089</int>
+        <int>3115</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>0</RemovalDirection>
+          <Certainty>1</Certainty>
+          <Tool>PhillipsBlade</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>3.0000159514767613</Diameter>
+          <Name>TXT-1 - MC1 vis M3 x 16-10</Name>
+          <OverallLength>18.372900585442761</OverallLength>
+          <EngagedLength>15.5</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>4</int>
+            <int>23</int>
+            <int>25</int>
+          </PartsLockedByFastener>
+        </Fastener>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>0</RemovalDirection>
+          <Certainty>1</Certainty>
+          <Tool>PhillipsBlade</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>3.0000159514767613</Diameter>
+          <Name>TXT-1 - MC1 vis M3 x 16-12</Name>
+          <OverallLength>18.372900585442761</OverallLength>
+          <EngagedLength>15.5</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>4</int>
+            <int>23</int>
+            <int>25</int>
+          </PartsLockedByFastener>
+        </Fastener>
+      </Fasteners>
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a9</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 MS7 axe-5</From>
+      <To>TXT-1 - C2 boitier batterie-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3115</int>
+        <int>3236</int>
+        <int>3567</int>
+        <int>4053</int>
+        <int>5412</int>
+        <int>5884</int>
+        <int>6231</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a10</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - C3 platine RC-1</From>
+      <To>TXT-1 - C2 boitier batterie-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>116</int>
+        <int>120</int>
+        <int>340</int>
+        <int>453</int>
+        <int>481</int>
+        <int>591</int>
+        <int>762</int>
+        <int>914</int>
+        <int>956</int>
+        <int>974</int>
+        <int>1235</int>
+        <int>1307</int>
+        <int>1523</int>
+        <int>1820</int>
+        <int>1892</int>
+        <int>2030</int>
+        <int>2099</int>
+        <int>2213</int>
+        <int>2364</int>
+        <int>2427</int>
+        <int>2521</int>
+        <int>2690</int>
+        <int>2765</int>
+        <int>2958</int>
+        <int>3009</int>
+        <int>3089</int>
+        <int>3236</int>
+        <int>3415</int>
+        <int>3380</int>
+        <int>3713</int>
+        <int>3846</int>
+        <int>4053</int>
+        <int>4228</int>
+        <int>4337</int>
+        <int>6231</int>
+        <int>4571</int>
+        <int>4811</int>
+        <int>4922</int>
+        <int>5069</int>
+        <int>5151</int>
+        <int>5462</int>
+        <int>5467</int>
+        <int>5698</int>
+        <int>5800</int>
+        <int>6074</int>
+        <int>6230</int>
+        <int>1544</int>
+        <int>3115</int>
       </InfiniteDirections>
       <FiniteDirections />
       <Fasteners />
@@ -31704,15 +31730,62 @@
       <name>a11</name>
       <localLabels />
       <localVariables />
-      <From>PumpWithRealBoltsAndNuts - Shaft</From>
-      <To>PumpWithRealBoltsAndNuts - Pump</To>
+      <From>TXT-1 - Chassis-1 Demi chassis-2 G2 support amortisseur-1</From>
+      <To>TXT-1 - C2 boitier batterie-1</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
-        <int>4618</int>
+        <int>1892</int>
+        <int>2048</int>
+        <int>2446</int>
+        <int>2733</int>
+        <int>3081</int>
+        <int>3151</int>
+        <int>3415</int>
+        <int>3380</int>
+        <int>3674</int>
+        <int>3713</int>
+        <int>4053</int>
+        <int>4181</int>
+        <int>4228</int>
+        <int>4235</int>
+        <int>6231</int>
+        <int>4705</int>
+        <int>1544</int>
+        <int>3115</int>
       </InfiniteDirections>
-      <FiniteDirections />
-      <Fasteners />
+      <FiniteDirections>
+        <int>1494</int>
+        <int>1523</int>
+        <int>1554</int>
+        <int>1798</int>
+        <int>2076</int>
+        <int>2320</int>
+        <int>2536</int>
+        <int>2844</int>
+        <int>2958</int>
+        <int>4735</int>
+        <int>6230</int>
+      </FiniteDirections>
+      <Fasteners>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>1530</RemovalDirection>
+          <Certainty>1</Certainty>
+          <Tool>PhillipsBlade</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>2.9979178760409111</Diameter>
+          <Name>TXT-1 - MB2 vis M3 x 12-3</Name>
+          <OverallLength>14.354210274377124</OverallLength>
+          <EngagedLength>11.400010579161753</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener />
+        </Fastener>
+      </Fasteners>
       <Certainty>1</Certainty>
       <ConnectionType>Loose</ConnectionType>
     </arc>
@@ -31720,65 +31793,829 @@
       <name>a12</name>
       <localLabels />
       <localVariables />
-      <From>PumpWithRealBoltsAndNuts - Pump</From>
-      <To>PumpWithRealBoltsAndNuts - Lid</To>
+      <From>TXT-1 - F1 support de carro-1</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 F5 support de carro-1</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
-        <int>1241</int>
-        <int>765</int>
-        <int>340</int>
-        <int>780</int>
-        <int>450</int>
-        <int>1257</int>
-        <int>1976</int>
-        <int>477</int>
-        <int>2339</int>
-        <int>1277</int>
-        <int>2036</int>
-        <int>2416</int>
-        <int>2129</int>
-        <int>1364</int>
-        <int>725</int>
-        <int>1566</int>
-        <int>1401</int>
-        <int>762</int>
-        <int>2560</int>
-        <int>1583</int>
-        <int>798</int>
-        <int>2637</int>
-        <int>2777</int>
-        <int>2168</int>
-        <int>1801</int>
-        <int>1465</int>
-        <int>6230</int>
-        <int>2891</int>
-        <int>1817</int>
-        <int>1017</int>
-        <int>2686</int>
         <int>0</int>
-        <int>2804</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>3114</RemovalDirection>
+          <Certainty>1</Certainty>
+          <Tool>PhillipsBlade</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>3.0000159514767613</Diameter>
+          <Name>TXT-1 - MC1 vis M3 x 16-14</Name>
+          <OverallLength>18.372900585442761</OverallLength>
+          <EngagedLength>15.5</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>8</int>
+            <int>21</int>
+            <int>26</int>
+          </PartsLockedByFastener>
+        </Fastener>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>3114</RemovalDirection>
+          <Certainty>1</Certainty>
+          <Tool>PhillipsBlade</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>3.0000159514767613</Diameter>
+          <Name>TXT-1 - MC1 vis M3 x 16-15</Name>
+          <OverallLength>18.372900585442761</OverallLength>
+          <EngagedLength>15.5</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>8</int>
+            <int>21</int>
+            <int>26</int>
+          </PartsLockedByFastener>
+        </Fastener>
+      </Fasteners>
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a13</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - F1 support de carro-4</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 F5 support de carro-2</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>3114</RemovalDirection>
+          <Certainty>1</Certainty>
+          <Tool>PhillipsBlade</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>3.0000159514767613</Diameter>
+          <Name>TXT-1 - MC1 vis M3 x 16-11</Name>
+          <OverallLength>18.372900585442761</OverallLength>
+          <EngagedLength>15.5</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>9</int>
+            <int>24</int>
+            <int>25</int>
+          </PartsLockedByFastener>
+        </Fastener>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>3114</RemovalDirection>
+          <Certainty>1</Certainty>
+          <Tool>PhillipsBlade</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>3.0000159514767613</Diameter>
+          <Name>TXT-1 - MC1 vis M3 x 16-9</Name>
+          <OverallLength>18.372900585442761</OverallLength>
+          <EngagedLength>15.5</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>9</int>
+            <int>24</int>
+            <int>25</int>
+          </PartsLockedByFastener>
+        </Fastener>
+      </Fasteners>
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a14</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-1 F5 support de carro-1</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-1 chassis-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>116</int>
         <int>120</int>
-        <int>1032</int>
-        <int>1835</int>
-        <int>3016</int>
-        <int>2233</int>
         <int>124</int>
-        <int>2332</int>
         <int>330</int>
         <int>336</int>
+        <int>340</int>
+        <int>450</int>
+        <int>477</int>
+        <int>481</int>
+        <int>725</int>
+        <int>762</int>
+        <int>765</int>
+        <int>780</int>
+        <int>684</int>
+        <int>974</int>
+        <int>1017</int>
+        <int>1032</int>
+        <int>1241</int>
+        <int>1257</int>
+        <int>1277</int>
+        <int>1364</int>
+        <int>1401</int>
+        <int>1465</int>
+        <int>1566</int>
+        <int>6230</int>
+        <int>1544</int>
+        <int>4659</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a15</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Pare-chocs avant-1 G6 bumper-1 bumper1-1</From>
+      <To>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a16</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Pare-chocs avant-1 G6 bumper-1 bumper1-2</From>
+      <To>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a17</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-1</From>
+      <To>TXT-1 - Chassis-1 MS7 axe-3</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>3028</RemovalDirection>
+          <Certainty>0</Certainty>
+          <Tool>HexWrench</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>5.2500446527442239</Diameter>
+          <Name>TXT-1 - Chassis-1 F4 entrtoise-7</Name>
+          <OverallLength>11.500001650002432</OverallLength>
+          <EngagedLength>0</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>7</int>
+            <int>13</int>
+            <int>17</int>
+          </PartsLockedByFastener>
+        </Fastener>
+      </Fasteners>
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a18</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-1</From>
+      <To>TXT-1 - Chassis-1 MS7 axe-4</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>3028</RemovalDirection>
+          <Certainty>0</Certainty>
+          <Tool>HexWrench</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>5.2500581248416829</Diameter>
+          <Name>TXT-1 - Chassis-1 F4 entrtoise-5</Name>
+          <OverallLength>11.500003716368852</OverallLength>
+          <EngagedLength>0</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>7</int>
+            <int>14</int>
+            <int>17</int>
+          </PartsLockedByFastener>
+        </Fastener>
+      </Fasteners>
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a19</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 MS7 axe-6</From>
+      <To>TXT-1 - C2 boitier batterie-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>122</int>
+        <int>126</int>
+        <int>333</int>
+        <int>453</int>
+        <int>500</int>
+        <int>1138</int>
+        <int>1246</int>
+        <int>1541</int>
+        <int>1697</int>
+        <int>1935</int>
+        <int>1992</int>
+        <int>684</int>
+        <int>755</int>
+        <int>2032</int>
+        <int>2329</int>
+        <int>914</int>
+        <int>1021</int>
+        <int>2633</int>
+        <int>2722</int>
+        <int>2349</int>
+        <int>2895</int>
+        <int>2976</int>
+        <int>3089</int>
+        <int>3151</int>
+        <int>2521</int>
+        <int>4048</int>
+        <int>4053</int>
+        <int>4241</int>
+        <int>3376</int>
+        <int>4403</int>
+        <int>4585</int>
+        <int>3380</int>
+        <int>4715</int>
+        <int>3686</int>
+        <int>4961</int>
+        <int>3745</int>
+        <int>5775</int>
+        <int>5009</int>
+        <int>5315</int>
+        <int>5454</int>
+        <int>6231</int>
+        <int>4659</int>
+        <int>5862</int>
+        <int>6074</int>
+        <int>6230</int>
+        <int>3115</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a20</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Pare-chocs avant-1 G6 bumper-1 bumper1-1</From>
+      <To>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-2</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a21</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-2</From>
+      <To>TXT-1 - Chassis-1 MS7 axe-3</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>3028</RemovalDirection>
+          <Certainty>0</Certainty>
+          <Tool>HexWrench</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>5.2500326901976671</Diameter>
+          <Name>TXT-1 - Chassis-1 F4 entrtoise-3</Name>
+          <OverallLength>11.500000846778631</OverallLength>
+          <EngagedLength>0</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener />
+        </Fastener>
+      </Fasteners>
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a22</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 MS7 axe-6</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>116</int>
+        <int>120</int>
+        <int>124</int>
+        <int>330</int>
+        <int>336</int>
+        <int>340</int>
+        <int>450</int>
+        <int>477</int>
+        <int>481</int>
+        <int>725</int>
+        <int>762</int>
+        <int>765</int>
+        <int>780</int>
+        <int>684</int>
+        <int>974</int>
+        <int>1017</int>
+        <int>1032</int>
+        <int>1241</int>
+        <int>1257</int>
+        <int>1277</int>
+        <int>1364</int>
+        <int>1401</int>
+        <int>1465</int>
+        <int>1566</int>
+        <int>6230</int>
+        <int>4715</int>
+        <int>4811</int>
+        <int>4571</int>
+        <int>5089</int>
+        <int>5069</int>
+        <int>5009</int>
+        <int>5128</int>
+        <int>5143</int>
+        <int>5344</int>
+        <int>5568</int>
+        <int>5608</int>
+        <int>5698</int>
+        <int>5467</int>
+        <int>5800</int>
+        <int>5948</int>
+        <int>6105</int>
+        <int>1544</int>
+        <int>6231</int>
+        <int>4659</int>
       </InfiniteDirections>
       <FiniteDirections>
-        <int>481</int>
-        <int>2468</int>
-        <int>974</int>
-        <int>1544</int>
+        <int>4585</int>
+        <int>4587</int>
+        <int>4601</int>
+      </FiniteDirections>
+      <Fasteners>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>3028</RemovalDirection>
+          <Certainty>0</Certainty>
+          <Tool>HexWrench</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>5.250006700126634</Diameter>
+          <Name>TXT-1 - Chassis-1 F4 entrtoise-4</Name>
+          <OverallLength>11.500000158869915</OverallLength>
+          <EngagedLength>0</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener />
+        </Fastener>
+      </Fasteners>
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a23</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 MS7 axe-2</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
         <int>116</int>
+        <int>120</int>
+        <int>124</int>
+        <int>330</int>
+        <int>336</int>
+        <int>340</int>
+        <int>450</int>
+        <int>477</int>
+        <int>481</int>
+        <int>725</int>
+        <int>762</int>
+        <int>765</int>
+        <int>780</int>
+        <int>684</int>
+        <int>974</int>
+        <int>1017</int>
+        <int>1032</int>
+        <int>1241</int>
+        <int>1257</int>
+        <int>1277</int>
+        <int>1364</int>
+        <int>1401</int>
+        <int>1465</int>
+        <int>1566</int>
+        <int>6230</int>
+        <int>4715</int>
+        <int>4585</int>
+        <int>4587</int>
+        <int>4811</int>
+        <int>4571</int>
+        <int>4601</int>
+        <int>5089</int>
+        <int>5069</int>
+        <int>5009</int>
+        <int>5128</int>
+        <int>5143</int>
+        <int>5344</int>
+        <int>5568</int>
+        <int>5608</int>
+        <int>5698</int>
+        <int>5467</int>
+        <int>5800</int>
+        <int>5948</int>
+        <int>6105</int>
+        <int>1544</int>
+        <int>6231</int>
+        <int>4659</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a24</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - G5 support de carrosserie-2</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 F5 support de carro-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>122</int>
+        <int>453</int>
+        <int>914</int>
+        <int>2030</int>
+        <int>2521</int>
+        <int>2895</int>
+        <int>6230</int>
+        <int>3115</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>3089</int>
+      </FiniteDirections>
+      <Fasteners>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>3114</RemovalDirection>
+          <Certainty>1</Certainty>
+          <Tool>PhillipsBlade</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>3.0000159514767613</Diameter>
+          <Name>TXT-1 - MC1 vis M3 x 16-14</Name>
+          <OverallLength>18.372900585442761</OverallLength>
+          <EngagedLength>15.5</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>8</int>
+            <int>21</int>
+            <int>26</int>
+          </PartsLockedByFastener>
+        </Fastener>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>3114</RemovalDirection>
+          <Certainty>1</Certainty>
+          <Tool>PhillipsBlade</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>3.0000159514767613</Diameter>
+          <Name>TXT-1 - MC1 vis M3 x 16-15</Name>
+          <OverallLength>18.372900585442761</OverallLength>
+          <EngagedLength>15.5</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>8</int>
+            <int>21</int>
+            <int>26</int>
+          </PartsLockedByFastener>
+        </Fastener>
+      </Fasteners>
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a25</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Pare-chocs avant-1 G6 bumper-1 bumper1-2</From>
+      <To>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-2</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a26</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-2</From>
+      <To>TXT-1 - Chassis-1 MS7 axe-4</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>0</RemovalDirection>
+          <Certainty>0</Certainty>
+          <Tool>HexWrench</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>5.2500692228810522</Diameter>
+          <Name>TXT-1 - Chassis-1 F4 entrtoise-6</Name>
+          <OverallLength>11.500000344811049</OverallLength>
+          <EngagedLength>0</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener />
+        </Fastener>
+      </Fasteners>
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a27</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-2 F5 support de carro-1</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1470</int>
+        <int>1554</int>
+        <int>1697</int>
+        <int>1566</int>
+        <int>1541</int>
+        <int>1892</int>
+        <int>2076</int>
+        <int>2032</int>
+        <int>1989</int>
+        <int>2030</int>
+        <int>2011</int>
+        <int>2048</int>
+        <int>2308</int>
+        <int>2441</int>
+        <int>2446</int>
+        <int>2460</int>
+        <int>2521</int>
+        <int>2617</int>
+        <int>2474</int>
+        <int>2838</int>
+        <int>2794</int>
+        <int>2863</int>
+        <int>2976</int>
+        <int>3089</int>
+        <int>2844</int>
+        <int>1544</int>
+        <int>6230</int>
         <int>3115</int>
         <int>4659</int>
-        <int>1941</int>
-        <int>2887</int>
-        <int>3097</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>1494</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a28</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - G5 support de carrosserie-1</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 F5 support de carro-2</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>122</int>
+        <int>453</int>
+        <int>914</int>
+        <int>2521</int>
+        <int>2030</int>
+        <int>2895</int>
+        <int>3115</int>
+        <int>6230</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>3089</int>
+      </FiniteDirections>
+      <Fasteners>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>3114</RemovalDirection>
+          <Certainty>1</Certainty>
+          <Tool>PhillipsBlade</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>3.0000159514767613</Diameter>
+          <Name>TXT-1 - MC1 vis M3 x 16-11</Name>
+          <OverallLength>18.372900585442761</OverallLength>
+          <EngagedLength>15.5</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>9</int>
+            <int>24</int>
+            <int>25</int>
+          </PartsLockedByFastener>
+        </Fastener>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>3114</RemovalDirection>
+          <Certainty>1</Certainty>
+          <Tool>PhillipsBlade</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>3.0000159514767613</Diameter>
+          <Name>TXT-1 - MC1 vis M3 x 16-9</Name>
+          <OverallLength>18.372900585442761</OverallLength>
+          <EngagedLength>15.5</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>9</int>
+            <int>24</int>
+            <int>25</int>
+          </PartsLockedByFastener>
+        </Fastener>
+      </Fasteners>
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a29</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - C2 boitier batterie-1</From>
+      <To>TXT-1 - C1 couvercle batterie-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1021</int>
+        <int>4659</int>
+        <int>3686</int>
+        <int>3713</int>
+        <int>4048</int>
+        <int>4053</int>
+        <int>4241</int>
+        <int>4205</int>
+        <int>4228</int>
+        <int>4403</int>
+        <int>4337</int>
+        <int>4585</int>
+        <int>4609</int>
+        <int>4705</int>
+        <int>4961</int>
+        <int>4922</int>
+        <int>5009</int>
+        <int>5148</int>
+        <int>5315</int>
+        <int>5441</int>
+        <int>5454</int>
+        <int>5637</int>
+        <int>6231</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>0</int>
+        <int>116</int>
+        <int>126</int>
+        <int>481</int>
+        <int>2213</int>
+        <int>500</int>
+        <int>974</int>
+        <int>2308</int>
+        <int>2690</int>
+        <int>2794</int>
+        <int>3009</int>
+        <int>3061</int>
+        <int>3581</int>
+        <int>3159</int>
+        <int>3846</int>
+        <int>3293</int>
+        <int>3380</int>
+        <int>5307</int>
+        <int>3415</int>
+        <int>5775</int>
+        <int>5855</int>
+        <int>6074</int>
+        <int>1544</int>
+        <int>3115</int>
+        <int>5862</int>
       </FiniteDirections>
       <Fasteners>
         <Fastener>
@@ -31787,33 +32624,12 @@
           <InstallDistance>0</InstallDistance>
           <RemovalDirection>4645</RemovalDirection>
           <Certainty>1</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>10.000017032134281</ToolSize>
-          <Diameter>8.7500019391243118</Diameter>
-          <Name>PumpWithRealBoltsAndNuts - Bolt14</Name>
-          <OverallLength>29.808724676225363</OverallLength>
-          <EngagedLength>0.7419735001332739</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener>
-            <int>4</int>
-            <int>6</int>
-            <int>7</int>
-          </PartsLockedByFastener>
-        </Fastener>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>4645</RemovalDirection>
-          <Certainty>1</Certainty>
-          <Tool>Allen</Tool>
-          <ToolSize>4.0840148437138737</ToolSize>
-          <Diameter>8.4900671918123276</Diameter>
-          <Name>PumpWithRealBoltsAndNuts - Bolt2</Name>
-          <OverallLength>30.000004450459329</OverallLength>
-          <EngagedLength>4.5</EngagedLength>
+          <Tool>PhillipsBlade</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>2.9999786903374042</Diameter>
+          <Name>TXT-1 - MF5vis de montage-2</Name>
+          <OverallLength>23.000000086538797</OverallLength>
+          <EngagedLength>9.5</EngagedLength>
           <AccessCylinderRadius>0</AccessCylinderRadius>
           <FastenerType>Bolt</FastenerType>
           <NumberOfThreads>0</NumberOfThreads>
@@ -31825,181 +32641,694 @@
           <InstallDistance>0</InstallDistance>
           <RemovalDirection>4645</RemovalDirection>
           <Certainty>1</Certainty>
+          <Tool>PhillipsBlade</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>2.9999786903374042</Diameter>
+          <Name>TXT-1 - MF5vis de montage-1</Name>
+          <OverallLength>23.000000086538797</OverallLength>
+          <EngagedLength>9.5</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener />
+        </Fastener>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>4645</RemovalDirection>
+          <Certainty>1</Certainty>
+          <Tool>PhillipsBlade</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>2.9999786903374042</Diameter>
+          <Name>TXT-1 - MF5vis de montage-1</Name>
+          <OverallLength>23.000000086538797</OverallLength>
+          <EngagedLength>9.5</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener />
+        </Fastener>
+      </Fasteners>
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a30</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 MS7 axe-3</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>340</int>
+        <int>116</int>
+        <int>450</int>
+        <int>1566</int>
+        <int>120</int>
+        <int>765</int>
+        <int>477</int>
+        <int>1241</int>
+        <int>481</int>
+        <int>124</int>
+        <int>5089</int>
+        <int>780</int>
+        <int>5143</int>
+        <int>725</int>
+        <int>1257</int>
+        <int>6230</int>
+        <int>762</int>
+        <int>5344</int>
+        <int>330</int>
+        <int>974</int>
+        <int>684</int>
+        <int>5800</int>
+        <int>5568</int>
+        <int>1277</int>
+        <int>5069</int>
+        <int>4715</int>
+        <int>336</int>
+        <int>1017</int>
+        <int>5948</int>
+        <int>5608</int>
+        <int>1544</int>
+        <int>1364</int>
+        <int>6105</int>
+        <int>5698</int>
+        <int>1032</int>
+        <int>5009</int>
+        <int>5467</int>
+        <int>6231</int>
+        <int>1401</int>
+        <int>4585</int>
+        <int>5128</int>
+        <int>1465</int>
+        <int>4587</int>
+        <int>4659</int>
+        <int>4811</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>4571</int>
+        <int>4601</int>
+      </FiniteDirections>
+      <Fasteners>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>3028</RemovalDirection>
+          <Certainty>0</Certainty>
           <Tool>HexWrench</Tool>
-          <ToolSize>10.000017032134281</ToolSize>
-          <Diameter>8.7500019391243118</Diameter>
-          <Name>PumpWithRealBoltsAndNuts - Bolt15</Name>
-          <OverallLength>29.808724676225363</OverallLength>
-          <EngagedLength>0.7419735001332739</EngagedLength>
+          <ToolSize>0</ToolSize>
+          <Diameter>5.2500446527442239</Diameter>
+          <Name>TXT-1 - Chassis-1 F4 entrtoise-7</Name>
+          <OverallLength>11.500001650002432</OverallLength>
+          <EngagedLength>0</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>7</int>
+            <int>13</int>
+            <int>17</int>
+          </PartsLockedByFastener>
+        </Fastener>
+      </Fasteners>
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a31</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-1 F5 support de carro-2</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-1 chassis-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>124</int>
+        <int>765</int>
+        <int>340</int>
+        <int>481</int>
+        <int>974</int>
+        <int>330</int>
+        <int>1241</int>
+        <int>116</int>
+        <int>1364</int>
+        <int>780</int>
+        <int>450</int>
+        <int>1017</int>
+        <int>725</int>
+        <int>1257</int>
+        <int>477</int>
+        <int>120</int>
+        <int>336</int>
+        <int>684</int>
+        <int>762</int>
+        <int>1566</int>
+        <int>1032</int>
+        <int>1401</int>
+        <int>1277</int>
+        <int>4659</int>
+        <int>1465</int>
+        <int>6230</int>
+        <int>1544</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a32</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 MS7 axe-4</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>765</int>
+        <int>1241</int>
+        <int>116</int>
+        <int>4571</int>
+        <int>124</int>
+        <int>120</int>
+        <int>340</int>
+        <int>4601</int>
+        <int>780</int>
+        <int>330</int>
+        <int>1257</int>
+        <int>1566</int>
+        <int>5800</int>
+        <int>450</int>
+        <int>762</int>
+        <int>5089</int>
+        <int>5143</int>
+        <int>336</int>
+        <int>477</int>
+        <int>684</int>
+        <int>5069</int>
+        <int>1364</int>
+        <int>5344</int>
+        <int>6230</int>
+        <int>1277</int>
+        <int>5948</int>
+        <int>481</int>
+        <int>1017</int>
+        <int>5608</int>
+        <int>4585</int>
+        <int>6105</int>
+        <int>1401</int>
+        <int>5568</int>
+        <int>974</int>
+        <int>5009</int>
+        <int>5698</int>
+        <int>725</int>
+        <int>5128</int>
+        <int>1465</int>
+        <int>4587</int>
+        <int>1032</int>
+        <int>5467</int>
+        <int>1544</int>
+        <int>4715</int>
+        <int>4811</int>
+        <int>6231</int>
+        <int>4659</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>3028</RemovalDirection>
+          <Certainty>0</Certainty>
+          <Tool>HexWrench</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>5.2500581248416829</Diameter>
+          <Name>TXT-1 - Chassis-1 F4 entrtoise-5</Name>
+          <OverallLength>11.500003716368852</OverallLength>
+          <EngagedLength>0</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>7</int>
+            <int>14</int>
+            <int>17</int>
+          </PartsLockedByFastener>
+        </Fastener>
+      </Fasteners>
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a33</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - G5 support de carrosserie-2</From>
+      <To>TXT-1 - F1 support de carro-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections />
+      <FiniteDirections>
+        <int>1503</int>
+      </FiniteDirections>
+      <Fasteners>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>3114</RemovalDirection>
+          <Certainty>1</Certainty>
+          <Tool>PhillipsBlade</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>3.0000159514767613</Diameter>
+          <Name>TXT-1 - MC1 vis M3 x 16-14</Name>
+          <OverallLength>18.372900585442761</OverallLength>
+          <EngagedLength>15.5</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>8</int>
+            <int>21</int>
+            <int>26</int>
+          </PartsLockedByFastener>
+        </Fastener>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>3114</RemovalDirection>
+          <Certainty>1</Certainty>
+          <Tool>PhillipsBlade</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>3.0000159514767613</Diameter>
+          <Name>TXT-1 - MC1 vis M3 x 16-15</Name>
+          <OverallLength>18.372900585442761</OverallLength>
+          <EngagedLength>15.5</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>8</int>
+            <int>21</int>
+            <int>26</int>
+          </PartsLockedByFastener>
+        </Fastener>
+      </Fasteners>
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a34</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 MS7 axe-5</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>4571</int>
+        <int>116</int>
+        <int>4601</int>
+        <int>1241</int>
+        <int>1566</int>
+        <int>340</int>
+        <int>120</int>
+        <int>765</int>
+        <int>5143</int>
+        <int>1257</int>
+        <int>5089</int>
+        <int>5800</int>
+        <int>780</int>
+        <int>124</int>
+        <int>6230</int>
+        <int>450</int>
+        <int>1277</int>
+        <int>684</int>
+        <int>5344</int>
+        <int>5948</int>
+        <int>5069</int>
+        <int>477</int>
+        <int>4715</int>
+        <int>6105</int>
+        <int>330</int>
+        <int>5568</int>
+        <int>1364</int>
+        <int>974</int>
+        <int>5608</int>
+        <int>336</int>
+        <int>5009</int>
+        <int>4587</int>
+        <int>481</int>
+        <int>1017</int>
+        <int>1401</int>
+        <int>725</int>
+        <int>1544</int>
+        <int>5698</int>
+        <int>5128</int>
+        <int>1032</int>
+        <int>1465</int>
+        <int>762</int>
+        <int>4811</int>
+        <int>6231</int>
+        <int>5467</int>
+        <int>4659</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>4585</int>
+      </FiniteDirections>
+      <Fasteners>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>3028</RemovalDirection>
+          <Certainty>0</Certainty>
+          <Tool>HexWrench</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>5.2500357912709328</Diameter>
+          <Name>TXT-1 - Chassis-1 F4 entrtoise-8</Name>
+          <OverallLength>11.500000256075307</OverallLength>
+          <EngagedLength>0</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener />
+        </Fastener>
+      </Fasteners>
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a35</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-2 F5 support de carro-2</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>3713</int>
+        <int>2976</int>
+        <int>1494</int>
+        <int>2030</int>
+        <int>4489</int>
+        <int>1892</int>
+        <int>4118</int>
+        <int>3674</int>
+        <int>2521</int>
+        <int>4571</int>
+        <int>6231</int>
+        <int>3089</int>
+        <int>4127</int>
+        <int>1470</int>
+        <int>3745</int>
+        <int>2076</int>
+        <int>3151</int>
+        <int>2308</int>
+        <int>2617</int>
+        <int>4170</int>
+        <int>3684</int>
+        <int>4659</int>
+        <int>3861</int>
+        <int>6230</int>
+        <int>4205</int>
+        <int>3376</int>
+        <int>2794</int>
+        <int>1697</int>
+        <int>1554</int>
+        <int>2446</int>
+        <int>2032</int>
+        <int>1566</int>
+        <int>1989</int>
+        <int>1544</int>
+        <int>2838</int>
+        <int>3415</int>
+        <int>2441</int>
+        <int>2474</int>
+        <int>3115</int>
+        <int>4235</int>
+        <int>3426</int>
+        <int>2011</int>
+        <int>2863</int>
+        <int>2460</int>
+        <int>2048</int>
+        <int>4369</int>
+        <int>4431</int>
+        <int>2844</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>4585</int>
+        <int>1541</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a36</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - G5 support de carrosserie-2</From>
+      <To>TXT-1 - F1 support de carro-2</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1503</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>0</RemovalDirection>
+          <Certainty>1</Certainty>
+          <Tool>PhillipsBlade</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>3.0000159514767613</Diameter>
+          <Name>TXT-1 - MC1 vis M3 x 16-13</Name>
+          <OverallLength>18.372900585442761</OverallLength>
+          <EngagedLength>15.5</EngagedLength>
           <AccessCylinderRadius>0</AccessCylinderRadius>
           <FastenerType>Bolt</FastenerType>
           <NumberOfThreads>0</NumberOfThreads>
           <PartsLockedByFastener>
             <int>5</int>
-            <int>6</int>
-            <int>7</int>
+            <int>22</int>
+            <int>26</int>
           </PartsLockedByFastener>
         </Fastener>
         <Fastener>
           <Time>0</Time>
           <TimeSD>0</TimeSD>
           <InstallDistance>0</InstallDistance>
-          <RemovalDirection>4645</RemovalDirection>
+          <RemovalDirection>0</RemovalDirection>
           <Certainty>1</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>10.000017032134281</ToolSize>
-          <Diameter>8.7500019391243118</Diameter>
-          <Name>PumpWithRealBoltsAndNuts - Bolt16</Name>
-          <OverallLength>29.808724676225363</OverallLength>
-          <EngagedLength>0.7419735001332739</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener>
-            <int>4</int>
-            <int>6</int>
-            <int>7</int>
-          </PartsLockedByFastener>
-        </Fastener>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>6231</RemovalDirection>
-          <Certainty>1</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>10.000017032134281</ToolSize>
-          <Diameter>8.7500019391243118</Diameter>
-          <Name>PumpWithRealBoltsAndNuts - Bolt13</Name>
-          <OverallLength>29.808724676225363</OverallLength>
-          <EngagedLength>0.7419735001332739</EngagedLength>
+          <Tool>PhillipsBlade</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>3.0000159514767613</Diameter>
+          <Name>TXT-1 - MC1 vis M3 x 16-16</Name>
+          <OverallLength>18.372900585442761</OverallLength>
+          <EngagedLength>15.5</EngagedLength>
           <AccessCylinderRadius>0</AccessCylinderRadius>
           <FastenerType>Bolt</FastenerType>
           <NumberOfThreads>0</NumberOfThreads>
           <PartsLockedByFastener>
             <int>5</int>
-            <int>6</int>
-            <int>7</int>
+            <int>22</int>
+            <int>26</int>
+          </PartsLockedByFastener>
+        </Fastener>
+      </Fasteners>
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a37</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 MS7 axe-1</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>4571</int>
+        <int>340</int>
+        <int>765</int>
+        <int>4601</int>
+        <int>1241</int>
+        <int>450</int>
+        <int>116</int>
+        <int>1566</int>
+        <int>481</int>
+        <int>974</int>
+        <int>124</int>
+        <int>5800</int>
+        <int>5069</int>
+        <int>1277</int>
+        <int>1257</int>
+        <int>5143</int>
+        <int>5089</int>
+        <int>6105</int>
+        <int>5948</int>
+        <int>725</int>
+        <int>5344</int>
+        <int>1017</int>
+        <int>6230</int>
+        <int>6231</int>
+        <int>4715</int>
+        <int>330</int>
+        <int>1364</int>
+        <int>780</int>
+        <int>1401</int>
+        <int>5568</int>
+        <int>5698</int>
+        <int>1544</int>
+        <int>120</int>
+        <int>4811</int>
+        <int>5009</int>
+        <int>477</int>
+        <int>4587</int>
+        <int>762</int>
+        <int>5608</int>
+        <int>336</int>
+        <int>4585</int>
+        <int>1465</int>
+        <int>1032</int>
+        <int>5128</int>
+        <int>4659</int>
+        <int>684</int>
+        <int>5467</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a38</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - G5 support de carrosserie-1</From>
+      <To>TXT-1 - F1 support de carro-3</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1503</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>0</RemovalDirection>
+          <Certainty>1</Certainty>
+          <Tool>PhillipsBlade</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>3.0000159514767613</Diameter>
+          <Name>TXT-1 - MC1 vis M3 x 16-10</Name>
+          <OverallLength>18.372900585442761</OverallLength>
+          <EngagedLength>15.5</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>4</int>
+            <int>23</int>
+            <int>25</int>
           </PartsLockedByFastener>
         </Fastener>
         <Fastener>
           <Time>0</Time>
           <TimeSD>0</TimeSD>
           <InstallDistance>0</InstallDistance>
-          <RemovalDirection>4645</RemovalDirection>
+          <RemovalDirection>0</RemovalDirection>
           <Certainty>1</Certainty>
-          <Tool>Allen</Tool>
-          <ToolSize>4.0840148437138737</ToolSize>
-          <Diameter>8.4900671918123276</Diameter>
-          <Name>PumpWithRealBoltsAndNuts - Bolt3</Name>
-          <OverallLength>30.000004450459329</OverallLength>
-          <EngagedLength>4.5</EngagedLength>
+          <Tool>PhillipsBlade</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>3.0000159514767613</Diameter>
+          <Name>TXT-1 - MC1 vis M3 x 16-12</Name>
+          <OverallLength>18.372900585442761</OverallLength>
+          <EngagedLength>15.5</EngagedLength>
           <AccessCylinderRadius>0</AccessCylinderRadius>
           <FastenerType>Bolt</FastenerType>
           <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener />
+          <PartsLockedByFastener>
+            <int>4</int>
+            <int>23</int>
+            <int>25</int>
+          </PartsLockedByFastener>
+        </Fastener>
+      </Fasteners>
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a39</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - G5 support de carrosserie-1</From>
+      <To>TXT-1 - F1 support de carro-4</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1503</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>3114</RemovalDirection>
+          <Certainty>1</Certainty>
+          <Tool>PhillipsBlade</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>3.0000159514767613</Diameter>
+          <Name>TXT-1 - MC1 vis M3 x 16-11</Name>
+          <OverallLength>18.372900585442761</OverallLength>
+          <EngagedLength>15.5</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>9</int>
+            <int>24</int>
+            <int>25</int>
+          </PartsLockedByFastener>
         </Fastener>
         <Fastener>
           <Time>0</Time>
           <TimeSD>0</TimeSD>
           <InstallDistance>0</InstallDistance>
-          <RemovalDirection>4645</RemovalDirection>
+          <RemovalDirection>3114</RemovalDirection>
           <Certainty>1</Certainty>
-          <Tool>Allen</Tool>
-          <ToolSize>4.0840148437138737</ToolSize>
-          <Diameter>8.4900671918123276</Diameter>
-          <Name>PumpWithRealBoltsAndNuts - Bolt4</Name>
-          <OverallLength>30.000004450459329</OverallLength>
-          <EngagedLength>4.5</EngagedLength>
+          <Tool>PhillipsBlade</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>3.0000159514767613</Diameter>
+          <Name>TXT-1 - MC1 vis M3 x 16-9</Name>
+          <OverallLength>18.372900585442761</OverallLength>
+          <EngagedLength>15.5</EngagedLength>
           <AccessCylinderRadius>0</AccessCylinderRadius>
           <FastenerType>Bolt</FastenerType>
           <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener />
-        </Fastener>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>4645</RemovalDirection>
-          <Certainty>1</Certainty>
-          <Tool>Allen</Tool>
-          <ToolSize>4.0840148437138737</ToolSize>
-          <Diameter>8.4900671918123276</Diameter>
-          <Name>PumpWithRealBoltsAndNuts - Bolt5</Name>
-          <OverallLength>30.000004450459329</OverallLength>
-          <EngagedLength>4.5</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener />
-        </Fastener>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>4645</RemovalDirection>
-          <Certainty>1</Certainty>
-          <Tool>Allen</Tool>
-          <ToolSize>4.0840148437138737</ToolSize>
-          <Diameter>8.4900671918123276</Diameter>
-          <Name>PumpWithRealBoltsAndNuts - Bolt6</Name>
-          <OverallLength>30.000004450459329</OverallLength>
-          <EngagedLength>4.5</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener />
-        </Fastener>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>4645</RemovalDirection>
-          <Certainty>1</Certainty>
-          <Tool>Allen</Tool>
-          <ToolSize>4.0840148437138737</ToolSize>
-          <Diameter>8.4900671918123276</Diameter>
-          <Name>PumpWithRealBoltsAndNuts - Bolt7</Name>
-          <OverallLength>30.000004450459329</OverallLength>
-          <EngagedLength>4.5</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener />
-        </Fastener>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>4645</RemovalDirection>
-          <Certainty>1</Certainty>
-          <Tool>Allen</Tool>
-          <ToolSize>4.0840148437138737</ToolSize>
-          <Diameter>8.4900671918123276</Diameter>
-          <Name>PumpWithRealBoltsAndNuts - Bolt8</Name>
-          <OverallLength>30.000004450459329</OverallLength>
-          <EngagedLength>4.5</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener />
-        </Fastener>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>4645</RemovalDirection>
-          <Certainty>1</Certainty>
-          <Tool>Allen</Tool>
-          <ToolSize>4.0840148437138737</ToolSize>
-          <Diameter>8.4900671918123276</Diameter>
-          <Name>PumpWithRealBoltsAndNuts - Bolt1</Name>
-          <OverallLength>30.000004450459329</OverallLength>
-          <EngagedLength>4.5</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener />
+          <PartsLockedByFastener>
+            <int>9</int>
+            <int>24</int>
+            <int>25</int>
+          </PartsLockedByFastener>
         </Fastener>
       </Fasteners>
       <Certainty>1</Certainty>

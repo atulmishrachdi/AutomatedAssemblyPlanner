@@ -249,21 +249,45 @@ namespace Assembly_Planner
                     dirs.Add(i);
                 }
             }
+            string printer = "";
             var arcTo = graph.arcs.Where(a => a is Connection).Cast<Connection>().Where(a => a.To.name == solid[0].Name).ToList();
             foreach (var c in arcTo)
-            {
-                foreach (var i in c.InfiniteDirections.Where(i => filteredDirections.Contains(DisassemblyDirections.DirectionsAndOppositsForGlobalpool[i])))
-                {
-                    var oppos = DisassemblyDirections.DirectionsAndOppositsForGlobalpool[i];
-                    if (dirs.Contains(oppos)) continue;
-                    dirs.Add(oppos);
+            {                
+                
+                    foreach (var i in c.InfiniteDirections)
+                    {
+                    Console.WriteLine(i.ToString());
+                        try
+                        {
+                        printer = "\n -> "+i.ToString();
+                            if (filteredDirections.Contains(DisassemblyDirections.DirectionsAndOppositsForGlobalpool[i]))
+                            {
+                                var oppos = DisassemblyDirections.DirectionsAndOppositsForGlobalpool[i];
+                                if (dirs.Contains(oppos)) continue;
+                                dirs.Add(oppos);
+                            }
+                        }
+                        catch (Exception Exept)
+                        {
+                            Console.WriteLine(printer);
+                            throw Exept;
+                        }
                 }
-                foreach (var i in c.FiniteDirections.Where(i => filteredDirections.Contains(DisassemblyDirections.DirectionsAndOppositsForGlobalpool[i])))
+                
+                try
                 {
-                    var oppos = DisassemblyDirections.DirectionsAndOppositsForGlobalpool[i];
-                    if (dirs.Contains(oppos)) continue;
-                    dirs.Add(oppos);
+                    foreach (var i in c.FiniteDirections.Where(i => filteredDirections.Contains(DisassemblyDirections.DirectionsAndOppositsForGlobalpool[i])))
+                    {
+                        var oppos = DisassemblyDirections.DirectionsAndOppositsForGlobalpool[i];
+                        if (dirs.Contains(oppos)) continue;
+                        dirs.Add(oppos);
+                    }
                 }
+                catch (Exception Exept)
+                {
+                    Console.WriteLine(printer);
+                }
+                printer = "";
             }
             //dirs.AddRange(arcTo.SelectMany(a => a.FiniteDirections).Where(d => filteredDirections.Contains(DisassemblyDirections.DirectionsAndOppositsForGlobalpool[d])));
             //dirs.AddRange(arcTo.SelectMany(a => a.InfiniteDirections).Where(d => filteredDirections.Contains(DisassemblyDirections.DirectionsAndOppositsForGlobalpool[d])));

@@ -1,0 +1,542 @@
+<?xml version="1.0" encoding="utf-8"?>
+<parts_properties xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <part_properties>
+    <name>TXT-1 - C1 couvercle batterie-1</name>
+    <mass>0</mass>
+    <volume>43406.51279429924</volume>
+    <surface_area>26413.166156578769</surface_area>
+    <fastener_certainty>0</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - C2 boitier batterie-1</name>
+    <mass>0</mass>
+    <volume>51640.8449999006</volume>
+    <surface_area>52623.860756410235</surface_area>
+    <fastener_certainty>0</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - C3 platine RC-1</name>
+    <mass>0</mass>
+    <volume>32321.830861197071</volume>
+    <surface_area>34594.002571923433</surface_area>
+    <fastener_certainty>0</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 Demi chassis-1 chassis-1</name>
+    <mass>0</mass>
+    <volume>59690.182044928144</volume>
+    <surface_area>34148.706941447475</surface_area>
+    <fastener_certainty>0</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 Demi chassis-1 F5 support de carro-1</name>
+    <mass>0</mass>
+    <volume>6145.5962569813419</volume>
+    <surface_area>6731.41839489069</surface_area>
+    <fastener_certainty>0</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 Demi chassis-1 F5 support de carro-2</name>
+    <mass>0</mass>
+    <volume>6145.601435187863</volume>
+    <surface_area>6731.418988867129</surface_area>
+    <fastener_certainty>0</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 Demi chassis-1 G2 support amortisseur-1</name>
+    <mass>0</mass>
+    <volume>10943.908508577382</volume>
+    <surface_area>8137.721955992427</surface_area>
+    <fastener_certainty>0</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 Demi chassis-1 MB4 vis M3 x 8-1</name>
+    <mass>0</mass>
+    <volume>100.1603351585414</volume>
+    <surface_area>159.79641244834644</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 Demi chassis-1 MB4 vis M3 x 8-2</name>
+    <mass>0</mass>
+    <volume>100.16034151236543</volume>
+    <surface_area>159.79638960995121</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 Demi chassis-1 MB4 vis M3 x 8-3</name>
+    <mass>0</mass>
+    <volume>100.16024380515604</volume>
+    <surface_area>159.79625294260836</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 Demi chassis-1 MB4 vis M3 x 8-4</name>
+    <mass>0</mass>
+    <volume>100.16067409616201</volume>
+    <surface_area>159.79621467220775</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 Demi chassis-1 MC1 vis M3 x 16-1</name>
+    <mass>0</mass>
+    <volume>157.52336957495649</volume>
+    <surface_area>233.13422774797795</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 Demi chassis-1 MC1 vis M3 x 16-2</name>
+    <mass>0</mass>
+    <volume>157.5227155547781</volume>
+    <surface_area>233.13385994217739</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</name>
+    <mass>0</mass>
+    <volume>59690.221004514751</volume>
+    <surface_area>34148.715422008245</surface_area>
+    <fastener_certainty>0</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 Demi chassis-2 F5 support de carro-1</name>
+    <mass>0</mass>
+    <volume>6145.5979021890744</volume>
+    <surface_area>6731.4173294204174</surface_area>
+    <fastener_certainty>0</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 Demi chassis-2 F5 support de carro-2</name>
+    <mass>0</mass>
+    <volume>6145.586476788827</volume>
+    <surface_area>6731.4167403685324</surface_area>
+    <fastener_certainty>0</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 Demi chassis-2 G2 support amortisseur-1</name>
+    <mass>0</mass>
+    <volume>10943.913438090702</volume>
+    <surface_area>8137.7193356921362</surface_area>
+    <fastener_certainty>0</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 Demi chassis-2 MB4 vis M3 x 8-1</name>
+    <mass>0</mass>
+    <volume>100.16177286068647</volume>
+    <surface_area>159.79770341328796</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 Demi chassis-2 MB4 vis M3 x 8-2</name>
+    <mass>0</mass>
+    <volume>100.16145322008522</volume>
+    <surface_area>159.79729620738135</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 Demi chassis-2 MB4 vis M3 x 8-3</name>
+    <mass>0</mass>
+    <volume>100.16129177864141</volume>
+    <surface_area>159.79717480061245</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 Demi chassis-2 MB4 vis M3 x 8-4</name>
+    <mass>0</mass>
+    <volume>100.16132137588993</volume>
+    <surface_area>159.79724855616774</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 Demi chassis-2 MC1 vis M3 x 16-1</name>
+    <mass>0</mass>
+    <volume>157.52364366550239</volume>
+    <surface_area>233.1351302777534</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 Demi chassis-2 MC1 vis M3 x 16-2</name>
+    <mass>0</mass>
+    <volume>157.5229740406065</volume>
+    <surface_area>233.13500676651373</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 F4 entrtoise-1</name>
+    <mass>0</mass>
+    <volume>548.43652155835355</volume>
+    <surface_area>717.78362853191447</surface_area>
+    <fastener_certainty>0.34440000476837163</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 F4 entrtoise-2</name>
+    <mass>0</mass>
+    <volume>548.438243728859</volume>
+    <surface_area>717.78318252817724</surface_area>
+    <fastener_certainty>0.34440000476837163</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 F4 entrtoise-3</name>
+    <mass>0</mass>
+    <volume>548.4382895418654</volume>
+    <surface_area>717.78247445499153</surface_area>
+    <fastener_certainty>0.34440000476837163</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 F4 entrtoise-4</name>
+    <mass>0</mass>
+    <volume>548.43799702717206</volume>
+    <surface_area>717.78318054512272</surface_area>
+    <fastener_certainty>0.34440000476837163</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 F4 entrtoise-5</name>
+    <mass>0</mass>
+    <volume>548.43746264569825</volume>
+    <surface_area>717.78278283825591</surface_area>
+    <fastener_certainty>0.34440000476837163</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 F4 entrtoise-6</name>
+    <mass>0</mass>
+    <volume>548.43709553418387</volume>
+    <surface_area>717.7830494650126</surface_area>
+    <fastener_certainty>0.34440000476837163</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 F4 entrtoise-7</name>
+    <mass>0</mass>
+    <volume>548.43759506473737</volume>
+    <surface_area>717.78324499218911</surface_area>
+    <fastener_certainty>0.34440000476837163</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 F4 entrtoise-8</name>
+    <mass>0</mass>
+    <volume>548.43941558050813</volume>
+    <surface_area>717.78335815044829</surface_area>
+    <fastener_certainty>0.34440000476837163</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 MB3 vis M3 x 16-1</name>
+    <mass>0</mass>
+    <volume>156.48196934054755</volume>
+    <surface_area>234.98318412095506</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 MB3 vis M3 x 16-10</name>
+    <mass>0</mass>
+    <volume>156.48205696690641</volume>
+    <surface_area>234.98311248378658</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 MB3 vis M3 x 16-11</name>
+    <mass>0</mass>
+    <volume>156.48168265232633</volume>
+    <surface_area>234.9831864914961</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 MB3 vis M3 x 16-12</name>
+    <mass>0</mass>
+    <volume>156.481445607763</volume>
+    <surface_area>234.9827961158571</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 MB3 vis M3 x 16-2</name>
+    <mass>0</mass>
+    <volume>156.48219855107618</volume>
+    <surface_area>234.98345702363108</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 MB3 vis M3 x 16-3</name>
+    <mass>0</mass>
+    <volume>156.48224583956502</volume>
+    <surface_area>234.98327926089468</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 MB3 vis M3 x 16-4</name>
+    <mass>0</mass>
+    <volume>156.48298032488461</volume>
+    <surface_area>234.98362046053785</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 MB3 vis M3 x 16-5</name>
+    <mass>0</mass>
+    <volume>156.48249083331987</volume>
+    <surface_area>234.98359802857871</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 MB3 vis M3 x 16-6</name>
+    <mass>0</mass>
+    <volume>156.48199950608168</volume>
+    <surface_area>234.98358236988383</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 MB3 vis M3 x 16-7</name>
+    <mass>0</mass>
+    <volume>156.48148857557732</volume>
+    <surface_area>234.98269672372157</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 MB3 vis M3 x 16-8</name>
+    <mass>0</mass>
+    <volume>156.48102951046022</volume>
+    <surface_area>234.98208317155985</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 MB3 vis M3 x 16-9</name>
+    <mass>0</mass>
+    <volume>156.48144296642309</volume>
+    <surface_area>234.98257624096388</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 MS7 axe-1</name>
+    <mass>0</mass>
+    <volume>3403.771472367092</volume>
+    <surface_area>3095.4160706427738</surface_area>
+    <fastener_certainty>0</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 MS7 axe-2</name>
+    <mass>0</mass>
+    <volume>3403.7897791290811</volume>
+    <surface_area>3095.4066958763265</surface_area>
+    <fastener_certainty>0</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 MS7 axe-3</name>
+    <mass>0</mass>
+    <volume>3403.7714269761477</volume>
+    <surface_area>3095.40258044202</surface_area>
+    <fastener_certainty>0</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 MS7 axe-4</name>
+    <mass>0</mass>
+    <volume>3403.775483278861</volume>
+    <surface_area>3095.3991487086291</surface_area>
+    <fastener_certainty>0</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 MS7 axe-5</name>
+    <mass>0</mass>
+    <volume>3403.7769764030113</volume>
+    <surface_area>3095.4111979270892</surface_area>
+    <fastener_certainty>0</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 MS7 axe-6</name>
+    <mass>0</mass>
+    <volume>3403.7784909652351</volume>
+    <surface_area>3095.4072916424661</surface_area>
+    <fastener_certainty>0</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-1</name>
+    <mass>0</mass>
+    <volume>6682.329020332425</volume>
+    <surface_area>6836.4223054374261</surface_area>
+    <fastener_certainty>0</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-2</name>
+    <mass>0</mass>
+    <volume>6682.3267526510745</volume>
+    <surface_area>6836.4232975780733</surface_area>
+    <fastener_certainty>0</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 Pare-chocs avant-1 G6 bumper-1 bumper1-1</name>
+    <mass>0</mass>
+    <volume>5625.6736701953587</volume>
+    <surface_area>4150.1640429494219</surface_area>
+    <fastener_certainty>0</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - Chassis-1 Pare-chocs avant-1 G6 bumper-1 bumper1-2</name>
+    <mass>0</mass>
+    <volume>5625.6728195296664</volume>
+    <surface_area>4150.1629296824112</surface_area>
+    <fastener_certainty>0</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - F1 support de carro-1</name>
+    <mass>0</mass>
+    <volume>4892.7194996750495</volume>
+    <surface_area>4201.2583933704627</surface_area>
+    <fastener_certainty>0</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - F1 support de carro-2</name>
+    <mass>0</mass>
+    <volume>4892.7234222888637</volume>
+    <surface_area>4201.26020862564</surface_area>
+    <fastener_certainty>0</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - F1 support de carro-3</name>
+    <mass>0</mass>
+    <volume>4892.7248016483009</volume>
+    <surface_area>4201.2637083688924</surface_area>
+    <fastener_certainty>0</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - F1 support de carro-4</name>
+    <mass>0</mass>
+    <volume>4892.7226240579666</volume>
+    <surface_area>4201.2615444379126</surface_area>
+    <fastener_certainty>0</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - G5 support de carrosserie-1</name>
+    <mass>0</mass>
+    <volume>10340.160478646569</volume>
+    <surface_area>9609.56766945018</surface_area>
+    <fastener_certainty>0</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - G5 support de carrosserie-2</name>
+    <mass>0</mass>
+    <volume>10340.160029852959</volume>
+    <surface_area>9609.5694995783069</surface_area>
+    <fastener_certainty>0</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - MB2 vis M3 x 12-1</name>
+    <mass>0</mass>
+    <volume>128.30727453928549</volume>
+    <surface_area>197.40085600723052</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - MB2 vis M3 x 12-2</name>
+    <mass>0</mass>
+    <volume>128.30745846787488</volume>
+    <surface_area>197.40106559672742</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - MB2 vis M3 x 12-3</name>
+    <mass>0</mass>
+    <volume>128.30637161189861</volume>
+    <surface_area>197.39937232360884</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - MB2 vis M3 x 12-4</name>
+    <mass>0</mass>
+    <volume>128.30634642237888</volume>
+    <surface_area>197.39895954585577</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - MB2 vis M3 x 12-5</name>
+    <mass>0</mass>
+    <volume>128.30665174163479</volume>
+    <surface_area>197.40008695482089</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - MB2 vis M3 x 12-6</name>
+    <mass>0</mass>
+    <volume>128.30625510568072</volume>
+    <surface_area>197.39950235683813</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - MB2 vis M3 x 12-7</name>
+    <mass>0</mass>
+    <volume>128.30653038504408</volume>
+    <surface_area>197.39916913194511</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - MB2 vis M3 x 12-8</name>
+    <mass>0</mass>
+    <volume>128.30653525329504</volume>
+    <surface_area>197.4002169973682</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - MC1 vis M3 x 16-10</name>
+    <mass>0</mass>
+    <volume>157.52287166767979</volume>
+    <surface_area>233.13407281481827</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - MC1 vis M3 x 16-11</name>
+    <mass>0</mass>
+    <volume>157.52391416424385</volume>
+    <surface_area>233.13534620260083</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - MC1 vis M3 x 16-12</name>
+    <mass>0</mass>
+    <volume>157.52297273424074</volume>
+    <surface_area>233.13413688874886</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - MC1 vis M3 x 16-13</name>
+    <mass>0</mass>
+    <volume>157.523233301326</volume>
+    <surface_area>233.13436350510534</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - MC1 vis M3 x 16-14</name>
+    <mass>0</mass>
+    <volume>157.52408861729214</volume>
+    <surface_area>233.13539237599423</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - MC1 vis M3 x 16-15</name>
+    <mass>0</mass>
+    <volume>157.52427181709606</volume>
+    <surface_area>233.1356368147583</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - MC1 vis M3 x 16-16</name>
+    <mass>0</mass>
+    <volume>157.52304986802326</volume>
+    <surface_area>233.13411907138573</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - MC1 vis M3 x 16-9</name>
+    <mass>0</mass>
+    <volume>157.524015327038</volume>
+    <surface_area>233.13541027931865</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - MF5vis de montage-1</name>
+    <mass>0</mass>
+    <volume>406.29950621965094</volume>
+    <surface_area>443.177065327231</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>TXT-1 - MF5vis de montage-2</name>
+    <mass>0</mass>
+    <volume>406.29904447283883</volume>
+    <surface_area>443.17708826018526</surface_area>
+    <fastener_certainty>1</fastener_certainty>
+  </part_properties>
+</parts_properties>
