@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using AssemblyEvaluation;
 using GraphSynth;
 using GraphSynth.Representation;
-using GraphSynth.Search;
+//using GraphSynth.Search;
 using Assembly_Planner.GraphSynth.BaseClasses;
 using StarMathLib;
 using TVGL;
@@ -338,7 +338,7 @@ namespace Assembly_Planner
             foreach (var opt in gOptions.Keys)
             {
                 var TC = new TreeCandidate();
-                if (AssemblyEvaluator.EvaluateSub(Graph, nodes, opt.nodes.Cast<Component>().ToList(), gOptions[opt],
+                if (AssemblyEvaluator.EvaluateSub(Graph, nodes, opt.Nodes.Cast<Component>().ToList(), gOptions[opt],
                     out TC.sa) <= 0)
                 {
                     c++;
@@ -714,7 +714,6 @@ namespace Assembly_Planner
             else Program.BeamWidth = (int)Math.Floor(baseCount / 2.0);
         }
     }
-
     class LeapCandidate : IComparable<LeapCandidate>
     {
         public HashSet<TreeCandidate> subAssems;

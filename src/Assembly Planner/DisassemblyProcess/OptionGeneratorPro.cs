@@ -67,24 +67,24 @@ namespace Assembly_Planner
             var sep = seperate.nodes.Count;
             foreach (var opt in combAndPar)
             {
-                var nodes = new List<node>();
-                var rule = new grammarRule();
-                rule.L = new designGraph();
-                var newOption = new option(rule);
-                foreach (var hy in opt)
-                    nodes.AddRange(hy.nodes);
-                var otherHalf = seperate.nodes.Where(n => !nodes.Contains(n)).ToList();
+                //var nodes = new List<node>();
+                //var rule = new grammarRule();
+                //rule.L = new designGraph();
+                //var newOption = new option(rule);
+                //foreach (var hy in opt)
+                //    nodes.AddRange(hy.nodes);
+                //var otherHalf = seperate.nodes.Where(n => !nodes.Contains(n)).ToList();
 
-                if (nodes.Count == sep) continue;
-                if (optionList.Any(o => o.nodes.All(nodes.Contains) && nodes.All(o.nodes.Contains))) continue;
-                if (optionList.Any(o => o.nodes.All(otherHalf.Contains) && otherHalf.All(o.nodes.Contains))) continue;
-                if (options.Any(o => o.nodes.All(nodes.Contains) && nodes.All(o.nodes.Contains))) continue;
-                if (options.Any(o => o.nodes.All(otherHalf.Contains) && otherHalf.All(o.nodes.Contains))) continue;
-                if (gOptions.Any(o => o.nodes.All(nodes.Contains) && nodes.All(o.nodes.Contains))) continue;
-                if (gOptions.Any(o => o.nodes.All(otherHalf.Contains) && otherHalf.All(o.nodes.Contains))) continue;
+                //if (nodes.Count == sep) continue;
+                //if (optionList.Any(o => o.nodes.All(nodes.Contains) && nodes.All(o.nodes.Contains))) continue;
+                //if (optionList.Any(o => o.nodes.All(otherHalf.Contains) && otherHalf.All(o.nodes.Contains))) continue;
+                //if (options.Any(o => o.nodes.All(nodes.Contains) && nodes.All(o.nodes.Contains))) continue;
+                //if (options.Any(o => o.nodes.All(otherHalf.Contains) && otherHalf.All(o.nodes.Contains))) continue;
+                //if (gOptions.Any(o => o.nodes.All(nodes.Contains) && nodes.All(o.nodes.Contains))) continue;
+                //if (gOptions.Any(o => o.nodes.All(otherHalf.Contains) && otherHalf.All(o.nodes.Contains))) continue;
                 
-                newOption.nodes.AddRange(nodes);
-                optionList.Add(newOption);
+                //newOption.nodes.AddRange(nodes);
+                //optionList.Add(newOption);
             }
             return optionList;
         }

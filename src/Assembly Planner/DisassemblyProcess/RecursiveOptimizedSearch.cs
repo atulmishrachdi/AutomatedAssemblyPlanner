@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using AssemblyEvaluation;
 using GraphSynth;
 using GraphSynth.Representation;
-using GraphSynth.Search;
+//using GraphSynth.Search;
 using Assembly_Planner.GraphSynth.BaseClasses;
 using TVGL;
 using Constants = AssemblyEvaluation.Constants;
@@ -195,7 +195,7 @@ namespace Assembly_Planner
             foreach (var opt in gOptions.Keys)
             {
                 var TC = new TreeCandidate();
-                if (AssemblyEvaluator.EvaluateSub(Graph, A, opt.nodes.Cast<Component>().ToList(), gOptions[opt], out TC.sa) > 0)
+                if (AssemblyEvaluator.EvaluateSub(Graph, A, opt.Nodes.Cast<Component>().ToList(), gOptions[opt], out TC.sa) > 0)
                 {
                     TC.RefNodes = new HashSet<Component>(TC.sa.Install.Reference.PartNames.Select(n => (Component)Graph[n]));
                     TC.MovNodes = new HashSet<Component>(TC.sa.Install.Moving.PartNames.Select(n => (Component)Graph[n]));
@@ -496,7 +496,7 @@ namespace Assembly_Planner
         public SubAssembly sa;
         public HashSet<Component> RefNodes, MovNodes;
         public double G, H; //G-score and heuristic value
-
+        public Dictionary<int, HashSet<HashSet<Component>>> Options; 
         public int CompareTo(TreeCandidate other)
         {
             var F = G + H;

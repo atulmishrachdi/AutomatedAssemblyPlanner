@@ -69,31 +69,26 @@ namespace Assembly_Planner
             var optionList = new HashSet<option>();
             foreach (var opt in combAndPar)
             {
-                var nodes = new List<node>();
-                var rule = new grammarRule();
-                rule.L = new designGraph();
-                var newOption = new option(rule);
+                var nodes = new HashSet<node>();
                 foreach (var hy in opt)
-                    nodes.AddRange(hy.nodes);
+                    nodes.UnionWith(hy.nodes);
                 var otherHalf = seperate.Where(n => !nodes.Contains(n)).ToList();
 
                 if (nodes.Count == seperate.Count) continue;
-                if (optionList.Any(o => o.nodes.Count == nodes.Count && nodes.All(o.nodes.Contains))) continue;
-                if (optionList.Any(o => o.nodes.Count == otherHalf.Count && otherHalf.All(o.nodes.Contains))) continue;
-                if (options.Any(o => o.nodes.Count == nodes.Count && nodes.All(o.nodes.Contains))) continue;
-                if (options.Any(o => o.nodes.Count == otherHalf.Count && otherHalf.All(o.nodes.Contains))) continue;
+                if (optionList.Any(o => o.Nodes.SetEquals(nodes))) continue;
+                if (optionList.Any(o => o.Nodes.SetEquals(otherHalf))) continue;
+                if (options.Any(o => o.Nodes.SetEquals(nodes))) continue;
+                if (options.Any(o => o.Nodes.SetEquals(otherHalf))) continue;
                 var exist =
-                    gOptions.Keys.Where(o => o.nodes.Count == nodes.Count && nodes.All(o.nodes.Contains)).ToList();
+                    gOptions.Keys.Where(o => o.Nodes.SetEquals(nodes)).ToList();
                 if (exist.Any())
                 {
                     gOptions[exist[0]].Add(cndDirInd);
                     continue;
                 }
-                if (gOptions.Keys.Any(o => o.nodes.Count == otherHalf.Count && otherHalf.All(o.nodes.Contains)))
+                if (gOptions.Keys.Any(o => o.Nodes.SetEquals(otherHalf)))
                     continue;
-
-                newOption.nodes.AddRange(nodes);
-                optionList.Add(newOption);
+                optionList.Add(new option(nodes));
             }
             return optionList;
         }

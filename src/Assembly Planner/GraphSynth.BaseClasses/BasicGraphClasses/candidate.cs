@@ -144,15 +144,15 @@ namespace GraphSynth.Representation
         ///   Gets the rule set index of the last option.
         /// </summary>
         /// <value>The last index of the rule set.</value>
-        [XmlIgnore]
-        public int lastRuleSetIndex
-        {
-            get
-            {
-                if (recipe.Count == 0) return -1;
-                return recipe.Last().ruleSetIndex;
-            }
-        }
+        //[XmlIgnore]
+        //public int lastRuleSetIndex
+        //{
+        //    get
+        //    {
+        //        if (recipe.Count == 0) return -1;
+        //        return recipe.Last().ruleSetIndex;
+        //    }
+        //}
 
         /* the following five properties simply make the performance
          * parameters easier to code. we simply refer to the as f0, f1,
@@ -288,67 +288,67 @@ namespace GraphSynth.Representation
         ///   Gets the rule numbers in recipe as an array of integers.
         /// </summary>
         /// <value>The rule numbers in recipe.</value>
-        [XmlIgnore]
-        public int[] ruleNumbersInRecipe
-        {
-            get
-            {
-                var rNIR = new int[recipe.Count];
-                for (var i = 0; i != recipe.Count; i++)
-                    rNIR[i] = recipe[i].ruleNumber;
-                return rNIR;
-            }
-        }
+        //[XmlIgnore]
+        //public int[] ruleNumbersInRecipe
+        //{
+        //    get
+        //    {
+        //        var rNIR = new int[recipe.Count];
+        //        for (var i = 0; i != recipe.Count; i++)
+        //            rNIR[i] = recipe[i].ruleNumber;
+        //        return rNIR;
+        //    }
+        //}
 
         /// <summary>
         ///   Gets the rule set indices in recipe as an array of integers.
         /// </summary>
         /// <value>The rule set indices in recipe.</value>
-        [XmlIgnore]
-        public int[] ruleSetIndicesInRecipe
-        {
-            get
-            {
-                var rSIIR = new int[recipe.Count];
-                for (var i = 0; i != recipe.Count; i++)
-                    rSIIR[i] = recipe[i].ruleSetIndex;
-                return rSIIR;
-            }
-        }
+        //[XmlIgnore]
+        //public int[] ruleSetIndicesInRecipe
+        //{
+        //    get
+        //    {
+        //        var rSIIR = new int[recipe.Count];
+        //        for (var i = 0; i != recipe.Count; i++)
+        //            rSIIR[i] = recipe[i].ruleSetIndex;
+        //        return rSIIR;
+        //    }
+        //}
 
-        /// <summary>
-        ///   Gets the option numbers in recipe as an array of integers.
-        /// </summary>
-        /// <value>The option numbers in recipe.</value>
-        [XmlIgnore]
-        public int[] optionNumbersInRecipe
-        {
-            get
-            {
-                var oNIR = new int[recipe.Count];
-                for (var i = 0; i != recipe.Count; i++)
-                    oNIR[i] = recipe[i].optionNumber;
-                return oNIR;
-            }
-        }
+        ///// <summary>
+        /////   Gets the option numbers in recipe as an array of integers.
+        ///// </summary>
+        ///// <value>The option numbers in recipe.</value>
+        //[XmlIgnore]
+        //public int[] optionNumbersInRecipe
+        //{
+        //    get
+        //    {
+        //        var oNIR = new int[recipe.Count];
+        //        for (var i = 0; i != recipe.Count; i++)
+        //            oNIR[i] = recipe[i].optionNumber;
+        //        return oNIR;
+        //    }
+        //}
 
         /// <summary>
         ///   Gets the parameter decisions of the recipe. This is a List the
         ///   same length as recipe, but each element is an array of double values.
         /// </summary>
         /// <value>The parameters in recipe.</value>
-        [XmlIgnore]
-        public List<double>[] parametersInRecipe
-        {
-            get
-            {
-                var pIR = new List<double>[recipe.Count];
-                for (var i = 0; i != recipe.Count; i++)
-                    if (recipe[i].parameters.Count > 0)
-                        pIR[i].AddRange(recipe[i].parameters);
-                return pIR;
-            }
-        }
+        //[XmlIgnore]
+        //public List<double>[] parametersInRecipe
+        //{
+        //    get
+        //    {
+        //        var pIR = new List<double>[recipe.Count];
+        //        for (var i = 0; i != recipe.Count; i++)
+        //            if (recipe[i].parameters.Count > 0)
+        //                pIR[i].AddRange(recipe[i].parameters);
+        //        return pIR;
+        //    }
+        //}
 
         #endregion
 
@@ -374,10 +374,10 @@ namespace GraphSynth.Representation
         ///   the currentstate, so this correspondingly adds the option to the recipe.
         /// </summary>
         /// <param name = "currentOpt">The currentrule.</param>
-        public virtual void addToRecipe(option currentOpt)
-        {
-            recipe.Add(currentOpt.copy());
-        }
+        //public virtual void addToRecipe(option currentOpt)
+        //{
+        //    recipe.Add(currentOpt.copy());
+        //}
 
 
         /// <summary>
@@ -389,7 +389,7 @@ namespace GraphSynth.Representation
         public virtual void undoLastRule()
         {
             if (prevStates.Count <= 0) return;
-            activeRuleSetIndex = lastRuleSetIndex;
+            //activeRuleSetIndex = lastRuleSetIndex;
             graph = prevStates.Last();
             prevStates.RemoveAt(prevStates.Count - 1);
             recipe.RemoveAt(recipe.Count - 1);
@@ -405,28 +405,28 @@ namespace GraphSynth.Representation
         ///   how each candidate may be changed in the future.
         /// </summary>
         /// <returns></returns>
-        public virtual candidate copy()
-        {
-            var copyOfCand = new candidate
-                                 {
-                                     activeRuleSetIndex = activeRuleSetIndex,
-                                     graph = graph.copy()
-                                 };
+        //public virtual candidate copy()
+        //{
+        //    var copyOfCand = new candidate
+        //                         {
+        //                             activeRuleSetIndex = activeRuleSetIndex,
+        //                             graph = graph.copy()
+        //                         };
 
-            foreach (var d in prevStates)
-                copyOfCand.prevStates.Add(d.copy());
-            foreach (var opt in recipe) 
-                copyOfCand.recipe.Add(opt.copy());
-            foreach (var f in performanceParams)
-                copyOfCand.performanceParams.Add(f);
-            foreach (var f in designParameters)
-                copyOfCand.designParameters.Add(f);
-            foreach (var a in GenerationStatus)
-                copyOfCand.GenerationStatus.Add(a);
+        //    foreach (var d in prevStates)
+        //        copyOfCand.prevStates.Add(d.copy());
+        //    foreach (var opt in recipe) 
+        //        copyOfCand.recipe.Add(opt.copy());
+        //    foreach (var f in performanceParams)
+        //        copyOfCand.performanceParams.Add(f);
+        //    foreach (var f in designParameters)
+        //        copyOfCand.designParameters.Add(f);
+        //    foreach (var a in GenerationStatus)
+        //        copyOfCand.GenerationStatus.Add(a);
 
 
-            return copyOfCand;
-        }
+        //    return copyOfCand;
+        //}
 
         #endregion
     }

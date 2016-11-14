@@ -29,26 +29,26 @@ namespace AssemblyEvaluation
         public SubAssembly Update(option opt, List<Component> rest, Dictionary<string, TVGLConvexHull> convexHullForParts)
         {
             Part refAssembly, movingAssembly;
-            if (ActionIsAssemblyByAssembly(opt.rule))
-            {
-                var node0 = (Component)opt.nodes[0];
-                var node1 = (Component)opt.nodes[1];
-                var node0name = node0.name;
-                var node1name = node1.name;
-                refAssembly = Subassemblies.FirstOrDefault(subasm => subasm.PartNames.Contains(node0name));
-                if (refAssembly == null)
-                    refAssembly = new Part(node0name, GetPartMass(node0), GetPartVolume(node0),
-                        convexHullForParts[node0name], GetPartCenterOfMass(node0));
-                else Subassemblies.Remove((SubAssembly) refAssembly);
-                movingAssembly = Subassemblies.FirstOrDefault(subasm => subasm.PartNames.Contains(node1name));
-                if (movingAssembly == null)
-                    movingAssembly = new Part(node1name, GetPartMass(node1), GetPartVolume(node1),
-                        convexHullForParts[node1name], GetPartCenterOfMass(node0));
-                else Subassemblies.Remove((SubAssembly) movingAssembly);
-            }
-            else if (ActionIsRemoveSCC(opt.rule))
-            {
-                var movingNodes = opt.nodes.Cast<Component>().ToList();
+            //if (ActionIsAssemblyByAssembly())
+            //{
+            //    //var node0 = (Component)opt.nodes[0];
+            //    //var node1 = (Component)opt.nodes[1];
+            //    //var node0name = node0.name;
+            //    //var node1name = node1.name;
+            //    //refAssembly = Subassemblies.FirstOrDefault(subasm => subasm.PartNames.Contains(node0name));
+            //    //if (refAssembly == null)
+            //    //    refAssembly = new Part(node0name, GetPartMass(node0), GetPartVolume(node0),
+            //    //        convexHullForParts[node0name], GetPartCenterOfMass(node0));
+            //    //else Subassemblies.Remove((SubAssembly) refAssembly);
+            //    //movingAssembly = Subassemblies.FirstOrDefault(subasm => subasm.PartNames.Contains(node1name));
+            //    //if (movingAssembly == null)
+            //    //    movingAssembly = new Part(node1name, GetPartMass(node1), GetPartVolume(node1),
+            //    //        convexHullForParts[node1name], GetPartCenterOfMass(node0));
+            //    //else Subassemblies.Remove((SubAssembly) movingAssembly);
+            //}
+            //else if (ActionIsRemoveSCC())
+            //{
+                var movingNodes = opt.Nodes.Cast<Component>().ToList();
                 var newSubAsmNodes = rest;
                 if (movingNodes.Count == 1)
                 {
@@ -83,8 +83,8 @@ namespace AssemblyEvaluation
                     var centerOfMass = GetSubassemblyCenterOfMass(referenceHyperArcnodes);
                     refAssembly = new SubAssembly(new HashSet<Component>(referenceHyperArcnodes), combinedCVXHullR, MassR, VolumeR, centerOfMass);
                 }
-            }
-            else throw new Exception("Only install rules in assembly at this point.");
+            //}
+            //else throw new Exception("Only install rules in assembly at this point.");
             TVGLConvexHull combinedCVXHull = CreateCombinedConvexHull(
                 refAssembly.CVXHull, movingAssembly.CVXHull);
             //List<PolygonalFace> refFacesInCombined, movingFacesInCombined;
@@ -132,10 +132,10 @@ namespace AssemblyEvaluation
         }
 
 
-        private bool ActionIsRemoveSCC(grammarRule rule)
+        private bool ActionIsRemoveSCC()
         {
             return true;
-            return rule.name.Equals("choose_SCC");
+            //return rule.name.Equals("choose_SCC");
         }
         /// <summary>
         /// Should the reference and moving be switched? Essentially the initial choice about what is the reference
@@ -312,7 +312,7 @@ namespace AssemblyEvaluation
         }
 
 
-        private static bool ActionIsAssemblyByAssembly(grammarRule rule)
+        private static bool ActionIsAssemblyByAssembly()
         {
             return false;
             //return rule.name.Equals("merger-additional");

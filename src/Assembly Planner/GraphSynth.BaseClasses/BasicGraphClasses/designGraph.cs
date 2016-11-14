@@ -717,7 +717,7 @@ namespace GraphSynth.Representation
             if (!contentsOfGraphAreEqual) return false;
             if (!(obj is designGraph)) return false;
             var g = (designGraph)obj;
-            if (!grammarRule.LabelsMatch(globalLabels, g.globalLabels, null, true)) return false;
+            //if (!grammarRule.LabelsMatch(globalLabels, g.globalLabels, null, true)) return false;
             if (nodes.Count != g.nodes.Count) return false;
             if (arcs.Count != g.arcs.Count) return false;
             if (hyperarcs.Count != g.hyperarcs.Count) return false;
@@ -778,7 +778,7 @@ namespace GraphSynth.Representation
             dummyRule.L.RepairGraphConnections();
             #endregion
 
-            if (dummyRule.recognize(this).Count < 1) return false;
+            //if (dummyRule.recognize(this).Count < 1) return false;
 
             #region put this's nodes, arcs and hyperarcs into the LHS of the rule
             dummyRule.L = new designGraph();
@@ -800,7 +800,7 @@ namespace GraphSynth.Representation
             }
             dummyRule.L.RepairGraphConnections();
             #endregion
-            if (dummyRule.recognize(g).Count < 1) return false;
+            //if (dummyRule.recognize(g).Count < 1) return false;
             return true;
         }
 
