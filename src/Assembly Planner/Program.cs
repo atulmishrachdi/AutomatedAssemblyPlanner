@@ -50,12 +50,11 @@ namespace Assembly_Planner
 #endif
             Solids = GetSTLs(inputDir);
             //EnlargeTheSolid();
-
-            var threaded = 0; // 0:none, 1: all, 2: subset
+            
             AssemblyGraph = new designGraph();
             DisassemblyDirectionsWithFastener.RunGeometricReasoning(Solids);
             if (DetectFasteners)
-                DisassemblyDirectionsWithFastener.RunFastenerDetection(Solids, threaded);
+                DisassemblyDirectionsWithFastener.RunFastenerDetection(Solids, FastenersAreThreaded);
             SerializeSolidProperties();
             Console.WriteLine("\nPress enter once input parts table generated >>");
             Console.ReadLine();
