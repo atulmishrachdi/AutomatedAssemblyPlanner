@@ -10,6 +10,7 @@ using System.Xml.Serialization;
 using AssemblyEvaluation;
 using Assembly_Planner;
 using Assembly_Planner.GraphSynth.BaseClasses;
+using GPprocess;
 using GraphSynth.Representation;
 using StarMathLib;
 using TVGL;
@@ -39,12 +40,12 @@ namespace Assembly_Planner
         private static void Main(string[] args)
         {
             InititalConfigurations();
-
             string inputDir;
 #if InputDialog
              inputDir = consoleFrontEnd.getPartsDirectory();
 #else
             inputDir = "workspace";
+            var ss = Directory.GetCurrentDirectory();
             //"src/Test/PumpWExtention";
 
 #endif
