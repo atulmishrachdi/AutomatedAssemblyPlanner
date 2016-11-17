@@ -956,7 +956,7 @@ function vecEntryUpdate(theInput){
 	currentPair.Ref.Mesh.geometry.computeBoundingBox();
 	currentPair.Mov.Mesh.geometry.computeBoundingBox();
 	var theBox=currentPair.Mov.Mesh.geometry.boundingBox.clone();
-	var distBox = currentPair.Mov.Mesh.geometry.boundingBox.clone()
+	var distBox = currentPair.Mov.Mesh.geometry.boundingBox.clone();
 	distBox.union(currentPair.Ref.Mesh.geometry.boundingBox);
 	
 	var theDist = Math.sqrt(Math.pow(distBox.max.x-distBox.min.x,2)+
@@ -985,7 +985,7 @@ function vecEntryUpdate(theInput){
 	theInputs[2].value = theInputs[2].value/theMag;
 	
 	console.log(theInputs);
-	if(theEntry.counterPart==null){
+	if(theEntry.counterPart===null){
 		var theVec = new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0xff0000}));
 		theVec.geometry.vertices[0]=new THREE.Vector3(
 								  (theBox.min.x+theBox.max.x)/2,
@@ -995,14 +995,15 @@ function vecEntryUpdate(theInput){
 		theVec.geometry.vertices[1]=new THREE.Vector3(theVec.geometry.vertices[0].x+parseFloat(theInputs[0].value)*theDist,
 													  theVec.geometry.vertices[0].y+parseFloat(theInputs[1].value)*theDist,
 													  theVec.geometry.vertices[0].z+parseFloat(theInputs[2].value)*theDist);
-		theVec.geometry.vertices[1].add(theVec.geometry.vertices[0]);
+
+													 
+
 		scene.add(theVec);
 		theVectors.push(theVec);
 		console.log("theVectors Updated. New length is: ",theVectors.length);
 		theVec.geometry.verticesNeedUpdate=true;
 		theEntry.counterPart=theVec;
-		
-
+		theEntry.counterPart.geometry.verticesNeedUpdate=true;
 	}
 	else{
 		var theVerts=theEntry.counterPart.geometry.vertices;
@@ -1010,11 +1011,7 @@ function vecEntryUpdate(theInput){
 		theVerts[1].y=theVerts[0].y+parseFloat(theInputs[1].value)*theDist;
 		theVerts[1].z=theVerts[0].z+parseFloat(theInputs[2].value)*theDist;
 		theEntry.counterPart.geometry.verticesNeedUpdate=true;
-		
 	}
-	
-	
-	
 	console.log(theEntry.counterPart.geometry.vertices);
 	
 }
@@ -1036,6 +1033,7 @@ function getDir(theVec){
 		pos++;
 	}
 	return best;
+	
 }
 
 

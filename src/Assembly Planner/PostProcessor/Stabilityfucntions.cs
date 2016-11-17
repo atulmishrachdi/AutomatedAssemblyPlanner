@@ -512,8 +512,7 @@ namespace Assembly_Planner
                 {
                     d1 = c.UnionAreaPoints[0][0].subtract(c.UnionAreaPointsCenter[0]).normalize();
                 }
-
-
+        
                 if (allreactionidirs.Any(td => Math.Abs(td.dotProduct(d0)) < 0.0001))
                 {
                     d1 = allreactionidirs.First(td => Math.Abs(td.dotProduct(d0)) < 0.0001);
@@ -522,6 +521,7 @@ namespace Assembly_Planner
                 {
                     d1 = c.UnionAreaPoints[0][0].subtract(c.UnionAreaPointsCenter[0]).normalize();
                 }
+                
 
                 //if (c.ToPartReactionForeceDirections.First(v => v.dotProduct(d0).Equals(0))!=null)
                 //{
