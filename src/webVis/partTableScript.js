@@ -194,37 +194,42 @@ function getChildrenByTag(theNode,tag){
 * 
 */
 function readMultipleFiles(evt) {
-	//Retrieve all the files from the FileList object
-	var files = evt.target.files; 
-			
-	if (files) {
-		for (var i=0, f; f=files[i]; i++) {
-			
-			var r = new FileReader();
-			var extension=grabExtension(f.name)[0];
-			
-			if(extension===undefined){
-				continue;
-			}
-			if(extension.toLowerCase()==="xml"){
-				if(!(inputXML===null)){
-					console.log("Warning: More than one XML file provided");
+	if(inputXML===null){
+		//Retrieve all the files from the FileList object
+		var files = evt.target.files; 
+				
+		if (files) {
+			for (var i=0, f; f=files[i]; i++) {
+				
+				var r = new FileReader();
+				var extension=grabExtension(f.name)[0];
+				
+				if(extension===undefined){
+					continue;
 				}
-				r.onload = (function(f) {
-					return function(e) {
-						var contents = e.target.result;
-						inputXML=r.result;
-						loadParts();
-					};
-				})(f);
-				r.readAsText(f,"US-ASCII");
-				fileReaders.push({Reader: r, Name: f.name});
+				if(extension.toLowerCase()==="xml"){
+					if(!(inputXML===null)){
+						console.log("Warning: More than one XML file provided");
+					}
+					r.onload = (function(f) {
+						return function(e) {
+							var contents = e.target.result;
+							inputXML=r.result;
+							loadParts();
+						};
+					})(f);
+					r.readAsText(f,"US-ASCII");
+					fileReaders.push({Reader: r, Name: f.name});
+				}
+							
 			}
-						
+		} 
+		else {
+			  alert("Failed to load files"); 
 		}
-	} 
+	}
 	else {
-		  alert("Failed to load files"); 
+		  alert("Refresh page to reattempt upload of files"); 
 	}
 }
 

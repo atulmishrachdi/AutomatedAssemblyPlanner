@@ -60,11 +60,23 @@ namespace Assembly_Planner
             {
                 nameList.Add(part.Name);
             }
+            float nameRating;
+            
+            float ratingAverage=0;
+            float ratingMax=-1;
+            float ratingMin=100000000000;
             int preCutoff = 0;
             int postCutoff = 0;
             PartNameAnalysis.findCommonPreSuffixes(nameList, ref preCutoff, ref postCutoff);
-
-            float nameRating;
+            foreach(var part in uniqueParts)
+            {
+                nameRating = PartNameAnalysis.SolidHasFastenerKeyword(part, preCutoff, postCutoff);
+                ratingAverage += nameRating;
+                ratingMax = Math.Max(ratingMax, nameRating);
+                ratingMin = Math.Min(ratingMin, nameRating);
+            }
+            float proportion = 1-( 1 - (ratingMax - ratingMin) )/2;
+            
             
 
 
@@ -81,12 +93,12 @@ namespace Assembly_Planner
 
                 var initialCertainty = FastenerGaussianNaiveBayes.GaussianNaiveBayesClassifier(solidPrimitive[solid],
                     solid);
-                
-               nameRating = PartNameAnalysis.SolidHasFastenerKeyword(solid, preCutoff, postCutoff); 
 
-                FastenerDetector.PotentialFastener[solid] = (0.1 + initialCertainty)*0.6 + (1-nameRating)*0.4;
+                nameRating = (PartNameAnalysis.SolidHasFastenerKeyword(solid, preCutoff, postCutoff) - ratingMin) / (0.001f + ratingMax - ratingMin);
+
+                FastenerDetector.PotentialFastener[solid] = (0.1 + initialCertainty)*proportion + (1-nameRating)*(1-proportion);
                 foreach (var up in multipleRefs[solid])
-                    FastenerDetector.PotentialFastener[up] = (0.1 + initialCertainty) * 0.6 + (1 - nameRating) * 0.4;
+                    FastenerDetector.PotentialFastener[up] = (0.1 + initialCertainty) * proportion + (1 - nameRating) *(1-proportion);
 
 
                 if (solidPrimitive[solid].Count == 0) return;
