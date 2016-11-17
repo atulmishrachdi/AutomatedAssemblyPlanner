@@ -162,7 +162,7 @@ function bindPartsToKeyFrames(theKeyFrameLists, theParts){
 	while(pos<lim){
 		searchPos=0;
 		while(searchPos<searchLim){
-			
+			//console.log(theKeyFrameLists[pos].Name+" -- "+theParts[searchPos].Name);
 			if(theKeyFrameLists[pos].Name===theParts[searchPos].Name){
 				break;
 			}

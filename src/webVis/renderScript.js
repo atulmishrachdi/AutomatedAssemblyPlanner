@@ -760,7 +760,8 @@ function readMultipleFiles(evt) {
 					return function(e) {
 						//console.log(f.name);
 						var contents = e.target.result;
-						theXML=r.result;
+						console.log(contents);
+						theXML=contents;
 						loadParts();
 					};
 				})(f);
@@ -872,6 +873,7 @@ function renderParts(){
 	cutoffPartNames(parts);
 	
 	// Parses in the xml of the treequence
+	console.log(theXML);
 	var treeQ = $.parseXML(theXML);
 	//console.log(treeQ);
 	treeQ=grab(treeQ,"AssemblyCandidate");
