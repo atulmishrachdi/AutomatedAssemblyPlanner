@@ -51,17 +51,28 @@ namespace Assembly_Planner
             var learnerWeights = FastenerPerceptronLearner.ReadingLearnerWeightsAndVotesFromCsv(out learnerVotes);
             FastenerGaussianNaiveBayes.GNB();
 
-            
+
             List<string> nameList = new List<string>();
             foreach (var part in uniqueParts)
             {
                 nameList.Add(part.Name);
             }
+            float nameRating;
+
+            float ratingAverage = 0;
+            float ratingMax = -1;
+            float ratingMin = 100000000000;
             int preCutoff = 0;
             int postCutoff = 0;
             PartNameAnalysis.findCommonPreSuffixes(nameList, ref preCutoff, ref postCutoff);
-
-            float nameRating;
+            foreach (var part in uniqueParts)
+            {
+                nameRating = PartNameAnalysis.SolidHasFastenerKeyword(part, preCutoff, postCutoff);
+                ratingAverage += nameRating;
+                ratingMax = Math.Max(ratingMax, nameRating);
+                ratingMin = Math.Min(ratingMin, nameRating);
+            }
+            float proportion = 1 - (1 - (ratingMax - ratingMin)) / 2;
 
             var refresh = (int)Math.Ceiling((float)uniqueParts.Count / (float)(width * 4));
             Parallel.ForEach(uniqueParts, solid =>
@@ -75,11 +86,11 @@ namespace Assembly_Planner
 
                 var initialCertainty = FastenerGaussianNaiveBayes.GaussianNaiveBayesClassifier(solidPrimitive[solid], solid);
 
-                nameRating = PartNameAnalysis.SolidHasFastenerKeyword(solid, preCutoff, postCutoff);
+                nameRating = (PartNameAnalysis.SolidHasFastenerKeyword(solid, preCutoff, postCutoff) - ratingMin) / (0.001f + ratingMax - ratingMin);
 
-                FastenerDetector.PotentialFastener[solid] = (0.1 + initialCertainty) * 0.6 + (1 - nameRating) * 0.4;
+                FastenerDetector.PotentialFastener[solid] = (0.1 + initialCertainty) * proportion + (1 - nameRating) * (1 - proportion);
                 foreach (var up in multipleRefs[solid])
-                    FastenerDetector.PotentialFastener[up] = (0.1 + initialCertainty) * 0.6 + (1 - nameRating) * 0.4;
+                    FastenerDetector.PotentialFastener[up] = (0.1 + initialCertainty) * proportion + (1 - nameRating) * (1 - proportion);
 
                 // if a fastener is detected using polynomial trend approach, it is definitely a fastener but not a nut.
                 // if it is detected using any other approach, but not polynomial trend, it is a possible nut.
