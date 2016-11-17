@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+	<output id="list"></output>
+<body id="theDisplay" >
+
+	<meta charset="UTF-16"></meta>
+
+	<head>
+		  <!--<style type="text/css">
+			#theDisplay {
+			  position: absolute;
+			  width: 90%;
+			  height: 50%;
+			  border-style: solid;
+			  border-color: gray;
+			  border-width: 2;
+			  background-color: black;
+			}
+		  </style>-->
+		  
+		  <style>
+			#body{
+			  margin: 0px;
+			  overflow: hidden;
+			}
+			canvas {
+				display: inline;
+			}
+			#theDisplay{
+				position: absolute;
+				background-color: black;
+				padding: 0px 0px 0px 0px;
+			}
+			#HUD{
+				position: absolute;
+				width:98%;
+				height: 96%;
+				font-family: "Lucida Console";
+				color: black;
+			}
+			#fileinput{
+				position: absolute;
+				top: 20px;
+				left: 10px;
+				width: 250px;
+				font-size: 75%;
+				font-family: "Lucida Console";
+				background: rgba(1, 1, 1, 0.3);
+				border-style: solid;
+				border-color: #000000;
+				color: black;
+				padding: 10px 10px 10px 10px;
+			}
+			#infoDiv{
+				position: absolute;
+				bottom: 0px;
+				right: 0px;
+				font-size: 150%;
+				font-family: "Lucida Console";
+				background: rgba(1, 1, 1, 0.3);
+				border-style: solid;
+				border-color: #000000;
+				color: white;
+				padding: 10px 10px 10px 10px;
+			}
+			#treequenceDiv{
+				position: absolute;
+				top: 90px;
+				left: 10px;
+				height: 80%;
+				display: inline-block;
+				font-size: 100%;
+				font-family: "Lucida Console";
+				background: rgba(1, 1, 1, 0.3);
+				border-style: solid;
+				border-color: #000000;
+				color: black;
+				padding: 10px 10px 10px 10px;
+				overflow: scroll;
+			}
+			#lockButton{
+				position: absolute;
+				top: 20px;
+				right: 0px;
+				background-color: #000000;
+				border: none;
+				color: white;
+				padding: 10px 10px;
+				text-align: center;
+				text-decoration: none;
+				display: inline-block;
+				font-size: 12px;
+
+			}
+			
+			#showHide{
+				position: absolute;
+				top: 70px;
+				left: 10px;
+				background-color: #000000;
+				border: none;
+				color: white;
+				padding: 5px 5px;
+				text-align: center;
+				text-decoration: none;
+				display: inline-block;
+				font-size: 12px;
+
+			}
+
+		  </style>
+	</head>
+	<div id="HUD">
+		
+		<button id="lockButton" onclick="tryMouseLock()" >Mouse Lock</button>
+		<button onclick='showHideTreequence()' id="showHide">Show/Hide</button>
+		<div id="treequenceDiv" state="shown" >
+			
+		</div>
+		<div id="infoDiv">
+			<div>
+			<text id="mouseoverName" color="#000000" size="20" >PART: </text>
+			</div>
+			<div>
+			<text id="theTime" color="#000000" size="20" >TIME: 0.0000000000</text>
+			</div>
+		</div>
+	</div>
+	
+	
+	
+	<!--<div id="container"></div>-->
+	
+	<script src="./src/webVis/jsstl.js"></script>
+	<script src="./src/webVis/treequence.js"></script>
+	<script src="./src/webVis/partRender.js"></script>
+	<script src="./src/webVis/jquery.js"></script>
+	<script src="./src/webVis/three.min.js"></script>
+	<script src="./src/webVis/renderScript.js"></script>
+	
+	<xmp id="warning"></xmp>
+	
+</body>
+</html>
