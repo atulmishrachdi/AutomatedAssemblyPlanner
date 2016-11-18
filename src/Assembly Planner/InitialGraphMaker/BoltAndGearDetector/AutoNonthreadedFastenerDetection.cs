@@ -75,7 +75,7 @@ namespace Assembly_Planner
                 ratingMax = Math.Max(ratingMax, nameRating);
                 ratingMin = Math.Min(ratingMin, nameRating);
             }
-            float proportion = 1- (ratingMax - ratingMin) /2;
+            float proportion = 1- (ratingMax - ratingMin) /3;
             
             
 

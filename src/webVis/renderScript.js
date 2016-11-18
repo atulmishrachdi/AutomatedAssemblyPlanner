@@ -760,7 +760,7 @@ function readMultipleFiles(evt) {
 					return function(e) {
 						//console.log(f.name);
 						var contents = e.target.result;
-						console.log(contents);
+						console.log(contents); 
 						theXML=contents;
 						loadParts();
 					};

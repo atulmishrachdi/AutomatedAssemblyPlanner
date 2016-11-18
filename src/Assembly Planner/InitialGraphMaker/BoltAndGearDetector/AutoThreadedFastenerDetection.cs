@@ -72,7 +72,7 @@ namespace Assembly_Planner
                 ratingMax = Math.Max(ratingMax, nameRating);
                 ratingMin = Math.Min(ratingMin, nameRating);
             }
-            float proportion = 1 - (ratingMax - ratingMin) / 2;
+            float proportion = 1 - (ratingMax - ratingMin) / 3;
 
             var refresh = (int)Math.Ceiling((float)uniqueParts.Count / (float)(width * 4));
             Parallel.ForEach(uniqueParts, solid =>
@@ -88,9 +88,9 @@ namespace Assembly_Planner
 
                 nameRating = (PartNameAnalysis.SolidHasFastenerKeyword(solid, preCutoff, postCutoff) - ratingMin) / (0.001f + ratingMax - ratingMin);
 
-                FastenerDetector.PotentialFastener[solid] = (0.1 + initialCertainty) * proportion + (1 - nameRating) * (1 - proportion);
+                FastenerDetector.PotentialFastener[solid] = (0.1 + initialCertainty);// * proportion + (1 - nameRating) * (1 - proportion);
                 foreach (var up in multipleRefs[solid])
-                    FastenerDetector.PotentialFastener[up] = (0.1 + initialCertainty) * proportion + (1 - nameRating) * (1 - proportion);
+                    FastenerDetector.PotentialFastener[up] = (0.1 + initialCertainty);// * proportion + (1 - nameRating) * (1 - proportion);
 
                 // if a fastener is detected using polynomial trend approach, it is definitely a fastener but not a nut.
                 // if it is detected using any other approach, but not polynomial trend, it is a possible nut.
