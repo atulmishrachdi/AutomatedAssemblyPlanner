@@ -94,8 +94,11 @@ namespace AssemblyEvaluation
         // public MovingAction Moving;
         public InstallCharacterType InstallCharacter;
         private List<PolygonalFace> refFacesInCombined;
+        [XmlIgnore]
         public double[,] InstallModelInputs;
+        [XmlIgnore]
         public double[,] RotateModelInputs;
+        [XmlIgnore]
         public double[,] MoveRoateModelInputs;
         public SubAssembly() { }
         public SubAssembly(Part refAssembly, Part movingAssembly, TVGLConvexHull combinedCVXHull,
