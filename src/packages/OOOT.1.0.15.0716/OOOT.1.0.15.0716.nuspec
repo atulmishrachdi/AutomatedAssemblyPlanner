@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>OOOT</id>
+    <version>1.0.15.0716</version>
+    <title>OOOT: Object-Oriented Optimization Toolbox</title>
+    <authors>Mat tCampbell</authors>
+    <owners>Mat tCampbell</owners>
+    <licenseUrl>https://ooot.codeplex.com/license</licenseUrl>
+    <projectUrl>https://ooot.codeplex.com/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A library (.dll) of various linear, nonlinear, and stochastic numerical optimization techniques. While some of these are older than 40 years, many have yet to take advantage of an object-oriented programming model. This toolbox was originally created to aid in the automated design of various engineering artifacts.
+
+The following “class diagram” shows the main optimization methods that have currently been implemented – as well as some insight into organization of classes and objects.  The best way to understand how to use OOOT, is through examples. There are two basic types of methods implemented so far: methods for continuous variables and methods for discrete variables. Approaches for mixed methods such as Branch-and-Bound are planned but not currently included.
+
+ClassDiagram1Many of the optimization methods for real valued decision variables will require that a line-search method be specified (Arithmetic Mean, Golden Section, DSC-Powell) and a search direction method (Cyclic Coordinate Search, Steepest Descent, Powell’s Method, Fletcher-Reeves, or Broyden-Fletcher-Goldfarb-Shanno).
+
+With this modular design it is possible to reconfigure these to create 80 unique algorithms. In addition to these there are also ten different convergence criteria that can be added  individually or in any combination to these 80 algorithms.  Read more about convergence methods here.
+
+But, one of the biggest advantages of the toolbox is the way that objective functions, equalities and inequalities can be easily added to the optimization process. Most (if not all open source approaches) optimization codes requires the problem specific details to be compiled along with the algorithm. Here, the problem formulation can be in another library or exe and can be customized at run-time instead of compile time. It is even possible to have the optimization algorithm change in response to the nature of the design variables and the number of constraints.  Read more about problem formulation</description>
+    <summary>A library (.dll) of various linear, nonlinear, and stochastic numerical optimization techniques. While some of these are older than 40 years, many have yet to take advantage of an object-oriented prog</summary>
+    <copyright>2010</copyright>
+    <language>en-US</language>
+    <tags>numerical optimization nonlinear programming</tags>
+    <dependencies>
+      <group targetFramework=".NETPortable0.0-net45+win+MonoAndroid10+MonoTouch10">
+        <dependency id="StarMath" version="1.0.14.0827" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>

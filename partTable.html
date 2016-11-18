@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+
+<html>
+	<style>
+		
+		#theBody{
+			background-color: #aaaaaa;
+		}
+		#fileinput{
+			color: black;
+		}
+		button{
+			display: block; 
+			width: 150px;
+			background-color: #DDDDDD;
+			border: 1px solid #888888;
+			color: #444444;
+			padding: 5px 8px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 12px;
+		}
+		button:hover{
+			color: #000000;
+			background-color: #EEEEEE;
+			border: 1px dashed #AAAAAA;
+		}
+		#table_id{
+		
+			font-family: Arial, Helvetica, sans-serif;
+		
+		}
+		
+	</style>
+	<body id="theBody">	
+		<select name="length units" id="lengthUnits">
+		  <option value="millimeters">millimeters</option>
+		  <option value="centimeters">centimeters</option>
+		  <option value="inches">inches</option>
+		  <option value="feet">feet</option>
+		  <option value="meters">meters</option>
+		</select>
+		<select name="mass units" id="massUnits">
+		  <option value="kilograms">kilograms</option>
+		  <option value="pounds">pounds</option>
+		</select>
+		<button onclick="fillGlobalDensity()">Global Density</button>
+		<input id="GlobalDensityInput" type="number"></input>
+		
+		<table id="table_id" class="display">
+			<thead>
+				<tr>
+					<th>NAME</th>
+					<th>VOLUME (units^3)</th>
+					<th>SURFACE AREA (units^2)</th>
+					<th>MASS (units)</th>
+					<th>FASTENER</th>
+					<th>AMBIGUITY</th>
+				</tr>
+			</thead>
+			<tbody id="body_id">
+
+			</tbody>
+			<tfoot>
+				<tr>
+					<th>NAME</th>
+					<th>VOLUME (units^3)</th>
+					<th>SURFACE AREA (units^2)</th>
+					<th>MASS (units)</th>
+					<th>FASTENER</th>
+					<th>AMBIGUITY</th>
+				</tr>
+			</tfoot>
+		</table>
+		
+		
+		
+		
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/gojs/1.6.7/go-debug.js"></script>
+		<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.css"/>
+
+		<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.js"></script>
+		<script src="./src/webVis/partTableScript.js"></script>
+	
+	</body>
+
+</html>
+
