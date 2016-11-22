@@ -251,6 +251,10 @@ var sunLight = new THREE.SpotLight( 0xaa5533, 6, 32000, 1.2, 1, 1 );
 
 var theFog=new THREE.Fog( skyColor, 9000, 12000 );
 scene.fog=theFog;
+
+var theXAxis=null;
+var theYAxis=null;
+var theZAxis=null;
 		
 
 
@@ -614,6 +618,8 @@ var render = function () {
 	// The function that will manage frame requests
 	requestAnimationFrame( render );
 	
+	
+	
 	// Recieve input and set the appropriate state
 	manageControls();
 	
@@ -672,6 +678,8 @@ var render = function () {
 	
 	// Update the installation trace lines
 	updateLines(movementTree,null,theTime);
+	
+	updateAxisLines();
 	
 	// Call for the render
 	renderer.render(scene, camera);
@@ -921,6 +929,8 @@ function renderParts(){
 	// Fixes a minor thing in the treequence graphic 
 	getChildrenByTag(document.getElementById("treequenceDiv"),"BUTTON")[0].innerHTML="+";
 	// Begins to display the parts
+	initAxisLines();
+	
 	render();
 
 }
