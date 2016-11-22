@@ -335,11 +335,11 @@ function grabInd(theTree,theMember, theIndex){
 function addEntry(theEntry){
 
 	var theName=grab(theEntry,"name").innerHTML;
-	var theVolume="<text>"+Number.parseFloat(grab(theEntry,"volume").innerHTML)+"</text>\n"+volElem;
+	var theVolume="<text>"+Number.parseFloat(grab(theEntry,"volume").innerHTML).toFixed(4)+"</text><br/>"+volElem;
 	
 	var theMass=massElem;
 	var theCertainty=Number.parseFloat(grab(theEntry,"fastener_certainty").innerHTML);
-	var theSurfaceArea=Number.parseFloat(grab(theEntry,"surface_area").innerHTML);
+	var theSurfaceArea=Number.parseFloat(grab(theEntry,"surface_area").innerHTML).toFixed(4);
 	
 	console.log(theCertainty);
 	
@@ -657,7 +657,7 @@ function updateMassDisplay(theBox){
 	var theDensity=Number.parseFloat(getChildrenByTag(theBox.parentElement,"INPUT")[0].value);
 	var theVolume=Number.parseFloat(getChildrenByTag(getChildrenByTag(theBox.parentElement.parentElement.parentElement,"TD")[1],"TEXT")[0].innerHTML);
 	var mass=theDensity*theVolume;
-	getChildrenByTag(theBox.parentElement,"TEXT")[0].innerHTML=mass.toString()+"\n";
+	getChildrenByTag(theBox.parentElement,"TEXT")[0].innerHTML= (mass.toFixed(4)).toString()+"\n";
 }
 
 
@@ -795,7 +795,7 @@ function fillGlobalDensity(){
 	var lim=massElems.length;
 	while(pos<lim){
 		massElems[pos].innerHTML=		"<text></text><text>Density:</text> "+
-										"<input type='text' onchange='updateMassDisplay(this)' value='"+theDensity.toString()+"'>"+
+										"<input type='text' onchange='updateMassDisplay(this)' value='"+(theDensity.toFixed(4)).toString()+"'>"+
 										"</input>"+
 										densityDiv+
 										"<button onclick='insertMassInput(this)' >Input By Mass</button>";
