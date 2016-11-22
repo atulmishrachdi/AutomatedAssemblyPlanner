@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>RandomGen</id>
+    <version>0.4.0</version>
+    <title>RandomGen</title>
+    <authors>Ali Kheyrollahi,  Jakub Konecki</authors>
+    <owners>Ali Kheyrollahi,  Jakub Konecki</owners>
+    <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
+    <projectUrl>https://github.com/aliostad/RandomGen</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Random Generation tool</description>
+    <copyright>Copyright 2014</copyright>
+    <tags>random randomise normal distribution female male name surname word</tags>
+  </metadata>
+</package>
