@@ -46,6 +46,12 @@ var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera( 75, theWidth/theHeight, 1, 16000 );
 
 
+var theXAxis=null;
+var theYAxis=null;
+var theZAxis=null;
+var xRet=null;
+var yRet=null;
+
 // Setting up the renderer with the default color and display size
 var renderer = new THREE.WebGLRenderer();
 renderer.setClearColor( skyColor, 1 );
@@ -209,7 +215,8 @@ var render = function () {
 	
 	
 	time+=0.01;
-		
+	
+	updateAxisLines();
 	
 	// Call for the render
 	renderer.render(scene, camera);
@@ -359,7 +366,7 @@ function loadParts (){
 	
 	// Executes if all files are loaded
 	if(pos===lim){
-		console.log("ALL DONE");
+		//console.log("ALL DONE");
 		parts.length=0;
 		pos=0;
 		var partGeom=null;
@@ -401,6 +408,7 @@ function loadParts (){
 		console.log("setting up currentPair");
 		console.log(currentPair);
 		insertAssemblyPairs();
+		initAxisLines();
 		render();
 		
 	}
@@ -422,17 +430,14 @@ function linkPair(a,b,vec){
 	var pos=0;
 	var lim=parts.length;
 	while(pos<lim){
-		console.log(a);
-		console.log(b);
-		//console.log(vec);
-		console.log(parts[pos].Name);
-		if(parts[pos].Name===a+".STL"){
+
+		if(parts[pos].Name===a+".STL" || parts[pos].Name===a){
 			thePair.Ref=parts[pos];
 		}
-		if(parts[pos].Name===b+".STL"){
+		if(parts[pos].Name===b+".STL" || parts[pos].Name===b){
 			thePair.Mov=parts[pos];
 		}
-		if(thePair.Ref!=null & thePair.Mov!=null){
+		if(thePair.Ref!==null && thePair.Mov!==null){
 			thePair.Vec=vec;
 			return thePair;
 		}
@@ -448,12 +453,15 @@ function linkParts(){
 	var pos=0;
 	var lim=namePairs.length;
 	var thePair=null;
-	console.log(namePairs);
+	
 	while(pos<lim){
 		thePair=linkPair(namePairs[pos].Ref,namePairs[pos].Mov,namePairs[pos].Vec);
-		thePair.InfiniteDirections = namePairs[pos].InfiniteDirections;
+		
 		if(thePair!=null){
+			thePair.InfiniteDirections = namePairs[pos].InfiniteDirections;
 			assemblyPairs.push(thePair);
+		}
+		else{
 		}
 		pos++;
 	}
@@ -643,7 +651,6 @@ function deHighlight(thePair){
 
 
 function highlight(thePair){
-	
 	
 	console.log(thePair);
 	thePair.Ref.Mesh.material=new THREE.MeshLambertMaterial({color: 0x4444FF /*, transparent: true, opacity: 0.6, depthTest: false */});
@@ -1108,6 +1115,72 @@ function renderXML(){
 	
 	
 }
+
+
+
+
+function initAxisLines(){
+	
+	theXAxis = new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0xff0000, depthTest: false }));
+	theXAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
+	theXAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
+	theXAxis.frustumCulled = false;
+	
+	theYAxis = new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0x00ff00, depthTest: false }));
+	theYAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
+	theYAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
+	theYAxis.frustumCulled = false;
+	
+	theZAxis = new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0x0000ff, depthTest: false }));
+	theZAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
+	theZAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
+	theZAxis.frustumCulled = false;
+	
+	
+	scene.add(theXAxis);
+	scene.add(theYAxis);
+	scene.add(theZAxis);
+
+	
+}
+
+
+
+function updateAxisLines(){
+	
+	var theRot= new THREE.Quaternion(0,0,0,0);
+	theRot.setFromEuler(camera.rotation);
+	var theDir= new THREE.Vector3(-3,-3,-5);
+	
+	theDir.applyQuaternion(theRot);
+
+	
+	var thePosition = camera.position.clone();
+	
+	thePosition.add(theDir);
+	
+	theXAxis.geometry.vertices[0].copy(thePosition);
+	theXAxis.geometry.vertices[0].x-=0.5;
+	theXAxis.geometry.vertices[1].copy(thePosition);
+	theXAxis.geometry.vertices[1].x+=1;
+	theXAxis.geometry.verticesNeedUpdate=true;
+	
+	theYAxis.geometry.vertices[0].copy(thePosition);
+	theYAxis.geometry.vertices[0].y-=0.5;
+	theYAxis.geometry.vertices[1].copy(thePosition);
+	theYAxis.geometry.vertices[1].y+=1;
+	theYAxis.geometry.verticesNeedUpdate=true;
+	
+	theZAxis.geometry.vertices[0].copy(thePosition);
+	theZAxis.geometry.vertices[0].z-=0.5;
+	theZAxis.geometry.vertices[1].copy(thePosition);
+	theZAxis.geometry.vertices[1].z+=1;
+	theZAxis.geometry.verticesNeedUpdate=true;
+	
+
+	
+}
+
 
 
 

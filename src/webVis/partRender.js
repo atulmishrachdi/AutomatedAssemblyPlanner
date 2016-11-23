@@ -163,7 +163,9 @@ function bindPartsToKeyFrames(theKeyFrameLists, theParts){
 		searchPos=0;
 		while(searchPos<searchLim){
 			//console.log(theKeyFrameLists[pos].Name+" -- "+theParts[searchPos].Name);
-			if(theKeyFrameLists[pos].Name===theParts[searchPos].Name){
+			if(theKeyFrameLists[pos].Name===theParts[searchPos].Name || 
+			   theKeyFrameLists[pos].Name+".STL"===theParts[searchPos].Name ||
+			   theKeyFrameLists[pos].Name===theParts[searchPos].Name+".STL"){
 				break;
 			}
 			console.log(theKeyFrameLists[pos].Name);
@@ -917,21 +919,36 @@ function updateLines(movTree,parentNode,theTime){
 
 function initAxisLines(){
 	
-	theXAxis = new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0xff0000}));
+	theXAxis = new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0xff0000, depthTest: false }));
 	theXAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
 	theXAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
+	theXAxis.frustumCulled = false;
 	
-	theYAxis = new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0x00ff00}));
+	theYAxis = new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0x00ff00, depthTest: false }));
 	theYAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
 	theYAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
+	theYAxis.frustumCulled = false;
 	
-	theZAxis = new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0x0000ff}));
+	theZAxis = new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0x0000ff, depthTest: false }));
 	theZAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
 	theZAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
+	theZAxis.frustumCulled = false;
+	
+	xRet = new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0x000000 }));
+	xRet.geometry.vertices.push(new THREE.Vector3(0,0,0));
+	xRet.geometry.vertices.push(new THREE.Vector3(0,0,0));
+	xRet.frustumCulled = false;
+	
+	yRet = new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0x000000 }));
+	yRet.geometry.vertices.push(new THREE.Vector3(0,0,0));
+	yRet.geometry.vertices.push(new THREE.Vector3(0,0,0));
+	yRet.frustumCulled = false;
 	
 	scene.add(theXAxis);
 	scene.add(theYAxis);
 	scene.add(theZAxis);
+	scene.add(xRet);
+	scene.add(yRet);
 	
 }
 
@@ -941,29 +958,60 @@ function updateAxisLines(){
 	
 	var theRot= new THREE.Quaternion(0,0,0,0);
 	theRot.setFromEuler(camera.rotation);
-	var theDir= new THREE.Vector3(0,0,-2);
+	var theDir= new THREE.Vector3(-3,-3,-5);
+	var retX0= new THREE.Vector3(-0.3,0,-5);
+	var retX1= new THREE.Vector3(0.3,0,-5);
+	var retY0= new THREE.Vector3(0,-0.08,-5);
+	var retY1= new THREE.Vector3(0,0.08,-5);
+	
 	theDir.applyQuaternion(theRot);
+	retX0.applyQuaternion(theRot);
+	retX1.applyQuaternion(theRot);
+	retY0.applyQuaternion(theRot);
+	retY1.applyQuaternion(theRot);
 	
 	var thePosition = camera.position.clone();
 	
 	thePosition.add(theDir);
 	
-	console.log(thePosition);
-	
 	theXAxis.geometry.vertices[0].copy(thePosition);
+	theXAxis.geometry.vertices[0].x-=0.5;
 	theXAxis.geometry.vertices[1].copy(thePosition);
 	theXAxis.geometry.vertices[1].x+=1;
 	theXAxis.geometry.verticesNeedUpdate=true;
 	
 	theYAxis.geometry.vertices[0].copy(thePosition);
+	theYAxis.geometry.vertices[0].y-=0.5;
 	theYAxis.geometry.vertices[1].copy(thePosition);
 	theYAxis.geometry.vertices[1].y+=1;
 	theYAxis.geometry.verticesNeedUpdate=true;
 	
 	theZAxis.geometry.vertices[0].copy(thePosition);
+	theZAxis.geometry.vertices[0].z-=0.5;
 	theZAxis.geometry.vertices[1].copy(thePosition);
 	theZAxis.geometry.vertices[1].z+=1;
 	theZAxis.geometry.verticesNeedUpdate=true;
+	
+	
+	
+	thePosition.copy(camera.position);
+	thePosition.add(retX0);
+	xRet.geometry.vertices[0].copy(thePosition);	
+	
+	thePosition.copy(camera.position);
+	thePosition.add(retX1);
+	xRet.geometry.vertices[1].copy(thePosition);
+	xRet.geometry.verticesNeedUpdate=true;
+	
+	thePosition.copy(camera.position);
+	thePosition.add(retY0);
+	yRet.geometry.vertices[0].copy(thePosition);
+	
+	thePosition.copy(camera.position);
+	thePosition.add(retY1);
+	yRet.geometry.vertices[1].copy(thePosition);
+	yRet.geometry.verticesNeedUpdate=true;
+	
 	
 }
 

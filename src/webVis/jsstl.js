@@ -217,7 +217,7 @@ var parseStl = function(stl) {
 						parseFloat(parts[4])
 					];
 					if (vCount % 1000 === 0) {
-						console.log(normal);
+						//console.log(normal);
 					}
 					state = 'facet normal';
 				} else {

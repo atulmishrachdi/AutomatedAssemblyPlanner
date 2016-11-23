@@ -255,6 +255,8 @@ scene.fog=theFog;
 var theXAxis=null;
 var theYAxis=null;
 var theZAxis=null;
+var xRet=null;
+var yRet=null;
 		
 
 
@@ -572,6 +574,8 @@ function manageControls(){
 	camera.position.y+=momentum.y;
 	camera.position.z+=momentum.z;
 	
+
+	
 	
 	if(inputState.F==true){
 		if(focusPoint==null && objectOfInterest!=null){
@@ -681,8 +685,10 @@ var render = function () {
 	
 	updateAxisLines();
 	
+	
 	// Call for the render
 	renderer.render(scene, camera);
+	
 };
 
 
