@@ -269,8 +269,8 @@ namespace Assembly_Planner
                         var aAverageEdgeLength = a.Edges.Sum(e => e.Length) / 3.0;
                         var bAverageEdgeLength = b.Edges.Sum(e => e.Length) / 3.0;
                         // if they are on the wrong side of each other
-                        if (a.Vertices.All(av => (av.Position.subtract(b.Vertices[0].Position)).dotProduct(b.Normal) / aAverageEdgeLength < -1e-5) ||
-                            b.Vertices.All(bv => (bv.Position.subtract(a.Vertices[0].Position)).dotProduct(a.Normal) / bAverageEdgeLength < -1e-5)) continue;
+                        if (a.Vertices.All(av => (av.Position.subtract(b.Vertices[0].Position)).dotProduct(b.Normal) / aAverageEdgeLength < -1e-2) ||
+                            b.Vertices.All(bv => (bv.Position.subtract(a.Vertices[0].Position)).dotProduct(a.Normal) / bAverageEdgeLength < -1e-2)) continue;
                         counter2++;
                         var q = a.Center;
                         var p = b.Center;

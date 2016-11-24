@@ -148,7 +148,7 @@ namespace Assembly_Planner
 
                 }
             }
-                ); //
+                );// 
             // when all of the fasteners are recognized, it's time to check the third level filter:
             // something is not acceptable: nut without fastener. If there is a nut without fastener,
             // I will try to look for that.
