@@ -13,11 +13,11 @@ namespace Assembly_Planner
     {
         internal static void SaveTheGraph(designGraph assemblyGraph)
         {
-            var outputDirectory = "../../../Test";
+            var outputDirectory = "";
             var setting = new GlobalSettings();
             var sa = new BasicFiler(setting.InputDir, setting.OutputDir, setting.RulesDir);
             sa.outputDirectory = outputDirectory;
-            sa.Save("FPM.gxml", assemblyGraph, false);
+            sa.Save("abbasgholi.gxml", assemblyGraph, false);
         }
         internal static object[] OpenSavedGraph(String fileName)
         {
