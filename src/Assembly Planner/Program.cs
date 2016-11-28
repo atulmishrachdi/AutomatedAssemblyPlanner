@@ -56,18 +56,24 @@ namespace Assembly_Planner
             DisassemblyDirectionsWithFastener.RunGeometricReasoning(Solids);
             if (DetectFasteners)
                 DisassemblyDirectionsWithFastener.RunFastenerDetection(Solids, FastenersAreThreaded);
+            //SolidsNoFastener = Solids;
             SerializeSolidProperties();
             Console.WriteLine("\nPress enter once input parts table generated >>");
             Console.ReadLine();
             DeserializeSolidProperties();
             globalDirPool = DisassemblyDirectionsWithFastener.RunGraphGeneration(AssemblyGraph, SolidsNoFastener);
-            // the second user interaction must happen here
+            //the second user interaction must happen here
             SaveDirections();
-            Console.WriteLine("\n\nPress enter once input directions generated >>");
-            Console.ReadLine();
-            LoadDirections();
-
+            var connectedGraph = false;
+            while (!connectedGraph)
+            {
+                Console.WriteLine("\n\nPress enter once input directions generated >>");
+                Console.ReadLine();
+                LoadDirections();
+                connectedGraph = DisassemblyDirectionsWithFastener.GraphIsConnected(AssemblyGraph);
+            }
             NonadjacentBlockingWithPartitioning.Run(AssemblyGraph, SolidsNoFastener, globalDirPool);
+            GraphSaving.SaveTheGraph(AssemblyGraph);
             Stabilityfunctions.GenerateReactionForceInfo(AssemblyGraph);
             var leapSearch = new LeapSearch();
             var solutions = leapSearch.Run(AssemblyGraph, Solids, globalDirPool);
@@ -256,13 +262,22 @@ namespace Assembly_Planner
         {
             MeshMagnifier = DetermineTheMagnifier();
             var solidsMagnified = new Dictionary<string, List<TessellatedSolid>>();
-            foreach (var dic in Solids)
+            Parallel.ForEach(Solids, dic =>
+                //foreach (var dic in Solids)
             {
                 var solids = new List<TessellatedSolid>();
                 foreach (var ts in dic.Value)
                 {
-                    var newVer = ts.Vertices.Select(vertex => new TempVer { Ver = vertex, IndexInList = 0 }).ToList();
-                    var newFace = ts.Faces.Select(face => new TempFace { Face = face, Vers = face.Vertices.Select(v => newVer.First(nv => nv.Ver == v)).ToArray() }).ToList();
+                    var newVer = ts.Vertices.Select(vertex => new TempVer {Ver = vertex, IndexInList = 0}).ToList();
+                    var newFace =
+                        ts.Faces.Select(
+                            face =>
+                                new TempFace
+                                {
+                                    Face = face,
+                                    Vers = face.Vertices.Select(v => newVer.First(nv => nv.Ver == v)).ToArray()
+                                })
+                            .ToList();
                     var tvglVertices = new List<Vertex>();
                     var tvglFaces = new List<PolygonalFace>();
                     for (var i = 0; i < newVer.Count; i++)
@@ -281,10 +296,13 @@ namespace Assembly_Planner
                     tsM.Repair();
                     solids.Add(tsM);
                 }
-                solidsMagnified.Add(solids[0].Name, solids);
+                lock (solidsMagnified)
+                    solidsMagnified.Add(solids[0].Name, solids);
             }
+                );
             Solids = solidsMagnified;
         }
+
         private static double DetermineTheMagnifier()
         {
             // Regardless of the actual size of the assembly, I will fit it in a box with
