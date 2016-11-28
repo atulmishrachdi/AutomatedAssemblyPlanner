@@ -188,7 +188,8 @@ namespace Assembly_Planner
             PartitioningSolid.Partitions = new Dictionary<TessellatedSolid, Partition[]>();
             PartitioningSolid.PartitionsAABB = new Dictionary<TessellatedSolid, PartitionAABB[]>();
             PartitioningSolid.CreatePartitions(solidsNoFastener);
-            
+
+            CheckToHaveConnectedGraph(assemblyGraph);
             return globalDirPool;
         }
 
@@ -386,6 +387,137 @@ namespace Assembly_Planner
                 var key = DisassemblyDirections.DirectionsAndOppositsForGlobalpool.Where(k => k.Value == newD).ToList();
                 DisassemblyDirections.DirectionsAndOppositsForGlobalpool.Add(newD, key[0].Key);
             }
+        }
+        private static void CheckToHaveConnectedGraph(designGraph assemblyGraph)
+        {
+            // The code will crash if the graph is not connected
+            // let's take a look:
+            var TTC1 = assemblyGraph.nodes.Count;
+            var counter1 = 0;
+            var batches = new List<HashSet<Component>>();
+            var stack = new Stack<Component>();
+            var visited = new HashSet<Component>();
+            var globalVisited = new HashSet<Component>();
+            foreach (Component Component in assemblyGraph.nodes.Where(n => !globalVisited.Contains(n)))
+            {
+                stack.Clear();
+                visited.Clear();
+                stack.Push(Component);
+                while (stack.Count > 0)
+                {
+                    var pNode = stack.Pop();
+                    visited.Add(pNode);
+                    counter1++;
+                    globalVisited.Add(pNode);
+                    List<Connection> a2;
+                    lock (pNode.arcs)
+                        a2 = pNode.arcs.Where(a => a is Connection).Cast<Connection>().ToList();
+
+                    foreach (Connection arc in a2)
+                    {
+                        if (!assemblyGraph.nodes.Contains(arc.From) || !assemblyGraph.nodes.Contains(arc.To)) continue;
+                        var otherNode = (Component)(arc.From == pNode ? arc.To : arc.From);
+                        if (visited.Contains(otherNode))
+                            continue;
+                        stack.Push(otherNode);
+                    }
+                }
+                if (visited.Count == assemblyGraph.nodes.Count)
+                {
+                    return;
+                }
+                batches.Add(new HashSet<Component>(visited));
+            }
+            Console.WriteLine("\nSome of the assembly parts are not connected to the rest of the model.");
+            Console.WriteLine("\n   * Since the graph needs to be connected, the following connections are added by the software:");
+            var referenceBatch = batches[0];
+            var c = false;
+            var TTC2 = batches.Count;
+            var counter2 = 0;
+            while (referenceBatch.Count < assemblyGraph.nodes.Count)
+            {
+                foreach (var rb in referenceBatch)
+                {
+                    for (var j = 1; j < batches.Count; j++)
+                    {
+                        foreach (var b in batches[j])
+                        {
+                            foreach (var p1 in Program.Solids[rb.name])
+                            {
+                                foreach (var p2 in Program.Solids[b.name])
+                                {
+                                    if (BlockingDetermination.BoundingBoxOverlap(p1, p2))
+                                    {
+                                        if (BlockingDetermination.ConvexHullOverlap(p1, p2))
+                                        {
+                                            // add a connection with low cetainty between them
+                                            var lastAdded = (Connection)assemblyGraph.addArc(rb, b, "", typeof(Connection));
+                                            lastAdded.Certainty = 0.1;
+                                            referenceBatch.UnionWith(batches[j]);
+                                            batches.RemoveAt(j);
+                                            c = true;
+                                            counter2++;
+                                            Console.WriteLine("\n      - "+ lastAdded.XmlFrom + lastAdded.XmlTo);
+                                        }
+                                    }
+                                    if (c) break;
+                                }
+                                if (c) break;
+                            }
+                            if (c) break;
+                        }
+                        if (c) break;
+                    }
+                    if (c) break;
+                }
+            }
+            Console.WriteLine("\n   * When you are reviewing the connections, please pay a closer attention to the connections above");
+        }
+        internal static bool GraphIsConnected(designGraph assemblyGraph)
+        {
+            var batches = new List<HashSet<Component>>();
+            var stack = new Stack<Component>();
+            var visited = new HashSet<Component>();
+            var globalVisited = new HashSet<Component>();
+            foreach (Component Component in assemblyGraph.nodes.Where(n => !globalVisited.Contains(n)))
+            {
+                stack.Clear();
+                visited.Clear();
+                stack.Push(Component);
+                while (stack.Count > 0)
+                {
+                    var pNode = stack.Pop();
+                    visited.Add(pNode);
+                    globalVisited.Add(pNode);
+                    List<Connection> a2;
+                    lock (pNode.arcs)
+                        a2 = pNode.arcs.Where(a => a is Connection).Cast<Connection>().ToList();
+
+                    foreach (Connection arc in a2)
+                    {
+                        if (!assemblyGraph.nodes.Contains(arc.From) || !assemblyGraph.nodes.Contains(arc.To)) continue;
+                        var otherNode = (Component)(arc.From == pNode ? arc.To : arc.From);
+                        if (visited.Contains(otherNode))
+                            continue;
+                        stack.Push(otherNode);
+                    }
+                }
+                if (visited.Count == assemblyGraph.nodes.Count)
+                {
+                    return true;
+                }
+                batches.Add(new HashSet<Component>(visited));
+            }
+            Console.WriteLine("\nThe reviewed graph is not connected! The following batch(es) are discunnected from the rest of the model.");
+            var sorted = batches.OrderBy(o => o.Count).ToList();
+            for (var i = 0; i < sorted.Count - 1; i++)
+            {
+                Console.WriteLine("\n   * Batch 1:");
+                foreach (var part in sorted[i])
+                    Console.WriteLine("      - " + part.name);
+            }
+            Console.WriteLine("\nPlease add the missing connections.");
+            return false;
         }
     }
 }
