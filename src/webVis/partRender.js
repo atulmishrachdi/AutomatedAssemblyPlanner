@@ -387,6 +387,32 @@ function copyFrameList (theFrameList){
 }
 
 
+
+
+function makeFastenerKeyFrames(theFst,runningList,currentFrameList){
+	
+	var newQuat= new THREE.Quaternion();
+	newQuat.setFromEuler(new THREE.Euler(0,0,0,'XYZ'));
+	
+	var presentFrame={
+						Quat: newQuat, 
+						Position: new THREE.Vector3(theTree.X,theTree.Y,theTree.Z),
+						Time: theTree.Time
+					};
+
+	
+	runningList.push(presentFrame);
+	
+	var copiedList= copyFrameList(runningList);
+	//console.log("-----------");
+	currentFrameList.push({Name: theTree.Name, Frames: copiedList});
+	runningList.pop();
+
+	return;
+	
+}
+
+
 /**
 *
 * Given a tree representation of the assembly process through nested javascript objects, returns an array
@@ -693,7 +719,22 @@ function getPartCenter(part){
 
 
 
-
+function alignAssemblyCenter(){
+	
+	var pos = 0;
+	var lim = partFrames.length;
+	var result = new THREE.Vector3(0,0,0);
+	while(pos<lim){
+		result.add(getPartCenter(partFrames[pos]));
+		pos++;
+	}
+	result.divideScalar(partFrames.length);
+	result.sub(camera.position);
+	result.normalize();
+	camYaw = Math.atan2(result.x,result.z) - Math.PI;
+	camPitch = Math.atan2(Math.pow(result.x*result.x+result.z*result.z,0.5),result.y);
+	
+}
 
 
 

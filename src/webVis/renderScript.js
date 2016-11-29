@@ -181,8 +181,8 @@ var scene = new THREE.Scene();
 
 // The camera
 var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 1, 16000 );
-camera.position.x=200;
-camera.position.z=200;
+camera.position.x=0;
+camera.position.z=0;
 camera.position.y=0;
 
 // The variable holding the state of whether or not the pointer is locked
@@ -936,6 +936,8 @@ function renderParts(){
 	getChildrenByTag(document.getElementById("treequenceDiv"),"BUTTON")[0].innerHTML="+";
 	// Begins to display the parts
 	initAxisLines();
+	
+	alignAssemblyCenter();
 	
 	render();
 
