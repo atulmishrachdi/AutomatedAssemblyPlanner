@@ -472,9 +472,18 @@ namespace Assembly_Planner
                     if (c) break;
                 }
             }
-            if (visits > 0)
+            if (loop < 15)
                 Console.WriteLine(
                     "\n   * When you are reviewing the connections, please pay a closer attention to the connections above");
+            else
+                Console.WriteLine("\n   * Some connections must be added manually between the following batches");
+            for (int i = 0; i < batches.Count; i++)
+            {
+                var batch = batches[i];
+                Console.WriteLine("\n      - Batch " + i + ":");
+                foreach (var component in batch)
+                    Console.WriteLine("         + " + component.name);
+            }
         }
         internal static bool GraphIsConnected(designGraph assemblyGraph)
         {
