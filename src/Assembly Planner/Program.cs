@@ -15,7 +15,6 @@ using GraphSynth.Representation;
 using StarMathLib;
 using TVGL;
 using TVGL.IOFunctions;
-using TVGL;
 
 namespace Assembly_Planner
 {
@@ -50,7 +49,7 @@ namespace Assembly_Planner
 
 #endif
             Solids = GetSTLs(inputDir);
-            //EnlargeTheSolid();
+            EnlargeTheSolid();
             
             AssemblyGraph = new designGraph();
             DisassemblyDirectionsWithFastener.RunGeometricReasoning(Solids);
@@ -200,7 +199,7 @@ namespace Assembly_Planner
 
         private static Dictionary<string, List<TessellatedSolid>> GetSTLs(string InputDir)
         {
-            Console.WriteLine("Loading STLs ....");
+            Console.WriteLine("\nLoading STLs ....");
             var parts = new List<TessellatedSolid>();
             var di = new DirectoryInfo(InputDir);
             var fis = di.EnumerateFiles("*.STL");
@@ -211,6 +210,21 @@ namespace Assembly_Planner
                 var ts = IO.Open(fileInfo.Open(FileMode.Open), fileInfo.Name);
                 //ts.Name = ts.Name.Remove(0, 1);
                 //lock (parts) 
+                if (ts[0].Faces.Length > 50000 &&
+                    (ts[0].Errors == null || ((ts[0].Errors.EdgesThatDoNotLinkBackToFace == null ||
+                                               ts[0].Errors.EdgesThatDoNotLinkBackToFace.Count < 2) &&
+                                              (ts[0].Errors.SingledSidedEdges == null ||
+                                               ts[0].Errors.SingledSidedEdges.Count < 5))))
+                {
+                    try
+                    {
+                        ts[0].SimplifyByPercentage(0.5);
+                    }
+                    catch (Exception)
+                    {
+                        //continue;
+                    }
+                }
                 parts.Add(ts[0]);
                 i++;
             }
@@ -260,6 +274,7 @@ namespace Assembly_Planner
 
         private static void EnlargeTheSolid()
         {
+            Console.WriteLine("\nScaling the parts ....");
             MeshMagnifier = DetermineTheMagnifier();
             var solidsMagnified = new Dictionary<string, List<TessellatedSolid>>();
             Parallel.ForEach(Solids, dic =>
@@ -292,7 +307,7 @@ namespace Assembly_Planner
                         tvglFaces.Add(
                             new PolygonalFace(tri.Vers.Select(v => tvglVertices[v.IndexInList]).ToList(), null));
                     }
-                    var tsM = new TessellatedSolid(tvglFaces, tvglVertices, null, UnitType.millimeter, ts.FileName);
+                    var tsM = new TessellatedSolid(tvglFaces, tvglVertices, null, UnitType.millimeter, ts.Name);
                     tsM.Repair();
                     solids.Add(tsM);
                 }
