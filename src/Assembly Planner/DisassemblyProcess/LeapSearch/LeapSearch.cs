@@ -93,7 +93,7 @@ namespace Assembly_Planner
                 //var all = new List<SortedList<double, HashSet<TreeCandidate>>>();
                 // if all the members of cand have moving and references that exist in the memo, this is the goal
                 var counter = 0;
-                var temp = new HashSet<TreeCandidate>();
+                //var temp = new HashSet<TreeCandidate>();
                 //Parallel.ForEach(cand, treeCandidate =>
                     foreach (var treeCandidate in cand)
                 {
@@ -118,11 +118,11 @@ namespace Assembly_Planner
                         }
                         else
                         {
-                            if (Memo[a].Value > d.Value)
+                            if (!FirstRun && Memo[a].Value > d.Value)
                                 Memo[a] = d;
                         }
-                        lock (temp)
-                            temp.Add(treeCandidate);
+                        //lock (temp)
+                        //    temp.Add(treeCandidate);
                         treeCandidate.sa.Install.Moving = Memo[treeCandidate.MovNodes].sa;
                         treeCandidate.sa.Install.Reference = Memo[treeCandidate.RefNodes].sa;
 
@@ -135,18 +135,19 @@ namespace Assembly_Planner
                         treeCandidate.sa.Install.Moving = Memo[treeCandidate.MovNodes].sa;
                         FalseLoop = 0;
                         var refCands = GetCandidates(treeCandidate.RefNodes, treeCandidate.G);
+                        refCands = CreateNewClassOfTreeCandidates(refCands);
                         foreach (var rC in refCands)
                         {
                             rC.parent = treeCandidate;
                             localSorted.Add(rC.G + rC.H, new HashSet<TreeCandidate> {rC});
                         }
-                        var otherTC1 = cand.Where(c => c != treeCandidate);
+                        var otherTC1 = cand.Where(c => c != treeCandidate).ToList();
                         var cost1 = otherTC1.Sum(tc => tc.G + tc.H);
                         foreach (var lsl in localSorted)
                         {
                             var merged = lsl.Value;
                             merged.UnionWith(otherTC1);
-                            merged.UnionWith(temp);
+                            //merged.UnionWith(temp);
                             beamChildern.Add(cost1 + lsl.Key, merged);
                         }
                         //all.Add(localSorted);
@@ -158,19 +159,20 @@ namespace Assembly_Planner
                         treeCandidate.sa.Install.Reference = Memo[treeCandidate.RefNodes].sa;
                         FalseLoop = 0;
                         var movCands = GetCandidates(treeCandidate.MovNodes, treeCandidate.G);
+                        movCands = CreateNewClassOfTreeCandidates(movCands);
                         foreach (var mC in movCands)
                         {
                             mC.parent = treeCandidate;
                             localSorted.Add(mC.G + mC.H, new HashSet<TreeCandidate> {mC});
                         }
                         //all.Add(localSorted);
-                        var otherTC2 = cand.Where(c => c != treeCandidate);
+                        var otherTC2 = cand.Where(c => c != treeCandidate).ToList();
                         var cost2 = otherTC2.Sum(tc => tc.G + tc.H);
                         foreach (var lsl in localSorted)
                         {
                             var merged = lsl.Value;
                             merged.UnionWith(otherTC2);
-                            merged.UnionWith(temp);
+                            //merged.UnionWith(temp);
                             beamChildern.Add(cost2 + lsl.Key, merged);
                         }
                         continue;
@@ -183,8 +185,10 @@ namespace Assembly_Planner
                     Task.WaitAll(tasks);*/
                     FalseLoop = 0;
                     var refCandsF = GetCandidates(treeCandidate.RefNodes, treeCandidate.G);
+                    refCandsF = CreateNewClassOfTreeCandidates(refCandsF);
                     FalseLoop = 0;
                     var movCandsF = GetCandidates(treeCandidate.MovNodes, treeCandidate.G);
+                    movCandsF = CreateNewClassOfTreeCandidates(movCandsF);
 
                     foreach (var rC in refCandsF)
                     {
@@ -198,13 +202,13 @@ namespace Assembly_Planner
 
                     // NEW APPROACH: instead of addding them to the all, take other members of the cand, merge them with
                     // every member of the local sortedList and add them to the global list
-                    var otherTC = cand.Where(c => c != treeCandidate);
+                    var otherTC = cand.Where(c => c != treeCandidate).ToList();
                     var cost = otherTC.Sum(tc => tc.G + tc.H);
                     foreach (var lsl in localSorted)
                     {
                         var merged = lsl.Value;
                         merged.UnionWith(otherTC);
-                        merged.UnionWith(temp);
+                        //merged.UnionWith(temp);
                         beamChildern.Add(cost + lsl.Key, merged);
                     }
                     //return;
@@ -212,9 +216,8 @@ namespace Assembly_Planner
                     //all.Add(localSorted);
                 }
                     //);
-                if (!SortedStack.Any())
-                    foreach (var child in beamChildern)
-                        SortedStack.Add(child.Key, child.Value);
+                foreach (var child in beamChildern)
+                    SortedStack.Add(child.Key, child.Value);
                 beamChildern.Clear();
                 if (counter == cand.Count)
                 {
@@ -235,6 +238,22 @@ namespace Assembly_Planner
             return tree;
         }
 
+        private static HashSet<TreeCandidate> CreateNewClassOfTreeCandidates(HashSet<TreeCandidate> refCandsF)
+        {
+            var newCands = new HashSet<TreeCandidate>();
+            foreach (var tc in refCandsF)
+            {
+                newCands.Add(new TreeCandidate
+                {
+                    MovNodes = tc.MovNodes,
+                    RefNodes = tc.RefNodes,
+                    sa = tc.sa,
+                    G = tc.G,
+                    H = tc.H
+                });
+            }
+            return newCands;
+        }
         private static void AssignNewWeight(List<double> initialTimes, List<double> initialStableScores,
             double stabilityWeightChosenByUser, out double finalTimeWeight, out double finalStableWeight)
         {
@@ -291,7 +310,29 @@ namespace Assembly_Planner
                     tempo = tempo.parent;
                 }
             }
+            FixTreeTemporarily(finalNodes[0], parentsMet);
             return finalNodes[0];
+        }
+        private static void FixTreeTemporarily(SubAssembly finalNode, HashSet<TreeCandidate> parentsMet)
+        {
+            if (finalNode.PartNames.Count > 2 && finalNode.Install == null)
+            {
+                foreach (var tc in parentsMet)
+                {
+                    if (finalNode.PartNames.Count != tc.MovNodes.Count + tc.RefNodes.Count) continue;
+                    if (tc.MovNodes.All(n => finalNode.PartNames.Contains(n.name)) &&
+                        tc.RefNodes.All(n => finalNode.PartNames.Contains(n.name)))
+                        finalNode = tc.sa;
+                }
+            }
+            else
+            {
+                if (finalNode.Install.Reference.PartNames.Count > 2)
+                    FixTreeTemporarily(finalNode.Install.Reference as SubAssembly, parentsMet);
+                if (finalNode.Install.Moving.PartNames.Count > 2)
+                    FixTreeTemporarily(finalNode.Install.Moving as SubAssembly, parentsMet);
+            }
+
         }
 
         private static void FillUpMemo(TreeCandidate sa)
@@ -395,6 +436,8 @@ namespace Assembly_Planner
             }
             if (MemoCandidates.ContainsKey(nodes))
                 return MemoCandidates[nodes];
+            foreach (var treeCandidate in candidates)
+                treeCandidate.parent = null;
             MemoCandidates.Add(nodes, candidates);
             return candidates;
         }
