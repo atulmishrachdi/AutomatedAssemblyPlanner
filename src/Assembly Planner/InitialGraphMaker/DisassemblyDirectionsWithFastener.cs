@@ -178,16 +178,18 @@ namespace Assembly_Planner
             Fastener.AddFastenersInformation(assemblyGraph, solidsNoFastener, SolidPrimitive);
             // create oppositeDirections for global direction pool.
             FindingOppositeDirectionsForGlobalPool(globalDirPool);
-            
+
             // Simplify the solids, before doing anything
             //------------------------------------------------------------------------------------------
-            SimplifySolids(solidsNoFastener, 0.7);
+            foreach (var solid in solidsNoFastener)
+                Program.SolidsNoFastenerSimplified.Add(solid.Key, Program.SimplifiedSolids[solid.Key]);
+            SimplifySolids(Program.SimplifiedSolids, 0.7);
 
             // Implementing region octree for every solid
             //------------------------------------------------------------------------------------------
             PartitioningSolid.Partitions = new Dictionary<TessellatedSolid, Partition[]>();
             PartitioningSolid.PartitionsAABB = new Dictionary<TessellatedSolid, PartitionAABB[]>();
-            PartitioningSolid.CreatePartitions(solidsNoFastener);
+            PartitioningSolid.CreatePartitions(Program.SimplifiedSolids);
 
             CheckToHaveConnectedGraph(assemblyGraph);
             return globalDirPool;

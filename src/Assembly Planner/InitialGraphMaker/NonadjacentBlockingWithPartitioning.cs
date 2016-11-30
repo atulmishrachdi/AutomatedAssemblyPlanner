@@ -60,7 +60,7 @@ namespace Assembly_Planner
                     ObbFacesHashSet.Add(s,
                         new HashSet<PolygonalFace>(
                             PartitioningSolid.TwelveFaceGenerator(
-                                BoundingGeometry.OrientedBoundingBoxDic[s].CornerVertices.Select(
+                                BoundingGeometry.OrientedBoundingBoxDic.First(b=> b.Key.Name == s.Name).Value.CornerVertices.Select(
                                     cv => new Vertex(cv.Position)).ToArray())));
                 }
             }

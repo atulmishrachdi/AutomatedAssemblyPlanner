@@ -418,7 +418,7 @@ namespace Assembly_Planner
                 check++;
                 //solid.SimplifyByPercentage(0.5);
                 var prtn = Run(new HashSet<Vertex>(solid.Vertices), new HashSet<PolygonalFace>(solid.Faces),
-                    BoundingGeometry.OrientedBoundingBoxDic[solid].CornerVertices.Select(
+                    BoundingGeometry.OrientedBoundingBoxDic.First(b=>b.Key.Name == solid.Name).Value.CornerVertices.Select(
                         cv => new Vertex(cv.Position)).ToArray());
                 lock (Partitions)
                 {

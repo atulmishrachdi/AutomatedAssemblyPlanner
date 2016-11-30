@@ -24,6 +24,8 @@ namespace Assembly_Planner
         public static List<double> StablbiblityScores = new List<double>();
         public static Dictionary<string, List<TessellatedSolid>> Solids = new Dictionary<string, List<TessellatedSolid>>();
         public static Dictionary<string, List<TessellatedSolid>> SolidsNoFastener = new Dictionary<string, List<TessellatedSolid>>();
+        public static Dictionary<string, List<TessellatedSolid>> SolidsNoFastenerSimplified = new Dictionary<string, List<TessellatedSolid>>();
+        public static Dictionary<string, List<TessellatedSolid>> SimplifiedSolids = new Dictionary<string, List<TessellatedSolid>>();
         public static Dictionary<string, double> SolidsMass = new Dictionary<string, double>();
         public static designGraph AssemblyGraph;
         public static double StabilityWeightChosenByUser = 0;
@@ -52,7 +54,7 @@ namespace Assembly_Planner
 #endif
             Solids = GetSTLs(inputDir);
             EnlargeTheSolid();
-            
+
             AssemblyGraph = new designGraph();
             DisassemblyDirectionsWithFastener.RunGeometricReasoning(Solids);
             if (DetectFasteners)
@@ -73,7 +75,7 @@ namespace Assembly_Planner
                 LoadDirections();
                 connectedGraph = DisassemblyDirectionsWithFastener.GraphIsConnected(AssemblyGraph);
             }
-            NonadjacentBlockingWithPartitioning.Run(AssemblyGraph, SolidsNoFastener, globalDirPool);
+            NonadjacentBlockingWithPartitioning.Run(AssemblyGraph, SolidsNoFastenerSimplified, globalDirPool);
             GraphSaving.SaveTheGraph(AssemblyGraph);
             Stabilityfunctions.GenerateReactionForceInfo(AssemblyGraph);
             var leapSearch = new LeapSearch();
@@ -302,6 +304,7 @@ namespace Assembly_Planner
                 //foreach (var dic in Solids)
             {
                 var solids = new List<TessellatedSolid>();
+                var solidsConstant = new List<TessellatedSolid>();
                 foreach (var ts in dic.Value)
                 {
                     var newVer = ts.Vertices.Select(vertex => new TempVer {Ver = vertex, IndexInList = 0}).ToList();
@@ -329,11 +332,16 @@ namespace Assembly_Planner
                             new PolygonalFace(tri.Vers.Select(v => tvglVertices[v.IndexInList]).ToList(), null));
                     }
                     var tsM = new TessellatedSolid(tvglFaces, tvglVertices, null, UnitType.millimeter, ts.Name);
+                    var tsC = new TessellatedSolid(tvglFaces, tvglVertices, null, UnitType.millimeter, ts.Name);
                     tsM.Repair();
+                    tsC.Repair();
                     solids.Add(tsM);
+                    solidsConstant.Add(tsC);
                 }
                 lock (solidsMagnified)
                     solidsMagnified.Add(solids[0].Name, solids);
+                lock (SimplifiedSolids)
+                    SimplifiedSolids.Add(solidsConstant[0].Name, solidsConstant);
             }
                 );
             Solids = solidsMagnified;
