@@ -774,7 +774,7 @@ function readMultipleFiles(evt) {
 					return function(e) {
 						//console.log(f.name);
 						var contents = e.target.result;
-						console.log(contents); 
+						//console.log(contents); 
 						theXML=contents;
 						loadParts();
 					};
@@ -887,7 +887,7 @@ function renderParts(){
 	cutoffPartNames(parts);
 	
 	// Parses in the xml of the treequence
-	console.log(theXML);
+	//console.log(theXML);
 	var treeQ = $.parseXML(theXML);
 	//console.log(treeQ);
 	treeQ=grab(treeQ,"AssemblyCandidate");
@@ -905,12 +905,16 @@ function renderParts(){
 	// Cuts off the common first characters of all the part names in the tree
 	cutOffNames(moveTree,similarityCutoff(getNameList(moveTree)));
 	//console.log(moveTree);
+	printAllNames(parts,moveTree);
 	
 	// Makes a series of keyframes for each part for evaluation in the animation
 	var theFrameLists=makeKeyFrames(moveTree,[],[]);
+	//console.log(theFrameLists);
+	//console.log(parts);
 	
 	// Links each key frame list object to the appropriate part object
 	partFrames= bindPartsToKeyFrames(theFrameLists,parts);
+	//console.log(partFrames);
 	//showFrames(theFrameLists);
 	
 	// Zeroes the time, for obvious reasons

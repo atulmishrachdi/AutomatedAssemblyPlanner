@@ -103,7 +103,7 @@ function grabInd(theTree,theMember, theIndex){
 function getMovement(theTree, myX, myY, myZ, myTime){
 
 	if(($(theTree).children("Install").length==0)){
-		return { Name: $(theTree).attr("Name"), X: myX, Y: myY, Z: myZ, Time: myTime, Ref: null, Mov: null };
+		return { Name: $(theTree).attr("Name"), X: myX, Y: myY, Z: myZ, Time: myTime, Ref: null, Mov: null, Fst: [] };
 	}
 	else{
 		var childTime=parseFloat(grab(grab(theTree,"Install"),"Time").innerHTML)+myTime;
@@ -117,8 +117,40 @@ function getMovement(theTree, myX, myY, myZ, myTime){
 		var movZ=myZ-movZDir*movDistance;
 		var ref=getMovement(getRef(theTree), myX, myY, myZ, childTime);
 		var mov=getMovement(getMov(theTree), movX, movY, movZ, childTime);
+		var fasteners = $(theTree).children("Secure");
+		var theFst;
+		var theDir;
+		var theDist;
+		var Fst = [];
+		console.log(fasteners);
+		if(fasteners.length >= 1){
+			fasteners = $(fasteners[0]).children("Fasteners");
+			if(fasteners.length >= 1){
+				fasteners = $(fasteners[0]).children("Fastener");
+				var pos = 0;
+				var lim = fasteners.length;
+				while(pos<lim){
+					theDist = parseFloat($(fasteners[pos]).children("InstallDistance")[0].innerHTML);
+					theDir = ($(fasteners[pos]).children("InstallDirection"))[0];
+					theDir = $(theDir).children("double");
+					//console.log($(fasteners[pos]).children("InstallDistance"));
+					theFst = {  Name: "subasm-"+($(fasteners[pos]).children("Name"))[0].innerHTML, 
+								X: myX-parseFloat(theDir[0].innerHTML)*theDist, 
+								Y: myY-parseFloat(theDir[1].innerHTML)*theDist,  
+								Z: myZ-parseFloat(theDir[2].innerHTML)*theDist, 
+								Time: childTime-(childTime-myTime)*0.1, 
+								Ref: null, 
+								Mov: null,
+								Fst: []
+							};
+					Fst.push(theFst);
+					pos++;
+				}
+			}
+		}
 		
-		return { Name: "", X: myX, Y: myY, Z: myZ, Time: myTime, Ref: ref, Mov: mov};
+		
+		return { Name: "", X: myX, Y: myY, Z: myZ, Time: myTime, Ref: ref, Mov: mov, Fst: Fst};
 		
 	}
 
@@ -376,6 +408,11 @@ function similarityCutoff(theList){
 }
 
 
+
+
+
+
+
 /**
 *
 * Given a tree of nested javascript objects (each with a string attribute "Name") and an
@@ -396,18 +433,20 @@ function cutOffNames(theTree,theCutOff){
 	}
 	else{
 	
-	
 		if(theCutOff<theTree.Name.length){
-		
 			theTree.Name=theTree.Name.substr(theCutOff,theTree.Name.length);
-		
 		}
 		
 		cutOffNames(theTree.Ref,theCutOff);
 		cutOffNames(theTree.Mov,theCutOff);
+		var pos = 0;
+		var lim = theTree.Fst.length;
+		while(pos<lim){
+			cutOffNames(theTree.Fst[pos],theCutOff)
+			pos++;
+		}
 		
 		return;
-	
 	
 	}
 
@@ -415,7 +454,69 @@ function cutOffNames(theTree,theCutOff){
 }
 
 
+function getTreeNames(tree,regTreeNames,fstTreeNames){
+	
+	if(tree===null){
+		return;
+	}
+	else{
+		if(tree.Ref===null){
+			regTreeNames.push(tree.Name);
+		}
+		else{
+			getTreeNames(tree.Ref,regTreeNames,fstTreeNames);
+			getTreeNames(tree.Mov,regTreeNames,fstTreeNames);
+		}
+		var pos = 0;
+		var lim = tree.Fst.length;
+		while(pos<lim){
+			fstTreeNames.push(tree.Fst[pos].Name);
+			pos++;
+		}
+	}
+	
+}
 
+function getPartNames(parts){
+	
+	var result = [];
+	var pos = 0;
+	var lim = parts.length;
+	while(pos<lim){
+		result.push(parts[pos].Name);
+		pos++;
+	}
+	return result;
+	
+}
+
+
+function printAllNames(parts,tree){
+	
+	var regTreeNames=[];
+	var fstTreeNames=[];
+	var prtNames=getPartNames(parts);
+	getTreeNames(tree,regTreeNames,fstTreeNames);
+	var pos=0;
+	var lim=prtNames.length;
+	while(pos<lim){
+		console.log(prtNames[pos]);
+		pos++;
+	}
+	pos=0;
+	lim=regTreeNames.length;
+	while(pos<lim){
+		console.log(regTreeNames[pos]);
+		pos++;
+	}
+	pos=0;
+	lim=fstTreeNames.length;
+	while(pos<lim){
+		console.log(fstTreeNames[pos]);
+		pos++;
+	}
+	
+}
 
 
 /**

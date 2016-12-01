@@ -166,10 +166,9 @@ function bindPartsToKeyFrames(theKeyFrameLists, theParts){
 			if(theKeyFrameLists[pos].Name===theParts[searchPos].Name || 
 			   theKeyFrameLists[pos].Name+".STL"===theParts[searchPos].Name ||
 			   theKeyFrameLists[pos].Name===theParts[searchPos].Name+".STL"){
+				   //console.log("===========");
 				break;
 			}
-			console.log(theKeyFrameLists[pos].Name);
-			console.log(theParts[searchPos].Name);
 			searchPos++;
 		}
 		if(searchPos==searchLim){
@@ -396,8 +395,8 @@ function makeFastenerKeyFrames(theFst,runningList,currentFrameList){
 	
 	var presentFrame={
 						Quat: newQuat, 
-						Position: new THREE.Vector3(theTree.X,theTree.Y,theTree.Z),
-						Time: theTree.Time
+						Position: new THREE.Vector3(theFst.X,theFst.Y,theFst.Z),
+						Time: theFst.Time
 					};
 
 	
@@ -405,7 +404,7 @@ function makeFastenerKeyFrames(theFst,runningList,currentFrameList){
 	
 	var copiedList= copyFrameList(runningList);
 	//console.log("-----------");
-	currentFrameList.push({Name: theTree.Name, Frames: copiedList});
+	currentFrameList.push({Name: theFst.Name, Frames: copiedList});
 	runningList.pop();
 
 	return;
@@ -461,6 +460,14 @@ function makeKeyFrames(theTree, runningList, currentFrameList){
 		makeKeyFrames(theTree.Mov,runningList,currentFrameList);
 		runningList.pop();
 	}
+	
+	var pos = 0;
+	var lim = theTree.Fst.length;
+	while(pos<lim){
+		makeFastenerKeyFrames(theTree.Fst[pos],runningList,currentFrameList);
+		pos++;
+	}
+	
 	
 	if(isRoot===1){
 		//console.log(currentFrameList);
@@ -832,6 +839,13 @@ function addLines(movTree,parentNode,theScene){
 			);
 			theScene.add(movTree.Line);
 			
+			var pos = 0;
+			var lim = movTree.Fst.length;
+			while(pos<lim){
+				addLines(movTree.Fst[pos].Line,movTree,theScene);
+				pos++;
+			}
+			
 		}
 		else{
 			movTree.Line= null;
@@ -951,6 +965,14 @@ function updateLines(movTree,parentNode,theTime){
 		
 		updateLines(movTree.Ref,movTree,theTime);
 		updateLines(movTree.Mov,movTree,theTime);
+		
+		var pos = 0;
+		var lim = movTree.Fst.length;
+		while(pos<lim){
+			updateLines(movTree.Fst[pos],movTree,theTime);
+			pos++;
+		}
+		
 		return;
 	}
 	
