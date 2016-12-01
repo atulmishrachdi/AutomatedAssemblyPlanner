@@ -166,10 +166,9 @@ function bindPartsToKeyFrames(theKeyFrameLists, theParts){
 			if(theKeyFrameLists[pos].Name===theParts[searchPos].Name || 
 			   theKeyFrameLists[pos].Name+".STL"===theParts[searchPos].Name ||
 			   theKeyFrameLists[pos].Name===theParts[searchPos].Name+".STL"){
+				   //console.log("===========");
 				break;
 			}
-			console.log(theKeyFrameLists[pos].Name);
-			console.log(theParts[searchPos].Name);
 			searchPos++;
 		}
 		if(searchPos==searchLim){
@@ -387,6 +386,32 @@ function copyFrameList (theFrameList){
 }
 
 
+
+
+function makeFastenerKeyFrames(theFst,runningList,currentFrameList){
+	
+	var newQuat= new THREE.Quaternion();
+	newQuat.setFromEuler(new THREE.Euler(0,0,0,'XYZ'));
+	
+	var presentFrame={
+						Quat: newQuat, 
+						Position: new THREE.Vector3(theFst.X,theFst.Y,theFst.Z),
+						Time: theFst.Time
+					};
+
+	
+	runningList.push(presentFrame);
+	
+	var copiedList= copyFrameList(runningList);
+	//console.log("-----------");
+	currentFrameList.push({Name: theFst.Name, Frames: copiedList});
+	runningList.pop();
+
+	return;
+	
+}
+
+
 /**
 *
 * Given a tree representation of the assembly process through nested javascript objects, returns an array
@@ -435,6 +460,14 @@ function makeKeyFrames(theTree, runningList, currentFrameList){
 		makeKeyFrames(theTree.Mov,runningList,currentFrameList);
 		runningList.pop();
 	}
+	
+	var pos = 0;
+	var lim = theTree.Fst.length;
+	while(pos<lim){
+		makeFastenerKeyFrames(theTree.Fst[pos],runningList,currentFrameList);
+		pos++;
+	}
+	
 	
 	if(isRoot===1){
 		//console.log(currentFrameList);
@@ -693,7 +726,22 @@ function getPartCenter(part){
 
 
 
-
+function alignAssemblyCenter(){
+	
+	var pos = 0;
+	var lim = partFrames.length;
+	var result = new THREE.Vector3(0,0,0);
+	while(pos<lim){
+		result.add(getPartCenter(partFrames[pos]));
+		pos++;
+	}
+	result.divideScalar(partFrames.length);
+	result.sub(camera.position);
+	result.normalize();
+	camYaw = Math.atan2(result.x,result.z) - Math.PI;
+	camPitch = Math.atan2(Math.pow(result.x*result.x+result.z*result.z,0.5),result.y);
+	
+}
 
 
 
@@ -790,6 +838,13 @@ function addLines(movTree,parentNode,theScene){
 				})
 			);
 			theScene.add(movTree.Line);
+			
+			var pos = 0;
+			var lim = movTree.Fst.length;
+			while(pos<lim){
+				addLines(movTree.Fst[pos].Line,movTree,theScene);
+				pos++;
+			}
 			
 		}
 		else{
@@ -910,6 +965,14 @@ function updateLines(movTree,parentNode,theTime){
 		
 		updateLines(movTree.Ref,movTree,theTime);
 		updateLines(movTree.Mov,movTree,theTime);
+		
+		var pos = 0;
+		var lim = movTree.Fst.length;
+		while(pos<lim){
+			updateLines(movTree.Fst[pos],movTree,theTime);
+			pos++;
+		}
+		
 		return;
 	}
 	
