@@ -815,7 +815,7 @@ function getFirstIntersect(theScene, theCamera, partFrames){
 * @return {Void}
 *
 */
-function addLines(movTree,parentNode,theScene){
+function addLines(movTree,parentNode,theScene,isMov){
 	
 	if(movTree==null){
 		return;
@@ -826,8 +826,6 @@ function addLines(movTree,parentNode,theScene){
 			var startP=new THREE.Vector3(movTree.X,movTree.Y,movTree.Z);
 			var endP=new THREE.Vector3(parentNode.X,parentNode.Y,parentNode.Z);
 			theGeo.vertices=[startP,endP];
-
-			
 			movTree.Line= new THREE.LineSegments(
 				theGeo,
 				new THREE.LineDashedMaterial({
@@ -838,20 +836,24 @@ function addLines(movTree,parentNode,theScene){
 				})
 			);
 			theScene.add(movTree.Line);
-			
-			var pos = 0;
-			var lim = movTree.Fst.length;
-			while(pos<lim){
-				addLines(movTree.Fst[pos].Line,movTree,theScene);
-				pos++;
-			}
-			
 		}
 		else{
 			movTree.Line= null;
 		}
-		addLines(movTree.Ref,movTree,theScene);
-		addLines(movTree.Mov,movTree,theScene);
+		addLines(movTree.Ref,movTree,theScene,false);
+		addLines(movTree.Mov,movTree,theScene,true);
+		var pos = 0;
+		var lim = movTree.Fst.length;
+		while(pos<lim){
+			if(isMov && parentNode != null){
+				addLines(movTree.Fst[pos],parentNode,theScene,false);
+			}
+			else{
+				addLines(movTree.Fst[pos],movTree,theScene,false);
+			}
+			console.log(movTree.Fst[pos]);
+			pos++;
+		}
 		
 		return;
 	}
@@ -889,20 +891,23 @@ function addDisplacement(movTree, partFrames, it){
 		var ref=addDisplacement(movTree.Ref,partFrames,it);
 		if(ref!=null){
 			var mov=addDisplacement(movTree.Mov, partFrames, ref);
+			var pos = 0;
+			var lim = movTree.Fst.length;
+			while(pos<lim){
+				mov = addDisplacement(movTree.Fst[pos], partFrames, mov);
+				console.log(movTree.Fst[pos]);
+				pos++;
+			}
 			it=mov;
 		}
 		
-		if(mov==null | ref==null){
-			console.log(partFrames[it]);
+		if(mov==null || ref==null){
 			movTree.Disp=getPartCenter(partFrames[it]);
 			it++;
 		}
 		else{
 			movTree.Disp=new THREE.Vector3(0,0,0);
 			movTree.Disp.lerpVectors(movTree.Ref.Disp,movTree.Mov.Disp,0.5);
-			/*movTree.Disp.x=(movTree.Ref.Disp.x+movTree.Mov.Disp.x)/2;
-			movTree.Disp.y=(movTree.Ref.Disp.y+movTree.Mov.Disp.y)/2;
-			movTree.Disp.z=(movTree.Ref.Disp.z+movTree.Mov.Disp.z)/2;*/
 		}
 		if(movTree.Line!=null){
 			movTree.Line.geometry.vertices[0].addVectors(movTree.Line.geometry.vertices[0],movTree.Disp);
@@ -910,10 +915,7 @@ function addDisplacement(movTree, partFrames, it){
 		}
 		
 		return it;
-		
 	}
-	
-	
 }
 
 
@@ -932,7 +934,7 @@ function addDisplacement(movTree, partFrames, it){
 * @return {Void}
 *
 */
-function updateLines(movTree,parentNode,theTime){
+function updateLines(movTree,parentNode,theTime, isMov){
 	
 	if(movTree==null){
 		return;
@@ -945,10 +947,6 @@ function updateLines(movTree,parentNode,theTime){
 					movTree.Line.geometry.vertices[0].x=(movTree.X+movTree.Disp.x)*(normTime)+(parentNode.X+movTree.Disp.x)*(1-normTime);
 					movTree.Line.geometry.vertices[0].y=(movTree.Y+movTree.Disp.y)*(normTime)+(parentNode.Y+movTree.Disp.y)*(1-normTime);
 					movTree.Line.geometry.vertices[0].z=(movTree.Z+movTree.Disp.z)*(normTime)+(parentNode.Z+movTree.Disp.z)*(1-normTime);
-					/*console.log("X: "+movTree.Line.geometry.vertices[0].x+
-					" Y: "+movTree.Line.geometry.vertices[0].y+
-					" Z: "+movTree.Line.geometry.vertices[0].z);*/
-
 				}
 				else{
 					movTree.Line.geometry.vertices[0].x=movTree.X+movTree.Disp.x;
@@ -957,22 +955,25 @@ function updateLines(movTree,parentNode,theTime){
 				}
 			}
 			else{
-				//console.log("time: "+theTime+" mov: "+movTree.Time+" parent: "+parentNode.Time);
 				movTree.Line.geometry.vertices[0]=movTree.Line.geometry.vertices[1].clone();
 			}
 			movTree.Line.geometry.verticesNeedUpdate=true;
 		}
 		
-		updateLines(movTree.Ref,movTree,theTime);
-		updateLines(movTree.Mov,movTree,theTime);
+		updateLines(movTree.Ref,movTree,theTime,false);
+		updateLines(movTree.Mov,movTree,theTime,true);
 		
 		var pos = 0;
 		var lim = movTree.Fst.length;
 		while(pos<lim){
-			updateLines(movTree.Fst[pos],movTree,theTime);
+			if( parentNode != null ){
+				updateLines(movTree.Fst[pos],parentNode,theTime,false);
+			}
+			else{
+				updateLines(movTree.Fst[pos],movTree,theTime,false);
+			}
 			pos++;
 		}
-		
 		return;
 	}
 	
@@ -1077,6 +1078,133 @@ function updateAxisLines(){
 	
 	
 }
+
+
+
+function interp (pointList, T){
+	
+	var pos = 0;
+	var lim = pointList.length;
+	var listCopy = [];
+	while(pos<lim){
+		listCopy.push(pointList[pos].clone());
+		pos++;
+	}
+	while(lim>1){
+		pos = 0;
+		while(pos<lim-1){
+			listCopy[pos].lerpVectors(listCopy[pos],listCopy[pos+1],T);
+			pos++;
+		}
+		delete listCopy[pos];
+		lim--;
+	}
+	return listCopy[1];
+	
+}
+
+
+function addArcSubDiv (target, center, startDisp, endDisp, level){
+	
+	var midVec = new THREE.Vector3(0,0,0);
+	midVec.add(startDisp);
+	midVec.add(endDisp);
+	midVec.normalize();
+	midVec.multiplyScalar((startDisp.length()+endDisp.length())/2);
+	//console.log((startDisp.length()+endDisp.length())/2);
+	
+	if(level <= 0){
+		midVec.add(center);
+		target.push(midVec);
+	}
+	else{
+		
+		addArcSubDiv(target,center,midVec,endDisp, level-1);
+		addArcSubDiv(target,center,startDisp,midVec, level-1);
+		delete midVec;
+	}
+	
+}
+
+
+function makeArcPointList(startPoint, center, endPoint){
+	
+	var pos = 0;
+	var lim = 5;
+	var result = [];
+	var norm;
+	var workVector = new THREE.Vector3 ( 0,0,0 );
+	var crossVector = new THREE.Vector3 ( 0,0,0 );
+	var startDisp = new THREE.Vector3 ( 0,0,0 );
+	var endDisp = new THREE.Vector3 ( 0,0,0 );
+	
+	workVector.copy(endPoint);
+	//workVector.sub(installDir);
+	workVector.sub(center);
+	
+	startDisp.copy(startPoint);
+	startDisp.sub(center);
+	
+	crossVector.clone(startDisp);	
+	
+	if(Math.abs(workVector.dot(crossVector)) > 0.98){
+		while(Math.abs(workVector.dot(crossVector)) > 0.98){
+			crossVector.set(Math.random()*100, Math.random()*100, Math.random()*100);
+		}
+		crossVector.cross(workVector);
+		crossVector.normalize();
+		crossVector.multiplyScalar((startDisp.length()+endDisp.length())/2);
+		
+		addArcSubDiv(result,center,crossVector,endDisp,3);
+		addArcSubDiv(result,center,startDisp,crossVector,3);
+	}
+	else{
+		delete crossVector;
+		crossVector = null;
+		addArcSubDiv(result,center,startDisp,endDisp,4);
+	}
+	
+	return result;
+
+}
+   
+
+function addCurveKeyFrames(theFrameLists, startLocation){
+	
+	var pos = 0;
+	var lim = theFrameLists.length;
+	var center = new THREE.Vector3(0,0,0);
+	
+	pos = 0;
+	lim = theFrameLists.length;
+	var framePos;
+	var frameLim;
+	var startFrame;
+	var theFrame;
+	var interpPoints;
+	
+	while(pos<lim){
+		interpPoints = [];
+		startFrame = (theFrameLists[pos].Frames)[theFrameLists[pos].Frames.length-1];
+		interpPoints = makeArcPointList( startLocation, center, startFrame.Position );
+		framePos = 0;
+		frameLim = interpPoints.length;
+		while(framePos<frameLim){
+			theFrame = copyFrame(startFrame);
+			theFrame.Position.copy(interpPoints[framePos]);
+			theFrame.Time = startFrame.Time + framePos;
+			(theFrameLists[pos].Frames).push(theFrame);
+			console.log("X: "+interpPoints[framePos].x+" Y: "+interpPoints[framePos].y+" Z: "+interpPoints[framePos].z);
+			framePos++;
+		}
+		pos++;
+	}
+	
+}
+
+
+
+
 
 
 

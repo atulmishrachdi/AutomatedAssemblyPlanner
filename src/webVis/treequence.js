@@ -138,7 +138,7 @@ function getMovement(theTree, myX, myY, myZ, myTime){
 								X: myX-parseFloat(theDir[0].innerHTML)*theDist, 
 								Y: myY-parseFloat(theDir[1].innerHTML)*theDist,  
 								Z: myZ-parseFloat(theDir[2].innerHTML)*theDist, 
-								Time: childTime-(childTime-myTime)*0.1, 
+								Time: myTime + (childTime - myTime) * 0.01, 
 								Ref: null, 
 								Mov: null,
 								Fst: []
@@ -540,6 +540,12 @@ function flipTreeTime(theTree,axis){
 		theTree.Time=axis-theTree.Time;
 		flipTreeTime(theTree.Ref,axis);
 		flipTreeTime(theTree.Mov,axis);
+		var pos = 0;
+		var lim = theTree.Fst.length;
+		while(pos<lim){
+			flipTreeTime(theTree.Fst[pos],axis);
+			pos++;
+		}
 		return;
 	}
 

@@ -31184,22 +31184,6 @@
       <name>a1</name>
       <localLabels />
       <localVariables />
-      <From>Torsion Device_9122016 - Fixed Vertical plate-1</From>
-      <To>Torsion Device_9122016 - 3_16 1_8 Dowel pin  98381A501-1</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>4618</int>
-      </InfiniteDirections>
-      <FiniteDirections />
-      <Fasteners />
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a2</name>
-      <localLabels />
-      <localVariables />
       <From>Torsion Device_9122016 - Vertical plates-1</From>
       <To>Torsion Device_9122016 - 1 d 6 L pin  93772A142-1</To>
       <directed>false</directed>
@@ -31214,117 +31198,11 @@
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a3</name>
-      <localLabels />
-      <localVariables />
-      <From>Torsion Device_9122016 - main plate-1</From>
-      <To>Torsion Device_9122016 - 3_16 1_8 Dowel pin  98381A501-3</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>1503</int>
-      </InfiniteDirections>
-      <FiniteDirections />
-      <Fasteners />
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a4</name>
-      <localLabels />
-      <localVariables />
-      <From>Torsion Device_9122016 - Vertical plates-3</From>
-      <To>Torsion Device_9122016 - 3_16 1_8 Dowel pin  98381A501-3</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>4618</int>
-      </InfiniteDirections>
-      <FiniteDirections />
-      <Fasteners />
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a5</name>
-      <localLabels />
-      <localVariables />
-      <From>Torsion Device_9122016 - Bottom mechanism-2 bracket-1</From>
-      <To>Torsion Device_9122016 - Bottom mechanism-2 Bottom fixture-1</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>0</int>
-        <int>938</int>
-        <int>2080</int>
-        <int>2947</int>
-        <int>6230</int>
-        <int>3115</int>
-      </InfiniteDirections>
-      <FiniteDirections>
-        <int>121</int>
-        <int>452</int>
-        <int>2583</int>
-      </FiniteDirections>
-      <Fasteners />
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a6</name>
+      <name>a2</name>
       <localLabels />
       <localVariables />
       <From>Torsion Device_9122016 - lever-3</From>
-      <To>Torsion Device_9122016 - 1 d 6 L pin  93772A142-1</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>1463</int>
-        <int>4578</int>
-      </InfiniteDirections>
-      <FiniteDirections />
-      <Fasteners />
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a7</name>
-      <localLabels />
-      <localVariables />
-      <From>Torsion Device_9122016 - main plate-1</From>
-      <To>Torsion Device_9122016 - 3_16 1_8 Dowel pin  98381A501-1</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>1422</int>
-      </InfiniteDirections>
-      <FiniteDirections />
-      <Fasteners />
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a8</name>
-      <localLabels />
-      <localVariables />
-      <From>Torsion Device_9122016 - main plate-1</From>
-      <To>Torsion Device_9122016 - 3_16 1_8 Dowel pin  98381A501-2</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>1503</int>
-      </InfiniteDirections>
-      <FiniteDirections />
-      <Fasteners />
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a9</name>
-      <localLabels />
-      <localVariables />
-      <From>Torsion Device_9122016 - lever-3</From>
-      <To>Torsion Device_9122016 - bushing no flange .5-1</To>
+      <To>Torsion Device_9122016 - 1 1_4 shoulder screw  91259A714-2</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
@@ -31333,30 +31211,6 @@
       </InfiniteDirections>
       <FiniteDirections />
       <Fasteners>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>1072</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>7877.5320014093977</Diameter>
-          <Name>Torsion Device_9122016 - 1 1_4 shoulder screw  91259A714-2</Name>
-          <OverallLength>45908.330472251539</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener>
-            <int>8</int>
-            <int>10</int>
-            <int>13</int>
-            <int>15</int>
-            <int>18</int>
-            <int>19</int>
-          </PartsLockedByFastener>
-        </Fastener>
         <Fastener>
           <Time>0</Time>
           <TimeSD>0</TimeSD>
@@ -31373,10 +31227,11 @@
           <FastenerType>Bolt</FastenerType>
           <NumberOfThreads>0</NumberOfThreads>
           <PartsLockedByFastener>
-            <int>8</int>
-            <int>10</int>
-            <int>15</int>
+            <int>1</int>
+            <int>11</int>
+            <int>13</int>
             <int>18</int>
+            <int>21</int>
           </PartsLockedByFastener>
         </Fastener>
         <Fastener>
@@ -31395,22 +31250,23 @@
           <FastenerType>Bolt</FastenerType>
           <NumberOfThreads>0</NumberOfThreads>
           <PartsLockedByFastener>
-            <int>8</int>
-            <int>13</int>
-            <int>15</int>
-            <int>19</int>
+            <int>1</int>
+            <int>11</int>
+            <int>16</int>
+            <int>18</int>
+            <int>22</int>
           </PartsLockedByFastener>
         </Fastener>
       </Fasteners>
-      <Certainty>1</Certainty>
+      <Certainty>0.76448934192980278</Certainty>
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a10</name>
+      <name>a3</name>
       <localLabels />
       <localVariables />
-      <From>Torsion Device_9122016 - bushing no flange .5-2</From>
-      <To>Torsion Device_9122016 - Bottom mechanism-2 bracket-1</To>
+      <From>Torsion Device_9122016 - bushing no flange .5-1</From>
+      <To>Torsion Device_9122016 - 1 1_4 shoulder screw  91259A714-2</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
@@ -31423,26 +31279,185 @@
           <Time>0</Time>
           <TimeSD>0</TimeSD>
           <InstallDistance>0</InstallDistance>
-          <RemovalDirection>1072</RemovalDirection>
+          <RemovalDirection>0</RemovalDirection>
           <Certainty>0</Certainty>
           <Tool>HexWrench</Tool>
           <ToolSize>0</ToolSize>
-          <Diameter>7877.6357133248621</Diameter>
-          <Name>Torsion Device_9122016 - 1 1_4 shoulder screw  91259A714-4</Name>
-          <OverallLength>45908.33009621963</OverallLength>
+          <Diameter>9176.86164033296</Diameter>
+          <Name>Torsion Device_9122016 - washer .5-6</Name>
+          <OverallLength>1573.1521432484878</OverallLength>
           <EngagedLength>0</EngagedLength>
           <AccessCylinderRadius>0</AccessCylinderRadius>
           <FastenerType>Bolt</FastenerType>
           <NumberOfThreads>0</NumberOfThreads>
           <PartsLockedByFastener>
-            <int>6</int>
-            <int>9</int>
+            <int>1</int>
             <int>11</int>
-            <int>12</int>
+            <int>13</int>
             <int>18</int>
-            <int>19</int>
+            <int>21</int>
           </PartsLockedByFastener>
         </Fastener>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>0</RemovalDirection>
+          <Certainty>0</Certainty>
+          <Tool>HexWrench</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>9176.86164033293</Diameter>
+          <Name>Torsion Device_9122016 - washer .5-7</Name>
+          <OverallLength>1573.1521432665177</OverallLength>
+          <EngagedLength>0</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>1</int>
+            <int>11</int>
+            <int>16</int>
+            <int>18</int>
+            <int>22</int>
+          </PartsLockedByFastener>
+        </Fastener>
+      </Fasteners>
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a4</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - lever-3</From>
+      <To>Torsion Device_9122016 - 1 d 6 L pin  93772A142-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1463</int>
+        <int>4578</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a5</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - 1 1_2 coupling  61005K551-2</From>
+      <To>Torsion Device_9122016 - 1 d 6 L pin  93772A142-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1463</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>4578</int>
+      </FiniteDirections>
+      <Fasteners>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>0</RemovalDirection>
+          <Certainty>0</Certainty>
+          <Tool>HexWrench</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>18353.589005707658</Diameter>
+          <Name>Torsion Device_9122016 - 1 in. washer 92150A171-6</Name>
+          <OverallLength>1573.1521432432637</OverallLength>
+          <EngagedLength>0</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>0</int>
+            <int>33</int>
+            <int>38</int>
+          </PartsLockedByFastener>
+        </Fastener>
+      </Fasteners>
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a6</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - pull-9</From>
+      <To>Torsion Device_9122016 - 1 1_4 shoulder screw  91259A714-2</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1463</int>
+        <int>4578</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>0</RemovalDirection>
+          <Certainty>0</Certainty>
+          <Tool>HexWrench</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>9176.8616403325141</Diameter>
+          <Name>Torsion Device_9122016 - washer .5-2</Name>
+          <OverallLength>1573.1521432515</OverallLength>
+          <EngagedLength>0</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>1</int>
+            <int>16</int>
+            <int>22</int>
+          </PartsLockedByFastener>
+        </Fastener>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>0</RemovalDirection>
+          <Certainty>0</Certainty>
+          <Tool>HexWrench</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>9176.86164033293</Diameter>
+          <Name>Torsion Device_9122016 - washer .5-7</Name>
+          <OverallLength>1573.1521432665177</OverallLength>
+          <EngagedLength>0</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>1</int>
+            <int>11</int>
+            <int>16</int>
+            <int>18</int>
+            <int>22</int>
+          </PartsLockedByFastener>
+        </Fastener>
+      </Fasteners>
+      <Certainty>0.2491488091280758</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a7</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - bushing no flange .5-2</From>
+      <To>Torsion Device_9122016 - 1 1_4 shoulder screw  91259A714-4</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1463</int>
+        <int>4578</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners>
         <Fastener>
           <Time>0</Time>
           <TimeSD>0</TimeSD>
@@ -31459,10 +31474,11 @@
           <FastenerType>Bolt</FastenerType>
           <NumberOfThreads>0</NumberOfThreads>
           <PartsLockedByFastener>
-            <int>6</int>
+            <int>2</int>
             <int>9</int>
-            <int>11</int>
-            <int>19</int>
+            <int>12</int>
+            <int>14</int>
+            <int>22</int>
           </PartsLockedByFastener>
         </Fastener>
         <Fastener>
@@ -31481,10 +31497,11 @@
           <FastenerType>Bolt</FastenerType>
           <NumberOfThreads>0</NumberOfThreads>
           <PartsLockedByFastener>
-            <int>6</int>
+            <int>2</int>
             <int>9</int>
             <int>12</int>
-            <int>18</int>
+            <int>15</int>
+            <int>21</int>
           </PartsLockedByFastener>
         </Fastener>
       </Fasteners>
@@ -31492,11 +31509,11 @@
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a11</name>
+      <name>a8</name>
       <localLabels />
       <localVariables />
-      <From>Torsion Device_9122016 - pull-9</From>
-      <To>Torsion Device_9122016 - bushing no flange-2</To>
+      <From>Torsion Device_9122016 - bushing no flange-4</From>
+      <To>Torsion Device_9122016 - 1 1_4 shoulder screw  91259A714-2</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
@@ -31509,24 +31526,21 @@
           <Time>0</Time>
           <TimeSD>0</TimeSD>
           <InstallDistance>0</InstallDistance>
-          <RemovalDirection>1072</RemovalDirection>
+          <RemovalDirection>0</RemovalDirection>
           <Certainty>0</Certainty>
           <Tool>HexWrench</Tool>
           <ToolSize>0</ToolSize>
-          <Diameter>7877.6357133248621</Diameter>
-          <Name>Torsion Device_9122016 - 1 1_4 shoulder screw  91259A714-4</Name>
-          <OverallLength>45908.33009621963</OverallLength>
+          <Diameter>9176.8616403325141</Diameter>
+          <Name>Torsion Device_9122016 - washer .5-2</Name>
+          <OverallLength>1573.1521432515</OverallLength>
           <EngagedLength>0</EngagedLength>
           <AccessCylinderRadius>0</AccessCylinderRadius>
           <FastenerType>Bolt</FastenerType>
           <NumberOfThreads>0</NumberOfThreads>
           <PartsLockedByFastener>
-            <int>6</int>
-            <int>9</int>
-            <int>11</int>
-            <int>12</int>
-            <int>18</int>
-            <int>19</int>
+            <int>1</int>
+            <int>16</int>
+            <int>22</int>
           </PartsLockedByFastener>
         </Fastener>
         <Fastener>
@@ -31537,35 +31551,19 @@
           <Certainty>0</Certainty>
           <Tool>HexWrench</Tool>
           <ToolSize>0</ToolSize>
-          <Diameter>9176.7426423425768</Diameter>
-          <Name>Torsion Device_9122016 - washer .5-1</Name>
-          <OverallLength>1573.1521432441514</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener />
-        </Fastener>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>0</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>9176.7388818233885</Diameter>
-          <Name>Torsion Device_9122016 - washer .5-3</Name>
-          <OverallLength>1573.1521432559821</OverallLength>
+          <Diameter>9176.86164033293</Diameter>
+          <Name>Torsion Device_9122016 - washer .5-7</Name>
+          <OverallLength>1573.1521432665177</OverallLength>
           <EngagedLength>0</EngagedLength>
           <AccessCylinderRadius>0</AccessCylinderRadius>
           <FastenerType>Bolt</FastenerType>
           <NumberOfThreads>0</NumberOfThreads>
           <PartsLockedByFastener>
-            <int>6</int>
-            <int>9</int>
+            <int>1</int>
             <int>11</int>
-            <int>19</int>
+            <int>16</int>
+            <int>18</int>
+            <int>22</int>
           </PartsLockedByFastener>
         </Fastener>
       </Fasteners>
@@ -31573,11 +31571,11 @@
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a12</name>
+      <name>a9</name>
       <localLabels />
       <localVariables />
       <From>Torsion Device_9122016 - pull-8</From>
-      <To>Torsion Device_9122016 - bushing no flange-1</To>
+      <To>Torsion Device_9122016 - 1 1_4 shoulder screw  91259A714-4</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
@@ -31590,26 +31588,43 @@
           <Time>0</Time>
           <TimeSD>0</TimeSD>
           <InstallDistance>0</InstallDistance>
-          <RemovalDirection>1072</RemovalDirection>
+          <RemovalDirection>0</RemovalDirection>
           <Certainty>0</Certainty>
           <Tool>HexWrench</Tool>
           <ToolSize>0</ToolSize>
-          <Diameter>7877.5320014093977</Diameter>
-          <Name>Torsion Device_9122016 - 1 1_4 shoulder screw  91259A714-2</Name>
-          <OverallLength>45908.330472251539</OverallLength>
+          <Diameter>9176.7426423426587</Diameter>
+          <Name>Torsion Device_9122016 - washer .5-4</Name>
+          <OverallLength>1573.152143240266</OverallLength>
           <EngagedLength>0</EngagedLength>
           <AccessCylinderRadius>0</AccessCylinderRadius>
           <FastenerType>Bolt</FastenerType>
           <NumberOfThreads>0</NumberOfThreads>
           <PartsLockedByFastener>
-            <int>8</int>
-            <int>10</int>
-            <int>13</int>
+            <int>2</int>
+            <int>9</int>
+            <int>12</int>
             <int>15</int>
-            <int>18</int>
-            <int>19</int>
+            <int>21</int>
           </PartsLockedByFastener>
         </Fastener>
+      </Fasteners>
+      <Certainty>0.24487919213494047</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a10</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - pull-8</From>
+      <To>Torsion Device_9122016 - 1 1_4 shoulder screw  91259A714-2</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1463</int>
+        <int>4578</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners>
         <Fastener>
           <Time>0</Time>
           <TimeSD>0</TimeSD>
@@ -31626,10 +31641,95 @@
           <FastenerType>Bolt</FastenerType>
           <NumberOfThreads>0</NumberOfThreads>
           <PartsLockedByFastener>
-            <int>8</int>
-            <int>10</int>
-            <int>15</int>
+            <int>1</int>
+            <int>11</int>
+            <int>13</int>
             <int>18</int>
+            <int>21</int>
+          </PartsLockedByFastener>
+        </Fastener>
+      </Fasteners>
+      <Certainty>0.25888808874324065</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a11</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - bushing no flange-1</From>
+      <To>Torsion Device_9122016 - 1 1_4 shoulder screw  91259A714-2</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>4578</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>1463</int>
+      </FiniteDirections>
+      <Fasteners>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>0</RemovalDirection>
+          <Certainty>0</Certainty>
+          <Tool>HexWrench</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>9176.86164033296</Diameter>
+          <Name>Torsion Device_9122016 - washer .5-6</Name>
+          <OverallLength>1573.1521432484878</OverallLength>
+          <EngagedLength>0</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>1</int>
+            <int>11</int>
+            <int>13</int>
+            <int>18</int>
+            <int>21</int>
+          </PartsLockedByFastener>
+        </Fastener>
+      </Fasteners>
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a12</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - bushing no flange-3</From>
+      <To>Torsion Device_9122016 - 1 1_4 shoulder screw  91259A714-4</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>4578</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>1463</int>
+      </FiniteDirections>
+      <Fasteners>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>0</RemovalDirection>
+          <Certainty>0</Certainty>
+          <Tool>HexWrench</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>9176.7426423426587</Diameter>
+          <Name>Torsion Device_9122016 - washer .5-4</Name>
+          <OverallLength>1573.152143240266</OverallLength>
+          <EngagedLength>0</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>2</int>
+            <int>9</int>
+            <int>12</int>
+            <int>15</int>
+            <int>21</int>
           </PartsLockedByFastener>
         </Fastener>
       </Fasteners>
@@ -31683,48 +31783,15 @@
       <name>a14</name>
       <localLabels />
       <localVariables />
-      <From>Torsion Device_9122016 - Vertical plates-1</From>
-      <To>Torsion Device_9122016 - 3_16 1_8 Dowel pin  98381A501-2</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>4618</int>
-      </InfiniteDirections>
-      <FiniteDirections />
-      <Fasteners />
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a15</name>
-      <localLabels />
-      <localVariables />
-      <From>Torsion Device_9122016 - mounting ring-2</From>
-      <To>Torsion Device_9122016 - Bottom mechanism-2 bottom actual-1</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>4618</int>
-      </InfiniteDirections>
-      <FiniteDirections />
-      <Fasteners />
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a16</name>
-      <localLabels />
-      <localVariables />
-      <From>Torsion Device_9122016 - 1 1_2 coupling  61005K551-2</From>
-      <To>Torsion Device_9122016 - 1 d 6 L pin  93772A142-1</To>
+      <From>Torsion Device_9122016 - pull-9</From>
+      <To>Torsion Device_9122016 - 1 1_4 shoulder screw  91259A714-4</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
         <int>1463</int>
-      </InfiniteDirections>
-      <FiniteDirections>
         <int>4578</int>
-      </FiniteDirections>
+      </InfiniteDirections>
+      <FiniteDirections />
       <Fasteners>
         <Fastener>
           <Time>0</Time>
@@ -31734,20 +31801,132 @@
           <Certainty>0</Certainty>
           <Tool>HexWrench</Tool>
           <ToolSize>0</ToolSize>
-          <Diameter>18353.589005707658</Diameter>
-          <Name>Torsion Device_9122016 - 1 in. washer 92150A171-6</Name>
-          <OverallLength>1573.1521432432637</OverallLength>
+          <Diameter>9176.7426423425768</Diameter>
+          <Name>Torsion Device_9122016 - washer .5-1</Name>
+          <OverallLength>1573.1521432441514</OverallLength>
           <EngagedLength>0</EngagedLength>
           <AccessCylinderRadius>0</AccessCylinderRadius>
           <FastenerType>Bolt</FastenerType>
           <NumberOfThreads>0</NumberOfThreads>
           <PartsLockedByFastener>
-            <int>0</int>
-            <int>24</int>
-            <int>27</int>
+            <int>2</int>
+            <int>14</int>
+            <int>22</int>
+          </PartsLockedByFastener>
+        </Fastener>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>0</RemovalDirection>
+          <Certainty>0</Certainty>
+          <Tool>HexWrench</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>9176.7388818233885</Diameter>
+          <Name>Torsion Device_9122016 - washer .5-3</Name>
+          <OverallLength>1573.1521432559821</OverallLength>
+          <EngagedLength>0</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>2</int>
+            <int>9</int>
+            <int>12</int>
+            <int>14</int>
+            <int>22</int>
           </PartsLockedByFastener>
         </Fastener>
       </Fasteners>
+      <Certainty>0.24487919213493992</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a15</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - lever-3</From>
+      <To>Torsion Device_9122016 - bushing no flange .5-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1463</int>
+        <int>4578</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>0</RemovalDirection>
+          <Certainty>0</Certainty>
+          <Tool>HexWrench</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>9176.86164033296</Diameter>
+          <Name>Torsion Device_9122016 - washer .5-6</Name>
+          <OverallLength>1573.1521432484878</OverallLength>
+          <EngagedLength>0</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>1</int>
+            <int>11</int>
+            <int>13</int>
+            <int>18</int>
+            <int>21</int>
+          </PartsLockedByFastener>
+        </Fastener>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>0</RemovalDirection>
+          <Certainty>0</Certainty>
+          <Tool>HexWrench</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>9176.86164033293</Diameter>
+          <Name>Torsion Device_9122016 - washer .5-7</Name>
+          <OverallLength>1573.1521432665177</OverallLength>
+          <EngagedLength>0</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>1</int>
+            <int>11</int>
+            <int>16</int>
+            <int>18</int>
+            <int>22</int>
+          </PartsLockedByFastener>
+        </Fastener>
+      </Fasteners>
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a16</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - Bottom mechanism-2 bracket-1</From>
+      <To>Torsion Device_9122016 - Bottom mechanism-2 Bottom fixture-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>938</int>
+        <int>2080</int>
+        <int>2947</int>
+        <int>6230</int>
+        <int>3115</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>121</int>
+        <int>452</int>
+        <int>2583</int>
+      </FiniteDirections>
+      <Fasteners />
       <Certainty>1</Certainty>
       <ConnectionType>Loose</ConnectionType>
     </arc>
@@ -31756,12 +31935,12 @@
       <localLabels />
       <localVariables />
       <From>Torsion Device_9122016 - pull-8</From>
-      <To>Torsion Device_9122016 - bushing no flange-3</To>
+      <To>Torsion Device_9122016 - bushing no flange-1</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
-        <int>4578</int>
         <int>1463</int>
+        <int>4578</int>
       </InfiniteDirections>
       <FiniteDirections />
       <Fasteners>
@@ -31769,24 +31948,126 @@
           <Time>0</Time>
           <TimeSD>0</TimeSD>
           <InstallDistance>0</InstallDistance>
-          <RemovalDirection>1072</RemovalDirection>
+          <RemovalDirection>0</RemovalDirection>
           <Certainty>0</Certainty>
           <Tool>HexWrench</Tool>
           <ToolSize>0</ToolSize>
-          <Diameter>7877.6357133248621</Diameter>
-          <Name>Torsion Device_9122016 - 1 1_4 shoulder screw  91259A714-4</Name>
-          <OverallLength>45908.33009621963</OverallLength>
+          <Diameter>9176.86164033296</Diameter>
+          <Name>Torsion Device_9122016 - washer .5-6</Name>
+          <OverallLength>1573.1521432484878</OverallLength>
           <EngagedLength>0</EngagedLength>
           <AccessCylinderRadius>0</AccessCylinderRadius>
           <FastenerType>Bolt</FastenerType>
           <NumberOfThreads>0</NumberOfThreads>
           <PartsLockedByFastener>
-            <int>6</int>
-            <int>9</int>
+            <int>1</int>
             <int>11</int>
-            <int>12</int>
+            <int>13</int>
             <int>18</int>
-            <int>19</int>
+            <int>21</int>
+          </PartsLockedByFastener>
+        </Fastener>
+      </Fasteners>
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a18</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - pull-9</From>
+      <To>Torsion Device_9122016 - bushing no flange-2</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1463</int>
+        <int>4578</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>0</RemovalDirection>
+          <Certainty>0</Certainty>
+          <Tool>HexWrench</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>9176.7426423425768</Diameter>
+          <Name>Torsion Device_9122016 - washer .5-1</Name>
+          <OverallLength>1573.1521432441514</OverallLength>
+          <EngagedLength>0</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>2</int>
+            <int>14</int>
+            <int>22</int>
+          </PartsLockedByFastener>
+        </Fastener>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>0</RemovalDirection>
+          <Certainty>0</Certainty>
+          <Tool>HexWrench</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>9176.7388818233885</Diameter>
+          <Name>Torsion Device_9122016 - washer .5-3</Name>
+          <OverallLength>1573.1521432559821</OverallLength>
+          <EngagedLength>0</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>2</int>
+            <int>9</int>
+            <int>12</int>
+            <int>14</int>
+            <int>22</int>
+          </PartsLockedByFastener>
+        </Fastener>
+      </Fasteners>
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a19</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - bushing no flange .5-2</From>
+      <To>Torsion Device_9122016 - Bottom mechanism-2 bracket-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1463</int>
+        <int>4578</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>0</RemovalDirection>
+          <Certainty>0</Certainty>
+          <Tool>HexWrench</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>9176.7388818233885</Diameter>
+          <Name>Torsion Device_9122016 - washer .5-3</Name>
+          <OverallLength>1573.1521432559821</OverallLength>
+          <EngagedLength>0</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>2</int>
+            <int>9</int>
+            <int>12</int>
+            <int>14</int>
+            <int>22</int>
           </PartsLockedByFastener>
         </Fastener>
         <Fastener>
@@ -31805,10 +32086,11 @@
           <FastenerType>Bolt</FastenerType>
           <NumberOfThreads>0</NumberOfThreads>
           <PartsLockedByFastener>
-            <int>6</int>
+            <int>2</int>
             <int>9</int>
             <int>12</int>
-            <int>18</int>
+            <int>15</int>
+            <int>21</int>
           </PartsLockedByFastener>
         </Fastener>
       </Fasteners>
@@ -31816,7 +32098,110 @@
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a18</name>
+      <name>a20</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - bushing no flange-2</From>
+      <To>Torsion Device_9122016 - 1 1_4 shoulder screw  91259A714-4</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1463</int>
+        <int>4578</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>0</RemovalDirection>
+          <Certainty>0</Certainty>
+          <Tool>HexWrench</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>9176.7426423425768</Diameter>
+          <Name>Torsion Device_9122016 - washer .5-1</Name>
+          <OverallLength>1573.1521432441514</OverallLength>
+          <EngagedLength>0</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>2</int>
+            <int>14</int>
+            <int>22</int>
+          </PartsLockedByFastener>
+        </Fastener>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>0</RemovalDirection>
+          <Certainty>0</Certainty>
+          <Tool>HexWrench</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>9176.7388818233885</Diameter>
+          <Name>Torsion Device_9122016 - washer .5-3</Name>
+          <OverallLength>1573.1521432559821</OverallLength>
+          <EngagedLength>0</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>2</int>
+            <int>9</int>
+            <int>12</int>
+            <int>14</int>
+            <int>22</int>
+          </PartsLockedByFastener>
+        </Fastener>
+      </Fasteners>
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a21</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - pull-8</From>
+      <To>Torsion Device_9122016 - bushing no flange-3</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1463</int>
+        <int>4578</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>0</RemovalDirection>
+          <Certainty>0</Certainty>
+          <Tool>HexWrench</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>9176.7426423426587</Diameter>
+          <Name>Torsion Device_9122016 - washer .5-4</Name>
+          <OverallLength>1573.152143240266</OverallLength>
+          <EngagedLength>0</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>2</int>
+            <int>9</int>
+            <int>12</int>
+            <int>15</int>
+            <int>21</int>
+          </PartsLockedByFastener>
+        </Fastener>
+      </Fasteners>
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a22</name>
       <localLabels />
       <localVariables />
       <From>Torsion Device_9122016 - pull-9</From>
@@ -31833,30 +32218,6 @@
           <Time>0</Time>
           <TimeSD>0</TimeSD>
           <InstallDistance>0</InstallDistance>
-          <RemovalDirection>1072</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>7877.5320014093977</Diameter>
-          <Name>Torsion Device_9122016 - 1 1_4 shoulder screw  91259A714-2</Name>
-          <OverallLength>45908.330472251539</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener>
-            <int>8</int>
-            <int>10</int>
-            <int>13</int>
-            <int>15</int>
-            <int>18</int>
-            <int>19</int>
-          </PartsLockedByFastener>
-        </Fastener>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
           <RemovalDirection>0</RemovalDirection>
           <Certainty>0</Certainty>
           <Tool>HexWrench</Tool>
@@ -31868,7 +32229,11 @@
           <AccessCylinderRadius>0</AccessCylinderRadius>
           <FastenerType>Bolt</FastenerType>
           <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener />
+          <PartsLockedByFastener>
+            <int>1</int>
+            <int>16</int>
+            <int>22</int>
+          </PartsLockedByFastener>
         </Fastener>
         <Fastener>
           <Time>0</Time>
@@ -31886,10 +32251,11 @@
           <FastenerType>Bolt</FastenerType>
           <NumberOfThreads>0</NumberOfThreads>
           <PartsLockedByFastener>
-            <int>8</int>
-            <int>13</int>
-            <int>15</int>
-            <int>19</int>
+            <int>1</int>
+            <int>11</int>
+            <int>16</int>
+            <int>18</int>
+            <int>22</int>
           </PartsLockedByFastener>
         </Fastener>
       </Fasteners>
@@ -31897,99 +32263,7 @@
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a19</name>
-      <localLabels />
-      <localVariables />
-      <From>Torsion Device_9122016 - Bottom mechanism-2 Bottom fixture-1</From>
-      <To>Torsion Device_9122016 - Bottom mechanism-2 bottom actual-1</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>1503</int>
-      </InfiniteDirections>
-      <FiniteDirections />
-      <Fasteners />
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a20</name>
-      <localLabels />
-      <localVariables />
-      <From>Torsion Device_9122016 - main plate-1</From>
-      <To>Torsion Device_9122016 - Fixed Vertical plate-1</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>0</int>
-        <int>121</int>
-        <int>452</int>
-        <int>2080</int>
-        <int>938</int>
-        <int>2583</int>
-        <int>2947</int>
-        <int>6230</int>
-        <int>3115</int>
-      </InfiniteDirections>
-      <FiniteDirections />
-      <Fasteners>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>1084</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>5912.88376516776</Diameter>
-          <Name>Torsion Device_9122016 - Screw 3_8 1 3_8   91251A590-1</Name>
-          <OverallLength>36739.306220095488</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener />
-        </Fastener>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>1084</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>5912.8876923697508</Diameter>
-          <Name>Torsion Device_9122016 - Screw 3_8 1 3_8   91251A590-2</Name>
-          <OverallLength>36739.306262221624</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener />
-        </Fastener>
-      </Fasteners>
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a21</name>
-      <localLabels />
-      <localVariables />
-      <From>Torsion Device_9122016 - top mount-1</From>
-      <To>Torsion Device_9122016 - main plate-1</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>1503</int>
-        <int>4618</int>
-      </InfiniteDirections>
-      <FiniteDirections />
-      <Fasteners />
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a22</name>
+      <name>a23</name>
       <localLabels />
       <localVariables />
       <From>Torsion Device_9122016 - 1 1_2 coupling  61005K551-2</From>
@@ -32006,23 +32280,23 @@
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a23</name>
+      <name>a24</name>
       <localLabels />
       <localVariables />
-      <From>Torsion Device_9122016 - Vertical plates-1</From>
-      <To>Torsion Device_9122016 - main plate-1</To>
+      <From>Torsion Device_9122016 - main plate-1</From>
+      <To>Torsion Device_9122016 - Fixed Vertical plate-1</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
-        <int>3236</int>
-        <int>3550</int>
-        <int>5145</int>
-        <int>4005</int>
-        <int>5758</int>
-        <int>6086</int>
-        <int>6231</int>
-        <int>3115</int>
         <int>0</int>
+        <int>121</int>
+        <int>452</int>
+        <int>938</int>
+        <int>2080</int>
+        <int>2583</int>
+        <int>2947</int>
+        <int>6230</int>
+        <int>3115</int>
       </InfiniteDirections>
       <FiniteDirections />
       <Fasteners>
@@ -32034,26 +32308,9 @@
           <Certainty>0</Certainty>
           <Tool>HexWrench</Tool>
           <ToolSize>0</ToolSize>
-          <Diameter>5912.8591468472368</Diameter>
-          <Name>Torsion Device_9122016 - Screw 3_8 1 3_8   91251A590-6</Name>
-          <OverallLength>36739.30535482</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener />
-        </Fastener>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>1084</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>5912.855218368094</Diameter>
-          <Name>Torsion Device_9122016 - Screw 3_8 1 3_8   91251A590-3</Name>
-          <OverallLength>36739.305312693752</OverallLength>
+          <Diameter>1966.5457269453673</Diameter>
+          <Name>Torsion Device_9122016 - 3_16 1_8 Dowel pin  98381A501-1</Name>
+          <OverallLength>5243.84047754528</OverallLength>
           <EngagedLength>0</EngagedLength>
           <AccessCylinderRadius>0</AccessCylinderRadius>
           <FastenerType>Bolt</FastenerType>
@@ -32065,7 +32322,104 @@
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a24</name>
+      <name>a25</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - 1 in d bearing 6383K570-2</From>
+      <To>Torsion Device_9122016 - 1 d 6 L pin  93772A142-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1463</int>
+        <int>4578</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>0</RemovalDirection>
+          <Certainty>0</Certainty>
+          <Tool>HexWrench</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>18353.589005707658</Diameter>
+          <Name>Torsion Device_9122016 - 1 in. washer 92150A171-6</Name>
+          <OverallLength>1573.1521432432637</OverallLength>
+          <EngagedLength>0</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>0</int>
+            <int>33</int>
+            <int>38</int>
+          </PartsLockedByFastener>
+        </Fastener>
+      </Fasteners>
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a26</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - Vertical plates-1</From>
+      <To>Torsion Device_9122016 - main plate-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3236</int>
+        <int>3550</int>
+        <int>4005</int>
+        <int>5145</int>
+        <int>5758</int>
+        <int>6086</int>
+        <int>3115</int>
+        <int>6231</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>4199</RemovalDirection>
+          <Certainty>0</Certainty>
+          <Tool>HexWrench</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>1966.4585193514195</Diameter>
+          <Name>Torsion Device_9122016 - 3_16 1_8 Dowel pin  98381A501-2</Name>
+          <OverallLength>5243.8404774824157</OverallLength>
+          <EngagedLength>0</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener />
+        </Fastener>
+      </Fasteners>
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a27</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - Bottom mechanism-2 Bottom fixture-1</From>
+      <To>Torsion Device_9122016 - Bottom mechanism-2 bottom actual-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1503</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a28</name>
       <localLabels />
       <localVariables />
       <From>Torsion Device_9122016 - 1 1_2 coupling half  61005K551-2</From>
@@ -32082,7 +32436,7 @@
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a25</name>
+      <name>a29</name>
       <localLabels />
       <localVariables />
       <From>Torsion Device_9122016 - Vertical plates-3</From>
@@ -32095,10 +32449,10 @@
         <int>3550</int>
         <int>4005</int>
         <int>5145</int>
-        <int>6231</int>
         <int>5758</int>
         <int>6086</int>
         <int>3115</int>
+        <int>6231</int>
       </InfiniteDirections>
       <FiniteDirections />
       <Fasteners>
@@ -32110,26 +32464,9 @@
           <Certainty>0</Certainty>
           <Tool>HexWrench</Tool>
           <ToolSize>0</ToolSize>
-          <Diameter>5912.8581902561236</Diameter>
-          <Name>Torsion Device_9122016 - Screw 3_8 1 3_8   91251A590-4</Name>
-          <OverallLength>36739.305339989034</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener />
-        </Fastener>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>1084</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>5912.8542629458552</Diameter>
-          <Name>Torsion Device_9122016 - Screw 3_8 1 3_8   91251A590-5</Name>
-          <OverallLength>36739.3052978629</OverallLength>
+          <Diameter>1966.4578555077962</Diameter>
+          <Name>Torsion Device_9122016 - 3_16 1_8 Dowel pin  98381A501-3</Name>
+          <OverallLength>5243.8404774958035</OverallLength>
           <EngagedLength>0</EngagedLength>
           <AccessCylinderRadius>0</AccessCylinderRadius>
           <FastenerType>Bolt</FastenerType>
@@ -32141,7 +32478,318 @@
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a26</name>
+      <name>a30</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - mounting ring-2</From>
+      <To>Torsion Device_9122016 - Bottom mechanism-2 bottom actual-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>4618</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a31</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - 10 1 1_25  screw  90044A114-2</From>
+      <To>Torsion Device_9122016 - Fixed Vertical plate-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>116</int>
+        <int>121</int>
+        <int>340</int>
+        <int>452</int>
+        <int>443</int>
+        <int>591</int>
+        <int>762</int>
+        <int>938</int>
+        <int>956</int>
+        <int>926</int>
+        <int>1235</int>
+        <int>1307</int>
+        <int>1523</int>
+        <int>1820</int>
+        <int>1892</int>
+        <int>2080</int>
+        <int>2099</int>
+        <int>2068</int>
+        <int>2364</int>
+        <int>2427</int>
+        <int>2583</int>
+        <int>2573</int>
+        <int>2765</int>
+        <int>2947</int>
+        <int>2941</int>
+        <int>3236</int>
+        <int>3383</int>
+        <int>3477</int>
+        <int>3713</int>
+        <int>3716</int>
+        <int>4005</int>
+        <int>4331</int>
+        <int>4208</int>
+        <int>4412</int>
+        <int>4891</int>
+        <int>4922</int>
+        <int>5145</int>
+        <int>5226</int>
+        <int>5462</int>
+        <int>5557</int>
+        <int>5758</int>
+        <int>5800</int>
+        <int>6086</int>
+        <int>6230</int>
+        <int>1544</int>
+        <int>3115</int>
+        <int>6231</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a32</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - Screw 3_8 1 3_8   91251A590-4</From>
+      <To>Torsion Device_9122016 - Vertical plates-3</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>2080</int>
+        <int>2455</int>
+        <int>2585</int>
+        <int>2863</int>
+        <int>6230</int>
+        <int>3115</int>
+        <int>2910</int>
+        <int>3038</int>
+        <int>3061</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a33</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - 3_8 16 nut  94895A031-3</From>
+      <To>Torsion Device_9122016 - 3_8 16  nut thin  93839A031-2</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>116</int>
+        <int>121</int>
+        <int>340</int>
+        <int>452</int>
+        <int>443</int>
+        <int>591</int>
+        <int>762</int>
+        <int>938</int>
+        <int>956</int>
+        <int>926</int>
+        <int>1235</int>
+        <int>1307</int>
+        <int>1523</int>
+        <int>1820</int>
+        <int>1892</int>
+        <int>2080</int>
+        <int>2099</int>
+        <int>2068</int>
+        <int>2364</int>
+        <int>2427</int>
+        <int>2583</int>
+        <int>2573</int>
+        <int>2765</int>
+        <int>2941</int>
+        <int>3383</int>
+        <int>3713</int>
+        <int>3716</int>
+        <int>4005</int>
+        <int>4331</int>
+        <int>4208</int>
+        <int>4412</int>
+        <int>4891</int>
+        <int>4922</int>
+        <int>5226</int>
+        <int>5800</int>
+        <int>6086</int>
+        <int>6230</int>
+        <int>1544</int>
+        <int>3115</int>
+        <int>6231</int>
+        <int>5462</int>
+        <int>5557</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>2947</int>
+        <int>3236</int>
+        <int>3477</int>
+        <int>5145</int>
+        <int>5758</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a34</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - 3_8 16 nut  94895A031-2</From>
+      <To>Torsion Device_9122016 - 3_8 16  nut thin  93839A031-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>116</int>
+        <int>121</int>
+        <int>340</int>
+        <int>452</int>
+        <int>443</int>
+        <int>591</int>
+        <int>762</int>
+        <int>938</int>
+        <int>956</int>
+        <int>926</int>
+        <int>1235</int>
+        <int>1307</int>
+        <int>1523</int>
+        <int>1820</int>
+        <int>1892</int>
+        <int>2080</int>
+        <int>2099</int>
+        <int>2068</int>
+        <int>2364</int>
+        <int>2427</int>
+        <int>2583</int>
+        <int>2573</int>
+        <int>2765</int>
+        <int>2941</int>
+        <int>3383</int>
+        <int>3713</int>
+        <int>3716</int>
+        <int>4005</int>
+        <int>4331</int>
+        <int>4208</int>
+        <int>4412</int>
+        <int>4891</int>
+        <int>4922</int>
+        <int>5226</int>
+        <int>5462</int>
+        <int>5557</int>
+        <int>5800</int>
+        <int>6086</int>
+        <int>6230</int>
+        <int>1544</int>
+        <int>3115</int>
+        <int>6231</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>2947</int>
+        <int>3236</int>
+        <int>3477</int>
+        <int>5145</int>
+        <int>5758</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a35</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - Screw 3_8 1 3_8   91251A590-6</From>
+      <To>Torsion Device_9122016 - Vertical plates-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>116</int>
+        <int>121</int>
+        <int>1566</int>
+        <int>1241</int>
+        <int>124</int>
+        <int>330</int>
+        <int>1257</int>
+        <int>1801</int>
+        <int>1817</int>
+        <int>1835</int>
+        <int>1277</int>
+        <int>450</int>
+        <int>2068</int>
+        <int>926</int>
+        <int>725</int>
+        <int>1364</int>
+        <int>2036</int>
+        <int>1401</int>
+        <int>1820</int>
+        <int>2416</int>
+        <int>2804</int>
+        <int>2573</int>
+        <int>1465</int>
+        <int>2080</int>
+        <int>2455</int>
+        <int>2168</int>
+        <int>2637</int>
+        <int>2941</int>
+        <int>1032</int>
+        <int>2686</int>
+        <int>2863</int>
+        <int>2233</int>
+        <int>2332</int>
+        <int>3115</int>
+        <int>2777</int>
+        <int>4659</int>
+        <int>6230</int>
+        <int>2339</int>
+        <int>1544</int>
+        <int>3016</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>765</int>
+        <int>340</int>
+        <int>780</int>
+        <int>798</int>
+        <int>336</int>
+        <int>443</int>
+        <int>762</int>
+        <int>1017</int>
+        <int>477</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a36</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - 3_8 16  nut thin  93839A031-1</From>
+      <To>Torsion Device_9122016 - 1 1_4 shoulder screw  91259A714-2</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections />
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a37</name>
       <localLabels />
       <localVariables />
       <From>Torsion Device_9122016 - 1 in d bearing 6383K570-1</From>
@@ -32176,111 +32824,31 @@
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a27</name>
+      <name>a38</name>
       <localLabels />
       <localVariables />
-      <From>Torsion Device_9122016 - 1 1_2 coupling half  61005K551-2</From>
-      <To>Torsion Device_9122016 - Fixed Vertical plate-1</To>
+      <From>Torsion Device_9122016 - 3_8 16 nut  94895A031-3</From>
+      <To>Torsion Device_9122016 - 1 1_4 shoulder screw  91259A714-4</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
-        <int>2236</int>
-        <int>0</int>
-        <int>705</int>
-        <int>121</int>
-        <int>3078</int>
-        <int>2523</int>
-        <int>1346</int>
-        <int>4829</int>
-        <int>3927</int>
-        <int>731</int>
-        <int>2611</int>
-        <int>3140</int>
-        <int>125</int>
-        <int>1672</int>
-        <int>1911</int>
-        <int>925</int>
-        <int>5061</int>
-        <int>349</int>
-        <int>3347</int>
-        <int>2854</int>
-        <int>442</int>
-        <int>1931</int>
-        <int>5145</int>
-        <int>938</int>
-        <int>2914</int>
-        <int>1115</int>
-        <int>5313</int>
-        <int>4221</int>
-        <int>1300</int>
-        <int>5541</int>
-        <int>4451</int>
-        <int>5758</int>
-        <int>4662</int>
-        <int>5588</int>
-        <int>5931</int>
-        <int>6230</int>
-        <int>3115</int>
-        <int>6231</int>
-        <int>4659</int>
-        <int>2231</int>
-        <int>4092</int>
-        <int>3599</int>
-        <int>3686</int>
+        <int>4578</int>
       </InfiniteDirections>
       <FiniteDirections>
-        <int>2834</int>
-        <int>2080</int>
-        <int>452</int>
-        <int>4005</int>
-        <int>3380</int>
+        <int>1463</int>
       </FiniteDirections>
       <Fasteners>
         <Fastener>
           <Time>0</Time>
           <TimeSD>0</TimeSD>
           <InstallDistance>0</InstallDistance>
-          <RemovalDirection>1072</RemovalDirection>
+          <RemovalDirection>5719</RemovalDirection>
           <Certainty>0</Certainty>
           <Tool>HexWrench</Tool>
           <ToolSize>0</ToolSize>
-          <Diameter>3275.2772882056029</Diameter>
-          <Name>Torsion Device_9122016 - 10 1 1_25  screw  90044A114-1</Name>
-          <OverallLength>30212.276718801179</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener />
-        </Fastener>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>1072</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>3275.2774870532867</Diameter>
-          <Name>Torsion Device_9122016 - 10 1 1_25  screw  90044A114-2</Name>
-          <OverallLength>30212.277178090906</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener />
-        </Fastener>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>1072</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>3275.2772885518411</Diameter>
-          <Name>Torsion Device_9122016 - 10 1 1_25  screw  90044A114-3</Name>
-          <OverallLength>30212.276702368123</OverallLength>
+          <Diameter>6554.8199630036961</Diameter>
+          <Name>Torsion Device_9122016 - washer 3_8 NAS-1515-H6-1</Name>
+          <OverallLength>1531.201419425357</OverallLength>
           <EngagedLength>0</EngagedLength>
           <AccessCylinderRadius>0</AccessCylinderRadius>
           <FastenerType>Bolt</FastenerType>
@@ -32292,11 +32860,114 @@
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a28</name>
+      <name>a39</name>
       <localLabels />
       <localVariables />
-      <From>Torsion Device_9122016 - 1 in d bearing 6383K570-2</From>
-      <To>Torsion Device_9122016 - 1 d 6 L pin  93772A142-1</To>
+      <From>Torsion Device_9122016 - Screw 3_8 1 3_8   91251A590-1</From>
+      <To>Torsion Device_9122016 - main plate-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1503</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a40</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - Screw 3_8 1 3_8   91251A590-3</From>
+      <To>Torsion Device_9122016 - Vertical plates-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>118</int>
+        <int>121</int>
+        <int>450</int>
+        <int>330</int>
+        <int>723</int>
+        <int>6230</int>
+        <int>1241</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a41</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - 10 1 1_25  screw  90044A114-1</From>
+      <To>Torsion Device_9122016 - Fixed Vertical plate-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>116</int>
+        <int>121</int>
+        <int>340</int>
+        <int>452</int>
+        <int>443</int>
+        <int>591</int>
+        <int>762</int>
+        <int>1523</int>
+        <int>1307</int>
+        <int>938</int>
+        <int>1820</int>
+        <int>956</int>
+        <int>926</int>
+        <int>1235</int>
+        <int>2068</int>
+        <int>1892</int>
+        <int>2080</int>
+        <int>2099</int>
+        <int>3716</int>
+        <int>3236</int>
+        <int>2947</int>
+        <int>2941</int>
+        <int>4412</int>
+        <int>4891</int>
+        <int>4005</int>
+        <int>4922</int>
+        <int>2364</int>
+        <int>5145</int>
+        <int>5226</int>
+        <int>2427</int>
+        <int>4331</int>
+        <int>4208</int>
+        <int>2583</int>
+        <int>2573</int>
+        <int>5462</int>
+        <int>2765</int>
+        <int>3383</int>
+        <int>5557</int>
+        <int>3713</int>
+        <int>5800</int>
+        <int>5758</int>
+        <int>6086</int>
+        <int>6230</int>
+        <int>1544</int>
+        <int>3115</int>
+        <int>6231</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>3477</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a42</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - Bottom mechanism-2 bracket-1</From>
+      <To>Torsion Device_9122016 - 1 1_4 shoulder screw  91259A714-4</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
@@ -32313,25 +32984,294 @@
           <Certainty>0</Certainty>
           <Tool>HexWrench</Tool>
           <ToolSize>0</ToolSize>
-          <Diameter>18353.589005707658</Diameter>
-          <Name>Torsion Device_9122016 - 1 in. washer 92150A171-6</Name>
-          <OverallLength>1573.1521432432637</OverallLength>
+          <Diameter>9176.7388818233885</Diameter>
+          <Name>Torsion Device_9122016 - washer .5-3</Name>
+          <OverallLength>1573.1521432559821</OverallLength>
           <EngagedLength>0</EngagedLength>
           <AccessCylinderRadius>0</AccessCylinderRadius>
           <FastenerType>Bolt</FastenerType>
           <NumberOfThreads>0</NumberOfThreads>
           <PartsLockedByFastener>
-            <int>0</int>
-            <int>24</int>
-            <int>27</int>
+            <int>2</int>
+            <int>9</int>
+            <int>12</int>
+            <int>14</int>
+            <int>22</int>
           </PartsLockedByFastener>
+        </Fastener>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>0</RemovalDirection>
+          <Certainty>0</Certainty>
+          <Tool>HexWrench</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>9176.7426423426587</Diameter>
+          <Name>Torsion Device_9122016 - washer .5-4</Name>
+          <OverallLength>1573.152143240266</OverallLength>
+          <EngagedLength>0</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener>
+            <int>2</int>
+            <int>9</int>
+            <int>12</int>
+            <int>15</int>
+            <int>21</int>
+          </PartsLockedByFastener>
+        </Fastener>
+      </Fasteners>
+      <Certainty>0.76161526153732129</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a43</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - 1 in d bearing 6383K570-2</From>
+      <To>Torsion Device_9122016 - Vertical plates-3</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1463</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a44</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - 1 1_2 coupling half  61005K551-2</From>
+      <To>Torsion Device_9122016 - 10 1 1_25  screw  90044A114-2</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>4578</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a45</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - Screw 3_8 1 3_8   91251A590-6</From>
+      <To>Torsion Device_9122016 - main plate-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1503</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a46</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - 1 1_2 coupling half  61005K551-2</From>
+      <To>Torsion Device_9122016 - 10 1 1_25  screw  90044A114-3</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>4578</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a47</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - 3_8 16 nut  94895A031-2</From>
+      <To>Torsion Device_9122016 - 1 1_4 shoulder screw  91259A714-2</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections />
+      <FiniteDirections />
+      <Fasteners>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>0</RemovalDirection>
+          <Certainty>0</Certainty>
+          <Tool>HexWrench</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>6554.9232880126847</Diameter>
+          <Name>Torsion Device_9122016 - washer 3_8 NAS-1515-H6-2</Name>
+          <OverallLength>1531.2014194320582</OverallLength>
+          <EngagedLength>0</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener />
         </Fastener>
       </Fasteners>
       <Certainty>1</Certainty>
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a29</name>
+      <name>a48</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - Screw 3_8 1 3_8   91251A590-1</From>
+      <To>Torsion Device_9122016 - Fixed Vertical plate-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>116</int>
+        <int>340</int>
+        <int>121</int>
+        <int>450</int>
+        <int>124</int>
+        <int>330</int>
+        <int>1566</int>
+        <int>765</int>
+        <int>477</int>
+        <int>336</int>
+        <int>443</int>
+        <int>780</int>
+        <int>926</int>
+        <int>725</int>
+        <int>762</int>
+        <int>1257</int>
+        <int>1017</int>
+        <int>1277</int>
+        <int>1032</int>
+        <int>798</int>
+        <int>1364</int>
+        <int>1241</int>
+        <int>1835</int>
+        <int>2068</int>
+        <int>1801</int>
+        <int>1401</int>
+        <int>1817</int>
+        <int>2080</int>
+        <int>2804</int>
+        <int>2637</int>
+        <int>1820</int>
+        <int>3115</int>
+        <int>1465</int>
+        <int>4659</int>
+        <int>2941</int>
+        <int>2455</int>
+        <int>2332</int>
+        <int>2863</int>
+        <int>3016</int>
+        <int>6230</int>
+        <int>1544</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>2036</int>
+        <int>2573</int>
+        <int>2416</int>
+        <int>2233</int>
+        <int>2777</int>
+        <int>2686</int>
+        <int>2168</int>
+        <int>2339</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a49</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - Screw 3_8 1 3_8   91251A590-5</From>
+      <To>Torsion Device_9122016 - Vertical plates-3</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>765</int>
+        <int>116</int>
+        <int>121</int>
+        <int>1566</int>
+        <int>340</int>
+        <int>124</int>
+        <int>330</int>
+        <int>450</int>
+        <int>336</int>
+        <int>443</int>
+        <int>477</int>
+        <int>1801</int>
+        <int>1817</int>
+        <int>926</int>
+        <int>780</int>
+        <int>725</int>
+        <int>762</int>
+        <int>1017</int>
+        <int>1835</int>
+        <int>798</int>
+        <int>1257</int>
+        <int>2068</int>
+        <int>2080</int>
+        <int>1277</int>
+        <int>1241</int>
+        <int>1032</int>
+        <int>1364</int>
+        <int>1820</int>
+        <int>2637</int>
+        <int>1401</int>
+        <int>1465</int>
+        <int>2804</int>
+        <int>4659</int>
+        <int>3115</int>
+        <int>2455</int>
+        <int>2332</int>
+        <int>2941</int>
+        <int>2863</int>
+        <int>3016</int>
+        <int>6230</int>
+        <int>1544</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>2036</int>
+        <int>2416</int>
+        <int>2233</int>
+        <int>2573</int>
+        <int>2168</int>
+        <int>2686</int>
+        <int>2777</int>
+        <int>2339</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a50</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - Screw 3_8 1 3_8   91251A590-2</From>
+      <To>Torsion Device_9122016 - main plate-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1503</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a51</name>
       <localLabels />
       <localVariables />
       <From>Torsion Device_9122016 - 1 in d bearing 6383K570-1</From>
@@ -32347,15 +33287,240 @@
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a30</name>
+      <name>a52</name>
       <localLabels />
       <localVariables />
-      <From>Torsion Device_9122016 - 1 in d bearing 6383K570-2</From>
-      <To>Torsion Device_9122016 - Vertical plates-3</To>
+      <From>Torsion Device_9122016 - 10 1 1_25  screw  90044A114-3</From>
+      <To>Torsion Device_9122016 - Fixed Vertical plate-1</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
-        <int>1463</int>
+        <int>2068</int>
+        <int>0</int>
+        <int>1307</int>
+        <int>116</int>
+        <int>1523</int>
+        <int>2364</int>
+        <int>1820</int>
+        <int>2427</int>
+        <int>121</int>
+        <int>1892</int>
+        <int>340</int>
+        <int>452</int>
+        <int>2947</int>
+        <int>443</int>
+        <int>2080</int>
+        <int>2099</int>
+        <int>591</int>
+        <int>2941</int>
+        <int>762</int>
+        <int>3716</int>
+        <int>2583</int>
+        <int>2573</int>
+        <int>3383</int>
+        <int>4005</int>
+        <int>2765</int>
+        <int>4922</int>
+        <int>3477</int>
+        <int>3236</int>
+        <int>938</int>
+        <int>5145</int>
+        <int>956</int>
+        <int>926</int>
+        <int>5226</int>
+        <int>6231</int>
+        <int>6086</int>
+        <int>3713</int>
+        <int>1235</int>
+        <int>4331</int>
+        <int>5462</int>
+        <int>6230</int>
+        <int>4208</int>
+        <int>5557</int>
+        <int>1544</int>
+        <int>5758</int>
+        <int>4412</int>
+        <int>3115</int>
+        <int>4891</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>5800</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a53</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - Screw 3_8 1 3_8   91251A590-2</From>
+      <To>Torsion Device_9122016 - Fixed Vertical plate-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1449</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a54</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - .25 28 1.25  SCREW  91251A444-1</From>
+      <To>Torsion Device_9122016 - lever-3</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections />
+      <FiniteDirections>
+        <int>2921</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a55</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - top mount-1</From>
+      <To>Torsion Device_9122016 - main plate-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1503</int>
+        <int>4618</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a56</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - Screw 3_8 1 3_8   91251A590-3</From>
+      <To>Torsion Device_9122016 - main plate-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1503</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a57</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - 1 1_2 coupling half  61005K551-2</From>
+      <To>Torsion Device_9122016 - 10 1 1_25  screw  90044A114-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>4578</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a58</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - 1 1_2 coupling half  61005K551-2</From>
+      <To>Torsion Device_9122016 - Fixed Vertical plate-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>2332</int>
+        <int>1241</int>
+        <int>3078</int>
+        <int>2585</int>
+        <int>0</int>
+        <int>705</int>
+        <int>121</int>
+        <int>1672</int>
+        <int>3140</int>
+        <int>3347</int>
+        <int>124</int>
+        <int>2611</int>
+        <int>3927</int>
+        <int>2921</int>
+        <int>731</int>
+        <int>3477</int>
+        <int>349</int>
+        <int>780</int>
+        <int>4829</int>
+        <int>336</int>
+        <int>4092</int>
+        <int>1911</int>
+        <int>2910</int>
+        <int>938</int>
+        <int>5061</int>
+        <int>3599</int>
+        <int>5145</int>
+        <int>2914</int>
+        <int>4221</int>
+        <int>1115</int>
+        <int>1801</int>
+        <int>5313</int>
+        <int>3686</int>
+        <int>6231</int>
+        <int>4451</int>
+        <int>1300</int>
+        <int>4659</int>
+        <int>5541</int>
+        <int>4662</int>
+        <int>5758</int>
+        <int>5931</int>
+        <int>2231</int>
+        <int>5588</int>
+        <int>6230</int>
+        <int>3115</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>4005</int>
+        <int>452</int>
+        <int>2080</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a59</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - Screw 3_8 1 3_8   91251A590-4</From>
+      <To>Torsion Device_9122016 - main plate-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1503</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a60</name>
+      <localLabels />
+      <localVariables />
+      <From>Torsion Device_9122016 - Screw 3_8 1 3_8   91251A590-5</From>
+      <To>Torsion Device_9122016 - main plate-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1503</int>
       </InfiniteDirections>
       <FiniteDirections />
       <Fasteners />
