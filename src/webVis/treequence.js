@@ -122,7 +122,7 @@ function getMovement(theTree, myX, myY, myZ, myTime){
 		var theDir;
 		var theDist;
 		var Fst = [];
-		console.log(fasteners);
+		//console.log(fasteners);
 		if(fasteners.length >= 1){
 			fasteners = $(fasteners[0]).children("Fasteners");
 			if(fasteners.length >= 1){
@@ -909,4 +909,31 @@ function getChildrenByTag(theNode,tag){
 	}
 	return result;
 }
+
+
+
+
+
+function bumpTreeTimes(theTree, theBump){
+	
+	if( theTree === null ){
+		return;
+	}
+	else{
+		theTree.Time = theTree.Time + theBump;
+		bumpTreeTimes(theTree.Ref, theBump);
+		bumpTreeTimes(theTree.Mov, theBump);
+		var pos = 0;
+		var lim = theTree.Fst.length;
+		while(pos<lim){
+			bumpTreeTimes(theTree.Fst[pos], theBump);
+			pos++;
+		}
+	}	
+	
+}
+
+
+
+
 

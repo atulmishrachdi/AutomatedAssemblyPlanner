@@ -109,7 +109,7 @@ var theTime=0;
 var theTreequence=null;
 
 
-
+var timeAdjustment = 0;
 
 
 // Holds the state of button press inputs to smooth out control response
@@ -681,7 +681,7 @@ var render = function () {
 	document.getElementById("theTime").innerHTML=("TIME: "+ theTime.toFixed(10)).toString();
 	
 	// Update the installation trace lines
-	updateLines(movementTree,null,theTime,false);
+	updateLines(movementTree,null,theTime-timeAdjustment,false);
 	
 	updateAxisLines();
 	
@@ -905,18 +905,19 @@ function renderParts(){
 	// Cuts off the common first characters of all the part names in the tree
 	cutOffNames(moveTree,similarityCutoff(getNameList(moveTree)));
 	//console.log(moveTree);
-	printAllNames(parts,moveTree);
+	//printAllNames(parts,moveTree);
 	
 	// Makes a series of keyframes for each part for evaluation in the animation
 	var theFrameLists=makeKeyFrames(moveTree,[],[]);
-	addCurveKeyFrames(theFrameLists, new THREE.Vector3 ( 300,1000,100 ) );
+	timeAdjustment = addCurveKeyFrames( theFrameLists, new THREE.Vector3 ( 1000,1000,1000 ) );
+	//bumpTreeTimes(moveTree,10*timeAdjustment);
 	//console.log(theFrameLists);
 	//console.log(parts);
 	
 	// Links each key frame list object to the appropriate part object
 	partFrames= bindPartsToKeyFrames(theFrameLists,parts);
-	console.log(partFrames.length.toString());
-	console.log(partFrames.length.toString());
+	//console.log(partFrames.length.toString());
+	//console.log(partFrames.length.toString());
 	//console.log(partFrames);
 	//showFrames(theFrameLists);
 	
@@ -932,7 +933,7 @@ function renderParts(){
 	// Mirrors the time measurements at each keyfram to turn the dissassembly into
 	// an assembly animation
 	flipTreeTime(movementTree,getLongestTime(movementTree));
-	console.log(partFrames.length.toString());
+	//console.log(partFrames.length.toString());
 	addDisplacement(movementTree, partFrames, 0);
 	
 	// Populates the treequence graphic
@@ -945,6 +946,8 @@ function renderParts(){
 	initAxisLines();
 	
 	alignAssemblyCenter();
+	
+	addGrid(50000,80);
 	
 	render();
 

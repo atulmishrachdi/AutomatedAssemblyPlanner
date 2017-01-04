@@ -851,7 +851,7 @@ function addLines(movTree,parentNode,theScene,isMov){
 			else{
 				addLines(movTree.Fst[pos],movTree,theScene,false);
 			}
-			console.log(movTree.Fst[pos]);
+			//console.log(movTree.Fst[pos]);
 			pos++;
 		}
 		
@@ -895,7 +895,7 @@ function addDisplacement(movTree, partFrames, it){
 			var lim = movTree.Fst.length;
 			while(pos<lim){
 				mov = addDisplacement(movTree.Fst[pos], partFrames, mov);
-				console.log(movTree.Fst[pos]);
+				//console.log(movTree.Fst[pos]);
 				pos++;
 			}
 			it=mov;
@@ -1104,30 +1104,52 @@ function interp (pointList, T){
 }
 
 
+
+function vecDesc(theVec){
+	
+	return "X: "+theVec.x+" Y: "+theVec.y+" Z: "+theVec.z;
+	
+}
+
 function addArcSubDiv (target, center, startDisp, endDisp, level){
 	
 	var midVec = new THREE.Vector3(0,0,0);
-	midVec.add(startDisp);
-	midVec.add(endDisp);
-	midVec.normalize();
-	midVec.multiplyScalar((startDisp.length()+endDisp.length())/2);
+	var midDisp = new THREE.Vector3(0,0,0);
+	var startVec = new THREE.Vector3(0,0,0);
+	var endVec = new THREE.Vector3(0,0,0);
+	midDisp.add(startDisp);
+	midDisp.add(endDisp);
+	midDisp.normalize();
+	midDisp.multiplyScalar((startDisp.length()+endDisp.length())/2);
+	midVec.add(midDisp);
+	midVec.add(center);
+	startVec.add(startDisp);
+	startVec.add(center);
+	endVec.add(endDisp);
+	endVec.add(center);
+	
+	//console.log("HELPER: Start: "+vecDesc(startVec)+" middle: "+vecDesc(midVec)+" End: "+vecDesc(endVec));
+	
 	//console.log((startDisp.length()+endDisp.length())/2);
 	
 	if(level <= 0){
-		midVec.add(center);
 		target.push(midVec);
+		target.push(endVec);
 	}
 	else{
-		
-		addArcSubDiv(target,center,midVec,endDisp, level-1);
-		addArcSubDiv(target,center,startDisp,midVec, level-1);
-		delete midVec;
+		addArcSubDiv(target,center,startDisp,midDisp, level-1);
+		addArcSubDiv(target,center,midDisp,endDisp, level-1);
 	}
 	
 }
 
 
-function makeArcPointList(startPoint, center, endPoint){
+
+
+
+
+
+function makeArcPointList(startPoint, center, endPoint, resolution){
 	
 	var pos = 0;
 	var lim = 5;
@@ -1139,13 +1161,15 @@ function makeArcPointList(startPoint, center, endPoint){
 	var endDisp = new THREE.Vector3 ( 0,0,0 );
 	
 	workVector.copy(endPoint);
-	//workVector.sub(installDir);
 	workVector.sub(center);
 	
 	startDisp.copy(startPoint);
 	startDisp.sub(center);
 	
-	crossVector.clone(startDisp);	
+	crossVector.clone(startDisp);
+	
+	endDisp.copy(endPoint);
+	endDisp.sub(center);
 	
 	if(Math.abs(workVector.dot(crossVector)) > 0.98){
 		while(Math.abs(workVector.dot(crossVector)) > 0.98){
@@ -1155,25 +1179,31 @@ function makeArcPointList(startPoint, center, endPoint){
 		crossVector.normalize();
 		crossVector.multiplyScalar((startDisp.length()+endDisp.length())/2);
 		
-		addArcSubDiv(result,center,crossVector,endDisp,3);
-		addArcSubDiv(result,center,startDisp,crossVector,3);
+		//console.log("MAINFUNC: Start: "+vecDesc(startDisp)+" crossVector: "+vecDesc(crossVector)+" End: "+vecDesc(endDisp));
+		addArcSubDiv(result,center,endDisp,crossVector,resolution-1);
+		addArcSubDiv(result,center,crossVector,startDisp,resolution-1);
 	}
 	else{
 		delete crossVector;
 		crossVector = null;
-		addArcSubDiv(result,center,startDisp,endDisp,4);
+		//console.log("MAINFUNC: Start: "+vecDesc(startDisp)+" End: "+vecDesc(endDisp));
+		addArcSubDiv(result,center,endDisp,startDisp,resolution);
 	}
 	
 	return result;
 
 }
    
-
+   
+   
+   
 function addCurveKeyFrames(theFrameLists, startLocation){
 	
 	var pos = 0;
 	var lim = theFrameLists.length;
-	var center = new THREE.Vector3(0,0,0);
+	var center = new THREE.Vector3(-5,-5,-5);
+	center.add(startLocation);
+	center.multiplyScalar(0.5);
 	
 	pos = 0;
 	lim = theFrameLists.length;
@@ -1182,29 +1212,80 @@ function addCurveKeyFrames(theFrameLists, startLocation){
 	var startFrame;
 	var theFrame;
 	var interpPoints;
+	var offSet;
+	var resolution = 4;
 	
 	while(pos<lim){
+		
+		//console.log("---------------------------------------------");
 		interpPoints = [];
-		startFrame = (theFrameLists[pos].Frames)[theFrameLists[pos].Frames.length-1];
-		interpPoints = makeArcPointList( startLocation, center, startFrame.Position );
+		startFrame = (theFrameLists[pos].Frames)[(theFrameLists[pos].Frames.length)-1];
+		/*console.log(    " X: "+startFrame.Position.x+
+			            " Y: "+startFrame.Position.y+
+						" Z: "+startFrame.Position.z+
+						" T: "+startFrame.Time );*/
+		interpPoints = makeArcPointList( startLocation, center, startFrame.Position, resolution);
 		framePos = 0;
 		frameLim = interpPoints.length;
 		while(framePos<frameLim){
 			theFrame = copyFrame(startFrame);
 			theFrame.Position.copy(interpPoints[framePos]);
-			theFrame.Time = startFrame.Time + framePos;
+			theFrame.Time = startFrame.Time + framePos + 8;
 			(theFrameLists[pos].Frames).push(theFrame);
-			console.log("X: "+interpPoints[framePos].x+" Y: "+interpPoints[framePos].y+" Z: "+interpPoints[framePos].z);
+			framePos++;
+		}
+		framePos = 0;
+		frameLim = theFrameLists[pos].Frames.length;
+		while(framePos<frameLim){
+			/*console.log(" X: "+theFrameLists[pos].Frames[framePos].Position.x+
+			            " Y: "+theFrameLists[pos].Frames[framePos].Position.y+
+						" Z: "+theFrameLists[pos].Frames[framePos].Position.z+
+						" T: "+theFrameLists[pos].Frames[framePos].Time );*/
 			framePos++;
 		}
 		pos++;
 	}
+	return 8 + Math.pow(2,resolution+1);
 	
 }
 
 
 
-
-
+function addGrid(theSize, theDivs){
+	
+	var xpos = 0;
+	var zpos = 0;
+	var theLine = null;
+	var theGeo = new THREE.Geometry();
+	while(xpos<theDivs){
+		theGeo.vertices.push(new THREE.Vector3(xpos*theSize/theDivs-theSize/2, -500 , 0-theSize/2));
+		theGeo.vertices.push(new THREE.Vector3(xpos*theSize/theDivs-theSize/2, -500 , theSize/2));
+		theLine =  new THREE.LineSegments(
+			theGeo,
+			new THREE.LineDashedMaterial({
+				color: 0x000000,
+				dashSize: 50,
+				gapSize:50
+			})
+		);
+		scene.add(theLine);
+		xpos++;
+	}
+	while(zpos<theDivs){
+		theGeo.vertices.push(new THREE.Vector3(0-theSize/2, -500, zpos*theSize/theDivs-theSize/2));
+		theGeo.vertices.push(new THREE.Vector3(theSize/2, -500 , zpos*theSize/theDivs-theSize/2));
+		theLine =  new THREE.LineSegments(
+			theGeo,
+			new THREE.LineDashedMaterial({
+				color: 0x000000,
+				dashSize: 50,
+				gapSize:50
+			})
+		);
+		scene.add(theLine);
+		zpos++;
+	}
+	
+}
 
 
