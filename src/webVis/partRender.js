@@ -449,7 +449,7 @@ function makeKeyFrames(theTree, runningList, currentFrameList){
 	
 	runningList.push(presentFrame);
 	
-	if(theTree.Ref===null){
+	if(theTree.Ref === null){
 		var copiedList= copyFrameList(runningList);
 		//console.log("-----------");
 		currentFrameList.push({Name: theTree.Name, Frames: copiedList});
@@ -606,23 +606,13 @@ function animate(partFrames, time, timeWarp){
 		
 		interp=grabInterp(partFrames[pos].Frames,time,partFrames[pos].Mesh.position);
 		
-		/*delt=partFrames[pos].Mesh.position.sub(interp.Position);
-		
-		
-		if(delt.length()>0.00000001){
-			console.log(delt.length());
-			console.log(delt);
-		}*/
-		
 		eul.setFromQuaternion(interp.Quat);
 		partFrames[pos].Mesh.rotation.x=eul.x;
 		partFrames[pos].Mesh.rotation.y=eul.y;
 		partFrames[pos].Mesh.rotation.z=eul.z;
 		partFrames[pos].Mesh.position.x=interp.Position.x;
 		partFrames[pos].Mesh.position.y=interp.Position.y;
-		partFrames[pos].Mesh.position.z=interp.Position.z;
-		
-		
+		partFrames[pos].Mesh.position.z=interp.Position.z;		
 
 		pos++;
 	}
@@ -784,10 +774,6 @@ function getFirstIntersect(theScene, theCamera, partFrames){
 			if(part===partFrames[pos].Mesh){
 				return partFrames[pos];
 			}
-			/*console.log("vvvvvvvvv");
-			console.log(part);
-			console.log(partFrames[pos].Mesh);
-			console.log("^^^^^^^^^");*/
 			pos++;
 		}
 		return null;		
@@ -845,13 +831,12 @@ function addLines(movTree,parentNode,theScene,isMov){
 		var pos = 0;
 		var lim = movTree.Fst.length;
 		while(pos<lim){
-			if(isMov && parentNode != null){
+			if(isMov || parentNode != null){
 				addLines(movTree.Fst[pos],parentNode,theScene,false);
 			}
 			else{
 				addLines(movTree.Fst[pos],movTree,theScene,false);
 			}
-			//console.log(movTree.Fst[pos]);
 			pos++;
 		}
 		
@@ -895,7 +880,6 @@ function addDisplacement(movTree, partFrames, it){
 			var lim = movTree.Fst.length;
 			while(pos<lim){
 				mov = addDisplacement(movTree.Fst[pos], partFrames, mov);
-				//console.log(movTree.Fst[pos]);
 				pos++;
 			}
 			it=mov;
@@ -981,6 +965,16 @@ function updateLines(movTree,parentNode,theTime, isMov){
 
 
 
+
+/**
+*
+* Initializes the axis lines for the bottom-left of the screen
+*
+* @method initAxisLines
+* @for renderGlobal
+* @return {Void}
+*
+*/
 function initAxisLines(){
 	
 	theXAxis = new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0xff0000, depthTest: false }));
@@ -1018,6 +1012,16 @@ function initAxisLines(){
 
 
 
+
+/**
+*
+* Updates the axis line dispay
+*
+* @method updateAxisLines
+* @for renderGlobal
+* @return {Void}
+*
+*/
 function updateAxisLines(){
 	
 	var theRot= new THREE.Quaternion(0,0,0,0);
@@ -1080,7 +1084,18 @@ function updateAxisLines(){
 }
 
 
-
+/**
+*
+* Performs a bezier curve interpolation of the control points in pointlist given 
+* the time value T, and returns a ThreeJS Vector3 object with the interpolated coordinates.
+*
+* @method interp 
+* @for renderGlobal
+* @param {Vector3 Array} pointList A list of control points for use in interpolation.
+* @param {Float} T A normalized value for use as a time value in interpolation.
+* @return {Object}
+*
+*/
 function interp (pointList, T){
 	
 	var pos = 0;
@@ -1104,13 +1119,40 @@ function interp (pointList, T){
 }
 
 
-
+/**
+*
+* Returns a string describing the x, y, and z coordinates of theVec.
+*
+* @method vecDesc 
+* @for renderGlobal
+* @param {Vector3} theVec The ThreeJS Vector3 object to be described by the output string
+* @return {String}
+*
+*/
 function vecDesc(theVec){
 	
 	return "X: "+theVec.x+" Y: "+theVec.y+" Z: "+theVec.z;
 	
 }
 
+
+
+/**
+*
+* Recursively adds Vector3 objects onto the Vector3 list, target, interpolating from startDisp
+* and endDisp in an arc centered at the Vector3 object center. Each layer of recursion
+* adds the midpoint of the arc from startDisp to endDisp until level = 0.
+*
+* @method addArcSubDiv 
+* @for renderGlobal 
+* @param {Vector3 Array} target The list where the calculated Vector3 objects should be added
+* @param {Vector3} center The point which the generated arc should be centered on
+* @param {Vector3} startDisp The starting point of the arc
+* @param {Vector3} endDisp The ending point of the arc
+* @param {Int} level The desired levels of recursion in the point interpolation
+* @return {Void}
+*
+*/
 function addArcSubDiv (target, center, startDisp, endDisp, level){
 	
 	var midVec = new THREE.Vector3(0,0,0);
@@ -1128,9 +1170,6 @@ function addArcSubDiv (target, center, startDisp, endDisp, level){
 	endVec.add(endDisp);
 	endVec.add(center);
 	
-	//console.log("HELPER: Start: "+vecDesc(startVec)+" middle: "+vecDesc(midVec)+" End: "+vecDesc(endVec));
-	
-	//console.log((startDisp.length()+endDisp.length())/2);
 	
 	if(level <= 0){
 		target.push(midVec);
@@ -1148,7 +1187,20 @@ function addArcSubDiv (target, center, startDisp, endDisp, level){
 
 
 
-
+/**
+*
+* Returns a list of 2^(resolution+1) points which trace an arc beginning at startPoint,
+* terminating at endpoint, and centered around center
+*
+* @method makeArcPointList
+* @for renderGlobal 
+* @param {Vector3} startPoint The starting point of the arc
+* @param {Vector3} center The point which the generated arc should be centered on
+* @param {Vector3} endPoint The ending point of the arc
+* @param {Int} resolution The desired levels of recursion in the point interpolation
+* @return {Vector3 Array}
+*
+*/
 function makeArcPointList(startPoint, center, endPoint, resolution){
 	
 	var pos = 0;
@@ -1179,14 +1231,12 @@ function makeArcPointList(startPoint, center, endPoint, resolution){
 		crossVector.normalize();
 		crossVector.multiplyScalar((startDisp.length()+endDisp.length())/2);
 		
-		//console.log("MAINFUNC: Start: "+vecDesc(startDisp)+" crossVector: "+vecDesc(crossVector)+" End: "+vecDesc(endDisp));
 		addArcSubDiv(result,center,endDisp,crossVector,resolution-1);
 		addArcSubDiv(result,center,crossVector,startDisp,resolution-1);
 	}
 	else{
 		delete crossVector;
 		crossVector = null;
-		//console.log("MAINFUNC: Start: "+vecDesc(startDisp)+" End: "+vecDesc(endDisp));
 		addArcSubDiv(result,center,endDisp,startDisp,resolution);
 	}
 	
@@ -1197,11 +1247,24 @@ function makeArcPointList(startPoint, center, endPoint, resolution){
    
    
    
+   
+/**
+*
+* Adds keyframes onto the keyframe lists provided so that the keyframed parts begin their
+* animation at start location and move in an arc to their previously defined start position
+*
+* @method addCurveKeyFrames
+* @for renderGlobal 
+* @param {Object List} theFrameLists A list of keyframe lists describing the movement of 3d models
+* @param {Vector3} startLocation The desired new start location of the 3d models in the animation
+* @return {Void}
+*
+*/
 function addCurveKeyFrames(theFrameLists, startLocation){
 	
 	var pos = 0;
 	var lim = theFrameLists.length;
-	var center = new THREE.Vector3(-5,-5,-5);
+	var center = new THREE.Vector3(0,0,0);
 	center.add(startLocation);
 	center.multiplyScalar(0.5);
 	
@@ -1216,14 +1279,8 @@ function addCurveKeyFrames(theFrameLists, startLocation){
 	var resolution = 4;
 	
 	while(pos<lim){
-		
-		//console.log("---------------------------------------------");
 		interpPoints = [];
 		startFrame = (theFrameLists[pos].Frames)[(theFrameLists[pos].Frames.length)-1];
-		/*console.log(    " X: "+startFrame.Position.x+
-			            " Y: "+startFrame.Position.y+
-						" Z: "+startFrame.Position.z+
-						" T: "+startFrame.Time );*/
 		interpPoints = makeArcPointList( startLocation, center, startFrame.Position, resolution);
 		framePos = 0;
 		frameLim = interpPoints.length;
@@ -1237,10 +1294,6 @@ function addCurveKeyFrames(theFrameLists, startLocation){
 		framePos = 0;
 		frameLim = theFrameLists[pos].Frames.length;
 		while(framePos<frameLim){
-			/*console.log(" X: "+theFrameLists[pos].Frames[framePos].Position.x+
-			            " Y: "+theFrameLists[pos].Frames[framePos].Position.y+
-						" Z: "+theFrameLists[pos].Frames[framePos].Position.z+
-						" T: "+theFrameLists[pos].Frames[framePos].Time );*/
 			framePos++;
 		}
 		pos++;
@@ -1250,42 +1303,113 @@ function addCurveKeyFrames(theFrameLists, startLocation){
 }
 
 
-
-function addGrid(theSize, theDivs){
+/**
+*
+* Adds a simple square grid of width equal to theSize and a number of lines equal to theDivs at Y=-1000
+*
+* @method addGrid
+* @for renderGlobal 
+* @param {Int} theSize The desired grid width
+* @param {Int} theDivs The desired number of lines per side of the grid
+* @return {Void}
+*
+*/
+function addGrid(theSize, theDivs, theHeight, theColor){
 	
 	var xpos = 0;
 	var zpos = 0;
 	var theLine = null;
 	var theGeo = new THREE.Geometry();
 	while(xpos<theDivs){
-		theGeo.vertices.push(new THREE.Vector3(xpos*theSize/theDivs-theSize/2, -500 , 0-theSize/2));
-		theGeo.vertices.push(new THREE.Vector3(xpos*theSize/theDivs-theSize/2, -500 , theSize/2));
-		theLine =  new THREE.LineSegments(
-			theGeo,
-			new THREE.LineDashedMaterial({
-				color: 0x000000,
-				dashSize: 50,
-				gapSize:50
-			})
-		);
-		scene.add(theLine);
+		theGeo.vertices.push(new THREE.Vector3(xpos*theSize/theDivs-theSize/2, theHeight , 0-theSize/2));
+		theGeo.vertices.push(new THREE.Vector3(xpos*theSize/theDivs-theSize/2, theHeight , theSize/2));
 		xpos++;
-	}
+	}	
 	while(zpos<theDivs){
-		theGeo.vertices.push(new THREE.Vector3(0-theSize/2, -500, zpos*theSize/theDivs-theSize/2));
-		theGeo.vertices.push(new THREE.Vector3(theSize/2, -500 , zpos*theSize/theDivs-theSize/2));
-		theLine =  new THREE.LineSegments(
-			theGeo,
-			new THREE.LineDashedMaterial({
-				color: 0x000000,
-				dashSize: 50,
-				gapSize:50
-			})
-		);
-		scene.add(theLine);
+		theGeo.vertices.push(new THREE.Vector3(0-theSize/2, theHeight, zpos*theSize/theDivs-theSize/2));
+		theGeo.vertices.push(new THREE.Vector3(theSize/2, theHeight , zpos*theSize/theDivs-theSize/2));
 		zpos++;
 	}
+	theLine =  new THREE.LineSegments(
+		theGeo,
+		new THREE.LineDashedMaterial({
+			color: theColor,
+			dashSize: 50,
+			gapSize:50
+		})
+	);
+	scene.add(theLine);
 	
 }
+
+
+
+/**
+*
+* Adds a simple vertical column with a radius of theRad, a base Y value of theBot, a top terminating at
+* theTop, an x and z position equal to theX and theZ, a line color of theColor, a number of vertical 
+* segmentations equal to stacks, and a number of radial segmentations equal to slices
+*
+* @method addGrid
+* @for renderGlobal 
+* @param {Float} theRad The desired radius of the column
+* @param {Float} theBot The desired bottom y value of the column
+* @param {Float} theTop The desired top y value of the column
+* @param {Float} theX The desired x value of the column
+* @param {Float} theZ The desired z value of the column
+* @param {Float} slices The desired number of radial segmentations
+* @param {Float} stacks The desired z value of vertical segmentations
+* @param {Float} theColor The desired color of the column
+* @return {Void}
+*
+*/
+function addCylender(theRad, theBot, theTop, theX, theZ, slices, stacks, theColor){
+	
+	var slicePos = 0;
+	var stackPos;
+	var theLine = null;
+	var theGeo = new THREE.Geometry();
+	while(slicePos<slices){
+		stackPos = 0;
+		while(stackPos<stacks+1){
+			theGeo.vertices.push(new THREE.Vector3( 
+													theX+theRad*Math.cos(Math.PI*2*slicePos/slices), 
+			                                        theBot*stackPos/stacks+theTop*(stacks-stackPos)/stacks, 
+													theZ+theRad*Math.sin(Math.PI*2*slicePos/slices)
+												  ));
+			theGeo.vertices.push(new THREE.Vector3( 
+													theX+theRad*Math.cos(Math.PI*2*(slicePos+1)/slices), 
+			                                        theBot*stackPos/stacks+theTop*(stacks-stackPos)/stacks, 
+													theZ+theRad*Math.sin(Math.PI*2*(slicePos+1)/slices)
+												  ));
+			stackPos++;
+		}
+		theGeo.vertices.push(new THREE.Vector3( 
+												theX+theRad*Math.cos(Math.PI*2*slicePos/slices), 
+												theBot, 
+												theZ+theRad*Math.sin(Math.PI*2*slicePos/slices)
+											  ));
+		theGeo.vertices.push(new THREE.Vector3( 
+												theX+theRad*Math.cos(Math.PI*2*slicePos/slices), 
+												theTop, 
+												theZ+theRad*Math.sin(Math.PI*2*slicePos/slices)
+											  ));
+		slicePos++;
+	}
+	theLine =  new THREE.LineSegments(
+		theGeo,
+		new THREE.LineDashedMaterial({
+			color: theColor,
+			dashSize: 50,
+			gapSize:50
+		})
+	);
+	scene.add(theLine);
+	
+}
+
+
+
+
 
 

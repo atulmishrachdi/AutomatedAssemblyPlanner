@@ -249,7 +249,7 @@ var sunLight = new THREE.SpotLight( 0xaa5533, 6, 32000, 1.2, 1, 1 );
 		
 
 
-var theFog=new THREE.Fog( skyColor, 9000, 12000 );
+var theFog=new THREE.Fog( skyColor, 4000, 9000 );
 scene.fog=theFog;
 
 var theXAxis=null;
@@ -273,8 +273,8 @@ document.addEventListener('keyup', registerUp , false);
 // Dialates time with the scrolling of the mouse
 function zoomIt(e){
 	
-	zoom=zoom*Math.pow(1.001,e.wheelDelta);
-	//theTime+=e.wheelDelta*0.0001;
+	//zoom=zoom*Math.pow(1.001,e.wheelDelta);
+	zoom+=e.wheelDelta*0.01;
 }
 
 
@@ -632,7 +632,12 @@ var render = function () {
 	
 	
 	// Moves the parts along the appropriate motions of the animation
-	theTime=animate(partFrames,theTime,zoom);
+	if(zoom>=0){
+		theTime=animate(partFrames,theTime,Math.pow(zoom,1.008));
+	}
+	else{
+		theTime=animate(partFrames,theTime,0-Math.pow(0-zoom,1.008));
+	}
 	
 
 	// Reset the appearence of the last object of interest
@@ -947,7 +952,14 @@ function renderParts(){
 	
 	alignAssemblyCenter();
 	
-	addGrid(50000,80);
+	addGrid(50000,500, -1000, 0x888888);
+	addGrid(50000,500, 2000, 0x888888);
+	
+	var pos = 0;
+	while(pos<100){
+		addCylender(200, -1000, 2000, (pos%10)/10*50000-25000, pos/10/10*50000-25000, 8, 12, 0x888888);
+		pos++;
+	}
 	
 	render();
 

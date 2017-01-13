@@ -15,10 +15,10 @@ var theEul= new THREE.Euler(0,0,0,'XYZ');
 var baseQuat = new THREE.Quaternion(1,0,0,0);
 var deltaQuat = new THREE.Quaternion(1,0,0,0);
 
-var dragInp=false;
+var leftDrag = false;
+var rightDrag = false;
 
 var textFile=null;
-
 
 var wireSettings={transparent: true, opacity: 0.1, color: 0x444444, wireframe: false};
 
@@ -118,6 +118,18 @@ var sunLight = new THREE.SpotLight( 0x666666, 6, 32000, 1.2, 1, 1 );
 
 
 
+		
+/**
+*
+* Given an HTML element corresponding to a "confirm" button, moves the parent element
+* to the confirmed section of the webpage
+*
+* @method confirmPair
+* @for directionConfirmGlobal
+* @param {HTML Element} theButton The confirm button of the element to be moved
+* @return {Void}
+* 
+*/
 function confirmPair(theButton){
 	document.getElementById("confirmed").appendChild(theButton.parentElement);
 	theButton.innerHTML="unconfirm";
@@ -126,6 +138,19 @@ function confirmPair(theButton){
 	};
 }
 
+
+
+/**
+*
+* Given an HTML element corresponding to a "unconfirm" button, moves the parent element
+* to the unconfirmed section of the webpage
+*
+* @method deconfirmPair
+* @for directionConfirmGlobal
+* @param {HTML Element} theButton The unconfirm button of the element to be moved
+* @return {Void}
+* 
+*/
 function deconfirmPair(theButton){
 	document.getElementById("unconfirmed").appendChild(theButton.parentElement);
 	theButton.innerHTML="confirm";
@@ -135,6 +160,18 @@ function deconfirmPair(theButton){
 }
 
 
+
+/**
+*
+* Given an HTML element corresponding to a "focus" button, makes the corresponding pair
+* of parts to be displayed  
+*
+* @method changeCurrentPair
+* @for directionConfirmGlobal
+* @param {HTML Element} theButton The confirm button of the element to be moved
+* @return {Void}
+* 
+*/
 function changeCurrentPair(theButton){
 	
 	if(lastPair!==null){
@@ -173,6 +210,16 @@ var time=0;
 var focusBox;
 var focusPoint;
 
+
+/**
+*
+* The rendering function for the webpage
+*
+* @for directionConfirmGlobal
+* @for renderGlobal
+* @return {Void}
+* 
+*/
 var render = function () {
 
 	// The function that will manage frame requests
@@ -238,7 +285,7 @@ var render = function () {
 * in the string. This is used internally to extract file extensions from file names.
 *
 * @method grabExtension
-* @for dirConfirmGlobal
+* @for directionConfirmGlobal
 * @param {String} theName The file name to be processed
 * @return {String} the extension in the given file name. If no extension is found, the 
 * 'undefined' value is returned.
@@ -274,7 +321,7 @@ function whoIsLeft(theReaders){
 * of that given reader's files 
 *
 * @method readMultipleFiles
-* @for dirConfirmGlobal
+* @for directionConfirmGlobal
 * @param {Event} evt A fileinput event, to be given by a fileinput event listener
 * @return {Void}
 * 
@@ -344,7 +391,7 @@ document.getElementById('fileinput').addEventListener('change', readMultipleFile
 * all recieved stl files into threeJS models and executes "renderParts".
 *
 * @method loadParts
-* @for dirConfirmGlobal
+* @for directionConfirmGlobal
 * @return {Void}
 * 
 */
@@ -416,6 +463,19 @@ function loadParts (){
 
 }
 
+
+
+/**
+*
+* Accepts two strings, a and b, and a vector, vec, and outputs a
+* constructed part pair object if the two strings correspond to two
+* extant parts
+*
+* @method linkPair
+* @for directionConfirmGlobal
+* @return {Object}
+* 
+*/
 function linkPair(a,b,vec){
 	
 	var thePair={Ref: null,
@@ -448,6 +508,18 @@ function linkPair(a,b,vec){
 	
 }
 
+
+
+/**
+*
+* Links together the pairs of parts corresponding to the strings present in
+* the namePairs array.
+*
+* @method linkParts
+* @for directionConfirmGlobal
+* @return {Void}
+* 
+*/
 function linkParts(){
 	
 	var pos=0;
@@ -461,13 +533,21 @@ function linkParts(){
 			thePair.InfiniteDirections = namePairs[pos].InfiniteDirections;
 			assemblyPairs.push(thePair);
 		}
-		else{
-		}
 		pos++;
 	}
 	//console.log(assemblyPairs);
 }
 
+
+/**
+*
+* Populates the webpage with data stored int the global variable theSML
+*
+* @method parseData
+* @for directionConfirmGlobal
+* @return {Void}
+* 
+*/
 function parseData(){
 	
 	//console.log(theXML);
@@ -497,16 +577,15 @@ function parseData(){
 	var docInfDirs;
 	
 	while(pos<lim){
+		
 		theRef=grab(thePairs[pos],"To");
 		theMov=grab(thePairs[pos],"From");
-		
 		
 		docDirs=grab(thePairs[pos],"directed");
 		directed=[];
 		
 		docDubDirs=grab(thePairs[pos],"doublyDirected");
 		doublyDirected=[];
-		
 		
 		docInfDirs=grab(thePairs[pos],"InfiniteDirections");
 		infiniteDirections=[];
@@ -550,18 +629,7 @@ function parseData(){
 			}
 		}
 		
-		/*
-		if($(docFinDirs[vecPos]).innerHTML != "false"){
-			docFinDirs = $(docInfDirs).children("int");
-			vecPos=0;
-			vecLim=docFinDirs.length;
-			while(vecPos<vecLim){
-				theVec=parseInt(docFinDirs[vecPos].innerHTML);
-				finiteDirections.push(theVec);
-				vecPos++;
-			}
-		}
-		*/
+
 		theVec=grab(thePairs[pos],"vector");
 		namePairs.push({
 			name: grab(thePairs[pos],"name").innerHTML,
@@ -594,11 +662,21 @@ function parseData(){
 		pos++;
 	}	
 	
-	//console.log(namePairs);
 	
 }
 
 
+
+/**
+*
+* Populates the webpage with graphical representations of the assembly pairs
+* stored in the global variable assemblyPairs
+*
+* @method insertAssemblyPairs
+* @for directionConfirmGlobal
+* @return {Void}
+* 
+*/
 function insertAssemblyPairs(){
 	
 	var pos=0;
@@ -641,6 +719,17 @@ function insertAssemblyPairs(){
 
 
 
+
+
+/**
+*
+* Dehighlights the given pair of parts
+*
+* @method deHighlight
+* @for directionConfirmGlobal
+* @return {Void}
+* 
+*/
 function deHighlight(thePair){
 	console.log("The number of vectors is ",theVectors.length);
 	removeVectorView(document.getElementById("expandButton"));
@@ -724,26 +813,44 @@ function fixOpacity(theSlider){
 }
 
 
-function doMouseUp(){
-	dragInp=false;
+function doMouseUp(theEvent){
+	if(theEvent.button == 0){
+		leftDrag = false;
+	}
+	else if(theEvent.button == 2){
+		rightDrag = false;
+	}
 }
 
-function doMouseDown(){
-	dragInp=true;
+function doMouseDown(theEvent){
+	if(theEvent.button == 0){
+		leftDrag = true;
+	}
+	else if(theEvent.button == 2){
+		rightDrag = true;
+	}
 }
 
-function doMouseLeave(){
-	dragInp=false;
-	lastMouse=null;
+function doMouseLeave(theEvent){
+	leftDrag = false;
+	rightDrag = false;
+	lastMouse = null;
+}
+
+function justDont(theEvent){
+	theEvent.preventDefault();
 }
 
 function doDrag(theEvent){
-	if(dragInp==true){
+	if(leftDrag==true){
 		thePos.normalize();
 		theEul.set(theEvent.movementY*(-0.02)*Math.cos(Math.atan2(thePos.x,thePos.z)),
 				   theEvent.movementX*(-0.02),
 				   theEvent.movementY*(0.02)*Math.sin(Math.atan2(thePos.x,thePos.z)),
 				   'ZYX'); 
+	}
+	if(rightDrag==true){
+		addVectorFromMouse(theEvent.clientX, theEvent.clientY);
 	}
 }
 
@@ -935,6 +1042,7 @@ function addVectorToPair(theButton){
 	theEntry.className="vecEntry";
 	
 	theVecList.appendChild(theEntry);
+	return theEntry;
 	
 }
 
@@ -1177,11 +1285,46 @@ function updateAxisLines(){
 	theZAxis.geometry.vertices[1].z+=1;
 	theZAxis.geometry.verticesNeedUpdate=true;
 	
+}
 
+
+
+
+
+function getDirectionFromMouse( mouseX, mouseY){
+	
+	var mouseZ;
+	mouseZ = Math.pow(1-(mouseX*mouseX)+(mouseY*mouseY),0.5);
+
+	var theVec = new THREE.Vector3(mouseX,mouseY,0-mouseZ);
+	/*var theRot = new THREE.Euler( 	0,
+									0//Math.atan2(thePos.x-focusPoint.x,thePos.z-focusPoint.z),
+									0//Math.atan2(Math.sqrt(Math.pow(thePos.z-focusPoint.z,2)+Math.pow(thePos.x-focusPoint.x,2)),thePos.y-focusPoint.y),
+									'ZYX' );
+	theVec.applyEuler(theRot);*/
+	
+	var theDir = getDir(theVec);
+	return theDir;
 	
 }
 
 
+function addVectorFromMouse ( mouseX, mouseY ){
+	
+	var theButton = document.getElementById("addButton");
+	var areaW = renderer.domElement.clientWidth;
+	var areaH = renderer.domElement.clientHeight;
+	var areaT = renderer.domElement.clientTop;
+	var areaL = renderer.domElement.clientLeft;
+	var theDir = getDirectionFromMouse( ((mouseX-areaL)-areaW/2)/(areaW/2), ((mouseY-areaT)-areaH/2)/(areaH/2) );
+	var theElem = addVectorToPair(theButton);
+	var theInputs = theElem.getElementsByTagName("input");
+	theInputs[0].value = theDirections[theDir].X;
+	theInputs[1].value = theDirections[theDir].Y;
+	theInputs[2].value = theDirections[theDir].Z;
+	theInputs[0].onchange();
+	
+}
 
 
 

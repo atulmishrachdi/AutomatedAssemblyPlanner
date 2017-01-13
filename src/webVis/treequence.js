@@ -69,14 +69,10 @@ function grab(theTree,theMember){
 function grabInd(theTree,theMember, theIndex){
 
 	if($(theTree).children(theMember).length>theIndex){
-		
 		return $(theTree).children(theMember)[theIndex];
-		
 	}
 	else{
-	
 		return null;
-	
 	}
 
 }
@@ -112,6 +108,7 @@ function getMovement(theTree, myX, myY, myZ, myTime){
 		var movYDir=parseFloat(grabInd(movDirection,"double",1).innerHTML);
 		var movZDir=parseFloat(grabInd(movDirection,"double",2).innerHTML);
 		var movDistance=parseFloat(grab(grab(theTree,"Install"),"InstallDistance").innerHTML);
+		movDistance = Math.min(movDistance,800);
 		var movX=myX-movXDir*movDistance;
 		var movY=myY-movYDir*movDistance;
 		var movZ=myZ-movZDir*movDistance;
@@ -138,7 +135,7 @@ function getMovement(theTree, myX, myY, myZ, myTime){
 								X: myX-parseFloat(theDir[0].innerHTML)*theDist, 
 								Y: myY-parseFloat(theDir[1].innerHTML)*theDist,  
 								Z: myZ-parseFloat(theDir[2].innerHTML)*theDist, 
-								Time: myTime + (childTime - myTime) * 0.01, 
+								Time: childTime, 
 								Ref: null, 
 								Mov: null,
 								Fst: []
@@ -148,7 +145,6 @@ function getMovement(theTree, myX, myY, myZ, myTime){
 				}
 			}
 		}
-		
 		
 		return { Name: "", X: myX, Y: myY, Z: myZ, Time: myTime, Ref: ref, Mov: mov, Fst: Fst};
 		
@@ -174,9 +170,7 @@ function getMovement(theTree, myX, myY, myZ, myTime){
 function getRef(theTree){
 
 	theTree=grab(theTree,"Install");
-	
 	theTree=grab(theTree,"Reference");
-	
 	return theTree;
 
 }
@@ -196,9 +190,7 @@ function getRef(theTree){
 function getMov(theTree){
 
 	theTree=grab(theTree,"Install");
-	
 	theTree=grab(theTree,"Moving");
-	
 	return theTree;
 
 }
@@ -228,7 +220,6 @@ function getTimes(theTree, parentTime){
 		var myTime=parseFloat(grab(grab(theTree,"Install"),"Time").innerHTML)+parentTime;
 		var ref=getTimes(getRef(theTree),myTime);
 		var mov=getTimes(getMov(theTree),myTime);
-		
 		
 		return { Time: parentTime, Ref: ref, Mov: mov};
 	}
@@ -274,14 +265,12 @@ function getLongestTime(timeTree){
 */
 function getNames(theTree){
 
-
-
 	if(($(theTree).children("Install").length==0)){
 		return {Name: $(theTree).attr("Name"), Ref: null, Mov: null};
 	}
 	else{
-		var ref=getNames(getRef(theTree));
-		var mov=getNames(getMov(theTree));
+		var ref = getNames(getRef(theTree));
+		var mov = getNames(getMov(theTree));
 		return {Name: "", Ref: ref, Mov: mov};
 	}
 
@@ -305,21 +294,14 @@ function getNames(theTree){
 */
 function mergeTrees(TimeTree,SpaceTree,NameTree){
 
-
 	if(TimeTree==null || SpaceTree==null || NameTree==null){
-	
 		return null;
-	
 	}
 	else{
-	
 		var ref=mergeTrees(TimeTree.Ref,SpaceTree.Ref,NameTree.Ref);
 		var mov=mergeTrees(TimeTree.Mov,SpaceTree.Mov,NameTree.Mov);		
-		
 		return {Time: TimeTree.Time, Space: SpaceTree.Space, Name: NameTree.Name, Ref: ref, Mov: mov};
-
 	}
-	
 
 }
 
@@ -341,32 +323,21 @@ function mergeTrees(TimeTree,SpaceTree,NameTree){
 */
 function getNameList(theTree){
 
-
 	if(theTree==null){
-	
 		return [];
-	
 	}
 	else{
-		
 		var result;
-		
 		if(theTree.Name===""){
 			result=[];
 		}
 		else{
 			result=[theTree.Name];
 		}
-		
 		result=result.concat(getNameList(theTree.Ref));
 		result=result.concat(getNameList(theTree.Mov));
-					
-	
 		return result;
-	
-	
 	}
-
 
 }
 
@@ -454,6 +425,21 @@ function cutOffNames(theTree,theCutOff){
 }
 
 
+
+/**
+*
+* Given a tree of nested javascript objects (each with a string attribute "Name"), and two lists,
+* regTreeNames and fstTreeNames, inserts all regular part names into regTreeNames and inserts all
+* fastener part names into fstTreeNames
+*
+* @method getTreeNames
+* @for renderGlobal
+* @param {Object} tree
+* @param {String List} regTreeNames
+* @param {String List} fstTreeNames
+* @return {Void}
+* 
+*/
 function getTreeNames(tree,regTreeNames,fstTreeNames){
 	
 	if(tree===null){
@@ -477,6 +463,19 @@ function getTreeNames(tree,regTreeNames,fstTreeNames){
 	
 }
 
+
+
+
+/**
+*
+* Given a list of parts, returns a list of the names of each part
+*
+* @method getPartNames
+* @for renderGlobal
+* @param {Part List} parts The list of part objects.
+* @return {String List}
+* 
+*/
 function getPartNames(parts){
 	
 	var result = [];
@@ -491,32 +490,7 @@ function getPartNames(parts){
 }
 
 
-function printAllNames(parts,tree){
-	
-	var regTreeNames=[];
-	var fstTreeNames=[];
-	var prtNames=getPartNames(parts);
-	getTreeNames(tree,regTreeNames,fstTreeNames);
-	var pos=0;
-	var lim=prtNames.length;
-	while(pos<lim){
-		console.log(prtNames[pos]);
-		pos++;
-	}
-	pos=0;
-	lim=regTreeNames.length;
-	while(pos<lim){
-		console.log(regTreeNames[pos]);
-		pos++;
-	}
-	pos=0;
-	lim=fstTreeNames.length;
-	while(pos<lim){
-		console.log(fstTreeNames[pos]);
-		pos++;
-	}
-	
-}
+
 
 
 /**
@@ -846,7 +820,8 @@ function showChildren(theNode){
 		show(theChildren[pos]);
 		hideChildren(theChildren[pos]);
 		pos++;
-	}	
+	}
+	
 }
 
 
@@ -875,7 +850,8 @@ function hideChildren(theNode){
 		hideChildren(theChildren[pos]);
 		hide(theChildren[pos]);
 		pos++;
-	}	
+	}
+	
 }
 
 
@@ -908,29 +884,6 @@ function getChildrenByTag(theNode,tag){
 		pos++;
 	}
 	return result;
-}
-
-
-
-
-
-function bumpTreeTimes(theTree, theBump){
-	
-	if( theTree === null ){
-		return;
-	}
-	else{
-		theTree.Time = theTree.Time + theBump;
-		bumpTreeTimes(theTree.Ref, theBump);
-		bumpTreeTimes(theTree.Mov, theBump);
-		var pos = 0;
-		var lim = theTree.Fst.length;
-		while(pos<lim){
-			bumpTreeTimes(theTree.Fst[pos], theBump);
-			pos++;
-		}
-	}	
-	
 }
 
 
