@@ -36,7 +36,7 @@ namespace Assembly_Planner
                     var fastener = FastenerDetector.Fasteners.Where(f => solidName == f.Solid.Name).ToList();
                     if (fastener.Any())
                     {
-                        part.FastenerCertainty = fastener[0].Certainty;
+                        part.FastenerCertainty = fastener[0].Certainty > 1 ? 1 : fastener[0].Certainty;
                         this.parts.Add(part);
                         continue;
                     }
@@ -46,7 +46,7 @@ namespace Assembly_Planner
                     var nut = FastenerDetector.Nuts.Where(n => solidName == n.Solid.Name).ToList();
                     if (nut.Any())
                     {
-                        part.FastenerCertainty = nut[0].Certainty;
+                        part.FastenerCertainty = nut[0].Certainty > 1 ? 1 : nut[0].Certainty;
                         this.parts.Add(part);
                         continue;
                     }
@@ -56,7 +56,7 @@ namespace Assembly_Planner
                     var washer = FastenerDetector.Fasteners.Where(w => solidName == w.Solid.Name).ToList();
                     if (washer.Any())
                     {
-                        part.FastenerCertainty = washer[0].Certainty;
+                        part.FastenerCertainty = washer[0].Certainty > 1 ? 1 : washer[0].Certainty;
                         this.parts.Add(part);
                         continue;
                     }
@@ -64,7 +64,9 @@ namespace Assembly_Planner
                 var smallPart = FastenerDetector.PotentialFastener.Keys.Where(sp => solidName == sp.Name).ToList();
                 if (smallPart.Any())
                 {
-                    part.FastenerCertainty = FastenerDetector.PotentialFastener[smallPart[0]];
+                    part.FastenerCertainty = FastenerDetector.PotentialFastener[smallPart[0]] > 1
+                        ? 1
+                        : FastenerDetector.PotentialFastener[smallPart[0]];
                     this.parts.Add(part);
                     continue;
                 }
