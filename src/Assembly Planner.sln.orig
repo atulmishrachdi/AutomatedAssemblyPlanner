@@ -1,0 +1,138 @@
+<<<<<<< local
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly Planner", "Assembly Planner\Assembly Planner.csproj", "{A7045F03-81DA-4784-A287-DD7C81EEF4E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrimitiveClassificationOfTessellatedSolids", "PrimitiveClassificationOfTessellatedSolids\PrimitiveClassificationOfTessellatedSolids.csproj", "{59F5FE35-E4B0-4C0C-8405-9E314CF48298}"
+EndProject
+Global
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Console Debug|Any CPU = Console Debug|Any CPU
+		Console Debug|x86 = Console Debug|x86
+		Console Release|Any CPU = Console Release|Any CPU
+		Console Release|x86 = Console Release|x86
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+		WPF GUI Debug|Any CPU = WPF GUI Debug|Any CPU
+		WPF GUI Debug|x86 = WPF GUI Debug|x86
+		WPF GUI Release|Any CPU = WPF GUI Release|Any CPU
+		WPF GUI Release|x86 = WPF GUI Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A7045F03-81DA-4784-A287-DD7C81EEF4E0}.Console Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7045F03-81DA-4784-A287-DD7C81EEF4E0}.Console Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7045F03-81DA-4784-A287-DD7C81EEF4E0}.Console Debug|x86.ActiveCfg = Debug|Any CPU
+		{A7045F03-81DA-4784-A287-DD7C81EEF4E0}.Console Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7045F03-81DA-4784-A287-DD7C81EEF4E0}.Console Release|Any CPU.Build.0 = Release|Any CPU
+		{A7045F03-81DA-4784-A287-DD7C81EEF4E0}.Console Release|x86.ActiveCfg = Release|Any CPU
+		{A7045F03-81DA-4784-A287-DD7C81EEF4E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7045F03-81DA-4784-A287-DD7C81EEF4E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7045F03-81DA-4784-A287-DD7C81EEF4E0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A7045F03-81DA-4784-A287-DD7C81EEF4E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7045F03-81DA-4784-A287-DD7C81EEF4E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7045F03-81DA-4784-A287-DD7C81EEF4E0}.Release|x86.ActiveCfg = Release|Any CPU
+		{A7045F03-81DA-4784-A287-DD7C81EEF4E0}.WPF GUI Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7045F03-81DA-4784-A287-DD7C81EEF4E0}.WPF GUI Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7045F03-81DA-4784-A287-DD7C81EEF4E0}.WPF GUI Debug|x86.ActiveCfg = Debug|Any CPU
+		{A7045F03-81DA-4784-A287-DD7C81EEF4E0}.WPF GUI Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7045F03-81DA-4784-A287-DD7C81EEF4E0}.WPF GUI Release|Any CPU.Build.0 = Release|Any CPU
+		{A7045F03-81DA-4784-A287-DD7C81EEF4E0}.WPF GUI Release|x86.ActiveCfg = Release|Any CPU
+		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.Console Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.Console Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.Console Debug|x86.ActiveCfg = Debug|Any CPU
+		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.Console Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.Console Release|Any CPU.Build.0 = Release|Any CPU
+		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.Console Release|x86.ActiveCfg = Release|Any CPU
+		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.Release|x86.ActiveCfg = Release|Any CPU
+		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.WPF GUI Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.WPF GUI Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.WPF GUI Debug|x86.ActiveCfg = Debug|Any CPU
+		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.WPF GUI Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.WPF GUI Release|Any CPU.Build.0 = Release|Any CPU
+		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.WPF GUI Release|x86.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
+=======
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly Planner", "Assembly Planner\Assembly Planner.csproj", "{A7045F03-81DA-4784-A287-DD7C81EEF4E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrimitiveClassificationOfTessellatedSolids", "PrimitiveClassificationOfTessellatedSolids\PrimitiveClassificationOfTessellatedSolids.csproj", "{59F5FE35-E4B0-4C0C-8405-9E314CF48298}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Console Debug|Any CPU = Console Debug|Any CPU
+		Console Debug|x86 = Console Debug|x86
+		Console Release|Any CPU = Console Release|Any CPU
+		Console Release|x86 = Console Release|x86
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+		WPF GUI Debug|Any CPU = WPF GUI Debug|Any CPU
+		WPF GUI Debug|x86 = WPF GUI Debug|x86
+		WPF GUI Release|Any CPU = WPF GUI Release|Any CPU
+		WPF GUI Release|x86 = WPF GUI Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A7045F03-81DA-4784-A287-DD7C81EEF4E0}.Console Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7045F03-81DA-4784-A287-DD7C81EEF4E0}.Console Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7045F03-81DA-4784-A287-DD7C81EEF4E0}.Console Debug|x86.ActiveCfg = Debug|Any CPU
+		{A7045F03-81DA-4784-A287-DD7C81EEF4E0}.Console Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7045F03-81DA-4784-A287-DD7C81EEF4E0}.Console Release|Any CPU.Build.0 = Release|Any CPU
+		{A7045F03-81DA-4784-A287-DD7C81EEF4E0}.Console Release|x86.ActiveCfg = Release|Any CPU
+		{A7045F03-81DA-4784-A287-DD7C81EEF4E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7045F03-81DA-4784-A287-DD7C81EEF4E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7045F03-81DA-4784-A287-DD7C81EEF4E0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A7045F03-81DA-4784-A287-DD7C81EEF4E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7045F03-81DA-4784-A287-DD7C81EEF4E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7045F03-81DA-4784-A287-DD7C81EEF4E0}.Release|x86.ActiveCfg = Release|Any CPU
+		{A7045F03-81DA-4784-A287-DD7C81EEF4E0}.WPF GUI Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7045F03-81DA-4784-A287-DD7C81EEF4E0}.WPF GUI Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7045F03-81DA-4784-A287-DD7C81EEF4E0}.WPF GUI Debug|x86.ActiveCfg = Debug|Any CPU
+		{A7045F03-81DA-4784-A287-DD7C81EEF4E0}.WPF GUI Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7045F03-81DA-4784-A287-DD7C81EEF4E0}.WPF GUI Release|Any CPU.Build.0 = Release|Any CPU
+		{A7045F03-81DA-4784-A287-DD7C81EEF4E0}.WPF GUI Release|x86.ActiveCfg = Release|Any CPU
+		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.Console Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.Console Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.Console Debug|x86.ActiveCfg = Debug|Any CPU
+		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.Console Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.Console Release|Any CPU.Build.0 = Release|Any CPU
+		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.Console Release|x86.ActiveCfg = Release|Any CPU
+		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.Release|x86.ActiveCfg = Release|Any CPU
+		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.WPF GUI Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.WPF GUI Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.WPF GUI Debug|x86.ActiveCfg = Debug|Any CPU
+		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.WPF GUI Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.WPF GUI Release|Any CPU.Build.0 = Release|Any CPU
+		{59F5FE35-E4B0-4C0C-8405-9E314CF48298}.WPF GUI Release|x86.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
+>>>>>>> other
