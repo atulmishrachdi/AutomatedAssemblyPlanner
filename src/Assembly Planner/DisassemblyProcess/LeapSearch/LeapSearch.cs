@@ -13,6 +13,7 @@ using GraphSynth;
 using GraphSynth.Representation;
 //using GraphSynth.Search;
 using Assembly_Planner.GraphSynth.BaseClasses;
+using RandomGen;
 using StarMathLib;
 using TVGL;
 using Constants = AssemblyEvaluation.Constants;
@@ -26,13 +27,15 @@ namespace Assembly_Planner
         protected static List<int> DirPool;
         protected static int TimeEstm;
         protected static int TimeEstmCounter;
-        protected static SortedList<double, HashSet<TreeCandidate>> SortedStack;
+        protected static SortedList<double, List<TreeCandidate>> SortedStack;
+        protected static SortedList<double, List<TreeCandidate>> TemporaryAlternatives;
         protected static bool FirstRun;
         protected static List<double> InitialStableScores = new List<double>();
         protected static List<double> InitialTimes = new List<double>();
         protected static List<double> InitialStablyH = new List<double>();
         protected static double FinalTimeWeight;
         protected static double FinalStableWeight;
+        public static double stabilityscore;
         protected static int FalseLoop;
 
         protected static Dictionary<HashSet<Component>, MemoData> Memo =
@@ -77,106 +80,167 @@ namespace Assembly_Planner
         private static SubAssembly LeapOptimizationSearch()
         {
             SubAssembly tree = null;
-            SortedStack = new SortedList<double, HashSet<TreeCandidate>>(new CandidateComparer());
-            var beamChildern = new SortedList<double, HashSet<TreeCandidate>>(new CandidateComparer());
+            SortedStack = new SortedList<double, List<TreeCandidate>>(new CandidateComparer());
+            var beamChildern = new SortedList<double, List<TreeCandidate>>(new CandidateComparer());
+
             var cands = GetCandidates(new HashSet<Component>(Graph.nodes.Cast<Component>()), 0);
             foreach (var c in cands)
-                SortedStack.Add(c.G + c.H, new HashSet<TreeCandidate> {c});
+                SortedStack.Add(c.G + c.H, new List<TreeCandidate> {c});
             FalseLoop = 0;
             while (SortedStack.Any())
             {
                 TimeEstmCounter++;
                 TimeEstm++;
+
+                TemporaryAlternatives = new SortedList<double, List<TreeCandidate>>(new CandidateComparer());
                 UpdateSortedStackWithBeamWidth(Program.BeamWidth);
                 var cand = SortedStack.First().Value;
                 SortedStack.RemoveAt(0);
-                //var all = new List<SortedList<double, HashSet<TreeCandidate>>>();
-                // if all the members of cand have moving and references that exist in the memo, this is the goal
-                var counter = 0;
-                //var temp = new HashSet<TreeCandidate>();
-                //Parallel.ForEach(cand, treeCandidate =>
-                    foreach (var treeCandidate in cand)
+                if (FirstRun)
                 {
-                    var localSorted = new SortedList<double, HashSet<TreeCandidate>>(new CandidateComparer());
-                    if (Memo.ContainsKey(treeCandidate.MovNodes) && Memo.ContainsKey(treeCandidate.RefNodes))
+                    foreach (var sS in SortedStack)
+                        TemporaryAlternatives.Add(sS.Key, sS.Value);
+                    SortedStack.Clear();
+                }
+                var counter = 0;
+                //Parallel.ForEach(cand, treeCandidate =>
+                for (var i = 0; i < cand.Count; i++)
+                {
+                    var treeCandidate = cand[i];
+                    var treeCandidateNodes = new HashSet<Component>(treeCandidate.MovNodes);
+                    treeCandidateNodes.UnionWith(treeCandidate.RefNodes);
+                    var localSorted = new SortedList<double, List<TreeCandidate>>(new CandidateComparer());
+
+                    var noBetterOption = false;
+                    if (Memo.ContainsKey(treeCandidateNodes) && treeCandidate.H >= Memo[treeCandidateNodes].Value)
                     {
-                        var time = Memo[treeCandidate.MovNodes].Value + Memo[treeCandidate.RefNodes].Value +
-                                   treeCandidate.sa.Install.Time;
-                        var d = new MemoData(time, treeCandidate.sa);
-                        var a = new HashSet<Component>(treeCandidate.MovNodes);
-                        a.UnionWith(treeCandidate.RefNodes);
-                        if (!Memo.ContainsKey(a))
+                        treeCandidate.sa = Memo[treeCandidateNodes].sa;
+                        treeCandidate.RefNodes = new HashSet<Component>(Memo[treeCandidateNodes].sa.Install.Reference.PartNames.Select(
+                                n => treeCandidateNodes.First(node => node.name == n)));
+                        treeCandidate.MovNodes =
+                            new HashSet<Component>(Memo[treeCandidateNodes].sa.Install.Moving.PartNames.Select(
+                                n => treeCandidateNodes.First(node => node.name == n)));
+                        noBetterOption = true;
+                    }
+
+                    var memoContainsMoving = Memo.ContainsKey(treeCandidate.MovNodes);
+                    var memoContainsReference = Memo.ContainsKey(treeCandidate.RefNodes);
+
+                    if (noBetterOption ||
+                        (memoContainsMoving && memoContainsReference &&
+                         ((treeCandidate.ReferenceH >= Memo[treeCandidate.RefNodes].Value &&
+                           (treeCandidate.MovingH >= Memo[treeCandidate.MovNodes].Value)))))
+                    {
+                        var value = Math.Max(Memo[treeCandidate.MovNodes].Value, Memo[treeCandidate.RefNodes].Value) +
+                                    FinalTimeWeight*(treeCandidate.sa.Install.Time + treeCandidate.sa.MoveRoate.Time +
+                                                     Program.UncertaintyWeightChosenByUser*
+                                                     (treeCandidate.sa.Install.TimeSD +
+                                                      treeCandidate.sa.MoveRoate.TimeSD)) +
+                                    FinalStableWeight*treeCandidate.sa.InternalStabilityInfo.Totalsecore;
+                        var d = new MemoData(value, treeCandidate.sa);
+                        if (!Memo.ContainsKey(treeCandidateNodes))
                         {
+
                             lock (Memo)
                             {
-                                if (Program.BeamWidth == 1 || (Program.BeamWidth > 1 && !FirstRun))
-                                {
-                                    Memo.Add(a, d);
-                                    FillUpMemo(treeCandidate.parent);
-                                }
+                                Memo.Add(treeCandidateNodes, d);
+                                if (treeCandidate.parent != null)
+                                    FillUpMemo(treeCandidate);
                             }
                         }
                         else
                         {
-                            if (!FirstRun && Memo[a].Value > d.Value)
-                                Memo[a] = d;
+                            if ( /*!FirstRun && */Memo[treeCandidateNodes].Value > d.Value)
+                                Memo[treeCandidateNodes] = d;
                         }
-                        //lock (temp)
-                        //    temp.Add(treeCandidate);
                         treeCandidate.sa.Install.Moving = Memo[treeCandidate.MovNodes].sa;
                         treeCandidate.sa.Install.Reference = Memo[treeCandidate.RefNodes].sa;
 
                         counter++;
                         continue;
-                        //return;
                     }
-                    if (Memo.ContainsKey(treeCandidate.MovNodes))
+                    if (memoContainsMoving &&
+                        treeCandidate.MovingH >= Memo[treeCandidate.MovNodes].Value)
                     {
                         treeCandidate.sa.Install.Moving = Memo[treeCandidate.MovNodes].sa;
                         FalseLoop = 0;
                         var refCands = GetCandidates(treeCandidate.RefNodes, treeCandidate.G);
                         refCands = CreateNewClassOfTreeCandidates(refCands);
+                        // if the refCands is null, add the refNodes to the memo, and go to the for loop one more time
+                        if (!refCands.Any())
+                        {
+                            if (!SortedStack.Any() && !TemporaryAlternatives.Any())
+                            {
+                                TakeSubassemAsOnePartAndAddToMemo(treeCandidate.RefNodes);
+                                i--;
+                                continue;
+                            }
+                            if (SortedStack.Any())
+                                break;
+                            var alterFirst = TemporaryAlternatives.First();
+                            SortedStack.Add(alterFirst.Key, alterFirst.Value);
+                            TemporaryAlternatives.RemoveAt(0);
+                        }
                         foreach (var rC in refCands)
                         {
                             rC.parent = treeCandidate;
-                            localSorted.Add(rC.G + rC.H, new HashSet<TreeCandidate> {rC});
+                            localSorted.Add(
+                                Math.Max(rC.G + rC.H, Memo[treeCandidate.MovNodes].Value + treeCandidate.G),
+                                new List<TreeCandidate> { rC });
                         }
                         var otherTC1 = cand.Where(c => c != treeCandidate).ToList();
-                        var cost1 = otherTC1.Sum(tc => tc.G + tc.H);
+                        var cost1 = 0.0;
+                        if (otherTC1.Any())
+                            otherTC1.Max(tc => tc.G + tc.H);
                         foreach (var lsl in localSorted)
                         {
                             var merged = lsl.Value;
-                            merged.UnionWith(otherTC1);
-                            //merged.UnionWith(temp);
-                            beamChildern.Add(cost1 + lsl.Key, merged);
+                            merged.AddRange(otherTC1);
+                            beamChildern.Add(Math.Max(cost1, lsl.Key), merged);
                         }
-                        //all.Add(localSorted);
                         continue;
-                        //return;
+                        //break;
                     }
-                    if (Memo.ContainsKey(treeCandidate.RefNodes))
+                    if (memoContainsReference &&
+                        treeCandidate.ReferenceH >= Memo[treeCandidate.RefNodes].Value)
                     {
                         treeCandidate.sa.Install.Reference = Memo[treeCandidate.RefNodes].sa;
                         FalseLoop = 0;
                         var movCands = GetCandidates(treeCandidate.MovNodes, treeCandidate.G);
                         movCands = CreateNewClassOfTreeCandidates(movCands);
+                        if (!movCands.Any())
+                        {
+                            if (!SortedStack.Any() && !TemporaryAlternatives.Any())
+                            {
+                                TakeSubassemAsOnePartAndAddToMemo(treeCandidate.MovNodes);
+                                i--;
+                                continue;
+                            }
+                            if (SortedStack.Any())
+                                break;
+                            var alterFirst = TemporaryAlternatives.First();
+                            SortedStack.Add(alterFirst.Key, alterFirst.Value);
+                            TemporaryAlternatives.RemoveAt(0);
+                        }
                         foreach (var mC in movCands)
                         {
                             mC.parent = treeCandidate;
-                            localSorted.Add(mC.G + mC.H, new HashSet<TreeCandidate> {mC});
+                            localSorted.Add(
+                                Math.Max(mC.G + mC.H, Memo[treeCandidate.RefNodes].Value + treeCandidate.G),
+                                new List<TreeCandidate> { mC });
                         }
-                        //all.Add(localSorted);
                         var otherTC2 = cand.Where(c => c != treeCandidate).ToList();
-                        var cost2 = otherTC2.Sum(tc => tc.G + tc.H);
+                        var cost2 = 0.0;
+                        if (otherTC2.Any())
+                            cost2 = otherTC2.Max(tc => tc.G + tc.H);
                         foreach (var lsl in localSorted)
                         {
                             var merged = lsl.Value;
-                            merged.UnionWith(otherTC2);
-                            //merged.UnionWith(temp);
-                            beamChildern.Add(cost2 + lsl.Key, merged);
+                            merged.AddRange(otherTC2);
+                            beamChildern.Add(Math.Max(cost2, lsl.Key), merged);
                         }
                         continue;
-                        //return;
+                        //break;
                     }
                     /*HashSet<TreeCandidate> refCandsF = null, movCandsF = null;
                     var tasks = new Task[2];
@@ -189,52 +253,98 @@ namespace Assembly_Planner
                     FalseLoop = 0;
                     var movCandsF = GetCandidates(treeCandidate.MovNodes, treeCandidate.G);
                     movCandsF = CreateNewClassOfTreeCandidates(movCandsF);
+                    if (!refCandsF.Any() && movCandsF.Any())
+                    {
+                        if (!SortedStack.Any() && !TemporaryAlternatives.Any())
+                        {
+                            TakeSubassemAsOnePartAndAddToMemo(treeCandidate.RefNodes);
+                            i--;
+                            continue;
+                        }
+                        if (SortedStack.Any())
+                            break;
+                        var alterFirst = TemporaryAlternatives.First();
+                        SortedStack.Add(alterFirst.Key, alterFirst.Value);
+                        TemporaryAlternatives.RemoveAt(0);
 
+                    }
+                    if (!movCandsF.Any() && refCandsF.Any())
+                    {
+                        if (!SortedStack.Any() && !TemporaryAlternatives.Any())
+                        {
+                            TakeSubassemAsOnePartAndAddToMemo(treeCandidate.MovNodes);
+                            i--;
+                            continue;
+                        }
+                        if (SortedStack.Any())
+                            break;
+                        var alterFirst = TemporaryAlternatives.First();
+                        SortedStack.Add(alterFirst.Key, alterFirst.Value);
+                        TemporaryAlternatives.RemoveAt(0);
+
+                    }
+                    if (!refCandsF.Any() && !movCandsF.Any())
+                    {
+                        if (!SortedStack.Any() && !TemporaryAlternatives.Any())
+                        {
+                            TakeSubassemAsOnePartAndAddToMemo(treeCandidate.RefNodes);
+                            TakeSubassemAsOnePartAndAddToMemo(treeCandidate.MovNodes);
+                            i--;
+                            continue;
+                        }
+                        if (SortedStack.Any())
+                            break;
+                        var alterFirst = TemporaryAlternatives.First();
+                        SortedStack.Add(alterFirst.Key, alterFirst.Value);
+                        TemporaryAlternatives.RemoveAt(0);
+
+                    }
                     foreach (var rC in refCandsF)
                     {
                         rC.parent = treeCandidate;
                         foreach (var mC in movCandsF)
                         {
                             mC.parent = treeCandidate;
-                            localSorted.Add(rC.G + rC.H + mC.G + mC.H, new HashSet<TreeCandidate> {rC, mC});
+                            localSorted.Add(Math.Max(rC.G + rC.H, mC.G + mC.H), new List<TreeCandidate> { rC, mC });
                         }
                     }
 
                     // NEW APPROACH: instead of addding them to the all, take other members of the cand, merge them with
                     // every member of the local sortedList and add them to the global list
                     var otherTC = cand.Where(c => c != treeCandidate).ToList();
-                    var cost = otherTC.Sum(tc => tc.G + tc.H);
+                    var cost = 0.0;
+                    if (otherTC.Any())
+                        cost = otherTC.Max(tc => tc.G + tc.H);
                     foreach (var lsl in localSorted)
                     {
                         var merged = lsl.Value;
-                        merged.UnionWith(otherTC);
-                        //merged.UnionWith(temp);
-                        beamChildern.Add(cost + lsl.Key, merged);
+                        merged.AddRange(otherTC);
+                        //merged.AddRange(temp);
+                        beamChildern.Add(Math.Max(cost, lsl.Key), merged);
                     }
-                    //return;
+                    //break;
                     continue;
                     //all.Add(localSorted);
                 }
-                    //);
+                //);
                 foreach (var child in beamChildern)
                     SortedStack.Add(child.Key, child.Value);
                 beamChildern.Clear();
-                if (counter == cand.Count)
+                if (counter == cand.Count /*&& !SortedStack.Any()*/)
                 {
-                    if (FirstRun)
+                    if (FirstRun && Program.BeamWidth > 1)
                     {
                         FirstRun = false;
-                        AssignNewWeight(InitialTimes, InitialStableScores, Program.StabilityWeightChosenByUser,
-                            out FinalTimeWeight, out FinalStableWeight);
+
+                        //AssignNewWeight(InitialTimes, InitialStableScores, Bridge.StabilityWeightChosenByUser,
                         //    out FinalTimeWeight, out FinalStableWeight);
-                        //tree = LeapOptimizationSearch();
+                        tree = LeapOptimizationSearch();
                     }
                     if (tree == null)
                         tree = CreateTheSequence(cand);
                 }
                 if (tree != null) break;
             }
-            Console.WriteLine("Sequence is generated.");
             return tree;
         }
 
@@ -254,17 +364,17 @@ namespace Assembly_Planner
             }
             return newCands;
         }
-        private static void AssignNewWeight(List<double> initialTimes, List<double> initialStableScores,
-            double stabilityWeightChosenByUser, out double finalTimeWeight, out double finalStableWeight)
+        private static void AssignNewWeight()
         {
-            var meantime = initialTimes.Sum()/initialTimes.Count;
-            var meanSB = initialStableScores.Sum()/initialStableScores.Count;
-            var scale = meantime/meanSB;
-            finalTimeWeight = 1 - stabilityWeightChosenByUser;
-            finalStableWeight = scale*stabilityWeightChosenByUser;
+            var meantime = InitialTimes.Sum() / InitialTimes.Count;
+            var meanSB = InitialStableScores.Sum() / InitialStableScores.Count;
+            var scale = meantime / meanSB;
+            FinalTimeWeight = 1 - Program.StabilityWeightChosenByUser;
+            FinalStableWeight = scale * Program.StabilityWeightChosenByUser;
         }
 
-        private static SubAssembly CreateTheSequence(HashSet<TreeCandidate> cand)
+
+        private static SubAssembly CreateTheSequence(List<TreeCandidate> cand)
         {
             var parentsMet = new HashSet<TreeCandidate>();
             var goal = true;
@@ -335,6 +445,21 @@ namespace Assembly_Planner
 
         }
 
+        private static void TakeSubassemAsOnePartAndAddToMemo(HashSet<Component> nodes)
+        {
+            // this is for the time that I cannot disassemble some parts from each other.
+            // what I do is that I take them as one part and add them to the memo
+            var sa = new SubAssembly(nodes, EvaluationForBinaryTree.CreateCombinedConvexHull2(nodes.ToList()),
+                EvaluationForBinaryTree.GetSubassemblyMass(nodes.ToList()),
+                EvaluationForBinaryTree.GetSubassemblyVolume(nodes.ToList()),
+                EvaluationForBinaryTree.GetSubassemblyCenterOfMass(nodes.ToList()));
+            MemoData D = new MemoData(0, sa);
+            lock (Memo)
+            {
+                Memo.Add(nodes, D);
+            }
+        }
+
         private static void FillUpMemo(TreeCandidate sa)
         {
             //var d = new MemoData(time, treeCandidate.sa);
@@ -360,22 +485,35 @@ namespace Assembly_Planner
 
         private static void UpdateSortedStackWithBeamWidth(int beamWidth)
         {
-            if (FirstRun) beamWidth = 1;
             if (SortedStack.Count > beamWidth)
                 for (var i = SortedStack.Count - 1; i >= beamWidth; i--)
+                {
+                    TemporaryAlternatives.Add(SortedStack.Keys[i], SortedStack.Values[i]);
                     SortedStack.RemoveAt(i);
+                }
         }
 
         private static HashSet<TreeCandidate> GetCandidates(HashSet<Component> nodes, double parentTransitionCost,
             bool relaxingSc = false, bool relaxingConnectionsWithFasteners = false)
         {
             var gOptions = new Dictionary<option, HashSet<int>>();
+            var c = 0;
+            var cF = 0;
             var candidates = new HashSet<TreeCandidate>();
             if (MemoCandidates.ContainsKey(nodes))
+            {
+                foreach (var tc in MemoCandidates[nodes])
+                {
+                    if (tc.G > 0) continue;
+                    tc.G = parentTransitionCost +
+                           FinalTimeWeight *
+                           (tc.sa.Install.Time + tc.sa.MoveRoate.Time +
+                            Program.UncertaintyWeightChosenByUser * (tc.sa.Install.TimeSD + tc.sa.MoveRoate.TimeSD)) +
+                           FinalStableWeight * tc.sa.InternalStabilityInfo.Totalsecore;
+                }
                 return MemoCandidates[nodes];
+            }
             GenerateOptions(nodes, gOptions, relaxingSc, relaxingConnectionsWithFasteners);
-            var c = 0;
-
             foreach (var opt in gOptions.Keys)
             {
                 var TC = new TreeCandidate();
@@ -393,45 +531,37 @@ namespace Assembly_Planner
                 //	continue;
                 var HR = H(TC.RefNodes);
                 var HM = H(TC.MovNodes);
-                TC.G = parentTransitionCost + TC.sa.Install.Time +
-                       Constants.Innerstabilityweight*TC.sa.InternalStabilityInfo.Totalsecore;
+                TC.G = parentTransitionCost +
+                       FinalTimeWeight*
+                       (TC.sa.Install.Time + TC.sa.MoveRoate.Time +
+                        Program.UncertaintyWeightChosenByUser*(TC.sa.Install.TimeSD + TC.sa.MoveRoate.TimeSD)) +
+                       FinalStableWeight*TC.sa.InternalStabilityInfo.Totalsecore;
                 TC.H = Math.Max(HR, HM);
+                TC.MovingH = HM;
+                TC.ReferenceH = HR;
                 if (FirstRun)
                 {
-                    InitialStableScores.Add(TC.sa.InternalStabilityInfo.Totalsecore);
-                    InitialTimes.Add(TC.sa.Install.Time);
+                    //  InitialStableScores.Add(TC.sa.InternalStabilityInfo.Totalsecore);
+                    //InitialTimes.Add(TC.sa.Install.Time + TC.sa.MoveRoate.Time);
                     InitialStablyH.Add(TC.H);
                 }
                 candidates.Add(TC);
-
             }
             // if candidates.Count is zero, s.th. is wrong. Meaning that we have a subassembly that cannot be disassembled
             // It means that finite/inf directions suck or secondary connections.
             // since user is checking the removal directions, we can simply assume the problem is only with secondary connections. 
-            if (c == gOptions.Count)
+            if (c + cF == gOptions.Count)
             {
-                if (c > 0)
+                FalseLoop++;
+                if (FalseLoop > 3)
+                    throw new Exception("Nodes cannot be disassembled.");
+                try
                 {
-                    candidates = GetCandidates(nodes, parentTransitionCost, false, true);
+                    candidates = GetCandidates(nodes, parentTransitionCost, true, true);
                 }
-                else
+                catch (Exception)
                 {
-                    FalseLoop++;
-                    if (FalseLoop > 3)
-                    {
-                        Console.WriteLine("OOPS, I cannot disassemble these parts:\n");
-                        foreach (var n in nodes)
-                            Console.WriteLine("    - " + n.name);
-                        throw new Exception("Nodes cannot be disassembled.");
-                    }
-                    try
-                    {
-                        candidates = GetCandidates(nodes, parentTransitionCost, true);
-                    }
-                    catch (Exception)
-                    {
-                        //Bridge.StatusReporter.PrintMessage("I CANNOT CONTINUE ...", (float)1.0);
-                    }
+                    // ignored
                 }
             }
             if (MemoCandidates.ContainsKey(nodes))
@@ -472,7 +602,7 @@ namespace Assembly_Planner
             if (A.Count <= 1)
                 return 0;
 
-            if (Memo.ContainsKey(A))
+            if (A.Count < 3 && Memo.ContainsKey(A))
                 return Memo[A].Value;
 
             var L = Math.Log(A.Count, 2);
@@ -712,10 +842,181 @@ namespace Assembly_Planner
         private void InitializeDataStructures(designGraph graph, Dictionary<string, List<TessellatedSolid>> solids,
             List<int> globalDirPool)
         {
+            GenearateTimeWeight(solids);
             AssemblyEvaluator = new EvaluationForBinaryTree(solids);
             Constants.Values = new Constants();
             InitializeMemoInitial();
             FillingParallelDirections(globalDirPool);
+        }
+
+        private static void GenearateTimeWeight(Dictionary<string, List<TessellatedSolid>> solids)
+        {
+            var subdictionary = new Dictionary<List<List<int>>, List<List<Component>>>();
+            var index = 0;
+            var numberofnode = Program.AssemblyGraph.nodes.Count;
+            var listdir = new List<int>();
+            for (int i = 3; i <= numberofnode; i++)
+            {
+                for (int j = 2; j < i; j++)
+                {
+                    var key = new List<List<int>>();
+                    var subassemblynodes = new HashSet<Component>();
+                    var refnodes = new List<Component>();
+                    var dir = new List<int>();
+                    try
+                    {
+                        GenerateGraphOptions(i, j, out subassemblynodes, out refnodes, out dir);
+                        if (subassemblynodes.Count == 1 || refnodes.Count == 1)
+                        {
+                            continue;
+                        }
+                        if (subassemblynodes.Count == 0 || refnodes.Count == 0)
+                        {
+                            continue;
+                        }
+                        var listnodes = new List<List<Component>>();
+                        listnodes.Add(subassemblynodes.ToList());
+                        listnodes.Add(refnodes);
+                        key.Add(new List<int> { index });
+                        key.Add(dir);
+                        subdictionary.Add(key, listnodes);
+                        index++;
+                    }
+                    catch (Exception)
+                    {
+                        continue;
+                    }
+                }
+
+            }
+            Parallel.ForEach(subdictionary, subnode =>
+            //   foreach (var subnode in subdictionary)
+            {
+                if (InitialTimes.Count > 100)
+                    return;
+                try
+                {
+                    var dir = subnode.Key[1];
+                    var subassemblynodes = new HashSet<Component>(subnode.Value[0]);
+                    var refnodes = subnode.Value[1];
+                    var sub = new SubAssembly();
+                    AssemblyEvaluator = new EvaluationForBinaryTree(solids);
+                    var d = AssemblyEvaluator.EvaluateSub(Program.AssemblyGraph, subassemblynodes, refnodes,
+                        new HashSet<int>(dir), out sub);
+                    if (sub.Install.Time + sub.MoveRoate.Time != 0)
+                    {
+                        lock (InitialTimes)
+                        {
+                            InitialTimes.Add(sub.Install.Time + sub.MoveRoate.Time);
+
+                        }
+                        lock (InitialStableScores)
+                        {
+                            InitialStableScores.Add(stabilityscore);
+                        }
+                    }
+
+                }
+                catch (Exception)
+                {
+
+                }
+                // }
+            });
+            AssignNewWeight();
+        }
+
+        private static void GenerateGraphOptions(int numberofrefnodes, int numberofmovnodes, out HashSet<Component> refnodes, out List<Component> movnodes, out List<int> dirs)
+        {
+
+            refnodes = new HashSet<Component>();
+            movnodes = new List<Component>();
+            dirs = new List<int>();
+            var randomstartnode = (Component)
+                Program.AssemblyGraph.nodes.Where(n => n is Component).ToList()[Gen.Random.Numbers.Integers(0, Program.AssemblyGraph.nodes.Count - 1)()];
+            refnodes.Add(randomstartnode);
+            var trytime = 0;
+            var allarcs = new List<arc>();
+            while (refnodes.Count != numberofrefnodes && trytime < 100)
+            {
+
+                var connectedarcs =
+                    Program.AssemblyGraph.arcs.Where(a => a is Connection).ToList().FindAll(
+                        a => a.To.name.Equals(randomstartnode.name) || a.From.name.Equals(randomstartnode.name));
+                var selectedarc = new arc();
+                if (connectedarcs.Count == 1)
+                {
+                    selectedarc = connectedarcs[0];
+                }
+                else
+                {
+                    selectedarc = connectedarcs[Gen.Random.Numbers.Integers(0, connectedarcs.Count - 1)()];
+                }
+                if (randomstartnode.name.Equals(selectedarc.To.name) && !refnodes.Contains(selectedarc.From))
+                {
+                    allarcs.Add(selectedarc);
+                    randomstartnode = (Component)selectedarc.From;
+                    refnodes.Add(randomstartnode);
+                    trytime = 0;
+
+                }
+                else if (randomstartnode.name.Equals(selectedarc.From.name) && !refnodes.Contains(selectedarc.To))
+                {
+                    allarcs.Add(selectedarc);
+                    randomstartnode = (Component)selectedarc.To;
+                    refnodes.Add(randomstartnode);
+                    trytime = 0;
+                }
+                else
+                {
+                    trytime++;
+                    continue;
+
+                }
+            }
+
+            var randomstartmovenode = refnodes.ToList()[Gen.Random.Numbers.Integers(0, refnodes.Count - 1)()];
+            dirs =
+                randomstartmovenode.arcs.Where(a => a is Connection).Cast<Connection>().ToList()[0].InfiniteDirections;
+
+            trytime = 0;
+            movnodes.Add(randomstartmovenode);
+            while (movnodes.Count != numberofmovnodes && trytime < 100)
+            {
+
+                var connectedarcs =
+                    allarcs.Where(a => a is Connection).ToList().FindAll(
+                        a => a.To.name.Equals(randomstartmovenode.name) || a.From.name.Equals(randomstartmovenode.name));
+                var selectedarc = new arc();
+                if (connectedarcs.Count == 1)
+                {
+                    selectedarc = connectedarcs[0];
+                }
+                else
+                {
+                    selectedarc = connectedarcs[Gen.Random.Numbers.Integers(0, connectedarcs.Count - 1)()];
+                }
+
+                if (randomstartmovenode.name.Equals(selectedarc.To.name) && !movnodes.Contains(selectedarc.From) && refnodes.Contains(selectedarc.From))
+                {
+                    randomstartmovenode = (Component)selectedarc.From;
+                    movnodes.Add((Component)randomstartmovenode);
+                    trytime = 0;
+
+                }
+                else if (randomstartmovenode.name.Equals(selectedarc.From.name) && !movnodes.Contains(selectedarc.To) && refnodes.Contains(selectedarc.To))
+                {
+                    randomstartmovenode = (Component)selectedarc.To;
+                    movnodes.Add((Component)randomstartmovenode);
+                    trytime = 0;
+
+                }
+                else
+                {
+                    trytime++;
+                    continue;
+                }
+            }
         }
 
         private void FillingParallelDirections(List<int> globalDirPool)
@@ -752,9 +1053,9 @@ namespace Assembly_Planner
             var partsCount = Program.AssemblyGraph.nodes.Count;
             var baseCount = 8 - Math.Log(partsCount);
             if (baseCount < 0) Program.BeamWidth = 1;
-            else if (partsCount < 12) Program.BeamWidth = (int)Math.Floor(baseCount);
-            else if (partsCount < 25) Program.BeamWidth = (int)Math.Floor(baseCount / 2.0) + 1;
-            else Program.BeamWidth = (int)Math.Floor(baseCount / 2.0);
+            else if (partsCount < 12) Program.BeamWidth = 16*(int)Math.Floor(baseCount);
+            else if (partsCount < 25) Program.BeamWidth = 8*(int)Math.Floor(baseCount);
+            else Program.BeamWidth = 8*(int)Math.Floor(baseCount / 2.0);
         }
     }
     class LeapCandidate : IComparable<LeapCandidate>

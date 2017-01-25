@@ -495,8 +495,7 @@ namespace Assembly_Planner
         public TreeCandidate parent;
         public SubAssembly sa;
         public HashSet<Component> RefNodes, MovNodes;
-        public double G, H; //G-score and heuristic value
-        public Dictionary<int, HashSet<HashSet<Component>>> Options; 
+        public double G, H, MovingH, ReferenceH; //G-score and heuristic value
         public int CompareTo(TreeCandidate other)
         {
             var F = G + H;

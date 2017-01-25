@@ -29,6 +29,7 @@ namespace Assembly_Planner
         public static Dictionary<string, double> SolidsMass = new Dictionary<string, double>();
         public static designGraph AssemblyGraph;
         public static double StabilityWeightChosenByUser = 0;
+        public static double UncertaintyWeightChosenByUser = 0;
         public static double MeshMagnifier = 1;
         public static double[] PointInMagicBox = {0,0,0.0};
         public static int BeamWidth;
@@ -40,6 +41,10 @@ namespace Assembly_Planner
         public static List<int> globalDirPool = new List<int>();
         public static List<double> allmtime = new List<double>();
         public static List<double> allitime = new List<double>();
+        public static List<double> gpmovingtime = new List<double>();
+        public static List<double> gpinstalltime = new List<double>();
+        public static List<double> gpsecuretime = new List<double>();
+        public static List<double> gprotate = new List<double>();
         private static void Main(string[] args)
         {
             InititalConfigurations();
