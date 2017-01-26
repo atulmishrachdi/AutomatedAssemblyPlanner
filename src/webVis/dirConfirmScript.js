@@ -1294,13 +1294,13 @@ function updateAxisLines(){
 function getDirectionFromMouse( mouseX, mouseY){
 	
 	var mouseZ;
-	mouseZ = Math.pow(1-(mouseX*mouseX)+(mouseY*mouseY),0.5);
+	mouseZ = Math.pow(1-((mouseX*mouseX)+(mouseY*mouseY)),0.5);
 
 	var theVec = new THREE.Vector3(mouseX,mouseY,mouseZ);
-	var theRot = new THREE.Euler( 	0-Math.atan2(thePos.y-focusPoint.y,Math.sqrt(Math.pow(thePos.z-focusPoint.z,2)+Math.pow(thePos.x-focusPoint.x,2))),
-									Math.PI/2-Math.atan2(thePos.z-focusPoint.z,thePos.x-focusPoint.x),
+	var theRot = new THREE.Euler( 	0-Math.atan2(thePos.y,Math.sqrt(Math.pow(thePos.z,2)+Math.pow(thePos.x,2))),
+									Math.atan2(thePos.x,thePos.z),
 									0,
-									'YXZ' );
+									'ZYX' );
 	theVec.applyEuler(theRot);
 	
 	var theDir = getDir(theVec);
