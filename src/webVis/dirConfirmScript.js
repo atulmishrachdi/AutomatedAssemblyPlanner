@@ -1002,7 +1002,7 @@ function addVectorToPair(theButton){
 	
 	var theDiv=theButton.parentElement;
 	var theVecList=document.getElementById("vecList");
-	console.log(theVecList);
+	//console.log(theVecList);
 	
 	var theEntry=document.createElement("div");
 	var remBut=document.createElement("button");
@@ -1320,6 +1320,26 @@ function addVectorFromMouse ( mouseX, mouseY ){
 	console.log("aW: "+areaW+" aH: "+areaH+" aT: "+areaT+" aL: "+areaL);
 	console.log("mX: "+(((mouseX-areaL)-areaW/2)/(areaW/2))+" mY: "+((areaH/2-(mouseY-areaT))/(areaH/2)));
 	var theDir = getDirectionFromMouse( ((mouseX-areaL)-areaW/2)/(areaW/2), (areaH/2-(mouseY-areaT))/(areaH/2) );
+	
+	
+	var theVecList=document.getElementById("vecList");
+	var theVecs = theVecList.childNodes;
+	var pos = 0;
+	var lim = theVecs.length;
+	var testVec = new THREE.Vector3(theDirections[theDir].X,theDirections[theDir].Y,theDirections[theDir].Z);
+	var otherVec = new THREE.Vector3(0,0,0);
+	while(pos<lim){
+		if(theVecs[pos]!==null){
+			otherVec.copy(theVecs[pos].counterPart.geometry.vertices[1]);
+			otherVec.sub(theVecs[pos].counterPart.geometry.vertices[0]);
+			if(testVec.angleTo(otherVec) < 0.15){
+				return;
+			}
+		}
+		pos++;
+	}
+	delete testVec;
+	delete otherVec;
 	var theElem = addVectorToPair(theButton);
 	var theInputs = theElem.getElementsByTagName("input");
 	theInputs[0].value = theDirections[theDir].X;
