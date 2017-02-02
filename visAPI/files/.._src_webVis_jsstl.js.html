@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>..\src\webVis\jsstl.js</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="icon" href="../assets/favicon.ico">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+                <h1><img src="../assets/css/logo.png" title="" width="117" height="52"></h1>
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: </em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+                    <h2 class="off-left">APIs</h2>
+                    <div id="api-tabview" class="tabview">
+                        <ul class="tabs">
+                            <li><a href="#api-classes">Classes</a></li>
+                            <li><a href="#api-elements">Elements</a></li>
+                            <li><a href="#api-modules">Modules</a></li>
+                        </ul>
+                
+                        <div id="api-tabview-filter">
+                            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+                        </div>
+                
+                        <div id="api-tabview-panel">
+                            <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/directionConfirmGlobal.html">directionConfirmGlobal</a></li>
+                                <li><a href="../classes/partTableGlobal.html">partTableGlobal</a></li>
+                                <li><a href="../classes/renderGlobal.html">renderGlobal</a></li>
+                            </ul>
+                
+                                <ul id="api-elements" class="apis elements">
+                                    <li><a href="../elements/inputState.html">&lt;inputState&gt;</a></li>
+                                </ul>
+                
+                            <ul id="api-modules" class="apis modules">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+                    Show:
+                    <label for="api-show-inherited">
+                        <input type="checkbox" id="api-show-inherited" checked>
+                        Inherited
+                    </label>
+            
+                    <label for="api-show-protected">
+                        <input type="checkbox" id="api-show-protected">
+                        Protected
+                    </label>
+            
+                    <label for="api-show-private">
+                        <input type="checkbox" id="api-show-private">
+                        Private
+                    </label>
+                    <label for="api-show-deprecated">
+                        <input type="checkbox" id="api-show-deprecated">
+                        Deprecated
+                    </label>
+            
+                </div>
+            
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+<h1 class="file-heading">File: ..\src\webVis\jsstl.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+// Code copied from Github repo of tonylukasavage (and somewhat modified)
+// License of this code, as stated on the repo is:
+//
+//    Do whatever you want with this code. I offer it without expectation or warranty. 
+//    No need to credit me in your project or source code. A digital high five would be
+//    nice, but is not required.
+//
+
+
+// Notes:
+// - STL file format: http://en.wikipedia.org/wiki/STL_(file_format)
+// - 80 byte unused header
+// - All binary STLs are assumed to be little endian, as per wiki doc
+/**
+*
+* Converts a given block of binary stl data (as an arraybuffer) to a threeJS representation
+* of the geometry. Function courtesy of &#x27;tonylukasavage&#x27; from Github, who released this to
+* the public domain. 
+*
+* @method parseStlBinary
+* @for renderGlobal
+* @param {Arraybuffer} stl The binary stl data
+* @return {Object} threeJS geometry object
+* 
+*/
+var parseStlBinary = function(stl) {
+	var geo = new THREE.Geometry();
+	var dv = new DataView(stl, 80); // 80 == unused header
+	var isLittleEndian = true;
+	var triangles = dv.getUint32(0, isLittleEndian); 
+	// console.log(&#x27;arraybuffer length:  &#x27; + stl.byteLength);
+	// console.log(&#x27;number of triangles: &#x27; + triangles);
+	var offset = 4;
+	for (var i = 0; i &lt; triangles; i++) {
+		// Get the normal for this triangle
+		var normal = new THREE.Vector3(
+			dv.getFloat32(offset, isLittleEndian),
+			dv.getFloat32(offset+4, isLittleEndian),
+			dv.getFloat32(offset+8, isLittleEndian)
+		);
+		offset += 12;
+		// Get all 3 vertices for this triangle
+		for (var j = 0; j &lt; 3; j++) {
+			geo.vertices.push(
+				new THREE.Vector3(
+					dv.getFloat32(offset, isLittleEndian),
+					dv.getFloat32(offset+4, isLittleEndian),
+					dv.getFloat32(offset+8, isLittleEndian)
+				)
+			);
+			offset += 12
+		}
+		// there&#x27;s also a Uint16 &quot;attribute byte count&quot; that we
+		// don&#x27;t need, it should always be zero.
+		offset += 2;   
+		// Create a new face for from the vertices and the normal             
+		geo.faces.push(new THREE.Face3(i*3, i*3+1, i*3+2, normal));
+	}
+	// The binary STL I&#x27;m testing with seems to have all
+	// zeroes for the normals, unlike its ASCII counterpart.
+	// We can use three.js to compute the normals for us, though,
+	// once we&#x27;ve assembled our geometry. This is a relatively 
+	// expensive operation, but only needs to be done once.
+	geo.computeFaceNormals();
+	
+	return geo;
+};  
+
+
+
+/**
+*
+* Processes a given string to make it parsible for parseStl and returns
+* the results
+*
+* @method trim
+* @for renderGlobal
+* @param {String} str ASCII STL data
+* @return {String} processed string
+* 
+*/
+function trim (str) {
+	str = str.replace(/^\s+/, &#x27;&#x27;);
+	for (var i = str.length - 1; i &gt;= 0; i--) {
+		if (/\S/.test(str.charAt(i))) {
+			str = str.substring(0, i + 1);
+			break;
+		}
+	}
+	return str;
+}
+			
+
+			
+// Added this in to turn the input buffer into an actual string
+/**
+*
+* Converts an arraybuffer into a string of equivalent binary content
+* @method arrayToString
+* @for renderGlobal
+* @param {Arraybuffer} buf The arraybuffer
+* @return {String} 
+* 
+*/
+function arrayToString(buf) {
+	var pos=0;
+	var arr=new Uint8Array(buf);
+	var lim=arr.length;
+	var result=&quot;&quot;;
+	while(pos&lt;lim){
+		result=result+String.fromCharCode(arr[pos]);
+		pos++;
+	}
+	return result;
+}
+
+
+
+/**
+*
+* Converts a given block of ASCII stl data (as an arraybuffer) to a threeJS representation
+* of the geometry. Function courtesy of &#x27;tonylukasavage&#x27; from Github, who released this to
+* the public domain. 
+*
+* @method parseStl
+* @for renderGlobal
+* @param {Arraybuffer} stl The ASCII stl data
+* @return {Object} threeJS geometry object
+* 
+*/
+var parseStl = function(stl) {
+	
+	var state = &#x27;&#x27;;
+	
+	stl=arrayToString(stl);
+	
+	
+	var lines = stl.split(&#x27;\n&#x27;);
+	var geo = new THREE.Geometry();
+	var name, parts, line, normal, done, vertices = [];
+	var vCount = 0;
+	stl = null;
+	for (var len = lines.length, i = 0; i &lt; len; i++) {
+		if (done) {
+			break;
+		}
+		line = trim(lines[i]);
+		parts = line.split(&#x27; &#x27;);
+		switch (state) {
+			case &#x27;&#x27;:
+				if (parts[0] !== &#x27;solid&#x27;) {
+					console.error(line);
+					console.error(&#x27;Invalid state &quot;&#x27; + parts[0] + &#x27;&quot;, should be &quot;solid&quot;&#x27;);
+					return null;
+				} else {
+					name = parts[1];
+					state = &#x27;solid&#x27;;
+				}
+				break;
+			case &#x27;solid&#x27;:
+				if (parts[0] !== &#x27;facet&#x27; || parts[1] !== &#x27;normal&#x27;) {
+					console.error(line);
+					console.error(&#x27;Invalid state &quot;&#x27; + parts[0] + &#x27;&quot;, should be &quot;facet normal&quot;&#x27;);
+					return null;
+				} else {
+					normal = [
+						parseFloat(parts[2]), 
+						parseFloat(parts[3]), 
+						parseFloat(parts[4])
+					];
+					state = &#x27;facet normal&#x27;;
+				}
+				break;
+			case &#x27;facet normal&#x27;:
+				if (parts[0] !== &#x27;outer&#x27; || parts[1] !== &#x27;loop&#x27;) {
+					console.error(line);
+					console.error(&#x27;Invalid state &quot;&#x27; + parts[0] + &#x27;&quot;, should be &quot;outer loop&quot;&#x27;);
+					return null;
+				} else {
+					state = &#x27;vertex&#x27;;
+				}
+				break;
+			case &#x27;vertex&#x27;: 
+				if (parts[0] === &#x27;vertex&#x27;) {
+					geo.vertices.push(new THREE.Vector3(
+						parseFloat(parts[1]),
+						parseFloat(parts[2]),
+						parseFloat(parts[3])
+					));
+				} else if (parts[0] === &#x27;endloop&#x27;) {
+					geo.faces.push( new THREE.Face3( vCount*3, vCount*3+1, vCount*3+2, new THREE.Vector3(normal[0], normal[1], normal[2]) ) );
+					vCount++;
+					state = &#x27;endloop&#x27;;
+				} else {
+					console.error(line);
+					console.error(&#x27;Invalid state &quot;&#x27; + parts[0] + &#x27;&quot;, should be &quot;vertex&quot; or &quot;endloop&quot;&#x27;);
+					return null;
+				}
+				break;
+			case &#x27;endloop&#x27;:
+				if (parts[0] !== &#x27;endfacet&#x27;) {
+					console.error(line);
+					console.error(&#x27;Invalid state &quot;&#x27; + parts[0] + &#x27;&quot;, should be &quot;endfacet&quot;&#x27;);
+					return null;
+				} else {
+					state = &#x27;endfacet&#x27;;
+				}
+				break;
+			case &#x27;endfacet&#x27;:
+				if (parts[0] === &#x27;endsolid&#x27;) {
+					return geo;
+					done = true;
+				} else if (parts[0] === &#x27;facet&#x27; &amp;&amp; parts[1] === &#x27;normal&#x27;) {
+					normal = [
+						parseFloat(parts[2]), 
+						parseFloat(parts[3]), 
+						parseFloat(parts[4])
+					];
+					if (vCount % 1000 === 0) {
+						//console.log(normal);
+					}
+					state = &#x27;facet normal&#x27;;
+				} else {
+					console.error(line);
+					console.error(&#x27;Invalid state &quot;&#x27; + parts[0] + &#x27;&quot;, should be &quot;endsolid&quot; or &quot;facet normal&quot;&#x27;);
+					return null;
+				}
+				break;
+			default:
+				console.error(&#x27;Invalid state &quot;&#x27; + state + &#x27;&quot;&#x27;);
+				break;
+		}
+	}
+};
+    </pre>
+</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>
