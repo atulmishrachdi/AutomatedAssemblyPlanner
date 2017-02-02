@@ -656,7 +656,7 @@ var render = function () {
 	
 	
 	// Change appearence of the object of interest and display the appropriate information
-	if(objectOfInterest!=null){
+	if(objectOfInterest!==null && standard !== true){
 	
 		mouseOverText=" "+objectOfInterest.Name.substring(0,objectOfInterest.Name.length-4);
 		objectOfInterest.Mesh.material=new THREE.MeshStandardMaterial({
@@ -675,7 +675,7 @@ var render = function () {
 	
 	
 	// Change appearence of the focus point mesh
-	if(focusPoint!=null){
+	if(focusPoint!=null && standard !== true){
 	
 		focusPoint.Mesh.material=new THREE.MeshStandardMaterial({
 			color:0xff6666,
@@ -962,11 +962,11 @@ function renderParts(){
 	alignAssemblyCenter();
 	
 	addGrid(50000,500, -1000, 0x888888);
-	addGrid(50000,500, 2000, 0x888888);
+	addGrid(50000,500, 8000, 0x888888);
 	
 	var pos = 0;
 	while(pos<100){
-		addCylender(200, -1000, 2000, (pos%10)/10*50000-25000, pos/10/10*50000-25000, 8, 12, 0x888888);
+		addCylender(200, -1000, 8000, (pos%10)/10*50000-25000, pos/10/10*50000-25000, 8, 12, 0x888888);
 		pos++;
 	}
 	

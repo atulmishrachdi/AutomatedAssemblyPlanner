@@ -458,7 +458,18 @@ function makeFastenerKeyFrames(theFst,runningList,currentFrameList){
 	
 	var copiedList= copyFrameList(runningList);
 	//console.log("-----------");
+	if(copiedList.length===1){
+		copiedList.length = 2;
+		copiedList[1] = copiedList[0];
+		copiedList[0] = {
+						Quat: newQuat, 
+						Position: new THREE.Vector3(0.0,0.0,0.0),
+						Time: 0.00
+					};
+	}
 	currentFrameList.push({Name: theFst.Name, Frames: copiedList});
+	
+	console.log({Name: theFst.Name, Frames: copiedList});
 	runningList.pop();
 
 	return;
@@ -494,7 +505,7 @@ function makeKeyFrames(theTree, runningList, currentFrameList){
 	var newQuat= new THREE.Quaternion();
 	newQuat.setFromEuler(new THREE.Euler(0,0,0,'XYZ'));
 	
-	var presentFrame={
+	var presentFrame = {
 						Quat: newQuat, 
 						Position: new THREE.Vector3(theTree.X,theTree.Y,theTree.Z),
 						Time: theTree.Time
