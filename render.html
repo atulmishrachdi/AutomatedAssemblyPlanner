@@ -129,7 +129,6 @@
 	
 	
 	
-	<!--<div id="container"></div>-->
 	
 	<script src="./src/webVis/jsstl.js"></script>
 	<script src="./src/webVis/treequence.js"></script>
@@ -137,6 +136,31 @@
 	<script src="./src/webVis/jquery.js"></script>
 	<script src="./src/webVis/three.min.js"></script>
 	<script src="./src/webVis/renderScript.js"></script>
+	
+	
+	
+	<script id="chroma-vert" type="x-shader/x-vertex">
+		varying float theZ;
+		varying vec3 theNorm;
+		void main() {
+			gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+			theZ = gl_Position.z;
+			theNorm = normal.xyz;
+		}
+    </script>
+    <script id="chroma-frag" type="x-shader/x-fragment">
+		varying float theZ;
+		varying vec3 theNorm;
+		uniform float cameraNear;
+		uniform float cameraFar;
+		
+		void main() {
+			float Z = abs(theZ-cameraNear)/pow(abs((cameraFar-cameraNear)/4.0),0.95)-0.1;
+			float shade = 0.5+dot(theNorm,vec3(0.0,1.0,0.0))*0.5;
+			gl_FragColor.rgb = vec3( clamp((1.0-Z),0.0,1.0), 1.0-clamp(abs(1.0-Z*1.5),0.0,1.0), clamp(Z-0.5,0.0,1.0) ) * shade ;
+			gl_FragColor.a = 1.0;
+		}
+    </script>
 	
 	<xmp id="warning"></xmp>
 	

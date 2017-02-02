@@ -1,15 +1,25 @@
 {
     "project": {},
     "files": {
-        "src\\webVis\\jquery.js": {
-            "name": "src\\webVis\\jquery.js",
+        "..\\src\\webVis\\dirConfirmScript.js": {
+            "name": "..\\src\\webVis\\dirConfirmScript.js",
+            "modules": {},
+            "classes": {},
+            "fors": {
+                "directionConfirmGlobal": 1,
+                "renderGlobal": 1
+            },
+            "namespaces": {}
+        },
+        "..\\src\\webVis\\jquery.js": {
+            "name": "..\\src\\webVis\\jquery.js",
             "modules": {},
             "classes": {},
             "fors": {},
             "namespaces": {}
         },
-        "src\\webVis\\jsstl.js": {
-            "name": "src\\webVis\\jsstl.js",
+        "..\\src\\webVis\\jsstl.js": {
+            "name": "..\\src\\webVis\\jsstl.js",
             "modules": {},
             "classes": {},
             "fors": {
@@ -17,8 +27,8 @@
             },
             "namespaces": {}
         },
-        "src\\webVis\\partRender.js": {
-            "name": "src\\webVis\\partRender.js",
+        "..\\src\\webVis\\partRender.js": {
+            "name": "..\\src\\webVis\\partRender.js",
             "modules": {},
             "classes": {},
             "fors": {
@@ -26,8 +36,8 @@
             },
             "namespaces": {}
         },
-        "src\\webVis\\partTableScript.js": {
-            "name": "src\\webVis\\partTableScript.js",
+        "..\\src\\webVis\\partTableScript.js": {
+            "name": "..\\src\\webVis\\partTableScript.js",
             "modules": {},
             "classes": {},
             "fors": {
@@ -35,8 +45,8 @@
             },
             "namespaces": {}
         },
-        "src\\webVis\\renderScript.js": {
-            "name": "src\\webVis\\renderScript.js",
+        "..\\src\\webVis\\renderScript.js": {
+            "name": "..\\src\\webVis\\renderScript.js",
             "modules": {},
             "classes": {
                 "renderGlobal": 1
@@ -46,15 +56,15 @@
             },
             "namespaces": {}
         },
-        "src\\webVis\\sigma.canvas.edges.curvedArrow.js": {
-            "name": "src\\webVis\\sigma.canvas.edges.curvedArrow.js",
+        "..\\src\\webVis\\sigma.canvas.edges.curvedArrow.js": {
+            "name": "..\\src\\webVis\\sigma.canvas.edges.curvedArrow.js",
             "modules": {},
             "classes": {},
             "fors": {},
             "namespaces": {}
         },
-        "src\\webVis\\treequence.js": {
-            "name": "src\\webVis\\treequence.js",
+        "..\\src\\webVis\\treequence.js": {
+            "name": "..\\src\\webVis\\treequence.js",
             "modules": {},
             "classes": {},
             "fors": {
@@ -65,6 +75,15 @@
     },
     "modules": {},
     "classes": {
+        "directionConfirmGlobal": {
+            "name": "directionConfirmGlobal",
+            "shortname": "directionConfirmGlobal",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": []
+        },
         "renderGlobal": {
             "name": "renderGlobal",
             "shortname": "renderGlobal",
@@ -73,7 +92,7 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
-            "file": "src\\webVis\\renderScript.js",
+            "file": "..\\src\\webVis\\renderScript.js",
             "line": 6,
             "description": "Class containing all the methods used in the 3d visual assembly",
             "static": 1
@@ -92,8 +111,8 @@
         "inputState": {
             "name": "inputState",
             "attributes": [],
-            "file": "src\\webVis\\renderScript.js",
-            "line": 118,
+            "file": "..\\src\\webVis\\renderScript.js",
+            "line": 120,
             "description": "Contains a representation of the last keyboard events reported by the \n web page for each given key that acts as input for manipulating the\n visulization: 'W','A','S','D','R','F', and the 'Space' key",
             "return": {
                 "description": "",
@@ -103,7 +122,184 @@
     },
     "classitems": [
         {
-            "file": "src\\webVis\\jquery.js",
+            "file": "..\\src\\webVis\\dirConfirmScript.js",
+            "line": 122,
+            "description": "Given an HTML element corresponding to a \"confirm\" button, moves the parent element\n to the confirmed section of the webpage",
+            "itemtype": "method",
+            "name": "confirmPair",
+            "params": [
+                {
+                    "name": "theButton",
+                    "description": "The confirm button of the element to be moved",
+                    "type": "HTML Element"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "directionConfirmGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\dirConfirmScript.js",
+            "line": 143,
+            "description": "Given an HTML element corresponding to a \"unconfirm\" button, moves the parent element\n to the unconfirmed section of the webpage",
+            "itemtype": "method",
+            "name": "deconfirmPair",
+            "params": [
+                {
+                    "name": "theButton",
+                    "description": "The unconfirm button of the element to be moved",
+                    "type": "HTML Element"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "directionConfirmGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\dirConfirmScript.js",
+            "line": 164,
+            "description": "Given an HTML element corresponding to a \"focus\" button, makes the corresponding pair\n of parts to be displayed",
+            "itemtype": "method",
+            "name": "changeCurrentPair",
+            "params": [
+                {
+                    "name": "theButton",
+                    "description": "The confirm button of the element to be moved",
+                    "type": "HTML Element"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "directionConfirmGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\dirConfirmScript.js",
+            "line": 214,
+            "description": "The rendering function for the webpage",
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\dirConfirmScript.js",
+            "line": 282,
+            "description": "Accepts a string and outputs the string of all characters following the final '.' symbol\n in the string. This is used internally to extract file extensions from file names.",
+            "itemtype": "method",
+            "name": "grabExtension",
+            "params": [
+                {
+                    "name": "theName",
+                    "description": "The file name to be processed",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "the extension in the given file name. If no extension is found, the \n 'undefined' value is returned.",
+                "type": "String"
+            },
+            "class": "directionConfirmGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\dirConfirmScript.js",
+            "line": 317,
+            "description": "Accepts a fileinput event, presumably from a file upload event listener, and assigns\n functions to each file reader listed in the event to be called upon the full loading\n of that given reader's files",
+            "itemtype": "method",
+            "name": "readMultipleFiles",
+            "params": [
+                {
+                    "name": "evt",
+                    "description": "A fileinput event, to be given by a fileinput event listener",
+                    "type": "Event"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "directionConfirmGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\dirConfirmScript.js",
+            "line": 387,
+            "description": "Called internally upon every recieved fileload event. Checks if every file reader in the \n array \"fileReaders\" has fully read each of their files. If so, then the function converts\n all recieved stl files into threeJS models and executes \"renderParts\".",
+            "itemtype": "method",
+            "name": "loadParts",
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "directionConfirmGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\dirConfirmScript.js",
+            "line": 468,
+            "description": "Accepts two strings, a and b, and a vector, vec, and outputs a\n constructed part pair object if the two strings correspond to two\n extant parts",
+            "itemtype": "method",
+            "name": "linkPair",
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "class": "directionConfirmGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\dirConfirmScript.js",
+            "line": 513,
+            "description": "Links together the pairs of parts corresponding to the strings present in\n the namePairs array.",
+            "itemtype": "method",
+            "name": "linkParts",
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "directionConfirmGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\dirConfirmScript.js",
+            "line": 542,
+            "description": "Populates the webpage with data stored int the global variable theSML",
+            "itemtype": "method",
+            "name": "parseData",
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "directionConfirmGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\dirConfirmScript.js",
+            "line": 670,
+            "description": "Populates the webpage with graphical representations of the assembly pairs\n stored in the global variable assemblyPairs",
+            "itemtype": "method",
+            "name": "insertAssemblyPairs",
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "directionConfirmGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\dirConfirmScript.js",
+            "line": 724,
+            "description": "Dehighlights the given pair of parts",
+            "itemtype": "method",
+            "name": "deHighlight",
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "directionConfirmGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\jquery.js",
             "line": 890,
             "description": "Create key-value caches of limited size",
             "return": {
@@ -113,7 +309,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\jquery.js",
+            "file": "..\\src\\webVis\\jquery.js",
             "line": 910,
             "description": "Mark a function for special use by Sizzle",
             "params": [
@@ -126,7 +322,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\jquery.js",
+            "file": "..\\src\\webVis\\jquery.js",
             "line": 919,
             "description": "Support testing using an element",
             "params": [
@@ -139,7 +335,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\jquery.js",
+            "file": "..\\src\\webVis\\jquery.js",
             "line": 940,
             "description": "Adds the same handler for all of the specified attrs",
             "params": [
@@ -157,7 +353,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\jquery.js",
+            "file": "..\\src\\webVis\\jquery.js",
             "line": 954,
             "description": "Checks document order of two siblings",
             "params": [
@@ -179,7 +375,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\jquery.js",
+            "file": "..\\src\\webVis\\jquery.js",
             "line": 982,
             "description": "Returns a function to use in pseudos for input types",
             "params": [
@@ -192,7 +388,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\jquery.js",
+            "file": "..\\src\\webVis\\jquery.js",
             "line": 993,
             "description": "Returns a function to use in pseudos for buttons",
             "params": [
@@ -205,7 +401,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\jquery.js",
+            "file": "..\\src\\webVis\\jquery.js",
             "line": 1004,
             "description": "Returns a function to use in pseudos for :enabled/:disabled",
             "params": [
@@ -218,7 +414,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\jquery.js",
+            "file": "..\\src\\webVis\\jquery.js",
             "line": 1032,
             "description": "Returns a function to use in pseudos for positionals",
             "params": [
@@ -231,7 +427,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\jquery.js",
+            "file": "..\\src\\webVis\\jquery.js",
             "line": 1054,
             "description": "Checks a node for validity as a Sizzle context",
             "params": [
@@ -248,7 +444,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\jquery.js",
+            "file": "..\\src\\webVis\\jquery.js",
             "line": 1066,
             "description": "Detects XML nodes",
             "params": [
@@ -265,7 +461,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\jquery.js",
+            "file": "..\\src\\webVis\\jquery.js",
             "line": 1078,
             "description": "Sets document-related variables once based on the current document",
             "params": [
@@ -283,7 +479,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\jquery.js",
+            "file": "..\\src\\webVis\\jquery.js",
             "line": 1532,
             "description": "Document sorting and removing duplicates",
             "params": [
@@ -296,7 +492,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\jquery.js",
+            "file": "..\\src\\webVis\\jquery.js",
             "line": 1565,
             "description": "Utility function for retrieving the text value of an array of DOM nodes",
             "params": [
@@ -309,7 +505,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\jquery.js",
+            "file": "..\\src\\webVis\\jquery.js",
             "line": 2594,
             "description": "A low-level selection function that works with Sizzle's compiled\n selector functions",
             "params": [
@@ -339,19 +535,19 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\jquery.js",
+            "file": "..\\src\\webVis\\jquery.js",
             "line": 9606,
             "description": "Load a url into a page",
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\jquery.js",
+            "file": "..\\src\\webVis\\jquery.js",
             "line": 9698,
             "description": "Gets a window from an element",
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\jsstl.js",
+            "file": "..\\src\\webVis\\jsstl.js",
             "line": 14,
             "description": "Converts a given block of binary stl data (as an arraybuffer) to a threeJS representation\n of the geometry. Function courtesy of 'tonylukasavage' from Github, who released this to\n the public domain.",
             "itemtype": "method",
@@ -370,7 +566,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\jsstl.js",
+            "file": "..\\src\\webVis\\jsstl.js",
             "line": 71,
             "description": "Processes a given string to make it parsible for parseStl and returns\n the results",
             "itemtype": "method",
@@ -389,7 +585,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\jsstl.js",
+            "file": "..\\src\\webVis\\jsstl.js",
             "line": 96,
             "description": "Converts an arraybuffer into a string of equivalent binary content",
             "itemtype": "method",
@@ -408,7 +604,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\jsstl.js",
+            "file": "..\\src\\webVis\\jsstl.js",
             "line": 119,
             "description": "Converts a given block of ASCII stl data (as an arraybuffer) to a threeJS representation\n of the geometry. Function courtesy of 'tonylukasavage' from Github, who released this to\n the public domain.",
             "itemtype": "method",
@@ -427,8 +623,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\partRender.js",
-            "line": 5,
+            "file": "..\\src\\webVis\\partRender.js",
+            "line": 59,
             "description": "Accepts an array of objects containing a string property called \"Name\" and returns\n the first index where any two \"Name\" properties in the array have different characters.",
             "itemtype": "method",
             "name": "getPartNameCutoff",
@@ -446,8 +642,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\partRender.js",
-            "line": 40,
+            "file": "..\\src\\webVis\\partRender.js",
+            "line": 94,
             "description": "Accepts an array of objects containing a string property called \"Name\" removes\n the first N characters in each string, where N is the first index where any two\n \"Name\" properties in the array have different characters.",
             "itemtype": "method",
             "name": "cutoffPartNames",
@@ -465,8 +661,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\partRender.js",
-            "line": 68,
+            "file": "..\\src\\webVis\\partRender.js",
+            "line": 122,
             "description": "Finds the average position of all the vertices in a given threeJS Geometry model.",
             "itemtype": "method",
             "name": "centerGeometry",
@@ -484,8 +680,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\partRender.js",
-            "line": 134,
+            "file": "..\\src\\webVis\\partRender.js",
+            "line": 188,
             "description": "Combines a given array of objects (each associating an array of keyframes to name) with a \n given array of objects (each associating a threeJS mesh with a name), creating an array\n of objects with keyFrame arrays and threeJS meshes associated with the same name",
             "itemtype": "method",
             "name": "bindPartsToKeyFrames",
@@ -508,8 +704,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\partRender.js",
-            "line": 199,
+            "file": "..\\src\\webVis\\partRender.js",
+            "line": 253,
             "description": "Combines a jagged array of objects, each object at least possessing a numeric\n property called \"Time\", returns the value of the greatest \"Time\" property",
             "itemtype": "method",
             "name": "longestTimeFromFrames",
@@ -527,8 +723,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\partRender.js",
-            "line": 232,
+            "file": "..\\src\\webVis\\partRender.js",
+            "line": 286,
             "description": "Given a jagged array of objects, each object at least possessing a numeric\n property called \"Time\", sets each Time property to the greatest Time value in\n the jagged array minus the origional value, thus effectively reversing the\n temporal order of each object",
             "itemtype": "method",
             "name": "flipTheTimes",
@@ -546,8 +742,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\partRender.js",
-            "line": 267,
+            "file": "..\\src\\webVis\\partRender.js",
+            "line": 321,
             "description": "Logs the contents of the given jagged array of keyFrame objects, each containing numeric properties \"X\",\n \"Y\", \"Z\", and \"Time\", to the console as a string.",
             "itemtype": "method",
             "name": "showFrames",
@@ -565,8 +761,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\partRender.js",
-            "line": 305,
+            "file": "..\\src\\webVis\\partRender.js",
+            "line": 359,
             "description": "Logs the contents of a given keyFrame object, containing numeric properties \"X\",\n \"Y\", \"Z\", and \"Time\", to the console as a string.",
             "itemtype": "method",
             "name": "showFrame",
@@ -584,8 +780,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\partRender.js",
-            "line": 323,
+            "file": "..\\src\\webVis\\partRender.js",
+            "line": 377,
             "description": "Returns true if any position component of the given keyframe object is NaN",
             "itemtype": "method",
             "name": "hasNaN",
@@ -603,8 +799,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\partRender.js",
-            "line": 340,
+            "file": "..\\src\\webVis\\partRender.js",
+            "line": 394,
             "description": "Returns a copy of the provided keyframe object",
             "itemtype": "method",
             "name": "copyFrame",
@@ -622,8 +818,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\partRender.js",
-            "line": 364,
+            "file": "..\\src\\webVis\\partRender.js",
+            "line": 418,
             "description": "Returns a copy of the provided array of keyframe objects",
             "itemtype": "method",
             "name": "copyFrameList",
@@ -641,8 +837,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\partRender.js",
-            "line": 389,
+            "file": "..\\src\\webVis\\partRender.js",
+            "line": 469,
             "description": "Given a tree representation of the assembly process through nested javascript objects, returns an array\n of keyframe array objects, with each keyframe array object being a representation of the movement of each part \n in the tree representation throughout the assembly proceess, with a list of keyframe objects and a given part name",
             "itemtype": "method",
             "name": "makeKeyFrames",
@@ -670,8 +866,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\partRender.js",
-            "line": 448,
+            "file": "..\\src\\webVis\\partRender.js",
+            "line": 536,
             "description": "Given two keyFrames and a normalized float \"proportion\", returns an interpolation\n between the two keyframes with a weight towards the second keyframe proportional\n to \"proportion\"",
             "itemtype": "method",
             "name": "interpolate",
@@ -699,8 +895,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\partRender.js",
-            "line": 490,
+            "file": "..\\src\\webVis\\partRender.js",
+            "line": 578,
             "description": "Given a list of keyframes and a time quantity, returns a keyframe object interpolating\n between the two temporally closest keyframes. In cases where the provide time is beyond the\n range of times represented by the list, returns the closest keyframe",
             "itemtype": "method",
             "name": "grabInterp",
@@ -723,8 +919,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\partRender.js",
-            "line": 546,
+            "file": "..\\src\\webVis\\partRender.js",
+            "line": 634,
             "description": "Given an array of objects (each containing a threeJS mesh object and an array of \n keyFrame objects), and two floating points \"time\" and \"timeWarp\", will animate each\n mesh in the array along the keyframes in their associate objects according to the \n given \"time\" and returns the new time as given by the standard time step multiplied\n by \"timeWarp\"",
             "itemtype": "method",
             "name": "animate",
@@ -752,8 +948,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\partRender.js",
-            "line": 605,
+            "file": "..\\src\\webVis\\partRender.js",
+            "line": 683,
             "description": "Given two threeJS boundingBox objects, returns the smallest bounding box\n encompassing the two",
             "itemtype": "method",
             "name": "combineBounds",
@@ -776,8 +972,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\partRender.js",
-            "line": 634,
+            "file": "..\\src\\webVis\\partRender.js",
+            "line": 712,
             "description": "Given two threeJS boundingBox objects, returns the smallest bounding box\n encompassing the two",
             "itemtype": "method",
             "name": "getGlobBounds",
@@ -800,8 +996,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\partRender.js",
-            "line": 668,
+            "file": "..\\src\\webVis\\partRender.js",
+            "line": 746,
             "description": "Given an object, containing a threeJS mesh object as \"Mesh\", will\n return the center of the mesh's bounding box",
             "itemtype": "method",
             "name": "getPartCenter",
@@ -819,8 +1015,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\partRender.js",
-            "line": 699,
+            "file": "..\\src\\webVis\\partRender.js",
+            "line": 792,
             "description": "Given a threeJS scene object, a threeJS camera object, and an array of objects containing\n threeJS mesh objects, finds the first mesh in the scene which is intersected the ray extending\n through the center of the camera's field of vision. If this mesh is in the provided array of \n objects, then that object is returned, otherwise null is returned instead",
             "itemtype": "method",
             "name": "getFirstIntersect",
@@ -848,8 +1044,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\partRender.js",
-            "line": 754,
+            "file": "..\\src\\webVis\\partRender.js",
+            "line": 843,
             "description": "Given an tree representation of the movement of parts in an assembly sequence, the\n parent node of that node, and a threeJS scene object, inserts a line for each subassembly\n path along the path of movement",
             "itemtype": "method",
             "name": "addLines",
@@ -877,8 +1073,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\partRender.js",
-            "line": 808,
+            "file": "..\\src\\webVis\\partRender.js",
+            "line": 900,
             "description": "Given an tree representation of the movement of parts in an assembly sequence, an \n array of Objects each associating a list of keyframes with a threeJS mesh object and aLinkcolor\n string, and the index of the keyframe associated with the tree's root node, displaces the movement\n line points associated with that particular part of the assembly to match the displacement of the\n model",
             "itemtype": "method",
             "name": "addDisplacement",
@@ -906,8 +1102,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\partRender.js",
-            "line": 863,
+            "file": "..\\src\\webVis\\partRender.js",
+            "line": 955,
             "description": "Given an tree representation of the movement of parts in an assembly sequence, the\n parent node of that node, and the current time in the animation, updates the ends of the\n movement lines such that the portion of lines which have already been traversed are not shown",
             "itemtype": "method",
             "name": "updateLines",
@@ -935,7 +1131,249 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\partTableScript.js",
+            "file": "..\\src\\webVis\\partRender.js",
+            "line": 1018,
+            "description": "Initializes the axis lines for the bottom-left of the screen",
+            "itemtype": "method",
+            "name": "initAxisLines",
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\partRender.js",
+            "line": 1065,
+            "description": "Updates the axis line dispay",
+            "itemtype": "method",
+            "name": "updateAxisLines",
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\partRender.js",
+            "line": 1136,
+            "description": "Performs a bezier curve interpolation of the control points in pointlist given \n the time value T, and returns a ThreeJS Vector3 object with the interpolated coordinates.",
+            "itemtype": "method",
+            "name": "interp",
+            "params": [
+                {
+                    "name": "pointList",
+                    "description": "A list of control points for use in interpolation.",
+                    "type": "Vector3 Array"
+                },
+                {
+                    "name": "T",
+                    "description": "A normalized value for use as a time value in interpolation.",
+                    "type": "Float"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\partRender.js",
+            "line": 1171,
+            "description": "Returns a string describing the x, y, and z coordinates of theVec.",
+            "itemtype": "method",
+            "name": "vecDesc",
+            "params": [
+                {
+                    "name": "theVec",
+                    "description": "The ThreeJS Vector3 object to be described by the output string",
+                    "type": "Vector3"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\partRender.js",
+            "line": 1189,
+            "description": "Recursively adds Vector3 objects onto the Vector3 list, target, interpolating from startDisp\n and endDisp in an arc centered at the Vector3 object center. Each layer of recursion\n adds the midpoint of the arc from startDisp to endDisp until level = 0.",
+            "itemtype": "method",
+            "name": "addArcSubDiv",
+            "params": [
+                {
+                    "name": "target",
+                    "description": "The list where the calculated Vector3 objects should be added",
+                    "type": "Vector3 Array"
+                },
+                {
+                    "name": "center",
+                    "description": "The point which the generated arc should be centered on",
+                    "type": "Vector3"
+                },
+                {
+                    "name": "startDisp",
+                    "description": "The starting point of the arc",
+                    "type": "Vector3"
+                },
+                {
+                    "name": "endDisp",
+                    "description": "The ending point of the arc",
+                    "type": "Vector3"
+                },
+                {
+                    "name": "level",
+                    "description": "The desired levels of recursion in the point interpolation",
+                    "type": "Int"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\partRender.js",
+            "line": 1239,
+            "description": "Returns a list of 2^(resolution+1) points which trace an arc beginning at startPoint,\n terminating at endpoint, and centered around center",
+            "itemtype": "method",
+            "name": "makeArcPointList",
+            "params": [
+                {
+                    "name": "startPoint",
+                    "description": "The starting point of the arc",
+                    "type": "Vector3"
+                },
+                {
+                    "name": "center",
+                    "description": "The point which the generated arc should be centered on",
+                    "type": "Vector3"
+                },
+                {
+                    "name": "endPoint",
+                    "description": "The ending point of the arc",
+                    "type": "Vector3"
+                },
+                {
+                    "name": "resolution",
+                    "description": "The desired levels of recursion in the point interpolation",
+                    "type": "Int"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Vector3 Array"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\partRender.js",
+            "line": 1300,
+            "description": "Adds keyframes onto the keyframe lists provided so that the keyframed parts begin their\n animation at start location and move in an arc to their previously defined start position",
+            "itemtype": "method",
+            "name": "addCurveKeyFrames",
+            "params": [
+                {
+                    "name": "theFrameLists",
+                    "description": "A list of keyframe lists describing the movement of 3d models",
+                    "type": "Object List"
+                },
+                {
+                    "name": "startLocation",
+                    "description": "The desired new start location of the 3d models in the animation",
+                    "type": "Vector3"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\partRender.js",
+            "line": 1355,
+            "description": "Adds a simple square grid of width equal to theSize and a number of lines equal to theDivs at Y=-1000",
+            "itemtype": "method",
+            "name": "addGrid",
+            "params": [
+                {
+                    "name": "theSize",
+                    "description": "The desired grid width",
+                    "type": "Int"
+                },
+                {
+                    "name": "theDivs",
+                    "description": "The desired number of lines per side of the grid",
+                    "type": "Int"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\partRender.js",
+            "line": 1392,
+            "description": "Adds a simple vertical column with a radius of theRad, a base Y value of theBot, a top terminating at\n theTop, an x and z position equal to theX and theZ, a line color of theColor, a number of vertical \n segmentations equal to stacks, and a number of radial segmentations equal to slices",
+            "itemtype": "method",
+            "name": "addGrid",
+            "params": [
+                {
+                    "name": "theRad",
+                    "description": "The desired radius of the column",
+                    "type": "Float"
+                },
+                {
+                    "name": "theBot",
+                    "description": "The desired bottom y value of the column",
+                    "type": "Float"
+                },
+                {
+                    "name": "theTop",
+                    "description": "The desired top y value of the column",
+                    "type": "Float"
+                },
+                {
+                    "name": "theX",
+                    "description": "The desired x value of the column",
+                    "type": "Float"
+                },
+                {
+                    "name": "theZ",
+                    "description": "The desired z value of the column",
+                    "type": "Float"
+                },
+                {
+                    "name": "slices",
+                    "description": "The desired number of radial segmentations",
+                    "type": "Float"
+                },
+                {
+                    "name": "stacks",
+                    "description": "The desired z value of vertical segmentations",
+                    "type": "Float"
+                },
+                {
+                    "name": "theColor",
+                    "description": "The desired color of the column",
+                    "type": "Float"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\partTableScript.js",
             "line": 15,
             "description": "Given the contents of a part table XML file (as a string), fills out the table in the web page.",
             "itemtype": "method",
@@ -954,7 +1392,7 @@
             "class": "partTableGlobal"
         },
         {
-            "file": "src\\webVis\\partTableScript.js",
+            "file": "..\\src\\webVis\\partTableScript.js",
             "line": 45,
             "description": "Is called whenever the user submits the part table and every entry has been\n properly filled out.",
             "itemtype": "method",
@@ -973,8 +1411,8 @@
             "class": "partTableGlobal"
         },
         {
-            "file": "src\\webVis\\partTableScript.js",
-            "line": 129,
+            "file": "..\\src\\webVis\\partTableScript.js",
+            "line": 136,
             "description": "Accepts a string and outputs the string of all characters following the final '.' symbol\n in the string. This is used internally to extract file extensions from file names.",
             "itemtype": "method",
             "name": "grabExtension",
@@ -992,8 +1430,8 @@
             "class": "partTableGlobal"
         },
         {
-            "file": "src\\webVis\\partTableScript.js",
-            "line": 147,
+            "file": "..\\src\\webVis\\partTableScript.js",
+            "line": 154,
             "description": "Given an HTML element and a string, returns a list containing all child elements\n of the given element with a tag equivalent to the given string",
             "itemtype": "method",
             "name": "getChildrenByTag",
@@ -1016,8 +1454,8 @@
             "class": "partTableGlobal"
         },
         {
-            "file": "src\\webVis\\partTableScript.js",
-            "line": 177,
+            "file": "..\\src\\webVis\\partTableScript.js",
+            "line": 184,
             "description": "Accepts a fileinput event, presumably from a file upload event listener, and assigns\n functions to each file reader listed in the event to be called upon the full loading\n of that given reader's files",
             "itemtype": "method",
             "name": "readMultipleFiles",
@@ -1035,8 +1473,8 @@
             "class": "partTableGlobal"
         },
         {
-            "file": "src\\webVis\\partTableScript.js",
-            "line": 234,
+            "file": "..\\src\\webVis\\partTableScript.js",
+            "line": 243,
             "description": "Called internally upon every recieved fileload event. Checks if every file reader in the \n array \"fileReaders\" has fully read each of their files. If so, then the function calls\n \"recieveData\".",
             "itemtype": "method",
             "name": "loadParts",
@@ -1047,8 +1485,8 @@
             "class": "partTableGlobal"
         },
         {
-            "file": "src\\webVis\\partTableScript.js",
-            "line": 266,
+            "file": "..\\src\\webVis\\partTableScript.js",
+            "line": 273,
             "description": "Given a jQuery object and a string, returns the first child of the given element with\n a tag equivalent to the given string.",
             "itemtype": "method",
             "name": "grab",
@@ -1071,8 +1509,8 @@
             "class": "partTableGlobal"
         },
         {
-            "file": "src\\webVis\\partTableScript.js",
-            "line": 290,
+            "file": "..\\src\\webVis\\partTableScript.js",
+            "line": 297,
             "description": "Given a jQuery object and an integer \"N\", returns the Nth child of the given element with\n the given tag.",
             "itemtype": "method",
             "name": "grabInd",
@@ -1100,8 +1538,8 @@
             "class": "partTableGlobal"
         },
         {
-            "file": "src\\webVis\\partTableScript.js",
-            "line": 316,
+            "file": "..\\src\\webVis\\partTableScript.js",
+            "line": 323,
             "description": "Given a jQuery object representation of a part entry, inserts an html representation\n of that entry in the table",
             "itemtype": "method",
             "name": "addEntry",
@@ -1119,8 +1557,8 @@
             "class": "partTableGlobal"
         },
         {
-            "file": "src\\webVis\\partTableScript.js",
-            "line": 362,
+            "file": "..\\src\\webVis\\partTableScript.js",
+            "line": 374,
             "description": "Parses through each entry in the table and, if all entries are fully filled out, converts the table into an\n XML file and adds a download link for that file to the webpage",
             "itemtype": "method",
             "name": "renderXML",
@@ -1131,8 +1569,8 @@
             "class": "partTableGlobal"
         },
         {
-            "file": "src\\webVis\\partTableScript.js",
-            "line": 433,
+            "file": "..\\src\\webVis\\partTableScript.js",
+            "line": 447,
             "description": "Given an html row element containing data regarding a part, converts the information into an\n xml formatted string and returns it",
             "itemtype": "method",
             "name": "renderEntry",
@@ -1150,8 +1588,8 @@
             "class": "partTableGlobal"
         },
         {
-            "file": "src\\webVis\\partTableScript.js",
-            "line": 525,
+            "file": "..\\src\\webVis\\partTableScript.js",
+            "line": 535,
             "description": "A function automatically called by button elements associated with the mass option\n in an entry's mass section when pressed. Changes the parent mass section to contain a\n text input element and a button allowing the user to switch over to density input.",
             "itemtype": "method",
             "name": "insertMassInput",
@@ -1169,8 +1607,8 @@
             "class": "partTableGlobal"
         },
         {
-            "file": "src\\webVis\\partTableScript.js",
-            "line": 544,
+            "file": "..\\src\\webVis\\partTableScript.js",
+            "line": 556,
             "description": "A function automatically called by button elements associated with the density option\n in an entry's mass section when pressed. Changes the parent mass section to contain a\n text input element and a button allowing the user to switch over to mass input.",
             "itemtype": "method",
             "name": "insertDensityInput",
@@ -1188,8 +1626,8 @@
             "class": "partTableGlobal"
         },
         {
-            "file": "src\\webVis\\partTableScript.js",
-            "line": 565,
+            "file": "..\\src\\webVis\\partTableScript.js",
+            "line": 579,
             "description": "A function automatically called by button elements associated with the hollow option\n in an entry's volume section when pressed. Changes the parent volume section to contain a\n text input element and a button allowing the user to indicate the part is not hollow.",
             "itemtype": "method",
             "name": "insertHollowInput",
@@ -1207,8 +1645,8 @@
             "class": "partTableGlobal"
         },
         {
-            "file": "src\\webVis\\partTableScript.js",
-            "line": 589,
+            "file": "..\\src\\webVis\\partTableScript.js",
+            "line": 601,
             "description": "A function automatically called by button elements associated with the hollow option\n in an entry's volume section when pressed. Changes the parent volume section to contain\n only a mass value and a button allowing the user to indicate the part is hollow.",
             "itemtype": "method",
             "name": "removeHollowInput",
@@ -1226,8 +1664,8 @@
             "class": "partTableGlobal"
         },
         {
-            "file": "src\\webVis\\partTableScript.js",
-            "line": 613,
+            "file": "..\\src\\webVis\\partTableScript.js",
+            "line": 623,
             "description": "A function automatically called by text input elements associated with the hollow option\n in an entry's volume section when changed. Changes the currently displayed volume to \n match the given thickness",
             "itemtype": "method",
             "name": "updateVolumeDisplay",
@@ -1245,8 +1683,8 @@
             "class": "partTableGlobal"
         },
         {
-            "file": "src\\webVis\\partTableScript.js",
-            "line": 637,
+            "file": "..\\src\\webVis\\partTableScript.js",
+            "line": 644,
             "description": "A function automatically called by text input elements associated with the density option\n in an entry's mass section when changed. Changes the currently displayed mass to \n match the given density",
             "itemtype": "method",
             "name": "updateMassDisplay",
@@ -1264,8 +1702,8 @@
             "class": "partTableGlobal"
         },
         {
-            "file": "src\\webVis\\partTableScript.js",
-            "line": 662,
+            "file": "..\\src\\webVis\\partTableScript.js",
+            "line": 667,
             "description": "A function automatically called by button elements associated with accessing sample densities.\n Adds a div element containing several sample density options.",
             "itemtype": "method",
             "name": "doDensityDrop",
@@ -1283,8 +1721,8 @@
             "class": "partTableGlobal"
         },
         {
-            "file": "src\\webVis\\partTableScript.js",
-            "line": 679,
+            "file": "..\\src\\webVis\\partTableScript.js",
+            "line": 684,
             "description": "A function automatically called by button elements associated with accessing sample densities.\n Removes the sample density option div element.",
             "itemtype": "method",
             "name": "undoDensityDrop",
@@ -1302,8 +1740,8 @@
             "class": "partTableGlobal"
         },
         {
-            "file": "src\\webVis\\partTableScript.js",
-            "line": 698,
+            "file": "..\\src\\webVis\\partTableScript.js",
+            "line": 703,
             "description": "A function automatically called by button elements associated with sample densities. Will fill\n the associated density input box with the value associated with the inner text of the button.",
             "itemtype": "method",
             "name": "changeDensity",
@@ -1321,8 +1759,8 @@
             "class": "partTableGlobal"
         },
         {
-            "file": "src\\webVis\\partTableScript.js",
-            "line": 751,
+            "file": "..\\src\\webVis\\partTableScript.js",
+            "line": 757,
             "description": "A function automatically called by text box elements upon becoming checked/unchecked.\n Sets an internal value to indicate the checked state of the element.",
             "itemtype": "method",
             "name": "flipCheck",
@@ -1340,7 +1778,98 @@
             "class": "partTableGlobal"
         },
         {
-            "file": "src\\webVis\\renderScript.js",
+            "file": "..\\src\\webVis\\partTableScript.js",
+            "line": 781,
+            "description": "Takes the value present in the global density input textbox and applies it to all \n parts currently in the table.",
+            "itemtype": "method",
+            "name": "fillGlobalDensity",
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "partTableGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\partTableScript.js",
+            "line": 821,
+            "description": "Accepts a string and outputs a conversion value for the string's described unit to the standard\n units of this application. If no suitable unit is identified in the string, the conversion value\n returned is 0.",
+            "itemtype": "method",
+            "name": "conversion",
+            "params": [
+                {
+                    "name": "theString",
+                    "description": "A string representation of the unit being looked up",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "the unit conversion value",
+                "type": "Float"
+            },
+            "class": "partTableGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\partTableScript.js",
+            "line": 873,
+            "description": "Returns a blank mass input element for use in the table",
+            "itemtype": "method",
+            "name": "makeMassElem",
+            "return": {
+                "description": "a blank mass input element",
+                "type": "HTML element"
+            },
+            "class": "partTableGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\partTableScript.js",
+            "line": 902,
+            "description": "Returns a blank volume input element for use in the table",
+            "itemtype": "method",
+            "name": "makeVolElem",
+            "return": {
+                "description": "a blank volume input element",
+                "type": "HTML element"
+            },
+            "class": "partTableGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\partTableScript.js",
+            "line": 924,
+            "description": "Returns a standard button for a density dropdown menu",
+            "itemtype": "method",
+            "name": "makeDropButton",
+            "return": {
+                "description": "a standard density dropdown button",
+                "type": "HTML element"
+            },
+            "class": "partTableGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\partTableScript.js",
+            "line": 945,
+            "description": "Returns a standard button to remove a density dropdown element",
+            "itemtype": "method",
+            "name": "makeUndropButton",
+            "return": {
+                "description": "a standard density dropdown removal button",
+                "type": "HTML element"
+            },
+            "class": "partTableGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\partTableScript.js",
+            "line": 980,
+            "description": "Returns a standard sample density dropdown menu",
+            "itemtype": "method",
+            "name": "makeDensityDiv",
+            "return": {
+                "description": "a sample density dropdown menu",
+                "type": "HTML element"
+            },
+            "class": "partTableGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\renderScript.js",
             "line": 26,
             "description": "The function which handles the actual rendering of the solution file animation\n and loading in the models",
             "itemtype": "method",
@@ -1364,8 +1893,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\renderScript.js",
-            "line": 275,
+            "file": "..\\src\\webVis\\renderScript.js",
+            "line": 287,
             "description": "Attempts to lock the mouse for camera manupulation",
             "itemtype": "method",
             "name": "tryMouseLock",
@@ -1376,8 +1905,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\renderScript.js",
-            "line": 297,
+            "file": "..\\src\\webVis\\renderScript.js",
+            "line": 309,
             "description": "Adds or Removes event listeners for input meant for camera manipulation.\n Is triggered by a change in the state of the mouse locking or unlocking. \n The mouse locking results in input listeners being added to the webpage,\n whereas the unlocking of the mouse results in the removal of appropriate\n listeners.",
             "itemtype": "method",
             "name": "lockChange",
@@ -1395,8 +1924,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\renderScript.js",
-            "line": 337,
+            "file": "..\\src\\webVis\\renderScript.js",
+            "line": 349,
             "description": "Changes the orientation of the camera based off of the mouse movement\n contained in the supplied mouse movement event. X-axis movement\n corresponds to change in the yaw of the camera whereas Y-axis movement\n corresponds to a change in the pitch of the camera.",
             "itemtype": "method",
             "name": "mouseMoved",
@@ -1414,8 +1943,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\renderScript.js",
-            "line": 384,
+            "file": "..\\src\\webVis\\renderScript.js",
+            "line": 396,
             "description": "Accepts a key press event and, if the key press corresponds to one\n of the keys used for manipulating the view, sets the proper components\n of \"inputState\" to true.",
             "itemtype": "method",
             "name": "registerDown",
@@ -1433,8 +1962,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\renderScript.js",
-            "line": 443,
+            "file": "..\\src\\webVis\\renderScript.js",
+            "line": 455,
             "description": "Accepts a key press release and, if the key release corresponds to one\n of the keys used for manipulating the view, sets the proper components\n of \"inputState\" to false",
             "itemtype": "method",
             "name": "registerUp",
@@ -1452,8 +1981,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\renderScript.js",
-            "line": 500,
+            "file": "..\\src\\webVis\\renderScript.js",
+            "line": 512,
             "description": "Once called, interprets the current state of registered inputs and manipulates \n the visualization accordingly, including the accelleration of the camera, as\n affected by the W,S,A, and D keys, and the rotation of the camera if the F key\n is depressed and there currently is a highlighted object of interest",
             "itemtype": "method",
             "name": "manageControls",
@@ -1464,8 +1993,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\renderScript.js",
-            "line": 601,
+            "file": "..\\src\\webVis\\renderScript.js",
+            "line": 615,
             "description": "The main portion of the visualization's rendering cycle, managing frame rate,\n input, camera decelleration, keyframe manipulation, model animation, object highlighting,\n and informational display.",
             "itemtype": "method",
             "name": "render",
@@ -1476,8 +2005,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\renderScript.js",
-            "line": 682,
+            "file": "..\\src\\webVis\\renderScript.js",
+            "line": 707,
             "description": "Accepts a string and outputs the string of all characters following the final '.' symbol\n in the string. This is used internally to extract file extensions from file names.",
             "itemtype": "method",
             "name": "grabExtension",
@@ -1495,8 +2024,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\renderScript.js",
-            "line": 715,
+            "file": "..\\src\\webVis\\renderScript.js",
+            "line": 740,
             "description": "Accepts a fileinput event, presumably from a file upload event listener, and assigns\n functions to each file reader listed in the event to be called upon the full loading\n of that given reader's files",
             "itemtype": "method",
             "name": "readMultipleFiles",
@@ -1514,8 +2043,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\renderScript.js",
-            "line": 784,
+            "file": "..\\src\\webVis\\renderScript.js",
+            "line": 810,
             "description": "Called internally upon every recieved fileload event. Checks if every file reader in the \n array \"fileReaders\" has fully read each of their files. If so, then the function converts\n all recieved stl files into threeJS models and executes \"renderParts\".",
             "itemtype": "method",
             "name": "loadParts",
@@ -1526,8 +2055,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\renderScript.js",
-            "line": 854,
+            "file": "..\\src\\webVis\\renderScript.js",
+            "line": 883,
             "description": "Called internally by \"loadParts\". Parses the text stored in \"theXML\" into a tree\n structure composed of nested javascript objects and converts that structure into a\n series of keyframe arrays, each of which are stored alongside their respective \n parts in \"partFrames\". Additionally, generates the path lines for each subassembly\n and inserts those lines into \"scene\".",
             "itemtype": "method",
             "name": "renderParts",
@@ -1538,8 +2067,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\renderScript.js",
-            "line": 929,
+            "file": "..\\src\\webVis\\renderScript.js",
+            "line": 981,
             "description": "Toggles the display of the HTML div element containing the treequence representation of\n the assembly.",
             "itemtype": "method",
             "name": "showHideTreequence",
@@ -1550,7 +2079,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\sigma.canvas.edges.curvedArrow.js",
+            "file": "..\\src\\webVis\\sigma.canvas.edges.curvedArrow.js",
             "line": 6,
             "description": "This edge renderer will display edges as curves with arrow heading.",
             "params": [
@@ -1583,7 +2112,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\treequence.js",
+            "file": "..\\src\\webVis\\treequence.js",
             "line": 6,
             "description": "Given a jQuery object, returns a full list of all of its children.",
             "itemtype": "method",
@@ -1602,7 +2131,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\treequence.js",
+            "file": "..\\src\\webVis\\treequence.js",
             "line": 27,
             "description": "Given a jQuery object and a string, returns the first child of the given element with\n a tag equivalent to the given string.",
             "itemtype": "method",
@@ -1626,7 +2155,7 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\treequence.js",
+            "file": "..\\src\\webVis\\treequence.js",
             "line": 55,
             "description": "Given a jQuery object and an integer \"N\", returns the Nth child of the given element with\n the given tag.",
             "itemtype": "method",
@@ -1655,8 +2184,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\treequence.js",
-            "line": 87,
+            "file": "..\\src\\webVis\\treequence.js",
+            "line": 83,
             "description": "Given a jQuery object derived from parsing an XML document, extracts all information\n relevant to part movement and composes it into an identically structured tree of \n nested javascript objects which is then returned",
             "itemtype": "method",
             "name": "getMovement",
@@ -1694,8 +2223,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\treequence.js",
-            "line": 132,
+            "file": "..\\src\\webVis\\treequence.js",
+            "line": 159,
             "description": "Given a jQuery Object, will return the first child with the tag \"Reference\" of the first child with\n the tag \"Install\" of the object. If no such child exists, null is returned.",
             "itemtype": "method",
             "name": "getRef",
@@ -1713,8 +2242,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\treequence.js",
-            "line": 154,
+            "file": "..\\src\\webVis\\treequence.js",
+            "line": 179,
             "description": "Given a jQuery Object, will return the first child with the tag \"Moving\" of the first child with\n the tag \"Install\" of the object. If no such child exists, null is returned.",
             "itemtype": "method",
             "name": "getMov",
@@ -1732,8 +2261,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\treequence.js",
-            "line": 178,
+            "file": "..\\src\\webVis\\treequence.js",
+            "line": 201,
             "description": "Given a jQuery object derived from parsing an XML document, extracts all information\n relevant to installation timing and composes it into an identically structured tree of \n nested javascript objects which is then returned",
             "itemtype": "method",
             "name": "getTimes",
@@ -1756,8 +2285,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\treequence.js",
-            "line": 210,
+            "file": "..\\src\\webVis\\treequence.js",
+            "line": 232,
             "description": "Given a tree of nested objects, returns the highest \"Time\" value from all the nodes",
             "itemtype": "method",
             "name": "getLongestTime",
@@ -1775,8 +2304,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\treequence.js",
-            "line": 232,
+            "file": "..\\src\\webVis\\treequence.js",
+            "line": 254,
             "description": "Given a jQuery object derived from parsing an XML document, extracts all part name \n information and composes it into an identically structured tree of nested javascript\n objects which is then returned",
             "itemtype": "method",
             "name": "getNames",
@@ -1794,8 +2323,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\treequence.js",
-            "line": 262,
+            "file": "..\\src\\webVis\\treequence.js",
+            "line": 282,
             "description": "Given a three trees of nested javascript objects, one holding time data, one holding\n movement data, and one holding part name data",
             "itemtype": "method",
             "name": "mergeTrees",
@@ -1823,8 +2352,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\treequence.js",
-            "line": 298,
+            "file": "..\\src\\webVis\\treequence.js",
+            "line": 311,
             "description": "Given a three trees of nested javascript objects, one holding time data, one holding\n movement data, and one holding part name data",
             "itemtype": "method",
             "name": "getNameList",
@@ -1852,8 +2381,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\treequence.js",
-            "line": 344,
+            "file": "..\\src\\webVis\\treequence.js",
+            "line": 346,
             "description": "Given an array of strings, returns the first index at which at least \n two of the included strings are different",
             "itemtype": "method",
             "name": "similarityCutoff",
@@ -1871,8 +2400,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\treequence.js",
-            "line": 380,
+            "file": "..\\src\\webVis\\treequence.js",
+            "line": 387,
             "description": "Given a tree of nested javascript objects (each with a string attribute \"Name\") and an\n integer \"N\", removes the first N characters of each Name attribute",
             "itemtype": "method",
             "name": "cutOffNames",
@@ -1890,8 +2419,56 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\treequence.js",
-            "line": 422,
+            "file": "..\\src\\webVis\\treequence.js",
+            "line": 429,
+            "description": "Given a tree of nested javascript objects (each with a string attribute \"Name\"), and two lists,\n regTreeNames and fstTreeNames, inserts all regular part names into regTreeNames and inserts all\n fastener part names into fstTreeNames",
+            "itemtype": "method",
+            "name": "getTreeNames",
+            "params": [
+                {
+                    "name": "tree",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "regTreeNames",
+                    "description": "",
+                    "type": "String List"
+                },
+                {
+                    "name": "fstTreeNames",
+                    "description": "",
+                    "type": "String List"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\treequence.js",
+            "line": 469,
+            "description": "Given a list of parts, returns a list of the names of each part",
+            "itemtype": "method",
+            "name": "getPartNames",
+            "params": [
+                {
+                    "name": "parts",
+                    "description": "The list of part objects.",
+                    "type": "Part List"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "String List"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\treequence.js",
+            "line": 496,
             "description": "Given a tree of nested javascript objects (each with a float attribute \"Time\") and a\n float \"N\", sets each Time value to N minus that value",
             "itemtype": "method",
             "name": "flipTreeTime",
@@ -1914,8 +2491,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\treequence.js",
-            "line": 451,
+            "file": "..\\src\\webVis\\treequence.js",
+            "line": 531,
             "description": "Given a tree of nested javascript objects, returns the depth of the tree",
             "itemtype": "method",
             "name": "getDepth",
@@ -1933,8 +2510,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\treequence.js",
-            "line": 476,
+            "file": "..\\src\\webVis\\treequence.js",
+            "line": 556,
             "description": "Given a staggered array of integer pairs, returns a random UTF character with a UTF value\n within one of the given integer ranges (inclusive)",
             "itemtype": "method",
             "name": "getRandomUTF",
@@ -1952,8 +2529,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\treequence.js",
-            "line": 526,
+            "file": "..\\src\\webVis\\treequence.js",
+            "line": 606,
             "description": "Given a tree of nested javascript objects and an html element, inserts the contents\n of the root node of the given tree as an html element into the given element. Returns\n the name of the generated node.",
             "itemtype": "method",
             "name": "insertTreequenceHTML",
@@ -1976,8 +2553,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\treequence.js",
-            "line": 630,
+            "file": "..\\src\\webVis\\treequence.js",
+            "line": 710,
             "description": "Given an html node containing a button, hides all child treequence elements\n if the button text is not \"+\" and shows them if it is.",
             "itemtype": "method",
             "name": "swapHiding",
@@ -1995,8 +2572,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\treequence.js",
-            "line": 667,
+            "file": "..\\src\\webVis\\treequence.js",
+            "line": 747,
             "description": "Given an HTML element, sets the style attributes of that element to display it's contents.",
             "itemtype": "method",
             "name": "show",
@@ -2014,8 +2591,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\treequence.js",
-            "line": 690,
+            "file": "..\\src\\webVis\\treequence.js",
+            "line": 769,
             "description": "Given an HTML element, sets the style attributes of that element to hide it's contents.",
             "itemtype": "method",
             "name": "hide",
@@ -2033,8 +2610,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\treequence.js",
-            "line": 722,
+            "file": "..\\src\\webVis\\treequence.js",
+            "line": 803,
             "description": "Given an HTML element, sets the style attributes of that element's children\n to display their contents.",
             "itemtype": "method",
             "name": "showChildren",
@@ -2052,8 +2629,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\treequence.js",
-            "line": 750,
+            "file": "..\\src\\webVis\\treequence.js",
+            "line": 832,
             "description": "Given an HTML element, sets the style attributes of that element's children\n to hide their contents.",
             "itemtype": "method",
             "name": "hideChildren",
@@ -2071,8 +2648,8 @@
             "class": "renderGlobal"
         },
         {
-            "file": "src\\webVis\\treequence.js",
-            "line": 779,
+            "file": "..\\src\\webVis\\treequence.js",
+            "line": 862,
             "description": "Given an HTML element and a string, returns a list containing all child elements\n of the given element with a tag equivalent to the given string",
             "itemtype": "method",
             "name": "getChildrenByTag",
@@ -2098,95 +2675,99 @@
     "warnings": [
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src\\webVis\\jquery.js:890"
+            "line": " ..\\src\\webVis\\jquery.js:890"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src\\webVis\\jquery.js:954"
+            "line": " ..\\src\\webVis\\jquery.js:954"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src\\webVis\\jquery.js:1054"
+            "line": " ..\\src\\webVis\\jquery.js:1054"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src\\webVis\\jquery.js:1066"
+            "line": " ..\\src\\webVis\\jquery.js:1066"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " src\\webVis\\jquery.js:1078"
+            "line": " ..\\src\\webVis\\jquery.js:1078"
+        },
+        {
+            "message": "Missing item type\nThe rendering function for the webpage",
+            "line": " ..\\src\\webVis\\dirConfirmScript.js:214"
         },
         {
             "message": "Missing item type\nCreate key-value caches of limited size",
-            "line": " src\\webVis\\jquery.js:890"
+            "line": " ..\\src\\webVis\\jquery.js:890"
         },
         {
             "message": "Missing item type\nMark a function for special use by Sizzle",
-            "line": " src\\webVis\\jquery.js:910"
+            "line": " ..\\src\\webVis\\jquery.js:910"
         },
         {
             "message": "Missing item type\nSupport testing using an element",
-            "line": " src\\webVis\\jquery.js:919"
+            "line": " ..\\src\\webVis\\jquery.js:919"
         },
         {
             "message": "Missing item type\nAdds the same handler for all of the specified attrs",
-            "line": " src\\webVis\\jquery.js:940"
+            "line": " ..\\src\\webVis\\jquery.js:940"
         },
         {
             "message": "Missing item type\nChecks document order of two siblings",
-            "line": " src\\webVis\\jquery.js:954"
+            "line": " ..\\src\\webVis\\jquery.js:954"
         },
         {
             "message": "Missing item type\nReturns a function to use in pseudos for input types",
-            "line": " src\\webVis\\jquery.js:982"
+            "line": " ..\\src\\webVis\\jquery.js:982"
         },
         {
             "message": "Missing item type\nReturns a function to use in pseudos for buttons",
-            "line": " src\\webVis\\jquery.js:993"
+            "line": " ..\\src\\webVis\\jquery.js:993"
         },
         {
             "message": "Missing item type\nReturns a function to use in pseudos for :enabled/:disabled",
-            "line": " src\\webVis\\jquery.js:1004"
+            "line": " ..\\src\\webVis\\jquery.js:1004"
         },
         {
             "message": "Missing item type\nReturns a function to use in pseudos for positionals",
-            "line": " src\\webVis\\jquery.js:1032"
+            "line": " ..\\src\\webVis\\jquery.js:1032"
         },
         {
             "message": "Missing item type\nChecks a node for validity as a Sizzle context",
-            "line": " src\\webVis\\jquery.js:1054"
+            "line": " ..\\src\\webVis\\jquery.js:1054"
         },
         {
             "message": "Missing item type\nDetects XML nodes",
-            "line": " src\\webVis\\jquery.js:1066"
+            "line": " ..\\src\\webVis\\jquery.js:1066"
         },
         {
             "message": "Missing item type\nSets document-related variables once based on the current document",
-            "line": " src\\webVis\\jquery.js:1078"
+            "line": " ..\\src\\webVis\\jquery.js:1078"
         },
         {
             "message": "Missing item type\nDocument sorting and removing duplicates",
-            "line": " src\\webVis\\jquery.js:1532"
+            "line": " ..\\src\\webVis\\jquery.js:1532"
         },
         {
             "message": "Missing item type\nUtility function for retrieving the text value of an array of DOM nodes",
-            "line": " src\\webVis\\jquery.js:1565"
+            "line": " ..\\src\\webVis\\jquery.js:1565"
         },
         {
             "message": "Missing item type\nA low-level selection function that works with Sizzle's compiled\n selector functions",
-            "line": " src\\webVis\\jquery.js:2594"
+            "line": " ..\\src\\webVis\\jquery.js:2594"
         },
         {
             "message": "Missing item type\nLoad a url into a page",
-            "line": " src\\webVis\\jquery.js:9606"
+            "line": " ..\\src\\webVis\\jquery.js:9606"
         },
         {
             "message": "Missing item type\nGets a window from an element",
-            "line": " src\\webVis\\jquery.js:9698"
+            "line": " ..\\src\\webVis\\jquery.js:9698"
         },
         {
             "message": "Missing item type\nThis edge renderer will display edges as curves with arrow heading.",
-            "line": " src\\webVis\\sigma.canvas.edges.curvedArrow.js:6"
+            "line": " ..\\src\\webVis\\sigma.canvas.edges.curvedArrow.js:6"
         }
     ]
 }

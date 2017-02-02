@@ -39,6 +39,7 @@
                 
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/directionConfirmGlobal.html">directionConfirmGlobal</a></li>
                                 <li><a href="../classes/partTableGlobal.html">partTableGlobal</a></li>
                                 <li><a href="../classes/renderGlobal.html">renderGlobal</a></li>
                             </ul>
@@ -119,7 +120,15 @@
 
                             </li>
                             <li class="index-item method">
+                                <a href="#method_conversion">conversion</a>
+
+                            </li>
+                            <li class="index-item method">
                                 <a href="#method_doDensityDrop">doDensityDrop</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_fillGlobalDensity">fillGlobalDensity</a>
 
                             </li>
                             <li class="index-item method">
@@ -156,6 +165,26 @@
                             </li>
                             <li class="index-item method">
                                 <a href="#method_loadParts">loadParts</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_makeDensityDiv">makeDensityDiv</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_makeDropButton">makeDropButton</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_makeMassElem">makeMassElem</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_makeUndropButton">makeUndropButton</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_makeVolElem">makeVolElem</a>
 
                             </li>
                             <li class="index-item method">
@@ -228,7 +257,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_webVis_partTableScript.js.html#l316"><code>src\webVis\partTableScript.js:316</code></a>
+        <a href="../files/.._src_webVis_partTableScript.js.html#l323"><code>..\src\webVis\partTableScript.js:323</code></a>
         </p>
 
 
@@ -294,7 +323,7 @@ entry, as extracted from an XML document</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_webVis_partTableScript.js.html#l698"><code>src\webVis\partTableScript.js:698</code></a>
+        <a href="../files/.._src_webVis_partTableScript.js.html#l703"><code>..\src\webVis\partTableScript.js:703</code></a>
         </p>
 
 
@@ -335,6 +364,74 @@ the associated density input box with the value associated with the inner text o
 
 
 </div>
+<div id="method_conversion" class="method item">
+    <h3 class="name"><code>conversion</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theString</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Float</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partTableScript.js.html#l821"><code>..\src\webVis\partTableScript.js:821</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Accepts a string and outputs a conversion value for the string's described unit to the standard
+units of this application. If no suitable unit is identified in the string, the conversion value
+returned is 0.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theString</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                        <p>A string representation of the unit being looked up</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Float</span>:
+                    <p>the unit conversion value</p>
+
+            </div>
+        </div>
+
+
+</div>
 <div id="method_doDensityDrop" class="method item">
     <h3 class="name"><code>doDensityDrop</code></h3>
 
@@ -359,7 +456,7 @@ the associated density input box with the value associated with the inner text o
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_webVis_partTableScript.js.html#l662"><code>src\webVis\partTableScript.js:662</code></a>
+        <a href="../files/.._src_webVis_partTableScript.js.html#l667"><code>..\src\webVis\partTableScript.js:667</code></a>
         </p>
 
 
@@ -400,6 +497,48 @@ Adds a div element containing several sample density options.</p>
 
 
 </div>
+<div id="method_fillGlobalDensity" class="method item">
+    <h3 class="name"><code>fillGlobalDensity</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partTableScript.js.html#l781"><code>..\src\webVis\partTableScript.js:781</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Takes the value present in the global density input textbox and applies it to all
+parts currently in the table.</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
 <div id="method_flipCheck" class="method item">
     <h3 class="name"><code>flipCheck</code></h3>
 
@@ -424,7 +563,7 @@ Adds a div element containing several sample density options.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_webVis_partTableScript.js.html#l751"><code>src\webVis\partTableScript.js:751</code></a>
+        <a href="../files/.._src_webVis_partTableScript.js.html#l757"><code>..\src\webVis\partTableScript.js:757</code></a>
         </p>
 
 
@@ -492,7 +631,7 @@ Sets an internal value to indicate the checked state of the element.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_webVis_partTableScript.js.html#l147"><code>src\webVis\partTableScript.js:147</code></a>
+        <a href="../files/.._src_webVis_partTableScript.js.html#l154"><code>..\src\webVis\partTableScript.js:154</code></a>
         </p>
 
 
@@ -571,7 +710,7 @@ of the given element with a tag equivalent to the given string</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_webVis_partTableScript.js.html#l266"><code>src\webVis\partTableScript.js:266</code></a>
+        <a href="../files/.._src_webVis_partTableScript.js.html#l273"><code>..\src\webVis\partTableScript.js:273</code></a>
         </p>
 
 
@@ -650,7 +789,7 @@ exist, null is returned.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_webVis_partTableScript.js.html#l129"><code>src\webVis\partTableScript.js:129</code></a>
+        <a href="../files/.._src_webVis_partTableScript.js.html#l136"><code>..\src\webVis\partTableScript.js:136</code></a>
         </p>
 
 
@@ -724,7 +863,7 @@ in the string. This is used internally to extract file extensions from file name
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_webVis_partTableScript.js.html#l290"><code>src\webVis\partTableScript.js:290</code></a>
+        <a href="../files/.._src_webVis_partTableScript.js.html#l297"><code>..\src\webVis\partTableScript.js:297</code></a>
         </p>
 
 
@@ -814,7 +953,7 @@ If such a child does not exist, null is returned.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_webVis_partTableScript.js.html#l544"><code>src\webVis\partTableScript.js:544</code></a>
+        <a href="../files/.._src_webVis_partTableScript.js.html#l556"><code>..\src\webVis\partTableScript.js:556</code></a>
         </p>
 
 
@@ -880,7 +1019,7 @@ text input element and a button allowing the user to switch over to mass input.<
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_webVis_partTableScript.js.html#l565"><code>src\webVis\partTableScript.js:565</code></a>
+        <a href="../files/.._src_webVis_partTableScript.js.html#l579"><code>..\src\webVis\partTableScript.js:579</code></a>
         </p>
 
 
@@ -946,7 +1085,7 @@ text input element and a button allowing the user to indicate the part is not ho
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_webVis_partTableScript.js.html#l525"><code>src\webVis\partTableScript.js:525</code></a>
+        <a href="../files/.._src_webVis_partTableScript.js.html#l535"><code>..\src\webVis\partTableScript.js:535</code></a>
         </p>
 
 
@@ -1006,7 +1145,7 @@ text input element and a button allowing the user to switch over to density inpu
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_webVis_partTableScript.js.html#l234"><code>src\webVis\partTableScript.js:234</code></a>
+        <a href="../files/.._src_webVis_partTableScript.js.html#l243"><code>..\src\webVis\partTableScript.js:243</code></a>
         </p>
 
 
@@ -1026,6 +1165,221 @@ array &quot;fileReaders&quot; has fully read each of their files. If so, then th
 
             <div class="returns-description">
                         <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_makeDensityDiv" class="method item">
+    <h3 class="name"><code>makeDensityDiv</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">HTML element</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partTableScript.js.html#l980"><code>..\src\webVis\partTableScript.js:980</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Returns a standard sample density dropdown menu</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">HTML element</span>:
+                    <p>a sample density dropdown menu</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_makeDropButton" class="method item">
+    <h3 class="name"><code>makeDropButton</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">HTML element</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partTableScript.js.html#l924"><code>..\src\webVis\partTableScript.js:924</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Returns a standard button for a density dropdown menu</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">HTML element</span>:
+                    <p>a standard density dropdown button</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_makeMassElem" class="method item">
+    <h3 class="name"><code>makeMassElem</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">HTML element</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partTableScript.js.html#l873"><code>..\src\webVis\partTableScript.js:873</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Returns a blank mass input element for use in the table</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">HTML element</span>:
+                    <p>a blank mass input element</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_makeUndropButton" class="method item">
+    <h3 class="name"><code>makeUndropButton</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">HTML element</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partTableScript.js.html#l945"><code>..\src\webVis\partTableScript.js:945</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Returns a standard button to remove a density dropdown element</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">HTML element</span>:
+                    <p>a standard density dropdown removal button</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_makeVolElem" class="method item">
+    <h3 class="name"><code>makeVolElem</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">HTML element</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partTableScript.js.html#l902"><code>..\src\webVis\partTableScript.js:902</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Returns a blank volume input element for use in the table</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">HTML element</span>:
+                    <p>a blank volume input element</p>
+
             </div>
         </div>
 
@@ -1055,7 +1409,7 @@ array &quot;fileReaders&quot; has fully read each of their files. If so, then th
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_webVis_partTableScript.js.html#l177"><code>src\webVis\partTableScript.js:177</code></a>
+        <a href="../files/.._src_webVis_partTableScript.js.html#l184"><code>..\src\webVis\partTableScript.js:184</code></a>
         </p>
 
 
@@ -1121,7 +1475,7 @@ of that given reader's files</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_webVis_partTableScript.js.html#l15"><code>src\webVis\partTableScript.js:15</code></a>
+        <a href="../files/.._src_webVis_partTableScript.js.html#l15"><code>..\src\webVis\partTableScript.js:15</code></a>
         </p>
 
 
@@ -1185,7 +1539,7 @@ of that given reader's files</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_webVis_partTableScript.js.html#l589"><code>src\webVis\partTableScript.js:589</code></a>
+        <a href="../files/.._src_webVis_partTableScript.js.html#l601"><code>..\src\webVis\partTableScript.js:601</code></a>
         </p>
 
 
@@ -1251,7 +1605,7 @@ only a mass value and a button allowing the user to indicate the part is hollow.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_webVis_partTableScript.js.html#l433"><code>src\webVis\partTableScript.js:433</code></a>
+        <a href="../files/.._src_webVis_partTableScript.js.html#l447"><code>..\src\webVis\partTableScript.js:447</code></a>
         </p>
 
 
@@ -1312,7 +1666,7 @@ xml formatted string and returns it</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_webVis_partTableScript.js.html#l362"><code>src\webVis\partTableScript.js:362</code></a>
+        <a href="../files/.._src_webVis_partTableScript.js.html#l374"><code>..\src\webVis\partTableScript.js:374</code></a>
         </p>
 
 
@@ -1360,7 +1714,7 @@ XML file and adds a download link for that file to the webpage</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_webVis_partTableScript.js.html#l45"><code>src\webVis\partTableScript.js:45</code></a>
+        <a href="../files/.._src_webVis_partTableScript.js.html#l45"><code>..\src\webVis\partTableScript.js:45</code></a>
         </p>
 
 
@@ -1426,7 +1780,7 @@ in XML formatting</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_webVis_partTableScript.js.html#l679"><code>src\webVis\partTableScript.js:679</code></a>
+        <a href="../files/.._src_webVis_partTableScript.js.html#l684"><code>..\src\webVis\partTableScript.js:684</code></a>
         </p>
 
 
@@ -1491,7 +1845,7 @@ Removes the sample density option div element.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_webVis_partTableScript.js.html#l637"><code>src\webVis\partTableScript.js:637</code></a>
+        <a href="../files/.._src_webVis_partTableScript.js.html#l644"><code>..\src\webVis\partTableScript.js:644</code></a>
         </p>
 
 
@@ -1557,7 +1911,7 @@ match the given density</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_webVis_partTableScript.js.html#l613"><code>src\webVis\partTableScript.js:613</code></a>
+        <a href="../files/.._src_webVis_partTableScript.js.html#l623"><code>..\src\webVis\partTableScript.js:623</code></a>
         </p>
 
 

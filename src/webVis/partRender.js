@@ -2,6 +2,60 @@
 
 
 
+
+function getStdMaterial(){
+	
+	if(standard === true){
+		
+		return new THREE.ShaderMaterial({
+					vertexShader: document.querySelector('#chroma-vert').textContent.trim(),
+					fragmentShader: document.querySelector('#chroma-frag').textContent.trim(),
+					uniforms: {
+						cameraNear: { value: camera.near },
+						cameraFar:  { value: camera.far }
+					}
+				});
+		
+	}
+	else{
+		
+		return new THREE.MeshNormalMaterial( );
+		
+	}
+	
+	
+	
+}
+
+function getStdLine(){
+	
+	if(standard === true){
+		
+		return new THREE.ShaderMaterial({
+					vertexShader: document.querySelector('#chroma-vert').textContent.trim(),
+					fragmentShader: document.querySelector('#chroma-frag').textContent.trim(),
+					uniforms: {
+						cameraNear: { value: camera.near },
+						cameraFar:  { value: camera.far }
+					}
+				});
+		
+	}
+	else{
+		
+		return new THREE.LineDashedMaterial({
+					color: 0x333333,
+					dashSize: 50,
+					gapSize:50
+				
+				})
+		
+	}
+	
+	
+	
+}
+
 /**
 *
 * Accepts an array of objects containing a string property called "Name" and returns
@@ -814,12 +868,7 @@ function addLines(movTree,parentNode,theScene,isMov){
 			theGeo.vertices=[startP,endP];
 			movTree.Line= new THREE.LineSegments(
 				theGeo,
-				new THREE.LineDashedMaterial({
-					color: 0x333333,
-					dashSize: 50,
-					gapSize:50
-				
-				})
+				getStdLine()
 			);
 			theScene.add(movTree.Line);
 		}
@@ -1332,11 +1381,7 @@ function addGrid(theSize, theDivs, theHeight, theColor){
 	}
 	theLine =  new THREE.LineSegments(
 		theGeo,
-		new THREE.LineDashedMaterial({
-			color: theColor,
-			dashSize: 50,
-			gapSize:50
-		})
+		getStdLine()
 	);
 	scene.add(theLine);
 	
@@ -1398,11 +1443,7 @@ function addCylender(theRad, theBot, theTop, theX, theZ, slices, stacks, theColo
 	}
 	theLine =  new THREE.LineSegments(
 		theGeo,
-		new THREE.LineDashedMaterial({
-			color: theColor,
-			dashSize: 50,
-			gapSize:50
-		})
+		getStdLine()
 	);
 	scene.add(theLine);
 	

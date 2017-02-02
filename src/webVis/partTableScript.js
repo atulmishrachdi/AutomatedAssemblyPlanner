@@ -778,6 +778,16 @@ function flipCheck(theBox){
 
 
 
+/**
+*
+* Takes the value present in the global density input textbox and applies it to all 
+* parts currently in the table.
+*
+* @method fillGlobalDensity
+* @for partTableGlobal
+* @return {Void} 
+* 
+*/
 function fillGlobalDensity(){
 	var densInp= document.getElementById("GlobalDensityInput");
 	var theDensity;
@@ -806,6 +816,20 @@ function fillGlobalDensity(){
 }
 
 
+
+
+/**
+*
+* Accepts a string and outputs a conversion value for the string's described unit to the standard
+* units of this application. If no suitable unit is identified in the string, the conversion value
+* returned is 0.
+*
+* @method conversion
+* @for partTableGlobal
+* @param {String} theString A string representation of the unit being looked up
+* @return {Float} the unit conversion value
+* 
+*/
 function conversion (theString){
 	
 	switch(theString){
@@ -845,6 +869,16 @@ var massElem="<div class='masselem'>"+
 				"<button onclick='insertMassInput(this)'>Input By Mass</button>"+
 				"<button onclick='insertDensityInput(this)'>Input By Volume+Density</button>"+
 			 "</div>";
+			 
+/**
+*
+* Returns a blank mass input element for use in the table
+*
+* @method makeMassElem
+* @for partTableGlobal
+* @return {HTML element} a blank mass input element
+* 
+*/
 function makeMassElem(){
 	
 	var result=document.createElement("DIV");
@@ -864,6 +898,16 @@ function makeMassElem(){
 
 // Starting Input for Volume cells
 var volElem="<button onclick='insertHollowInput(this)'>Is Hollow</button>";
+
+/**
+*
+* Returns a blank volume input element for use in the table
+*
+* @method makeVolElem
+* @for partTableGlobal
+* @return {HTML element} a blank volume input element
+* 
+*/
 function makeVolElem(){
 	
 	result=document.creatElement("BUTTON");
@@ -876,6 +920,16 @@ function makeVolElem(){
 
 // The button for showing the sample density dropdown menu
 var dropDensityButton="<button class='dropbtn' onclick='doDensityDrop(this)'>Sample Densities</button>";
+
+/**
+*
+* Returns a standard button for a density dropdown menu
+*
+* @method makeDropButton
+* @for partTableGlobal
+* @return {HTML element} a standard density dropdown button
+* 
+*/
 function makeDropButton(){
 	
 	result=document.creatElement("BUTTON");
@@ -888,6 +942,15 @@ function makeDropButton(){
 	
 // The button for removing the sample density dropdown menu
 var undropDensityButton="<button class='dropbtn' onclick='undoDensityDrop(this)'>Sample Densities</button>";
+/**
+*
+* Returns a standard button to remove a density dropdown element
+*
+* @method makeUndropButton
+* @for partTableGlobal
+* @return {HTML element} a standard density dropdown removal button
+* 
+*/
 function makeUndropButton(){
 	
 	result=document.creatElement("BUTTON");
@@ -913,6 +976,16 @@ var densityMenu="<div class='dropdown-content' style='border-color: #666666; bac
 
 // Starting input for density cells
 var densityDiv= "\n<div class='dropdown'>"+dropDensityButton+"</div>";
+
+/**
+*
+* Returns a standard sample density dropdown menu
+*
+* @method makeDensityDiv
+* @for partTableGlobal
+* @return {HTML element} a sample density dropdown menu
+* 
+*/
 function makeDensityDiv(){
 	
 	result=document.creatElement("DIV");

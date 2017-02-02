@@ -111,6 +111,8 @@ var theTreequence=null;
 
 var timeAdjustment = 0;
 
+var standard = false;
+
 
 // Holds the state of button press inputs to smooth out control response
 
@@ -141,6 +143,10 @@ var inputState={
 
 // The color of the background of the scene
 var skyColor= 0xFFFFFF;
+
+if(standard){
+	skyColor = 0x000000;
+}
 
 // The tree structure holding animation data
 var movementTree=null;
@@ -180,7 +186,7 @@ var momentum= new THREE.Vector3(0,0,0);
 var scene = new THREE.Scene();
 
 // The camera
-var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 1, 16000 );
+var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 1, 6000 );
 camera.position.x=0;
 camera.position.z=0;
 camera.position.y=0;
@@ -249,7 +255,7 @@ var sunLight = new THREE.SpotLight( 0xaa5533, 6, 32000, 1.2, 1, 1 );
 		
 
 
-var theFog=new THREE.Fog( skyColor, 4000, 9000 );
+var theFog=new THREE.Fog( skyColor, 4000, 6000 );
 scene.fog=theFog;
 
 var theXAxis=null;
@@ -590,7 +596,7 @@ function manageControls(){
 	}
 	else{
 		if(focusPoint!=null){
-			focusPoint.Mesh.material=new THREE.MeshNormalMaterial( );
+			focusPoint.Mesh.material= getStdMaterial();
 			focusPoint=null;
 		}
 	}
@@ -642,7 +648,7 @@ var render = function () {
 
 	// Reset the appearence of the last object of interest
 	if(objectOfInterest!=null){
-		objectOfInterest.Mesh.material=new THREE.MeshNormalMaterial( );
+		objectOfInterest.Mesh.material=getStdMaterial();
 	}
 	
 	// Get the first part being directly looked at and sets it as object of interest
@@ -849,9 +855,12 @@ function loadParts (){
 				
 				//console.log(partGeom);
 				
+				var postMaterial = 
+				
+							
 				partMesh=new THREE.Mesh( 
 						partGeom,
-						new THREE.MeshNormalMaterial( )
+						getStdMaterial()
 				);
 				parts.push({
 					Mesh: partMesh,
@@ -1007,6 +1016,11 @@ function showHideTreequence(){
 	}
 				
 }
+
+
+
+
+
 
 
 
