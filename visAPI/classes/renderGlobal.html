@@ -140,6 +140,10 @@
 
                             </li>
                             <li class="index-item method">
+                                <a href="#method_alignAssemblyCenter">alignAssemblyCenter</a>
+
+                            </li>
+                            <li class="index-item method">
                                 <a href="#method_animate">animate</a>
 
                             </li>
@@ -196,6 +200,10 @@
 
                             </li>
                             <li class="index-item method">
+                                <a href="#method_getGeometries">getGeometries</a>
+
+                            </li>
+                            <li class="index-item method">
                                 <a href="#method_getGlobBounds">getGlobBounds</a>
 
                             </li>
@@ -237,6 +245,14 @@
                             </li>
                             <li class="index-item method">
                                 <a href="#method_getRef">getRef</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_getStdMaterial">getStdMaterial</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_getStdMaterial">getStdMaterial</a>
 
                             </li>
                             <li class="index-item method">
@@ -305,6 +321,10 @@
                             </li>
                             <li class="index-item method">
                                 <a href="#method_makeArcPointList">makeArcPointList</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_makeFastenerKeyFrames">makeFastenerKeyFrames</a>
 
                             </li>
                             <li class="index-item method">
@@ -453,7 +473,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._src_webVis_partRender.js.html#l1189"><code>..\src\webVis\partRender.js:1189</code></a>
+        <a href="../files/.._src_webVis_partRender.js.html#l1257"><code>..\src\webVis\partRender.js:1257</code></a>
         </p>
 
 
@@ -566,7 +586,7 @@ adds the midpoint of the arc from startDisp to endDisp until level = 0.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._src_webVis_partRender.js.html#l1300"><code>..\src\webVis\partRender.js:1300</code></a>
+        <a href="../files/.._src_webVis_partRender.js.html#l1368"><code>..\src\webVis\partRender.js:1368</code></a>
         </p>
 
 
@@ -648,7 +668,7 @@ animation at start location and move in an arc to their previously defined start
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._src_webVis_partRender.js.html#l900"><code>..\src\webVis\partRender.js:900</code></a>
+        <a href="../files/.._src_webVis_partRender.js.html#l968"><code>..\src\webVis\partRender.js:968</code></a>
         </p>
 
 
@@ -723,84 +743,6 @@ For external use, apply 0.</p>
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code>theSize</code>
-                </li>
-                <li class="arg">
-                        <code>theDivs</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
-
-        <span class="returns-inline">
-            <span class="type">Void</span>
-        </span>
-
-
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/.._src_webVis_partRender.js.html#l1355"><code>..\src\webVis\partRender.js:1355</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Adds a simple square grid of width equal to theSize and a number of lines equal to theDivs at Y=-1000</p>
-
-    </div>
-
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name">theSize</code>
-                        <span class="type">Int</span>
-
-
-                    <div class="param-description">
-                        <p>The desired grid width</p>
-
-                    </div>
-
-                </li>
-                <li class="param">
-                        <code class="param-name">theDivs</code>
-                        <span class="type">Int</span>
-
-
-                    <div class="param-description">
-                        <p>The desired number of lines per side of the grid</p>
-
-                    </div>
-
-                </li>
-            </ul>
-        </div>
-
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                        <span class="type">Void</span>:
-            </div>
-        </div>
-
-
-</div>
-<div id="method_addGrid" class="method item">
-    <h3 class="name"><code>addGrid</code></h3>
-
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
                         <code>theRad</code>
                 </li>
                 <li class="arg">
@@ -840,7 +782,7 @@ For external use, apply 0.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._src_webVis_partRender.js.html#l1392"><code>..\src\webVis\partRender.js:1392</code></a>
+        <a href="../files/.._src_webVis_partRender.js.html#l1460"><code>..\src\webVis\partRender.js:1460</code></a>
         </p>
 
 
@@ -959,6 +901,84 @@ segmentations equal to stacks, and a number of radial segmentations equal to sli
 
 
 </div>
+<div id="method_addGrid" class="method item">
+    <h3 class="name"><code>addGrid</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theSize</code>
+                </li>
+                <li class="arg">
+                        <code>theDivs</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l1423"><code>..\src\webVis\partRender.js:1423</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Adds a simple square grid of width equal to theSize and a number of lines equal to theDivs at Y=-1000</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theSize</code>
+                        <span class="type">Int</span>
+
+
+                    <div class="param-description">
+                        <p>The desired grid width</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">theDivs</code>
+                        <span class="type">Int</span>
+
+
+                    <div class="param-description">
+                        <p>The desired number of lines per side of the grid</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
 <div id="method_addLines" class="method item">
     <h3 class="name"><code>addLines</code></h3>
 
@@ -989,7 +1009,7 @@ segmentations equal to stacks, and a number of radial segmentations equal to sli
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._src_webVis_partRender.js.html#l843"><code>..\src\webVis\partRender.js:843</code></a>
+        <a href="../files/.._src_webVis_partRender.js.html#l911"><code>..\src\webVis\partRender.js:911</code></a>
         </p>
 
 
@@ -1054,6 +1074,47 @@ in it's assembly sequence</p>
 
 
 </div>
+<div id="method_alignAssemblyCenter" class="method item">
+    <h3 class="name"><code>alignAssemblyCenter</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l833"><code>..\src\webVis\partRender.js:833</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Aligns the camera to look at the point at the average of the centers of all the parts bounding boxes</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
 <div id="method_animate" class="method item">
     <h3 class="name"><code>animate</code></h3>
 
@@ -1084,7 +1145,7 @@ in it's assembly sequence</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._src_webVis_partRender.js.html#l634"><code>..\src\webVis\partRender.js:634</code></a>
+        <a href="../files/.._src_webVis_partRender.js.html#l693"><code>..\src\webVis\partRender.js:693</code></a>
         </p>
 
 
@@ -1245,7 +1306,7 @@ animation</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._src_webVis_partRender.js.html#l188"><code>..\src\webVis\partRender.js:188</code></a>
+        <a href="../files/.._src_webVis_partRender.js.html#l223"><code>..\src\webVis\partRender.js:223</code></a>
         </p>
 
 
@@ -1324,7 +1385,7 @@ a string property called &quot;Name&quot;</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._src_webVis_partRender.js.html#l122"><code>..\src\webVis\partRender.js:122</code></a>
+        <a href="../files/.._src_webVis_partRender.js.html#l146"><code>..\src\webVis\partRender.js:146</code></a>
         </p>
 
 
@@ -1394,7 +1455,7 @@ vertices are present in the object, a zeroed vector is returned.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._src_webVis_partRender.js.html#l683"><code>..\src\webVis\partRender.js:683</code></a>
+        <a href="../files/.._src_webVis_partRender.js.html#l742"><code>..\src\webVis\partRender.js:742</code></a>
         </p>
 
 
@@ -1472,7 +1533,7 @@ encompassing the two</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._src_webVis_partRender.js.html#l394"><code>..\src\webVis\partRender.js:394</code></a>
+        <a href="../files/.._src_webVis_partRender.js.html#l429"><code>..\src\webVis\partRender.js:429</code></a>
         </p>
 
 
@@ -1538,7 +1599,7 @@ encompassing the two</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._src_webVis_partRender.js.html#l418"><code>..\src\webVis\partRender.js:418</code></a>
+        <a href="../files/.._src_webVis_partRender.js.html#l453"><code>..\src\webVis\partRender.js:453</code></a>
         </p>
 
 
@@ -1669,7 +1730,7 @@ integer &quot;N&quot;, removes the first N characters of each Name attribute</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._src_webVis_partRender.js.html#l94"><code>..\src\webVis\partRender.js:94</code></a>
+        <a href="../files/.._src_webVis_partRender.js.html#l118"><code>..\src\webVis\partRender.js:118</code></a>
         </p>
 
 
@@ -1736,7 +1797,7 @@ a property called &quot;Name&quot; with a non-null string.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._src_webVis_partRender.js.html#l286"><code>..\src\webVis\partRender.js:286</code></a>
+        <a href="../files/.._src_webVis_partRender.js.html#l321"><code>..\src\webVis\partRender.js:321</code></a>
         </p>
 
 
@@ -2035,7 +2096,7 @@ of the given element with a tag equivalent to the given string</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._src_webVis_partRender.js.html#l792"><code>..\src\webVis\partRender.js:792</code></a>
+        <a href="../files/.._src_webVis_partRender.js.html#l860"><code>..\src\webVis\partRender.js:860</code></a>
         </p>
 
 
@@ -2105,6 +2166,70 @@ contain a threeJS mesh object (under the property &quot;Mesh&quot;) to be tested
 
 
 </div>
+<div id="method_getGeometries" class="method item">
+    <h3 class="name"><code>getGeometries</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theSTLs</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">ThreeJS Object List</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l196"><code>..\src\webVis\partRender.js:196</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Accepts a list of binary stl buffer objects and returns a corresponding list
+of ThreeJS objects.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theSTLs</code>
+                        <span class="type">Buffer Object List</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">ThreeJS Object List</span>:
+            </div>
+        </div>
+
+
+</div>
 <div id="method_getGlobBounds" class="method item">
     <h3 class="name"><code>getGlobBounds</code></h3>
 
@@ -2132,7 +2257,7 @@ contain a threeJS mesh object (under the property &quot;Mesh&quot;) to be tested
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._src_webVis_partRender.js.html#l712"><code>..\src\webVis\partRender.js:712</code></a>
+        <a href="../files/.._src_webVis_partRender.js.html#l771"><code>..\src\webVis\partRender.js:771</code></a>
         </p>
 
 
@@ -2630,7 +2755,7 @@ objects which is then returned</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._src_webVis_partRender.js.html#l746"><code>..\src\webVis\partRender.js:746</code></a>
+        <a href="../files/.._src_webVis_partRender.js.html#l805"><code>..\src\webVis\partRender.js:805</code></a>
         </p>
 
 
@@ -2698,7 +2823,7 @@ a threeJS Vector3 object</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._src_webVis_partRender.js.html#l59"><code>..\src\webVis\partRender.js:59</code></a>
+        <a href="../files/.._src_webVis_partRender.js.html#l83"><code>..\src\webVis\partRender.js:83</code></a>
         </p>
 
 
@@ -2933,6 +3058,90 @@ the tag &quot;Install&quot; of the object. If no such child exists, null is retu
                         <span class="type">JQuery Object</span>:
                     <p>The resulting child</p>
 
+            </div>
+        </div>
+
+
+</div>
+<div id="method_getStdMaterial" class="method item">
+    <h3 class="name"><code>getStdMaterial</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l7"><code>..\src\webVis\partRender.js:7</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Returns a normal material for meshes if the global variable &quot;standard&quot; is false. If &quot;standard&quot;
+is set to true, returns a chromadepth material instead.</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Object</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_getStdMaterial" class="method item">
+    <h3 class="name"><code>getStdMaterial</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l44"><code>..\src\webVis\partRender.js:44</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Returns a normal material for lines if the global variable &quot;standard&quot; is false. If &quot;standard&quot;
+is set to true, returns a chromadepth material instead.</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Object</span>:
             </div>
         </div>
 
@@ -3384,7 +3593,7 @@ If such a child does not exist, null is returned.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._src_webVis_partRender.js.html#l578"><code>..\src\webVis\partRender.js:578</code></a>
+        <a href="../files/.._src_webVis_partRender.js.html#l637"><code>..\src\webVis\partRender.js:637</code></a>
         </p>
 
 
@@ -3464,7 +3673,7 @@ should occur</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._src_webVis_partRender.js.html#l377"><code>..\src\webVis\partRender.js:377</code></a>
+        <a href="../files/.._src_webVis_partRender.js.html#l412"><code>..\src\webVis\partRender.js:412</code></a>
         </p>
 
 
@@ -3651,7 +3860,7 @@ to hide their contents.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._src_webVis_partRender.js.html#l1018"><code>..\src\webVis\partRender.js:1018</code></a>
+        <a href="../files/.._src_webVis_partRender.js.html#l1086"><code>..\src\webVis\partRender.js:1086</code></a>
         </p>
 
 
@@ -3781,7 +3990,7 @@ the name of the generated node.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._src_webVis_partRender.js.html#l1136"><code>..\src\webVis\partRender.js:1136</code></a>
+        <a href="../files/.._src_webVis_partRender.js.html#l1204"><code>..\src\webVis\partRender.js:1204</code></a>
         </p>
 
 
@@ -3863,7 +4072,7 @@ the time value T, and returns a ThreeJS Vector3 object with the interpolated coo
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._src_webVis_partRender.js.html#l536"><code>..\src\webVis\partRender.js:536</code></a>
+        <a href="../files/.._src_webVis_partRender.js.html#l595"><code>..\src\webVis\partRender.js:595</code></a>
         </p>
 
 
@@ -4066,7 +4275,7 @@ a change in the state of mouselock</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._src_webVis_partRender.js.html#l253"><code>..\src\webVis\partRender.js:253</code></a>
+        <a href="../files/.._src_webVis_partRender.js.html#l288"><code>..\src\webVis\partRender.js:288</code></a>
         </p>
 
 
@@ -4142,7 +4351,7 @@ property called &quot;Time&quot;, returns the value of the greatest &quot;Time&q
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._src_webVis_partRender.js.html#l1239"><code>..\src\webVis\partRender.js:1239</code></a>
+        <a href="../files/.._src_webVis_partRender.js.html#l1307"><code>..\src\webVis\partRender.js:1307</code></a>
         </p>
 
 
@@ -4216,6 +4425,98 @@ terminating at endpoint, and centered around center</p>
 
 
 </div>
+<div id="method_makeFastenerKeyFrames" class="method item">
+    <h3 class="name"><code>makeFastenerKeyFrames</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theFst</code>
+                </li>
+                <li class="arg">
+                        <code>runningList</code>
+                </li>
+                <li class="arg">
+                        <code>currentFrameList</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l481"><code>..\src\webVis\partRender.js:481</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Creates a keyframe list for the given fastener object and adds it to currentFrameList</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theFst</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>The object representation of the fastener being keyframed</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">runningList</code>
+                        <span class="type">Object List</span>
+
+
+                    <div class="param-description">
+                        <p>The current running list of keyframes</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">currentFrameList</code>
+                        <span class="type">Object List</span>
+
+
+                    <div class="param-description">
+                        <p>The list of part-keyframe list objects</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
 <div id="method_makeKeyFrames" class="method item">
     <h3 class="name"><code>makeKeyFrames</code></h3>
 
@@ -4246,7 +4547,7 @@ terminating at endpoint, and centered around center</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._src_webVis_partRender.js.html#l469"><code>..\src\webVis\partRender.js:469</code></a>
+        <a href="../files/.._src_webVis_partRender.js.html#l528"><code>..\src\webVis\partRender.js:528</code></a>
         </p>
 
 
@@ -5173,7 +5474,7 @@ to display their contents.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._src_webVis_partRender.js.html#l359"><code>..\src\webVis\partRender.js:359</code></a>
+        <a href="../files/.._src_webVis_partRender.js.html#l394"><code>..\src\webVis\partRender.js:394</code></a>
         </p>
 
 
@@ -5238,7 +5539,7 @@ to display their contents.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._src_webVis_partRender.js.html#l321"><code>..\src\webVis\partRender.js:321</code></a>
+        <a href="../files/.._src_webVis_partRender.js.html#l356"><code>..\src\webVis\partRender.js:356</code></a>
         </p>
 
 
@@ -5579,7 +5880,7 @@ the results</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._src_webVis_partRender.js.html#l1065"><code>..\src\webVis\partRender.js:1065</code></a>
+        <a href="../files/.._src_webVis_partRender.js.html#l1133"><code>..\src\webVis\partRender.js:1133</code></a>
         </p>
 
 
@@ -5632,7 +5933,7 @@ the results</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._src_webVis_partRender.js.html#l955"><code>..\src\webVis\partRender.js:955</code></a>
+        <a href="../files/.._src_webVis_partRender.js.html#l1023"><code>..\src\webVis\partRender.js:1023</code></a>
         </p>
 
 
@@ -5721,7 +6022,7 @@ in it's assembly sequence</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._src_webVis_partRender.js.html#l1171"><code>..\src\webVis\partRender.js:1171</code></a>
+        <a href="../files/.._src_webVis_partRender.js.html#l1239"><code>..\src\webVis\partRender.js:1239</code></a>
         </p>
 
 

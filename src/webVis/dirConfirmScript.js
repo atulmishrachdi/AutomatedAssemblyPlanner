@@ -193,7 +193,19 @@ function changeCurrentPair(theButton){
 	
 }
 
-
+/**
+*
+* Given a jQuery object and a string, returns the first child of the given element with
+* a tag equivalent to the given string.
+*
+* @method grab
+* @for  directionConfirmGlobal
+* @param {jQuery Object} theTree The jQuery object whose child is to be returned
+* @param {String} theMember The name of the tag being searched
+* @return {jQuery Object} The first child with the given tag. If such a child does not 
+* exist, null is returned.
+* 
+*/
 function grab(theTree,theMember){
 
 	if($(theTree).children(theMember).length!=0){
@@ -216,7 +228,6 @@ var focusPoint;
 * The rendering function for the webpage
 *
 * @for directionConfirmGlobal
-* @for renderGlobal
 * @return {Void}
 * 
 */
@@ -295,7 +306,22 @@ function grabExtension(theName){
 	return (/[.]/.exec(theName)) ? /[^.]+$/.exec(theName) : undefined;
 }
 
+
+
+
+
 // Returns from the given list of file readers those that have not completed loading
+/**
+*
+* Outputs through the console the list of FileReaders in theReaders which have 
+* not yet completed their loading
+*
+* @method whoIsLeft
+* @for  directionConfirmGlobal
+* @param {FileReader Object List} theReaders The list of FileReaders to be checked
+* @return {Void}
+* 
+*/
 function whoIsLeft(theReaders){
 
 	var pos=0;
@@ -473,7 +499,10 @@ function loadParts (){
 *
 * @method linkPair
 * @for directionConfirmGlobal
-* @return {Object}
+* @param {String} a The first part name
+* @param {String} b The second part name
+* @param {Vector3} vec The vector to be added to the pair
+* @return {Object} The resulting pair object
 * 
 */
 function linkPair(a,b,vec){
@@ -727,6 +756,7 @@ function insertAssemblyPairs(){
 *
 * @method deHighlight
 * @for directionConfirmGlobal
+* @param {Object} thePair The pair object to be dehighlighted 
 * @return {Void}
 * 
 */
@@ -738,6 +768,17 @@ function deHighlight(thePair){
 }
 
 
+
+/**
+*
+* Highlights the given pair of parts
+*
+* @method highlight
+* @for directionConfirmGlobal
+* @param {Object} thePair The pair object to be highlighted 
+* @return {Void}
+* 
+*/
 
 function highlight(thePair){
 	
@@ -796,6 +837,18 @@ function highlight(thePair){
 
 
 
+
+/**
+*
+* Sets the opacity of each (non-highlighted) mesh object to the value of the
+* slider element provided
+*
+* @method fixOpacity
+* @for directionConfirmGlobal
+* @param {Object} theSlider The slider which is to be referenced when setting object opacity
+* @return {Void}
+* 
+*/
 function fixOpacity(theSlider){
 	
 	console.log("Changing Opacity");
@@ -813,6 +866,17 @@ function fixOpacity(theSlider){
 }
 
 
+
+/**
+*
+* Given a mouseup event, sets corresponding internal button states for mouse-related controls
+*
+* @method doMouseUp
+* @for directionConfirmGlobal
+* @param {mouseup event} theEvent
+* @return {Void}
+* 
+*/
 function doMouseUp(theEvent){
 	if(theEvent.button == 0){
 		leftDrag = false;
@@ -822,6 +886,17 @@ function doMouseUp(theEvent){
 	}
 }
 
+
+/**
+*
+* Given a mousedown event, sets corresponding internal button states for mouse-related controls
+*
+* @method doMouseDown
+* @for directionConfirmGlobal
+* @param {mousedown event} theEvent
+* @return {Void}
+* 
+*/
 function doMouseDown(theEvent){
 	if(theEvent.button == 0){
 		leftDrag = true;
@@ -831,16 +906,51 @@ function doMouseDown(theEvent){
 	}
 }
 
+
+/**
+*
+* Given a mouseleave event, sets corresponding internal button states for mouse-related controls
+*
+* @method doMouseLeave
+* @for directionConfirmGlobal
+* @param {mouseup event} theEvent
+* @return {Void}
+* 
+*/
 function doMouseLeave(theEvent){
 	leftDrag = false;
 	rightDrag = false;
 	lastMouse = null;
 }
 
+
+/**
+*
+* Prevents the default response of the given event (used to prevent dropdown menus when right
+* clicking on the display).
+*
+* @method justDont
+* @for directionConfirmGlobal
+* @param {Event Object} theEvent The event to suppress the default response of.
+* @return {Void}
+* 
+*/
 function justDont(theEvent){
 	theEvent.preventDefault();
 }
 
+
+/**
+*
+* Given a mousedrag event, rotates the camera or adds a vector to the currently displayed pair,
+* depending upon whether or not the left or right mouse button is depressed
+*
+* @method doDrag
+* @for directionConfirmGlobal
+* @param {mouseup event} theEvent
+* @return {Void}
+* 
+*/
 function doDrag(theEvent){
 	if(leftDrag==true){
 		thePos.normalize();
@@ -856,13 +966,35 @@ function doDrag(theEvent){
 
 document.getElementById("display").addEventListener("mousemove", doDrag);
 
-
+/**
+*
+* Given a mousewheel event, changes the distance of the camera from the center of the scene
+*
+* @method doMouseUp
+* @for directionConfirmGlobal
+* @param {mouseup event} theEvent
+* @return {Void}
+* 
+*/
 function doZoom(theEvent){
 	theDistance=theDistance*Math.pow(1.001,theEvent.wheelDelta);	
 }
 
 document.getElementById("display").addEventListener("wheel", doZoom);
 
+
+
+
+/**
+*
+* Inserts the vector view into the webpage
+*
+* @method insertVectorView
+* @for directionConfirmGlobal
+* @param {HTML Element} theButton The vector viewing button
+* @return {Void}
+* 
+*/
 function insertVectorView(theButton){
 	
 	console.log("doing insertVectorView");
@@ -951,6 +1083,20 @@ function insertVectorView(theButton){
 	
 }
 
+
+
+
+
+/**
+*
+* Removes the vector view from the webpage
+*
+* @method removeVectorView
+* @for directionConfirmGlobal
+* @param {HTML Element} theButton The vector viewing button
+* @return {Void}
+* 
+*/
 function removeVectorView(theButton){
 	
 	console.log("doing removeVectorView");
@@ -996,6 +1142,17 @@ function removeVectorView(theButton){
 	
 }
 
+
+/**
+*
+* Inserts a blank vector widget into the vector view element
+*
+* @method addVectorToPair
+* @for directionConfirmGlobal
+* @param {HTML Element} theButton The "add vector" button
+* @return {Void}
+* 
+*/
 function addVectorToPair(theButton){
 	
 	console.log("doing addVectorToPair");
@@ -1047,6 +1204,18 @@ function addVectorToPair(theButton){
 }
 
 
+
+
+/**
+*
+* Removes a vector widget from the vector view element
+*
+* @method remVectorFromPair
+* @for directionConfirmGlobal
+* @param {HTML Element} theButton The "remove" button of the widget to be removed
+* @return {Void}
+* 
+*/
 function remVectorFromPair(theButton){
 	
 	console.log("doing remVectorFromPair");
@@ -1062,6 +1231,16 @@ function remVectorFromPair(theButton){
 	
 }
 
+
+/**
+*
+* Updates a vector to match the values in its corresponding widget
+* @method vecEntryUpdate
+* @for directionConfirmGlobal
+* @param {HTML Element} theInput An input element of the vector's widget
+* @return {Void}
+* 
+*/
 function vecEntryUpdate(theInput){
 	
 	console.log("doing vecEntryUpdate");
@@ -1132,6 +1311,18 @@ function vecEntryUpdate(theInput){
 }
 
 
+
+/**
+*
+* Finds and returns the index of the direction in the list of usable vector directions
+* which best matches the given vector
+*
+* @method getDir
+* @for directionConfirmGlobal
+* @param {Vector3} theVec The vector to be searched with
+* @return {Int} The index of the best matching direction in the list of usable vector directions
+* 
+*/
 function getDir(theVec){
 	
 	var maxDot=-1;
@@ -1153,7 +1344,16 @@ function getDir(theVec){
 
 
 
-
+/**
+*
+* Processes the information in the webpage into an XML string and inserts a download link 
+* for the data into the top of the page
+*
+* @method renderXML
+* @for directionConfirmGlobal
+* @return {Void}
+* 
+*/
 function renderXML(){
 	
 	
@@ -1226,7 +1426,15 @@ function renderXML(){
 
 
 
-
+/**
+*
+* Initializes the lines for the XYZ compass in the display
+*
+* @method initAxisLines
+* @for directionConfirmGlobal
+* @return {Void}
+* 
+*/
 function initAxisLines(){
 	
 	theXAxis = new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0xff0000, depthTest: false }));
@@ -1253,7 +1461,15 @@ function initAxisLines(){
 }
 
 
-
+/**
+*
+* Updates the lines for the XYZ compass in the display
+*
+* @method updateAxisLines
+* @for directionConfirmGlobal
+* @return {Void}
+* 
+*/
 function updateAxisLines(){
 	
 	var theRot= new THREE.Quaternion(0,0,0,0);
@@ -1290,8 +1506,19 @@ function updateAxisLines(){
 
 
 
-
-function getDirectionFromMouse( mouseX, mouseY){
+/**
+*
+* Maps a given mouse X position and mouse Y position to a point on a unit hemisphere facing
+* towards the user then returns the index of the closest valid direction
+*
+* @method getDirectionFromMouse
+* @for directionConfirmGlobal
+* @param {Float} mouseX
+* @param {Float} mouseY
+* @return {Int}
+* 
+*/
+function getDirectionFromMouse( mouseX, mouseY ){
 	
 	var mouseZ;
 	mouseZ = Math.pow(1-((mouseX*mouseX)+(mouseY*mouseY)),0.5);
@@ -1309,6 +1536,19 @@ function getDirectionFromMouse( mouseX, mouseY){
 }
 
 
+
+
+/**
+*
+* Adds a vector to the currently displayed pair based off of camera position, mouse X and mouse Y
+*
+* @method addVectorFromMouse
+* @for directionConfirmGlobal
+* @param {Float} mouseX The X position of the mouse 
+* @param {Float} mouseY The Y position of the mouse
+* @return {Void}
+* 
+*/
 function addVectorFromMouse ( mouseX, mouseY ){
 	
 	var theButton = document.getElementById("addButton");

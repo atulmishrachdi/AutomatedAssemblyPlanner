@@ -6,8 +6,7 @@
             "modules": {},
             "classes": {},
             "fors": {
-                "directionConfirmGlobal": 1,
-                "renderGlobal": 1
+                "directionConfirmGlobal": 1
             },
             "namespaces": {}
         },
@@ -180,17 +179,41 @@
         },
         {
             "file": "..\\src\\webVis\\dirConfirmScript.js",
-            "line": 214,
+            "line": 196,
+            "description": "Given a jQuery object and a string, returns the first child of the given element with\n a tag equivalent to the given string.",
+            "itemtype": "method",
+            "name": "grab",
+            "params": [
+                {
+                    "name": "theTree",
+                    "description": "The jQuery object whose child is to be returned",
+                    "type": "JQuery Object"
+                },
+                {
+                    "name": "theMember",
+                    "description": "The name of the tag being searched",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "The first child with the given tag. If such a child does not \n exist, null is returned.",
+                "type": "JQuery Object"
+            },
+            "class": "directionConfirmGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\dirConfirmScript.js",
+            "line": 226,
             "description": "The rendering function for the webpage",
             "return": {
                 "description": "",
                 "type": "Void"
             },
-            "class": "renderGlobal"
+            "class": "directionConfirmGlobal"
         },
         {
             "file": "..\\src\\webVis\\dirConfirmScript.js",
-            "line": 282,
+            "line": 293,
             "description": "Accepts a string and outputs the string of all characters following the final '.' symbol\n in the string. This is used internally to extract file extensions from file names.",
             "itemtype": "method",
             "name": "grabExtension",
@@ -209,7 +232,26 @@
         },
         {
             "file": "..\\src\\webVis\\dirConfirmScript.js",
-            "line": 317,
+            "line": 314,
+            "description": "Outputs through the console the list of FileReaders in theReaders which have \n not yet completed their loading",
+            "itemtype": "method",
+            "name": "whoIsLeft",
+            "params": [
+                {
+                    "name": "theReaders",
+                    "description": "The list of FileReaders to be checked",
+                    "type": "FileReader Object List"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "directionConfirmGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\dirConfirmScript.js",
+            "line": 343,
             "description": "Accepts a fileinput event, presumably from a file upload event listener, and assigns\n functions to each file reader listed in the event to be called upon the full loading\n of that given reader's files",
             "itemtype": "method",
             "name": "readMultipleFiles",
@@ -228,7 +270,7 @@
         },
         {
             "file": "..\\src\\webVis\\dirConfirmScript.js",
-            "line": 387,
+            "line": 413,
             "description": "Called internally upon every recieved fileload event. Checks if every file reader in the \n array \"fileReaders\" has fully read each of their files. If so, then the function converts\n all recieved stl files into threeJS models and executes \"renderParts\".",
             "itemtype": "method",
             "name": "loadParts",
@@ -240,19 +282,36 @@
         },
         {
             "file": "..\\src\\webVis\\dirConfirmScript.js",
-            "line": 468,
+            "line": 494,
             "description": "Accepts two strings, a and b, and a vector, vec, and outputs a\n constructed part pair object if the two strings correspond to two\n extant parts",
             "itemtype": "method",
             "name": "linkPair",
+            "params": [
+                {
+                    "name": "a",
+                    "description": "The first part name",
+                    "type": "String"
+                },
+                {
+                    "name": "b",
+                    "description": "The second part name",
+                    "type": "String"
+                },
+                {
+                    "name": "vec",
+                    "description": "The vector to be added to the pair",
+                    "type": "Vector3"
+                }
+            ],
             "return": {
-                "description": "",
+                "description": "The resulting pair object",
                 "type": "Object"
             },
             "class": "directionConfirmGlobal"
         },
         {
             "file": "..\\src\\webVis\\dirConfirmScript.js",
-            "line": 513,
+            "line": 542,
             "description": "Links together the pairs of parts corresponding to the strings present in\n the namePairs array.",
             "itemtype": "method",
             "name": "linkParts",
@@ -264,7 +323,7 @@
         },
         {
             "file": "..\\src\\webVis\\dirConfirmScript.js",
-            "line": 542,
+            "line": 571,
             "description": "Populates the webpage with data stored int the global variable theSML",
             "itemtype": "method",
             "name": "parseData",
@@ -276,7 +335,7 @@
         },
         {
             "file": "..\\src\\webVis\\dirConfirmScript.js",
-            "line": 670,
+            "line": 699,
             "description": "Populates the webpage with graphical representations of the assembly pairs\n stored in the global variable assemblyPairs",
             "itemtype": "method",
             "name": "insertAssemblyPairs",
@@ -288,10 +347,367 @@
         },
         {
             "file": "..\\src\\webVis\\dirConfirmScript.js",
-            "line": 724,
+            "line": 753,
             "description": "Dehighlights the given pair of parts",
             "itemtype": "method",
             "name": "deHighlight",
+            "params": [
+                {
+                    "name": "thePair",
+                    "description": "The pair object to be dehighlighted",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "directionConfirmGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\dirConfirmScript.js",
+            "line": 772,
+            "description": "Highlights the given pair of parts",
+            "itemtype": "method",
+            "name": "highlight",
+            "params": [
+                {
+                    "name": "thePair",
+                    "description": "The pair object to be highlighted",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "directionConfirmGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\dirConfirmScript.js",
+            "line": 841,
+            "description": "Sets the opacity of each (non-highlighted) mesh object to the value of the\n slider element provided",
+            "itemtype": "method",
+            "name": "fixOpacity",
+            "params": [
+                {
+                    "name": "theSlider",
+                    "description": "The slider which is to be referenced when setting object opacity",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "directionConfirmGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\dirConfirmScript.js",
+            "line": 870,
+            "description": "Given a mouseup event, sets corresponding internal button states for mouse-related controls",
+            "itemtype": "method",
+            "name": "doMouseUp",
+            "params": [
+                {
+                    "name": "theEvent",
+                    "description": "",
+                    "type": "Mouseup event"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "directionConfirmGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\dirConfirmScript.js",
+            "line": 890,
+            "description": "Given a mousedown event, sets corresponding internal button states for mouse-related controls",
+            "itemtype": "method",
+            "name": "doMouseDown",
+            "params": [
+                {
+                    "name": "theEvent",
+                    "description": "",
+                    "type": "Mousedown event"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "directionConfirmGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\dirConfirmScript.js",
+            "line": 910,
+            "description": "Given a mouseleave event, sets corresponding internal button states for mouse-related controls",
+            "itemtype": "method",
+            "name": "doMouseLeave",
+            "params": [
+                {
+                    "name": "theEvent",
+                    "description": "",
+                    "type": "Mouseup event"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "directionConfirmGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\dirConfirmScript.js",
+            "line": 927,
+            "description": "Prevents the default response of the given event (used to prevent dropdown menus when right\n clicking on the display).",
+            "itemtype": "method",
+            "name": "justDont",
+            "params": [
+                {
+                    "name": "theEvent",
+                    "description": "The event to suppress the default response of.",
+                    "type": "Event Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "directionConfirmGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\dirConfirmScript.js",
+            "line": 943,
+            "description": "Given a mousedrag event, rotates the camera or adds a vector to the currently displayed pair,\n depending upon whether or not the left or right mouse button is depressed",
+            "itemtype": "method",
+            "name": "doDrag",
+            "params": [
+                {
+                    "name": "theEvent",
+                    "description": "",
+                    "type": "Mouseup event"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "directionConfirmGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\dirConfirmScript.js",
+            "line": 969,
+            "description": "Given a mousewheel event, changes the distance of the camera from the center of the scene",
+            "itemtype": "method",
+            "name": "doMouseUp",
+            "params": [
+                {
+                    "name": "theEvent",
+                    "description": "",
+                    "type": "Mouseup event"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "directionConfirmGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\dirConfirmScript.js",
+            "line": 988,
+            "description": "Inserts the vector view into the webpage",
+            "itemtype": "method",
+            "name": "insertVectorView",
+            "params": [
+                {
+                    "name": "theButton",
+                    "description": "The vector viewing button",
+                    "type": "HTML Element"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "directionConfirmGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\dirConfirmScript.js",
+            "line": 1090,
+            "description": "Removes the vector view from the webpage",
+            "itemtype": "method",
+            "name": "removeVectorView",
+            "params": [
+                {
+                    "name": "theButton",
+                    "description": "The vector viewing button",
+                    "type": "HTML Element"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "directionConfirmGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\dirConfirmScript.js",
+            "line": 1146,
+            "description": "Inserts a blank vector widget into the vector view element",
+            "itemtype": "method",
+            "name": "addVectorToPair",
+            "params": [
+                {
+                    "name": "theButton",
+                    "description": "The \"add vector\" button",
+                    "type": "HTML Element"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "directionConfirmGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\dirConfirmScript.js",
+            "line": 1209,
+            "description": "Removes a vector widget from the vector view element",
+            "itemtype": "method",
+            "name": "remVectorFromPair",
+            "params": [
+                {
+                    "name": "theButton",
+                    "description": "The \"remove\" button of the widget to be removed",
+                    "type": "HTML Element"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "directionConfirmGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\dirConfirmScript.js",
+            "line": 1235,
+            "description": "Updates a vector to match the values in its corresponding widget",
+            "itemtype": "method",
+            "name": "vecEntryUpdate",
+            "params": [
+                {
+                    "name": "theInput",
+                    "description": "An input element of the vector's widget",
+                    "type": "HTML Element"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "directionConfirmGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\dirConfirmScript.js",
+            "line": 1315,
+            "description": "Finds and returns the index of the direction in the list of usable vector directions\n which best matches the given vector",
+            "itemtype": "method",
+            "name": "getDir",
+            "params": [
+                {
+                    "name": "theVec",
+                    "description": "The vector to be searched with",
+                    "type": "Vector3"
+                }
+            ],
+            "return": {
+                "description": "The index of the best matching direction in the list of usable vector directions",
+                "type": "Int"
+            },
+            "class": "directionConfirmGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\dirConfirmScript.js",
+            "line": 1347,
+            "description": "Processes the information in the webpage into an XML string and inserts a download link \n for the data into the top of the page",
+            "itemtype": "method",
+            "name": "renderXML",
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "directionConfirmGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\dirConfirmScript.js",
+            "line": 1429,
+            "description": "Initializes the lines for the XYZ compass in the display",
+            "itemtype": "method",
+            "name": "initAxisLines",
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "directionConfirmGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\dirConfirmScript.js",
+            "line": 1464,
+            "description": "Updates the lines for the XYZ compass in the display",
+            "itemtype": "method",
+            "name": "updateAxisLines",
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "directionConfirmGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\dirConfirmScript.js",
+            "line": 1509,
+            "description": "Maps a given mouse X position and mouse Y position to a point on a unit hemisphere facing\n towards the user then returns the index of the closest valid direction",
+            "itemtype": "method",
+            "name": "getDirectionFromMouse",
+            "params": [
+                {
+                    "name": "mouseX",
+                    "description": "",
+                    "type": "Float"
+                },
+                {
+                    "name": "mouseY",
+                    "description": "",
+                    "type": "Float"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Int"
+            },
+            "class": "directionConfirmGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\dirConfirmScript.js",
+            "line": 1541,
+            "description": "Adds a vector to the currently displayed pair based off of camera position, mouse X and mouse Y",
+            "itemtype": "method",
+            "name": "addVectorFromMouse",
+            "params": [
+                {
+                    "name": "mouseX",
+                    "description": "The X position of the mouse",
+                    "type": "Float"
+                },
+                {
+                    "name": "mouseY",
+                    "description": "The Y position of the mouse",
+                    "type": "Float"
+                }
+            ],
             "return": {
                 "description": "",
                 "type": "Void"
@@ -624,7 +1040,31 @@
         },
         {
             "file": "..\\src\\webVis\\partRender.js",
-            "line": 59,
+            "line": 7,
+            "description": "Returns a normal material for meshes if the global variable \"standard\" is false. If \"standard\"\n is set to true, returns a chromadepth material instead.",
+            "itemtype": "method",
+            "name": "getStdMaterial",
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\partRender.js",
+            "line": 44,
+            "description": "Returns a normal material for lines if the global variable \"standard\" is false. If \"standard\"\n is set to true, returns a chromadepth material instead.",
+            "itemtype": "method",
+            "name": "getStdMaterial",
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\partRender.js",
+            "line": 83,
             "description": "Accepts an array of objects containing a string property called \"Name\" and returns\n the first index where any two \"Name\" properties in the array have different characters.",
             "itemtype": "method",
             "name": "getPartNameCutoff",
@@ -643,7 +1083,7 @@
         },
         {
             "file": "..\\src\\webVis\\partRender.js",
-            "line": 94,
+            "line": 118,
             "description": "Accepts an array of objects containing a string property called \"Name\" removes\n the first N characters in each string, where N is the first index where any two\n \"Name\" properties in the array have different characters.",
             "itemtype": "method",
             "name": "cutoffPartNames",
@@ -662,7 +1102,7 @@
         },
         {
             "file": "..\\src\\webVis\\partRender.js",
-            "line": 122,
+            "line": 146,
             "description": "Finds the average position of all the vertices in a given threeJS Geometry model.",
             "itemtype": "method",
             "name": "centerGeometry",
@@ -681,7 +1121,26 @@
         },
         {
             "file": "..\\src\\webVis\\partRender.js",
-            "line": 188,
+            "line": 196,
+            "description": "Accepts a list of binary stl buffer objects and returns a corresponding list\n of ThreeJS objects.",
+            "itemtype": "method",
+            "name": "getGeometries",
+            "params": [
+                {
+                    "name": "theSTLs",
+                    "description": "",
+                    "type": "Buffer Object List"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "ThreeJS Object List"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\partRender.js",
+            "line": 223,
             "description": "Combines a given array of objects (each associating an array of keyframes to name) with a \n given array of objects (each associating a threeJS mesh with a name), creating an array\n of objects with keyFrame arrays and threeJS meshes associated with the same name",
             "itemtype": "method",
             "name": "bindPartsToKeyFrames",
@@ -705,7 +1164,7 @@
         },
         {
             "file": "..\\src\\webVis\\partRender.js",
-            "line": 253,
+            "line": 288,
             "description": "Combines a jagged array of objects, each object at least possessing a numeric\n property called \"Time\", returns the value of the greatest \"Time\" property",
             "itemtype": "method",
             "name": "longestTimeFromFrames",
@@ -724,7 +1183,7 @@
         },
         {
             "file": "..\\src\\webVis\\partRender.js",
-            "line": 286,
+            "line": 321,
             "description": "Given a jagged array of objects, each object at least possessing a numeric\n property called \"Time\", sets each Time property to the greatest Time value in\n the jagged array minus the origional value, thus effectively reversing the\n temporal order of each object",
             "itemtype": "method",
             "name": "flipTheTimes",
@@ -743,7 +1202,7 @@
         },
         {
             "file": "..\\src\\webVis\\partRender.js",
-            "line": 321,
+            "line": 356,
             "description": "Logs the contents of the given jagged array of keyFrame objects, each containing numeric properties \"X\",\n \"Y\", \"Z\", and \"Time\", to the console as a string.",
             "itemtype": "method",
             "name": "showFrames",
@@ -762,7 +1221,7 @@
         },
         {
             "file": "..\\src\\webVis\\partRender.js",
-            "line": 359,
+            "line": 394,
             "description": "Logs the contents of a given keyFrame object, containing numeric properties \"X\",\n \"Y\", \"Z\", and \"Time\", to the console as a string.",
             "itemtype": "method",
             "name": "showFrame",
@@ -781,7 +1240,7 @@
         },
         {
             "file": "..\\src\\webVis\\partRender.js",
-            "line": 377,
+            "line": 412,
             "description": "Returns true if any position component of the given keyframe object is NaN",
             "itemtype": "method",
             "name": "hasNaN",
@@ -800,7 +1259,7 @@
         },
         {
             "file": "..\\src\\webVis\\partRender.js",
-            "line": 394,
+            "line": 429,
             "description": "Returns a copy of the provided keyframe object",
             "itemtype": "method",
             "name": "copyFrame",
@@ -819,7 +1278,7 @@
         },
         {
             "file": "..\\src\\webVis\\partRender.js",
-            "line": 418,
+            "line": 453,
             "description": "Returns a copy of the provided array of keyframe objects",
             "itemtype": "method",
             "name": "copyFrameList",
@@ -838,7 +1297,36 @@
         },
         {
             "file": "..\\src\\webVis\\partRender.js",
-            "line": 469,
+            "line": 481,
+            "description": "Creates a keyframe list for the given fastener object and adds it to currentFrameList",
+            "itemtype": "method",
+            "name": "makeFastenerKeyFrames",
+            "params": [
+                {
+                    "name": "theFst",
+                    "description": "The object representation of the fastener being keyframed",
+                    "type": "Object"
+                },
+                {
+                    "name": "runningList",
+                    "description": "The current running list of keyframes",
+                    "type": "Object List"
+                },
+                {
+                    "name": "currentFrameList",
+                    "description": "The list of part-keyframe list objects",
+                    "type": "Object List"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\partRender.js",
+            "line": 528,
             "description": "Given a tree representation of the assembly process through nested javascript objects, returns an array\n of keyframe array objects, with each keyframe array object being a representation of the movement of each part \n in the tree representation throughout the assembly proceess, with a list of keyframe objects and a given part name",
             "itemtype": "method",
             "name": "makeKeyFrames",
@@ -867,7 +1355,7 @@
         },
         {
             "file": "..\\src\\webVis\\partRender.js",
-            "line": 536,
+            "line": 595,
             "description": "Given two keyFrames and a normalized float \"proportion\", returns an interpolation\n between the two keyframes with a weight towards the second keyframe proportional\n to \"proportion\"",
             "itemtype": "method",
             "name": "interpolate",
@@ -896,7 +1384,7 @@
         },
         {
             "file": "..\\src\\webVis\\partRender.js",
-            "line": 578,
+            "line": 637,
             "description": "Given a list of keyframes and a time quantity, returns a keyframe object interpolating\n between the two temporally closest keyframes. In cases where the provide time is beyond the\n range of times represented by the list, returns the closest keyframe",
             "itemtype": "method",
             "name": "grabInterp",
@@ -920,7 +1408,7 @@
         },
         {
             "file": "..\\src\\webVis\\partRender.js",
-            "line": 634,
+            "line": 693,
             "description": "Given an array of objects (each containing a threeJS mesh object and an array of \n keyFrame objects), and two floating points \"time\" and \"timeWarp\", will animate each\n mesh in the array along the keyframes in their associate objects according to the \n given \"time\" and returns the new time as given by the standard time step multiplied\n by \"timeWarp\"",
             "itemtype": "method",
             "name": "animate",
@@ -949,7 +1437,7 @@
         },
         {
             "file": "..\\src\\webVis\\partRender.js",
-            "line": 683,
+            "line": 742,
             "description": "Given two threeJS boundingBox objects, returns the smallest bounding box\n encompassing the two",
             "itemtype": "method",
             "name": "combineBounds",
@@ -973,7 +1461,7 @@
         },
         {
             "file": "..\\src\\webVis\\partRender.js",
-            "line": 712,
+            "line": 771,
             "description": "Given two threeJS boundingBox objects, returns the smallest bounding box\n encompassing the two",
             "itemtype": "method",
             "name": "getGlobBounds",
@@ -997,7 +1485,7 @@
         },
         {
             "file": "..\\src\\webVis\\partRender.js",
-            "line": 746,
+            "line": 805,
             "description": "Given an object, containing a threeJS mesh object as \"Mesh\", will\n return the center of the mesh's bounding box",
             "itemtype": "method",
             "name": "getPartCenter",
@@ -1016,7 +1504,19 @@
         },
         {
             "file": "..\\src\\webVis\\partRender.js",
-            "line": 792,
+            "line": 833,
+            "description": "Aligns the camera to look at the point at the average of the centers of all the parts bounding boxes",
+            "itemtype": "method",
+            "name": "alignAssemblyCenter",
+            "return": {
+                "description": "",
+                "type": "Void"
+            },
+            "class": "renderGlobal"
+        },
+        {
+            "file": "..\\src\\webVis\\partRender.js",
+            "line": 860,
             "description": "Given a threeJS scene object, a threeJS camera object, and an array of objects containing\n threeJS mesh objects, finds the first mesh in the scene which is intersected the ray extending\n through the center of the camera's field of vision. If this mesh is in the provided array of \n objects, then that object is returned, otherwise null is returned instead",
             "itemtype": "method",
             "name": "getFirstIntersect",
@@ -1045,7 +1545,7 @@
         },
         {
             "file": "..\\src\\webVis\\partRender.js",
-            "line": 843,
+            "line": 911,
             "description": "Given an tree representation of the movement of parts in an assembly sequence, the\n parent node of that node, and a threeJS scene object, inserts a line for each subassembly\n path along the path of movement",
             "itemtype": "method",
             "name": "addLines",
@@ -1074,7 +1574,7 @@
         },
         {
             "file": "..\\src\\webVis\\partRender.js",
-            "line": 900,
+            "line": 968,
             "description": "Given an tree representation of the movement of parts in an assembly sequence, an \n array of Objects each associating a list of keyframes with a threeJS mesh object and aLinkcolor\n string, and the index of the keyframe associated with the tree's root node, displaces the movement\n line points associated with that particular part of the assembly to match the displacement of the\n model",
             "itemtype": "method",
             "name": "addDisplacement",
@@ -1103,7 +1603,7 @@
         },
         {
             "file": "..\\src\\webVis\\partRender.js",
-            "line": 955,
+            "line": 1023,
             "description": "Given an tree representation of the movement of parts in an assembly sequence, the\n parent node of that node, and the current time in the animation, updates the ends of the\n movement lines such that the portion of lines which have already been traversed are not shown",
             "itemtype": "method",
             "name": "updateLines",
@@ -1132,7 +1632,7 @@
         },
         {
             "file": "..\\src\\webVis\\partRender.js",
-            "line": 1018,
+            "line": 1086,
             "description": "Initializes the axis lines for the bottom-left of the screen",
             "itemtype": "method",
             "name": "initAxisLines",
@@ -1144,7 +1644,7 @@
         },
         {
             "file": "..\\src\\webVis\\partRender.js",
-            "line": 1065,
+            "line": 1133,
             "description": "Updates the axis line dispay",
             "itemtype": "method",
             "name": "updateAxisLines",
@@ -1156,7 +1656,7 @@
         },
         {
             "file": "..\\src\\webVis\\partRender.js",
-            "line": 1136,
+            "line": 1204,
             "description": "Performs a bezier curve interpolation of the control points in pointlist given \n the time value T, and returns a ThreeJS Vector3 object with the interpolated coordinates.",
             "itemtype": "method",
             "name": "interp",
@@ -1180,7 +1680,7 @@
         },
         {
             "file": "..\\src\\webVis\\partRender.js",
-            "line": 1171,
+            "line": 1239,
             "description": "Returns a string describing the x, y, and z coordinates of theVec.",
             "itemtype": "method",
             "name": "vecDesc",
@@ -1199,7 +1699,7 @@
         },
         {
             "file": "..\\src\\webVis\\partRender.js",
-            "line": 1189,
+            "line": 1257,
             "description": "Recursively adds Vector3 objects onto the Vector3 list, target, interpolating from startDisp\n and endDisp in an arc centered at the Vector3 object center. Each layer of recursion\n adds the midpoint of the arc from startDisp to endDisp until level = 0.",
             "itemtype": "method",
             "name": "addArcSubDiv",
@@ -1238,7 +1738,7 @@
         },
         {
             "file": "..\\src\\webVis\\partRender.js",
-            "line": 1239,
+            "line": 1307,
             "description": "Returns a list of 2^(resolution+1) points which trace an arc beginning at startPoint,\n terminating at endpoint, and centered around center",
             "itemtype": "method",
             "name": "makeArcPointList",
@@ -1272,7 +1772,7 @@
         },
         {
             "file": "..\\src\\webVis\\partRender.js",
-            "line": 1300,
+            "line": 1368,
             "description": "Adds keyframes onto the keyframe lists provided so that the keyframed parts begin their\n animation at start location and move in an arc to their previously defined start position",
             "itemtype": "method",
             "name": "addCurveKeyFrames",
@@ -1296,7 +1796,7 @@
         },
         {
             "file": "..\\src\\webVis\\partRender.js",
-            "line": 1355,
+            "line": 1423,
             "description": "Adds a simple square grid of width equal to theSize and a number of lines equal to theDivs at Y=-1000",
             "itemtype": "method",
             "name": "addGrid",
@@ -1320,7 +1820,7 @@
         },
         {
             "file": "..\\src\\webVis\\partRender.js",
-            "line": 1392,
+            "line": 1460,
             "description": "Adds a simple vertical column with a radius of theRad, a base Y value of theBot, a top terminating at\n theTop, an x and z position equal to theX and theZ, a line color of theColor, a number of vertical \n segmentations equal to stacks, and a number of radial segmentations equal to slices",
             "itemtype": "method",
             "name": "addGrid",
@@ -2695,7 +3195,7 @@
         },
         {
             "message": "Missing item type\nThe rendering function for the webpage",
-            "line": " ..\\src\\webVis\\dirConfirmScript.js:214"
+            "line": " ..\\src\\webVis\\dirConfirmScript.js:226"
         },
         {
             "message": "Missing item type\nCreate key-value caches of limited size",

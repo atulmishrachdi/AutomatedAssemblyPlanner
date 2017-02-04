@@ -3,6 +3,17 @@
 
 
 
+
+/**
+*
+* Returns a normal material for meshes if the global variable "standard" is false. If "standard"
+* is set to true, returns a chromadepth material instead.
+*
+* @method getStdMaterial
+* @for renderGlobal
+* @return {Object}
+* 
+*/
 function getStdMaterial(){
 	
 	if(standard === true){
@@ -27,6 +38,19 @@ function getStdMaterial(){
 	
 }
 
+
+
+
+/**
+*
+* Returns a normal material for lines if the global variable "standard" is false. If "standard"
+* is set to true, returns a chromadepth material instead.
+*
+* @method getStdMaterial
+* @for renderGlobal
+* @return {Object}
+* 
+*/
 function getStdLine(){
 	
 	if(standard === true){
@@ -169,6 +193,17 @@ function centerGeometry(theGeo){
 
 
 
+/**
+*
+* Accepts a list of binary stl buffer objects and returns a corresponding list
+* of ThreeJS objects.
+*
+* @method getGeometries
+* @for renderGlobal 
+* @param {Buffer Object List} theSTLs
+* @return {ThreeJS Object List}
+* 
+*/
 function getGeometries(theSTLs){
 	
 	var result=[];
@@ -442,6 +477,19 @@ function copyFrameList (theFrameList){
 
 
 
+
+/**
+*
+* Creates a keyframe list for the given fastener object and adds it to currentFrameList
+*
+* @method makeFastenerKeyFrames
+* @for renderGlobal 
+* @param {Object} theFst The object representation of the fastener being keyframed
+* @param {Object List} runningList The current running list of keyframes
+* @param {Object List} currentFrameList The list of part-keyframe list objects
+* @return {Void}
+* 
+*/
 function makeFastenerKeyFrames(theFst,runningList,currentFrameList){
 	
 	var newQuat= new THREE.Quaternion();
@@ -781,6 +829,15 @@ function getPartCenter(part){
 
 
 
+
+/**
+*
+* Aligns the camera to look at the point at the average of the centers of all the parts bounding boxes
+* @method alignAssemblyCenter
+* @for renderGlobal
+* @return {Void}
+* 
+*/
 function alignAssemblyCenter(){
 	
 	var pos = 0;
