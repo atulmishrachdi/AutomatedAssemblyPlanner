@@ -46,9 +46,10 @@ var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera( 75, theWidth/theHeight, 1, 16000 );
 
 
-var theXAxis=null;
-var theYAxis=null;
-var theZAxis=null;
+var theXAxis = null;
+var theYAxis = null;
+var theZAxis = null;
+var theAddAxis = null;
 var xRet=null;
 var yRet=null;
 
@@ -952,6 +953,32 @@ function justDont(theEvent){
 * 
 */
 function doDrag(theEvent){
+	
+	
+	if(theAddAxis !== null){
+		
+		var theBox=currentPair.Mov.Mesh.geometry.boundingBox.clone();
+		var theArea = document.getElementById("display");
+		var areaW = theArea.clientWidth;
+		var areaH = theArea.clientHeight;
+		var areaT = theArea.offsetTop;
+		var areaL = theArea.offsetLeft;
+		var mouseX = theEvent.clientX;
+		var mouseY = theEvent.clientY;
+		//console.log("aW: "+areaW+" aH: "+areaH+" aT: "+areaT+" aL: "+areaL);
+		//console.log("mX: "+(((mouseX-areaL)-areaW/2)/(areaW/2))+" mY: "+((areaH/2-(mouseY-areaT))/(areaH/2)));
+		var theDir = getDirectionFromMouse( ((mouseX-areaL)-areaW/2)/(areaW/2), (areaH/2-(mouseY-areaT))/(areaH/2) );
+		
+		theAddAxis.geometry.vertices[0].set((theBox.min.x+theBox.max.x)/2,(theBox.min.y+theBox.max.y)/2,(theBox.min.z+theBox.max.z)/2);
+		theAddAxis.geometry.vertices[1].set((theBox.min.x+theBox.max.x)/2+theDirections[theDir].X*theDistance*0.6,
+											(theBox.min.y+theBox.max.y)/2+theDirections[theDir].Y*theDistance*0.6,
+											(theBox.min.z+theBox.max.z)/2+theDirections[theDir].Z*theDistance*0.6 );
+											
+		theAddAxis.geometry.verticesNeedUpdate=true;
+		
+	}
+	
+	
 	if(leftDrag==true){
 		thePos.normalize();
 		theEul.set(theEvent.movementY*(-0.02)*Math.cos(Math.atan2(thePos.x,thePos.z)),
@@ -1452,10 +1479,16 @@ function initAxisLines(){
 	theZAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
 	theZAxis.frustumCulled = false;
 	
+	theAddAxis = new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0x00ff00, depthTest: true }));
+	theAddAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
+	theAddAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
+	//theAddAxis.frustumCulled = false;
+	
 	
 	scene.add(theXAxis);
 	scene.add(theYAxis);
 	scene.add(theZAxis);
+	scene.add(theAddAxis);
 
 	
 }
