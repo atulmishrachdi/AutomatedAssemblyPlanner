@@ -973,6 +973,13 @@ function doDrag(theEvent){
 		theAddAxis.geometry.vertices[1].set((theBox.min.x+theBox.max.x)/2+theDirections[theDir].X*theDistance*0.6,
 											(theBox.min.y+theBox.max.y)/2+theDirections[theDir].Y*theDistance*0.6,
 											(theBox.min.z+theBox.max.z)/2+theDirections[theDir].Z*theDistance*0.6 );
+		console.log("X:"+(theBox.min.x+theBox.max.x)/2  +
+					" Y: "+(theBox.min.y+theBox.max.y)/2+
+					" Z: "+(theBox.min.z+theBox.max.z)/2 );
+					
+		console.log(" X: "+theDirections[theDir].X +
+					" Y: "+theDirections[theDir].Y +
+					" Z: "+theDirections[theDir].Z  );
 											
 		theAddAxis.geometry.verticesNeedUpdate=true;
 		
@@ -1482,7 +1489,7 @@ function initAxisLines(){
 	theAddAxis = new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0x00ff00, depthTest: true }));
 	theAddAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
 	theAddAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
-	//theAddAxis.frustumCulled = false;
+	theAddAxis.frustumCulled = false;
 	
 	
 	scene.add(theXAxis);
