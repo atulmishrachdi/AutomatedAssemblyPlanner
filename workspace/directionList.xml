@@ -31167,6 +31167,139 @@
       <name>a0</name>
       <localLabels />
       <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-1 G2 support amortisseur-1</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-1 MC1 vis M3 x 16-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a1</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-1 G2 support amortisseur-1</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-1 MC1 vis M3 x 16-2</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a2</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-1 chassis-1</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-1 MB4 vis M3 x 8-2</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a3</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-1 chassis-1</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-1 MB4 vis M3 x 8-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a4</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-1 chassis-1</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-1 MB4 vis M3 x 8-3</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a5</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-1 chassis-1</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-1 MC1 vis M3 x 16-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a6</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-1 F5 support de carro-1</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-1 MB4 vis M3 x 8-2</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a7</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-1 F5 support de carro-2</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-1 MB4 vis M3 x 8-3</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a8</name>
+      <localLabels />
+      <localVariables />
       <From>TXT-1 - C3 platine RC-1</From>
       <To>TXT-1 - Chassis-1 Demi chassis-1 G2 support amortisseur-1</To>
       <directed>false</directed>
@@ -31179,89 +31312,143 @@
         <int>3115</int>
       </InfiniteDirections>
       <FiniteDirections />
-      <Fasteners>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>1084</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>2653.63711577133</Diameter>
-          <Name>TXT-1 - MB2 vis M3 x 12-8</Name>
-          <OverallLength>13603.335735747223</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener />
-        </Fastener>
-      </Fasteners>
+      <Fasteners />
       <Certainty>1</Certainty>
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a1</name>
+      <name>a9</name>
       <localLabels />
       <localVariables />
-      <From>TXT-1 - F1 support de carro-2</From>
-      <To>TXT-1 - Chassis-1 Demi chassis-1 F5 support de carro-2</To>
+      <From>TXT-1 - Chassis-1 Demi chassis-1 F5 support de carro-1</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-1 MB4 vis M3 x 8-1</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
         <int>3112</int>
       </InfiniteDirections>
       <FiniteDirections />
-      <Fasteners>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>0</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>2653.6183934561864</Diameter>
-          <Name>TXT-1 - MC1 vis M3 x 16-13</Name>
-          <OverallLength>17411.817874604581</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener>
-            <int>2</int>
-            <int>29</int>
-            <int>33</int>
-          </PartsLockedByFastener>
-        </Fastener>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>0</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>2653.6185408513429</Diameter>
-          <Name>TXT-1 - MC1 vis M3 x 16-16</Name>
-          <OverallLength>17411.818125414477</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener>
-            <int>2</int>
-            <int>29</int>
-            <int>33</int>
-          </PartsLockedByFastener>
-        </Fastener>
-      </Fasteners>
+      <Fasteners />
       <Certainty>1</Certainty>
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a2</name>
+      <name>a10</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - MB2 vis M3 x 12-6</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-1 G2 support amortisseur-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1503</int>
+        <int>4618</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a11</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-1 chassis-1</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-1 MB4 vis M3 x 8-4</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a12</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-1 chassis-1</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-1 MC1 vis M3 x 16-2</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a13</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - MB2 vis M3 x 12-8</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-1 G2 support amortisseur-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1503</int>
+        <int>4618</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a14</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - MC1 vis M3 x 16-13</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-1 F5 support de carro-2</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a15</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - MC1 vis M3 x 16-10</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-1 F5 support de carro-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a16</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - MC1 vis M3 x 16-12</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-1 F5 support de carro-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a17</name>
       <localLabels />
       <localVariables />
       <From>TXT-1 - Chassis-1 Demi chassis-1 chassis-1</From>
@@ -31278,13 +31465,13 @@
         <int>340</int>
         <int>450</int>
         <int>477</int>
-        <int>481</int>
+        <int>443</int>
         <int>725</int>
         <int>762</int>
         <int>765</int>
         <int>780</int>
         <int>798</int>
-        <int>974</int>
+        <int>926</int>
         <int>1017</int>
         <int>1032</int>
         <int>1241</int>
@@ -31294,24 +31481,24 @@
         <int>1401</int>
         <int>1465</int>
         <int>1566</int>
-        <int>4581</int>
+        <int>4609</int>
         <int>4584</int>
         <int>4587</int>
         <int>4595</int>
         <int>4598</int>
-        <int>4601</int>
+        <int>4441</int>
         <int>5089</int>
         <int>5096</int>
         <int>5112</int>
-        <int>5128</int>
+        <int>4999</int>
         <int>5143</int>
         <int>5344</int>
-        <int>5568</int>
-        <int>5608</int>
-        <int>5615</int>
+        <int>5455</int>
+        <int>5733</int>
+        <int>5637</int>
         <int>5642</int>
         <int>5835</int>
-        <int>5948</int>
+        <int>5848</int>
         <int>6105</int>
         <int>6230</int>
         <int>1544</int>
@@ -31324,7 +31511,169 @@
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a3</name>
+      <name>a18</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-1 chassis-1</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-1 F5 support de carro-2</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>2068</int>
+        <int>2308</int>
+        <int>2573</int>
+        <int>2794</int>
+        <int>2941</int>
+        <int>3061</int>
+        <int>3159</int>
+        <int>3293</int>
+        <int>3412</int>
+        <int>3465</int>
+        <int>3581</int>
+        <int>3624</int>
+        <int>3820</int>
+        <int>3893</int>
+        <int>3952</int>
+        <int>4045</int>
+        <int>4029</int>
+        <int>4205</int>
+        <int>4377</int>
+        <int>4357</int>
+        <int>4441</int>
+        <int>4584</int>
+        <int>4609</int>
+        <int>4759</int>
+        <int>1544</int>
+        <int>3115</int>
+        <int>6231</int>
+        <int>4659</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a19</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-2 F5 support de carro-1</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 MB4 vis M3 x 8-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a20</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 MB4 vis M3 x 8-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a21</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - C2 boitier batterie-1</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-1 G2 support amortisseur-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1981</int>
+        <int>2013</int>
+        <int>2229</int>
+        <int>2235</int>
+        <int>1566</int>
+        <int>2583</int>
+        <int>2547</int>
+        <int>2737</int>
+        <int>2974</int>
+        <int>2947</int>
+        <int>3213</int>
+        <int>3492</int>
+        <int>4294</int>
+        <int>3923</int>
+        <int>4609</int>
+        <int>6230</int>
+        <int>4659</int>
+        <int>3115</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>1480</int>
+        <int>1401</int>
+        <int>2794</int>
+        <int>3259</int>
+        <int>3952</int>
+        <int>3581</int>
+        <int>3731</int>
+        <int>4587</int>
+        <int>4099</int>
+        <int>6231</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a22</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - G5 support de carrosserie-2</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-1 F5 support de carro-2</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>120</int>
+        <int>452</int>
+        <int>938</int>
+        <int>2080</int>
+        <int>2947</int>
+        <int>2583</int>
+        <int>6230</int>
+        <int>3115</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>0</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a23</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 MB4 vis M3 x 8-2</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a24</name>
       <localLabels />
       <localVariables />
       <From>TXT-1 - Chassis-1 MS7 axe-5</From>
@@ -31341,113 +31690,7 @@
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a4</name>
-      <localLabels />
-      <localVariables />
-      <From>TXT-1 - C3 platine RC-1</From>
-      <To>TXT-1 - Chassis-1 Demi chassis-2 G2 support amortisseur-1</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>0</int>
-        <int>120</int>
-        <int>452</int>
-        <int>938</int>
-        <int>6230</int>
-      </InfiniteDirections>
-      <FiniteDirections />
-      <Fasteners>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>1084</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>2653.5808614402617</Diameter>
-          <Name>TXT-1 - MB2 vis M3 x 12-5</Name>
-          <OverallLength>13603.3357199629</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener />
-        </Fastener>
-      </Fasteners>
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a5</name>
-      <localLabels />
-      <localVariables />
-      <From>TXT-1 - G5 support de carrosserie-2</From>
-      <To>TXT-1 - Chassis-1 Demi chassis-1 F5 support de carro-2</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>120</int>
-        <int>452</int>
-        <int>938</int>
-        <int>2080</int>
-        <int>2583</int>
-        <int>2947</int>
-        <int>6230</int>
-        <int>3115</int>
-      </InfiniteDirections>
-      <FiniteDirections>
-        <int>0</int>
-      </FiniteDirections>
-      <Fasteners>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>0</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>2653.6183934561864</Diameter>
-          <Name>TXT-1 - MC1 vis M3 x 16-13</Name>
-          <OverallLength>17411.817874604581</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener>
-            <int>2</int>
-            <int>29</int>
-            <int>33</int>
-          </PartsLockedByFastener>
-        </Fastener>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>0</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>2653.6185408513429</Diameter>
-          <Name>TXT-1 - MC1 vis M3 x 16-16</Name>
-          <OverallLength>17411.818125414477</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener>
-            <int>2</int>
-            <int>29</int>
-            <int>33</int>
-          </PartsLockedByFastener>
-        </Fastener>
-      </Fasteners>
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a6</name>
+      <name>a25</name>
       <localLabels />
       <localVariables />
       <From>TXT-1 - G5 support de carrosserie-1</From>
@@ -31467,58 +31710,31 @@
       <FiniteDirections>
         <int>0</int>
       </FiniteDirections>
-      <Fasteners>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>0</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>2653.606212140347</Diameter>
-          <Name>TXT-1 - MC1 vis M3 x 16-10</Name>
-          <OverallLength>17411.817701604894</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener>
-            <int>3</int>
-            <int>25</int>
-            <int>28</int>
-          </PartsLockedByFastener>
-        </Fastener>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>0</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>2653.603506240077</Diameter>
-          <Name>TXT-1 - MC1 vis M3 x 16-12</Name>
-          <OverallLength>17411.817724703822</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener>
-            <int>3</int>
-            <int>25</int>
-            <int>28</int>
-          </PartsLockedByFastener>
-        </Fastener>
-      </Fasteners>
+      <Fasteners />
       <Certainty>1</Certainty>
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a7</name>
+      <name>a26</name>
       <localLabels />
       <localVariables />
-      <From>TXT-1 - Chassis-1 MS7 axe-6</From>
+      <From>TXT-1 - F1 support de carro-3</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-1 F5 support de carro-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a27</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 MB3 vis M3 x 16-12</From>
       <To>TXT-1 - Chassis-1 F4 entrtoise-2</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
@@ -31528,73 +31744,11 @@
       </InfiniteDirections>
       <FiniteDirections />
       <Fasteners />
-      <Certainty>1</Certainty>
+      <Certainty>0.4965632466516009</Certainty>
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a8</name>
-      <localLabels />
-      <localVariables />
-      <From>TXT-1 - C2 boitier batterie-1</From>
-      <To>TXT-1 - Chassis-1 Demi chassis-1 G2 support amortisseur-1</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>1566</int>
-        <int>4659</int>
-        <int>1981</int>
-        <int>2013</int>
-        <int>2229</int>
-        <int>2235</int>
-        <int>2583</int>
-        <int>2547</int>
-        <int>2947</int>
-        <int>2974</int>
-        <int>3213</int>
-        <int>3492</int>
-        <int>2737</int>
-        <int>4294</int>
-        <int>3923</int>
-        <int>4581</int>
-        <int>6230</int>
-        <int>3115</int>
-      </InfiniteDirections>
-      <FiniteDirections>
-        <int>1480</int>
-        <int>1401</int>
-        <int>3259</int>
-        <int>2707</int>
-        <int>3731</int>
-        <int>3880</int>
-        <int>4099</int>
-        <int>4587</int>
-        <int>3525</int>
-        <int>6231</int>
-      </FiniteDirections>
-      <Fasteners>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>1084</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>2653.6182455069875</Diameter>
-          <Name>TXT-1 - MB2 vis M3 x 12-6</Name>
-          <OverallLength>13603.334789490624</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener />
-        </Fastener>
-      </Fasteners>
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a9</name>
+      <name>a28</name>
       <localLabels />
       <localVariables />
       <From>TXT-1 - Chassis-1 MS7 axe-3</From>
@@ -31611,11 +31765,28 @@
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a10</name>
+      <name>a29</name>
       <localLabels />
       <localVariables />
-      <From>TXT-1 - Chassis-1 MS7 axe-6</From>
-      <To>TXT-1 - Chassis-1 F4 entrtoise-4</To>
+      <From>TXT-1 - Chassis-1 MB3 vis M3 x 16-8</From>
+      <To>TXT-1 - Chassis-1 F4 entrtoise-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>0.49657349724766964</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a30</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-2 MC1 vis M3 x 16-2</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 G2 support amortisseur-1</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
@@ -31628,172 +31799,32 @@
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a11</name>
+      <name>a31</name>
       <localLabels />
       <localVariables />
-      <From>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</From>
-      <To>TXT-1 - Chassis-1 Demi chassis-2 G2 support amortisseur-1</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>1544</int>
-        <int>1467</int>
-        <int>1470</int>
-        <int>1566</int>
-        <int>1969</int>
-        <int>1975</int>
-        <int>1981</int>
-        <int>1989</int>
-        <int>2011</int>
-        <int>2023</int>
-        <int>2080</int>
-        <int>2308</int>
-        <int>2573</int>
-        <int>2547</int>
-        <int>2460</int>
-        <int>2474</int>
-        <int>2583</int>
-        <int>2617</int>
-        <int>2707</int>
-        <int>2838</int>
-        <int>2863</int>
-        <int>2941</int>
-        <int>3061</int>
-        <int>3082</int>
-        <int>3159</int>
-        <int>3332</int>
-        <int>3339</int>
-        <int>3426</int>
-        <int>3820</int>
-        <int>3674</int>
-        <int>3681</int>
-        <int>3684</int>
-        <int>3861</int>
-        <int>4205</int>
-        <int>4294</int>
-        <int>4127</int>
-        <int>4170</int>
-        <int>4209</int>
-        <int>4369</int>
-        <int>4489</int>
-        <int>4545</int>
-        <int>4478</int>
-        <int>6230</int>
-        <int>3115</int>
-        <int>6231</int>
-        <int>4659</int>
-      </InfiniteDirections>
-      <FiniteDirections>
-        <int>1473</int>
-        <int>1480</int>
-        <int>1488</int>
-      </FiniteDirections>
-      <Fasteners />
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a12</name>
-      <localLabels />
-      <localVariables />
-      <From>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-2</From>
+      <From>TXT-1 - Chassis-1 MB3 vis M3 x 16-11</From>
       <To>TXT-1 - Chassis-1 F4 entrtoise-3</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
-        <int>1544</int>
-        <int>1566</int>
-        <int>1969</int>
-        <int>1975</int>
-        <int>1981</int>
-        <int>1989</int>
-        <int>2011</int>
-        <int>2023</int>
-        <int>2080</int>
-        <int>2308</int>
-        <int>2573</int>
-        <int>2547</int>
-        <int>2460</int>
-        <int>2474</int>
-        <int>2583</int>
-        <int>2617</int>
-        <int>2707</int>
-        <int>2838</int>
-        <int>2863</int>
-        <int>2941</int>
-        <int>3061</int>
-        <int>3082</int>
-        <int>3159</int>
-        <int>3332</int>
-        <int>3339</int>
-        <int>3426</int>
-        <int>3820</int>
-        <int>3674</int>
-        <int>3681</int>
-        <int>3684</int>
-        <int>3861</int>
-        <int>4205</int>
-        <int>4294</int>
-        <int>4127</int>
-        <int>4170</int>
-        <int>4209</int>
-        <int>4369</int>
-        <int>4489</int>
-        <int>4545</int>
-        <int>4478</int>
-        <int>6230</int>
-        <int>3115</int>
-        <int>6231</int>
-        <int>4659</int>
+        <int>0</int>
+        <int>3112</int>
       </InfiniteDirections>
-      <FiniteDirections>
-        <int>1467</int>
-        <int>1470</int>
-        <int>1473</int>
-        <int>1480</int>
-        <int>1488</int>
-      </FiniteDirections>
+      <FiniteDirections />
       <Fasteners />
-      <Certainty>1</Certainty>
+      <Certainty>0.49565700445317495</Certainty>
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a13</name>
+      <name>a32</name>
       <localLabels />
       <localVariables />
-      <From>TXT-1 - Chassis-1 Demi chassis-1 chassis-1</From>
-      <To>TXT-1 - Chassis-1 Demi chassis-1 F5 support de carro-2</To>
+      <From>TXT-1 - Chassis-1 Demi chassis-2 F5 support de carro-1</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 MB4 vis M3 x 8-2</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
-        <int>1544</int>
-        <int>4659</int>
-        <int>2068</int>
-        <int>2308</int>
-        <int>2573</int>
-        <int>2707</int>
-        <int>2941</int>
-        <int>3061</int>
-        <int>3159</int>
-        <int>3293</int>
-        <int>3412</int>
-        <int>3465</int>
-        <int>3525</int>
-        <int>3624</int>
-        <int>3820</int>
-        <int>3893</int>
-        <int>3880</int>
-        <int>4045</int>
-        <int>4029</int>
-        <int>4205</int>
-        <int>4377</int>
-        <int>4357</int>
-        <int>4601</int>
-        <int>4584</int>
-        <int>4581</int>
-        <int>4759</int>
-        <int>3115</int>
-        <int>6231</int>
+        <int>0</int>
       </InfiniteDirections>
       <FiniteDirections />
       <Fasteners />
@@ -31801,7 +31832,41 @@
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a14</name>
+      <name>a33</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 MS7 axe-6</From>
+      <To>TXT-1 - Chassis-1 F4 entrtoise-2</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a34</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-2 MC1 vis M3 x 16-1</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 G2 support amortisseur-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a35</name>
       <localLabels />
       <localVariables />
       <From>TXT-1 - Chassis-1 Demi chassis-1 chassis-1</From>
@@ -31809,34 +31874,34 @@
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
-        <int>1544</int>
-        <int>4659</int>
         <int>2068</int>
         <int>2308</int>
         <int>2573</int>
-        <int>2707</int>
+        <int>2794</int>
         <int>2941</int>
         <int>3061</int>
         <int>3159</int>
         <int>3293</int>
         <int>3412</int>
         <int>3465</int>
-        <int>3525</int>
+        <int>3581</int>
         <int>3624</int>
         <int>3820</int>
         <int>3893</int>
-        <int>3880</int>
+        <int>3952</int>
         <int>4045</int>
         <int>4029</int>
         <int>4205</int>
         <int>4377</int>
         <int>4357</int>
-        <int>4601</int>
+        <int>4441</int>
         <int>4584</int>
-        <int>4581</int>
+        <int>4609</int>
         <int>4759</int>
+        <int>1544</int>
         <int>3115</int>
         <int>6231</int>
+        <int>4659</int>
       </InfiniteDirections>
       <FiniteDirections />
       <Fasteners />
@@ -31844,7 +31909,105 @@
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a15</name>
+      <name>a36</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-2</From>
+      <To>TXT-1 - Chassis-1 F4 entrtoise-3</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1566</int>
+        <int>1969</int>
+        <int>1975</int>
+        <int>1981</int>
+        <int>1989</int>
+        <int>2011</int>
+        <int>2023</int>
+        <int>2080</int>
+        <int>2308</int>
+        <int>2573</int>
+        <int>2547</int>
+        <int>2460</int>
+        <int>2474</int>
+        <int>2583</int>
+        <int>2617</int>
+        <int>2794</int>
+        <int>2838</int>
+        <int>2863</int>
+        <int>2941</int>
+        <int>3061</int>
+        <int>3082</int>
+        <int>3159</int>
+        <int>3332</int>
+        <int>3339</int>
+        <int>3426</int>
+        <int>3820</int>
+        <int>3674</int>
+        <int>3681</int>
+        <int>3684</int>
+        <int>3861</int>
+        <int>4205</int>
+        <int>4045</int>
+        <int>4127</int>
+        <int>4170</int>
+        <int>4209</int>
+        <int>4369</int>
+        <int>4489</int>
+        <int>4545</int>
+        <int>4478</int>
+        <int>6230</int>
+        <int>1544</int>
+        <int>3115</int>
+        <int>6231</int>
+        <int>4659</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>1467</int>
+        <int>1470</int>
+        <int>1473</int>
+        <int>1480</int>
+        <int>1488</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a37</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 MB3 vis M3 x 16-5</From>
+      <To>TXT-1 - Chassis-1 F4 entrtoise-4</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>0.49652649214412781</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a38</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - MC1 vis M3 x 16-16</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-1 F5 support de carro-2</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a39</name>
       <localLabels />
       <localVariables />
       <From>TXT-1 - Chassis-1 Demi chassis-1 chassis-1</From>
@@ -31861,13 +32024,13 @@
         <int>340</int>
         <int>450</int>
         <int>477</int>
-        <int>481</int>
+        <int>443</int>
         <int>725</int>
         <int>762</int>
         <int>765</int>
         <int>780</int>
         <int>798</int>
-        <int>974</int>
+        <int>926</int>
         <int>1017</int>
         <int>1032</int>
         <int>1241</int>
@@ -31877,19 +32040,18 @@
         <int>1401</int>
         <int>1465</int>
         <int>1566</int>
-        <int>4581</int>
         <int>5089</int>
         <int>5096</int>
-        <int>5112</int>
-        <int>5128</int>
-        <int>5143</int>
         <int>5344</int>
-        <int>5568</int>
-        <int>5608</int>
-        <int>5615</int>
+        <int>5112</int>
+        <int>5455</int>
+        <int>4999</int>
+        <int>5733</int>
+        <int>5637</int>
+        <int>5143</int>
+        <int>5848</int>
         <int>5642</int>
         <int>5835</int>
-        <int>5948</int>
         <int>6105</int>
         <int>6230</int>
         <int>1544</int>
@@ -31897,194 +32059,19 @@
         <int>4659</int>
       </InfiniteDirections>
       <FiniteDirections>
+        <int>4609</int>
         <int>4584</int>
         <int>4587</int>
         <int>4595</int>
         <int>4598</int>
-        <int>4601</int>
-      </FiniteDirections>
-      <Fasteners>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>0</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>2654.1377000184939</Diameter>
-          <Name>TXT-1 - Chassis-1 MB3 vis M3 x 16-8</Name>
-          <OverallLength>17394.777249312578</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener />
-        </Fastener>
-      </Fasteners>
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a16</name>
-      <localLabels />
-      <localVariables />
-      <From>TXT-1 - F1 support de carro-3</From>
-      <To>TXT-1 - Chassis-1 Demi chassis-1 F5 support de carro-1</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>3112</int>
-      </InfiniteDirections>
-      <FiniteDirections />
-      <Fasteners>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>0</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>2653.606212140347</Diameter>
-          <Name>TXT-1 - MC1 vis M3 x 16-10</Name>
-          <OverallLength>17411.817701604894</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener>
-            <int>3</int>
-            <int>25</int>
-            <int>28</int>
-          </PartsLockedByFastener>
-        </Fastener>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>0</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>2653.603506240077</Diameter>
-          <Name>TXT-1 - MC1 vis M3 x 16-12</Name>
-          <OverallLength>17411.817724703822</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener>
-            <int>3</int>
-            <int>25</int>
-            <int>28</int>
-          </PartsLockedByFastener>
-        </Fastener>
-      </Fasteners>
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a17</name>
-      <localLabels />
-      <localVariables />
-      <From>TXT-1 - Chassis-1 MS7 axe-4</From>
-      <To>TXT-1 - Chassis-1 F4 entrtoise-5</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>0</int>
-        <int>3112</int>
-      </InfiniteDirections>
-      <FiniteDirections />
-      <Fasteners />
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a18</name>
-      <localLabels />
-      <localVariables />
-      <From>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-2</From>
-      <To>TXT-1 - Chassis-1 F4 entrtoise-6</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>1544</int>
-        <int>1470</int>
-        <int>1566</int>
-        <int>1969</int>
-        <int>1975</int>
-        <int>1981</int>
-        <int>1989</int>
-        <int>2011</int>
-        <int>2023</int>
-        <int>2080</int>
-        <int>2308</int>
-        <int>2573</int>
-        <int>2547</int>
-        <int>2460</int>
-        <int>2474</int>
-        <int>2583</int>
-        <int>2617</int>
-        <int>2707</int>
-        <int>2838</int>
-        <int>2863</int>
-        <int>2941</int>
-        <int>3061</int>
-        <int>3082</int>
-        <int>3159</int>
-        <int>3332</int>
-        <int>3339</int>
-        <int>3426</int>
-        <int>3820</int>
-        <int>3674</int>
-        <int>3681</int>
-        <int>3684</int>
-        <int>3861</int>
-        <int>4205</int>
-        <int>4294</int>
-        <int>4127</int>
-        <int>4170</int>
-        <int>4209</int>
-        <int>4369</int>
-        <int>4489</int>
-        <int>4545</int>
-        <int>4478</int>
-        <int>6230</int>
-        <int>3115</int>
-        <int>6231</int>
-        <int>4659</int>
-      </InfiniteDirections>
-      <FiniteDirections>
-        <int>1467</int>
-        <int>1473</int>
-        <int>1480</int>
-        <int>1488</int>
+        <int>4441</int>
       </FiniteDirections>
       <Fasteners />
       <Certainty>1</Certainty>
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a19</name>
-      <localLabels />
-      <localVariables />
-      <From>TXT-1 - Chassis-1 MS7 axe-3</From>
-      <To>TXT-1 - Chassis-1 F4 entrtoise-7</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>0</int>
-        <int>3112</int>
-      </InfiniteDirections>
-      <FiniteDirections />
-      <Fasteners />
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a20</name>
+      <name>a40</name>
       <localLabels />
       <localVariables />
       <From>TXT-1 - Chassis-1 Demi chassis-1 chassis-1</From>
@@ -32101,13 +32088,13 @@
         <int>340</int>
         <int>450</int>
         <int>477</int>
-        <int>481</int>
+        <int>443</int>
         <int>725</int>
         <int>762</int>
         <int>765</int>
         <int>780</int>
         <int>798</int>
-        <int>974</int>
+        <int>926</int>
         <int>1017</int>
         <int>1032</int>
         <int>1241</int>
@@ -32120,15 +32107,15 @@
         <int>5089</int>
         <int>5096</int>
         <int>5112</int>
-        <int>5128</int>
+        <int>4999</int>
         <int>5143</int>
         <int>5344</int>
-        <int>5568</int>
-        <int>5608</int>
-        <int>5615</int>
+        <int>5455</int>
+        <int>5733</int>
+        <int>5637</int>
         <int>5642</int>
         <int>5835</int>
-        <int>5948</int>
+        <int>5848</int>
         <int>6105</int>
         <int>6230</int>
         <int>1544</int>
@@ -32136,128 +32123,26 @@
         <int>4659</int>
       </InfiniteDirections>
       <FiniteDirections>
-        <int>4581</int>
+        <int>4609</int>
         <int>4584</int>
         <int>4587</int>
         <int>4595</int>
         <int>4598</int>
-        <int>4601</int>
+        <int>4441</int>
       </FiniteDirections>
-      <Fasteners>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>0</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>2654.1397978752398</Diameter>
-          <Name>TXT-1 - Chassis-1 MB3 vis M3 x 16-12</Name>
-          <OverallLength>17394.777539264644</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener />
-        </Fastener>
-      </Fasteners>
+      <Fasteners />
       <Certainty>1</Certainty>
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a21</name>
+      <name>a41</name>
       <localLabels />
       <localVariables />
-      <From>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</From>
-      <To>TXT-1 - Chassis-1 F4 entrtoise-4</To>
+      <From>TXT-1 - Chassis-1 Demi chassis-1 F5 support de carro-2</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-1 MB4 vis M3 x 8-4</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
-        <int>1544</int>
-        <int>1566</int>
-        <int>1969</int>
-        <int>1975</int>
-        <int>1981</int>
-        <int>1989</int>
-        <int>2011</int>
-        <int>2023</int>
-        <int>2080</int>
-        <int>2308</int>
-        <int>2573</int>
-        <int>2547</int>
-        <int>2460</int>
-        <int>2474</int>
-        <int>2583</int>
-        <int>2617</int>
-        <int>2707</int>
-        <int>2838</int>
-        <int>2863</int>
-        <int>2941</int>
-        <int>3061</int>
-        <int>3082</int>
-        <int>3159</int>
-        <int>3332</int>
-        <int>3339</int>
-        <int>3426</int>
-        <int>3820</int>
-        <int>3674</int>
-        <int>3681</int>
-        <int>3684</int>
-        <int>3861</int>
-        <int>4205</int>
-        <int>4294</int>
-        <int>4127</int>
-        <int>4170</int>
-        <int>4209</int>
-        <int>4369</int>
-        <int>4489</int>
-        <int>4545</int>
-        <int>4478</int>
-        <int>6230</int>
-        <int>3115</int>
-        <int>6231</int>
-        <int>4659</int>
-      </InfiniteDirections>
-      <FiniteDirections>
-        <int>1467</int>
-        <int>1470</int>
-        <int>1473</int>
-        <int>1480</int>
-        <int>1488</int>
-      </FiniteDirections>
-      <Fasteners>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>3028</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>2654.1334294986113</Diameter>
-          <Name>TXT-1 - Chassis-1 MB3 vis M3 x 16-5</Name>
-          <OverallLength>17394.777556436758</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener />
-        </Fastener>
-      </Fasteners>
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a22</name>
-      <localLabels />
-      <localVariables />
-      <From>TXT-1 - Chassis-1 MS7 axe-5</From>
-      <To>TXT-1 - Chassis-1 F4 entrtoise-8</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>0</int>
         <int>3112</int>
       </InfiniteDirections>
       <FiniteDirections />
@@ -32266,71 +32151,40 @@
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a23</name>
+      <name>a42</name>
       <localLabels />
       <localVariables />
-      <From>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-1</From>
-      <To>TXT-1 - Chassis-1 F4 entrtoise-5</To>
+      <From>TXT-1 - Chassis-1 Demi chassis-2 F5 support de carro-2</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 MB4 vis M3 x 8-3</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
         <int>0</int>
-        <int>116</int>
-        <int>120</int>
-        <int>124</int>
-        <int>330</int>
-        <int>336</int>
-        <int>340</int>
-        <int>450</int>
-        <int>477</int>
-        <int>481</int>
-        <int>725</int>
-        <int>762</int>
-        <int>765</int>
-        <int>780</int>
-        <int>798</int>
-        <int>974</int>
-        <int>1017</int>
-        <int>1032</int>
-        <int>1241</int>
-        <int>1257</int>
-        <int>1277</int>
-        <int>1364</int>
-        <int>1401</int>
-        <int>1465</int>
-        <int>1566</int>
-        <int>5089</int>
-        <int>5096</int>
-        <int>5112</int>
-        <int>5128</int>
-        <int>5143</int>
-        <int>5344</int>
-        <int>5568</int>
-        <int>5608</int>
-        <int>5615</int>
-        <int>5642</int>
-        <int>5835</int>
-        <int>5948</int>
-        <int>6105</int>
-        <int>6230</int>
-        <int>1544</int>
-        <int>6231</int>
-        <int>4659</int>
       </InfiniteDirections>
-      <FiniteDirections>
-        <int>4581</int>
-        <int>4584</int>
-        <int>4587</int>
-        <int>4595</int>
-        <int>4598</int>
-        <int>4601</int>
-      </FiniteDirections>
+      <FiniteDirections />
       <Fasteners />
       <Certainty>1</Certainty>
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a24</name>
+      <name>a43</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - MB2 vis M3 x 12-3</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 G2 support amortisseur-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1503</int>
+        <int>4618</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a44</name>
       <localLabels />
       <localVariables />
       <From>TXT-1 - Chassis-1 MS7 axe-4</From>
@@ -32347,18 +32201,245 @@
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a25</name>
+      <name>a45</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 MS7 axe-6</From>
+      <To>TXT-1 - Chassis-1 F4 entrtoise-4</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a46</name>
       <localLabels />
       <localVariables />
       <From>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 MB4 vis M3 x 8-4</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a47</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - C3 platine RC-1</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 G2 support amortisseur-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>120</int>
+        <int>452</int>
+        <int>938</int>
+        <int>6230</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a48</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-2 F5 support de carro-2</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 MB4 vis M3 x 8-4</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a49</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 MS7 axe-4</From>
       <To>TXT-1 - Chassis-1 F4 entrtoise-5</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
-        <int>1544</int>
-        <int>1467</int>
-        <int>1470</int>
-        <int>1473</int>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a50</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 MB3 vis M3 x 16-9</From>
+      <To>TXT-1 - Chassis-1 F4 entrtoise-6</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>0.49663172718287152</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a51</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 MB4 vis M3 x 8-3</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a52</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - C2 boitier batterie-1</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 G2 support amortisseur-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>349</int>
+        <int>120</int>
+        <int>126</int>
+        <int>705</int>
+        <int>500</int>
+        <int>731</int>
+        <int>452</int>
+        <int>1046</int>
+        <int>1241</int>
+        <int>938</int>
+        <int>1115</int>
+        <int>5112</int>
+        <int>1300</int>
+        <int>5848</int>
+        <int>4659</int>
+        <int>6230</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>4609</int>
+        <int>4584</int>
+        <int>4587</int>
+        <int>5089</int>
+        <int>5143</int>
+        <int>5550</int>
+        <int>5455</int>
+        <int>5733</int>
+        <int>6231</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a53</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 MB3 vis M3 x 16-1</From>
+      <To>TXT-1 - Chassis-1 F4 entrtoise-8</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>0.49538257138823316</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a54</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 MS7 axe-5</From>
+      <To>TXT-1 - Chassis-1 F4 entrtoise-8</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a55</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 MS7 axe-5</From>
+      <To>TXT-1 - Chassis-1 MB3 vis M3 x 16-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>3112</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a56</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 MC1 vis M3 x 16-2</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a57</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</From>
+      <To>TXT-1 - Chassis-1 F4 entrtoise-4</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
         <int>1566</int>
         <int>1969</int>
         <int>1975</int>
@@ -32374,7 +32455,7 @@
         <int>2474</int>
         <int>2583</int>
         <int>2617</int>
-        <int>2707</int>
+        <int>2794</int>
         <int>2838</int>
         <int>2863</int>
         <int>2941</int>
@@ -32390,7 +32471,7 @@
         <int>3684</int>
         <int>3861</int>
         <int>4205</int>
-        <int>4294</int>
+        <int>4045</int>
         <int>4127</int>
         <int>4170</int>
         <int>4209</int>
@@ -32399,42 +32480,346 @@
         <int>4545</int>
         <int>4478</int>
         <int>6230</int>
+        <int>1544</int>
         <int>3115</int>
         <int>6231</int>
         <int>4659</int>
       </InfiniteDirections>
       <FiniteDirections>
+        <int>1467</int>
+        <int>1470</int>
+        <int>1473</int>
         <int>1480</int>
         <int>1488</int>
       </FiniteDirections>
-      <Fasteners>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>3028</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>2654.1313018902433</Diameter>
-          <Name>TXT-1 - Chassis-1 MB3 vis M3 x 16-6</Name>
-          <OverallLength>17394.777131531529</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener />
-        </Fastener>
-      </Fasteners>
+      <Fasteners />
       <Certainty>1</Certainty>
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a26</name>
+      <name>a58</name>
       <localLabels />
       <localVariables />
-      <From>TXT-1 - Chassis-1 Demi chassis-1 chassis-1</From>
-      <To>TXT-1 - Chassis-1 MS7 axe-1</To>
+      <From>TXT-1 - Chassis-1 MS7 axe-3</From>
+      <To>TXT-1 - Chassis-1 MB3 vis M3 x 16-11</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a59</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 MB3 vis M3 x 16-6</From>
+      <To>TXT-1 - Chassis-1 F4 entrtoise-5</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>0.49698601868363523</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a60</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 MS7 axe-3</From>
+      <To>TXT-1 - Chassis-1 MB3 vis M3 x 16-2</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>3112</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a61</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</From>
+      <To>TXT-1 - Chassis-1 F4 entrtoise-7</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1969</int>
+        <int>1975</int>
+        <int>1981</int>
+        <int>1989</int>
+        <int>2011</int>
+        <int>2023</int>
+        <int>2080</int>
+        <int>2308</int>
+        <int>2573</int>
+        <int>2547</int>
+        <int>2460</int>
+        <int>2474</int>
+        <int>2583</int>
+        <int>2617</int>
+        <int>2794</int>
+        <int>2838</int>
+        <int>2863</int>
+        <int>2941</int>
+        <int>3061</int>
+        <int>3082</int>
+        <int>1566</int>
+        <int>3159</int>
+        <int>3332</int>
+        <int>3339</int>
+        <int>3820</int>
+        <int>3426</int>
+        <int>4045</int>
+        <int>3674</int>
+        <int>3681</int>
+        <int>4127</int>
+        <int>3684</int>
+        <int>4170</int>
+        <int>3861</int>
+        <int>4209</int>
+        <int>4205</int>
+        <int>4369</int>
+        <int>4545</int>
+        <int>4478</int>
+        <int>4489</int>
+        <int>4659</int>
+        <int>6230</int>
+        <int>1544</int>
+        <int>3115</int>
+        <int>6231</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>1467</int>
+        <int>1470</int>
+        <int>1473</int>
+        <int>1480</int>
+        <int>1488</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a62</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - F1 support de carro-2</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-1 F5 support de carro-2</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a63</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 MB3 vis M3 x 16-2</From>
+      <To>TXT-1 - Chassis-1 F4 entrtoise-7</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>0.49515594138342833</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a64</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - MB2 vis M3 x 12-5</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 G2 support amortisseur-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>4618</int>
+        <int>1503</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a65</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 MS7 axe-2</From>
+      <To>TXT-1 - Chassis-1 MB3 vis M3 x 16-4</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>3112</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a66</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 MS7 axe-6</From>
+      <To>TXT-1 - Chassis-1 MB3 vis M3 x 16-12</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a67</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-2</From>
+      <To>TXT-1 - Chassis-1 F4 entrtoise-6</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1470</int>
+        <int>1566</int>
+        <int>1969</int>
+        <int>1975</int>
+        <int>1981</int>
+        <int>1989</int>
+        <int>2011</int>
+        <int>2023</int>
+        <int>2080</int>
+        <int>2308</int>
+        <int>2573</int>
+        <int>2547</int>
+        <int>2460</int>
+        <int>2474</int>
+        <int>2583</int>
+        <int>2617</int>
+        <int>2794</int>
+        <int>2838</int>
+        <int>2863</int>
+        <int>2941</int>
+        <int>3061</int>
+        <int>3082</int>
+        <int>3159</int>
+        <int>3332</int>
+        <int>3339</int>
+        <int>3426</int>
+        <int>3820</int>
+        <int>3674</int>
+        <int>3681</int>
+        <int>3684</int>
+        <int>3861</int>
+        <int>4205</int>
+        <int>4045</int>
+        <int>4127</int>
+        <int>4170</int>
+        <int>4209</int>
+        <int>4369</int>
+        <int>4489</int>
+        <int>4545</int>
+        <int>4478</int>
+        <int>6230</int>
+        <int>1544</int>
+        <int>3115</int>
+        <int>6231</int>
+        <int>4659</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>1467</int>
+        <int>1473</int>
+        <int>1480</int>
+        <int>1488</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a68</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 MS7 axe-1</From>
+      <To>TXT-1 - Chassis-1 MB3 vis M3 x 16-3</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>3112</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a69</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 MS7 axe-3</From>
+      <To>TXT-1 - Chassis-1 F4 entrtoise-7</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a70</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 MC1 vis M3 x 16-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a71</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-1</From>
+      <To>TXT-1 - Chassis-1 F4 entrtoise-5</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
@@ -32447,13 +32832,13 @@
         <int>340</int>
         <int>450</int>
         <int>477</int>
-        <int>481</int>
+        <int>443</int>
         <int>725</int>
         <int>762</int>
         <int>765</int>
         <int>780</int>
         <int>798</int>
-        <int>974</int>
+        <int>926</int>
         <int>1017</int>
         <int>1032</int>
         <int>1241</int>
@@ -32463,23 +32848,18 @@
         <int>1401</int>
         <int>1465</int>
         <int>1566</int>
-        <int>4581</int>
-        <int>4584</int>
-        <int>4587</int>
-        <int>4595</int>
-        <int>4598</int>
         <int>5089</int>
         <int>5096</int>
         <int>5112</int>
-        <int>5128</int>
+        <int>4999</int>
         <int>5143</int>
         <int>5344</int>
-        <int>5568</int>
-        <int>5608</int>
-        <int>5615</int>
+        <int>5455</int>
+        <int>5733</int>
+        <int>5637</int>
         <int>5642</int>
         <int>5835</int>
-        <int>5948</int>
+        <int>5848</int>
         <int>6105</int>
         <int>6230</int>
         <int>1544</int>
@@ -32487,14 +32867,136 @@
         <int>4659</int>
       </InfiniteDirections>
       <FiniteDirections>
-        <int>4601</int>
+        <int>4609</int>
+        <int>4584</int>
+        <int>4587</int>
+        <int>4595</int>
+        <int>4598</int>
+        <int>4441</int>
       </FiniteDirections>
       <Fasteners />
       <Certainty>1</Certainty>
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a27</name>
+      <name>a72</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</From>
+      <To>TXT-1 - Chassis-1 F4 entrtoise-8</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1480</int>
+        <int>1566</int>
+        <int>1488</int>
+        <int>1969</int>
+        <int>1975</int>
+        <int>1981</int>
+        <int>1989</int>
+        <int>2011</int>
+        <int>2023</int>
+        <int>2080</int>
+        <int>2308</int>
+        <int>2573</int>
+        <int>2547</int>
+        <int>2460</int>
+        <int>2474</int>
+        <int>2583</int>
+        <int>2617</int>
+        <int>2794</int>
+        <int>2838</int>
+        <int>2863</int>
+        <int>2941</int>
+        <int>3061</int>
+        <int>3082</int>
+        <int>3159</int>
+        <int>3332</int>
+        <int>3339</int>
+        <int>3426</int>
+        <int>3820</int>
+        <int>3674</int>
+        <int>3681</int>
+        <int>3684</int>
+        <int>3861</int>
+        <int>4205</int>
+        <int>4045</int>
+        <int>4127</int>
+        <int>4170</int>
+        <int>4209</int>
+        <int>4369</int>
+        <int>4489</int>
+        <int>4545</int>
+        <int>4478</int>
+        <int>6230</int>
+        <int>1544</int>
+        <int>3115</int>
+        <int>6231</int>
+        <int>4659</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>1467</int>
+        <int>1470</int>
+        <int>1473</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a73</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-1</From>
+      <To>TXT-1 - Chassis-1 MS7 axe-3</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a74</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-2</From>
+      <To>TXT-1 - Chassis-1 MS7 axe-3</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a75</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 MB3 vis M3 x 16-8</From>
+      <To>TXT-1 - Chassis-1 MS7 axe-5</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>3112</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a76</name>
       <localLabels />
       <localVariables />
       <From>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-1</From>
@@ -32511,13 +33013,13 @@
         <int>340</int>
         <int>450</int>
         <int>477</int>
-        <int>481</int>
+        <int>443</int>
         <int>725</int>
         <int>762</int>
         <int>765</int>
         <int>780</int>
         <int>798</int>
-        <int>974</int>
+        <int>926</int>
         <int>1017</int>
         <int>1032</int>
         <int>1241</int>
@@ -32531,15 +33033,15 @@
         <int>5089</int>
         <int>5096</int>
         <int>5112</int>
-        <int>5128</int>
+        <int>4999</int>
         <int>5143</int>
         <int>5344</int>
-        <int>5568</int>
-        <int>5608</int>
-        <int>5615</int>
+        <int>5455</int>
+        <int>5733</int>
+        <int>5637</int>
         <int>5642</int>
         <int>5835</int>
-        <int>5948</int>
+        <int>5848</int>
         <int>6105</int>
         <int>6230</int>
         <int>1544</int>
@@ -32547,109 +33049,29 @@
         <int>4659</int>
       </InfiniteDirections>
       <FiniteDirections>
-        <int>4581</int>
+        <int>4609</int>
         <int>4584</int>
         <int>4587</int>
         <int>4595</int>
-        <int>4601</int>
+        <int>4441</int>
       </FiniteDirections>
       <Fasteners />
       <Certainty>1</Certainty>
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a28</name>
-      <localLabels />
-      <localVariables />
-      <From>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-1</From>
-      <To>TXT-1 - Chassis-1 MS7 axe-4</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>0</int>
-        <int>3112</int>
-      </InfiniteDirections>
-      <FiniteDirections />
-      <Fasteners />
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a29</name>
-      <localLabels />
-      <localVariables />
-      <From>TXT-1 - Chassis-1 Demi chassis-1 chassis-1</From>
-      <To>TXT-1 - Chassis-1 MS7 axe-2</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>0</int>
-        <int>116</int>
-        <int>120</int>
-        <int>124</int>
-        <int>330</int>
-        <int>336</int>
-        <int>340</int>
-        <int>450</int>
-        <int>477</int>
-        <int>481</int>
-        <int>725</int>
-        <int>762</int>
-        <int>765</int>
-        <int>780</int>
-        <int>798</int>
-        <int>974</int>
-        <int>1017</int>
-        <int>1032</int>
-        <int>1241</int>
-        <int>1257</int>
-        <int>1277</int>
-        <int>1364</int>
-        <int>1401</int>
-        <int>1465</int>
-        <int>1566</int>
-        <int>4581</int>
-        <int>4584</int>
-        <int>4587</int>
-        <int>4595</int>
-        <int>4598</int>
-        <int>4601</int>
-        <int>5089</int>
-        <int>5096</int>
-        <int>5112</int>
-        <int>5128</int>
-        <int>5143</int>
-        <int>5344</int>
-        <int>5568</int>
-        <int>5608</int>
-        <int>5615</int>
-        <int>5642</int>
-        <int>5835</int>
-        <int>5948</int>
-        <int>6105</int>
-        <int>6230</int>
-        <int>1544</int>
-        <int>6231</int>
-        <int>4659</int>
-      </InfiniteDirections>
-      <FiniteDirections />
-      <Fasteners />
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a30</name>
+      <name>a77</name>
       <localLabels />
       <localVariables />
       <From>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</From>
-      <To>TXT-1 - Chassis-1 F4 entrtoise-8</To>
+      <To>TXT-1 - Chassis-1 F4 entrtoise-5</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
-        <int>1544</int>
-        <int>1480</int>
+        <int>1467</int>
+        <int>1470</int>
+        <int>1473</int>
         <int>1566</int>
-        <int>1488</int>
         <int>1969</int>
         <int>1975</int>
         <int>1981</int>
@@ -32664,7 +33086,7 @@
         <int>2474</int>
         <int>2583</int>
         <int>2617</int>
-        <int>2707</int>
+        <int>2794</int>
         <int>2838</int>
         <int>2863</int>
         <int>2941</int>
@@ -32680,7 +33102,7 @@
         <int>3684</int>
         <int>3861</int>
         <int>4205</int>
-        <int>4294</int>
+        <int>4045</int>
         <int>4127</int>
         <int>4170</int>
         <int>4209</int>
@@ -32689,39 +33111,135 @@
         <int>4545</int>
         <int>4478</int>
         <int>6230</int>
+        <int>1544</int>
         <int>3115</int>
         <int>6231</int>
         <int>4659</int>
       </InfiniteDirections>
       <FiniteDirections>
-        <int>1467</int>
-        <int>1470</int>
-        <int>1473</int>
+        <int>1480</int>
+        <int>1488</int>
       </FiniteDirections>
-      <Fasteners>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>3028</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>2654.1204869895305</Diameter>
-          <Name>TXT-1 - Chassis-1 MB3 vis M3 x 16-1</Name>
-          <OverallLength>17394.77770072217</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener />
-        </Fastener>
-      </Fasteners>
+      <Fasteners />
       <Certainty>1</Certainty>
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a31</name>
+      <name>a78</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</From>
+      <To>TXT-1 - Chassis-1 MB3 vis M3 x 16-2</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a79</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</From>
+      <To>TXT-1 - Chassis-1 MB3 vis M3 x 16-3</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a80</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</From>
+      <To>TXT-1 - Chassis-1 MB3 vis M3 x 16-4</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a81</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-1 chassis-1</From>
+      <To>TXT-1 - Chassis-1 MB3 vis M3 x 16-11</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a82</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</From>
+      <To>TXT-1 - Chassis-1 MB3 vis M3 x 16-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a83</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-1 chassis-1</From>
+      <To>TXT-1 - Chassis-1 MB3 vis M3 x 16-12</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a84</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 MS7 axe-6</From>
+      <To>TXT-1 - Chassis-1 MB3 vis M3 x 16-5</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>3112</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a85</name>
       <localLabels />
       <localVariables />
       <From>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-2</From>
@@ -32738,63 +33256,16 @@
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a32</name>
+      <name>a86</name>
       <localLabels />
       <localVariables />
-      <From>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</From>
-      <To>TXT-1 - Chassis-1 MS7 axe-1</To>
+      <From>TXT-1 - Chassis-1 Pare-chocs avant-1 G6 bumper-1 bumper1-2</From>
+      <To>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-1</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
-        <int>1544</int>
-        <int>1467</int>
-        <int>1470</int>
-        <int>1473</int>
-        <int>1480</int>
-        <int>1566</int>
-        <int>1488</int>
-        <int>1969</int>
-        <int>1975</int>
-        <int>1981</int>
-        <int>1989</int>
-        <int>2011</int>
-        <int>2023</int>
-        <int>2080</int>
-        <int>2308</int>
-        <int>2573</int>
-        <int>2547</int>
-        <int>2460</int>
-        <int>2474</int>
-        <int>2583</int>
-        <int>2617</int>
-        <int>2707</int>
-        <int>2838</int>
-        <int>2863</int>
-        <int>2941</int>
-        <int>3061</int>
-        <int>3082</int>
-        <int>3159</int>
-        <int>3332</int>
-        <int>3339</int>
-        <int>3426</int>
-        <int>3820</int>
-        <int>3674</int>
-        <int>3681</int>
-        <int>3684</int>
-        <int>3861</int>
-        <int>4205</int>
-        <int>4294</int>
-        <int>4127</int>
-        <int>4170</int>
-        <int>4209</int>
-        <int>4369</int>
-        <int>4489</int>
-        <int>4545</int>
-        <int>4478</int>
-        <int>6230</int>
-        <int>3115</int>
-        <int>6231</int>
-        <int>4659</int>
+        <int>0</int>
+        <int>3112</int>
       </InfiniteDirections>
       <FiniteDirections />
       <Fasteners />
@@ -32802,102 +33273,34 @@
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a33</name>
+      <name>a87</name>
       <localLabels />
       <localVariables />
-      <From>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</From>
-      <To>TXT-1 - Chassis-1 F4 entrtoise-7</To>
+      <From>TXT-1 - MB2 vis M3 x 12-1</From>
+      <To>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-1</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
-        <int>1544</int>
-        <int>1566</int>
-        <int>1969</int>
-        <int>1975</int>
-        <int>1981</int>
-        <int>1989</int>
-        <int>2011</int>
-        <int>2023</int>
-        <int>2080</int>
-        <int>2308</int>
-        <int>2573</int>
-        <int>2547</int>
-        <int>2460</int>
-        <int>2474</int>
-        <int>2583</int>
-        <int>2617</int>
-        <int>2707</int>
-        <int>2838</int>
-        <int>2863</int>
-        <int>2941</int>
-        <int>3061</int>
-        <int>3082</int>
-        <int>3159</int>
-        <int>3332</int>
-        <int>3339</int>
-        <int>3426</int>
-        <int>3820</int>
-        <int>3674</int>
-        <int>3681</int>
-        <int>3684</int>
-        <int>3861</int>
-        <int>4205</int>
-        <int>4294</int>
-        <int>4127</int>
-        <int>4170</int>
-        <int>4209</int>
-        <int>4369</int>
-        <int>4489</int>
-        <int>4545</int>
-        <int>4478</int>
-        <int>6230</int>
-        <int>3115</int>
-        <int>6231</int>
-        <int>4659</int>
+        <int>1503</int>
       </InfiniteDirections>
       <FiniteDirections>
-        <int>1467</int>
-        <int>1470</int>
-        <int>1473</int>
-        <int>1480</int>
-        <int>1488</int>
+        <int>4618</int>
       </FiniteDirections>
-      <Fasteners>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>3028</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>2654.1296839088595</Diameter>
-          <Name>TXT-1 - Chassis-1 MB3 vis M3 x 16-2</Name>
-          <OverallLength>17394.776755696374</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener />
-        </Fastener>
-      </Fasteners>
+      <Fasteners />
       <Certainty>1</Certainty>
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a34</name>
+      <name>a88</name>
       <localLabels />
       <localVariables />
       <From>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</From>
-      <To>TXT-1 - Chassis-1 MS7 axe-4</To>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 G2 support amortisseur-1</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
-        <int>1544</int>
         <int>1467</int>
         <int>1470</int>
-        <int>1473</int>
-        <int>1480</int>
         <int>1566</int>
         <int>1969</int>
         <int>1975</int>
@@ -32913,7 +33316,7 @@
         <int>2474</int>
         <int>2583</int>
         <int>2617</int>
-        <int>2707</int>
+        <int>2794</int>
         <int>2838</int>
         <int>2863</int>
         <int>2941</int>
@@ -32927,22 +33330,25 @@
         <int>3674</int>
         <int>3681</int>
         <int>3684</int>
-        <int>4205</int>
         <int>3861</int>
+        <int>4205</int>
+        <int>4045</int>
+        <int>4127</int>
         <int>4170</int>
         <int>4209</int>
         <int>4369</int>
-        <int>4294</int>
         <int>4489</int>
-        <int>4127</int>
         <int>4545</int>
-        <int>4659</int>
         <int>4478</int>
         <int>6230</int>
+        <int>1544</int>
         <int>3115</int>
         <int>6231</int>
+        <int>4659</int>
       </InfiniteDirections>
       <FiniteDirections>
+        <int>1473</int>
+        <int>1480</int>
         <int>1488</int>
       </FiniteDirections>
       <Fasteners />
@@ -32950,135 +33356,51 @@
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a35</name>
+      <name>a89</name>
       <localLabels />
       <localVariables />
-      <From>TXT-1 - Chassis-1 Demi chassis-1 chassis-1</From>
-      <To>TXT-1 - Chassis-1 MS7 axe-5</To>
+      <From>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 F5 support de carro-1</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
         <int>0</int>
         <int>116</int>
-        <int>120</int>
-        <int>124</int>
-        <int>330</int>
-        <int>336</int>
-        <int>340</int>
-        <int>450</int>
-        <int>477</int>
-        <int>481</int>
-        <int>725</int>
-        <int>762</int>
-        <int>765</int>
-        <int>780</int>
-        <int>798</int>
-        <int>974</int>
-        <int>1017</int>
-        <int>1032</int>
-        <int>1241</int>
-        <int>1257</int>
-        <int>1277</int>
-        <int>1364</int>
-        <int>1401</int>
-        <int>1465</int>
-        <int>1566</int>
-        <int>4581</int>
+        <int>126</int>
+        <int>443</int>
+        <int>500</int>
+        <int>926</int>
+        <int>1046</int>
+        <int>4478</int>
+        <int>4587</int>
+        <int>4595</int>
+        <int>4598</int>
+        <int>5154</int>
         <int>5089</int>
-        <int>5096</int>
-        <int>5112</int>
-        <int>5128</int>
-        <int>5143</int>
-        <int>5344</int>
-        <int>5568</int>
-        <int>5608</int>
-        <int>5615</int>
+        <int>5148</int>
+        <int>5036</int>
+        <int>5126</int>
+        <int>5267</int>
         <int>5642</int>
-        <int>5835</int>
-        <int>5948</int>
-        <int>6105</int>
-        <int>6230</int>
+        <int>5575</int>
+        <int>5455</int>
+        <int>5550</int>
+        <int>5896</int>
+        <int>5953</int>
+        <int>6036</int>
         <int>1544</int>
         <int>6231</int>
         <int>4659</int>
       </InfiniteDirections>
       <FiniteDirections>
-        <int>4584</int>
-        <int>4587</int>
-        <int>4595</int>
-        <int>4598</int>
-        <int>4601</int>
+        <int>4609</int>
       </FiniteDirections>
       <Fasteners />
       <Certainty>1</Certainty>
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a36</name>
-      <localLabels />
-      <localVariables />
-      <From>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</From>
-      <To>TXT-1 - Chassis-1 MS7 axe-2</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>1544</int>
-        <int>1467</int>
-        <int>1470</int>
-        <int>1473</int>
-        <int>1480</int>
-        <int>1566</int>
-        <int>1488</int>
-        <int>1969</int>
-        <int>1975</int>
-        <int>1981</int>
-        <int>1989</int>
-        <int>2011</int>
-        <int>2023</int>
-        <int>2080</int>
-        <int>2308</int>
-        <int>2573</int>
-        <int>2547</int>
-        <int>2460</int>
-        <int>2474</int>
-        <int>2583</int>
-        <int>2617</int>
-        <int>2707</int>
-        <int>2838</int>
-        <int>2863</int>
-        <int>2941</int>
-        <int>3061</int>
-        <int>3082</int>
-        <int>3159</int>
-        <int>3332</int>
-        <int>3339</int>
-        <int>3426</int>
-        <int>3820</int>
-        <int>3674</int>
-        <int>3681</int>
-        <int>3684</int>
-        <int>3861</int>
-        <int>4205</int>
-        <int>4294</int>
-        <int>4127</int>
-        <int>4170</int>
-        <int>4209</int>
-        <int>4369</int>
-        <int>4489</int>
-        <int>4545</int>
-        <int>4478</int>
-        <int>6230</int>
-        <int>3115</int>
-        <int>6231</int>
-        <int>4659</int>
-      </InfiniteDirections>
-      <FiniteDirections />
-      <Fasteners />
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a37</name>
+      <name>a90</name>
       <localLabels />
       <localVariables />
       <From>TXT-1 - C2 boitier batterie-1</From>
@@ -33102,7 +33424,273 @@
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a38</name>
+      <name>a91</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-2</From>
+      <To>TXT-1 - C3 platine RC-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>4595</int>
+        <int>4598</int>
+        <int>1544</int>
+        <int>6231</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a92</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</From>
+      <To>TXT-1 - Chassis-1 MS7 axe-3</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1470</int>
+        <int>1473</int>
+        <int>1566</int>
+        <int>1969</int>
+        <int>1975</int>
+        <int>1981</int>
+        <int>1989</int>
+        <int>2011</int>
+        <int>2023</int>
+        <int>2080</int>
+        <int>2308</int>
+        <int>2573</int>
+        <int>2547</int>
+        <int>2460</int>
+        <int>2474</int>
+        <int>2583</int>
+        <int>2617</int>
+        <int>2794</int>
+        <int>2838</int>
+        <int>2863</int>
+        <int>2941</int>
+        <int>3061</int>
+        <int>3082</int>
+        <int>3159</int>
+        <int>3332</int>
+        <int>3339</int>
+        <int>3426</int>
+        <int>3820</int>
+        <int>3674</int>
+        <int>3681</int>
+        <int>3684</int>
+        <int>3861</int>
+        <int>4205</int>
+        <int>4045</int>
+        <int>4127</int>
+        <int>4170</int>
+        <int>4209</int>
+        <int>4369</int>
+        <int>4489</int>
+        <int>4545</int>
+        <int>4478</int>
+        <int>6230</int>
+        <int>1544</int>
+        <int>3115</int>
+        <int>6231</int>
+        <int>4659</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>1467</int>
+        <int>1480</int>
+        <int>1488</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a93</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-1 chassis-1</From>
+      <To>TXT-1 - Chassis-1 MS7 axe-5</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>116</int>
+        <int>120</int>
+        <int>124</int>
+        <int>330</int>
+        <int>336</int>
+        <int>340</int>
+        <int>450</int>
+        <int>477</int>
+        <int>443</int>
+        <int>725</int>
+        <int>762</int>
+        <int>765</int>
+        <int>780</int>
+        <int>798</int>
+        <int>926</int>
+        <int>1017</int>
+        <int>1032</int>
+        <int>1241</int>
+        <int>1257</int>
+        <int>1277</int>
+        <int>1364</int>
+        <int>1401</int>
+        <int>1465</int>
+        <int>1566</int>
+        <int>4609</int>
+        <int>5089</int>
+        <int>5096</int>
+        <int>5112</int>
+        <int>4999</int>
+        <int>5143</int>
+        <int>5344</int>
+        <int>5455</int>
+        <int>5733</int>
+        <int>5637</int>
+        <int>5642</int>
+        <int>5835</int>
+        <int>5848</int>
+        <int>6105</int>
+        <int>6230</int>
+        <int>1544</int>
+        <int>6231</int>
+        <int>4659</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>4584</int>
+        <int>4587</int>
+        <int>4595</int>
+        <int>4598</int>
+        <int>4441</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a94</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</From>
+      <To>TXT-1 - Chassis-1 MS7 axe-4</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1467</int>
+        <int>1470</int>
+        <int>1473</int>
+        <int>1480</int>
+        <int>1566</int>
+        <int>1969</int>
+        <int>1975</int>
+        <int>1981</int>
+        <int>1989</int>
+        <int>2011</int>
+        <int>2023</int>
+        <int>2080</int>
+        <int>2308</int>
+        <int>2573</int>
+        <int>2547</int>
+        <int>2460</int>
+        <int>2474</int>
+        <int>2583</int>
+        <int>2617</int>
+        <int>2794</int>
+        <int>2838</int>
+        <int>2863</int>
+        <int>2941</int>
+        <int>3061</int>
+        <int>3082</int>
+        <int>3159</int>
+        <int>3332</int>
+        <int>3339</int>
+        <int>3426</int>
+        <int>3820</int>
+        <int>3674</int>
+        <int>3681</int>
+        <int>3684</int>
+        <int>3861</int>
+        <int>4205</int>
+        <int>4045</int>
+        <int>4127</int>
+        <int>4170</int>
+        <int>4209</int>
+        <int>4369</int>
+        <int>4489</int>
+        <int>4545</int>
+        <int>4478</int>
+        <int>6230</int>
+        <int>1544</int>
+        <int>3115</int>
+        <int>6231</int>
+        <int>4659</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>1488</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a95</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-1</From>
+      <To>TXT-1 - C3 platine RC-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>4595</int>
+        <int>4598</int>
+        <int>1544</int>
+        <int>6231</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a96</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 MB3 vis M3 x 16-6</From>
+      <To>TXT-1 - Chassis-1 MS7 axe-4</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a97</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 MS7 axe-1</From>
+      <To>TXT-1 - Chassis-1 MB3 vis M3 x 16-7</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a98</name>
       <localLabels />
       <localVariables />
       <From>TXT-1 - Chassis-1 Demi chassis-1 chassis-1</From>
@@ -33119,194 +33707,58 @@
         <int>340</int>
         <int>450</int>
         <int>477</int>
-        <int>481</int>
+        <int>443</int>
         <int>725</int>
         <int>762</int>
         <int>765</int>
         <int>780</int>
         <int>798</int>
-        <int>974</int>
+        <int>926</int>
         <int>1017</int>
         <int>1032</int>
         <int>1241</int>
         <int>1257</int>
-        <int>1566</int>
         <int>1277</int>
-        <int>4581</int>
         <int>1364</int>
-        <int>4584</int>
         <int>1401</int>
         <int>1465</int>
+        <int>1566</int>
+        <int>4609</int>
+        <int>4584</int>
         <int>4587</int>
         <int>4595</int>
-        <int>5344</int>
         <int>5089</int>
-        <int>5568</int>
         <int>5096</int>
-        <int>5608</int>
         <int>5112</int>
-        <int>5128</int>
-        <int>5615</int>
+        <int>4999</int>
         <int>5143</int>
-        <int>5948</int>
+        <int>5344</int>
+        <int>5455</int>
+        <int>5733</int>
+        <int>5637</int>
         <int>5642</int>
+        <int>5835</int>
+        <int>5848</int>
         <int>6105</int>
         <int>6230</int>
-        <int>5835</int>
         <int>1544</int>
         <int>6231</int>
         <int>4659</int>
       </InfiniteDirections>
       <FiniteDirections>
         <int>4598</int>
-        <int>4601</int>
+        <int>4441</int>
       </FiniteDirections>
       <Fasteners />
       <Certainty>1</Certainty>
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a39</name>
-      <localLabels />
-      <localVariables />
-      <From>TXT-1 - Chassis-1 Pare-chocs avant-1 G6 bumper-1 bumper1-1</From>
-      <To>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-2</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>0</int>
-        <int>3112</int>
-      </InfiniteDirections>
-      <FiniteDirections />
-      <Fasteners />
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a40</name>
-      <localLabels />
-      <localVariables />
-      <From>TXT-1 - F1 support de carro-4</From>
-      <To>TXT-1 - Chassis-1 Demi chassis-2 F5 support de carro-2</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>0</int>
-      </InfiniteDirections>
-      <FiniteDirections />
-      <Fasteners>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>3028</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>2653.6062121401496</Diameter>
-          <Name>TXT-1 - MC1 vis M3 x 16-11</Name>
-          <OverallLength>17411.884039919125</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener>
-            <int>19</int>
-            <int>25</int>
-            <int>32</int>
-          </PartsLockedByFastener>
-        </Fastener>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>3028</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>2653.6035062404671</Diameter>
-          <Name>TXT-1 - MC1 vis M3 x 16-9</Name>
-          <OverallLength>17411.884063017795</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener>
-            <int>19</int>
-            <int>25</int>
-            <int>32</int>
-          </PartsLockedByFastener>
-        </Fastener>
-      </Fasteners>
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a41</name>
-      <localLabels />
-      <localVariables />
-      <From>TXT-1 - C2 boitier batterie-1</From>
-      <To>TXT-1 - Chassis-1 Demi chassis-2 G2 support amortisseur-1</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>0</int>
-        <int>120</int>
-        <int>124</int>
-        <int>349</int>
-        <int>452</int>
-        <int>705</int>
-        <int>731</int>
-        <int>780</int>
-        <int>938</int>
-        <int>1115</int>
-        <int>1300</int>
-        <int>1241</int>
-        <int>4659</int>
-        <int>5112</int>
-        <int>5948</int>
-        <int>6230</int>
-      </InfiniteDirections>
-      <FiniteDirections>
-        <int>336</int>
-        <int>4581</int>
-        <int>4584</int>
-        <int>4587</int>
-        <int>5089</int>
-        <int>5143</int>
-        <int>5615</int>
-        <int>5568</int>
-        <int>5608</int>
-        <int>6231</int>
-      </FiniteDirections>
-      <Fasteners>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>1084</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>2653.5878957159644</Diameter>
-          <Name>TXT-1 - MB2 vis M3 x 12-3</Name>
-          <OverallLength>13603.334757319974</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener />
-        </Fastener>
-      </Fasteners>
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a42</name>
+      <name>a99</name>
       <localLabels />
       <localVariables />
       <From>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-1</From>
-      <To>TXT-1 - Chassis-1 MS7 axe-3</To>
+      <To>TXT-1 - Chassis-1 MS7 axe-4</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
@@ -33319,15 +33771,14 @@
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a43</name>
+      <name>a100</name>
       <localLabels />
       <localVariables />
-      <From>TXT-1 - Chassis-1 Pare-chocs avant-1 G6 bumper-1 bumper1-2</From>
-      <To>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-2</To>
+      <From>TXT-1 - Chassis-1 Demi chassis-1 chassis-1</From>
+      <To>TXT-1 - Chassis-1 MB3 vis M3 x 16-10</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
-        <int>0</int>
         <int>3112</int>
       </InfiniteDirections>
       <FiniteDirections />
@@ -33336,7 +33787,23 @@
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a44</name>
+      <name>a101</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</From>
+      <To>TXT-1 - Chassis-1 MB3 vis M3 x 16-5</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a102</name>
       <localLabels />
       <localVariables />
       <From>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</From>
@@ -33344,53 +33811,53 @@
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
-        <int>1544</int>
         <int>1470</int>
         <int>1480</int>
         <int>1566</int>
         <int>1488</int>
         <int>1969</int>
         <int>1975</int>
-        <int>2023</int>
         <int>1981</int>
+        <int>1989</int>
+        <int>2011</int>
+        <int>2023</int>
         <int>2080</int>
         <int>2308</int>
-        <int>1989</int>
         <int>2573</int>
-        <int>2011</int>
         <int>2547</int>
-        <int>2474</int>
         <int>2460</int>
+        <int>2474</int>
         <int>2583</int>
-        <int>2941</int>
         <int>2617</int>
-        <int>3061</int>
-        <int>2707</int>
-        <int>3082</int>
-        <int>3159</int>
+        <int>2794</int>
         <int>2838</int>
         <int>2863</int>
-        <int>3426</int>
+        <int>2941</int>
+        <int>3061</int>
+        <int>3082</int>
+        <int>3159</int>
         <int>3332</int>
         <int>3339</int>
+        <int>3426</int>
         <int>3820</int>
-        <int>4205</int>
         <int>3674</int>
-        <int>4294</int>
-        <int>4127</int>
         <int>3681</int>
         <int>3684</int>
         <int>3861</int>
+        <int>4205</int>
+        <int>4045</int>
+        <int>4127</int>
+        <int>4170</int>
+        <int>4209</int>
+        <int>4369</int>
         <int>4489</int>
         <int>4545</int>
         <int>4478</int>
-        <int>4659</int>
-        <int>4170</int>
         <int>6230</int>
+        <int>1544</int>
         <int>3115</int>
         <int>6231</int>
-        <int>4209</int>
-        <int>4369</int>
+        <int>4659</int>
       </InfiniteDirections>
       <FiniteDirections>
         <int>1467</int>
@@ -33401,15 +33868,51 @@
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a45</name>
+      <name>a103</name>
       <localLabels />
       <localVariables />
-      <From>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</From>
-      <To>TXT-1 - Chassis-1 MS7 axe-6</To>
+      <From>TXT-1 - MC1 vis M3 x 16-9</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 F5 support de carro-2</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
-        <int>1544</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a104</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - MC1 vis M3 x 16-15</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 F5 support de carro-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a105</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</From>
+      <To>TXT-1 - Chassis-1 MS7 axe-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1467</int>
+        <int>1470</int>
+        <int>1473</int>
+        <int>1480</int>
+        <int>1566</int>
         <int>1488</int>
         <int>1969</int>
         <int>1975</int>
@@ -33422,55 +33925,50 @@
         <int>2573</int>
         <int>2547</int>
         <int>2460</int>
-        <int>1480</int>
         <int>2474</int>
-        <int>1566</int>
         <int>2583</int>
-        <int>2941</int>
         <int>2617</int>
-        <int>3061</int>
-        <int>2707</int>
-        <int>3082</int>
+        <int>2794</int>
         <int>2838</int>
         <int>2863</int>
+        <int>2941</int>
+        <int>3061</int>
+        <int>3082</int>
         <int>3159</int>
-        <int>3426</int>
         <int>3332</int>
+        <int>3339</int>
+        <int>3426</int>
         <int>3820</int>
         <int>3674</int>
         <int>3681</int>
-        <int>3339</int>
         <int>3684</int>
-        <int>4205</int>
         <int>3861</int>
-        <int>4294</int>
-        <int>4489</int>
+        <int>4205</int>
+        <int>4045</int>
         <int>4127</int>
-        <int>4545</int>
         <int>4170</int>
-        <int>4478</int>
         <int>4209</int>
+        <int>4369</int>
+        <int>4489</int>
+        <int>4545</int>
+        <int>4478</int>
         <int>6230</int>
+        <int>1544</int>
         <int>3115</int>
         <int>6231</int>
-        <int>4369</int>
         <int>4659</int>
       </InfiniteDirections>
-      <FiniteDirections>
-        <int>1467</int>
-        <int>1470</int>
-        <int>1473</int>
-      </FiniteDirections>
+      <FiniteDirections />
       <Fasteners />
       <Certainty>1</Certainty>
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a46</name>
+      <name>a106</name>
       <localLabels />
       <localVariables />
-      <From>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-2</From>
-      <To>TXT-1 - Chassis-1 MS7 axe-3</To>
+      <From>TXT-1 - Chassis-1 MS7 axe-2</From>
+      <To>TXT-1 - Chassis-1 MB3 vis M3 x 16-10</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
@@ -33483,7 +33981,59 @@
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a47</name>
+      <name>a107</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 MB3 vis M3 x 16-9</From>
+      <To>TXT-1 - Chassis-1 MS7 axe-4</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>3112</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a108</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - MB2 vis M3 x 12-2</From>
+      <To>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-2</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1503</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>4618</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a109</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</From>
+      <To>TXT-1 - Chassis-1 MB3 vis M3 x 16-6</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a110</name>
       <localLabels />
       <localVariables />
       <From>TXT-1 - C2 boitier batterie-1</From>
@@ -33492,57 +34042,74 @@
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
         <int>1046</int>
-        <int>4659</int>
+        <int>3624</int>
+        <int>3820</int>
+        <int>3952</int>
         <int>4029</int>
         <int>4045</int>
         <int>4205</int>
         <int>4357</int>
         <int>4377</int>
-        <int>4601</int>
+        <int>4441</int>
         <int>4478</int>
-        <int>4581</int>
-        <int>6231</int>
+        <int>4609</int>
         <int>4759</int>
         <int>4935</int>
-        <int>3624</int>
-        <int>5128</int>
-        <int>3820</int>
+        <int>4999</int>
         <int>5036</int>
         <int>5148</int>
         <int>5267</int>
-        <int>3880</int>
         <int>5441</int>
-        <int>5615</int>
-        <int>5568</int>
+        <int>5455</int>
+        <int>5637</int>
+        <int>6231</int>
+        <int>4659</int>
       </InfiniteDirections>
       <FiniteDirections>
         <int>0</int>
         <int>116</int>
         <int>126</int>
-        <int>481</int>
+        <int>443</int>
         <int>500</int>
-        <int>974</int>
-        <int>1544</int>
-        <int>2707</int>
-        <int>2941</int>
-        <int>3061</int>
+        <int>926</int>
         <int>2068</int>
         <int>2308</int>
         <int>2573</int>
+        <int>2794</int>
+        <int>2941</int>
+        <int>3061</int>
         <int>3159</int>
         <int>3293</int>
         <int>3412</int>
         <int>3465</int>
-        <int>3525</int>
+        <int>3581</int>
         <int>3893</int>
         <int>5307</int>
-        <int>5608</int>
-        <int>5948</int>
         <int>5855</int>
         <int>6024</int>
+        <int>1544</int>
+        <int>5733</int>
         <int>3115</int>
+        <int>5848</int>
       </FiniteDirections>
       <Fasteners>
+        <Fastener>
+          <Time>0</Time>
+          <TimeSD>0</TimeSD>
+          <InstallDistance>0</InstallDistance>
+          <RemovalDirection>4645</RemovalDirection>
+          <Certainty>1</Certainty>
+          <Tool>PhillipsBlade</Tool>
+          <ToolSize>0</ToolSize>
+          <Diameter>3081721.8203162928</Diameter>
+          <Name>TXT-1 - MF5vis de montage-1</Name>
+          <OverallLength>21796.87454661524</OverallLength>
+          <EngagedLength>11847.421521412511</EngagedLength>
+          <AccessCylinderRadius>0</AccessCylinderRadius>
+          <FastenerType>Bolt</FastenerType>
+          <NumberOfThreads>0</NumberOfThreads>
+          <PartsLockedByFastener />
+        </Fastener>
         <Fastener>
           <Time>0</Time>
           <TimeSD>0</TimeSD>
@@ -33569,7 +34136,7 @@
           <Tool>PhillipsBlade</Tool>
           <ToolSize>0</ToolSize>
           <Diameter>3081721.8203162928</Diameter>
-          <Name>TXT-1 - MF5vis de montage-1</Name>
+          <Name>TXT-1 - MF5vis de montage-2</Name>
           <OverallLength>21796.87454661524</OverallLength>
           <EngagedLength>11847.421521412511</EngagedLength>
           <AccessCylinderRadius>0</AccessCylinderRadius>
@@ -33582,44 +34149,666 @@
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a48</name>
+      <name>a111</name>
       <localLabels />
       <localVariables />
-      <From>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-1</From>
+      <From>TXT-1 - MB2 vis M3 x 12-1</From>
       <To>TXT-1 - C3 platine RC-1</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
-        <int>1544</int>
-        <int>4595</int>
-        <int>6231</int>
-        <int>4598</int>
+        <int>1503</int>
       </InfiniteDirections>
       <FiniteDirections />
-      <Fasteners>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>1084</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>2653.5909874754084</Diameter>
-          <Name>TXT-1 - MB2 vis M3 x 12-1</Name>
-          <OverallLength>13603.344314302858</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener />
-        </Fastener>
-      </Fasteners>
+      <Fasteners />
       <Certainty>1</Certainty>
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a49</name>
+      <name>a112</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Pare-chocs avant-1 G6 bumper-1 bumper1-1</From>
+      <To>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-2</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a113</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</From>
+      <To>TXT-1 - Chassis-1 MS7 axe-2</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1467</int>
+        <int>1470</int>
+        <int>1473</int>
+        <int>1480</int>
+        <int>1566</int>
+        <int>1488</int>
+        <int>1969</int>
+        <int>1975</int>
+        <int>1981</int>
+        <int>1989</int>
+        <int>2011</int>
+        <int>2023</int>
+        <int>2080</int>
+        <int>2308</int>
+        <int>2573</int>
+        <int>2547</int>
+        <int>2460</int>
+        <int>2474</int>
+        <int>2583</int>
+        <int>2617</int>
+        <int>2794</int>
+        <int>2838</int>
+        <int>2863</int>
+        <int>2941</int>
+        <int>3061</int>
+        <int>3082</int>
+        <int>3159</int>
+        <int>3332</int>
+        <int>3820</int>
+        <int>3339</int>
+        <int>3674</int>
+        <int>3426</int>
+        <int>3684</int>
+        <int>3681</int>
+        <int>3861</int>
+        <int>4045</int>
+        <int>4205</int>
+        <int>4369</int>
+        <int>4127</int>
+        <int>4170</int>
+        <int>4489</int>
+        <int>4545</int>
+        <int>4209</int>
+        <int>4659</int>
+        <int>4478</int>
+        <int>6230</int>
+        <int>1544</int>
+        <int>3115</int>
+        <int>6231</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a114</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</From>
+      <To>TXT-1 - Chassis-1 MS7 axe-6</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1480</int>
+        <int>1566</int>
+        <int>1488</int>
+        <int>1969</int>
+        <int>1975</int>
+        <int>1981</int>
+        <int>1989</int>
+        <int>2011</int>
+        <int>2023</int>
+        <int>2080</int>
+        <int>2308</int>
+        <int>2573</int>
+        <int>2547</int>
+        <int>2460</int>
+        <int>2474</int>
+        <int>2583</int>
+        <int>2617</int>
+        <int>2794</int>
+        <int>2838</int>
+        <int>2863</int>
+        <int>2941</int>
+        <int>3061</int>
+        <int>3082</int>
+        <int>3159</int>
+        <int>3332</int>
+        <int>3339</int>
+        <int>3426</int>
+        <int>3820</int>
+        <int>3674</int>
+        <int>3681</int>
+        <int>3684</int>
+        <int>3861</int>
+        <int>4205</int>
+        <int>4045</int>
+        <int>4127</int>
+        <int>4170</int>
+        <int>4209</int>
+        <int>4369</int>
+        <int>4489</int>
+        <int>4545</int>
+        <int>4478</int>
+        <int>6230</int>
+        <int>1544</int>
+        <int>3115</int>
+        <int>6231</int>
+        <int>4659</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>1467</int>
+        <int>1470</int>
+        <int>1473</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a115</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - F1 support de carro-4</From>
+      <To>TXT-1 - MC1 vis M3 x 16-11</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a116</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Pare-chocs avant-1 G6 bumper-1 bumper1-2</From>
+      <To>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-2</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a117</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - F1 support de carro-4</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 F5 support de carro-2</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a118</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - F1 support de carro-1</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 F5 support de carro-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a119</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - C2 boitier batterie-1</From>
+      <To>TXT-1 - Chassis-1 MS7 axe-6</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>116</int>
+        <int>120</int>
+        <int>340</int>
+        <int>452</int>
+        <int>443</int>
+        <int>591</int>
+        <int>762</int>
+        <int>938</int>
+        <int>956</int>
+        <int>926</int>
+        <int>1235</int>
+        <int>1307</int>
+        <int>1523</int>
+        <int>1820</int>
+        <int>1969</int>
+        <int>2080</int>
+        <int>2099</int>
+        <int>2068</int>
+        <int>2364</int>
+        <int>2427</int>
+        <int>2583</int>
+        <int>2573</int>
+        <int>2765</int>
+        <int>2947</int>
+        <int>2941</int>
+        <int>3159</int>
+        <int>3339</int>
+        <int>3495</int>
+        <int>3893</int>
+        <int>3820</int>
+        <int>4029</int>
+        <int>4205</int>
+        <int>4441</int>
+        <int>4357</int>
+        <int>4545</int>
+        <int>4759</int>
+        <int>5148</int>
+        <int>5154</int>
+        <int>5441</int>
+        <int>5637</int>
+        <int>5642</int>
+        <int>6036</int>
+        <int>6230</int>
+        <int>1544</int>
+        <int>3115</int>
+        <int>6231</int>
+        <int>5835</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a120</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 MB3 vis M3 x 16-9</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-1 chassis-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a121</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - G5 support de carrosserie-1</From>
+      <To>TXT-1 - MC1 vis M3 x 16-10</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>116</int>
+        <int>120</int>
+        <int>340</int>
+        <int>452</int>
+        <int>443</int>
+        <int>591</int>
+        <int>762</int>
+        <int>938</int>
+        <int>956</int>
+        <int>926</int>
+        <int>1235</int>
+        <int>1523</int>
+        <int>1820</int>
+        <int>2080</int>
+        <int>2099</int>
+        <int>2364</int>
+        <int>2427</int>
+        <int>2583</int>
+        <int>2573</int>
+        <int>2765</int>
+        <int>2947</int>
+        <int>2941</int>
+        <int>3159</int>
+        <int>3465</int>
+        <int>3820</int>
+        <int>4357</int>
+        <int>4598</int>
+        <int>4595</int>
+        <int>5126</int>
+        <int>5642</int>
+        <int>5575</int>
+        <int>5835</int>
+        <int>6230</int>
+        <int>3115</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>1307</int>
+        <int>1969</int>
+        <int>2068</int>
+        <int>3495</int>
+        <int>3893</int>
+        <int>4029</int>
+        <int>4441</int>
+        <int>4999</int>
+        <int>5096</int>
+        <int>5832</int>
+        <int>1544</int>
+        <int>6231</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>0.23599151996672096</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a122</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 F5 support de carro-2</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>116</int>
+        <int>126</int>
+        <int>443</int>
+        <int>500</int>
+        <int>926</int>
+        <int>1046</int>
+        <int>4609</int>
+        <int>4478</int>
+        <int>4587</int>
+        <int>4595</int>
+        <int>4598</int>
+        <int>5154</int>
+        <int>5089</int>
+        <int>5148</int>
+        <int>5036</int>
+        <int>5126</int>
+        <int>5267</int>
+        <int>5642</int>
+        <int>5575</int>
+        <int>5455</int>
+        <int>5550</int>
+        <int>5896</int>
+        <int>5953</int>
+        <int>6036</int>
+        <int>1544</int>
+        <int>6231</int>
+        <int>4659</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a123</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - C2 boitier batterie-1</From>
+      <To>TXT-1 - MB2 vis M3 x 12-3</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>4618</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a124</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - MB2 vis M3 x 12-2</From>
+      <To>TXT-1 - C3 platine RC-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1503</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a125</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - F1 support de carro-3</From>
+      <To>TXT-1 - MC1 vis M3 x 16-10</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a126</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - C2 boitier batterie-1</From>
+      <To>TXT-1 - MB2 vis M3 x 12-6</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>4618</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a127</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - G5 support de carrosserie-2</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 F5 support de carro-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>120</int>
+        <int>938</int>
+        <int>2080</int>
+        <int>452</int>
+        <int>2583</int>
+        <int>2947</int>
+        <int>6230</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>3115</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a128</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - C2 boitier batterie-1</From>
+      <To>TXT-1 - MB2 vis M3 x 12-4</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>4618</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a129</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - MB2 vis M3 x 12-8</From>
+      <To>TXT-1 - C3 platine RC-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1467</int>
+        <int>1470</int>
+        <int>1473</int>
+        <int>1480</int>
+        <int>1566</int>
+        <int>1975</int>
+        <int>1981</int>
+        <int>2023</int>
+        <int>2080</int>
+        <int>1989</int>
+        <int>2011</int>
+        <int>2308</int>
+        <int>2583</int>
+        <int>2547</int>
+        <int>2617</int>
+        <int>2737</int>
+        <int>2794</int>
+        <int>2863</int>
+        <int>2941</int>
+        <int>2974</int>
+        <int>3082</int>
+        <int>1969</int>
+        <int>2573</int>
+        <int>4659</int>
+        <int>2474</int>
+        <int>6230</int>
+        <int>1544</int>
+        <int>3115</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a130</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 MB3 vis M3 x 16-7</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-1 chassis-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a131</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - MC1 vis M3 x 16-11</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 F5 support de carro-2</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a132</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 Demi chassis-1 chassis-1</From>
+      <To>TXT-1 - Chassis-1 MB3 vis M3 x 16-8</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a133</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - G5 support de carrosserie-2</From>
+      <To>TXT-1 - F1 support de carro-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections />
+      <FiniteDirections>
+        <int>1503</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a134</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - MC1 vis M3 x 16-14</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-2 F5 support de carro-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a135</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - MC1 vis M3 x 16-14</From>
+      <To>TXT-1 - F1 support de carro-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a136</name>
       <localLabels />
       <localVariables />
       <From>TXT-1 - C2 boitier batterie-1</From>
@@ -33629,49 +34818,49 @@
       <InfiniteDirections>
         <int>0</int>
         <int>120</int>
-        <int>124</int>
+        <int>126</int>
         <int>349</int>
+        <int>500</int>
         <int>705</int>
-        <int>336</int>
         <int>731</int>
-        <int>780</int>
-        <int>1241</int>
+        <int>1046</int>
         <int>938</int>
-        <int>4659</int>
-        <int>1672</int>
         <int>1115</int>
-        <int>1989</int>
+        <int>1241</int>
         <int>1300</int>
         <int>1931</int>
+        <int>1672</int>
+        <int>1989</int>
         <int>2231</int>
-        <int>2235</int>
-        <int>2914</int>
+        <int>2308</int>
+        <int>2838</int>
         <int>2460</int>
+        <int>2794</int>
         <int>3078</int>
         <int>2611</int>
-        <int>3140</int>
+        <int>3145</int>
         <int>3293</int>
+        <int>3952</int>
         <int>3412</int>
-        <int>3525</int>
-        <int>3624</int>
-        <int>4581</int>
-        <int>4829</int>
-        <int>3880</int>
-        <int>5112</int>
+        <int>3581</int>
         <int>4029</int>
-        <int>2838</int>
+        <int>3624</int>
         <int>4045</int>
-        <int>5615</int>
+        <int>4829</int>
         <int>4170</int>
-        <int>5096</int>
-        <int>5608</int>
+        <int>5036</int>
         <int>4584</int>
+        <int>5096</int>
+        <int>4609</int>
         <int>5313</int>
-        <int>5948</int>
+        <int>5550</int>
         <int>5541</int>
+        <int>5588</int>
+        <int>5931</int>
         <int>6230</int>
         <int>3115</int>
         <int>6231</int>
+        <int>4659</int>
       </InfiniteDirections>
       <FiniteDirections>
         <int>452</int>
@@ -33683,7 +34872,135 @@
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a50</name>
+      <name>a137</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - G5 support de carrosserie-1</From>
+      <To>TXT-1 - MC1 vis M3 x 16-11</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>116</int>
+        <int>120</int>
+        <int>340</int>
+        <int>452</int>
+        <int>443</int>
+        <int>591</int>
+        <int>762</int>
+        <int>938</int>
+        <int>956</int>
+        <int>1235</int>
+        <int>1523</int>
+        <int>1975</int>
+        <int>1969</int>
+        <int>2099</int>
+        <int>2080</int>
+        <int>2068</int>
+        <int>2427</int>
+        <int>2474</int>
+        <int>2583</int>
+        <int>2573</int>
+        <int>2765</int>
+        <int>2947</int>
+        <int>3037</int>
+        <int>3159</int>
+        <int>3339</int>
+        <int>3674</int>
+        <int>3820</int>
+        <int>4205</int>
+        <int>4357</int>
+        <int>4759</int>
+        <int>5148</int>
+        <int>5835</int>
+        <int>6230</int>
+        <int>5441</int>
+        <int>3115</int>
+        <int>5637</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>926</int>
+        <int>1307</int>
+        <int>3426</int>
+        <int>4029</int>
+        <int>4441</int>
+        <int>4545</int>
+        <int>5154</int>
+        <int>6036</int>
+        <int>1544</int>
+        <int>6231</int>
+        <int>5642</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>0.23599222190732572</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a138</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - MC1 vis M3 x 16-9</From>
+      <To>TXT-1 - G5 support de carrosserie-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>591</int>
+        <int>956</int>
+        <int>926</int>
+        <int>1235</int>
+        <int>1523</int>
+        <int>1975</int>
+        <int>2099</int>
+        <int>2474</int>
+        <int>3037</int>
+        <int>2573</int>
+        <int>3145</int>
+        <int>2765</int>
+        <int>3820</int>
+        <int>3339</int>
+        <int>4029</int>
+        <int>4759</int>
+        <int>3426</int>
+        <int>4205</int>
+        <int>4357</int>
+        <int>3674</int>
+        <int>4441</int>
+        <int>5096</int>
+        <int>4545</int>
+        <int>5154</int>
+        <int>0</int>
+        <int>116</int>
+        <int>443</int>
+        <int>5126</int>
+        <int>120</int>
+        <int>340</int>
+        <int>5832</int>
+        <int>5575</int>
+        <int>5642</int>
+        <int>5835</int>
+        <int>3115</int>
+        <int>6231</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>762</int>
+        <int>938</int>
+        <int>1307</int>
+        <int>1969</int>
+        <int>2080</int>
+        <int>2068</int>
+        <int>2427</int>
+        <int>2947</int>
+        <int>2583</int>
+        <int>452</int>
+        <int>6230</int>
+        <int>1544</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>0.21736939423240476</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a139</name>
       <localLabels />
       <localVariables />
       <From>TXT-1 - Chassis-1 Pare-chocs avant-1 G6 bumper-1 bumper1-1</From>
@@ -33700,72 +35017,72 @@
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a51</name>
+      <name>a140</name>
       <localLabels />
       <localVariables />
-      <From>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</From>
-      <To>TXT-1 - Chassis-1 MS7 axe-3</To>
+      <From>TXT-1 - Chassis-1 MS7 axe-1</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-1 chassis-1</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
-        <int>1544</int>
+        <int>1467</int>
         <int>1470</int>
         <int>1473</int>
+        <int>1480</int>
+        <int>1566</int>
         <int>1969</int>
         <int>1975</int>
         <int>1981</int>
-        <int>1566</int>
-        <int>2023</int>
         <int>1989</int>
-        <int>2080</int>
         <int>2011</int>
-        <int>2474</int>
+        <int>2023</int>
+        <int>2080</int>
         <int>2308</int>
         <int>2573</int>
-        <int>2583</int>
-        <int>2941</int>
-        <int>2617</int>
-        <int>3061</int>
-        <int>2707</int>
         <int>2547</int>
-        <int>3332</int>
-        <int>2838</int>
-        <int>3082</int>
-        <int>2863</int>
-        <int>3159</int>
-        <int>3426</int>
         <int>2460</int>
-        <int>4205</int>
-        <int>3820</int>
+        <int>2474</int>
+        <int>2583</int>
+        <int>2617</int>
+        <int>2794</int>
+        <int>2838</int>
+        <int>2863</int>
+        <int>2941</int>
+        <int>3061</int>
+        <int>3082</int>
+        <int>3159</int>
+        <int>3332</int>
         <int>3339</int>
-        <int>4489</int>
+        <int>3426</int>
+        <int>3820</int>
         <int>3674</int>
-        <int>4294</int>
         <int>3681</int>
         <int>3684</int>
-        <int>4209</int>
-        <int>4127</int>
         <int>3861</int>
-        <int>4545</int>
-        <int>3115</int>
-        <int>4369</int>
-        <int>6231</int>
-        <int>4659</int>
+        <int>4205</int>
+        <int>4045</int>
+        <int>4127</int>
         <int>4170</int>
+        <int>4209</int>
         <int>4478</int>
+        <int>4545</int>
+        <int>4369</int>
+        <int>3115</int>
+        <int>4489</int>
         <int>6230</int>
+        <int>6231</int>
+        <int>1544</int>
+        <int>4659</int>
       </InfiniteDirections>
       <FiniteDirections>
-        <int>1467</int>
         <int>1488</int>
-        <int>1480</int>
       </FiniteDirections>
       <Fasteners />
       <Certainty>1</Certainty>
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a52</name>
+      <name>a141</name>
       <localLabels />
       <localVariables />
       <From>TXT-1 - G5 support de carrosserie-1</From>
@@ -33778,225 +35095,319 @@
         <int>452</int>
         <int>938</int>
         <int>2080</int>
-        <int>2947</int>
         <int>2583</int>
+        <int>2947</int>
         <int>6230</int>
       </InfiniteDirections>
       <FiniteDirections>
         <int>3115</int>
       </FiniteDirections>
-      <Fasteners>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>3028</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>2653.6062121401496</Diameter>
-          <Name>TXT-1 - MC1 vis M3 x 16-11</Name>
-          <OverallLength>17411.884039919125</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener>
-            <int>19</int>
-            <int>25</int>
-            <int>32</int>
-          </PartsLockedByFastener>
-        </Fastener>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>3028</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>2653.6035062404671</Diameter>
-          <Name>TXT-1 - MC1 vis M3 x 16-9</Name>
-          <OverallLength>17411.884063017795</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener>
-            <int>19</int>
-            <int>25</int>
-            <int>32</int>
-          </PartsLockedByFastener>
-        </Fastener>
-      </Fasteners>
+      <Fasteners />
       <Certainty>1</Certainty>
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a53</name>
+      <name>a142</name>
       <localLabels />
       <localVariables />
-      <From>TXT-1 - C2 boitier batterie-1</From>
-      <To>TXT-1 - Chassis-1 MS7 axe-6</To>
+      <From>TXT-1 - MB2 vis M3 x 12-5</From>
+      <To>TXT-1 - C3 platine RC-1</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
         <int>0</int>
         <int>116</int>
         <int>120</int>
-        <int>591</int>
-        <int>762</int>
+        <int>124</int>
+        <int>330</int>
+        <int>336</int>
         <int>340</int>
-        <int>452</int>
-        <int>481</int>
-        <int>1307</int>
-        <int>938</int>
-        <int>956</int>
-        <int>1523</int>
-        <int>1820</int>
-        <int>1969</int>
-        <int>1544</int>
-        <int>974</int>
-        <int>2099</int>
-        <int>1235</int>
-        <int>2080</int>
-        <int>2068</int>
-        <int>2765</int>
-        <int>2573</int>
-        <int>3893</int>
-        <int>2364</int>
-        <int>2947</int>
-        <int>4545</int>
-        <int>2427</int>
-        <int>2941</int>
-        <int>4759</int>
-        <int>3159</int>
-        <int>2583</int>
-        <int>5096</int>
-        <int>3339</int>
-        <int>5615</int>
-        <int>5154</int>
-        <int>5642</int>
-        <int>3495</int>
-        <int>5344</int>
-        <int>3820</int>
-        <int>4029</int>
-        <int>4205</int>
-        <int>4209</int>
-        <int>4357</int>
-        <int>5835</int>
-        <int>6036</int>
+        <int>450</int>
+        <int>477</int>
+        <int>443</int>
+        <int>725</int>
+        <int>765</int>
+        <int>762</int>
+        <int>780</int>
+        <int>1017</int>
+        <int>1241</int>
+        <int>798</int>
+        <int>1032</int>
+        <int>1465</int>
+        <int>1257</int>
+        <int>1401</int>
+        <int>1364</int>
+        <int>1277</int>
         <int>6230</int>
-        <int>3115</int>
-        <int>6231</int>
-      </InfiniteDirections>
-      <FiniteDirections />
-      <Fasteners />
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a54</name>
-      <localLabels />
-      <localVariables />
-      <From>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-2</From>
-      <To>TXT-1 - C3 platine RC-1</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
         <int>1544</int>
-        <int>4598</int>
-        <int>4595</int>
-        <int>6231</int>
-      </InfiniteDirections>
-      <FiniteDirections />
-      <Fasteners>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>1084</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>2653.6090839558437</Diameter>
-          <Name>TXT-1 - MB2 vis M3 x 12-2</Name>
-          <OverallLength>13603.344445700124</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener />
-        </Fastener>
-      </Fasteners>
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a55</name>
-      <localLabels />
-      <localVariables />
-      <From>TXT-1 - Chassis-1 Pare-chocs avant-1 G6 bumper-1 bumper1-2</From>
-      <To>TXT-1 - Chassis-1 Pare-chocs avant-1 G3 support avant-1</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>0</int>
-        <int>3112</int>
-      </InfiniteDirections>
-      <FiniteDirections />
-      <Fasteners />
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a56</name>
-      <localLabels />
-      <localVariables />
-      <From>TXT-1 - Chassis-1 Demi chassis-2 F5 support de carro-1</From>
-      <To>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>1488</int>
-        <int>1473</int>
-        <int>1969</int>
-        <int>1544</int>
-        <int>2573</int>
-        <int>2023</int>
-        <int>1480</int>
-        <int>1981</int>
-        <int>1975</int>
-        <int>2080</int>
-        <int>1566</int>
-        <int>2583</int>
-        <int>1470</int>
-        <int>2547</int>
-        <int>2308</int>
-        <int>2707</int>
-        <int>2474</int>
-        <int>3115</int>
-        <int>3061</int>
-        <int>2617</int>
-        <int>1989</int>
-        <int>2460</int>
-        <int>3082</int>
-        <int>2941</int>
-        <int>6230</int>
-        <int>2838</int>
-        <int>2011</int>
         <int>4659</int>
-        <int>2863</int>
       </InfiniteDirections>
       <FiniteDirections>
-        <int>1467</int>
+        <int>926</int>
       </FiniteDirections>
       <Fasteners />
       <Certainty>1</Certainty>
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a57</name>
+      <name>a143</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - MC1 vis M3 x 16-12</From>
+      <To>TXT-1 - G5 support de carrosserie-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>591</int>
+        <int>0</int>
+        <int>116</int>
+        <int>956</int>
+        <int>1235</int>
+        <int>120</int>
+        <int>2068</int>
+        <int>1523</int>
+        <int>2474</int>
+        <int>1975</int>
+        <int>2573</int>
+        <int>340</int>
+        <int>2947</int>
+        <int>2765</int>
+        <int>1969</int>
+        <int>2099</int>
+        <int>443</int>
+        <int>4759</int>
+        <int>5096</int>
+        <int>5154</int>
+        <int>4029</int>
+        <int>3820</int>
+        <int>5126</int>
+        <int>5832</int>
+        <int>5575</int>
+        <int>5835</int>
+        <int>5642</int>
+        <int>4205</int>
+        <int>3426</int>
+        <int>4357</int>
+        <int>4441</int>
+        <int>4545</int>
+        <int>3037</int>
+        <int>3115</int>
+        <int>3674</int>
+        <int>6231</int>
+        <int>3145</int>
+        <int>3339</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>762</int>
+        <int>938</int>
+        <int>926</int>
+        <int>1307</int>
+        <int>2427</int>
+        <int>2583</int>
+        <int>452</int>
+        <int>2080</int>
+        <int>6230</int>
+        <int>1544</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>0.21736868037923929</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a144</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - MC1 vis M3 x 16-14</From>
+      <To>TXT-1 - G5 support de carrosserie-2</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>591</int>
+        <int>1523</int>
+        <int>0</int>
+        <int>956</int>
+        <int>116</int>
+        <int>926</int>
+        <int>1975</int>
+        <int>1235</int>
+        <int>120</int>
+        <int>2474</int>
+        <int>340</int>
+        <int>3820</int>
+        <int>4759</int>
+        <int>3037</int>
+        <int>4029</int>
+        <int>3426</int>
+        <int>4357</int>
+        <int>3674</int>
+        <int>3145</int>
+        <int>443</int>
+        <int>2573</int>
+        <int>5096</int>
+        <int>4441</int>
+        <int>4205</int>
+        <int>2099</int>
+        <int>3115</int>
+        <int>2765</int>
+        <int>6231</int>
+        <int>3339</int>
+        <int>5126</int>
+        <int>4545</int>
+        <int>5832</int>
+        <int>5642</int>
+        <int>5154</int>
+        <int>5575</int>
+        <int>5835</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>1307</int>
+        <int>762</int>
+        <int>2068</int>
+        <int>938</int>
+        <int>2427</int>
+        <int>1969</int>
+        <int>2947</int>
+        <int>452</int>
+        <int>2583</int>
+        <int>1544</int>
+        <int>2080</int>
+        <int>6230</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>0.21744621037763068</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a145</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - Chassis-1 MS7 axe-2</From>
+      <To>TXT-1 - Chassis-1 Demi chassis-1 chassis-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>1467</int>
+        <int>1470</int>
+        <int>1473</int>
+        <int>1480</int>
+        <int>1969</int>
+        <int>2583</int>
+        <int>3061</int>
+        <int>2617</int>
+        <int>3082</int>
+        <int>3820</int>
+        <int>1975</int>
+        <int>2080</int>
+        <int>4545</int>
+        <int>3159</int>
+        <int>2794</int>
+        <int>1989</int>
+        <int>3674</int>
+        <int>2011</int>
+        <int>1981</int>
+        <int>3681</int>
+        <int>2308</int>
+        <int>2573</int>
+        <int>3684</int>
+        <int>2023</int>
+        <int>2460</int>
+        <int>2838</int>
+        <int>2547</int>
+        <int>2941</int>
+        <int>3861</int>
+        <int>2863</int>
+        <int>3332</int>
+        <int>2474</int>
+        <int>4127</int>
+        <int>4205</int>
+        <int>3339</int>
+        <int>4478</int>
+        <int>4170</int>
+        <int>4045</int>
+        <int>3426</int>
+        <int>6231</int>
+        <int>1566</int>
+        <int>4659</int>
+        <int>4209</int>
+        <int>6230</int>
+        <int>4369</int>
+        <int>1544</int>
+        <int>4489</int>
+        <int>3115</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>1488</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a146</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - MC1 vis M3 x 16-16</From>
+      <To>TXT-1 - G5 support de carrosserie-2</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>2947</int>
+        <int>591</int>
+        <int>2068</int>
+        <int>1523</int>
+        <int>116</int>
+        <int>1975</int>
+        <int>4759</int>
+        <int>3820</int>
+        <int>956</int>
+        <int>120</int>
+        <int>2474</int>
+        <int>1969</int>
+        <int>5096</int>
+        <int>1235</int>
+        <int>4029</int>
+        <int>2099</int>
+        <int>2573</int>
+        <int>340</int>
+        <int>2765</int>
+        <int>4205</int>
+        <int>443</int>
+        <int>5154</int>
+        <int>5832</int>
+        <int>5126</int>
+        <int>5835</int>
+        <int>4357</int>
+        <int>5575</int>
+        <int>3339</int>
+        <int>5642</int>
+        <int>4441</int>
+        <int>3037</int>
+        <int>3115</int>
+        <int>3426</int>
+        <int>6231</int>
+        <int>4545</int>
+        <int>3145</int>
+        <int>3674</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>1307</int>
+        <int>762</int>
+        <int>2427</int>
+        <int>938</int>
+        <int>926</int>
+        <int>2583</int>
+        <int>2080</int>
+        <int>452</int>
+        <int>6230</int>
+        <int>1544</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>0.21744549657364498</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a147</name>
       <localLabels />
       <localVariables />
       <From>TXT-1 - F1 support de carro-3</From>
@@ -34007,284 +35418,12 @@
         <int>4618</int>
       </InfiniteDirections>
       <FiniteDirections />
-      <Fasteners>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>0</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>2653.606212140347</Diameter>
-          <Name>TXT-1 - MC1 vis M3 x 16-10</Name>
-          <OverallLength>17411.817701604894</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener>
-            <int>3</int>
-            <int>25</int>
-            <int>28</int>
-          </PartsLockedByFastener>
-        </Fastener>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>0</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>2653.603506240077</Diameter>
-          <Name>TXT-1 - MC1 vis M3 x 16-12</Name>
-          <OverallLength>17411.817724703822</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener>
-            <int>3</int>
-            <int>25</int>
-            <int>28</int>
-          </PartsLockedByFastener>
-        </Fastener>
-      </Fasteners>
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a58</name>
-      <localLabels />
-      <localVariables />
-      <From>TXT-1 - F1 support de carro-1</From>
-      <To>TXT-1 - G5 support de carrosserie-2</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections />
-      <FiniteDirections>
-        <int>4618</int>
-      </FiniteDirections>
-      <Fasteners>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>3028</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>2653.6183934538058</Diameter>
-          <Name>TXT-1 - MC1 vis M3 x 16-15</Name>
-          <OverallLength>17411.884212922534</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener>
-            <int>29</int>
-            <int>30</int>
-            <int>31</int>
-          </PartsLockedByFastener>
-        </Fastener>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>3028</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>2653.61854085336</Diameter>
-          <Name>TXT-1 - MC1 vis M3 x 16-14</Name>
-          <OverallLength>17411.884463723713</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener>
-            <int>29</int>
-            <int>30</int>
-            <int>31</int>
-          </PartsLockedByFastener>
-        </Fastener>
-      </Fasteners>
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a59</name>
-      <localLabels />
-      <localVariables />
-      <From>TXT-1 - Chassis-1 Demi chassis-2 chassis-1</From>
-      <To>TXT-1 - Chassis-1 Demi chassis-2 F5 support de carro-2</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>4581</int>
-        <int>0</int>
-        <int>5575</int>
-        <int>5126</int>
-        <int>5143</int>
-        <int>4595</int>
-        <int>4584</int>
-        <int>974</int>
-        <int>1046</int>
-        <int>4587</int>
-        <int>5953</int>
-        <int>5642</int>
-        <int>500</int>
-        <int>116</int>
-        <int>481</int>
-        <int>5948</int>
-        <int>5096</int>
-        <int>5089</int>
-        <int>6231</int>
-        <int>126</int>
-        <int>5112</int>
-        <int>5154</int>
-        <int>1544</int>
-        <int>5896</int>
-        <int>4598</int>
-        <int>5568</int>
-        <int>5615</int>
-        <int>4659</int>
-      </InfiniteDirections>
-      <FiniteDirections />
       <Fasteners />
       <Certainty>1</Certainty>
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a60</name>
-      <localLabels />
-      <localVariables />
-      <From>TXT-1 - Chassis-1 Demi chassis-2 F5 support de carro-1</From>
-      <To>TXT-1 - G5 support de carrosserie-2</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>3259</int>
-        <int>6231</int>
-        <int>3115</int>
-        <int>5615</int>
-        <int>4029</int>
-        <int>3495</int>
-        <int>5267</int>
-        <int>6036</int>
-      </InfiniteDirections>
-      <FiniteDirections>
-        <int>0</int>
-      </FiniteDirections>
-      <Fasteners>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>3028</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>2653.6183934538058</Diameter>
-          <Name>TXT-1 - MC1 vis M3 x 16-15</Name>
-          <OverallLength>17411.884212922534</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener>
-            <int>29</int>
-            <int>30</int>
-            <int>31</int>
-          </PartsLockedByFastener>
-        </Fastener>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>3028</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>2653.61854085336</Diameter>
-          <Name>TXT-1 - MC1 vis M3 x 16-14</Name>
-          <OverallLength>17411.884463723713</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener>
-            <int>29</int>
-            <int>30</int>
-            <int>31</int>
-          </PartsLockedByFastener>
-        </Fastener>
-      </Fasteners>
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a61</name>
-      <localLabels />
-      <localVariables />
-      <From>TXT-1 - F1 support de carro-4</From>
-      <To>TXT-1 - G5 support de carrosserie-1</To>
-      <directed>false</directed>
-      <doublyDirected>false</doublyDirected>
-      <InfiniteDirections>
-        <int>4618</int>
-      </InfiniteDirections>
-      <FiniteDirections />
-      <Fasteners>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>3028</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>2653.6062121401496</Diameter>
-          <Name>TXT-1 - MC1 vis M3 x 16-11</Name>
-          <OverallLength>17411.884039919125</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener>
-            <int>19</int>
-            <int>25</int>
-            <int>32</int>
-          </PartsLockedByFastener>
-        </Fastener>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>3028</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>2653.6035062404671</Diameter>
-          <Name>TXT-1 - MC1 vis M3 x 16-9</Name>
-          <OverallLength>17411.884063017795</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener>
-            <int>19</int>
-            <int>25</int>
-            <int>32</int>
-          </PartsLockedByFastener>
-        </Fastener>
-      </Fasteners>
-      <Certainty>1</Certainty>
-      <ConnectionType>Loose</ConnectionType>
-    </arc>
-    <arc xsi:type="Connection">
-      <name>a62</name>
+      <name>a148</name>
       <localLabels />
       <localVariables />
       <From>TXT-1 - F1 support de carro-2</From>
@@ -34295,109 +35434,252 @@
         <int>4618</int>
       </InfiniteDirections>
       <FiniteDirections />
-      <Fasteners>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>0</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>2653.6183934561864</Diameter>
-          <Name>TXT-1 - MC1 vis M3 x 16-13</Name>
-          <OverallLength>17411.817874604581</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener>
-            <int>2</int>
-            <int>29</int>
-            <int>33</int>
-          </PartsLockedByFastener>
-        </Fastener>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>0</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>2653.6185408513429</Diameter>
-          <Name>TXT-1 - MC1 vis M3 x 16-16</Name>
-          <OverallLength>17411.818125414477</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener>
-            <int>2</int>
-            <int>29</int>
-            <int>33</int>
-          </PartsLockedByFastener>
-        </Fastener>
-      </Fasteners>
+      <Fasteners />
       <Certainty>1</Certainty>
       <ConnectionType>Loose</ConnectionType>
     </arc>
     <arc xsi:type="Connection">
-      <name>a63</name>
+      <name>a149</name>
       <localLabels />
       <localVariables />
-      <From>TXT-1 - Chassis-1 Demi chassis-2 F5 support de carro-1</From>
-      <To>TXT-1 - F1 support de carro-1</To>
+      <From>TXT-1 - F1 support de carro-2</From>
+      <To>TXT-1 - MC1 vis M3 x 16-16</To>
       <directed>false</directed>
       <doublyDirected>false</doublyDirected>
       <InfiniteDirections>
+        <int>0</int>
         <int>3112</int>
       </InfiniteDirections>
       <FiniteDirections />
-      <Fasteners>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>3028</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>2653.6183934538058</Diameter>
-          <Name>TXT-1 - MC1 vis M3 x 16-15</Name>
-          <OverallLength>17411.884212922534</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener>
-            <int>29</int>
-            <int>30</int>
-            <int>31</int>
-          </PartsLockedByFastener>
-        </Fastener>
-        <Fastener>
-          <Time>0</Time>
-          <TimeSD>0</TimeSD>
-          <InstallDistance>0</InstallDistance>
-          <RemovalDirection>3028</RemovalDirection>
-          <Certainty>0</Certainty>
-          <Tool>HexWrench</Tool>
-          <ToolSize>0</ToolSize>
-          <Diameter>2653.61854085336</Diameter>
-          <Name>TXT-1 - MC1 vis M3 x 16-14</Name>
-          <OverallLength>17411.884463723713</OverallLength>
-          <EngagedLength>0</EngagedLength>
-          <AccessCylinderRadius>0</AccessCylinderRadius>
-          <FastenerType>Bolt</FastenerType>
-          <NumberOfThreads>0</NumberOfThreads>
-          <PartsLockedByFastener>
-            <int>29</int>
-            <int>30</int>
-            <int>31</int>
-          </PartsLockedByFastener>
-        </Fastener>
-      </Fasteners>
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a150</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - F1 support de carro-4</From>
+      <To>TXT-1 - G5 support de carrosserie-1</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>4618</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a151</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - F1 support de carro-1</From>
+      <To>TXT-1 - MC1 vis M3 x 16-15</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a152</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - C2 boitier batterie-1</From>
+      <To>TXT-1 - MB2 vis M3 x 12-7</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>4618</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a153</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - G5 support de carrosserie-2</From>
+      <To>TXT-1 - MC1 vis M3 x 16-15</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>2068</int>
+        <int>2947</int>
+        <int>3820</int>
+        <int>762</int>
+        <int>591</int>
+        <int>116</int>
+        <int>3037</int>
+        <int>5835</int>
+        <int>2427</int>
+        <int>452</int>
+        <int>2583</int>
+        <int>1523</int>
+        <int>938</int>
+        <int>120</int>
+        <int>3159</int>
+        <int>3339</int>
+        <int>443</int>
+        <int>5148</int>
+        <int>956</int>
+        <int>6230</int>
+        <int>4759</int>
+        <int>2099</int>
+        <int>4357</int>
+        <int>340</int>
+        <int>2573</int>
+        <int>2474</int>
+        <int>4205</int>
+        <int>3115</int>
+        <int>1975</int>
+        <int>1235</int>
+        <int>5637</int>
+        <int>3674</int>
+        <int>2080</int>
+        <int>2765</int>
+        <int>1969</int>
+        <int>5441</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>1307</int>
+        <int>4029</int>
+        <int>926</int>
+        <int>1544</int>
+        <int>4441</int>
+        <int>6036</int>
+        <int>3426</int>
+        <int>5154</int>
+        <int>4545</int>
+        <int>5642</int>
+        <int>6231</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>0.2360387227989349</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a154</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - F1 support de carro-4</From>
+      <To>TXT-1 - MC1 vis M3 x 16-9</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>3112</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a155</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - G5 support de carrosserie-2</From>
+      <To>TXT-1 - MC1 vis M3 x 16-13</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>926</int>
+        <int>0</int>
+        <int>2941</int>
+        <int>443</int>
+        <int>4595</int>
+        <int>2080</int>
+        <int>2427</int>
+        <int>591</int>
+        <int>3159</int>
+        <int>1235</int>
+        <int>5575</int>
+        <int>3115</int>
+        <int>2099</int>
+        <int>762</int>
+        <int>2583</int>
+        <int>5835</int>
+        <int>3465</int>
+        <int>938</int>
+        <int>2573</int>
+        <int>4357</int>
+        <int>116</int>
+        <int>5126</int>
+        <int>452</int>
+        <int>956</int>
+        <int>1523</int>
+        <int>6230</int>
+        <int>2765</int>
+        <int>340</int>
+        <int>2364</int>
+        <int>1820</int>
+        <int>3820</int>
+        <int>5642</int>
+        <int>2947</int>
+        <int>120</int>
+        <int>4598</int>
+      </InfiniteDirections>
+      <FiniteDirections>
+        <int>1969</int>
+        <int>3893</int>
+        <int>4029</int>
+        <int>4999</int>
+        <int>6231</int>
+        <int>5096</int>
+        <int>2068</int>
+        <int>3495</int>
+        <int>1307</int>
+        <int>5832</int>
+        <int>4441</int>
+        <int>1544</int>
+      </FiniteDirections>
+      <Fasteners />
+      <Certainty>0.23603802088810877</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a156</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - F1 support de carro-2</From>
+      <To>TXT-1 - MC1 vis M3 x 16-13</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
+      <Certainty>1</Certainty>
+      <ConnectionType>Loose</ConnectionType>
+    </arc>
+    <arc xsi:type="Connection">
+      <name>a157</name>
+      <localLabels />
+      <localVariables />
+      <From>TXT-1 - F1 support de carro-3</From>
+      <To>TXT-1 - MC1 vis M3 x 16-12</To>
+      <directed>false</directed>
+      <doublyDirected>false</doublyDirected>
+      <InfiniteDirections>
+        <int>0</int>
+        <int>3112</int>
+      </InfiniteDirections>
+      <FiniteDirections />
+      <Fasteners />
       <Certainty>1</Certainty>
       <ConnectionType>Loose</ConnectionType>
     </arc>
