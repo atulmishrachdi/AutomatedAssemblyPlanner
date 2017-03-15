@@ -1,0 +1,6152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>renderGlobal</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="icon" href="../assets/favicon.ico">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+                <h1><img src="../assets/css/logo.png" title="" width="117" height="52"></h1>
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: </em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+                    <h2 class="off-left">APIs</h2>
+                    <div id="api-tabview" class="tabview">
+                        <ul class="tabs">
+                            <li><a href="#api-classes">Classes</a></li>
+                            <li><a href="#api-elements">Elements</a></li>
+                            <li><a href="#api-modules">Modules</a></li>
+                        </ul>
+                
+                        <div id="api-tabview-filter">
+                            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+                        </div>
+                
+                        <div id="api-tabview-panel">
+                            <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/directionConfirmGlobal.html">directionConfirmGlobal</a></li>
+                                <li><a href="../classes/partTableGlobal.html">partTableGlobal</a></li>
+                                <li><a href="../classes/renderGlobal.html">renderGlobal</a></li>
+                            </ul>
+                
+                                <ul id="api-elements" class="apis elements">
+                                    <li><a href="../elements/inputState.html">&lt;inputState&gt;</a></li>
+                                </ul>
+                
+                            <ul id="api-modules" class="apis modules">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+                    Show:
+                    <label for="api-show-inherited">
+                        <input type="checkbox" id="api-show-inherited" checked>
+                        Inherited
+                    </label>
+            
+                    <label for="api-show-protected">
+                        <input type="checkbox" id="api-show-protected">
+                        Protected
+                    </label>
+            
+                    <label for="api-show-private">
+                        <input type="checkbox" id="api-show-private">
+                        Private
+                    </label>
+                    <label for="api-show-deprecated">
+                        <input type="checkbox" id="api-show-deprecated">
+                        Deprecated
+                    </label>
+            
+                </div>
+            
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+<h1>renderGlobal Class</h1>
+<div class="box meta">
+
+
+        <div class="foundat">
+            Defined in: <a href="../files/.._src_webVis_renderScript.js.html#l6"><code>..\src\webVis\renderScript.js:6</code></a>
+        </div>
+
+
+</div>
+
+
+<div class="box intro">
+    <p>Class containing all the methods used in the 3d visual assembly</p>
+
+</div>
+
+
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+                <div class="index-section methods">
+                    <h3>Methods</h3>
+
+                    <ul class="index-list methods">
+                            <li class="index-item method">
+                                <a href="#method_addArcSubDiv">addArcSubDiv</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_addCurveKeyFrames">addCurveKeyFrames</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_addDisplacement">addDisplacement</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_addGrid">addGrid</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_addGrid">addGrid</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_addLines">addLines</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_alignAssemblyCenter">alignAssemblyCenter</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_animate">animate</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_arrayToString">arrayToString</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_bindPartsToKeyFrames">bindPartsToKeyFrames</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_centerGeometry">centerGeometry</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_combineBounds">combineBounds</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_copyFrame">copyFrame</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_copyFrameList">copyFrameList</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_cutOffNames">cutOffNames</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_cutoffPartNames">cutoffPartNames</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_flipTheTimes">flipTheTimes</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_flipTreeTime">flipTreeTime</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_getChildrenByTag">getChildrenByTag</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_getDepth">getDepth</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_getFirstIntersect">getFirstIntersect</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_getGeometries">getGeometries</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_getGlobBounds">getGlobBounds</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_getLongestTime">getLongestTime</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_getMov">getMov</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_getMovement">getMovement</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_getNameList">getNameList</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_getNames">getNames</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_getPartCenter">getPartCenter</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_getPartNameCutoff">getPartNameCutoff</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_getPartNames">getPartNames</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_getRandomUTF">getRandomUTF</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_getRef">getRef</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_getStdMaterial">getStdMaterial</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_getStdMaterial">getStdMaterial</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_getTimes">getTimes</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_getTreeNames">getTreeNames</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_grab">grab</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_grabExtension">grabExtension</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_grabInd">grabInd</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_grabInterp">grabInterp</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_hasNaN">hasNaN</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_hide">hide</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_hideChildren">hideChildren</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_initAxisLines">initAxisLines</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_insertTreequenceHTML">insertTreequenceHTML</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_interp">interp</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_interpolate">interpolate</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_loadParts">loadParts</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_lockChange">lockChange</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_longestTimeFromFrames">longestTimeFromFrames</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_makeArcPointList">makeArcPointList</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_makeFastenerKeyFrames">makeFastenerKeyFrames</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_makeKeyFrames">makeKeyFrames</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_manageControls">manageControls</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_mergeTrees">mergeTrees</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_mouseMoved">mouseMoved</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_parseStl">parseStl</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_parseStlBinary">parseStlBinary</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_readMultipleFiles">readMultipleFiles</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_registerDown">registerDown</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_registerUp">registerUp</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_render">render</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_renderData">renderData</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_renderParts">renderParts</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_show">show</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_showChildren">showChildren</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_showFrame">showFrame</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_showFrames">showFrames</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_showHideTreequence">showHideTreequence</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_similarityCutoff">similarityCutoff</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_swapHiding">swapHiding</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_trim">trim</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_tryMouseLock">tryMouseLock</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_updateAxisLines">updateAxisLines</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_updateLines">updateLines</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_vecDesc">vecDesc</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_whatsIn">whatsIn</a>
+
+                            </li>
+                    </ul>
+                </div>
+
+
+
+        </div>
+
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
+
+<div id="method_addArcSubDiv" class="method item">
+    <h3 class="name"><code>addArcSubDiv</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>target</code>
+                </li>
+                <li class="arg">
+                        <code>center</code>
+                </li>
+                <li class="arg">
+                        <code>startDisp</code>
+                </li>
+                <li class="arg">
+                        <code>endDisp</code>
+                </li>
+                <li class="arg">
+                        <code>level</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l1257"><code>..\src\webVis\partRender.js:1257</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Recursively adds Vector3 objects onto the Vector3 list, target, interpolating from startDisp
+and endDisp in an arc centered at the Vector3 object center. Each layer of recursion
+adds the midpoint of the arc from startDisp to endDisp until level = 0.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">target</code>
+                        <span class="type">Vector3 Array</span>
+
+
+                    <div class="param-description">
+                        <p>The list where the calculated Vector3 objects should be added</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">center</code>
+                        <span class="type">Vector3</span>
+
+
+                    <div class="param-description">
+                        <p>The point which the generated arc should be centered on</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">startDisp</code>
+                        <span class="type">Vector3</span>
+
+
+                    <div class="param-description">
+                        <p>The starting point of the arc</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">endDisp</code>
+                        <span class="type">Vector3</span>
+
+
+                    <div class="param-description">
+                        <p>The ending point of the arc</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">level</code>
+                        <span class="type">Int</span>
+
+
+                    <div class="param-description">
+                        <p>The desired levels of recursion in the point interpolation</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_addCurveKeyFrames" class="method item">
+    <h3 class="name"><code>addCurveKeyFrames</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theFrameLists</code>
+                </li>
+                <li class="arg">
+                        <code>startLocation</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l1368"><code>..\src\webVis\partRender.js:1368</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Adds keyframes onto the keyframe lists provided so that the keyframed parts begin their
+animation at start location and move in an arc to their previously defined start position</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theFrameLists</code>
+                        <span class="type">Object List</span>
+
+
+                    <div class="param-description">
+                        <p>A list of keyframe lists describing the movement of 3d models</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">startLocation</code>
+                        <span class="type">Vector3</span>
+
+
+                    <div class="param-description">
+                        <p>The desired new start location of the 3d models in the animation</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_addDisplacement" class="method item">
+    <h3 class="name"><code>addDisplacement</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>movTree</code>
+                </li>
+                <li class="arg">
+                        <code>partFrames</code>
+                </li>
+                <li class="arg">
+                        <code>it</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l968"><code>..\src\webVis\partRender.js:968</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given an tree representation of the movement of parts in an assembly sequence, an
+array of Objects each associating a list of keyframes with a threeJS mesh object and aLinkcolor
+string, and the index of the keyframe associated with the tree's root node, displaces the movement
+line points associated with that particular part of the assembly to match the displacement of the
+model</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">movTree</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>Tree of nested objects representing the movement of each subassembly
+in it's assembly sequence</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">partFrames</code>
+                        <span class="type">Array</span>
+
+
+                    <div class="param-description">
+                        <p>An array of Objects each associating a list of keyframes with a threeJS
+mesh object and a string</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">it</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>The index of the keyframe associated with the root node of movTree. Used internally.
+For external use, apply 0.</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_addGrid" class="method item">
+    <h3 class="name"><code>addGrid</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theRad</code>
+                </li>
+                <li class="arg">
+                        <code>theBot</code>
+                </li>
+                <li class="arg">
+                        <code>theTop</code>
+                </li>
+                <li class="arg">
+                        <code>theX</code>
+                </li>
+                <li class="arg">
+                        <code>theZ</code>
+                </li>
+                <li class="arg">
+                        <code>slices</code>
+                </li>
+                <li class="arg">
+                        <code>stacks</code>
+                </li>
+                <li class="arg">
+                        <code>theColor</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l1460"><code>..\src\webVis\partRender.js:1460</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Adds a simple vertical column with a radius of theRad, a base Y value of theBot, a top terminating at
+theTop, an x and z position equal to theX and theZ, a line color of theColor, a number of vertical
+segmentations equal to stacks, and a number of radial segmentations equal to slices</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theRad</code>
+                        <span class="type">Float</span>
+
+
+                    <div class="param-description">
+                        <p>The desired radius of the column</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">theBot</code>
+                        <span class="type">Float</span>
+
+
+                    <div class="param-description">
+                        <p>The desired bottom y value of the column</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">theTop</code>
+                        <span class="type">Float</span>
+
+
+                    <div class="param-description">
+                        <p>The desired top y value of the column</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">theX</code>
+                        <span class="type">Float</span>
+
+
+                    <div class="param-description">
+                        <p>The desired x value of the column</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">theZ</code>
+                        <span class="type">Float</span>
+
+
+                    <div class="param-description">
+                        <p>The desired z value of the column</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">slices</code>
+                        <span class="type">Float</span>
+
+
+                    <div class="param-description">
+                        <p>The desired number of radial segmentations</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">stacks</code>
+                        <span class="type">Float</span>
+
+
+                    <div class="param-description">
+                        <p>The desired z value of vertical segmentations</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">theColor</code>
+                        <span class="type">Float</span>
+
+
+                    <div class="param-description">
+                        <p>The desired color of the column</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_addGrid" class="method item">
+    <h3 class="name"><code>addGrid</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theSize</code>
+                </li>
+                <li class="arg">
+                        <code>theDivs</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l1423"><code>..\src\webVis\partRender.js:1423</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Adds a simple square grid of width equal to theSize and a number of lines equal to theDivs at Y=-1000</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theSize</code>
+                        <span class="type">Int</span>
+
+
+                    <div class="param-description">
+                        <p>The desired grid width</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">theDivs</code>
+                        <span class="type">Int</span>
+
+
+                    <div class="param-description">
+                        <p>The desired number of lines per side of the grid</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_addLines" class="method item">
+    <h3 class="name"><code>addLines</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>movTree</code>
+                </li>
+                <li class="arg">
+                        <code>parentNode</code>
+                </li>
+                <li class="arg">
+                        <code>theScene</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l911"><code>..\src\webVis\partRender.js:911</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given an tree representation of the movement of parts in an assembly sequence, the
+parent node of that node, and a threeJS scene object, inserts a line for each subassembly
+path along the path of movement</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">movTree</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>Tree of nested objects representing the movement of each subassembly
+in it's assembly sequence</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">parentNode</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>Used for internal use. Null should be applied for external use.</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">theScene</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>the threeJS scene to which the line representations will be added</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_alignAssemblyCenter" class="method item">
+    <h3 class="name"><code>alignAssemblyCenter</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l833"><code>..\src\webVis\partRender.js:833</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Aligns the camera to look at the point at the average of the centers of all the parts bounding boxes</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_animate" class="method item">
+    <h3 class="name"><code>animate</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>partFrames</code>
+                </li>
+                <li class="arg">
+                        <code>time</code>
+                </li>
+                <li class="arg">
+                        <code>timeWarp</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Float</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l693"><code>..\src\webVis\partRender.js:693</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given an array of objects (each containing a threeJS mesh object and an array of
+keyFrame objects), and two floating points &quot;time&quot; and &quot;timeWarp&quot;, will animate each
+mesh in the array along the keyframes in their associate objects according to the
+given &quot;time&quot; and returns the new time as given by the standard time step multiplied
+by &quot;timeWarp&quot;</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">partFrames</code>
+                        <span class="type">Array</span>
+
+
+                    <div class="param-description">
+                        <p>List of objects relating threeJS mesh objects with their
+respective keyframe arrays</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">time</code>
+                        <span class="type">Float</span>
+
+
+                    <div class="param-description">
+                        <p>The time to be used when interpolating keyFrames for the models</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">timeWarp</code>
+                        <span class="type">Float</span>
+
+
+                    <div class="param-description">
+                        <p>The coefficeint to be applied to the timestep in the
+animation</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Float</span>:
+                    <p>The new value of time in the animation</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_arrayToString" class="method item">
+    <h3 class="name"><code>arrayToString</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>buf</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">String</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_jsstl.js.html#l96"><code>..\src\webVis\jsstl.js:96</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Converts an arraybuffer into a string of equivalent binary content</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">buf</code>
+                        <span class="type">Arraybuffer</span>
+
+
+                    <div class="param-description">
+                        <p>The arraybuffer</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">String</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_bindPartsToKeyFrames" class="method item">
+    <h3 class="name"><code>bindPartsToKeyFrames</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theKeyFrameLists</code>
+                </li>
+                <li class="arg">
+                        <code>theParts</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Array</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l223"><code>..\src\webVis\partRender.js:223</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Combines a given array of objects (each associating an array of keyframes to name) with a
+given array of objects (each associating a threeJS mesh with a name), creating an array
+of objects with keyFrame arrays and threeJS meshes associated with the same name</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theKeyFrameLists</code>
+                        <span class="type">Array</span>
+
+
+                    <div class="param-description">
+                        <p>An array of objects, each containing an array of keyframe objects
+called &quot;Frames&quot; and a string property called &quot;Name&quot;)</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">theParts</code>
+                        <span class="type">Array</span>
+
+
+                    <div class="param-description">
+                        <p>An array of objects, each containing a threeJS mesh object called &quot;Mesh&quot; and
+a string property called &quot;Name&quot;</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Array</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_centerGeometry" class="method item">
+    <h3 class="name"><code>centerGeometry</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theGeo</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">ThreeJS Vector3 Object</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l146"><code>..\src\webVis\partRender.js:146</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Finds the average position of all the vertices in a given threeJS Geometry model.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theGeo</code>
+                        <span class="type">ThreeJS Geometry Object</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">ThreeJS Vector3 Object</span>:
+                    <p>A 3d coordinate, with each component being the unweighted
+average of the corresponding component in each vector in the provided geometry object. If nodeName
+vertices are present in the object, a zeroed vector is returned.</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_combineBounds" class="method item">
+    <h3 class="name"><code>combineBounds</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>a</code>
+                </li>
+                <li class="arg">
+                        <code>b</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l742"><code>..\src\webVis\partRender.js:742</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given two threeJS boundingBox objects, returns the smallest bounding box
+encompassing the two</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">a</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>The first bounding box</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">b</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>The second bounding box</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Object</span>:
+                    <p>The combined bounds</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_copyFrame" class="method item">
+    <h3 class="name"><code>copyFrame</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theFrame</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l429"><code>..\src\webVis\partRender.js:429</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Returns a copy of the provided keyframe object</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theFrame</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>A keyFrame object</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Object</span>:
+                    <p>The copy</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_copyFrameList" class="method item">
+    <h3 class="name"><code>copyFrameList</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>partFrames</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Array</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l453"><code>..\src\webVis\partRender.js:453</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Returns a copy of the provided array of keyframe objects</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">partFrames</code>
+                        <span class="type">Array</span>
+
+
+                    <div class="param-description">
+                        <p>A keyFrame object array</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Array</span>:
+                    <p>The copy</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_cutOffNames" class="method item">
+    <h3 class="name"><code>cutOffNames</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theTree</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_treequence.js.html#l387"><code>..\src\webVis\treequence.js:387</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given a tree of nested javascript objects (each with a string attribute &quot;Name&quot;) and an
+integer &quot;N&quot;, removes the first N characters of each Name attribute</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theTree</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>The structure containing name data</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_cutoffPartNames" class="method item">
+    <h3 class="name"><code>cutoffPartNames</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>partFrames</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l118"><code>..\src\webVis\partRender.js:118</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Accepts an array of objects containing a string property called &quot;Name&quot; removes
+the first N characters in each string, where N is the first index where any two
+&quot;Name&quot; properties in the array have different characters.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">partFrames</code>
+                        <span class="type">Object Array</span>
+
+
+                    <div class="param-description">
+                        <p>An array of objects, each of which should containin
+a property called &quot;Name&quot; with a non-null string.</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_flipTheTimes" class="method item">
+    <h3 class="name"><code>flipTheTimes</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>partFrames</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Int</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l321"><code>..\src\webVis\partRender.js:321</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given a jagged array of objects, each object at least possessing a numeric
+property called &quot;Time&quot;, sets each Time property to the greatest Time value in
+the jagged array minus the origional value, thus effectively reversing the
+temporal order of each object</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">partFrames</code>
+                        <span class="type">Array</span>
+
+
+                    <div class="param-description">
+                        <p>The jagged array</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Int</span>:
+                    <p>The greatest &quot;Time&quot; value in the jagged array</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_flipTreeTime" class="method item">
+    <h3 class="name"><code>flipTreeTime</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theTree</code>
+                </li>
+                <li class="arg">
+                        <code>axis</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_treequence.js.html#l496"><code>..\src\webVis\treequence.js:496</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given a tree of nested javascript objects (each with a float attribute &quot;Time&quot;) and a
+float &quot;N&quot;, sets each Time value to N minus that value</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theTree</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>The structure containing time data</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">axis</code>
+                        <span class="type">Float</span>
+
+
+                    <div class="param-description">
+                        <p>The value used to mirror the time values</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_getChildrenByTag" class="method item">
+    <h3 class="name"><code>getChildrenByTag</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theNode</code>
+                </li>
+                <li class="arg">
+                        <code>tag</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_treequence.js.html#l862"><code>..\src\webVis\treequence.js:862</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given an HTML element and a string, returns a list containing all child elements
+of the given element with a tag equivalent to the given string</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theNode</code>
+                        <span class="type">HTML Element</span>
+
+
+                    <div class="param-description">
+                        <p>The HTML element whose children are to be searched</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">tag</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                        <p>The string to be used when searching for element children</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_getDepth" class="method item">
+    <h3 class="name"><code>getDepth</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theTree</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Int</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_treequence.js.html#l531"><code>..\src\webVis\treequence.js:531</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given a tree of nested javascript objects, returns the depth of the tree</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theTree</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>The object structure</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Int</span>:
+                    <p>The depth of the object</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_getFirstIntersect" class="method item">
+    <h3 class="name"><code>getFirstIntersect</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theScene</code>
+                </li>
+                <li class="arg">
+                        <code>theCamera</code>
+                </li>
+                <li class="arg">
+                        <code>partFrames</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l860"><code>..\src\webVis\partRender.js:860</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given a threeJS scene object, a threeJS camera object, and an array of objects containing
+threeJS mesh objects, finds the first mesh in the scene which is intersected the ray extending
+through the center of the camera's field of vision. If this mesh is in the provided array of
+objects, then that object is returned, otherwise null is returned instead</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theScene</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>The threeJS scene object in which intersections should
+be tested</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">theCamera</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>The threeJS camera object to be used to test for
+ray intersections</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">partFrames</code>
+                        <span class="type">Array</span>
+
+
+                    <div class="param-description">
+                        <p>An array containing a series of objects, each of which
+contain a threeJS mesh object (under the property &quot;Mesh&quot;) to be tested for intersections</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Object</span>:
+                    <p>The intersecting mesh (or null in case of no valid intersection)</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_getGeometries" class="method item">
+    <h3 class="name"><code>getGeometries</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theSTLs</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">ThreeJS Object List</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l196"><code>..\src\webVis\partRender.js:196</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Accepts a list of binary stl buffer objects and returns a corresponding list
+of ThreeJS objects.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theSTLs</code>
+                        <span class="type">Buffer Object List</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">ThreeJS Object List</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_getGlobBounds" class="method item">
+    <h3 class="name"><code>getGlobBounds</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>a</code>
+                </li>
+                <li class="arg">
+                        <code>b</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l771"><code>..\src\webVis\partRender.js:771</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given two threeJS boundingBox objects, returns the smallest bounding box
+encompassing the two</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">a</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>The first bounding box</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">b</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>The second bounding box</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Object</span>:
+                    <p>The combined bounds</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_getLongestTime" class="method item">
+    <h3 class="name"><code>getLongestTime</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>timeTree</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_treequence.js.html#l232"><code>..\src\webVis\treequence.js:232</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given a tree of nested objects, returns the highest &quot;Time&quot; value from all the nodes</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">timeTree</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>The tree of time values</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Object</span>:
+                    <p>The highest time value in the tree</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_getMov" class="method item">
+    <h3 class="name"><code>getMov</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theTree</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">JQuery Object</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_treequence.js.html#l179"><code>..\src\webVis\treequence.js:179</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given a jQuery Object, will return the first child with the tag &quot;Moving&quot; of the first child with
+the tag &quot;Install&quot; of the object. If no such child exists, null is returned.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theTree</code>
+                        <span class="type">JQuery Object</span>
+
+
+                    <div class="param-description">
+                        <p>The jQuery object to be accessed</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">JQuery Object</span>:
+                    <p>The resulting child</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_getMovement" class="method item">
+    <h3 class="name"><code>getMovement</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theTree</code>
+                </li>
+                <li class="arg">
+                        <code>myX</code>
+                </li>
+                <li class="arg">
+                        <code>myY</code>
+                </li>
+                <li class="arg">
+                        <code>myZ</code>
+                </li>
+                <li class="arg">
+                        <code>myTime</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_treequence.js.html#l83"><code>..\src\webVis\treequence.js:83</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given a jQuery object derived from parsing an XML document, extracts all information
+relevant to part movement and composes it into an identically structured tree of
+nested javascript objects which is then returned</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theTree</code>
+                        <span class="type">JQuery Object</span>
+
+
+                    <div class="param-description">
+                        <p>The jQuery object to be parsed over</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">myX</code>
+                        <span class="type">Float</span>
+
+
+                    <div class="param-description">
+                        <p>The X position of the subassembly represented by the root node of theTree</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">myY</code>
+                        <span class="type">Float</span>
+
+
+                    <div class="param-description">
+                        <p>The Y position of the subassembly represented by the root node of theTree</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">myZ</code>
+                        <span class="type">Float</span>
+
+
+                    <div class="param-description">
+                        <p>The Z position of the subassembly represented by the root node of theTree</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">myTime</code>
+                        <span class="type">Float</span>
+
+
+                    <div class="param-description">
+                        <p>The time value of the subassembly represented by the root node of theTree</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Object</span>:
+                    <p>The root node of the tree of extracted movement data</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_getNameList" class="method item">
+    <h3 class="name"><code>getNameList</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>TimeTree</code>
+                </li>
+                <li class="arg">
+                        <code>SpaceTree</code>
+                </li>
+                <li class="arg">
+                        <code>NameTree</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_treequence.js.html#l311"><code>..\src\webVis\treequence.js:311</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given a three trees of nested javascript objects, one holding time data, one holding
+movement data, and one holding part name data</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">TimeTree</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>The root node of the tree containing time data</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">SpaceTree</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>The root node of the tree containing movement data</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">NameTree</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>The root node of the tree containing name data</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Object</span>:
+                    <p>The root node of the resulting tree</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_getNames" class="method item">
+    <h3 class="name"><code>getNames</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theTree</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_treequence.js.html#l254"><code>..\src\webVis\treequence.js:254</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given a jQuery object derived from parsing an XML document, extracts all part name
+information and composes it into an identically structured tree of nested javascript
+objects which is then returned</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theTree</code>
+                        <span class="type">JQuery Object</span>
+
+
+                    <div class="param-description">
+                        <p>The jQuery object to be parsed over</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Object</span>:
+                    <p>The root node of the tree of extracted name data</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_getPartCenter" class="method item">
+    <h3 class="name"><code>getPartCenter</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>a</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l805"><code>..\src\webVis\partRender.js:805</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given an object, containing a threeJS mesh object as &quot;Mesh&quot;, will
+return the center of the mesh's bounding box</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">a</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>The object containing the threeJS mesh object</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Object</span>:
+                    <p>The center of the mesh's bounding box, represented as
+a threeJS Vector3 object</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_getPartNameCutoff" class="method item">
+    <h3 class="name"><code>getPartNameCutoff</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>partFrames</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Int</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l83"><code>..\src\webVis\partRender.js:83</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Accepts an array of objects containing a string property called &quot;Name&quot; and returns
+the first index where any two &quot;Name&quot; properties in the array have different characters.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">partFrames</code>
+                        <span class="type">Object Array</span>
+
+
+                    <div class="param-description">
+                        <p>An array of objects, each of which should containin
+a property called &quot;Name&quot; with a non-null string.</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Int</span>:
+                    <p>The first index where any two &quot;Name&quot; properties in the array are different.</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_getPartNames" class="method item">
+    <h3 class="name"><code>getPartNames</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>parts</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">String List</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_treequence.js.html#l469"><code>..\src\webVis\treequence.js:469</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given a list of parts, returns a list of the names of each part</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">parts</code>
+                        <span class="type">Part List</span>
+
+
+                    <div class="param-description">
+                        <p>The list of part objects.</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">String List</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_getRandomUTF" class="method item">
+    <h3 class="name"><code>getRandomUTF</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>selectSpace</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_treequence.js.html#l556"><code>..\src\webVis\treequence.js:556</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given a staggered array of integer pairs, returns a random UTF character with a UTF value
+within one of the given integer ranges (inclusive)</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">selectSpace</code>
+                        <span class="type">Array</span>
+
+
+                    <div class="param-description">
+                        <p>A staggered array of integer range limits</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_getRef" class="method item">
+    <h3 class="name"><code>getRef</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theTree</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">JQuery Object</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_treequence.js.html#l159"><code>..\src\webVis\treequence.js:159</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given a jQuery Object, will return the first child with the tag &quot;Reference&quot; of the first child with
+the tag &quot;Install&quot; of the object. If no such child exists, null is returned.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theTree</code>
+                        <span class="type">JQuery Object</span>
+
+
+                    <div class="param-description">
+                        <p>The jQuery object to be accessed</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">JQuery Object</span>:
+                    <p>The resulting child</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_getStdMaterial" class="method item">
+    <h3 class="name"><code>getStdMaterial</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l7"><code>..\src\webVis\partRender.js:7</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Returns a normal material for meshes if the global variable &quot;standard&quot; is false. If &quot;standard&quot;
+is set to true, returns a chromadepth material instead.</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Object</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_getStdMaterial" class="method item">
+    <h3 class="name"><code>getStdMaterial</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l44"><code>..\src\webVis\partRender.js:44</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Returns a normal material for lines if the global variable &quot;standard&quot; is false. If &quot;standard&quot;
+is set to true, returns a chromadepth material instead.</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Object</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_getTimes" class="method item">
+    <h3 class="name"><code>getTimes</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theTree</code>
+                </li>
+                <li class="arg">
+                        <code>parentTime</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_treequence.js.html#l201"><code>..\src\webVis\treequence.js:201</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given a jQuery object derived from parsing an XML document, extracts all information
+relevant to installation timing and composes it into an identically structured tree of
+nested javascript objects which is then returned</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theTree</code>
+                        <span class="type">JQuery Object</span>
+
+
+                    <div class="param-description">
+                        <p>The jQuery object to be parsed over</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">parentTime</code>
+                        <span class="type">Float</span>
+
+
+                    <div class="param-description">
+                        <p>The time value of the subassembly represented by the root node of theTree</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Object</span>:
+                    <p>The root node of the tree of extracted time data</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_getTreeNames" class="method item">
+    <h3 class="name"><code>getTreeNames</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>tree</code>
+                </li>
+                <li class="arg">
+                        <code>regTreeNames</code>
+                </li>
+                <li class="arg">
+                        <code>fstTreeNames</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_treequence.js.html#l429"><code>..\src\webVis\treequence.js:429</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given a tree of nested javascript objects (each with a string attribute &quot;Name&quot;), and two lists,
+regTreeNames and fstTreeNames, inserts all regular part names into regTreeNames and inserts all
+fastener part names into fstTreeNames</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">tree</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">regTreeNames</code>
+                        <span class="type">String List</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">fstTreeNames</code>
+                        <span class="type">String List</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_grab" class="method item">
+    <h3 class="name"><code>grab</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theTree</code>
+                </li>
+                <li class="arg">
+                        <code>theMember</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">JQuery Object</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_treequence.js.html#l27"><code>..\src\webVis\treequence.js:27</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given a jQuery object and a string, returns the first child of the given element with
+a tag equivalent to the given string.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theTree</code>
+                        <span class="type">JQuery Object</span>
+
+
+                    <div class="param-description">
+                        <p>The jQuery object whose child is to be returned</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">theMember</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                        <p>The name of the tag being searched</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">JQuery Object</span>:
+                    <p>The first child with the given tag. If such a child does not
+exist, null is returned.</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_grabExtension" class="method item">
+    <h3 class="name"><code>grabExtension</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theName</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">String</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_renderScript.js.html#l707"><code>..\src\webVis\renderScript.js:707</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Accepts a string and outputs the string of all characters following the final '.' symbol
+in the string. This is used internally to extract file extensions from file names.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theName</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                        <p>The file name to be processed</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">String</span>:
+                    <p>the extension in the given file name. If no extension is found, the
+'undefined' value is returned.</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_grabInd" class="method item">
+    <h3 class="name"><code>grabInd</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theTree</code>
+                </li>
+                <li class="arg">
+                        <code>theMember</code>
+                </li>
+                <li class="arg">
+                        <code>theIndex</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">JQuery Object</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_treequence.js.html#l55"><code>..\src\webVis\treequence.js:55</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given a jQuery object and an integer &quot;N&quot;, returns the Nth child of the given element with
+the given tag.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theTree</code>
+                        <span class="type">JQuery Object</span>
+
+
+                    <div class="param-description">
+                        <p>The jQuery object whose child is to be returned</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">theMember</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                        <p>The name of the tag being searched</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">theIndex</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                        <p>The ordinal of the matching child to be returned</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">JQuery Object</span>:
+                    <p>The child meeting the tag and ordinal requirement.
+If such a child does not exist, null is returned.</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_grabInterp" class="method item">
+    <h3 class="name"><code>grabInterp</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>frameList</code>
+                </li>
+                <li class="arg">
+                        <code>time</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l637"><code>..\src\webVis\partRender.js:637</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given a list of keyframes and a time quantity, returns a keyframe object interpolating
+between the two temporally closest keyframes. In cases where the provide time is beyond the
+range of times represented by the list, returns the closest keyframe</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">frameList</code>
+                        <span class="type">Array</span>
+
+
+                    <div class="param-description">
+                        <p>A list of keyframes. Must be organized from least time value to greatest time value</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">time</code>
+                        <span class="type">Float</span>
+
+
+                    <div class="param-description">
+                        <p>Floating-point representation of what time in the keyframe progression the interpolation
+should occur</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Object</span>:
+                    <p>The interpolated keyframe</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_hasNaN" class="method item">
+    <h3 class="name"><code>hasNaN</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theFrame</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Boolean</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l412"><code>..\src\webVis\partRender.js:412</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Returns true if any position component of the given keyframe object is NaN</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theFrame</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>A keyFrame object</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Boolean</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_hide" class="method item">
+    <h3 class="name"><code>hide</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theNode</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_treequence.js.html#l769"><code>..\src\webVis\treequence.js:769</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given an HTML element, sets the style attributes of that element to hide it's contents.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theNode</code>
+                        <span class="type">HTML Element</span>
+
+
+                    <div class="param-description">
+                        <p>The HTML element to be hidden.</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_hideChildren" class="method item">
+    <h3 class="name"><code>hideChildren</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theNode</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_treequence.js.html#l832"><code>..\src\webVis\treequence.js:832</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given an HTML element, sets the style attributes of that element's children
+to hide their contents.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theNode</code>
+                        <span class="type">HTML Element</span>
+
+
+                    <div class="param-description">
+                        <p>The HTML element whose children are to be hidden.</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_initAxisLines" class="method item">
+    <h3 class="name"><code>initAxisLines</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l1086"><code>..\src\webVis\partRender.js:1086</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Initializes the axis lines for the bottom-left of the screen</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_insertTreequenceHTML" class="method item">
+    <h3 class="name"><code>insertTreequenceHTML</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theTree</code>
+                </li>
+                <li class="arg">
+                        <code>parentElement</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_treequence.js.html#l606"><code>..\src\webVis\treequence.js:606</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given a tree of nested javascript objects and an html element, inserts the contents
+of the root node of the given tree as an html element into the given element. Returns
+the name of the generated node.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theTree</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>The tree structure</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">parentElement</code>
+                        <span class="type">HTML Element</span>
+
+
+                    <div class="param-description">
+                        <p>The html element to contain the node information</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_interp" class="method item">
+    <h3 class="name"><code>interp</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>pointList</code>
+                </li>
+                <li class="arg">
+                        <code>T</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l1204"><code>..\src\webVis\partRender.js:1204</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Performs a bezier curve interpolation of the control points in pointlist given
+the time value T, and returns a ThreeJS Vector3 object with the interpolated coordinates.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">pointList</code>
+                        <span class="type">Vector3 Array</span>
+
+
+                    <div class="param-description">
+                        <p>A list of control points for use in interpolation.</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">T</code>
+                        <span class="type">Float</span>
+
+
+                    <div class="param-description">
+                        <p>A normalized value for use as a time value in interpolation.</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Object</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_interpolate" class="method item">
+    <h3 class="name"><code>interpolate</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>keyFrame1</code>
+                </li>
+                <li class="arg">
+                        <code>keyFrame2</code>
+                </li>
+                <li class="arg">
+                        <code>proportion</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l595"><code>..\src\webVis\partRender.js:595</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given two keyFrames and a normalized float &quot;proportion&quot;, returns an interpolation
+between the two keyframes with a weight towards the second keyframe proportional
+to &quot;proportion&quot;</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">keyFrame1</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>The earlier keyFrame</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">keyFrame2</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>The later keyFrame</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">proportion</code>
+                        <span class="type">Float</span>
+
+
+                    <div class="param-description">
+                        <p>A normalized value representing what proportion of the path of
+interpolation is between the result and the earlier keyFrame</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Object</span>:
+                    <p>The jagged array of keyFrame objects</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_loadParts" class="method item">
+    <h3 class="name"><code>loadParts</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_renderScript.js.html#l810"><code>..\src\webVis\renderScript.js:810</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Called internally upon every recieved fileload event. Checks if every file reader in the
+array &quot;fileReaders&quot; has fully read each of their files. If so, then the function converts
+all recieved stl files into threeJS models and executes &quot;renderParts&quot;.</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_lockChange" class="method item">
+    <h3 class="name"><code>lockChange</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>e</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_renderScript.js.html#l309"><code>..\src\webVis\renderScript.js:309</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Adds or Removes event listeners for input meant for camera manipulation.
+Is triggered by a change in the state of the mouse locking or unlocking.
+The mouse locking results in input listeners being added to the webpage,
+whereas the unlocking of the mouse results in the removal of appropriate
+listeners.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">e</code>
+                        <span class="type">Event</span>
+
+
+                    <div class="param-description">
+                        <p>The event that is to be applied to the function by event listeners upon
+a change in the state of mouselock</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_longestTimeFromFrames" class="method item">
+    <h3 class="name"><code>longestTimeFromFrames</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>partFrames</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Int</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l288"><code>..\src\webVis\partRender.js:288</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Combines a jagged array of objects, each object at least possessing a numeric
+property called &quot;Time&quot;, returns the value of the greatest &quot;Time&quot; property</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">partFrames</code>
+                        <span class="type">Array</span>
+
+
+                    <div class="param-description">
+                        <p>The jagged array</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Int</span>:
+                    <p>The greatest &quot;Time&quot; value in the jagged array</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_makeArcPointList" class="method item">
+    <h3 class="name"><code>makeArcPointList</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>startPoint</code>
+                </li>
+                <li class="arg">
+                        <code>center</code>
+                </li>
+                <li class="arg">
+                        <code>endPoint</code>
+                </li>
+                <li class="arg">
+                        <code>resolution</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Vector3 Array</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l1307"><code>..\src\webVis\partRender.js:1307</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Returns a list of 2^(resolution+1) points which trace an arc beginning at startPoint,
+terminating at endpoint, and centered around center</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">startPoint</code>
+                        <span class="type">Vector3</span>
+
+
+                    <div class="param-description">
+                        <p>The starting point of the arc</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">center</code>
+                        <span class="type">Vector3</span>
+
+
+                    <div class="param-description">
+                        <p>The point which the generated arc should be centered on</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">endPoint</code>
+                        <span class="type">Vector3</span>
+
+
+                    <div class="param-description">
+                        <p>The ending point of the arc</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">resolution</code>
+                        <span class="type">Int</span>
+
+
+                    <div class="param-description">
+                        <p>The desired levels of recursion in the point interpolation</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Vector3 Array</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_makeFastenerKeyFrames" class="method item">
+    <h3 class="name"><code>makeFastenerKeyFrames</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theFst</code>
+                </li>
+                <li class="arg">
+                        <code>runningList</code>
+                </li>
+                <li class="arg">
+                        <code>currentFrameList</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l481"><code>..\src\webVis\partRender.js:481</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Creates a keyframe list for the given fastener object and adds it to currentFrameList</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theFst</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>The object representation of the fastener being keyframed</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">runningList</code>
+                        <span class="type">Object List</span>
+
+
+                    <div class="param-description">
+                        <p>The current running list of keyframes</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">currentFrameList</code>
+                        <span class="type">Object List</span>
+
+
+                    <div class="param-description">
+                        <p>The list of part-keyframe list objects</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_makeKeyFrames" class="method item">
+    <h3 class="name"><code>makeKeyFrames</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theTree</code>
+                </li>
+                <li class="arg">
+                        <code>runningList</code>
+                </li>
+                <li class="arg">
+                        <code>currentFrameList</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Array</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l528"><code>..\src\webVis\partRender.js:528</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given a tree representation of the assembly process through nested javascript objects, returns an array
+of keyframe array objects, with each keyframe array object being a representation of the movement of each part
+in the tree representation throughout the assembly proceess, with a list of keyframe objects and a given part name</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theTree</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>Tree representation of the assembly process through nested javascript objects</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">runningList</code>
+                        <span class="type">Array</span>
+
+
+                    <div class="param-description">
+                        <p>Internally used variable. Should be an empty array for outside use.</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">currentFrameList</code>
+                        <span class="type">Array</span>
+
+
+                    <div class="param-description">
+                        <p>Internally used variable. Should be an empty array for outside use.</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Array</span>:
+                    <p>The jagged array of keyFrame objects</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_manageControls" class="method item">
+    <h3 class="name"><code>manageControls</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_renderScript.js.html#l512"><code>..\src\webVis\renderScript.js:512</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Once called, interprets the current state of registered inputs and manipulates
+the visualization accordingly, including the accelleration of the camera, as
+affected by the W,S,A, and D keys, and the rotation of the camera if the F key
+is depressed and there currently is a highlighted object of interest</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_mergeTrees" class="method item">
+    <h3 class="name"><code>mergeTrees</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>TimeTree</code>
+                </li>
+                <li class="arg">
+                        <code>SpaceTree</code>
+                </li>
+                <li class="arg">
+                        <code>NameTree</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_treequence.js.html#l282"><code>..\src\webVis\treequence.js:282</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given a three trees of nested javascript objects, one holding time data, one holding
+movement data, and one holding part name data</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">TimeTree</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>The root node of the tree containing time data</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">SpaceTree</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>The root node of the tree containing movement data</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">NameTree</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>The root node of the tree containing name data</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Object</span>:
+                    <p>The root node of the resulting tree</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_mouseMoved" class="method item">
+    <h3 class="name"><code>mouseMoved</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>e</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_renderScript.js.html#l349"><code>..\src\webVis\renderScript.js:349</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Changes the orientation of the camera based off of the mouse movement
+contained in the supplied mouse movement event. X-axis movement
+corresponds to change in the yaw of the camera whereas Y-axis movement
+corresponds to a change in the pitch of the camera.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">e</code>
+                        <span class="type">Event</span>
+
+
+                    <div class="param-description">
+                        <p>The mouse movement event to be supplied to the function by a mouse
+movement event listener on the web page</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_parseStl" class="method item">
+    <h3 class="name"><code>parseStl</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>stl</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_jsstl.js.html#l119"><code>..\src\webVis\jsstl.js:119</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Converts a given block of ASCII stl data (as an arraybuffer) to a threeJS representation
+of the geometry. Function courtesy of 'tonylukasavage' from Github, who released this to
+the public domain.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">stl</code>
+                        <span class="type">Arraybuffer</span>
+
+
+                    <div class="param-description">
+                        <p>The ASCII stl data</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Object</span>:
+                    <p>threeJS geometry object</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_parseStlBinary" class="method item">
+    <h3 class="name"><code>parseStlBinary</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>stl</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_jsstl.js.html#l14"><code>..\src\webVis\jsstl.js:14</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Converts a given block of binary stl data (as an arraybuffer) to a threeJS representation
+of the geometry. Function courtesy of 'tonylukasavage' from Github, who released this to
+the public domain.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">stl</code>
+                        <span class="type">Arraybuffer</span>
+
+
+                    <div class="param-description">
+                        <p>The binary stl data</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Object</span>:
+                    <p>threeJS geometry object</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_readMultipleFiles" class="method item">
+    <h3 class="name"><code>readMultipleFiles</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>evt</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_renderScript.js.html#l740"><code>..\src\webVis\renderScript.js:740</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Accepts a fileinput event, presumably from a file upload event listener, and assigns
+functions to each file reader listed in the event to be called upon the full loading
+of that given reader's files</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">evt</code>
+                        <span class="type">Event</span>
+
+
+                    <div class="param-description">
+                        <p>A fileinput event, to be given by a fileinput event listener</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_registerDown" class="method item">
+    <h3 class="name"><code>registerDown</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>e</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_renderScript.js.html#l396"><code>..\src\webVis\renderScript.js:396</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Accepts a key press event and, if the key press corresponds to one
+of the keys used for manipulating the view, sets the proper components
+of &quot;inputState&quot; to true.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">e</code>
+                        <span class="type">Event</span>
+
+
+                    <div class="param-description">
+                        <p>The key down event to be supplied to the function by a key down event
+listener on the web page</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_registerUp" class="method item">
+    <h3 class="name"><code>registerUp</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>e</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_renderScript.js.html#l455"><code>..\src\webVis\renderScript.js:455</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Accepts a key press release and, if the key release corresponds to one
+of the keys used for manipulating the view, sets the proper components
+of &quot;inputState&quot; to false</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">e</code>
+                        <span class="type">Event</span>
+
+
+                    <div class="param-description">
+                        <p>The key up event to be supplied to the function by a key up event
+listener on the web page</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_render" class="method item">
+    <h3 class="name"><code>render</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_renderScript.js.html#l615"><code>..\src\webVis\renderScript.js:615</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>The main portion of the visualization's rendering cycle, managing frame rate,
+input, camera decelleration, keyframe manipulation, model animation, object highlighting,
+and informational display.</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_renderData" class="method item">
+    <h3 class="name"><code>renderData</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theXMLFile</code>
+                </li>
+                <li class="arg">
+                        <code>theSTLFiles</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_renderScript.js.html#l26"><code>..\src\webVis\renderScript.js:26</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>The function which handles the actual rendering of the solution file animation
+and loading in the models</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theXMLFile</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">theSTLFiles</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_renderParts" class="method item">
+    <h3 class="name"><code>renderParts</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_renderScript.js.html#l883"><code>..\src\webVis\renderScript.js:883</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Called internally by &quot;loadParts&quot;. Parses the text stored in &quot;theXML&quot; into a tree
+structure composed of nested javascript objects and converts that structure into a
+series of keyframe arrays, each of which are stored alongside their respective
+parts in &quot;partFrames&quot;. Additionally, generates the path lines for each subassembly
+and inserts those lines into &quot;scene&quot;.</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_show" class="method item">
+    <h3 class="name"><code>show</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theNode</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_treequence.js.html#l747"><code>..\src\webVis\treequence.js:747</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given an HTML element, sets the style attributes of that element to display it's contents.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theNode</code>
+                        <span class="type">HTML Element</span>
+
+
+                    <div class="param-description">
+                        <p>The HTML element to be shown.</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_showChildren" class="method item">
+    <h3 class="name"><code>showChildren</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theNode</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_treequence.js.html#l803"><code>..\src\webVis\treequence.js:803</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given an HTML element, sets the style attributes of that element's children
+to display their contents.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theNode</code>
+                        <span class="type">HTML Element</span>
+
+
+                    <div class="param-description">
+                        <p>The HTML element whose children are to be shown.</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_showFrame" class="method item">
+    <h3 class="name"><code>showFrame</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theFrame</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l394"><code>..\src\webVis\partRender.js:394</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Logs the contents of a given keyFrame object, containing numeric properties &quot;X&quot;,
+&quot;Y&quot;, &quot;Z&quot;, and &quot;Time&quot;, to the console as a string.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theFrame</code>
+                        <span class="type">Array</span>
+
+
+                    <div class="param-description">
+                        <p>the keyFrame object to be logged</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_showFrames" class="method item">
+    <h3 class="name"><code>showFrames</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>partFrames</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l356"><code>..\src\webVis\partRender.js:356</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Logs the contents of the given jagged array of keyFrame objects, each containing numeric properties &quot;X&quot;,
+&quot;Y&quot;, &quot;Z&quot;, and &quot;Time&quot;, to the console as a string.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">partFrames</code>
+                        <span class="type">Array</span>
+
+
+                    <div class="param-description">
+                        <p>A jagged array of keyframe objects</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_showHideTreequence" class="method item">
+    <h3 class="name"><code>showHideTreequence</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_renderScript.js.html#l981"><code>..\src\webVis\renderScript.js:981</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Toggles the display of the HTML div element containing the treequence representation of
+the assembly.</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_similarityCutoff" class="method item">
+    <h3 class="name"><code>similarityCutoff</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theList</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Index</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_treequence.js.html#l346"><code>..\src\webVis\treequence.js:346</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given an array of strings, returns the first index at which at least
+two of the included strings are different</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theList</code>
+                        <span class="type">Array</span>
+
+
+                    <div class="param-description">
+                        <p>The list of strings to be anylized</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Index</span>:
+                    <p>The computed index</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_swapHiding" class="method item">
+    <h3 class="name"><code>swapHiding</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theNode</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_treequence.js.html#l710"><code>..\src\webVis\treequence.js:710</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given an html node containing a button, hides all child treequence elements
+if the button text is not &quot;+&quot; and shows them if it is.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theNode</code>
+                        <span class="type">HTML Element</span>
+
+
+                    <div class="param-description">
+                        <p>The html element whose treequence elements are to be manipulated.</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_trim" class="method item">
+    <h3 class="name"><code>trim</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>str</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">String</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_jsstl.js.html#l71"><code>..\src\webVis\jsstl.js:71</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Processes a given string to make it parsible for parseStl and returns
+the results</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">str</code>
+                        <span class="type">String</span>
+
+
+                    <div class="param-description">
+                        <p>ASCII STL data</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">String</span>:
+                    <p>processed string</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_tryMouseLock" class="method item">
+    <h3 class="name"><code>tryMouseLock</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_renderScript.js.html#l287"><code>..\src\webVis\renderScript.js:287</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Attempts to lock the mouse for camera manupulation</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_updateAxisLines" class="method item">
+    <h3 class="name"><code>updateAxisLines</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l1133"><code>..\src\webVis\partRender.js:1133</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Updates the axis line dispay</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_updateLines" class="method item">
+    <h3 class="name"><code>updateLines</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>movTree</code>
+                </li>
+                <li class="arg">
+                        <code>parentNode</code>
+                </li>
+                <li class="arg">
+                        <code>theTime</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Void</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l1023"><code>..\src\webVis\partRender.js:1023</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given an tree representation of the movement of parts in an assembly sequence, the
+parent node of that node, and the current time in the animation, updates the ends of the
+movement lines such that the portion of lines which have already been traversed are not shown</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">movTree</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>Tree of nested objects representing the movement of each subassembly
+in it's assembly sequence</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">parentNode</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>Used for internal use. Null should be applied for external use.</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">theTime</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>the threeeJS scene to which the line representations will be added</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Void</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_vecDesc" class="method item">
+    <h3 class="name"><code>vecDesc</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theVec</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">String</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_partRender.js.html#l1239"><code>..\src\webVis\partRender.js:1239</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Returns a string describing the x, y, and z coordinates of theVec.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theVec</code>
+                        <span class="type">Vector3</span>
+
+
+                    <div class="param-description">
+                        <p>The ThreeJS Vector3 object to be described by the output string</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">String</span>:
+            </div>
+        </div>
+
+
+</div>
+<div id="method_whatsIn" class="method item">
+    <h3 class="name"><code>whatsIn</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>theTree</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Array</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._src_webVis_treequence.js.html#l6"><code>..\src\webVis\treequence.js:6</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Given a jQuery object, returns a full list of all of its children.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">theTree</code>
+                        <span class="type">JQuery Object</span>
+
+
+                    <div class="param-description">
+                        <p>The jQuery object whose children should be returned</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Array</span>:
+                    <p>Array of the object's children</p>
+
+            </div>
+        </div>
+
+
+</div>
+            </div>
+
+
+
+    </div>
+</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>
