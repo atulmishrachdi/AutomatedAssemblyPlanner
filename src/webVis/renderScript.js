@@ -13,7 +13,7 @@
 
 //
 //    Pretty Important: Keep this as true unless/until you've incorperated some other
-//                      method of getting file input
+//                      method of getting file input/output
 //
 var manualFileInput=true;
 
@@ -21,21 +21,19 @@ var manualFileInput=true;
 // Put recieved data about assembly into here. The code handles the rest.
 // theXMLFile should be a string, and theSTLFiles as a binary ArrayBuffer
 // Any text-based STL files should be in an 8-bit encoding
-
-
 /**
 *
 * The function which handles the actual rendering of the solution file animation
 * and loading in the models
 *
-* @method renderData
+* @method recieveData
 * @for renderGlobal 
 * @param {String} theXMLFile
 * @param {Object} theSTLFiles
 * @return {Void}
 * 
 */
-function renderData(theXMLFile, theSTLFiles){
+function receiveData(theXMLFile, theSTLFiles){
 
 	theXML=theXMLFile;
 

@@ -4,7 +4,7 @@
 
 //
 //    Pretty Important: Keep this as true unless/until you've incorperated some other
-//                      method of getting file input
+//                      method of getting file input/output
 //
 var manualFileInput=true;
 

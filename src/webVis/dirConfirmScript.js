@@ -1,3 +1,88 @@
+;
+
+
+
+//
+//    Pretty Important: Keep this as true unless/until you've incorperated some other
+//                      method of getting file input/output
+//
+var manualFileInput=true;
+
+
+// Put recieved data about assembly into here. The code handles the rest.
+// theXMLFile should be a string, and theSTLFiles as a binary ArrayBuffer
+// Any text-based STL files should be in an 8-bit encoding
+/**
+*
+* The function which handles the actual rendering of the solution file animation
+* and loading in the models
+*
+* @method recieveData
+* @for directionConfirmGlobal
+* @param {String} theXMLFile
+* @param {Object} theSTLFiles
+* @return {Void}
+* 
+*/
+function receiveData(theXMLFile, theSTLFiles){
+
+	theXML=theXMLFile;
+
+	parts.length=0;
+	var pos=0;
+	var lim=theSTLFiles.length;
+	var partGeom;
+	var partMesh;
+
+	while(pos<lim){
+		partGeom=null;
+		partGeom=theSTLFiles[pos];
+		if(partGeom===null){
+			partGeom=parseStlBinary(fileReaders[pos].Reader.result);
+		}
+		
+		partMesh=new THREE.Mesh( 
+				partGeom,
+				new THREE.MeshNormalMaterial( )
+		);
+		parts.push({
+			Mesh: partMesh,
+			Name: fileReaders[pos].Name
+		})
+		scene.add(partMesh);
+		
+		pos++;
+	}
+	
+	renderParts();
+
+}	
+
+
+
+// Gets called when the user submits the table and everything is properly filled out
+/**
+*
+* Is called whenever the user submits the part table and every entry has been
+* properly filled out.
+*
+* @method sendData
+* @for directionConfirmGlobal
+* @param {String} theXMLText The contents of the disassembly directions in the webpage, as a string
+* in XML formatting
+* @return {Void}
+* 
+*/
+function sendData(theXMLText){
+
+	// Do whatever you want with the resulting data to send it off, if you want
+	
+
+}
+
+
+
+
 
 var skyColor= 0xFFFFFF;
 var assemblyPairs=[];
@@ -473,21 +558,28 @@ function loadParts (){
 			pos++;
 		}
 		
-		parseData();
-		linkParts();
-		console.log(assemblyPairs);
-		highlight(assemblyPairs[0]);
-		lastPair=assemblyPairs[0];
-		currentPair=assemblyPairs[0];
-		console.log("setting up currentPair");
-		console.log(currentPair);
-		insertAssemblyPairs();
-		initAxisLines();
-		render();
+		renderParts();
 		
 	}
 	
 
+}
+
+
+function renderParts(){
+	
+	
+	parseData();
+	linkParts();
+	console.log(assemblyPairs);
+	highlight(assemblyPairs[0]);
+	lastPair=assemblyPairs[0];
+	currentPair=assemblyPairs[0];
+	insertAssemblyPairs();
+	initAxisLines();
+	render();
+	
+	
 }
 
 
