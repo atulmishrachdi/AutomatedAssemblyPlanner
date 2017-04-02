@@ -7,11 +7,12 @@ using System.Net.Security;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using AssemblyEvaluation;
 using Assembly_Planner;
-using Assembly_Planner.GraphSynth.BaseClasses;
+using BaseClasses;
+using BaseClasses.Representation;
+using Fastener_Detection;
+using Geometric_Reasoning;
 using GPprocess;
-using GraphSynth.Representation;
 using StarMathLib;
 using TVGL;
 using TVGL.IOFunctions;
@@ -45,6 +46,7 @@ namespace Assembly_Planner
         public static List<double> gpinstalltime = new List<double>();
         public static List<double> gpsecuretime = new List<double>();
         public static List<double> gprotate = new List<double>();
+
         private static void Main(string[] args)
         {
             InititalConfigurations();
@@ -53,17 +55,20 @@ namespace Assembly_Planner
              inputDir = consoleFrontEnd.getPartsDirectory();
 #else
             inputDir = "workspace";
-            var ss = Directory.GetCurrentDirectory();
-            //"src/Test/PumpWExtention";
+            var ss = //Directory.GetCurrentDirectory();
+            "src/Test/PumpWExtention";
 
 #endif
             Solids = GetSTLs(inputDir);
             EnlargeTheSolid();
 
             AssemblyGraph = new designGraph();
-            DisassemblyDirectionsWithFastener.RunGeometricReasoning(Solids);
+            Process.Start("Geometric_Reasoning.exe");
             if (DetectFasteners)
-                DisassemblyDirectionsWithFastener.RunFastenerDetection(Solids, FastenersAreThreaded);
+                Process.Start("Fastener_Detection.exe");
+            Process.Start("Graph_Generation.exe");
+            Process.Start("Plan_Generation.exe");
+            DisassemblyDirectionsWithFastener.RunGeometricReasoning(Solids);
             //SolidsNoFastener = Solids;
             SerializeSolidProperties();
             Console.WriteLine("\nPress enter once input parts table generated >>");
@@ -260,7 +265,7 @@ namespace Assembly_Planner
             Console.WriteLine("All the files are loaded successfully");
             Console.WriteLine("    * Number of tessellated solids:   " + parts.Count);
             Console.WriteLine("    * Total Number of Triangles:   " + parts.Sum(s => s.Faces.Count()));
-            return parts.ToDictionary(tessellatedSolid => tessellatedSolid.Name, tessellatedSolid => new List<TessellatedSolid> { tessellatedSolid });
+            return parts.ToDictionary(tessellatedSolid => tessellatedSolid.FileName, tessellatedSolid => new List<TessellatedSolid> { tessellatedSolid });
         }
 
         private static List<int> AddDirections(List<int> reviewedDirections)

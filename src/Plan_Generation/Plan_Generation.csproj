@@ -1,0 +1,176 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D0A890FD-A751-4721-AE35-9C043B96C7CB}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Plan_Generation</RootNamespace>
+    <AssemblyName>Plan_Generation</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Accord, Version=3.4.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.3.4.0\lib\net45\Accord.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Accord.Math, Version=3.4.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.Math.3.4.0\lib\net45\Accord.Math.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Accord.Math.Core, Version=3.4.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.Math.3.4.0\lib\net45\Accord.Math.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Accord.Statistics, Version=3.4.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.Statistics.3.4.0\lib\net45\Accord.Statistics.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MIConvexHull, Version=1.0.16.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MIConvexHull.1.1.17.0214\lib\portable-net45+wp8+win8\MIConvexHull.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="OptimizationToolbox, Version=1.0.14.1031, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OOOT.1.0.16.0419\lib\OptimizationToolbox.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="RandomGen, Version=0.4.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RandomGen.0.4.1\lib\net40\RandomGen.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="StarMath, Version=2.0.14.1114, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\StarMath.2.0.16.0529\lib\portable-net45+wp8+win8\StarMath.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="TessellationAndVoxelizationGeometryLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TVGL.1.0.17.0226\lib\portable-net45+win8\TessellationAndVoxelizationGeometryLibrary.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DisassemblyProcess\AStarInspiredRecursiveOptimizedSearch.cs" />
+    <Compile Include="DisassemblyProcess\BeamSearch.cs" />
+    <Compile Include="DisassemblyProcess\BoostedSCC.cs" />
+    <Compile Include="DisassemblyProcess\DBG.cs" />
+    <Compile Include="DisassemblyProcess\DBGBinary.cs" />
+    <Compile Include="DisassemblyProcess\LeapSearch\LeapSearch.cs" />
+    <Compile Include="DisassemblyProcess\OptionGenerator.cs" />
+    <Compile Include="DisassemblyProcess\OptionGeneratorPro.cs" />
+    <Compile Include="DisassemblyProcess\OptionGeneratorProBinary.cs" />
+    <Compile Include="DisassemblyProcess\OrderedDFS.cs" />
+    <Compile Include="DisassemblyProcess\RecursiveOptimizedSearch.cs" />
+    <Compile Include="DisassemblyProcess\SCC.cs" />
+    <Compile Include="DisassemblyProcess\SCCBinary.cs" />
+    <Compile Include="DisassemblyProcess\Updates.cs" />
+    <Compile Include="Evaluation\AssemblyEvaluator.cs" />
+    <Compile Include="Evaluation\ConvexHullEvaluator.cs" />
+    <Compile Include="Evaluation\EvaluationForBinaryTree.cs" />
+    <Compile Include="Evaluation\FeasibilityEvaluator.cs" />
+    <Compile Include="Evaluation\FootprintFace.cs" />
+    <Compile Include="Evaluation\MultiObj_optimizeSort.cs" />
+    <Compile Include="Evaluation\Statblity.cs" />
+    <Compile Include="Evaluation\TimeEvaluator.cs" />
+    <Compile Include="GPprocess\CalculateAssemblyTimeAndSD.cs" />
+    <Compile Include="GPprocess\CalculatRegression.cs" />
+    <Compile Include="GPprocess\GnuPlot.cs" />
+    <Compile Include="GPprocess\GPwithMeanfunction.cs" />
+    <Compile Include="GPprocess\Inequality.cs" />
+    <Compile Include="GPprocess\ObjectiveFunc - Copy.cs" />
+    <Compile Include="GPprocess\OneDObjectiveFunc.cs" />
+    <Compile Include="GPprocess\OnlineGPupdating.cs" />
+    <Compile Include="GPprocess\Optimization.cs" />
+    <Compile Include="GPprocess\readdata.cs" />
+    <Compile Include="GPprocess\Readwholedata.cs" />
+    <Compile Include="GPprocess\SaveandLoadData.cs" />
+    <Compile Include="GPprocess\Start.cs" />
+    <Compile Include="GPprocess\StartWithoutInfer.cs" />
+    <Compile Include="GPprocess\ThreeDinput.cs" />
+    <Compile Include="GPprocess\XMLFUNCTION.cs" />
+    <Compile Include="PostProcessor\OptimalOrientation.cs" />
+    <Compile Include="PostProcessor\PostProcessingConstnts.cs" />
+    <Compile Include="PostProcessor\Scheduling.cs" />
+    <Compile Include="PostProcessor\Stabilityfucntions.cs" />
+    <Compile Include="PostProcessor\TasksClass.cs" />
+    <Compile Include="PostProcessor\UpdatePostProcessor.cs" />
+    <Compile Include="PostProcessor\WorkerAllocation.cs" />
+    <Compile Include="PostProcessor\WorkersClass.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MIConvexHull.xml" />
+    <Content Include="OptimizationToolbox.XML" />
+    <Content Include="StarMath.XML" />
+    <Content Include="TessellationAndVoxelizationGeometryLibrary.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Fastener_Detection\Fastener_Detection.csproj">
+      <Project>{8cd7832c-44ca-4088-90f4-ab33208e9203}</Project>
+      <Name>Fastener_Detection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Geometric_Reasoning\Geometric_Reasoning.csproj">
+      <Project>{cc1b9e2b-a7d3-4862-a13b-6914a4d4f1c5}</Project>
+      <Name>Geometric_Reasoning</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GraphSynth\BaseClasses.csproj">
+      <Project>{20e21ddb-114e-4685-b228-621f1df13c1d}</Project>
+      <Name>BaseClasses</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Graph_Generation\Graph_Generation.csproj">
+      <Project>{86d2a764-466d-4e9d-b643-2d18747e0401}</Project>
+      <Name>Graph_Generation</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\Accord.3.4.0\build\Accord.targets" Condition="Exists('..\packages\Accord.3.4.0\build\Accord.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Accord.3.4.0\build\Accord.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Accord.3.4.0\build\Accord.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
