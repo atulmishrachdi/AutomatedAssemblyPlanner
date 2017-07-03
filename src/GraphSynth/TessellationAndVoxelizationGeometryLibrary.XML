@@ -4,11 +4,6 @@
         <name>TessellationAndVoxelizationGeometryLibrary</name>
     </assembly>
     <members>
-        <member name="T:TVGL.ClipperIntOld.IntPoint">
-            <summary>
-            Integer Point with X and Y coordinates
-            </summary>
-        </member>
         <member name="T:TVGL.Line">
             <summary>
             A 2D Line made up of two points.
@@ -1255,6 +1250,13 @@
             <param name="path"></param>
             <returns></returns>
         </member>
+        <member name="M:TVGL.PolygonOperations.Length(System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}})">
+            <summary>
+            Gets the length of a path
+            </summary>
+            <param name="paths"></param>
+            <returns></returns>
+        </member>
         <member name="M:TVGL.PolygonOperations.CCWPositive(System.Collections.Generic.IList{TVGL.Point})">
             <summary>
             Sets a polygon to counter clock wise positive
@@ -1353,9 +1355,10 @@
             <param name="offset"></param>
             <returns></returns>
         </member>
-        <member name="M:TVGL.PolygonOperations.Union(System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}},System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}},System.Boolean)">
+        <member name="M:TVGL.PolygonOperations.Union(System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}},System.Boolean,TVGL.PolygonFillType)">
             <summary>
             Union. Joins paths that are touching into merged larger subject.
+            Use the Even/Odd PolygonFillMethod to correctly ordering a set of paths.
             </summary>
             <param name="subject"></param>
             <param name="clip"></param>
@@ -1363,9 +1366,10 @@
             <returns></returns>
             <exception cref="T:System.Exception"></exception>
         </member>
-        <member name="M:TVGL.PolygonOperations.Union(System.Collections.Generic.List{TVGL.Point},System.Collections.Generic.List{TVGL.Point},System.Boolean)">
+        <member name="M:TVGL.PolygonOperations.Union(System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}},System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}},System.Boolean,TVGL.PolygonFillType)">
             <summary>
             Union. Joins paths that are touching into merged larger subject.
+            Use the Even/Odd PolygonFillMethod to correctly ordering a set of paths.
             </summary>
             <param name="subject"></param>
             <param name="clip"></param>
@@ -1373,9 +1377,10 @@
             <returns></returns>
             <exception cref="T:System.Exception"></exception>
         </member>
-        <member name="M:TVGL.PolygonOperations.Union(System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}},System.Collections.Generic.List{TVGL.Point},System.Boolean)">
+        <member name="M:TVGL.PolygonOperations.Union(System.Collections.Generic.List{TVGL.Point},System.Collections.Generic.List{TVGL.Point},System.Boolean,TVGL.PolygonFillType)">
             <summary>
             Union. Joins paths that are touching into merged larger subject.
+            Use the Even/Odd PolygonFillMethod to correctly ordering a set of paths.
             </summary>
             <param name="subject"></param>
             <param name="clip"></param>
@@ -1383,56 +1388,62 @@
             <returns></returns>
             <exception cref="T:System.Exception"></exception>
         </member>
-        <member name="M:TVGL.PolygonOperations.UnionEvenOdd(System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}},System.Boolean)">
+        <member name="M:TVGL.PolygonOperations.Union(System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}},System.Collections.Generic.List{TVGL.Point},System.Boolean,TVGL.PolygonFillType)">
             <summary>
-            Union based on Even/Odd methodology. Useful for correctly ordering a set of paths.
+            Union. Joins paths that are touching into merged larger subject.
+            Use the Even/Odd PolygonFillMethod to correctly ordering a set of paths.
             </summary>
             <param name="subject"></param>
+            <param name="clip"></param>
             <param name="simplifyPriorToUnion"></param>
             <returns></returns>
             <exception cref="T:System.Exception"></exception>
         </member>
-        <member name="M:TVGL.PolygonOperations.Difference(System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}},System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}},System.Boolean)">
+        <member name="M:TVGL.PolygonOperations.Difference(System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}},System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}},System.Boolean,TVGL.PolygonFillType)">
             <summary>
             Difference. Gets the difference between two sets of polygons. 
             </summary>
             <param name="subject"></param>
             <param name="clip"></param>
             <param name="simplifyPriorToDifference"></param>
+            <param name="polyFill"></param>
             <returns></returns>
             <exception cref="T:System.Exception"></exception>
         </member>
-        <member name="M:TVGL.PolygonOperations.Difference(System.Collections.Generic.List{TVGL.Point},System.Collections.Generic.List{TVGL.Point},System.Boolean)">
+        <member name="M:TVGL.PolygonOperations.Difference(System.Collections.Generic.List{TVGL.Point},System.Collections.Generic.List{TVGL.Point},System.Boolean,TVGL.PolygonFillType)">
             <summary>
             Difference. Gets the difference between two sets of polygons. 
             </summary>
             <param name="subject"></param>
             <param name="clip"></param>
             <param name="simplifyPriorToDifference"></param>
+            <param name="polyFill"></param>
             <returns></returns>
             <exception cref="T:System.Exception"></exception>
         </member>
-        <member name="M:TVGL.PolygonOperations.Difference(System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}},System.Collections.Generic.List{TVGL.Point},System.Boolean)">
+        <member name="M:TVGL.PolygonOperations.Difference(System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}},System.Collections.Generic.List{TVGL.Point},System.Boolean,TVGL.PolygonFillType)">
             <summary>
             Difference. Gets the difference between two sets of polygons. 
             </summary>
             <param name="subject"></param>
             <param name="clip"></param>
             <param name="simplifyPriorToDifference"></param>
+            <param name="polyFill"></param>
             <returns></returns>
             <exception cref="T:System.Exception"></exception>
         </member>
-        <member name="M:TVGL.PolygonOperations.Difference(System.Collections.Generic.List{TVGL.Point},System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}},System.Boolean)">
+        <member name="M:TVGL.PolygonOperations.Difference(System.Collections.Generic.List{TVGL.Point},System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}},System.Boolean,TVGL.PolygonFillType)">
             <summary>
             Difference. Gets the difference between two sets of polygons. 
             </summary>
             <param name="subject"></param>
             <param name="clip"></param>
             <param name="simplifyPriorToDifference"></param>
+            <param name="polyFill"></param>
             <returns></returns>
             <exception cref="T:System.Exception"></exception>
         </member>
-        <member name="M:TVGL.PolygonOperations.Intersection(System.Collections.Generic.List{TVGL.Point},System.Collections.Generic.List{TVGL.Point},System.Boolean)">
+        <member name="M:TVGL.PolygonOperations.Intersection(System.Collections.Generic.List{TVGL.Point},System.Collections.Generic.List{TVGL.Point},System.Boolean,TVGL.PolygonFillType)">
             <summary>
             Intersection. Gets the areas covered by both the subjects and the clips. 
             </summary>
@@ -1442,7 +1453,7 @@
             <returns></returns>
             <exception cref="T:System.Exception"></exception>
         </member>
-        <member name="M:TVGL.PolygonOperations.Intersection(System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}},System.Collections.Generic.List{TVGL.Point},System.Boolean)">
+        <member name="M:TVGL.PolygonOperations.Intersection(System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}},System.Collections.Generic.List{TVGL.Point},System.Boolean,TVGL.PolygonFillType)">
             <summary>
             Intersection. Gets the areas covered by both the subjects and the clips.
             </summary>
@@ -1452,7 +1463,7 @@
             <returns></returns>
             <exception cref="T:System.Exception"></exception>
         </member>
-        <member name="M:TVGL.PolygonOperations.Intersection(System.Collections.Generic.List{TVGL.Point},System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}},System.Boolean)">
+        <member name="M:TVGL.PolygonOperations.Intersection(System.Collections.Generic.List{TVGL.Point},System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}},System.Boolean,TVGL.PolygonFillType)">
             <summary>
             Intersection. Gets the areas covered by both the subjects and the clips. 
             </summary>
@@ -1462,7 +1473,7 @@
             <returns></returns>
             <exception cref="T:System.Exception"></exception>
         </member>
-        <member name="M:TVGL.PolygonOperations.Intersection(System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}},System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}},System.Boolean)">
+        <member name="M:TVGL.PolygonOperations.Intersection(System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}},System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}},System.Boolean,TVGL.PolygonFillType)">
             <summary>
             Intersection. Gets the areas covered by both the subjects and the clips.
             </summary>
@@ -1472,7 +1483,7 @@
             <returns></returns>
             <exception cref="T:System.Exception"></exception>
         </member>
-        <member name="M:TVGL.PolygonOperations.Xor(System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}},System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}},System.Boolean)">
+        <member name="M:TVGL.PolygonOperations.Xor(System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}},System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}},System.Boolean,TVGL.PolygonFillType)">
             <summary>
             XOR. Opposite of Intersection. Gets the areas covered by only either subjects or clips. 
             </summary>
@@ -1482,7 +1493,7 @@
             <returns></returns>
             <exception cref="T:System.Exception"></exception>
         </member>
-        <member name="M:TVGL.PolygonOperations.Xor(System.Collections.Generic.List{TVGL.Point},System.Collections.Generic.List{TVGL.Point},System.Boolean)">
+        <member name="M:TVGL.PolygonOperations.Xor(System.Collections.Generic.List{TVGL.Point},System.Collections.Generic.List{TVGL.Point},System.Boolean,TVGL.PolygonFillType)">
             <summary>
             XOR. Opposite of Intersection. Gets the areas covered by only either subjects or clips. 
             </summary>
@@ -1492,7 +1503,7 @@
             <returns></returns>
             <exception cref="T:System.Exception"></exception>
         </member>
-        <member name="M:TVGL.PolygonOperations.Xor(System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}},System.Collections.Generic.List{TVGL.Point},System.Boolean)">
+        <member name="M:TVGL.PolygonOperations.Xor(System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}},System.Collections.Generic.List{TVGL.Point},System.Boolean,TVGL.PolygonFillType)">
             <summary>
             XOR. Opposite of Intersection. Gets the areas covered by only either subjects or clips. 
             </summary>
@@ -1502,7 +1513,7 @@
             <returns></returns>
             <exception cref="T:System.Exception"></exception>
         </member>
-        <member name="M:TVGL.PolygonOperations.Xor(System.Collections.Generic.List{TVGL.Point},System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}},System.Boolean)">
+        <member name="M:TVGL.PolygonOperations.Xor(System.Collections.Generic.List{TVGL.Point},System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}},System.Boolean,TVGL.PolygonFillType)">
             <summary>
             XOR. Opposite of Intersection. Gets the areas covered by only either subjects or clips.  
             </summary>
@@ -1512,7 +1523,7 @@
             <returns></returns>
             <exception cref="T:System.Exception"></exception>
         </member>
-        <member name="M:TVGL.PolygonOperations.BooleanOperation(TVGL.ClipperInt.PolyFillType,TVGL.ClipperInt.ClipType,System.Collections.Generic.IEnumerable{System.Collections.Generic.List{TVGL.Point}},System.Collections.Generic.IEnumerable{System.Collections.Generic.List{TVGL.Point}},System.Boolean,System.Double)">
+        <member name="M:TVGL.PolygonOperations.BooleanOperation(ClipperLib.PolyFillType,ClipperLib.ClipType,System.Collections.Generic.IEnumerable{System.Collections.Generic.List{TVGL.Point}},System.Collections.Generic.IEnumerable{System.Collections.Generic.List{TVGL.Point}},System.Boolean,System.Double)">
             <summary>
             Performs the Boolean Operations from the Clipper Library
             </summary>
@@ -1524,14 +1535,6 @@
             <param name="fillMethod"></param>
             <returns></returns>
             <exception cref="T:System.Exception"></exception>
-        </member>
-        <member name="M:TVGL.PolygonOperations.Union3(System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}},System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}})">
-            <summary>
-             Union. Joins paths that are touching into merged larger subject.
-            </summary>
-            <param name="subject"></param>
-            <param name="clip"></param>
-            <returns></returns>
         </member>
         <member name="M:TVGL.PolygonOperations.BooleanOperation(System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}},System.Collections.Generic.IList{System.Collections.Generic.List{TVGL.Point}},TVGL.BooleanOperationType)">
             <reference>
@@ -3235,33 +3238,7 @@
             <param name="convexHull2DDecompositon">if set to <c>true</c> [convex hull2 d decompositon].</param>
             <param name="boundingRectangleArea">if set to <c>true</c> [bounding rectangle area].</param>
             <returns>List&lt;System.Double[]&gt;.</returns>
-        </member>
-        <member name="M:TVGL.AreaDecomposition.Run(TVGL.TessellatedSolid,System.Double[],System.Collections.Generic.List{System.Double[]}@,System.Double,System.Double,System.Double,System.Boolean,System.Boolean,System.Boolean)">
-            <summary>
-                Runs the specified ts.
-            </summary>
-            <param name="ts">The ts.</param>
-            <param name="axis">The axis.</param>
-            <param name="pointsOfInterestForFeasability">The points of interest for feasability.</param>
-            <param name="maxArea">The maximum area.</param>
-            <param name="stepSize">Size of the step.</param>
-            <param name="minOffset">The minimum offset.</param>
-            <param name="ignoreNegativeSpace">if set to <c>true</c> [ignore negative space].</param>
-            <param name="convexHull2DDecompositon">if set to <c>true</c> [convex hull2 d decompositon].</param>
-            <param name="boundingRectangleArea">if set to <c>true</c> [bounding rectangle area].</param>
-            <returns>List&lt;System.Double[]&gt;.</returns>
             <exception cref="T:System.Exception">Pick one or the other. Can't do both at the same time</exception>
-        </member>
-        <member name="M:TVGL.AreaDecomposition.RunRectangleRestricted(TVGL.TessellatedSolid,System.Double[],System.Double,System.Double,System.Double)">
-            <summary>
-                Runs the rectangle restricted.
-            </summary>
-            <param name="ts">The ts.</param>
-            <param name="axis">The axis.</param>
-            <param name="maxArea">The maximum area.</param>
-            <param name="stepSize">Size of the step.</param>
-            <param name="minOffset">The minimum offset.</param>
-            <returns>List&lt;System.Double[]&gt;.</returns>
         </member>
         <member name="T:TVGL.AreaDecomposition.DecompositionData">
             <summary>
@@ -3294,16 +3271,6 @@
             <param name="distance"></param>
             <returns></returns>
         </member>
-        <member name="M:TVGL.AreaDecomposition.DirectionalDecomposition(TVGL.TessellatedSolid,System.Double[],System.Double,System.Double)">
-            <summary>
-            Returns the decomposition data found from each slice of the decomposition. This data is used in other methods.
-            </summary>
-            <param name="ts"></param>
-            <param name="direction"></param>
-            <param name="stepSize"></param>
-            <param name="minOffset"></param>
-            <returns></returns>
-        </member>
         <member name="M:TVGL.AreaDecomposition.UniformDirectionalDecomposition(TVGL.TessellatedSolid,System.Double[],System.Double)">
             <summary>
             Returns the decomposition data found from each slice of the decomposition. This data is used in other methods.
@@ -3322,18 +3289,6 @@
             <param name="outputData"></param>
             <returns></returns>
             <exception cref="T:System.Exception"></exception>
-        </member>
-        <member name="M:TVGL.AreaDecomposition.AdditiveVolume(TVGL.TessellatedSolid,System.Double[],System.Double,System.Double,System.Collections.Generic.List{System.Collections.Generic.List{System.Collections.Generic.List{TVGL.Point}}}@,System.Double)">
-            <summary>
-            Returns the additive volume of a solid, with support material and an offset accuracy, Given the direction of printing.
-            </summary>
-            <param name="ts"></param>
-            <param name="direction"></param>
-            <param name="stepSize"></param>
-            <param name="additiveAccuracy">The additive processes accuracy, used for a Polygon Offset. </param>
-            <param name="outputData"></param>
-            <param name="minOffset"></param>
-            <returns></returns>
         </member>
         <member name="M:TVGL.AreaDecomposition.CrossSectionalArea(System.Collections.Generic.Dictionary{System.Int32,TVGL.Edge},TVGL.Flat,System.Collections.Generic.List{System.Collections.Generic.List{TVGL.Edge}}@,System.Collections.Generic.List{System.Collections.Generic.List{TVGL.Edge}},System.Boolean)">
             <summary>
@@ -3399,7 +3354,7 @@
             <param name="faces">The faces.</param>
             <returns>List&lt;PolygonalFace&gt;.</returns>
         </member>
-        <member name="M:TVGL.ListFunctions.Flats(System.Collections.Generic.IList{TVGL.PolygonalFace},System.Double,System.Double)">
+        <member name="M:TVGL.ListFunctions.Flats(System.Collections.Generic.IList{TVGL.PolygonalFace},System.Double,System.Double,System.Int32)">
             <summary>
                 Gets a list of flats, given a list of faces.
             </summary>
@@ -3429,7 +3384,7 @@
             <param name="normal"></param>
             <returns></returns>
         </member>
-        <member name="M:TVGL.Silhouette.Run(TVGL.TessellatedSolid,System.Double[],System.Double)">
+        <member name="M:TVGL.Silhouette.Run(TVGL.TessellatedSolid,System.Double[],System.Double,System.Boolean)">
             <summary>
             Gets the silhouette of a solid along a given normal. 
             </summary>
@@ -3993,7 +3948,22 @@
                 Miscellaneous Functions for TVGL
             </summary>
         </member>
-        <member name="M:TVGL.MiscFunctions.SortAlongDirection(System.Double[][],System.Collections.Generic.List{TVGL.Vertex},System.Collections.Generic.List{TVGL.Vertex}@,System.Collections.Generic.List{System.Int32[]}@)">
+        <member name="M:TVGL.MiscFunctions.SortAlongDirection(System.Double[][],System.Collections.Generic.IEnumerable{TVGL.Vertex},System.Collections.Generic.List{TVGL.Vertex}@,System.Collections.Generic.List{System.Int32[]}@)">
+            <summary>
+                Returns a list of sorted vertices along a set direction. Ties are broken by direction[1] then direction[2] if
+                available.
+            </summary>
+            <param name="directions">The directions.</param>
+            <param name="vertices">The vertices.</param>
+            <param name="sortedVertices">The sorted vertices.</param>
+            <param name="duplicateRanges">The duplicate ranges.</param>
+            <exception cref="T:System.Exception">
+                Must provide between 1 to 3 direction vectors
+                or
+                Must provide between 1 to 3 direction vectors
+            </exception>
+        </member>
+        <member name="M:TVGL.MiscFunctions.SortAlongDirection(System.Double[][],System.Collections.Generic.IEnumerable{TVGL.Vertex},System.Collections.Generic.List{System.Tuple{TVGL.Vertex,System.Double}}@,System.Collections.Generic.List{System.Int32[]}@)">
             <summary>
                 Returns a list of sorted vertices along a set direction. Ties are broken by direction[1] then direction[2] if
                 available.
@@ -4038,12 +4008,12 @@
                 Faster Method: http://geomalgorithms.com/a01-_area.html
             </reference>
         </member>
-        <member name="M:TVGL.MiscFunctions.AreaOf3DPolygon(System.Collections.Generic.ICollection{TVGL.Vertex},System.Double[])">
+        <member name="M:TVGL.MiscFunctions.AreaOf3DPolygon(System.Collections.Generic.IEnumerable{TVGL.Vertex},System.Double[])">
             <summary>
-                Calculate the area of any non-intersecting polygon in 3D space
+                Calculate the area of any non-intersecting polygon in 3D space (loops)
                 This is faster than projecting to a 2D surface first in a seperate function.
             </summary>
-            <param name="polygon">The polygon.</param>
+            <param name="loop"></param>
             <param name="normal">The normal.</param>
             <returns>System.Double.</returns>
             <references>http://geomalgorithms.com/a01-_area.html </references>
@@ -4056,7 +4026,7 @@
             <returns>List&lt;TessellatedSolid&gt;.</returns>
             <exception cref="T:System.Exception"></exception>
         </member>
-        <member name="M:TVGL.MiscFunctions.Get2DProjectionPointsReorderingIfNecessary(System.Collections.Generic.IList{TVGL.Vertex},System.Double[],System.Double[0:,0:]@,System.Double,System.Boolean)">
+        <member name="M:TVGL.MiscFunctions.Get2DProjectionPointsReorderingIfNecessary(System.Collections.Generic.IEnumerable{TVGL.Vertex},System.Double[],System.Double[0:,0:]@,System.Double,System.Boolean)">
             <summary>
                 Returns the 2D path (list of points) of the 3D loop (list of vertices) as that they would be represented in
                 the x-y plane (although the z-values will be non-zero). This does not destructively alter
@@ -4070,7 +4040,7 @@
             <param name="mergeDuplicateReferences"></param>
             <returns></returns>
         </member>
-        <member name="M:TVGL.MiscFunctions.Get2DProjectionPoints(System.Collections.Generic.IList{TVGL.Vertex},System.Double[],System.Boolean)">
+        <member name="M:TVGL.MiscFunctions.Get2DProjectionPoints(System.Collections.Generic.IEnumerable{TVGL.Vertex},System.Double[],System.Boolean)">
             <summary>
                 Returns the positions (array of 3D arrays) of the vertices as that they would be represented in
                 the x-y plane (although the z-values will be non-zero). This does not destructively alter
@@ -4081,7 +4051,7 @@
             <param name="mergeDuplicateReferences">The merge duplicate references.</param>
             <returns>Point2D[].</returns>
         </member>
-        <member name="M:TVGL.MiscFunctions.Get2DProjectionPoints(System.Collections.Generic.IList{TVGL.Vertex},System.Double[],System.Double)">
+        <member name="M:TVGL.MiscFunctions.Get2DProjectionPoints(System.Collections.Generic.IEnumerable{TVGL.Vertex},System.Double[],System.Double)">
             <summary>
                 Returns the positions (array of 3D arrays) of the vertices as that they would be represented in
                 the x-y plane (although the z-values will be non-zero). This does not destructively alter
@@ -4092,7 +4062,7 @@
             <param name="mergeDuplicateTolerance">The merge duplicate references.</param>
             <returns>Point2D[].</returns>
         </member>
-        <member name="M:TVGL.MiscFunctions.Get2DProjectionPoints(System.Collections.Generic.IList{TVGL.Vertex},System.Double[],System.Double[0:,0:]@,System.Boolean)">
+        <member name="M:TVGL.MiscFunctions.Get2DProjectionPoints(System.Collections.Generic.IEnumerable{TVGL.Vertex},System.Double[],System.Double[0:,0:]@,System.Boolean)">
             <summary>
                 Returns the positions (array of 3D arrays) of the vertices as that they would be represented in
                 the x-y plane (although the z-values will be non-zero). This does not destructively alter
@@ -4104,7 +4074,7 @@
             <param name="mergeDuplicateReferences">The merge duplicate references.</param>
             <returns>Point2D[].</returns>
         </member>
-        <member name="M:TVGL.MiscFunctions.Get2DProjectionPoints(System.Collections.Generic.IList{TVGL.Vertex},System.Double[0:,0:],System.Boolean,System.Double)">
+        <member name="M:TVGL.MiscFunctions.Get2DProjectionPoints(System.Collections.Generic.IEnumerable{TVGL.Vertex},System.Double[0:,0:],System.Boolean,System.Double)">
             <summary>
                 Get2s the d projection points.
             </summary>
@@ -5301,6 +5271,12 @@
             <param name="obj">The object to compare with the current object.</param>
             <returns><c>true</c> if the specified <see cref="T:System.Object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
         </member>
+        <member name="M:TVGL.Color.GetHashCode">
+            <summary>
+                Gets the Hash code for the object.
+            </summary>
+            <returns>System.Int.</returns>
+        </member>
         <member name="M:TVGL.Color.#ctor(TVGL.KnownColors)">
             <summary>
                 Initializes a new instance of the <see cref="T:TVGL.Color" /> struct.
@@ -5372,17 +5348,17 @@
         </member>
         <member name="F:TVGL.Color.B">
             <summary>
-                A
+                B
             </summary>
         </member>
         <member name="F:TVGL.Color.R">
             <summary>
-                A
+                R
             </summary>
         </member>
         <member name="F:TVGL.Color.G">
             <summary>
-                A
+                G
             </summary>
         </member>
         <member name="P:TVGL.Color.Af">
@@ -5974,557 +5950,61 @@
             </summary>
             <param name="face">The face.</param>
         </member>
-        <member name="T:TVGL.Primitive_Classification">
+        <member name="P:TVGL.PrimitiveClassificationDetail.FaceWithScores.AreaRatio">
             <summary>
-                Class Primitive_Classification.
+            gets the Area * edge ratio of the face. Edge ratio is the the length of longest
+            edge to the length of the shortest edge
             </summary>
+            <value>
+            AreaRatio
+            </value>
+        </member>
+        <member name="P:TVGL.PrimitiveClassificationDetail.FaceWithScores.FaceCat">
             <summary>
-                Class Primitive_Classification.
+            Dictionary with possible face category obtained from different 
+            combinatons  of its edges' groups 
             </summary>
+            <value>
+            Face Category
+            </value>
+        </member>
+        <member name="P:TVGL.PrimitiveClassificationDetail.FaceWithScores.CatToCom">
             <summary>
-                Class Primitive_Classification.
+            Dictionary with faceCat on its key and the combinaton which makes the category on its value
             </summary>
+            <value>
+            Category to combination
+            </value>
+        </member>
+        <member name="P:TVGL.PrimitiveClassificationDetail.FaceWithScores.ComToEdge">
+            <summary>
+            Dictionary with edge combinations on key and edges obtained from face rules on its value
+            </summary>
+            <value>
+            Combination to Edges
+            </value>
+        </member>
+        <member name="P:TVGL.PrimitiveClassificationDetail.FaceWithScores.CatToELDC">
+            <summary>
+            Dictionary with faceCat on key and edges lead to the category on its value
+            </summary>
+            <value>
+            Edges lead to desired category
+            </value>
+        </member>
+        <member name="P:TVGL.PrimitiveClassificationDetail.EdgeWithScores.CatProb">
+            <summary>
+            A dictionary with 5 groups of Flat, Cylinder, Sphere, Flat to Curve and Sharp Edge and their 
+            probabilities.
+            </summary>
+            <value>
+            Group Probability
+            </value>
+        </member>
+        <member name="T:TVGL.PrimitiveClassification">
             <summary>
             Class Primitive_Classification.
             </summary>
-        </member>
-        <member name="T:TVGL.Primitive_Classification.ClassificationConstants">
-            <summary>
-                Class ClassificationConstants.
-            </summary>
-        </member>
-        <member name="F:TVGL.Primitive_Classification.ClassificationConstants.Classifier_MinAreaForStartFace">
-            <summary>
-                The classifier_ minimum area for start face
-            </summary>
-        </member>
-        <member name="F:TVGL.Primitive_Classification.ClassificationConstants.AbnLe1">
-            <summary>
-                The abn le1
-            </summary>
-        </member>
-        <member name="F:TVGL.Primitive_Classification.ClassificationConstants.AbnLe2">
-            <summary>
-                The abn le2
-            </summary>
-        </member>
-        <member name="F:TVGL.Primitive_Classification.ClassificationConstants.AbnMs1">
-            <summary>
-                The abn MS1
-            </summary>
-        </member>
-        <member name="F:TVGL.Primitive_Classification.ClassificationConstants.AbnMs2">
-            <summary>
-                The abn MS2
-            </summary>
-        </member>
-        <member name="F:TVGL.Primitive_Classification.ClassificationConstants.AbnMe1">
-            <summary>
-                The abn me1
-            </summary>
-        </member>
-        <member name="F:TVGL.Primitive_Classification.ClassificationConstants.AbnMe2">
-            <summary>
-                The abn me2
-            </summary>
-        </member>
-        <member name="F:TVGL.Primitive_Classification.ClassificationConstants.AbnHs1">
-            <summary>
-                The abn HS1
-            </summary>
-        </member>
-        <member name="F:TVGL.Primitive_Classification.ClassificationConstants.AbnHs2">
-            <summary>
-                The abn HS2
-            </summary>
-        </member>
-        <member name="F:TVGL.Primitive_Classification.ClassificationConstants.McmLe1">
-            <summary>
-                The MCM le1
-            </summary>
-        </member>
-        <member name="F:TVGL.Primitive_Classification.ClassificationConstants.McmLe2">
-            <summary>
-                The MCM le2
-            </summary>
-        </member>
-        <member name="F:TVGL.Primitive_Classification.ClassificationConstants.McmMs1">
-            <summary>
-                The MCM MS1
-            </summary>
-        </member>
-        <member name="F:TVGL.Primitive_Classification.ClassificationConstants.McmMs2">
-            <summary>
-                The MCM MS2
-            </summary>
-        </member>
-        <member name="F:TVGL.Primitive_Classification.ClassificationConstants.McmMe1">
-            <summary>
-                The MCM me1
-            </summary>
-        </member>
-        <member name="F:TVGL.Primitive_Classification.ClassificationConstants.McmMe2">
-            <summary>
-                The MCM me2
-            </summary>
-        </member>
-        <member name="F:TVGL.Primitive_Classification.ClassificationConstants.McmHs1">
-            <summary>
-                The MCM HS1
-            </summary>
-        </member>
-        <member name="F:TVGL.Primitive_Classification.ClassificationConstants.McmHs2">
-            <summary>
-                The MCM HS2
-            </summary>
-        </member>
-        <member name="F:TVGL.Primitive_Classification.ClassificationConstants.SmLe1">
-            <summary>
-                The sm le1
-            </summary>
-        </member>
-        <member name="F:TVGL.Primitive_Classification.ClassificationConstants.SmLe2">
-            <summary>
-                The sm le2
-            </summary>
-        </member>
-        <member name="F:TVGL.Primitive_Classification.ClassificationConstants.SmMs1">
-            <summary>
-                The sm MS1
-            </summary>
-        </member>
-        <member name="F:TVGL.Primitive_Classification.ClassificationConstants.SmMs2">
-            <summary>
-                The sm MS2
-            </summary>
-        </member>
-        <member name="F:TVGL.Primitive_Classification.ClassificationConstants.SmMe1">
-            <summary>
-                The sm me1
-            </summary>
-        </member>
-        <member name="F:TVGL.Primitive_Classification.ClassificationConstants.SmMe2">
-            <summary>
-                The sm me2
-            </summary>
-        </member>
-        <member name="F:TVGL.Primitive_Classification.ClassificationConstants.SmHs1">
-            <summary>
-                The sm HS1
-            </summary>
-        </member>
-        <member name="F:TVGL.Primitive_Classification.ClassificationConstants.SmHs2">
-            <summary>
-                The sm HS2
-            </summary>
-        </member>
-        <member name="F:TVGL.Primitive_Classification.ClassificationConstants.MinConeGaussPlaneOffset">
-            <summary>
-                The minimum cone gauss plane offset
-            </summary>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.ClassificationConstants.MakingListOfLimABNbeta2">
-            <summary>
-                Makings the list of lim ab nbeta2.
-            </summary>
-            <returns>System.Double[].</returns>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.ClassificationConstants.MakingListOfLimMCMbeta2">
-            <summary>
-                Makings the list of lim mc mbeta2.
-            </summary>
-            <returns>System.Double[].</returns>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.ClassificationConstants.MakingListOfLimSMbeta2">
-            <summary>
-                Makings the list of lim s mbeta2.
-            </summary>
-            <returns>System.Double[].</returns>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.ClassificationConstants.readingEdgesRules2">
-            <summary>
-                Readings the edges rules2.
-            </summary>
-            <returns>System.Int32[].</returns>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.ClassificationConstants.readingFacesRules">
-            <summary>
-                Readings the faces rules.
-            </summary>
-            <returns>System.Int32[].</returns>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.ClassificationConstants.getStreamReader(System.String)">
-            <summary>
-                Gets the stream reader.
-            </summary>
-            <param name="filepath">The filepath.</param>
-            <returns>StreamReader.</returns>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.ClassificationConstants.ReadIntMatrix(System.IO.Stream,System.Int32)">
-            <summary>
-                Reads the int matrix.
-            </summary>
-            <param name="stream">The stream.</param>
-            <param name="numColumns">The number columns.</param>
-            <returns>System.Int32[].</returns>
-        </member>
-        <member name="T:TVGL.Primitive_Classification.FaceWithScores">
-            <summary>
-                Class FaceWithScores.
-            </summary>
-        </member>
-        <member name="F:TVGL.Primitive_Classification.FaceWithScores.Face">
-            <summary>
-                The face
-            </summary>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.FaceWithScores.#ctor(TVGL.PolygonalFace)">
-            <summary>
-                Initializes a new instance of the <see cref="T:TVGL.Primitive_Classification.FaceWithScores" /> class.
-            </summary>
-            <param name="face">The face.</param>
-        </member>
-        <member name="P:TVGL.Primitive_Classification.FaceWithScores.AreaRatio">
-            <summary>
-                gets the Area * edge ratio of the face. Edge ratio is the the length of longest
-                edge to the length of the shortest edge
-            </summary>
-            <value>AreaRatio</value>
-        </member>
-        <member name="P:TVGL.Primitive_Classification.FaceWithScores.FaceCat">
-            <summary>
-                Dictionary with possible face category obtained from different
-                combinatons  of its edges' groups
-            </summary>
-            <value>Face Category</value>
-        </member>
-        <member name="P:TVGL.Primitive_Classification.FaceWithScores.CatToCom">
-            <summary>
-                Dictionary with faceCat on its key and the combinaton which makes the category on its value
-            </summary>
-            <value>Category to combination</value>
-        </member>
-        <member name="P:TVGL.Primitive_Classification.FaceWithScores.ComToEdge">
-            <summary>
-                Dictionary with edge combinations on key and edges obtained from face rules on its value
-            </summary>
-            <value>Combination to Edges</value>
-        </member>
-        <member name="P:TVGL.Primitive_Classification.FaceWithScores.CatToELDC">
-            <summary>
-                Dictionary with faceCat on key and edges lead to the category on its value
-            </summary>
-            <value>Edges lead to desired category</value>
-        </member>
-        <member name="T:TVGL.Primitive_Classification.EdgeWithScores">
-            <summary>
-                Class EdgeWithScores.
-            </summary>
-        </member>
-        <member name="F:TVGL.Primitive_Classification.EdgeWithScores.Edge">
-            <summary>
-                The edge
-            </summary>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.EdgeWithScores.#ctor(TVGL.Edge)">
-            <summary>
-                Initializes a new instance of the <see cref="T:TVGL.Primitive_Classification.EdgeWithScores" /> class.
-            </summary>
-            <param name="edge">The edge.</param>
-        </member>
-        <member name="P:TVGL.Primitive_Classification.EdgeWithScores.CatProb">
-            <summary>
-                A dictionary with 5 groups of Flat, Cylinder, Sphere, Flat to Curve and Sharp Edge and their
-                probabilities.
-            </summary>
-            <value>Group Probability</value>
-        </member>
-        <member name="T:TVGL.Primitive_Classification.PlanningSurface">
-            <summary>
-                Class PlanningSurface.
-            </summary>
-        </member>
-        <member name="F:TVGL.Primitive_Classification.PlanningSurface.Faces">
-            <summary>
-                The faces
-            </summary>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.PlanningSurface.#ctor(TVGL.PrimitiveSurfaceType,TVGL.Primitive_Classification.FaceWithScores[])">
-            <summary>
-                Initializes a new instance of the <see cref="T:TVGL.Primitive_Classification.PlanningSurface" /> class.
-            </summary>
-            <param name="SurfaceType">Type of the surface.</param>
-            <param name="Faces">The faces.</param>
-        </member>
-        <member name="P:TVGL.Primitive_Classification.PlanningSurface.SurfaceType">
-            <summary>
-                Gets the type of the surface.
-            </summary>
-            <value>The type of the surface.</value>
-        </member>
-        <member name="P:TVGL.Primitive_Classification.PlanningSurface.Area">
-            <summary>
-                Gets or sets the area.
-            </summary>
-            <value>The area.</value>
-        </member>
-        <member name="P:TVGL.Primitive_Classification.PlanningSurface.NegativeProbability">
-            <summary>
-                Gets or sets the negative probability.
-            </summary>
-            <value>The negative probability.</value>
-        </member>
-        <member name="P:TVGL.Primitive_Classification.PlanningSurface.Metric">
-            <summary>
-                Gets the metric.
-            </summary>
-            <value>The metric.</value>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.PlanningSurface.Add(TVGL.Primitive_Classification.FaceWithScores)">
-            <summary>
-                Adds the specified f.
-            </summary>
-            <param name="f">The f.</param>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.PlanningSurface.Remove(TVGL.Primitive_Classification.FaceWithScores)">
-            <summary>
-                Removes the specified f.
-            </summary>
-            <param name="f">The f.</param>
-        </member>
-        <member name="F:TVGL.Primitive_Classification.listOfLimitsABN">
-            <summary>
-            The list of limits abn
-            </summary>
-        </member>
-        <member name="F:TVGL.Primitive_Classification.listOfLimitsMCM">
-            <summary>
-            The list of limits abn
-            </summary>
-        </member>
-        <member name="F:TVGL.Primitive_Classification.listOfLimitsSM">
-            <summary>
-            The list of limits abn
-            </summary>
-        </member>
-        <member name="F:TVGL.Primitive_Classification.edgeRules">
-            <summary>
-            The edge rules
-            </summary>
-        </member>
-        <member name="F:TVGL.Primitive_Classification.faceRules">
-            <summary>
-            The edge rules
-            </summary>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.InitializeFuzzinessRules">
-            <summary>
-            Initializes the fuzziness rules.
-            </summary>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.Run(TVGL.TessellatedSolid)">
-            <summary>
-            Runs the specified tessellated solid through the primitive classification method.
-            </summary>
-            <param name="ts">The ts.</param>
-            <returns>List&lt;PrimitiveSurface&gt;.</returns>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.MinorCorrections(System.Collections.Generic.List{TVGL.PrimitiveSurface},System.Collections.Generic.List{TVGL.Primitive_Classification.EdgeWithScores})">
-            <summary>
-            Minors the corrections.
-            </summary>
-            <param name="primitives">The primitives.</param>
-            <param name="allEdgeWithScores">All edge with scores.</param>
-            <returns>List&lt;PrimitiveSurface&gt;.</returns>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.FilterOutBadFaces(System.Collections.Generic.HashSet{TVGL.Primitive_Classification.EdgeWithScores},System.Collections.Generic.HashSet{TVGL.Primitive_Classification.FaceWithScores},System.Collections.Generic.HashSet{TVGL.Primitive_Classification.EdgeWithScores},System.Collections.Generic.HashSet{TVGL.Primitive_Classification.FaceWithScores})">
-            <summary>
-            Filters the out bad faces.
-            </summary>
-            <param name="unassignedEdges">The unassigned edges.</param>
-            <param name="unassignedFaces">The unassigned faces.</param>
-            <param name="filteredOutEdges">The filtered out edges.</param>
-            <param name="filteredOutFaces">The filtered out faces.</param>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.EdgesLeadToDesiredFaceCatFinder(TVGL.Primitive_Classification.FaceWithScores,TVGL.PrimitiveSurfaceType,System.Int32[0:,0:])">
-            <summary>
-            Edgeses the lead to desired face cat finder.
-            </summary>
-            <param name="face">The face.</param>
-            <param name="p">The p.</param>
-            <param name="faceRules">The face rules.</param>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.EdgeFuzzyClassification(TVGL.Primitive_Classification.EdgeWithScores)">
-            <summary>
-            Edges the fuzzy classification.
-            </summary>
-            <param name="e">The e.</param>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.AbnCalculator(TVGL.Primitive_Classification.EdgeWithScores)">
-            <summary>
-            Abns the calculator.
-            </summary>
-            <param name="eachEdge">The each edge.</param>
-            <returns>System.Double.</returns>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.McmCalculator(TVGL.Primitive_Classification.EdgeWithScores)">
-            <summary>
-            MCMs the calculator.
-            </summary>
-            <param name="eachEdge">The each edge.</param>
-            <returns>System.Double.</returns>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.SmCalculator(TVGL.Primitive_Classification.EdgeWithScores)">
-            <summary>
-            Sms the calculator.
-            </summary>
-            <param name="eachEdge">The each edge.</param>
-            <returns>System.Double.</returns>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.AddMissingEdgeLength(System.Collections.Generic.List{TVGL.Edge})">
-            <summary>
-            Adds the length of the missing edge.
-            </summary>
-            <param name="edges">The edges.</param>
-            <returns>System.Double.</returns>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.EdgeClassifier2(System.Double[],System.Double[],System.Double[],System.Int32[0:,0:],System.Double@)">
-            <summary>
-            Edges the classifier2.
-            </summary>
-            <param name="ABNProbs">The abn probs.</param>
-            <param name="MCMProbs">The MCM probs.</param>
-            <param name="SMProbs">The sm probs.</param>
-            <param name="rulesArray">The rules array.</param>
-            <param name="prob">The prob.</param>
-            <returns>System.Int32.</returns>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.CatAndProbFinder(System.Double,System.Double[])">
-            <summary>
-            Cats the and prob finder.
-            </summary>
-            <param name="metric">The metric.</param>
-            <param name="listOfLimits">The list of limits.</param>
-            <returns>List&lt;System.Double[]&gt;.</returns>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.CatAndProbForCases2and4(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
-            <summary>
-            Cats the and prob for cases2and4.
-            </summary>
-            <param name="p1">The p1.</param>
-            <param name="p2">The p2.</param>
-            <param name="p3">The p3.</param>
-            <param name="p4">The p4.</param>
-            <param name="metric">The metric.</param>
-            <param name="Case">The case.</param>
-            <returns>List&lt;System.Double[]&gt;.</returns>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.FaceFuzzyClassification(TVGL.Primitive_Classification.FaceWithScores,System.Collections.Generic.List{TVGL.Primitive_Classification.EdgeWithScores})">
-            <summary>
-            Faces the fuzzy classification.
-            </summary>
-            <param name="eachFace">The each face.</param>
-            <param name="allEdgeWithScores">All edge with scores.</param>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.FaceClassifier(System.Int32[],System.Int32[0:,0:])">
-            <summary>
-            Faces the classifier.
-            </summary>
-            <param name="bestCombination">The best combination.</param>
-            <param name="faceRules">The face rules.</param>
-            <returns>PrimitiveSurfaceType.</returns>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.sortingComToEdgeDic(System.Collections.Generic.Dictionary{System.Int32[],TVGL.Edge[]})">
-            <summary>
-            Sortings the COM to edge dic.
-            </summary>
-            <param name="d">The d.</param>
-            <returns>Dictionary&lt;System.Int32[], Edge[]&gt;.</returns>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.groupFacesIntoPlanningSurfaces(TVGL.Primitive_Classification.FaceWithScores,System.Collections.Generic.List{TVGL.Primitive_Classification.FaceWithScores})">
-            <summary>
-            Groups the faces into planning surfaces.
-            </summary>
-            <param name="seedFace">The seed face.</param>
-            <param name="allFacesWithScores">All faces with scores.</param>
-            <returns>List&lt;PlanningSurface&gt;.</returns>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.AlreadySearchedPrimitive(TVGL.Primitive_Classification.PlanningSurface,System.Collections.Generic.List{TVGL.Primitive_Classification.PlanningSurface})">
-            <summary>
-            Alreadies the searched primitive.
-            </summary>
-            <param name="newSeed">The new seed.</param>
-            <param name="candidatePatches">The candidate patches.</param>
-            <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.DecideOnOverlappingPatches(System.Collections.Generic.List{TVGL.Primitive_Classification.PlanningSurface},System.Collections.Generic.HashSet{TVGL.Primitive_Classification.FaceWithScores})">
-            <summary>
-            Decides the on overlapping patches.
-            </summary>
-            <param name="surfaces">The surfaces.</param>
-            <param name="unassignedFaces">The unassigned faces.</param>
-            <returns>IEnumerable&lt;PlanningSurface&gt;.</returns>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.ReInsert(TVGL.Primitive_Classification.PlanningSurface,System.Collections.Generic.List{TVGL.Primitive_Classification.PlanningSurface})">
-            <summary>
-            Res the insert.
-            </summary>
-            <param name="surface">The surface.</param>
-            <param name="orderedPrimitives">The ordered primitives.</param>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.MakeSurfaces(System.Collections.Generic.List{TVGL.Primitive_Classification.PlanningSurface},System.Double)">
-            <summary>
-            Makes the surfaces.
-            </summary>
-            <param name="plannedSurfaces">The planned surfaces.</param>
-            <param name="maxFaceArea">The maximum face area.</param>
-            <returns>List&lt;PrimitiveSurface&gt;.</returns>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.CreatePrimitiveSurface(TVGL.Primitive_Classification.PlanningSurface)">
-            <summary>
-            Creates the primitive surface.
-            </summary>
-            <param name="topPlannedSurface">The top planned surface.</param>
-            <returns>PrimitiveSurface.</returns>
-            <exception cref="T:System.Exception">Cannot build Create Primitive Surface of type:  + surfaceType</exception>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.IsReallyAFlat(System.Collections.Generic.IEnumerable{TVGL.PolygonalFace})">
-            <summary>
-            Determines whether [is really a flat] [the specified faces].
-            </summary>
-            <param name="faces">The faces.</param>
-            <returns><c>true</c> if [is really a flat] [the specified faces]; otherwise, <c>false</c>.</returns>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.IsReallyACone(System.Collections.Generic.IEnumerable{TVGL.PolygonalFace},System.Double[]@,System.Double@)">
-            <summary>
-            Determines whether [is really a cone] [the specified faces all].
-            </summary>
-            <param name="facesAll">The faces all.</param>
-            <param name="axis">The axis.</param>
-            <param name="coneAngle">The cone angle.</param>
-            <returns><c>true</c> if [is really a cone] [the specified faces all]; otherwise, <c>false</c>.</returns>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.IsReallyATorus(System.Collections.Generic.IEnumerable{TVGL.PolygonalFace})">
-            <summary>
-            Determines whether [is really a torus] [the specified faces].
-            </summary>
-            <param name="faces">The faces.</param>
-            <returns><c>true</c> if [is really a torus] [the specified faces]; otherwise, <c>false</c>.</returns>
-            <exception cref="T:System.NotImplementedException"></exception>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.PaintSurfaces(System.Collections.Generic.List{TVGL.PrimitiveSurface},TVGL.TessellatedSolid)">
-            <summary>
-            Paints the surfaces.
-            </summary>
-            <param name="primitives">The primitives.</param>
-            <param name="ts">The ts.</param>
-        </member>
-        <member name="M:TVGL.Primitive_Classification.ReportStats(System.Collections.Generic.List{TVGL.PrimitiveSurface},System.Double)">
-            <summary>
-            Reports the stats.
-            </summary>
-            <param name="primitives">The primitives.</param>
-            <param name="primitivesBeforeFiltering">The primitives before filtering.</param>
         </member>
         <member name="T:TVGL.PrimitiveSurfaceType">
             <summary>
@@ -6603,6 +6083,11 @@
         <member name="F:TVGL.BoundingBox.CornerVertices">
             <summary>
                 The corner points
+            </summary>
+        </member>
+        <member name="F:TVGL.BoundingBox.Center">
+            <summary>
+                The center point
             </summary>
         </member>
         <member name="T:TVGL.BoundingRectangle">
@@ -6685,6 +6170,22 @@
         <member name="F:TVGL.BoundingCylinder.Volume">
             <summary>
                 Volume
+            </summary>
+        </member>
+        <member name="T:TVGL.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:TVGL.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:TVGL.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
             </summary>
         </member>
         <member name="T:TVGL.SimplifyTessellation">

@@ -80,10 +80,6 @@
       <Project>{20e21ddb-114e-4685-b228-621f1df13c1d}</Project>
       <Name>BaseClasses</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PrimitiveClassificationOfTessellatedSolids\PrimitiveClassificationOfTessellatedSolids.csproj">
-      <Project>{59f5fe35-e4b0-4c0c-8405-9e314cf48298}</Project>
-      <Name>PrimitiveClassificationOfTessellatedSolids</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

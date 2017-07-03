@@ -1,0 +1,4 @@
+C:\Users\Matt Campbell\Documents\GitHub\AssemblyPlanner\src\GraphSynth\obj\Release\GraphSynth.dll
+C:\Users\Matt Campbell\Documents\GitHub\AssemblyPlanner\src\GraphSynth\obj\Release\GraphSynth.pdb
+C:\Users\Matt Campbell\Documents\GitHub\AssemblyPlanner\GraphSynth.dll
+C:\Users\Matt Campbell\Documents\GitHub\AssemblyPlanner\GraphSynth.pdb

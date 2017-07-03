@@ -10,7 +10,6 @@ using BaseClasses;
 using BaseClasses.Representation;
 using StarMathLib;
 using TVGL;
-using PrimitiveClassificationOfTessellatedSolids;
 
 namespace Geometric_Reasoning
 {
@@ -39,7 +38,7 @@ namespace Geometric_Reasoning
                 }
                 check++;
 
-                var solidPrim = TesselationToPrimitives.Run(solid);
+                var solidPrim = TVGL.Primitive_Classification.Run(solid);
                 lock (partPrimitive)
                     partPrimitive.Add(solid, solidPrim);
             }
