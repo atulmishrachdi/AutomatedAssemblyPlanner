@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Xml.Linq;
 using Assembly_Planner;
+using Plan_Generation.AssemblyEvaluation;
 
 namespace GPprocess
 {

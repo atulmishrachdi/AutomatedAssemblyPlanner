@@ -170,10 +170,6 @@
       <Project>{d0a890fd-a751-4721-ae35-9c043b96c7cb}</Project>
       <Name>Plan_Generation</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PrimitiveClassificationOfTessellatedSolids\PrimitiveClassificationOfTessellatedSolids.csproj">
-      <Project>{59f5fe35-e4b0-4c0c-8405-9e314cf48298}</Project>
-      <Name>PrimitiveClassificationOfTessellatedSolids</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="InitialGraphMaker\BoltAndGearDetector\" />

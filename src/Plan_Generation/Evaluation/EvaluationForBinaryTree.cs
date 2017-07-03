@@ -83,15 +83,15 @@ namespace Plan_Generation.AssemblyEvaluation
                 distanceToFree = 0.3;
             }
             EvaluateSubFirstThreeTime(sub, refnodes, movingnodes, distanceToFree);
-         //   EvaluateSubFirstThreeTime(sub, refnodes, movingnodes, distanceToFree, out sub.Install.Time, out sub.Install.TimeSD, out sub.Secure.Time, out sub.Secure.TimeSD);
+            //   EvaluateSubFirstThreeTime(sub, refnodes, movingnodes, distanceToFree, out sub.Install.Time, out sub.Install.TimeSD, out sub.Secure.Time, out sub.Secure.TimeSD);
 
-            
+
             if (sub.Install.Time < 0)
                 sub.Install.Time = 0.5;
-            
+
             if (sub.MoveRoate.Time < 0)
                 sub.MoveRoate.Time = 0.5;
-          
+
             //if (DetermineWeight)
             //{
             //    LeapSearch.InitialTimes.Add(sub.Install.Time+sub.MoveRoate.Time);
@@ -134,7 +134,7 @@ namespace Plan_Generation.AssemblyEvaluation
                     othersubassembly = optNodes;
                 }
                 var overallstatiblity = 0.0;
-                var ss = EvaluationForBinaryTree.CreateCombinedConvexHull2(subassembly);
+                var ss = AssemblySequence.CreateCombinedConvexHull2(subassembly, EvaluationForBinaryTree.ConvexHullsForParts);
                 var reductedfaces = AssemblyEvaluator.MergingFaces(ss.Faces.ToList());
                 var maxsigleDOF = 0.0;
                 var minsigleSB = double.PositiveInfinity;
@@ -656,7 +656,7 @@ namespace Plan_Generation.AssemblyEvaluation
             }
             else
             {
-                var combinedCVXHullM = CreateCombinedConvexHull2(movingNodes);
+                var combinedCVXHullM = AssemblySequence.CreateCombinedConvexHull2(movingNodes, EvaluationForBinaryTree.ConvexHullsForParts);
                 var VolumeM = GetSubassemblyVolume(movingNodes);
                 var MassM = GetSubassemblyMass(movingNodes);
                 var centerOfMass = GetSubassemblyCenterOfMass(movingNodes);
@@ -679,14 +679,14 @@ namespace Plan_Generation.AssemblyEvaluation
             }
             else
             {
-                var combinedCVXHullR = CreateCombinedConvexHull2(referenceHyperArcnodes);
+                var combinedCVXHullR = AssemblySequence.CreateCombinedConvexHull2(referenceHyperArcnodes, EvaluationForBinaryTree.ConvexHullsForParts);
                 var VolumeR = GetSubassemblyVolume(referenceHyperArcnodes);
                 var MassR = GetSubassemblyMass(referenceHyperArcnodes);
                 var centerOfMass = GetSubassemblyCenterOfMass(referenceHyperArcnodes);
                 refAssembly = new SubAssembly(new HashSet<Component>(referenceHyperArcnodes), combinedCVXHullR, MassR,
                     VolumeR, centerOfMass);
             }
-            var combinedCvxHull = CreateCombinedConvexHull(refAssembly.CVXHull, movingAssembly.CVXHull);
+            var combinedCvxHull = AssemblySequence.CreateCombinedConvexHull(refAssembly.CVXHull, movingAssembly.CVXHull);
             List<PolygonalFace> movingFacesInCombined;
             List<PolygonalFace> refFacesInCombined;
             var InstallCharacter = shouldReferenceAndMovingBeSwitched(refAssembly, movingAssembly, combinedCvxHull,
@@ -718,24 +718,6 @@ namespace Plan_Generation.AssemblyEvaluation
                     (newSubassembly.Install.Moving.CenterOfMass.Position[2] +
                      newSubassembly.Install.Reference.CenterOfMass.Position[2])/2
                 });
-        }
-
-        private TVGLConvexHull CreateCombinedConvexHull(TVGLConvexHull refCVXHull, TVGLConvexHull movingCVXHull)
-        {
-            var pointCloud = new List<Vertex>(refCVXHull.Vertices);
-            pointCloud.AddRange(movingCVXHull.Vertices);
-            return new TVGLConvexHull(pointCloud);
-        }
-
-        public static TVGLConvexHull CreateCombinedConvexHull2(List<Component> nodes)
-        {
-            var pointCloud = new List<Vertex>();
-            foreach (var n in nodes)
-            {
-                var nodeName = n.name;
-                pointCloud.AddRange(ConvexHullsForParts[nodeName].Vertices);
-            }
-            return new TVGLConvexHull(pointCloud);
         }
 
         public static double GetSubassemblyVolume(List<Component> nodes)

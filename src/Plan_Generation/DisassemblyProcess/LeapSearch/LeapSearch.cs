@@ -451,7 +451,7 @@ namespace Plan_Generation
         {
             // this is for the time that I cannot disassemble some parts from each other.
             // what I do is that I take them as one part and add them to the memo
-            var sa = new SubAssembly(nodes, EvaluationForBinaryTree.CreateCombinedConvexHull2(nodes.ToList()),
+            var sa = new SubAssembly(nodes, AssemblySequence.CreateCombinedConvexHull2(nodes.ToList(),EvaluationForBinaryTree.ConvexHullsForParts),
                 EvaluationForBinaryTree.GetSubassemblyMass(nodes.ToList()),
                 EvaluationForBinaryTree.GetSubassemblyVolume(nodes.ToList()),
                 EvaluationForBinaryTree.GetSubassemblyCenterOfMass(nodes.ToList()));

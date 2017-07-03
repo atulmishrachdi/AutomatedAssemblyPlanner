@@ -295,14 +295,26 @@ namespace BaseClasses.AssemblyEvaluation
         }
 
 
-        private TVGLConvexHull CreateCombinedConvexHull(TVGLConvexHull refCVXHull, TVGLConvexHull movingCVXHull)
+        /// <summary>
+        /// Creates the combined convex hull.
+        /// </summary>
+        /// <param name="refCVXHull">The reference CVX hull.</param>
+        /// <param name="movingCVXHull">The moving CVX hull.</param>
+        /// <returns>TVGLConvexHull.</returns>
+        public static TVGLConvexHull CreateCombinedConvexHull(TVGLConvexHull refCVXHull, TVGLConvexHull movingCVXHull)
         {
-            var pointCloud = new List<Vertex>(refCVXHull.Vertices);
+            var pointCloud = new List<TVGL.Vertex>(refCVXHull.Vertices);
             pointCloud.AddRange(movingCVXHull.Vertices);
-            return new TVGLConvexHull(pointCloud);
+            return new TVGLConvexHull(pointCloud, 1e-10);
         }
 
-        private TVGLConvexHull CreateCombinedConvexHull2(List<Component> nodes, Dictionary<string, TVGLConvexHull> convexHullForParts)
+        /// <summary>
+        /// Creates the combined convex hull2.
+        /// </summary>
+        /// <param name="nodes">The nodes.</param>
+        /// <param name="convexHullForParts">The convex hull for parts.</param>
+        /// <returns>TVGLConvexHull.</returns>
+        public static TVGLConvexHull CreateCombinedConvexHull2(List<Component> nodes, Dictionary<string, TVGLConvexHull> convexHullForParts)
         {
             var pointCloud = new List<Vertex>();
             foreach (var n in nodes)
@@ -310,7 +322,7 @@ namespace BaseClasses.AssemblyEvaluation
                 var nodeName = n.name;
                 pointCloud.AddRange(convexHullForParts[nodeName].Vertices);
             }
-            return new TVGLConvexHull(pointCloud);
+            return new TVGLConvexHull(pointCloud, 1e-10);
         }
 
 

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using BaseClasses.Representation;
 using Geometric_Reasoning;
 using Graph_Generation;
+using TVGL;
 
 namespace Plan_Generation
 {
@@ -13,6 +14,9 @@ namespace Plan_Generation
     {
         public static int BeamWidth;
         public static designGraph AssemblyGraph;
+        public static Dictionary<string, List<TessellatedSolid>> SolidsNoFastenerSimplified 
+            = new Dictionary<string, List<TessellatedSolid>>();
+
         public static List<double> DegreeOfFreedoms = new List<double>();
         public static List<double> StablbiblityScores = new List<double>();
         public static double StabilityWeightChosenByUser = 0;

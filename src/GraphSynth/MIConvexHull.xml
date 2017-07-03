@@ -782,7 +782,7 @@
             Saves the garbage collector a lot of work.
             </summary>
         </member>
-        <member name="F:MIConvexHull.ConvexHullAlgorithm.MathHelper">
+        <member name="F:MIConvexHull.ConvexHullAlgorithm.mathHelper">
             <summary>
             Helper class for handling math related stuff.
             </summary>

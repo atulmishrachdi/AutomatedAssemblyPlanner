@@ -48,7 +48,7 @@ namespace Geometric_Reasoning
             double[][] dirs;
             double volume;
             var verts = BuildFromCovarianceMatrix(C, points, out dirs, out volume);
-            return new BoundingBox {CornerVertices = verts.Select(v=> new Point(v)).ToArray(), Volume = volume, Directions = dirs};
+            return new BoundingBox {CornerVertices = verts.ToArray(), Volume = volume, Directions = dirs};
         }
 
         internal static Vertex[] BuildFromCovarianceMatrix(double[,] C, List<Vertex> points, out double[][] eigenVecs, out double volume)

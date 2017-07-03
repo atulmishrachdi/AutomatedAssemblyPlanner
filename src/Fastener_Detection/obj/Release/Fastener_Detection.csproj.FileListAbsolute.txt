@@ -1,0 +1,6 @@
+C:\Users\Matt Campbell\Documents\GitHub\AssemblyPlanner\src\Fastener_Detection\obj\Release\Fastener_Detection.csprojResolveAssemblyReference.cache
+C:\Users\Matt Campbell\Documents\GitHub\AssemblyPlanner\Accord.dll.config
+C:\Users\Matt Campbell\Documents\GitHub\AssemblyPlanner\src\Fastener_Detection\obj\Release\Fastener_Detection.exe
+C:\Users\Matt Campbell\Documents\GitHub\AssemblyPlanner\src\Fastener_Detection\obj\Release\Fastener_Detection.pdb
+C:\Users\Matt Campbell\Documents\GitHub\AssemblyPlanner\Fastener_Detection.exe
+C:\Users\Matt Campbell\Documents\GitHub\AssemblyPlanner\Fastener_Detection.pdb
