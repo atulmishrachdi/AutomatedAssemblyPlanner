@@ -27,6 +27,10 @@ namespace Plan_Generation
         public static List<double> gpinstalltime = new List<double>();
         public static List<double> gpsecuretime = new List<double>();
         public static List<double> gprotate = new List<double>();
+
+        //Added this from the original program class. Added TVGL prefix to TessellatedSolid type to resolve syntax errors
+        public static Dictionary<string, List<TVGL.TessellatedSolid>> SolidsNoFastenerSimplified = new Dictionary<string, List<TVGL.TessellatedSolid>>();
+
         static void Main(string[] args)
         {
             NonadjacentBlockingWithPartitioning.Run(AssemblyGraph, SolidsNoFastenerSimplified, globalDirPool);
