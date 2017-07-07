@@ -42,9 +42,9 @@ namespace Assembly_Planner
             Process.Start("Fastener_Detection.exe");
         }
 
-        internal static void RunGraphGeneration(designGraph assemblyGraph, Dictionary<string, List<TessellatedSolid>> solidsNoFastener)
+        internal static List<int> RunGraphGeneration(designGraph assemblyGraph, Dictionary<string, List<TessellatedSolid>> solidsNoFastener)
         {
-
+            throw new NotImplementedException();
         }
 
 

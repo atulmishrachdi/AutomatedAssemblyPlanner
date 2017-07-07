@@ -40,7 +40,7 @@ namespace Plan_Generation
             public SubAssembly FromSubAssembly;
         }
 
-        internal static Dictionary<string, double> Run(AssemblySequence solution)
+        public static Dictionary<string, double> Run(AssemblySequence solution)
         {
             TranslateToMagicBoxDic = new Dictionary<string, double[,]>();
             TranslateToMagicBox();

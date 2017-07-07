@@ -13,7 +13,7 @@ namespace Plan_Generation
         static Dictionary<string, double> FollowingTime;
         public static Dictionary<string, double> StartingTimes;
 
-        internal static void Run(AssemblySequence solution)
+        public static void Run(AssemblySequence solution)
         {
             Console.WriteLine("\n\nAssigning workers to the task....");
             //foreach (var c in solutions.Where(c => c != null))

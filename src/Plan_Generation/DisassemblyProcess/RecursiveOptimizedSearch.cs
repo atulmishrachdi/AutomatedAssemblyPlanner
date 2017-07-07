@@ -477,7 +477,7 @@ namespace Plan_Generation
     }
 
     //stores memoization information
-    class MemoData
+   internal class MemoData
     {
         public double Value;
         public SubAssembly sa;
@@ -490,7 +490,7 @@ namespace Plan_Generation
     }
 
     //Stores information about a candidate option
-    class TreeCandidate : IComparable<TreeCandidate>
+    public class TreeCandidate : IComparable<TreeCandidate>
     {
         public TreeCandidate parent;
         public SubAssembly sa;

@@ -12,7 +12,7 @@ using TVGL;
 
 namespace Graph_Generation
 {
-    class Program
+    public class Program
     {
         public static Dictionary<string, List<TessellatedSolid>> SolidsNoFastenerSimplified = new Dictionary<string, List<TessellatedSolid>>();
         public static Dictionary<string, List<TessellatedSolid>> SimplifiedSolids = new Dictionary<string, List<TessellatedSolid>>();
@@ -429,7 +429,7 @@ namespace Graph_Generation
                     Console.WriteLine("         + " + component.name);
             }
         }
-        internal static bool GraphIsConnected(designGraph assemblyGraph)
+        public static bool GraphIsConnected(designGraph assemblyGraph)
         {
             var batches = new List<HashSet<Component>>();
             var stack = new Stack<Component>();

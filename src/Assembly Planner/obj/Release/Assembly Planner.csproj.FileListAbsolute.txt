@@ -1,3 +1,10 @@
 C:\Users\Matt Campbell\Documents\GitHub\AssemblyPlanner\src\Assembly Planner\obj\Release\Assembly Planner.csprojResolveAssemblyReference.cache
 C:\Users\cuneob\Source\Repos\AutomatedAssemblyPlanner\Assembly Planner.exe.config
 C:\Users\cuneob\Source\Repos\AutomatedAssemblyPlanner\src\Assembly Planner\obj\Release\Assembly Planner.csprojResolveAssemblyReference.cache
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\Assembly Planner\obj\Release\Assembly Planner.csprojResolveAssemblyReference.cache
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\Accord.dll.config
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\Assembly Planner.exe.config
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\Assembly Planner\obj\Release\Assembly Planner.exe
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\Assembly Planner\obj\Release\Assembly Planner.pdb
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\Assembly Planner.exe
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\Assembly Planner.pdb

@@ -12,3 +12,10 @@ C:\Users\cuneob\Source\Repos\AutomatedAssemblyPlanner\src\Graph_Generation\obj\R
 C:\Users\cuneob\Source\Repos\AutomatedAssemblyPlanner\src\Graph_Generation\obj\Release\Graph_Generation.pdb
 C:\Users\cuneob\Source\Repos\AutomatedAssemblyPlanner\Graph_Generation.exe
 C:\Users\cuneob\Source\Repos\AutomatedAssemblyPlanner\Graph_Generation.pdb
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\Graph_Generation\obj\Release\Graph_Generation.csprojResolveAssemblyReference.cache
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\Accord.dll.config
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\Graph_Generation.exe.config
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\Graph_Generation\obj\Release\Graph_Generation.exe
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\Graph_Generation\obj\Release\Graph_Generation.pdb
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\Graph_Generation.exe
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\Graph_Generation.pdb

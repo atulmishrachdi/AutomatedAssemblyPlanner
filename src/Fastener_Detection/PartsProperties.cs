@@ -13,7 +13,7 @@ namespace Fastener_Detection
         [XmlElement("part_properties")]
         public List<PartProperties> parts { get; set; }
 
-        internal void GenerateProperties()
+        public void GenerateProperties()
         {
             var solids = Geometric_Reasoning.StartProcess.Solids;
             this.parts = new List<PartProperties>();

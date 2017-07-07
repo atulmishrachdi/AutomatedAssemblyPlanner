@@ -9,8 +9,11 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Assembly_Planner;
 using BaseClasses;
+using BaseClasses.AssemblyEvaluation;
 using BaseClasses.Representation;
+using Fastener_Detection;
 using Geometric_Reasoning;
+using Plan_Generation;
 //using GPprocess;
 using StarMathLib;
 using TVGL;
@@ -82,7 +85,7 @@ namespace Assembly_Planner
                 Console.WriteLine("\n\nPress enter once input directions generated >>");
                 Console.ReadLine();
                 LoadDirections();
-                connectedGraph = DisassemblyDirectionsWithFastener.GraphIsConnected(AssemblyGraph);
+                connectedGraph = Graph_Generation.Program.GraphIsConnected(AssemblyGraph);
             }
             NonadjacentBlockingWithPartitioning.Run(AssemblyGraph, SolidsNoFastenerSimplified, globalDirPool);
             GraphSaving.SaveTheGraph(AssemblyGraph);
@@ -282,24 +285,24 @@ namespace Assembly_Planner
                         globalDirPool.Where(
                             d =>
                                 Math.Abs(1 +
-                                         DisassemblyDirections.Directions[d].dotProduct(
-                                             DisassemblyDirections.Directions[dir])) < 0.01).ToList();
+                                         DisassemblyDirectionsWithFastener.Directions[d].dotProduct(
+                                             DisassemblyDirectionsWithFastener.Directions[dir])) < 0.01).ToList();
                     if (temp.Any())
-                        DisassemblyDirections.DirectionsAndOppositsForGlobalpool.Add(dir, temp[0]);
+                       Geometric_Reasoning.StartProcess.DirectionsAndOppositsForGlobalpool.Add(dir, temp[0]);
                     else
                     {
-                        var dir2 = DisassemblyDirections.Directions[dir];
-                        DisassemblyDirections.Directions.Add(dir2.multiply(-1));
-                        DisassemblyDirections.DirectionsAndOppositsForGlobalpool.Add(dir, DisassemblyDirections.Directions.Count - 1);
-                        toBeAddedToGDir.Add(DisassemblyDirections.Directions.Count - 1);
+                        var dir2 = DisassemblyDirectionsWithFastener.Directions[dir];
+                        DisassemblyDirectionsWithFastener.Directions.Add(dir2.multiply(-1));
+                        Geometric_Reasoning.StartProcess.DirectionsAndOppositsForGlobalpool.Add(dir, DisassemblyDirectionsWithFastener.Directions.Count - 1);
+                        toBeAddedToGDir.Add(DisassemblyDirectionsWithFastener.Directions.Count - 1);
                     }
                 }
             }
             foreach (var newD in toBeAddedToGDir)
             {
                 globalDirPool.Add(newD);
-                var key = DisassemblyDirections.DirectionsAndOppositsForGlobalpool.Where(k => k.Value == newD).ToList();
-                DisassemblyDirections.DirectionsAndOppositsForGlobalpool.Add(newD, key[0].Key);
+                var key = Geometric_Reasoning.StartProcess.DirectionsAndOppositsForGlobalpool.Where(k => k.Value == newD).ToList();
+                Geometric_Reasoning.StartProcess.DirectionsAndOppositsForGlobalpool.Add(newD, key[0].Key);
             }
             return dirInds;
         }

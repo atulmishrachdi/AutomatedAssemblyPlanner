@@ -7,3 +7,8 @@ C:\Users\cuneob\Source\Repos\AutomatedAssemblyPlanner\src\GraphSynth\obj\Release
 C:\Users\cuneob\Source\Repos\AutomatedAssemblyPlanner\src\GraphSynth\obj\Release\GraphSynth.pdb
 C:\Users\cuneob\Source\Repos\AutomatedAssemblyPlanner\GraphSynth.dll
 C:\Users\cuneob\Source\Repos\AutomatedAssemblyPlanner\GraphSynth.pdb
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\GraphSynth\obj\Release\BaseClasses.csprojResolveAssemblyReference.cache
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\GraphSynth\obj\Release\GraphSynth.dll
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\GraphSynth\obj\Release\GraphSynth.pdb
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\GraphSynth.dll
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\GraphSynth.pdb
