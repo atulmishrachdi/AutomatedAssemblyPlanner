@@ -1,1 +1,3 @@
 C:\Users\Matt Campbell\Documents\GitHub\AssemblyPlanner\src\Assembly Planner\obj\Release\Assembly Planner.csprojResolveAssemblyReference.cache
+C:\Users\cuneob\Source\Repos\AutomatedAssemblyPlanner\Assembly Planner.exe.config
+C:\Users\cuneob\Source\Repos\AutomatedAssemblyPlanner\src\Assembly Planner\obj\Release\Assembly Planner.csprojResolveAssemblyReference.cache

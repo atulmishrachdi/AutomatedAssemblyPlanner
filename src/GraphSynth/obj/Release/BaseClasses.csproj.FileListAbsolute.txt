@@ -2,3 +2,8 @@ C:\Users\Matt Campbell\Documents\GitHub\AssemblyPlanner\src\GraphSynth\obj\Relea
 C:\Users\Matt Campbell\Documents\GitHub\AssemblyPlanner\src\GraphSynth\obj\Release\GraphSynth.pdb
 C:\Users\Matt Campbell\Documents\GitHub\AssemblyPlanner\GraphSynth.dll
 C:\Users\Matt Campbell\Documents\GitHub\AssemblyPlanner\GraphSynth.pdb
+C:\Users\cuneob\Source\Repos\AutomatedAssemblyPlanner\src\GraphSynth\obj\Release\BaseClasses.csprojResolveAssemblyReference.cache
+C:\Users\cuneob\Source\Repos\AutomatedAssemblyPlanner\src\GraphSynth\obj\Release\GraphSynth.dll
+C:\Users\cuneob\Source\Repos\AutomatedAssemblyPlanner\src\GraphSynth\obj\Release\GraphSynth.pdb
+C:\Users\cuneob\Source\Repos\AutomatedAssemblyPlanner\GraphSynth.dll
+C:\Users\cuneob\Source\Repos\AutomatedAssemblyPlanner\GraphSynth.pdb

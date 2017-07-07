@@ -4,3 +4,9 @@ C:\Users\Matt Campbell\Documents\GitHub\AssemblyPlanner\src\Geometric_Reasoning\
 C:\Users\Matt Campbell\Documents\GitHub\AssemblyPlanner\src\Geometric_Reasoning\obj\Release\Geometric_Reasoning.pdb
 C:\Users\Matt Campbell\Documents\GitHub\AssemblyPlanner\Geometric_Reasoning.exe
 C:\Users\Matt Campbell\Documents\GitHub\AssemblyPlanner\Geometric_Reasoning.pdb
+C:\Users\cuneob\Source\Repos\AutomatedAssemblyPlanner\src\Geometric_Reasoning\obj\Release\Geometric_Reasoning.csprojResolveAssemblyReference.cache
+C:\Users\cuneob\Source\Repos\AutomatedAssemblyPlanner\Geometric_Reasoning.exe.config
+C:\Users\cuneob\Source\Repos\AutomatedAssemblyPlanner\src\Geometric_Reasoning\obj\Release\Geometric_Reasoning.exe
+C:\Users\cuneob\Source\Repos\AutomatedAssemblyPlanner\src\Geometric_Reasoning\obj\Release\Geometric_Reasoning.pdb
+C:\Users\cuneob\Source\Repos\AutomatedAssemblyPlanner\Geometric_Reasoning.exe
+C:\Users\cuneob\Source\Repos\AutomatedAssemblyPlanner\Geometric_Reasoning.pdb

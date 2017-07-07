@@ -10,9 +10,8 @@ using System.Xml.Serialization;
 using Assembly_Planner;
 using BaseClasses;
 using BaseClasses.Representation;
-using Fastener_Detection;
 using Geometric_Reasoning;
-using GPprocess;
+//using GPprocess;
 using StarMathLib;
 using TVGL;
 using TVGL.IOFunctions;
@@ -160,7 +159,7 @@ namespace Assembly_Planner
             UpdateFasteners(partsProperties);
         }
 
-        private static void UpdateSolidsProperties(PartsProperties partsProperties)
+        private static void UpdateSolidsProperties(Fastener_Detection.PartsProperties partsProperties)
         {
             foreach (var solidName in Solids.Keys)
             {
@@ -206,7 +205,7 @@ namespace Assembly_Planner
             }
         }
 
-        private static void UpdateFasteners(PartsProperties partsProperties)
+        private static void UpdateFasteners(Fastener_Detection.PartsProperties partsProperties)
         {
             foreach (var solidName in Solids.Keys)
             {

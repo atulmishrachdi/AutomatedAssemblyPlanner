@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GraphSynth.Representation;
+using BaseClasses.Representation;
 using System.Xml.Serialization;
 using System.IO;
 

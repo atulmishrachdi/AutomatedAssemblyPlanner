@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Assembly_Planner.GraphSynth.BaseClasses;
-using GraphSynth;
-using GraphSynth.Representation;
+using BaseClasses;
+using BaseClasses.Representation;
 
 namespace Assembly_Planner
 {
