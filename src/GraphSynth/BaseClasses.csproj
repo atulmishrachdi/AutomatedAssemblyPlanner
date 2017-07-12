@@ -84,6 +84,8 @@
     <Compile Include="Math.cs" />
     <Compile Include="OutputXML\AssemblyCandidate.cs" />
     <Compile Include="OutputXML\AssemblySequence.cs" />
+    <Compile Include="OutputXML\ProgramState.cs" />
+    <Compile Include="OutputXML\SaveableSolid.cs" />
     <Compile Include="OverlappingFuzzification.cs" />
     <Compile Include="Part_and_Subassembly.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -5,14 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using Geometric_Reasoning;
 using TVGL;
+using GraphSynth.OutputXML;
 
 namespace Fastener_Detection
 {
     class StartProcess
     {
+
         internal static int Threaded = new int();
+
         static void Main(string[] args)
         {
+
             var partsWithOneGeom =  Geometric_Reasoning.StartProcess.PartsWithOneGeom;
             partsWithOneGeom = new List<TessellatedSolid>();
             foreach (var subAssem in Geometric_Reasoning.StartProcess.Solids.Values)

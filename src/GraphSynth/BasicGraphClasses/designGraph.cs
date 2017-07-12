@@ -38,6 +38,7 @@ namespace BaseClasses.Representation
     ///   is a carry-over from other research, but indicates that GraphSynth is really
     ///   about designing with graphs.
     /// </summary>
+
     public class designGraph
     {
         #region Fields & Properties
