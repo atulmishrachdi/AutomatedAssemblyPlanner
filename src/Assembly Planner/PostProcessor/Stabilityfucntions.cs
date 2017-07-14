@@ -180,10 +180,10 @@ namespace Assembly_Planner
             }
             var allupforcePoints = MiscFunctions.Get2DProjectionPoints(allupforceVertices, tofaceNormal);
             var nodecomponent = (Component)refnode;
-            var forceCVH = MinimumEnclosure.ConvexHull2DMinimal(allupforcePoints);
+            var forceCVH = MinimumEnclosure.ConvexHull2D(allupforcePoints);
             var allWithCOM = MiscFunctions.Get2DProjectionPoints(new List<Vertex> { new Vertex(nodecomponent.CenterOfMass) }, tofaceNormal).ToList();
             allWithCOM.AddRange(allupforcePoints);
-            var forceandCMCVH = MinimumEnclosure.ConvexHull2DMinimal(allWithCOM);
+            var forceandCMCVH = MinimumEnclosure.ConvexHull2D(allWithCOM);
 
             var comlist1 = new List<double[]>();
             var comlist2 = new List<double[]>();
@@ -1341,7 +1341,7 @@ namespace Assembly_Planner
                     List<Vertex> newConvexHullVerts = new List<Vertex>();
                     try
                     {
-                        var newconvexull = new TVGLConvexHull(uniquelistver, 1e-20);
+                        var newconvexull = new TVGLConvexHull(uniquelistver, 1e-8);
                         newConvexHullVerts = newconvexull.Vertices.ToList();
                         if (newConvexHullVerts == null)
                         {

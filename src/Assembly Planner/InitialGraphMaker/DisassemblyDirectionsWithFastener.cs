@@ -253,7 +253,7 @@ namespace Assembly_Planner
                         gCounter++;
                         try
                         {
-                            ts.SimplifyByPercentage(percentage);
+                            ts.Simplify((int)percentage*ts.NumberOfFaces);
                         }
                         catch (Exception)
                         {

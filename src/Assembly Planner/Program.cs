@@ -18,8 +18,9 @@ using TVGL.IOFunctions;
 
 namespace Assembly_Planner
 {
-    internal class Program
+    public class Program
     {
+
         public static List<double> DegreeOfFreedoms = new List<double>();
         public static List<double> StablbiblityScores = new List<double>();
         public static Dictionary<string, List<TessellatedSolid>> Solids = new Dictionary<string, List<TessellatedSolid>>();
@@ -33,9 +34,9 @@ namespace Assembly_Planner
         public static double MeshMagnifier = 1;
         public static double[] PointInMagicBox = {0,0,0.0};
         public static int BeamWidth;
-        protected static bool DetectFasteners = true;
-        protected internal static int AvailableWorkers = 0;
-        protected static int FastenersAreThreaded = 0; // 0: none, 1: all, 2: subset
+        public static bool DetectFasteners = true;
+        public static int AvailableWorkers = 0;
+        public static int FastenersAreThreaded = 0;
         public static double StabilityScore = 0;
         public static bool RobustSolution = false;
         public static List<int> globalDirPool = new List<int>();
@@ -45,6 +46,8 @@ namespace Assembly_Planner
         public static List<double> gpinstalltime = new List<double>();
         public static List<double> gpsecuretime = new List<double>();
         public static List<double> gprotate = new List<double>();
+        protected static ProgramState state;
+
         private static void Main(string[] args)
         {
             InititalConfigurations();
@@ -57,6 +60,8 @@ namespace Assembly_Planner
             //"src/Test/PumpWExtention";
 
 #endif
+
+
             Solids = GetSTLs(inputDir);
             EnlargeTheSolid();
 
@@ -67,6 +72,8 @@ namespace Assembly_Planner
             //SolidsNoFastener = Solids;
             SerializeSolidProperties();
             Console.WriteLine("\nPress enter once input parts table generated >>");
+
+
             Console.ReadLine();
             DeserializeSolidProperties();
             globalDirPool = DisassemblyDirectionsWithFastener.RunGraphGeneration(AssemblyGraph, SolidsNoFastener);
@@ -80,6 +87,8 @@ namespace Assembly_Planner
                 LoadDirections();
                 connectedGraph = DisassemblyDirectionsWithFastener.GraphIsConnected(AssemblyGraph);
             }
+
+
             NonadjacentBlockingWithPartitioning.Run(AssemblyGraph, SolidsNoFastenerSimplified, globalDirPool);
             GraphSaving.SaveTheGraph(AssemblyGraph);
             Stabilityfunctions.GenerateReactionForceInfo(AssemblyGraph);
@@ -92,6 +101,146 @@ namespace Assembly_Planner
             Console.WriteLine("\n\nDone");
             Console.ReadLine();
         }
+
+
+        public static void doFastenerDetection()
+        {
+
+            InititalConfigurations();
+            string inputDir = "workspace";
+            state = new ProgramState();
+            state.CleanStart();
+            LoadState();
+
+            Solids = GetSTLs(inputDir);
+            EnlargeTheSolid();
+            AssemblyGraph = new designGraph();
+            DisassemblyDirectionsWithFastener.RunGeometricReasoning(Solids);
+            if (DetectFasteners)
+                DisassemblyDirectionsWithFastener.RunFastenerDetection(Solids, FastenersAreThreaded);
+            //SolidsNoFastener = Solids;
+            SerializeSolidProperties();
+
+            SaveState();
+            state.Save("ProgramState.xml");
+            Console.WriteLine("\nDone");
+
+        }
+
+        public static void doDisassemblyDirections()
+        {
+            
+            state = ProgramState.Load("ProgramState.xml");
+            LoadState();
+
+            DeserializeSolidProperties();
+            globalDirPool = DisassemblyDirectionsWithFastener.RunGraphGeneration(AssemblyGraph, SolidsNoFastener);
+            //the second user interaction must happen here
+            SaveDirections();
+            var connectedGraph = false;
+            while (!connectedGraph)
+            {
+                Console.WriteLine("\n\nPress enter once input directions generated >>");
+                Console.ReadLine();
+                LoadDirections();
+                connectedGraph = DisassemblyDirectionsWithFastener.GraphIsConnected(AssemblyGraph);
+            }
+
+            SaveState();
+            state.Save("ProgramState.xml");
+            Console.WriteLine("\nDone");
+
+        }
+
+
+        public static void doAssemblyPlanning()
+        {
+
+            state = ProgramState.Load("ProgramState.xml");
+            LoadState();
+
+            NonadjacentBlockingWithPartitioning.Run(AssemblyGraph, SolidsNoFastenerSimplified, globalDirPool);
+            GraphSaving.SaveTheGraph(AssemblyGraph);
+            Stabilityfunctions.GenerateReactionForceInfo(AssemblyGraph);
+            var leapSearch = new LeapSearch();
+            var solutions = leapSearch.Run(AssemblyGraph, Solids, globalDirPool);
+            OptimalOrientation.Run(solutions);
+            var cand = new AssemblyCandidate() { Sequence = solutions };
+            cand.SaveToDisk(Directory.GetCurrentDirectory() + "\\workspace\\solution.xml");
+            WorkerAllocation.Run(solutions);
+
+            SaveState();
+            state.Save("ProgramState.xml");
+            Console.WriteLine("\n\nDone");
+
+        }
+
+
+
+
+        public static void LoadState()
+        {
+
+            DegreeOfFreedoms = state.DegreeOfFreedoms;
+            StablbiblityScores = state.StablbiblityScores;
+            Solids = state.Solids;
+            SolidsNoFastener = state.SolidsNoFastener;
+            SolidsNoFastenerSimplified = state.SolidsNoFastenerSimplified;
+            SimplifiedSolids = state.SimplifiedSolids;
+            SolidsMass = state.SolidsMass;
+            AssemblyGraph = state.AssemblyGraph;
+            StabilityWeightChosenByUser = state.StabilityWeightChosenByUser;
+            UncertaintyWeightChosenByUser = state.UncertaintyWeightChosenByUser;
+            MeshMagnifier = state.MeshMagnifier;
+            PointInMagicBox = state.PointInMagicBox;
+            BeamWidth = state.BeamWidth;
+            DetectFasteners = state.DetectFasteners;
+            AvailableWorkers = state.AvailableWorkers;
+            FastenersAreThreaded = state.FastenersAreThreaded;
+            StabilityScore = state.StabilityScore;
+            RobustSolution = state.RobustSolution;
+            globalDirPool = state.globalDirPool;
+            allmtime = state.allmtime;
+            allitime = state.allitime;
+            gpmovingtime = state.gpmovingtime;
+            gpinstalltime = state.gpinstalltime;
+            gpsecuretime = state.gpsecuretime;
+            gprotate = state.gprotate;
+
+        }
+
+        public static void SaveState()
+        {
+
+            state.DegreeOfFreedoms = DegreeOfFreedoms;
+            state.StablbiblityScores = StablbiblityScores;
+            state.Solids = Solids;
+            state.SolidsNoFastener = SolidsNoFastener;
+            state.SolidsNoFastenerSimplified = SolidsNoFastenerSimplified;
+            state.SimplifiedSolids = SimplifiedSolids;
+            state.SolidsMass = SolidsMass;
+            state.AssemblyGraph = AssemblyGraph;
+            state.StabilityWeightChosenByUser = StabilityWeightChosenByUser;
+            state.UncertaintyWeightChosenByUser = UncertaintyWeightChosenByUser;
+            state.MeshMagnifier = MeshMagnifier;
+            state.PointInMagicBox = PointInMagicBox;
+            state.BeamWidth = BeamWidth;
+            state.DetectFasteners = DetectFasteners;
+            state.AvailableWorkers = AvailableWorkers;
+            state.FastenersAreThreaded = FastenersAreThreaded;
+            state.StabilityScore = StabilityScore;
+            state.RobustSolution = RobustSolution;
+            state.globalDirPool = globalDirPool;
+            state.allmtime = allmtime;
+            state.allitime = allitime;
+            state.gpmovingtime = gpmovingtime;
+            state.gpinstalltime = gpinstalltime;
+            state.gpsecuretime = gpsecuretime;
+            state.gprotate = gprotate;
+
+        }
+
+
 
         private static void InititalConfigurations()
         {
@@ -246,7 +395,7 @@ namespace Assembly_Planner
                 {
                     try
                     {
-                        ts[0].SimplifyByPercentage(0.5);
+                        ts[0].Simplify((int)0.5*ts[0].NumberOfFaces);
                     }
                     catch (Exception)
                     {

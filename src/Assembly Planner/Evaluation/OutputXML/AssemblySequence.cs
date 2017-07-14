@@ -297,7 +297,7 @@ namespace AssemblyEvaluation
         {
             var pointCloud = new List<Vertex>(refCVXHull.Vertices);
             pointCloud.AddRange(movingCVXHull.Vertices);
-            return new TVGLConvexHull(pointCloud);
+            return new TVGLConvexHull(pointCloud, 1e-8);
         }
 
         private TVGLConvexHull CreateCombinedConvexHull2(List<Component> nodes, Dictionary<string, TVGLConvexHull> convexHullForParts)
@@ -308,7 +308,7 @@ namespace AssemblyEvaluation
                 var nodeName = n.name;
                 pointCloud.AddRange(convexHullForParts[nodeName].Vertices);
             }
-            return new TVGLConvexHull(pointCloud);
+            return new TVGLConvexHull(pointCloud, 1e-8);
         }
 
 

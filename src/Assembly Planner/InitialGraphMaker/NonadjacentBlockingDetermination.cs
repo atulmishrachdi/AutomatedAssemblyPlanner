@@ -306,10 +306,7 @@ namespace Assembly_Planner
 
                 // set up a single face with the normal along the direction v in which the other 6 corner of the
                 // block make some sort of hexagonal face
-                var superficialBlockingFace = new PolygonalFace()
-                {
-                    Normal = v
-                };
+                var superficialBlockingFace = new PolygonalFace(v);
                 var index = 0;
                 for (int i = 0; i < 8; i++)
                 {

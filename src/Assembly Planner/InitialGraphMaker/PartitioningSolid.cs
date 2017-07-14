@@ -408,8 +408,8 @@ namespace Assembly_Planner
             var solidGeometries = solids.SelectMany(s => s.Value).ToList();
             var solidGeometries2 = Program.Solids.SelectMany(s => s.Value).ToList();
             var totalVerts = solidGeometries.Sum(s => s.Vertices.Count());
-            //foreach(var solid in solids)
-            Parallel.ForEach(solidGeometries, solid =>
+            foreach(var solid in solidGeometries)
+            //Parallel.ForEach(solidGeometries, solid =>
             {
                 if (check % refresh == 0)
                 {
@@ -417,14 +417,51 @@ namespace Assembly_Planner
                 }
                 check++;
                 //solid.SimplifyByPercentage(0.5);
-                var prtn = Run(new HashSet<Vertex>(solid.Vertices), new HashSet<PolygonalFace>(solid.Faces),
-                    BoundingGeometry.OrientedBoundingBoxDic.First(b=>b.Key.Name == solid.Name).Value.CornerVertices.Select(
-                        cv => new Vertex(cv.Position)).ToArray());
-                lock (Partitions)
+                /*Partition[] prtn;
+
+                for ()
                 {
-                    Partitions.Add(solid, prtn);
+
+                }*/
+                Console.WriteLine(solid.Name);
+                Console.Out.Flush();
+                BoundingBox bad = new BoundingBox();
+                BoundingBox val = bad;
+                Partition[] prtn = new Partition[0];
+                foreach (KeyValuePair<TessellatedSolid,BoundingBox> b 
+                            in BoundingGeometry.OrientedBoundingBoxDic)
+                {
+                    if(b.Key.Name == solid.Name)
+                    {
+                        val = b.Value;
+                    }
+                    else
+                    {
+                        Console.Write("\n - ");
+                        Console.Write(solid.Name);
+                        Console.Write("\n");
+                    }
                 }
-            });//
+                if(!val.Equals(bad))
+                {
+                    prtn = Run(new HashSet<Vertex>(solid.Vertices), new HashSet<PolygonalFace>(solid.Faces),
+                    val.CornerVertices.Select( cv => new Vertex(cv.Position)).ToArray());
+                }
+                else
+                {
+                    Console.Write("\n\n -> ");
+                    Console.Write(solid.Name);
+                    Console.Write("\n\n");
+                }
+                /*
+                prtn = Run(new HashSet<Vertex>(solid.Vertices), new HashSet<PolygonalFace>(solid.Faces),
+                    BoundingGeometry.OrientedBoundingBoxDic.First(b=>b.Key.Name == solid.Name).Value.CornerVertices.Select(
+                        cv => new Vertex(cv.Position)).ToArray());*/
+                //lock (Partitions)
+                //{
+                    Partitions.Add(solid, prtn);
+                //}
+            }//);
 
             // partition of AABB:
             Parallel.ForEach(solidGeometries2, solid =>
@@ -450,7 +487,7 @@ namespace Assembly_Planner
         }
     }
 
-    internal class Partition
+    public class Partition
     {
         public Partition[] InnerPartition;
         public Vertex[] CornerVertices;
@@ -459,7 +496,7 @@ namespace Assembly_Planner
         public HashSet<Vertex> SolidVertices;
         public HashSet<PolygonalFace> SolidTriangles;
     }
-    internal class PartitionAABB
+    public class PartitionAABB
     {
         public PartitionAABB[] InnerPartition;
         public Vertex[] CornerVertices;

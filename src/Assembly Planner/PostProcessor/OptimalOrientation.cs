@@ -25,7 +25,7 @@ namespace Assembly_Planner
         public static readonly double[] GravityVector = { 0.0, 0.0, -1.0 };
         public static readonly double[] Ground = { 0, 0, -0.25533295 };//{0, 0, 0};
         private const int GravityAxis = 3; // 1:x, 2:y, 3:z
-        private static List<double[]> VertsOnCircle;
+        public static List<double[]> VertsOnCircle;
 
         public class PreAndCost
         {

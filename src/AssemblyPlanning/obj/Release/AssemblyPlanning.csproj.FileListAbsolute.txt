@@ -1,0 +1,7 @@
+C:\Users\cuneob\Source\Repos\AutomatedAssemblyPlanner\src\AssemblyPlanning\obj\Release\AssemblyPlanning.csprojResolveAssemblyReference.cache
+C:\Users\cuneob\Source\Repos\AutomatedAssemblyPlanner\Accord.dll.config
+C:\Users\cuneob\Source\Repos\AutomatedAssemblyPlanner\AssemblyPlanning.exe.config
+C:\Users\cuneob\Source\Repos\AutomatedAssemblyPlanner\src\AssemblyPlanning\obj\Release\AssemblyPlanning.exe
+C:\Users\cuneob\Source\Repos\AutomatedAssemblyPlanner\src\AssemblyPlanning\obj\Release\AssemblyPlanning.pdb
+C:\Users\cuneob\Source\Repos\AutomatedAssemblyPlanner\AssemblyPlanning.exe
+C:\Users\cuneob\Source\Repos\AutomatedAssemblyPlanner\AssemblyPlanning.pdb

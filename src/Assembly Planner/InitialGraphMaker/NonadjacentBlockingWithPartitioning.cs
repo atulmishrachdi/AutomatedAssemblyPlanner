@@ -314,7 +314,7 @@ namespace Assembly_Planner
                 else
                 {
                     var vers = subAssem.Value.SelectMany(s => s.ConvexHull.Vertices);
-                    CombinedCVHForMultipleGeometries.Add(subAssem.Key, new TVGLConvexHull(vers.ToArray()));
+                    CombinedCVHForMultipleGeometries.Add(subAssem.Key, new TVGLConvexHull(vers.ToArray(),1e-8));
                 }
             }
         }

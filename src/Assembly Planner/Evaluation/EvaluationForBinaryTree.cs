@@ -721,7 +721,7 @@ namespace Assembly_Planner
         {
             var pointCloud = new List<Vertex>(refCVXHull.Vertices);
             pointCloud.AddRange(movingCVXHull.Vertices);
-            return new TVGLConvexHull(pointCloud);
+            return new TVGLConvexHull(pointCloud, 1e-8);
         }
 
         public static TVGLConvexHull CreateCombinedConvexHull2(List<Component> nodes)
@@ -732,7 +732,7 @@ namespace Assembly_Planner
                 var nodeName = n.name;
                 pointCloud.AddRange(ConvexHullsForParts[nodeName].Vertices);
             }
-            return new TVGLConvexHull(pointCloud);
+            return new TVGLConvexHull(pointCloud, 1e-8);
         }
 
         public static double GetSubassemblyVolume(List<Component> nodes)
