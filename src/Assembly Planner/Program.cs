@@ -117,7 +117,9 @@ namespace Assembly_Planner
             AssemblyGraph = new designGraph();
             DisassemblyDirectionsWithFastener.RunGeometricReasoning(Solids);
             if (DetectFasteners)
+            {
                 DisassemblyDirectionsWithFastener.RunFastenerDetection(Solids, FastenersAreThreaded);
+            }
             //SolidsNoFastener = Solids;
             SerializeSolidProperties();
 

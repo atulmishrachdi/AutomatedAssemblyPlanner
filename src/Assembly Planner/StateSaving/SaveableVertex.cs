@@ -5,23 +5,24 @@ using System.Text;
 using System.Threading.Tasks;
 using TVGL;
 
-namespace Assembly_Planner.StateSaving
+namespace Assembly_Planner
 {
     class SaveableVertex
     {
+
         double[] position;
 
-        SaveableVertex()
+        public SaveableVertex()
         {
             position = null;
         }
 
-        SaveableVertex(Vertex theVertex)
+        public SaveableVertex(Vertex theVertex)
         {
             position = theVertex.Position;
         }
 
-        Vertex generate()
+        public Vertex generate()
         {
             return new Vertex(position);
         }
