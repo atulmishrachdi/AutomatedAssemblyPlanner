@@ -16,8 +16,8 @@ namespace Assembly_Planner
             Item1 = first;
             Item2 = second;
         }
-        public T1 Item1 { get; set; }
-        public T2 Item2 { get; set; }
+        public T1 Item1;
+        public T2 Item2;
 
     }
 }

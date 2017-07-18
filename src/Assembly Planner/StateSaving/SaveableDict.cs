@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TVGL;
 
 namespace Assembly_Planner
 {
@@ -13,14 +14,21 @@ namespace Assembly_Planner
 
         public SaveableDict(IDictionary<T1,T2> theDict)
         {
+            Data = new List<XMLPair<T1, T2>>();
+            if(theDict == null)
+            {
+                return;
+            }
             foreach(KeyValuePair<T1,T2> p in theDict)
             {
                 Data.Add(new XMLPair<T1, T2>(p.Key, p.Value));
             }
         }
+
+
         public SaveableDict()
         {
-
+            Data = new List<XMLPair<T1, T2>>();
         }
 
         public Dictionary<T1,T2> generate()
@@ -33,4 +41,5 @@ namespace Assembly_Planner
             return result;
         }
     }
+    
 }

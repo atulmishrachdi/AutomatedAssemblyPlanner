@@ -15,6 +15,8 @@ namespace Assembly_Planner
     public class ProgramState
     {
 
+        
+
         public List<double> DegreeOfFreedoms;
         public List<double> StablbiblityScores;
 
@@ -37,24 +39,34 @@ namespace Assembly_Planner
 
         public SaveableDict<string, double> SaveSolidsMass;
 
-        public SaveableDict<TessellatedSolid, BoundingBox> BBoxes;
-        public SaveableDict<TessellatedSolid, BoundingCylinder> BCyls;
+        public SolidKeySaveDict<BoundingBox> BBoxes;
+        public SolidKeySaveDict<BoundingCylinder> BCyls;
 
-        public SaveableDict<TessellatedSolid, Partition[]> Part;
-        public SaveableDict<TessellatedSolid, PartitionAABB[]> PartAB;
+        [XmlIgnore]
+        public SolidKeySaveDict<Partition[]> Parts;
+        [XmlIgnore]
+        public SolidKeySaveDict<PartitionAABB[]> PartsAB;
 
 
-        public static SaveableDict<string, List<string>> SucTasks;
-        public static SaveableDict<string, double> TaskTime;
-        public static List<List<string>> SucSubassems;
-        public static List<string> TempSucSubassem;
-        public static SaveableDict<string, SubAssembly> InstTasks;
-        public static SaveableDict<string, SubAssembly> SubAssemAndParts;
-        public static List<Part> RefWithOneNode;
-        public static List<SubAssembly> RefPrec;
-        public static List<SubAssembly> Movings;
-        public static SaveableDict<string, double[,]> TranslateToMagicBoxDic;
-        public static List<double[]> VertsOnCircle;
+        public SaveableDict<string, List<string>> SucTasks;
+        public SaveableDict<string, double> TaskTime;
+
+        public List<List<string>> SucSubassems;
+        public List<string> TempSucSubassem;
+
+        [XmlIgnore]
+        public SaveableDict<string, SubAssembly> InstTasks;
+        [XmlIgnore]
+        public SaveableDict<string, SubAssembly> SubAssemAndParts;
+
+        public List<Part> RefWithOneNode;
+        [XmlIgnore]
+        public List<SubAssembly> RefPrec;
+        [XmlIgnore]
+        public List<SubAssembly> Movings;
+
+        public SaveableDict<string, double[,]> TranslateToMagicBoxDic;
+        public List<double[]> VertsOnCircle;
 
 
         public designGraph AssemblyGraph;
@@ -131,8 +143,11 @@ namespace Assembly_Planner
             SolidsMass = new Dictionary<string, double>();
             SaveSolidsMass = new SaveableDict<string, double>();
 
-            BBoxes = new SaveableDict<TessellatedSolid, BoundingBox>();
-            BCyls = new SaveableDict<TessellatedSolid, BoundingCylinder>();
+            BBoxes = new SolidKeySaveDict<BoundingBox>();
+            BCyls = new SolidKeySaveDict<BoundingCylinder>();
+
+            Parts = new SolidKeySaveDict<Partition[]>();
+            PartsAB = new SolidKeySaveDict<PartitionAABB[]>();
 
             SucTasks = new SaveableDict<string, List<string>>();
             TaskTime = new SaveableDict<string, double>();
@@ -183,24 +198,24 @@ namespace Assembly_Planner
 
             data.SolidsMass = data.SaveSolidsMass.generate();
 
+
             BoundingGeometry.OrientedBoundingBoxDic = data.BBoxes.generate();
             BoundingGeometry.BoundingCylinderDic = data.BCyls.generate();
+            PartitioningSolid.Partitions = data.Parts.generate();
+            PartitioningSolid.PartitionsAABB = data.PartsAB.generate();
 
-            PartitioningSolid.Partitions = data.Part.generate();
-            PartitioningSolid.PartitionsAABB = data.PartAB.generate();
 
-
-            OptimalOrientation.SucTasks = SucTasks.generate();
-            OptimalOrientation.TaskTime = TaskTime.generate();
-            OptimalOrientation.SucSubassems = SucSubassems;
-            OptimalOrientation.TempSucSubassem = TempSucSubassem;
-            OptimalOrientation.InstTasks = InstTasks.generate();
-            OptimalOrientation.SubAssemAndParts = SubAssemAndParts.generate();
-            OptimalOrientation.RefWithOneNode = RefWithOneNode;
-            OptimalOrientation.RefPrec = RefPrec;
-            OptimalOrientation.Movings = Movings;
-            OptimalOrientation.TranslateToMagicBoxDic = TranslateToMagicBoxDic.generate();
-            OptimalOrientation.VertsOnCircle = VertsOnCircle;
+            OptimalOrientation.SucTasks = data.SucTasks.generate();
+            OptimalOrientation.TaskTime = data.TaskTime.generate();
+            OptimalOrientation.SucSubassems = data.SucSubassems;
+            OptimalOrientation.TempSucSubassem = data.TempSucSubassem;
+            OptimalOrientation.InstTasks = data.InstTasks.generate();
+            OptimalOrientation.SubAssemAndParts = data.SubAssemAndParts.generate();
+            OptimalOrientation.RefWithOneNode = data.RefWithOneNode;
+            OptimalOrientation.RefPrec = data.RefPrec;
+            OptimalOrientation.Movings = data.Movings;
+            OptimalOrientation.TranslateToMagicBoxDic = data.TranslateToMagicBoxDic.generate();
+            OptimalOrientation.VertsOnCircle = data.VertsOnCircle;
 
             return data;
         }
@@ -212,29 +227,25 @@ namespace Assembly_Planner
             RealToSave(SolidsNoFastenerSimplified, SaveSolidsNoFastenerSimplified);
             RealToSave(SimplifiedSolids, SaveSimplifiedSolids);
             SaveSolidsMass = new SaveableDict<string, double>(SolidsMass);
-            BoundingGeometry.OrientedBoundingBoxDic = BBoxes.generate();
-            BoundingGeometry.BoundingCylinderDic = BCyls.generate();
-            PartitioningSolid.Partitions = Part.generate();
-            PartitioningSolid.PartitionsAABB = PartAB.generate();
 
-            BBoxes = new SaveableDict<TessellatedSolid, BoundingBox>(BoundingGeometry.OrientedBoundingBoxDic);
-            BCyls = new SaveableDict<TessellatedSolid, BoundingCylinder>(BoundingGeometry.BoundingCylinderDic);
+            BBoxes = new SolidKeySaveDict<BoundingBox>(BoundingGeometry.OrientedBoundingBoxDic);
+            BCyls = new SolidKeySaveDict<BoundingCylinder>(BoundingGeometry.BoundingCylinderDic);
 
-            Part = new SaveableDict<TessellatedSolid, Partition[]>(PartitioningSolid.Partitions);
-            PartAB = new SaveableDict<TessellatedSolid, PartitionAABB[]>(PartitioningSolid.PartitionsAABB);
+            Parts = new SolidKeySaveDict<Partition[]>(PartitioningSolid.Partitions);
+            PartsAB = new SolidKeySaveDict<PartitionAABB[]>(PartitioningSolid.PartitionsAABB);
 
 
-            OptimalOrientation.SucTasks = SucTasks.generate();
-            OptimalOrientation.TaskTime = TaskTime.generate();
-            OptimalOrientation.SucSubassems = SucSubassems;
-            OptimalOrientation.TempSucSubassem = TempSucSubassem;
-            OptimalOrientation.InstTasks = InstTasks.generate();
-            OptimalOrientation.SubAssemAndParts = SubAssemAndParts.generate();
-            OptimalOrientation.RefWithOneNode = RefWithOneNode;
-            OptimalOrientation.RefPrec = RefPrec;
-            OptimalOrientation.Movings = Movings;
-            OptimalOrientation.TranslateToMagicBoxDic = TranslateToMagicBoxDic.generate();
-            OptimalOrientation.VertsOnCircle = VertsOnCircle;
+            SucTasks = new SaveableDict<string, List<string>>(OptimalOrientation.SucTasks);
+            TaskTime = new SaveableDict<string, double>(OptimalOrientation.TaskTime);
+            SucSubassems = OptimalOrientation.SucSubassems;
+            TempSucSubassem = OptimalOrientation.TempSucSubassem;
+            InstTasks = new SaveableDict<string, SubAssembly>(OptimalOrientation.InstTasks);
+            SubAssemAndParts = new SaveableDict<string, SubAssembly>(OptimalOrientation.SubAssemAndParts);
+            RefWithOneNode = OptimalOrientation.RefWithOneNode;
+            RefPrec = OptimalOrientation.RefPrec;
+            Movings = OptimalOrientation.Movings;
+            TranslateToMagicBoxDic = new SaveableDict<string, double[,]>(OptimalOrientation.TranslateToMagicBoxDic);
+            VertsOnCircle = OptimalOrientation.VertsOnCircle;
 
             XmlSerializer ser = new XmlSerializer(typeof(ProgramState));
             var writer = new StreamWriter(destFile);
