@@ -1,5 +1,0 @@
-C:\Users\cuneob\Source\Repos\AutomatedAssemblyPlanner\src\PrimitiveClassificationOfTessellatedSolids\obj\Release\PrimitiveClassificationOfTessellatedSolids.dll
-C:\Users\cuneob\Source\Repos\AutomatedAssemblyPlanner\src\PrimitiveClassificationOfTessellatedSolids\obj\Release\PrimitiveClassificationOfTessellatedSolids.pdb
-C:\Users\cuneob\Source\Repos\AutomatedAssemblyPlanner\PrimitiveClassificationOfTessellatedSolids.dll
-C:\Users\cuneob\Source\Repos\AutomatedAssemblyPlanner\PrimitiveClassificationOfTessellatedSolids.pdb
-C:\Users\cuneob\Source\Repos\AutomatedAssemblyPlanner\src\PrimitiveClassificationOfTessellatedSolids\obj\Release\PrimitiveClassificationOfTessellatedSolids.csprojResolveAssemblyReference.cache

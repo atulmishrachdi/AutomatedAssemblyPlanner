@@ -8,7 +8,7 @@ using StarMathLib;
 using Assembly_Planner.GraphSynth.BaseClasses;
 using TVGL;
 
-namespace AssemblyEvaluation
+namespace Assembly_Planner
 {
 
     public class Part

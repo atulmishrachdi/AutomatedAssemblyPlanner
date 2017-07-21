@@ -8,7 +8,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using AssemblyEvaluation;
+using Assembly_Planner;
 using GraphSynth;
 using GraphSynth.Representation;
 //using GraphSynth.Search;
@@ -16,7 +16,7 @@ using Assembly_Planner.GraphSynth.BaseClasses;
 using RandomGen;
 using StarMathLib;
 using TVGL;
-using Constants = AssemblyEvaluation.Constants;
+using Constants = Assembly_Planner.Constants;
 
 namespace Assembly_Planner
 {

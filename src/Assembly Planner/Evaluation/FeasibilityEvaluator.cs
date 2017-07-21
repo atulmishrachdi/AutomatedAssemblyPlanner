@@ -3,7 +3,7 @@ using GraphSynth.Representation;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AssemblyEvaluation
+namespace Assembly_Planner
 {
     class FeasibilityEvaluator
     {                     

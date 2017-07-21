@@ -5,13 +5,13 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AssemblyEvaluation;
+using Assembly_Planner;
 using GraphSynth;
 using GraphSynth.Representation;
 //using GraphSynth.Search;
 using Assembly_Planner.GraphSynth.BaseClasses;
 using TVGL;
-using Constants = AssemblyEvaluation.Constants;
+using Constants = Assembly_Planner.Constants;
 
 namespace Assembly_Planner
 {

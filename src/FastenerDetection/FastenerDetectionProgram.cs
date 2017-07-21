@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Assembly_Planner;
+﻿using Assembly_Planner;
 
 namespace FastenerDetection
 {
@@ -13,7 +8,7 @@ namespace FastenerDetection
         static void Main(string[] args)
         {
 
-            Program.doFastenerDetection();
+            Program.doFastenerDetection(args);
 
         }
 

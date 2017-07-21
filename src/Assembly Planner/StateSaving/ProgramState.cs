@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TVGL;
 using System.Xml.Serialization;
 using GraphSynth.Representation;
-using AssemblyEvaluation;
+using Assembly_Planner;
 
 namespace Assembly_Planner
 {
@@ -15,7 +15,7 @@ namespace Assembly_Planner
     public class ProgramState
     {
 
-        
+        public string inputDir;
 
         public List<double> DegreeOfFreedoms;
         public List<double> StablbiblityScores;
@@ -123,8 +123,9 @@ namespace Assembly_Planner
 
 
 
-        public void CleanStart()
+        public ProgramState()
         {
+            
             DegreeOfFreedoms = new List<double>();
             StablbiblityScores = new List<double>();
             Solids = new Dictionary<string, List<TessellatedSolid>>();

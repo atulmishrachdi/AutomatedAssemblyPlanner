@@ -18,7 +18,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -27,7 +27,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\</OutputPath>
+    <OutputPath>..\..\bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -53,10 +53,6 @@
     <ProjectReference Include="..\Assembly Planner\Assembly Planner.csproj">
       <Project>{a7045f03-81da-4784-a287-dd7c81eef4e0}</Project>
       <Name>Assembly Planner</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PrimitiveClassificationOfTessellatedSolids\PrimitiveClassificationOfTessellatedSolids.csproj">
-      <Project>{59f5fe35-e4b0-4c0c-8405-9e314cf48298}</Project>
-      <Name>PrimitiveClassificationOfTessellatedSolids</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
