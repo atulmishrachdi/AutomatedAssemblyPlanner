@@ -34,7 +34,7 @@ namespace Assembly_Planner
         public static double MeshMagnifier = 1;
         public static double[] PointInMagicBox = {0,0,0.0};
         public static int BeamWidth;
-        public static bool DetectFasteners = true;
+        public static bool DetectFasteners = true; 
         public static int AvailableWorkers = 0;
         public static int FastenersAreThreaded = 0;
         public static double StabilityScore = 0;

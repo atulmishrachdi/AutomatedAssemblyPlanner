@@ -115,11 +115,7 @@ namespace Assembly_Planner
                 sList = new List<TessellatedSolid>();
                 foreach (SaveableSolid s in entry.Item2)
                 {
-                    //tList = TVGL.IOFunctions.IO.OpenFromString(s);
-                    //foreach(TessellatedSolid t in tList)
-                    //{
-                    sList.Add(s.generate());
-                    //}
+                    sList.AddRange(s.generate().Select(x => x));
                 }
                 Real[entry.Item1] = sList;
             }
