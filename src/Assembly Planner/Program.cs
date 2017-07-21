@@ -7,7 +7,6 @@ using System.Net.Security;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using AssemblyEvaluation;
 using Assembly_Planner;
 using Assembly_Planner.GraphSynth.BaseClasses;
 using GPprocess;
@@ -32,7 +31,7 @@ namespace Assembly_Planner
         public static double StabilityWeightChosenByUser = 0;
         public static double UncertaintyWeightChosenByUser = 0;
         public static double MeshMagnifier = 1;
-        public static double[] PointInMagicBox = {0,0,0.0};
+        public static double[] PointInMagicBox = { 0, 0, 0.0 };
         public static int BeamWidth;
         public static bool DetectFasteners = true;
         public static int AvailableWorkers = 0;
@@ -50,19 +49,10 @@ namespace Assembly_Planner
 
         private static void Main(string[] args)
         {
-            InititalConfigurations();
-            string inputDir;
-#if InputDialog
-             inputDir = consoleFrontEnd.getPartsDirectory();
-#else
-            inputDir = "workspace";
-            var ss = Directory.GetCurrentDirectory();
-            //"src/Test/PumpWExtention";
-
-#endif
-
-
-            Solids = GetSTLs(inputDir);
+            state = new ProgramState();
+            SetInputArguments(state, args);
+            LoadState();
+            Solids = GetSTLs(state.inputDir);
             EnlargeTheSolid();
 
             AssemblyGraph = new designGraph();
@@ -103,16 +93,13 @@ namespace Assembly_Planner
         }
 
 
-        public static void doFastenerDetection()
+        public static void doFastenerDetection(string[] args)
         {
-
-            InititalConfigurations();
-            string inputDir = "workspace";
             state = new ProgramState();
-            state.CleanStart();
+            SetInputArguments(state, args);
             LoadState();
 
-            Solids = GetSTLs(inputDir);
+            Solids = GetSTLs(state.inputDir);
             EnlargeTheSolid();
             AssemblyGraph = new designGraph();
             DisassemblyDirectionsWithFastener.RunGeometricReasoning(Solids);
@@ -120,7 +107,6 @@ namespace Assembly_Planner
             {
                 DisassemblyDirectionsWithFastener.RunFastenerDetection(Solids, FastenersAreThreaded);
             }
-            //SolidsNoFastener = Solids;
             SerializeSolidProperties();
 
             SaveState();
@@ -131,7 +117,7 @@ namespace Assembly_Planner
 
         public static void doDisassemblyDirections()
         {
-            
+
             state = ProgramState.Load("ProgramState.xml");
             LoadState();
 
@@ -244,7 +230,32 @@ namespace Assembly_Planner
 
 
 
-        private static void InititalConfigurations()
+        private static void SetInputArguments(ProgramState state, string[] args)
+        {
+            var argsIndex = 0;
+            if (!args.Any())
+            {
+                Console.WriteLine("No arguments provided. Using default values.");
+                SetInputArguments(state, Constants.DefaultInputArguments);
+                return;
+            }
+            if (args[argsIndex].Equals("dialog", StringComparison.CurrentCultureIgnoreCase))
+                SetInputArgumentsViaDialog(state);
+            else
+            {
+                state.inputDir = args[argsIndex];
+                if (args.Length > ++argsIndex)
+                    DetectFasteners = args[argsIndex].Equals("y", StringComparison.CurrentCultureIgnoreCase);
+                if (DetectFasteners && args.Length > ++argsIndex)
+                    FastenersAreThreaded = int.Parse(args[argsIndex]);
+                if (args.Length > ++argsIndex)
+                    StabilityScore = double.Parse(args[argsIndex]);
+                if (args.Length > ++argsIndex)
+                    RobustSolution = args[argsIndex].Equals("y", StringComparison.CurrentCultureIgnoreCase);
+            }
+        }
+
+        private static void SetInputArgumentsViaDialog(ProgramState state)
         {
             var autoFastenersDetect = "m";
             while (autoFastenersDetect != "y" && autoFastenersDetect != "n" && autoFastenersDetect != "Y" &&
@@ -286,7 +297,6 @@ namespace Assembly_Planner
                 RobustSolution = true;
         }
 
-
         private static void SerializeSolidProperties()
         {
             XmlSerializer ser = new XmlSerializer(typeof(PartsProperties));
@@ -313,8 +323,8 @@ namespace Assembly_Planner
                 var userUpdated = partsProperties.parts.First(p => p.Name == solidName);
                 SolidsMass.Add(solidName,
                     userUpdated.Mass > 0
-                        ? userUpdated.Mass*Math.Pow(MeshMagnifier, 3)
-                        : userUpdated.Volume*Math.Pow(MeshMagnifier, 3));
+                        ? userUpdated.Mass * Math.Pow(MeshMagnifier, 3)
+                        : userUpdated.Volume * Math.Pow(MeshMagnifier, 3));
             }
         }
 
@@ -381,11 +391,16 @@ namespace Assembly_Planner
             Console.WriteLine("\nLoading STLs ....");
             var parts = new List<TessellatedSolid>();
             var di = new DirectoryInfo(InputDir);
-            var fis = di.EnumerateFiles("*.STL");
+            var fis = di.EnumerateFiles("*");
             // Parallel.ForEach(fis, fileInfo =>
             var i = 0;
             foreach (var fileInfo in fis)
             {
+                // debug: does this work? does extension include "." or capitals?
+                if (!Constants.ValidShapeFileTypes.Any(s =>
+                s.Equals(fileInfo.Extension, StringComparison.CurrentCultureIgnoreCase)))
+                    continue;
+
                 var ts = IO.Open(fileInfo.Open(FileMode.Open), fileInfo.Name);
                 //ts.Name = ts.Name.Remove(0, 1);
                 //lock (parts) 
@@ -397,7 +412,7 @@ namespace Assembly_Planner
                 {
                     try
                     {
-                        ts[0].Simplify((int)0.5*ts[0].NumberOfFaces);
+                        ts[0].Simplify(ts[0].NumberOfFaces / 2);
                     }
                     catch (Exception)
                     {
@@ -457,13 +472,13 @@ namespace Assembly_Planner
             MeshMagnifier = DetermineTheMagnifier();
             var solidsMagnified = new Dictionary<string, List<TessellatedSolid>>();
             Parallel.ForEach(Solids, dic =>
-                //foreach (var dic in Solids)
+            //foreach (var dic in Solids)
             {
                 var solids = new List<TessellatedSolid>();
                 var solidsConstant = new List<TessellatedSolid>();
                 foreach (var ts in dic.Value)
                 {
-                    var newVer = ts.Vertices.Select(vertex => new TempVer {Ver = vertex, IndexInList = 0}).ToList();
+                    var newVer = ts.Vertices.Select(vertex => new TempVer { Ver = vertex, IndexInList = 0 }).ToList();
                     var newFace =
                         ts.Faces.Select(
                             face =>

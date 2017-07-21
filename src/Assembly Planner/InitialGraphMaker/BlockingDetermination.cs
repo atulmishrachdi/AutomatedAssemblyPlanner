@@ -1,17 +1,11 @@
-﻿using System;
+﻿using GraphSynth.Representation;
+using StarMathLib;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
-using Assembly_Planner;
-using GraphSynth.Representation;
-using StarMathLib;
 using TVGL;
-using TVGL;
-using PrimitiveClassificationOfTessellatedSolids;
 
 namespace Assembly_Planner
 {
@@ -40,7 +34,7 @@ namespace Assembly_Planner
                 }
                 check++;
 
-                var solidPrim = TesselationToPrimitives.Run(solid);
+                var solidPrim = solid.ClassifyPrimitiveSurfaces(true);
                 lock (partPrimitive)
                     partPrimitive.Add(solid, solidPrim);
             }

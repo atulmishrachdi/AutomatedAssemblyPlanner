@@ -5,7 +5,7 @@ using System.Text;
 using MIConvexHull;
 using TVGL;
 
-namespace AssemblyEvaluation
+namespace Assembly_Planner
 {
     public class FootprintFace
     {

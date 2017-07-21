@@ -102,8 +102,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="TessellationAndVoxelizationGeometryLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\TVGL.1.0.17.707\lib\portable-net45+win8\TessellationAndVoxelizationGeometryLibrary.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\TVGL.1.0.17.719\lib\portable-net45+win8\TessellationAndVoxelizationGeometryLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -119,7 +118,7 @@
     <Compile Include="DisassemblyProcess\SCC.cs" />
     <Compile Include="DisassemblyProcess\Updates.cs" />
     <Compile Include="Evaluation\AssemblyEvaluator.cs" />
-    <Compile Include="Evaluation\Constants.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Evaluation\ConvexHullEvaluator.cs" />
     <Compile Include="Evaluation\FeasibilityEvaluator.cs" />
     <Compile Include="Evaluation\FootprintFace.cs" />
@@ -289,12 +288,6 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\PrimitiveClassificationOfTessellatedSolids\PrimitiveClassificationOfTessellatedSolids.csproj">
-      <Project>{59f5fe35-e4b0-4c0c-8405-9e314cf48298}</Project>
-      <Name>PrimitiveClassificationOfTessellatedSolids</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -4,12 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AssemblyEvaluation;
+using Assembly_Planner;
 using GraphSynth.Representation;
 using StarMathLib;
 using Assembly_Planner.GraphSynth.BaseClasses;
 using TVGL;
-using Constants = AssemblyEvaluation.Constants;
+using Constants = Assembly_Planner.Constants;
 
 namespace Assembly_Planner
 {
@@ -91,19 +91,19 @@ namespace Assembly_Planner
                 var node = assemblyGraph.nodes.Cast<Component>().Where(n => n.name == Convert.ToString(values[0])).ToList()[0];
                 while (i < 9)
                 {
-                    if (Convert.ToDouble(values[i]) == Constants.Values.WEIGHT)
+                    if (Convert.ToDouble(values[i]) == Constants.WEIGHT)
                     {
                         node.Mass = Convert.ToDouble(values[i + 1]);
                         i+=2;
                         continue;
                     }
-                    if (Convert.ToDouble(values[i]) == Constants.Values.VOLUME)
+                    if (Convert.ToDouble(values[i]) == Constants.VOLUME)
                     {
                         node.Volume = Convert.ToDouble(values[i + 1]);
                         i += 2;
                         continue;
                     }
-                    if (Convert.ToDouble(values[i]) == Constants.Values.CENTEROFMASS)
+                    if (Convert.ToDouble(values[i]) == Constants.CENTEROFMASS)
                     {
                         node.CenterOfMass = new[] { Convert.ToDouble(values[i + 1]), Convert.ToDouble(values[i + 2]), Convert.ToDouble(values[i + 3]) };
                         i += 4;

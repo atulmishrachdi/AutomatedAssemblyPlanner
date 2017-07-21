@@ -1,0 +1,31 @@
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\FastenerDetection\bin\Debug\Accord.dll.config
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\FastenerDetection\bin\Debug\FastenerDetection.exe.config
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\FastenerDetection\bin\Debug\FastenerDetection.exe
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\FastenerDetection\bin\Debug\FastenerDetection.pdb
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\FastenerDetection\bin\Debug\Assembly Planner.dll
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\FastenerDetection\bin\Debug\OptimizationToolbox.dll
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\FastenerDetection\bin\Debug\Accord.Statistics.dll
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\FastenerDetection\bin\Debug\TessellationAndVoxelizationGeometryLibrary.dll
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\FastenerDetection\bin\Debug\MIConvexHull.dll
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\FastenerDetection\bin\Debug\Accord.MachineLearning.dll
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\FastenerDetection\bin\Debug\StarMath.dll
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\FastenerDetection\bin\Debug\RandomGen.dll
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\FastenerDetection\bin\Debug\Accord.Math.dll
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\FastenerDetection\bin\Debug\Accord.dll
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\FastenerDetection\bin\Debug\Accord.Math.Core.dll
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\FastenerDetection\bin\Debug\Assembly Planner.pdb
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\FastenerDetection\bin\Debug\Assembly Planner.dll.config
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\FastenerDetection\bin\Debug\Accord.Statistics.xml
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\FastenerDetection\bin\Debug\TessellationAndVoxelizationGeometryLibrary.pdb
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\FastenerDetection\bin\Debug\MIConvexHull.pdb
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\FastenerDetection\bin\Debug\Accord.MachineLearning.xml
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\FastenerDetection\bin\Debug\Accord.Math.xml
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\FastenerDetection\bin\Debug\Accord.xml
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\FastenerDetection\bin\Debug\Accord.Math.Core.xml
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\FastenerDetection\obj\Debug\FastenerDetection.csprojResolveAssemblyReference.cache
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\FastenerDetection\obj\Debug\FastenerDetection.exe
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\FastenerDetection\obj\Debug\FastenerDetection.pdb
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\bin\Accord.dll.config
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\bin\FastenerDetection.exe.config
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\bin\FastenerDetection.exe
+C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\bin\FastenerDetection.pdb

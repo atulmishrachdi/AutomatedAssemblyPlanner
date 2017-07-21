@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 
-namespace AssemblyEvaluation
+namespace Assembly_Planner
 {
     public class AssemblyCandidate : candidate
     {

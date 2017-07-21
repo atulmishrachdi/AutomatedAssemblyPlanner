@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AssemblyEvaluation;
+using Assembly_Planner;
 
 namespace Assembly_Planner
 {
@@ -119,7 +119,7 @@ namespace Assembly_Planner
         private static void CheckValuesWithCandidate(double totalTime1, double totalTime2,
             double makeSpan1, double makeSpan2)
         {
-            if (Math.Abs(totalTime1 - totalTime2) > Constants.Values.SameWithinError || Math.Abs(makeSpan1 - makeSpan2) > Constants.Values.SameWithinError)
+            if (Math.Abs(totalTime1 - totalTime2) > Constants.SameWithinError || Math.Abs(makeSpan1 - makeSpan2) > Constants.SameWithinError)
                 throw new Exception("Times do not match.");
         }
 

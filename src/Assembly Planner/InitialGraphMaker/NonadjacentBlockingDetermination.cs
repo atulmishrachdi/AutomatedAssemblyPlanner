@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using AssemblyEvaluation;
+using Assembly_Planner;
 using Assembly_Planner.GraphSynth.BaseClasses;
 using GraphSynth.Representation;
 using MIConvexHull;
@@ -408,7 +408,7 @@ namespace Assembly_Planner
 
         public static bool RayIntersectsWithFace(Ray ray, PolygonalFace face)
         {
-            if (Math.Abs(ray.Direction.dotProduct(face.Normal)) < AssemblyEvaluation.Constants.Values.NearlyParallelFace) return false;
+            if (Math.Abs(ray.Direction.dotProduct(face.Normal)) < Assembly_Planner.Constants.NearlyParallelFace) return false;
             var inPlaneVerts = new Vertex[3];
             var negativeDirCounter = 3;
             for (var i = 0; i < 3; i++)
@@ -434,7 +434,7 @@ namespace Assembly_Planner
                     inPlaneVerts[i].Position.subtract(ray.Position)
                         .normalizeInPlace(3)
                         .crossProduct(inPlaneVerts[j].Position.subtract(ray.Position).normalizeInPlace(3));
-                if (crossProductsFrom_i_To_j.norm2(true) < AssemblyEvaluation.Constants.Values.NearlyOnLine) return false;
+                if (crossProductsFrom_i_To_j.norm2(true) < Assembly_Planner.Constants.NearlyOnLine) return false;
                 crossProductsToCorners.Add(crossProductsFrom_i_To_j);
             }
             for (int i = 0; i < 3; i++)
@@ -459,7 +459,7 @@ namespace Assembly_Planner
                 var crossProductsFrom_i_To_j =
                     face.Vertices[i].Position.subtract(raysPointOnFacePlane).normalize()
                         .crossProduct(face.Vertices[j].Position.subtract(ray.Position).normalize());
-                if (crossProductsFrom_i_To_j.norm2(true) < AssemblyEvaluation.Constants.Values.NearlyOnLine) return false;
+                if (crossProductsFrom_i_To_j.norm2(true) < Assembly_Planner.Constants.NearlyOnLine) return false;
                 crossProductsToCorners.Add(crossProductsFrom_i_To_j);
             }
             for (int i = 0; i < 3; i++)
