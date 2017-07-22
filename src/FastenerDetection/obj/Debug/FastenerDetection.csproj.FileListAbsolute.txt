@@ -29,3 +29,10 @@ C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\bin\Accord.dll.config
 C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\bin\FastenerDetection.exe.config
 C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\bin\FastenerDetection.exe
 C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\bin\FastenerDetection.pdb
+C:\Users\Braxton\Desktop\Work Programs\AutomatedAssemblyPlanner\src\FastenerDetection\obj\Debug\FastenerDetection.csprojResolveAssemblyReference.cache
+C:\Users\Braxton\Desktop\Work Programs\AutomatedAssemblyPlanner\src\FastenerDetection\obj\Debug\FastenerDetection.exe
+C:\Users\Braxton\Desktop\Work Programs\AutomatedAssemblyPlanner\src\FastenerDetection\obj\Debug\FastenerDetection.pdb
+C:\Users\Braxton\Desktop\Work Programs\AutomatedAssemblyPlanner\FastenerDetection.exe.config
+C:\Users\Braxton\Desktop\Work Programs\AutomatedAssemblyPlanner\Accord.dll.config
+C:\Users\Braxton\Desktop\Work Programs\AutomatedAssemblyPlanner\FastenerDetection.exe
+C:\Users\Braxton\Desktop\Work Programs\AutomatedAssemblyPlanner\FastenerDetection.pdb

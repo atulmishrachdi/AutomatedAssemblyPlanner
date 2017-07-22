@@ -20,3 +20,6 @@ C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\FastenerDetection\obj\R
 C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\FastenerDetection.exe
 C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\FastenerDetection.pdb
 C:\Users\Braxton\Desktop\Work Programs\AutomatedAssemblyPlanner\bin\FastenerDetection.exe.config
+C:\Users\Braxton\Desktop\Work Programs\AutomatedAssemblyPlanner\bin\Accord.dll.config
+C:\Users\Braxton\Desktop\Work Programs\AutomatedAssemblyPlanner\bin\FastenerDetection.exe
+C:\Users\Braxton\Desktop\Work Programs\AutomatedAssemblyPlanner\bin\FastenerDetection.pdb

@@ -18,14 +18,23 @@ namespace Assembly_Planner
 
         public SaveableSolid(TessellatedSolid theSolid)
         {
-            if (loadDict.ContainsKey(theSolid.FileName)){
+            FileName = theSolid.Name;
+            if(FileName == "")
+            {
+                throw new SystemException("SCREAM");
+            }
+            if(loadDict == null)
+            {
+                loadDict = new Dictionary<string, List<TessellatedSolid>>();
+            }
+            if (loadDict.ContainsKey(theSolid.Name)){
                 if (loadDict[FileName].Contains(theSolid))
                 {
                     return;
                 }
                 loadDict[FileName].Add(theSolid);
             }
-            FileName = theSolid.FileName;
+            FileName = theSolid.Name;
             List<TessellatedSolid> tList = new List<TessellatedSolid>();
             tList.Add(theSolid);
             loadDict[FileName] = tList;
@@ -38,6 +47,10 @@ namespace Assembly_Planner
 
         public List<TessellatedSolid> generate()
         {
+            if (loadDict == null)
+            {
+                loadDict = new Dictionary<string, List<TessellatedSolid>>();
+            }
             List<TessellatedSolid> result;
             if (loadDict.ContainsKey(FileName))
             {
@@ -45,11 +58,27 @@ namespace Assembly_Planner
             }
             else
             {
-                var fileStream = File.OpenRead(FileName);
-                result = IO.Open(fileStream, FileName);
+                var fileStream = File.OpenRead("workspace/" + FileName+".tvgl");
+                result = IO.Open(fileStream, FileName + ".tvgl");
                 loadDict[FileName] = result;
             }
             return result;
+        }
+
+        public static void saveAll()
+        {
+            if (loadDict == null)
+            {
+                loadDict = new Dictionary<string, List<TessellatedSolid>>();
+            }
+            foreach (KeyValuePair<string,List<TessellatedSolid>> p in loadDict)
+            {
+                var fileStream = File.OpenWrite("workspace/" + p.Key + ".tvgl");
+                foreach( TessellatedSolid s in p.Value)
+                {
+                    IO.Save(fileStream, s, FileType.TVGL);
+                }
+            }
         }
 
     }

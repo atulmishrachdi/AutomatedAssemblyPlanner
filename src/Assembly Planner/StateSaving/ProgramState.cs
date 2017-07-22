@@ -39,7 +39,9 @@ namespace Assembly_Planner
 
         public SaveableDict<string, double> SaveSolidsMass;
 
+        [XmlIgnore]
         public SolidKeySaveDict<BoundingBox> BBoxes;
+        [XmlIgnore]
         public SolidKeySaveDict<BoundingCylinder> BCyls;
 
         [XmlIgnore]
@@ -65,6 +67,7 @@ namespace Assembly_Planner
         [XmlIgnore]
         public List<SubAssembly> Movings;
 
+        [XmlIgnore]
         public SaveableDict<string, double[,]> TranslateToMagicBoxDic;
         public List<double[]> VertsOnCircle;
 
@@ -158,7 +161,7 @@ namespace Assembly_Planner
             TranslateToMagicBoxDic = new SaveableDict<string, double[,]>();
             VertsOnCircle = new List<double[]>();
 
-        StabilityWeightChosenByUser = 0;
+            StabilityWeightChosenByUser = 0;
             UncertaintyWeightChosenByUser = 0;
             MeshMagnifier = 1;
             PointInMagicBox = new double[] {0.0,0.0,0.0};
@@ -174,6 +177,8 @@ namespace Assembly_Planner
             gpinstalltime = new List<double>();
             gpsecuretime = new List<double>();
             gprotate = new List<double>();
+
+
         }
 
         public static ProgramState Load(string sourceFile)
@@ -247,6 +252,9 @@ namespace Assembly_Planner
             XmlSerializer ser = new XmlSerializer(typeof(ProgramState));
             var writer = new StreamWriter(destFile);
             ser.Serialize(writer, this);
+
+            SaveableSolid.saveAll();
+
         }
 
     }

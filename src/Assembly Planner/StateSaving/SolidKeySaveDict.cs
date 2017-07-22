@@ -34,9 +34,14 @@ namespace Assembly_Planner
         public Dictionary<TessellatedSolid, Val> generate()
         {
             Dictionary<TessellatedSolid, Val> result = new Dictionary<TessellatedSolid, Val>();
+            List<TessellatedSolid> tList = new List<TessellatedSolid>();
             foreach (XMLPair<SaveableSolid, Val> p in Data)
             {
-                result[p.Item1.generate()] = p.Item2;
+                tList = p.Item1.generate();
+                foreach(TessellatedSolid t in tList)
+                {
+                    result[t] = p.Item2;
+                }
             }
             return result;
         }
