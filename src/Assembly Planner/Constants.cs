@@ -94,8 +94,8 @@ namespace Assembly_Planner
         public const double MinInterfaceSuccessRate = 0.8;
         public const double boltinsertSpeed = 2; // just a guess. the unit is mm/s
 
-        internal static string[] ValidShapeFileTypes = { ".ply", ".stl", ".off", ".3mf", ".amf" };
-        internal static string[] DefaultInputArguments = { "workspace", "y", "1", "0.5", "y" };
+        internal static string[] ValidShapeFileTypes = { ".ply", ".stl", ".off", ".3mf", ".amf", ".tvgl" };
+        internal static string[] DefaultInputArguments = { "./bin", "y", "1", "0.5", "y" };
 
     }
 }

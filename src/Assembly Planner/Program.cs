@@ -45,7 +45,7 @@ namespace Assembly_Planner
         public static List<double> gpinstalltime = new List<double>();
         public static List<double> gpsecuretime = new List<double>();
         public static List<double> gprotate = new List<double>();
-        protected static ProgramState state;
+        public static ProgramState state;
 
         private static void Main(string[] args)
         {
@@ -86,7 +86,7 @@ namespace Assembly_Planner
             var solutions = leapSearch.Run(AssemblyGraph, Solids, globalDirPool);
             OptimalOrientation.Run(solutions);
             var cand = new AssemblyCandidate() { Sequence = solutions };
-            cand.SaveToDisk(Directory.GetCurrentDirectory() + "\\workspace\\solution.xml");
+            cand.SaveToDisk(state.inputDir + "solution.xml");
             WorkerAllocation.Run(solutions);
             Console.WriteLine("\n\nDone");
             Console.ReadLine();
@@ -110,15 +110,15 @@ namespace Assembly_Planner
             SerializeSolidProperties();
 
             SaveState();
-            state.Save("ProgramState.xml");
+            state.Save(state.inputDir + "/intermediate/ProgramState.xml");
             Console.WriteLine("\nDone");
 
         }
 
         public static void doDisassemblyDirections()
         {
-
-            state = ProgramState.Load("ProgramState.xml");
+            state = new ProgramState();
+            ProgramState.Load("./bin/intermediate/ProgramState.xml", ref state);
             LoadState();
 
             DeserializeSolidProperties();
@@ -135,7 +135,7 @@ namespace Assembly_Planner
             }
 
             SaveState();
-            state.Save("ProgramState.xml");
+            state.Save(state.inputDir + "/intermediate/ProgramState.xml");
             Console.WriteLine("\nDone");
 
         }
@@ -143,8 +143,8 @@ namespace Assembly_Planner
 
         public static void doAssemblyPlanning()
         {
-
-            state = ProgramState.Load("ProgramState.xml");
+            state = new ProgramState();
+            ProgramState.Load("./bin/intermediate/ProgramState.xml", ref state);
             LoadState();
 
             NonadjacentBlockingWithPartitioning.Run(AssemblyGraph, SolidsNoFastenerSimplified, globalDirPool);
@@ -154,11 +154,11 @@ namespace Assembly_Planner
             var solutions = leapSearch.Run(AssemblyGraph, Solids, globalDirPool);
             OptimalOrientation.Run(solutions);
             var cand = new AssemblyCandidate() { Sequence = solutions };
-            cand.SaveToDisk(Directory.GetCurrentDirectory() + "\\workspace\\solution.xml");
+            cand.SaveToDisk(state.inputDir + "/XML/solution.xml");
             WorkerAllocation.Run(solutions);
 
             SaveState();
-            state.Save("ProgramState.xml");
+            state.Save(state.inputDir + "/intermediate/ProgramState.xml");
             Console.WriteLine("\n\nDone");
 
         }
@@ -302,14 +302,14 @@ namespace Assembly_Planner
             XmlSerializer ser = new XmlSerializer(typeof(PartsProperties));
             var partsProperties = new PartsProperties();
             partsProperties.GenerateProperties();
-            var writer = new StreamWriter("workspace/parts_properties.xml");
+            var writer = new StreamWriter(state.inputDir + "/XML/parts_properties.xml");
             ser.Serialize(writer, partsProperties);
         }
 
         private static void DeserializeSolidProperties()
         {
             XmlSerializer ser = new XmlSerializer(typeof(PartsProperties));
-            var reader = new StreamReader("workspace/parts_properties2.xml");
+            var reader = new StreamReader(state.inputDir + "/XML/parts_properties2.xml");
             var partsProperties = (PartsProperties)ser.Deserialize(reader);
             //now update everything with the revised properties
             UpdateSolidsProperties(partsProperties);
@@ -332,7 +332,7 @@ namespace Assembly_Planner
         {
 
             XmlSerializer ser = new XmlSerializer(typeof(DirectionSaveStructure));
-            var writer = new StreamWriter("workspace/directionList.xml");
+            var writer = new StreamWriter(state.inputDir + "/XML/directionList.xml");
             var theData = new DirectionSaveStructure();
             theData.arcs = AssemblyGraph.arcs;
             theData.Directions = DisassemblyDirectionsWithFastener.Directions;
@@ -343,7 +343,7 @@ namespace Assembly_Planner
         internal static void LoadDirections()
         {
             XmlSerializer ser = new XmlSerializer(typeof(DirectionSaveStructure));
-            var reader = new StreamReader("workspace/directionList2.xml");
+            var reader = new StreamReader(state.inputDir + "/XML/directionList2.xml");
             var theData = (DirectionSaveStructure)ser.Deserialize(reader);
             var reviewedArc = theData.arcs;
             UpdateGraphArcs(reviewedArc);
@@ -391,7 +391,7 @@ namespace Assembly_Planner
             Console.WriteLine("\nLoading STLs ....");
             var parts = new List<TessellatedSolid>();
             var di = new DirectoryInfo(InputDir);
-            var fis = di.EnumerateFiles("*");
+            var fis = di.EnumerateFiles("models/*");
             // Parallel.ForEach(fis, fileInfo =>
             var i = 0;
             foreach (var fileInfo in fis)

@@ -58,8 +58,8 @@ namespace Assembly_Planner
             }
             else
             {
-                var fileStream = File.OpenRead("workspace/" + FileName+".tvgl");
-                result = IO.Open(fileStream, FileName + ".tvgl");
+                var fileStream = File.OpenRead(Program.state.inputDir + "/intermediate/" + FileName+".tvgl");
+                result = IO.Open(fileStream, Program.state.inputDir + "/intermediate/" + FileName + ".tvgl");
                 loadDict[FileName] = result;
             }
             return result;
@@ -73,7 +73,7 @@ namespace Assembly_Planner
             }
             foreach (KeyValuePair<string,List<TessellatedSolid>> p in loadDict)
             {
-                var fileStream = File.OpenWrite("workspace/" + p.Key + ".tvgl");
+                var fileStream = File.OpenWrite(Program.state.inputDir+"/intermediate/" + p.Key + ".tvgl");
                 foreach( TessellatedSolid s in p.Value)
                 {
                     IO.Save(fileStream, s, FileType.TVGL);

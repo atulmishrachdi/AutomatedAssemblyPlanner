@@ -181,45 +181,44 @@ namespace Assembly_Planner
 
         }
 
-        public static ProgramState Load(string sourceFile)
+        public static void Load(string sourceFile, ref ProgramState state)
         {
             XmlSerializer ser = new XmlSerializer(typeof(ProgramState));
             var reader = new StreamReader(sourceFile);
-            var data = (ProgramState)ser.Deserialize(reader);
+            state = (ProgramState)ser.Deserialize(reader);
 
-            data.Solids = new Dictionary<string, List<TessellatedSolid>>();
-            data.SolidsNoFastener = new Dictionary<string, List<TessellatedSolid>>();
-            data.SolidsNoFastenerSimplified = new Dictionary<string, List<TessellatedSolid>>();
-            data.SimplifiedSolids = new Dictionary<string, List<TessellatedSolid>>();
-            data.SolidsMass = new Dictionary<string, double>();
+            state.Solids = new Dictionary<string, List<TessellatedSolid>>();
+            state.SolidsNoFastener = new Dictionary<string, List<TessellatedSolid>>();
+            state.SolidsNoFastenerSimplified = new Dictionary<string, List<TessellatedSolid>>();
+            state.SimplifiedSolids = new Dictionary<string, List<TessellatedSolid>>();
+            state.SolidsMass = new Dictionary<string, double>();
 
-            data.SaveToReal(data.SaveSolids, data.Solids);
-            data.SaveToReal(data.SaveSolidsNoFastener, data.SolidsNoFastener);
-            data.SaveToReal(data.SaveSolidsNoFastenerSimplified,data.SolidsNoFastenerSimplified);
-            data.SaveToReal(data.SaveSimplifiedSolids,data.SimplifiedSolids);
+            state.SaveToReal(state.SaveSolids, state.Solids);
+            state.SaveToReal(state.SaveSolidsNoFastener, state.SolidsNoFastener);
+            state.SaveToReal(state.SaveSolidsNoFastenerSimplified, state.SolidsNoFastenerSimplified);
+            state.SaveToReal(state.SaveSimplifiedSolids, state.SimplifiedSolids);
 
-            data.SolidsMass = data.SaveSolidsMass.generate();
-
-
-            BoundingGeometry.OrientedBoundingBoxDic = data.BBoxes.generate();
-            BoundingGeometry.BoundingCylinderDic = data.BCyls.generate();
-            PartitioningSolid.Partitions = data.Parts.generate();
-            PartitioningSolid.PartitionsAABB = data.PartsAB.generate();
+            state.SolidsMass = state.SaveSolidsMass.generate();
 
 
-            OptimalOrientation.SucTasks = data.SucTasks.generate();
-            OptimalOrientation.TaskTime = data.TaskTime.generate();
-            OptimalOrientation.SucSubassems = data.SucSubassems;
-            OptimalOrientation.TempSucSubassem = data.TempSucSubassem;
-            OptimalOrientation.InstTasks = data.InstTasks.generate();
-            OptimalOrientation.SubAssemAndParts = data.SubAssemAndParts.generate();
-            OptimalOrientation.RefWithOneNode = data.RefWithOneNode;
-            OptimalOrientation.RefPrec = data.RefPrec;
-            OptimalOrientation.Movings = data.Movings;
-            OptimalOrientation.TranslateToMagicBoxDic = data.TranslateToMagicBoxDic.generate();
-            OptimalOrientation.VertsOnCircle = data.VertsOnCircle;
+            BoundingGeometry.OrientedBoundingBoxDic = state.BBoxes.generate();
+            BoundingGeometry.BoundingCylinderDic = state.BCyls.generate();
+            PartitioningSolid.Partitions = state.Parts.generate();
+            PartitioningSolid.PartitionsAABB = state.PartsAB.generate();
 
-            return data;
+
+            OptimalOrientation.SucTasks = state.SucTasks.generate();
+            OptimalOrientation.TaskTime = state.TaskTime.generate();
+            OptimalOrientation.SucSubassems = state.SucSubassems;
+            OptimalOrientation.TempSucSubassem = state.TempSucSubassem;
+            OptimalOrientation.InstTasks = state.InstTasks.generate();
+            OptimalOrientation.SubAssemAndParts = state.SubAssemAndParts.generate();
+            OptimalOrientation.RefWithOneNode = state.RefWithOneNode;
+            OptimalOrientation.RefPrec = state.RefPrec;
+            OptimalOrientation.Movings = state.Movings;
+            OptimalOrientation.TranslateToMagicBoxDic = state.TranslateToMagicBoxDic.generate();
+            OptimalOrientation.VertsOnCircle = state.VertsOnCircle;
+            
         }
 
         public void Save(string destFile)

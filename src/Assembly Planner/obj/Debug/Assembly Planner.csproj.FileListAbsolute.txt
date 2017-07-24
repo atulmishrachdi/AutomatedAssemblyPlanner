@@ -5,10 +5,10 @@ C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\Assembly Planner\obj\De
 C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\src\Assembly Planner\obj\Debug\Assembly Planner.pdb
 C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\Assembly Planner.dll
 C:\Users\matth\Source\Repos\AutomatedAssemblyPlanner\Assembly Planner.pdb
-C:\Users\Braxton\Desktop\Work Programs\AutomatedAssemblyPlanner\src\Assembly Planner\obj\Debug\Assembly Planner.csprojResolveAssemblyReference.cache
 C:\Users\Braxton\Desktop\Work Programs\AutomatedAssemblyPlanner\Accord.dll.config
 C:\Users\Braxton\Desktop\Work Programs\AutomatedAssemblyPlanner\Assembly Planner.dll.config
 C:\Users\Braxton\Desktop\Work Programs\AutomatedAssemblyPlanner\src\Assembly Planner\obj\Debug\Assembly Planner.dll
 C:\Users\Braxton\Desktop\Work Programs\AutomatedAssemblyPlanner\src\Assembly Planner\obj\Debug\Assembly Planner.pdb
 C:\Users\Braxton\Desktop\Work Programs\AutomatedAssemblyPlanner\Assembly Planner.dll
 C:\Users\Braxton\Desktop\Work Programs\AutomatedAssemblyPlanner\Assembly Planner.pdb
+C:\Users\Braxton\Desktop\Work Programs\AutomatedAssemblyPlanner\src\Assembly Planner\obj\Debug\Assembly Planner.csprojResolveAssemblyReference.cache
