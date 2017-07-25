@@ -449,9 +449,7 @@ namespace Assembly_Planner
                 }
                 else
                 {
-                    Console.Write("\n\n -> ");
                     Console.Write(solid.Name);
-                    Console.Write("\n\n");
                 }
                 /*
                 prtn = Run(new HashSet<Vertex>(solid.Vertices), new HashSet<PolygonalFace>(solid.Faces),
