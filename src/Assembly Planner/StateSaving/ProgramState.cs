@@ -118,7 +118,7 @@ namespace Assembly_Planner
                 sList = new List<TessellatedSolid>();
                 foreach (SaveableSolid s in entry.Item2)
                 {
-                    sList.AddRange(s.generate().Select(x => x));
+                    sList.AddRange(s.generate());
                 }
                 Real[entry.Item1] = sList;
             }

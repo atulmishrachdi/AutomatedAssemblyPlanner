@@ -126,13 +126,16 @@ namespace Assembly_Planner
             //the second user interaction must happen here
             SaveDirections();
             var connectedGraph = false;
+			string dummyString = "";
             while (!connectedGraph)
             {
                 Console.WriteLine("\n\nPress enter once input directions generated >>");
-                Console.ReadLine();
+				dummyString = Console.ReadLine();
+				Console.WriteLine("\n\nChecking connectedness...");
                 LoadDirections();
                 connectedGraph = DisassemblyDirectionsWithFastener.GraphIsConnected(AssemblyGraph);
             }
+			Console.WriteLine("\n\nConnectedness verified");
 
             SaveState();
             state.Save(state.inputDir + "/intermediate/ProgramState.xml");
@@ -390,8 +393,8 @@ namespace Assembly_Planner
         {
             Console.WriteLine("\nLoading STLs ....");
             var parts = new List<TessellatedSolid>();
-            var di = new DirectoryInfo(InputDir);
-            var fis = di.EnumerateFiles("models/*");
+            var di = new DirectoryInfo(InputDir + "/models");
+            var fis = di.EnumerateFiles("*");
             // Parallel.ForEach(fis, fileInfo =>
             var i = 0;
             foreach (var fileInfo in fis)
@@ -431,6 +434,12 @@ namespace Assembly_Planner
 
         private static List<int> AddDirections(List<int> reviewedDirections)
         {
+
+			//$ Filling DisassemblyDirections 
+			//DisassemblyDirections.Directions;
+			//
+
+
             var dirInds = new List<int>();
             if (reviewedDirections == null) return dirInds;
             var toBeAddedToGDir = new List<int>();
@@ -439,6 +448,15 @@ namespace Assembly_Planner
                 dirInds.Add(dir);
                 if (!globalDirPool.Contains(dir))
                 {
+					//$ Added to check for invalid values. Remove later 
+					if (dir < 0 || dir > DisassemblyDirections.Directions.Count) {
+						Console.Write ("\n");
+						Console.Write (dir);
+						Console.Write (" - ");
+						Console.Write (DisassemblyDirections.Directions.Count);
+					}
+					//
+
                     globalDirPool.Add(dir);
                     var temp =
                         globalDirPool.Where(

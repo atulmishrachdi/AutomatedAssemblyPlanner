@@ -155,7 +155,6 @@ namespace Assembly_Planner
             // Is there anyway to detect more?
             ConnectFastenersNutsAndWashers(groupedPotentialFasteners);
             LoadingBar.refresh(width, 1);
-            Console.WriteLine("\n");
         }
 
         private static void PreSelectedFastenerToFastenerClass(

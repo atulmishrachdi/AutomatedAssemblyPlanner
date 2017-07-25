@@ -220,7 +220,6 @@ namespace Assembly_Planner
             // now use groupped small objects:
             AutoNonthreadedFastenerDetection.ConnectFastenersNutsAndWashers(groupedPotentialFasteners);
             LoadingBar.refresh(width, 1);
-            Console.WriteLine("\n");
         }
 
         private static void AddThreadedOrNonthreadedFastener(TessellatedSolid solid, List<TessellatedSolid> repeated,

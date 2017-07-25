@@ -16,6 +16,7 @@ using System.Xml.Linq;
 using Accord.Statistics;
 using Assembly_Planner;
 using StarMathLib;
+using System.Management.Instrumentation;
 
 namespace GPprocess
 {

@@ -60,8 +60,12 @@ namespace Assembly_Planner
             {
                 var fileStream = File.OpenRead(Program.state.inputDir + "/intermediate/" + FileName+".tvgl.xml");
                 result = IO.Open(fileStream, Program.state.inputDir + "/intermediate/" + FileName + ".tvgl.xml");
+				if (result == null) {
+					throw new SystemException("SHOUT");
+				}
                 loadDict[FileName] = result;
             }
+
             return result;
         }
 
