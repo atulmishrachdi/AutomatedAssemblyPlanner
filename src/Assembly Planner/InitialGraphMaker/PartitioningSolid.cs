@@ -423,8 +423,7 @@ namespace Assembly_Planner
                 {
 
                 }*/
-                Console.WriteLine(solid.Name);
-                Console.Out.Flush();
+
                 BoundingBox bad = new BoundingBox();
                 BoundingBox val = bad;
                 Partition[] prtn = new Partition[0];
@@ -435,12 +434,6 @@ namespace Assembly_Planner
                     {
                         val = b.Value;
                     }
-                    else
-                    {
-                        Console.Write("\n - ");
-                        Console.Write(solid.Name);
-                        Console.Write("\n");
-                    }
                 }
                 if(!val.Equals(bad))
                 {
@@ -449,7 +442,9 @@ namespace Assembly_Planner
                 }
                 else
                 {
-                    Console.Write(solid.Name);
+					//$ Removing this check for now
+					//string err = "A bounding box was not found";
+					//throw new SystemException(err);
                 }
                 /*
                 prtn = Run(new HashSet<Vertex>(solid.Vertices), new HashSet<PolygonalFace>(solid.Faces),

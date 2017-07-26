@@ -183,6 +183,7 @@ namespace Assembly_Planner
 
         public static void Load(string sourceFile, ref ProgramState state)
         {
+			
             XmlSerializer ser = new XmlSerializer(typeof(ProgramState));
             var reader = new StreamReader(sourceFile);
             state = (ProgramState)ser.Deserialize(reader);

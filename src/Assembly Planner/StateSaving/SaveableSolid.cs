@@ -21,7 +21,7 @@ namespace Assembly_Planner
         public SaveableSolid(TessellatedSolid theSolid)
         {
             FileName = theSolid.Name;
-            if(FileName == "")
+			if(FileName == "" || FileName == null)
             {
                 throw new SystemException("SCREAM");
             }
@@ -53,7 +53,7 @@ namespace Assembly_Planner
             {
                 loadDict = new Dictionary<string, List<TessellatedSolid>>();
             }
-            List<TessellatedSolid> result;
+			List<TessellatedSolid> result = new List<TessellatedSolid>();
             if (loadDict.ContainsKey(FileName))
             {
                 result = loadDict[FileName];
@@ -62,16 +62,22 @@ namespace Assembly_Planner
             {
 				if (writer == null) {
 					Message.Verbosity = TVGL.VerbosityLevels.Everything;
-					writer = new TextWriterTraceListener(Console.Out);
+					writer = new TextWriterTraceListener(Console.Error);
 					Debug.Listeners.Add(writer);
 				}
 
-                var fileStream = File.OpenRead(Program.state.inputDir + "/intermediate/" + FileName+".tvgl.xml");
-                result = IO.Open(fileStream, Program.state.inputDir + "/intermediate/" + FileName + ".tvgl.xml");
+                var fileStream = File.OpenRead(Program.state.inputDir + "/intermediate/" + FileName +".xml");
+                result = IO.Open(fileStream, Program.state.inputDir + "/intermediate/" + FileName + ".xml");
 				if (result == null) {
+					writer.Flush ();
 					Console.Out.Flush ();
-					//throw new SystemException("SHOUT");
+					throw new SystemException("SHOUT");
 				}
+
+				foreach (TessellatedSolid s in result) {
+					s.Name = FileName;
+				}
+
                 loadDict[FileName] = result;
             }
 
@@ -86,7 +92,7 @@ namespace Assembly_Planner
             }
             foreach (KeyValuePair<string,List<TessellatedSolid>> p in loadDict)
             {
-                var fileStream = File.OpenWrite(Program.state.inputDir+"/intermediate/" + p.Key + ".tvgl.xml");
+                var fileStream = File.OpenWrite(Program.state.inputDir+"/intermediate/" + p.Key + ".xml");
                 foreach( TessellatedSolid s in p.Value)
                 {
                     IO.Save(fileStream, s, FileType.TVGL);

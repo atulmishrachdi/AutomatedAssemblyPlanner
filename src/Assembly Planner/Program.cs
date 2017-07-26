@@ -356,12 +356,22 @@ namespace Assembly_Planner
         {
             foreach (Connection arc in reviewedArc)
             {
-                var counterpart =
-                    AssemblyGraph.arcs.Cast<Connection>().First(c => c.XmlFrom == arc.XmlFrom && c.XmlTo == arc.XmlTo);
-                if (arc.Certainty == 0)
-                    AssemblyGraph.arcs.Remove(counterpart);
-                counterpart.FiniteDirections = AddDirections(arc.FiniteDirections);
-                counterpart.InfiniteDirections = AddDirections(arc.InfiniteDirections);
+
+				//$ Incorperated the ability to add arcs, because otherwise resolving incomplete graphs
+				//  would be impossible
+				var counterpart =(Connection)
+                    AssemblyGraph.arcs.FirstOrDefault(c => c.XmlFrom == arc.XmlFrom && c.XmlTo == arc.XmlTo);
+				if (counterpart == null) {
+					AssemblyGraph.addArc(AssemblyGraph.nodes.First(a => a.name == arc.XmlFrom),
+						AssemblyGraph.nodes.First(a => a.name == arc.XmlTo),"",typeof(Connection));
+					counterpart = (Connection)AssemblyGraph.arcs.Last ();
+				} else {
+					if (arc.Certainty == 0) {
+						AssemblyGraph.removeArc(counterpart);
+					}
+				}
+				counterpart.FiniteDirections = AddDirections (arc.FiniteDirections);
+				counterpart.InfiniteDirections = AddDirections (arc.InfiniteDirections);
             }
         }
 
@@ -391,7 +401,7 @@ namespace Assembly_Planner
 
         private static Dictionary<string, List<TessellatedSolid>> GetSTLs(string InputDir)
         {
-            Console.WriteLine("\nLoading STLs ....");
+            Console.WriteLine("\nLoading STLs ....\n");
             var parts = new List<TessellatedSolid>();
             var di = new DirectoryInfo(InputDir + "/models");
             var fis = di.EnumerateFiles("*");
@@ -486,7 +496,7 @@ namespace Assembly_Planner
 
         private static void EnlargeTheSolid()
         {
-            Console.WriteLine("\nScaling the parts ....");
+            Console.WriteLine("\nScaling the parts ....\n");
             MeshMagnifier = DetermineTheMagnifier();
             var solidsMagnified = new Dictionary<string, List<TessellatedSolid>>();
             Parallel.ForEach(Solids, dic =>

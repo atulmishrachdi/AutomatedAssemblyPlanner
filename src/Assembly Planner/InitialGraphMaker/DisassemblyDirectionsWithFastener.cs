@@ -540,7 +540,7 @@ namespace Assembly_Planner
                 }
                 batches.Add(new HashSet<Component>(visited));
             }
-            Console.WriteLine("\nThe reviewed graph is not connected! The following batch(es) are discunnected from the rest of the model.");
+            Console.WriteLine("\nThe reviewed graph is not connected! The following batch(es) are disconnected from the rest of the model.");
             var sorted = batches.OrderBy(o => o.Count).ToList();
             for (var i = 0; i < sorted.Count - 1; i++)
             {
