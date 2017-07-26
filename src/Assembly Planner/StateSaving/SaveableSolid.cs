@@ -7,6 +7,7 @@ using TVGL;
 using TVGL.IOFunctions;
 using System.Xml.Serialization;
 using System.IO;
+using System.Diagnostics;
 
 namespace Assembly_Planner
 {
@@ -14,7 +15,8 @@ namespace Assembly_Planner
     public class SaveableSolid
     {
         public static Dictionary<string, List<TessellatedSolid>> loadDict;
-        public string FileName;
+		public string FileName;
+		TextWriterTraceListener writer = null;
 
         public SaveableSolid(TessellatedSolid theSolid)
         {
@@ -58,10 +60,17 @@ namespace Assembly_Planner
             }
             else
             {
+				if (writer == null) {
+					Message.Verbosity = TVGL.VerbosityLevels.Everything;
+					writer = new TextWriterTraceListener(Console.Out);
+					Debug.Listeners.Add(writer);
+				}
+
                 var fileStream = File.OpenRead(Program.state.inputDir + "/intermediate/" + FileName+".tvgl.xml");
                 result = IO.Open(fileStream, Program.state.inputDir + "/intermediate/" + FileName + ".tvgl.xml");
 				if (result == null) {
-					throw new SystemException("SHOUT");
+					Console.Out.Flush ();
+					//throw new SystemException("SHOUT");
 				}
                 loadDict[FileName] = result;
             }
