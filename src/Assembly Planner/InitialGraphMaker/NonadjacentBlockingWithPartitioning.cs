@@ -54,15 +54,27 @@ namespace Assembly_Planner
             long counter = 0;
             foreach (var subAssem in subAssems)
             {
+                List<BoundingBox> pairList = new List<BoundingBox>();
                 foreach (var s in subAssem.Value)
                 {
                     //CvhHashSet.Add(s, new HashSet<PolygonalFace>(s.ConvexHull.Faces));
-                    ObbFacesHashSet.Add(s,
+
+
+                    //$ What was used previously
+                    /*
+                     * ObbFacesHashSet.Add(s,
                         new HashSet<PolygonalFace>(
                             PartitioningSolid.TwelveFaceGenerator(
                                 BoundingGeometry.OrientedBoundingBoxDic.First(b=> b.Key.Name == s.Name).Value.CornerVertices.Select(
                                     cv => new Vertex(cv.Position)).ToArray())));
+                                    */
+                    KeyValuePair<TessellatedSolid,BoundingBox> pair = BoundingGeometry.OrientedBoundingBoxDic.FirstOrDefault(b => b.Key.Name == s.Name);
+                    if (! pair.Equals(default (KeyValuePair<TessellatedSolid, BoundingBox>)) ){
+                        ObbFacesHashSet.Add(s, new HashSet<PolygonalFace>(PartitioningSolid.TwelveFaceGenerator(pair.Value.CornerVertices.Select(cv => new Vertex(cv.Position)).ToArray())));
+                    }                    
+
                 }
+
             }
 
             CreateCombinedCVHs(subAssems);
@@ -169,8 +181,10 @@ namespace Assembly_Planner
                     {
                         //continue;
                         // If CVHs dont overlap:
-                        Parallel.ForEach(scndFilteredDirectionsMoving, filtDir =>
-                        //foreach (var filtDir in filteredDirections)
+
+                        //$ Made this non-parallel for debugging purposes switch back later
+                        //Parallel.ForEach(scndFilteredDirectionsMoving, filtDir =>
+                        foreach (var filtDir in filteredDirections)
                         {
                             var direction = DisassemblyDirections.Directions[filtDir];
                             blocked = BlockingDeterminationNoCvhOverlapping(direction, solidMoving, solidBlocking);
@@ -184,7 +198,8 @@ namespace Assembly_Planner
                                     scndFilteredDirectionsBlocking.Remove(
                                         DisassemblyDirections.DirectionsAndOppositsForGlobalpool[filtDir]);
                             }
-                        });
+                        }//);
+
                         Parallel.ForEach(scndFilteredDirectionsBlocking, filtDir =>
                         //foreach (var filtDir in filteredDirections)
                         {
@@ -220,7 +235,7 @@ namespace Assembly_Planner
                     gDir.Where(
                         d =>
                             /*d != gD &&*/
-                            Math.Abs(1 -
+                    Math.Abs(1 -
                                      DisassemblyDirections.Directions[d].dotProduct(DisassemblyDirections.Directions[gD])) <
                             OverlappingFuzzification.CheckWithGlobDirsParall2);
 

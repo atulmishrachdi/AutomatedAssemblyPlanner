@@ -34,6 +34,12 @@ namespace Assembly_Planner
         public List<XMLPair<string, List<SaveableSolid>>> SaveSolidsNoFastenerSimplified;
         public List<XMLPair<string, List<SaveableSolid>>> SaveSimplifiedSolids;
 
+        public List<double[]> disDirs;
+        public List<double[]> disDirsWithFast;
+
+        public SaveableDict<int, int> dirOps;
+        public SaveableDict<int, int> dirOpsForPool;
+
         [XmlIgnore]
         public Dictionary<string, double> SolidsMass;
 
@@ -140,6 +146,12 @@ namespace Assembly_Planner
             SaveSolidsNoFastenerSimplified = new List<XMLPair<string, List<SaveableSolid>>>();
             SaveSimplifiedSolids = new List<XMLPair<string, List<SaveableSolid>>>();
 
+            disDirs = new List<double[]>();
+            disDirsWithFast = new List<double[]>();
+
+            dirOps = new SaveableDict<int, int>();
+            dirOpsForPool = new SaveableDict<int, int>();
+
             SolidsMass = new Dictionary<string, double>();
             SaveSolidsMass = new SaveableDict<string, double>();
 
@@ -201,12 +213,10 @@ namespace Assembly_Planner
 
             state.SolidsMass = state.SaveSolidsMass.generate();
 
-
             BoundingGeometry.OrientedBoundingBoxDic = state.BBoxes.generate();
             BoundingGeometry.BoundingCylinderDic = state.BCyls.generate();
             PartitioningSolid.Partitions = state.Parts.generate();
             PartitioningSolid.PartitionsAABB = state.PartsAB.generate();
-
 
             OptimalOrientation.SucTasks = state.SucTasks.generate();
             OptimalOrientation.TaskTime = state.TaskTime.generate();
@@ -219,6 +229,12 @@ namespace Assembly_Planner
             OptimalOrientation.Movings = state.Movings;
             OptimalOrientation.TranslateToMagicBoxDic = state.TranslateToMagicBoxDic.generate();
             OptimalOrientation.VertsOnCircle = state.VertsOnCircle;
+
+            DisassemblyDirections.Directions = state.disDirs;
+            DisassemblyDirectionsWithFastener.Directions = state.disDirsWithFast;
+
+            DisassemblyDirections.DirectionsAndOpposits = state.dirOps.generate();
+            DisassemblyDirections.DirectionsAndOppositsForGlobalpool = state.dirOpsForPool.generate();
             
         }
 
@@ -248,6 +264,12 @@ namespace Assembly_Planner
             Movings = OptimalOrientation.Movings;
             TranslateToMagicBoxDic = new SaveableDict<string, double[,]>(OptimalOrientation.TranslateToMagicBoxDic);
             VertsOnCircle = OptimalOrientation.VertsOnCircle;
+
+            disDirs = DisassemblyDirections.Directions;
+            disDirsWithFast = DisassemblyDirectionsWithFastener.Directions;
+
+            dirOps = new SaveableDict<int, int>(DisassemblyDirections.DirectionsAndOpposits);
+            dirOpsForPool = new SaveableDict<int, int>(DisassemblyDirections.DirectionsAndOppositsForGlobalpool);
 
             XmlSerializer ser = new XmlSerializer(typeof(ProgramState));
             var writer = new StreamWriter(destFile);
