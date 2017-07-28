@@ -66,8 +66,9 @@ namespace Assembly_Planner
 					Debug.Listeners.Add(writer);
 				}
 
-                var fileStream = File.OpenRead(Program.state.inputDir + "/intermediate/" + FileName +".xml");
-                result = IO.Open(fileStream, Program.state.inputDir + "/intermediate/" + FileName + ".xml");
+                var filePath = Program.state.inputDir + "\\intermediate\\" + FileName + ".xml";
+                var fileStream = File.OpenRead(filePath);
+                result = IO.Open(fileStream, filePath);
 				if (result == null) {
 					writer.Flush ();
 					Console.Out.Flush ();
