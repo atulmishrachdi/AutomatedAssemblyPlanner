@@ -66,7 +66,7 @@ namespace Assembly_Planner
 					Debug.Listeners.Add(writer);
 				}
 
-                var filePath = Program.state.inputDir + "\\intermediate\\" + FileName + ".xml";
+				var filePath = Program.state.inputDir + Program.slash + "intermediate" + Program.slash + FileName + ".xml";
                 var fileStream = File.OpenRead(filePath);
                 result = IO.Open(fileStream, filePath);
 				if (result == null) {
@@ -93,7 +93,7 @@ namespace Assembly_Planner
             }
             foreach (KeyValuePair<string,List<TessellatedSolid>> p in loadDict)
             {
-                var fileStream = File.OpenWrite(Program.state.inputDir+"/intermediate/" + p.Key + ".xml");
+				var fileStream = File.OpenWrite(Program.state.inputDir + Program.slash + "intermediate" + Program.slash + p.Key + ".xml");
                 foreach( TessellatedSolid s in p.Value)
                 {
                     IO.Save(fileStream, s, FileType.TVGL);

@@ -240,7 +240,6 @@
     <Compile Include="StateSaving\SaveableSolid.cs" />
     <Compile Include="StateSaving\SaveableVertex.cs" />
     <Compile Include="StateSaving\SolidKeySaveDict.cs" />
-    <Compile Include="StateSaving\TrackableSolid.cs" />
     <Compile Include="StateSaving\XMLPair.cs" />
   </ItemGroup>
   <ItemGroup>

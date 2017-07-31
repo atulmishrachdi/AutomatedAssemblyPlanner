@@ -183,8 +183,8 @@ namespace Assembly_Planner
                         // If CVHs dont overlap:
 
                         //$ Made this non-parallel for debugging purposes switch back later
-                        //Parallel.ForEach(scndFilteredDirectionsMoving, filtDir =>
-                        foreach (var filtDir in filteredDirections)
+                        Parallel.ForEach(scndFilteredDirectionsMoving, filtDir =>
+                        // foreach (var filtDir in filteredDirections)
                         {
                             var direction = DisassemblyDirections.Directions[filtDir];
                             blocked = BlockingDeterminationNoCvhOverlapping(direction, solidMoving, solidBlocking);
@@ -198,7 +198,7 @@ namespace Assembly_Planner
                                     scndFilteredDirectionsBlocking.Remove(
                                         DisassemblyDirections.DirectionsAndOppositsForGlobalpool[filtDir]);
                             }
-                        }//);
+                        });
 
                         Parallel.ForEach(scndFilteredDirectionsBlocking, filtDir =>
                         //foreach (var filtDir in filteredDirections)
