@@ -71,6 +71,7 @@ namespace Assembly_Planner
             //the second user interaction must happen here
             SaveDirections();
             var connectedGraph = false;
+
             while (!connectedGraph)
             {
                 Console.WriteLine("\n\nPress enter once input directions generated >>");
@@ -132,23 +133,39 @@ namespace Assembly_Planner
             globalDirPool = DisassemblyDirectionsWithFastener.RunGraphGeneration(AssemblyGraph, SolidsNoFastener);
             //the second user interaction must happen here
             SaveDirections();
-            var connectedGraph = false;
-			string dummyString = "";
-            while (!connectedGraph)
-            {
-                Console.WriteLine("\n\nPress enter once input directions generated >>");
-				dummyString = Console.ReadLine();
-				Console.WriteLine("\n\nChecking connectedness...");
-                LoadDirections();
-                connectedGraph = DisassemblyDirectionsWithFastener.GraphIsConnected(AssemblyGraph);
-            }
-			Console.WriteLine("\n\nConnectedness verified");
 
             SaveState();
 			state.Save(state.inputDir + slash + "intermediate" + slash + "ProgramState.xml");
             Console.WriteLine("\nDone");
 
         }
+
+
+		public static void doVerification(){
+
+			state = new ProgramState();
+			ProgramState.Load("." + slash + "bin" + slash + "intermediate" + slash + "ProgramState.xml", ref state);
+			LoadState();
+
+			//$ Adding this so that bounding box related functionalities still work
+			BoundingGeometry.OrientedBoundingBoxDic = new Dictionary<TessellatedSolid, BoundingBox>();
+			BoundingGeometry.BoundingCylinderDic = new Dictionary<TessellatedSolid, BoundingCylinder>();
+			BoundingGeometry.CreateOBB2(Solids);
+			BoundingGeometry.CreateBoundingCylinder(Solids);
+
+			Console.WriteLine("\n\nChecking connectedness...");
+			LoadDirections();
+			if (!DisassemblyDirectionsWithFastener.GraphIsConnected (AssemblyGraph)) {
+				Console.WriteLine("\n\nFailure: Graph is not connected");
+				return;
+			}
+
+			Console.WriteLine("\n\nConnectedness verified");
+			SaveState();
+			state.Save(state.inputDir + slash + "intermediate" + slash + "ProgramState.xml");
+			Console.WriteLine("\nDone");
+
+		}
 
 
         public static void doAssemblyPlanning()

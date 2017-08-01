@@ -542,7 +542,7 @@ namespace Assembly_Planner
             var sorted = batches.OrderBy(o => o.Count).ToList();
             for (var i = 0; i < sorted.Count - 1; i++)
             {
-                Console.WriteLine("\n   * Batch 1:");
+				Console.WriteLine("\n   * Batch ", i, ":");
                 foreach (var part in sorted[i])
                     Console.WriteLine("      - " + part.name);
             }
