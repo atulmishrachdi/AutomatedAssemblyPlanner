@@ -100,7 +100,6 @@ namespace Assembly_Planner
             state = new ProgramState();
             SetInputArguments(state, args);
             LoadState();
-			RefreshGraphArcs ();
 
             Solids = GetSTLs(state.inputDir);
             EnlargeTheSolid();
@@ -123,7 +122,10 @@ namespace Assembly_Planner
             state = new ProgramState();
 			ProgramState.Load("." + slash + "bin" + slash + "intermediate" + slash + "ProgramState.xml", ref state);
             LoadState();
-			RefreshGraphArcs ();
+
+
+			AssemblyGraph.RepairGraphConnections ();
+			//RefreshGraphArcs ();
 
 			//$ Adding this so that bounding box related functionalities still work
 			BoundingGeometry.OrientedBoundingBoxDic = new Dictionary<TessellatedSolid, BoundingBox>();
@@ -148,7 +150,9 @@ namespace Assembly_Planner
 			state = new ProgramState();
 			ProgramState.Load("." + slash + "bin" + slash + "intermediate" + slash + "ProgramState.xml", ref state);
 			LoadState();
-			RefreshGraphArcs ();
+
+			AssemblyGraph.RepairGraphConnections ();
+			//RefreshGraphArcs ();
 
 			//$ Adding this so that bounding box related functionalities still work
 			BoundingGeometry.OrientedBoundingBoxDic = new Dictionary<TessellatedSolid, BoundingBox>();
@@ -176,7 +180,9 @@ namespace Assembly_Planner
             state = new ProgramState();
 			ProgramState.Load("." + slash + "bin" + slash + "intermediate" + slash + "ProgramState.xml", ref state);
 			LoadState();
-			RefreshGraphArcs ();
+
+			AssemblyGraph.RepairGraphConnections ();
+			//RefreshGraphArcs ();
 
 			//$ Adding this so that bounding box related functionalities still work
 			BoundingGeometry.OrientedBoundingBoxDic = new Dictionary<TessellatedSolid, BoundingBox>();
@@ -396,39 +402,7 @@ namespace Assembly_Planner
             UpdateGraphArcs(reviewedArc);
         }
 
-
-		private static void RefreshGraphArcs(){
-
-			if (AssemblyGraph == null) {
-				return;
-			}
-			if (AssemblyGraph.arcs == null) {
-				return;
-			}
-			List<Connection> oldArcs = new List<Connection>(AssemblyGraph.arcs.Count);
-			foreach (Connection arc in AssemblyGraph.arcs) {
-				oldArcs.Add (arc);
-			}
-			foreach (Connection arc in oldArcs) {
-				AssemblyGraph.removeArc (arc);
-			}
-			foreach (Connection arc in oldArcs) {
-				node fromNode = AssemblyGraph.nodes.First(a => a.name == arc.XmlFrom);
-				node toNode = AssemblyGraph.nodes.First(a => a.name == arc.XmlTo);
-				AssemblyGraph.addArc(AssemblyGraph.nodes.First(a => a.name == arc.XmlFrom),
-					AssemblyGraph.nodes.First(a => a.name == arc.XmlTo),"",typeof(Connection));
-				var counterpart = (Connection)AssemblyGraph.arcs.Last ();
-				counterpart.FiniteDirections = arc.FiniteDirections;
-				counterpart.InfiniteDirections = arc.InfiniteDirections;
-				if (!fromNode.arcsFrom.Contains (counterpart)) {
-					throw new Exception ("Hollar");
-				}
-				if (!toNode.arcsTo.Contains (counterpart)) {
-					throw new Exception ("Hollar");
-				}
-			}
-
-		}
+	
 
         private static void UpdateGraphArcs(List<arc> reviewedArc)
         {
@@ -443,7 +417,7 @@ namespace Assembly_Planner
 
 				if (counterpart == null) {
 					AssemblyGraph.addArc(AssemblyGraph.nodes.First(a => a.name == arc.XmlFrom),
-						AssemblyGraph.nodes.First(a => a.name == arc.XmlTo),"",typeof(Connection));
+						                 AssemblyGraph.nodes.First(a => a.name == arc.XmlTo),"",typeof(Connection));
 					counterpart = (Connection)AssemblyGraph.arcs.Last ();
 				} else {
 					if (arc.Certainty == 0) {
@@ -454,7 +428,8 @@ namespace Assembly_Planner
 				counterpart.FiniteDirections = AddDirections (arc.FiniteDirections);
 				counterpart.InfiniteDirections = AddDirections (arc.InfiniteDirections);
 
-            }
+			}
+
         }
 
         private static void UpdateFasteners(PartsProperties partsProperties)

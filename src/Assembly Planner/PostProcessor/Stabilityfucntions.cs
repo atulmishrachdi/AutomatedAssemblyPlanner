@@ -301,13 +301,16 @@ namespace Assembly_Planner
         private static Dictionary<string, List<int>> GetSubPartRemovealDirectionIndexs(node checknode, List<arc> refarcs,
             bool s)
         {
+
             var removedirsbetweeneveryparts = new Dictionary<string, List<int>>();
             var checkarcs = refarcs.FindAll(a => a.From.name.Equals(checknode.name) || a.To.name.Equals(checknode.name));
 
+
             foreach (Connection arc in checkarcs.Where(a => a is Connection))
-            {
+			{
+				Console.WriteLine ("\n"+ arc.XmlTo + " <- "+ arc.XmlFrom);
                 var currentindex = new List<int>();
-                var othernodes = new List<node>();
+                var othernodes = new List<node>(); 
                 if (arc.From.name == checknode.name)
                 {
                     othernodes.Add(arc.To);
