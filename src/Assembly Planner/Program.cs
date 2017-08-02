@@ -152,7 +152,6 @@ namespace Assembly_Planner
 			LoadState();
 
 			AssemblyGraph.RepairGraphConnections ();
-			//RefreshGraphArcs ();
 
 			//$ Adding this so that bounding box related functionalities still work
 			BoundingGeometry.OrientedBoundingBoxDic = new Dictionary<TessellatedSolid, BoundingBox>();
@@ -170,6 +169,7 @@ namespace Assembly_Planner
 			Console.WriteLine("\n\nConnectedness verified");
 			SaveState();
 			state.Save(state.inputDir + slash + "intermediate" + slash + "ProgramState.xml");
+
 			Console.WriteLine("\nDone");
 
 		}
@@ -181,8 +181,9 @@ namespace Assembly_Planner
 			ProgramState.Load("." + slash + "bin" + slash + "intermediate" + slash + "ProgramState.xml", ref state);
 			LoadState();
 
+			checkDirs ();
 			AssemblyGraph.RepairGraphConnections ();
-			//RefreshGraphArcs ();
+
 
 			//$ Adding this so that bounding box related functionalities still work
 			BoundingGeometry.OrientedBoundingBoxDic = new Dictionary<TessellatedSolid, BoundingBox>();
@@ -399,21 +400,31 @@ namespace Assembly_Planner
 			var reader = new StreamReader(state.inputDir  + slash + "XML" + slash + "directionList2.xml");
             var theData = (DirectionSaveStructure)ser.Deserialize(reader);
             var reviewedArc = theData.arcs;
+			checkDirs ();
             UpdateGraphArcs(reviewedArc);
+			checkDirs ();
         }
 
 	
 
         private static void UpdateGraphArcs(List<arc> reviewedArc)
         {
+			
 
             foreach (Connection arc in reviewedArc)
             {
 				//$ Incorperated the ability to add arcs, because otherwise resolving incomplete graphs
 				//  would be impossible
 
-				var counterpart =(Connection)
-                    AssemblyGraph.arcs.FirstOrDefault(c => c.XmlFrom == arc.XmlFrom && c.XmlTo == arc.XmlTo);
+				bool reversed = false;
+				var counterpart = (Connection) AssemblyGraph.arcs.FirstOrDefault(c => c.XmlFrom == arc.XmlFrom && c.XmlTo == arc.XmlTo);
+
+				if (counterpart == null) {
+					counterpart =(Connection) AssemblyGraph.arcs.FirstOrDefault(c => c.XmlTo == arc.XmlFrom && c.XmlFrom == arc.XmlTo);
+					if (counterpart != null) {
+						reversed = true;
+					}
+				}
 
 				if (counterpart == null) {
 					AssemblyGraph.addArc(AssemblyGraph.nodes.First(a => a.name == arc.XmlFrom),
@@ -620,7 +631,38 @@ namespace Assembly_Planner
                 new[] { minX, minY, minZ });
             return 500000 / diagonalLength;
         }
+
+
+		//$ Remove this once nonsense is resolved
+		public static void checkDirs(){
+
+			/*
+			if (AssemblyGraph != null) {
+				Console.Write ("\n\n************\n\n");
+				foreach (arc arc in AssemblyGraph.arcs) {
+					arc other = AssemblyGraph.arcs.FirstOrDefault (a => a.XmlFrom == arc.XmlTo && a.XmlTo == arc.XmlFrom);
+					if (other != null) {
+						Console.Write ("\n\n" + arc.XmlFrom + " -- " + arc.XmlTo);
+					}
+				}
+				Console.Write ("\n\n============\n\n");
+				foreach (arc arc in AssemblyGraph.arcs.Where(a => a is Connection)) {
+					arc other = AssemblyGraph.arcs.FirstOrDefault (a => a.XmlFrom == arc.XmlTo && a.XmlTo == arc.XmlFrom);
+					if (other != null) {
+						Console.Write ("\n\n" + arc.XmlFrom + " -- " + arc.XmlTo);
+					}
+				}
+				Console.Write ("\n\n************\n\n");
+			}
+			*/
+
+		}
+
+
     }
+
+
+
 
     class TempVer
     {

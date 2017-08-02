@@ -140,8 +140,8 @@ namespace Assembly_Planner
             
 
             //$ Need to convert back to parallel after debug
-            foreach (var each in overlapCheck)
-            //Parallel.ForEach(overlapCheck, each =>
+            //foreach (var each in overlapCheck)
+            Parallel.ForEach(overlapCheck, each =>
             {
                 if (check % refresh == 0)
                 {
@@ -186,8 +186,7 @@ namespace Assembly_Planner
                         AddInformationToArc(a, finDirs, infDirs);
                     }
                 }
-            }//
-            //);
+            });
             LoadingBar.refresh(width, 1);
             Fastener.AddFastenersInformation(assemblyGraph, solidsNoFastener, SolidPrimitive);
             // create oppositeDirections for global direction pool.

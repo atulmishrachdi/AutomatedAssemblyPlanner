@@ -67,7 +67,8 @@ namespace Assembly_Planner
         [XmlIgnore]
         public SaveableDict<string, SubAssembly> SubAssemAndParts;
 
-        public List<Part> RefWithOneNode;
+		[XmlIgnore]
+		public List<Part> RefWithOneNode;
         [XmlIgnore]
         public List<SubAssembly> RefPrec;
         [XmlIgnore]
