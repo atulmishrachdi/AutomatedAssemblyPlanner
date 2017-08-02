@@ -235,6 +235,8 @@ namespace Assembly_Planner
 
             DisassemblyDirections.DirectionsAndOpposits = state.dirOps.generate();
             DisassemblyDirections.DirectionsAndOppositsForGlobalpool = state.dirOpsForPool.generate();
+
+            reader.Close();
             
         }
 
@@ -276,6 +278,7 @@ namespace Assembly_Planner
             ser.Serialize(writer, this);
 
             SaveableSolid.saveAll();
+            writer.Close();
 
         }
 

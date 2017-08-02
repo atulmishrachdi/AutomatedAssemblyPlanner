@@ -80,6 +80,9 @@ namespace Assembly_Planner
 				}
 
                 loadDict[FileName] = result;
+
+                fileStream.Close();
+
             }
 
             return result;
@@ -98,6 +101,7 @@ namespace Assembly_Planner
                 {
                     IO.Save(fileStream, s, FileType.TVGL);
                 }
+                fileStream.Close();
             }
         }
 
