@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<model type="DomeModel" id="1f2fbef8-dfed-1004-8be0-58277b79f346" name="Test">
+<model type="DomeModel" id="a2fedb09-dfee-1004-8376-5771df87f092" name="Test">
     <modelinfo>
         <version>0.0.0</version>
     </modelinfo>
@@ -21,26 +21,16 @@
                 </dataobject>
             </data>
         </parameter>
-        <parameter id="306434e9-dfed-1004-8467-a33a9a22dad2" name="C">
-            <currentType value="Real"/>
+        <parameter id="a2fedb22-dfee-1004-8376-5771df87f092" name="C">
+            <currentType value="String"/>
             <data>
-                <dataobject type="Real">
-                    <quantity magnitude="0.0" unit="kg"/>
-                </dataobject>
+                <dataobject type="String">5.0 kg/home/braxtoncuneo/Desktop/dome/dist/client</dataobject>
             </data>
         </parameter>
     </parameters>
     <relations>
         <relation type="Procedural" id="1f2fbf14-dfed-1004-8be0-58277b79f346" name="Test Relation">
             <parameters>
-                <parameter id="306434ef-dfed-1004-8467-a33a9a22dad2" name="C">
-                    <currentType value="Real"/>
-                    <data>
-                        <dataobject type="Real">
-                            <quantity magnitude="5.0" unit="kg"/>
-                        </dataobject>
-                    </data>
-                </parameter>
                 <parameter id="306434f2-dfed-1004-8467-a33a9a22dad2" name="B">
                     <currentType value="Real"/>
                     <data>
@@ -57,10 +47,20 @@
                         </dataobject>
                     </data>
                 </parameter>
+                <parameter id="a2fedb25-dfee-1004-8376-5771df87f092" name="C">
+                    <currentType value="String"/>
+                    <data>
+                        <dataobject type="String">5.0 kg/home/braxtoncuneo/Desktop/dome/dist/client</dataobject>
+                    </data>
+                </parameter>
             </parameters>
-            <body><![CDATA[C = A + B]]></body>
+            <body><![CDATA[import os;
+
+D = os.getcwd();
+
+C = str(A + B) + D;]]></body>
             <dependencies>
-                <dependency idRef="306434ef-dfed-1004-8467-a33a9a22dad2">
+                <dependency idRef="a2fedb25-dfee-1004-8376-5771df87f092">
                     <parameter name="B" idRef="306434f2-dfed-1004-8467-a33a9a22dad2" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346"/>
                     <parameter name="A" idRef="306434f5-dfed-1004-8467-a33a9a22dad2" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346"/>
                 </dependency>
@@ -72,23 +72,23 @@
         <context id="BUILD_CXT" name="Build View">
             <modelobjects>
                 <relation name="Test Relation" idRef="1f2fbf14-dfed-1004-8be0-58277b79f346"/>
-                <parameter name="C" idRef="306434e9-dfed-1004-8467-a33a9a22dad2" idModelRef="1f2fbef8-dfed-1004-8be0-58277b79f346"/>
-                <parameter name="B" idRef="306434e6-dfed-1004-8467-a33a9a22dad2" idModelRef="1f2fbef8-dfed-1004-8be0-58277b79f346"/>
-                <parameter name="A" idRef="306434e3-dfed-1004-8467-a33a9a22dad2" idModelRef="1f2fbef8-dfed-1004-8be0-58277b79f346"/>
+                <parameter name="C" idRef="a2fedb22-dfee-1004-8376-5771df87f092" idModelRef="a2fedb09-dfee-1004-8376-5771df87f092"/>
+                <parameter name="B" idRef="306434e6-dfed-1004-8467-a33a9a22dad2" idModelRef="a2fedb09-dfee-1004-8376-5771df87f092"/>
+                <parameter name="A" idRef="306434e3-dfed-1004-8467-a33a9a22dad2" idModelRef="a2fedb09-dfee-1004-8376-5771df87f092"/>
             </modelobjects>
         </context>
         <context id="FILE_CXT" name="Files"/>
     </contexts>
     <mappings>
         <modelMappings>
-            <mappedParameter name="B" idRef="306434f2-dfed-1004-8467-a33a9a22dad2" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346">
-                <parameter name="B" idRef="306434e6-dfed-1004-8467-a33a9a22dad2" idModelRef="1f2fbef8-dfed-1004-8be0-58277b79f346"/>
+            <mappedParameter name="C" idRef="a2fedb25-dfee-1004-8376-5771df87f092" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346">
+                <parameter name="C" idRef="a2fedb22-dfee-1004-8376-5771df87f092" idModelRef="a2fedb09-dfee-1004-8376-5771df87f092"/>
             </mappedParameter>
-            <mappedParameter name="C" idRef="306434ef-dfed-1004-8467-a33a9a22dad2" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346">
-                <parameter name="C" idRef="306434e9-dfed-1004-8467-a33a9a22dad2" idModelRef="1f2fbef8-dfed-1004-8be0-58277b79f346"/>
+            <mappedParameter name="B" idRef="306434f2-dfed-1004-8467-a33a9a22dad2" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346">
+                <parameter name="B" idRef="306434e6-dfed-1004-8467-a33a9a22dad2" idModelRef="a2fedb09-dfee-1004-8376-5771df87f092"/>
             </mappedParameter>
             <mappedParameter name="A" idRef="306434f5-dfed-1004-8467-a33a9a22dad2" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346">
-                <parameter name="A" idRef="306434e3-dfed-1004-8467-a33a9a22dad2" idModelRef="1f2fbef8-dfed-1004-8be0-58277b79f346"/>
+                <parameter name="A" idRef="306434e3-dfed-1004-8467-a33a9a22dad2" idModelRef="a2fedb09-dfee-1004-8376-5771df87f092"/>
             </mappedParameter>
         </modelMappings>
     </mappings>
