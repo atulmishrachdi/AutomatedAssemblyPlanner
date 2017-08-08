@@ -1,4 +1,5 @@
-﻿using System;
+﻿#define NOSRC
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -127,7 +128,14 @@ namespace Assembly_Planner
             class2 = new double[Training, Features];
             var reader =
                 new StreamReader(
-                    File.OpenRead("src/Assembly Planner/InitialGraphMaker/BoltAndGearDetector/ClassifierFiles/TrainingData.csv"));
+
+					#if NOSRC
+					File.OpenRead(Program.state.inputDir+"/training/TrainingData.csv")
+					#else
+					File.OpenRead("src/Assembly Planner/InitialGraphMaker/BoltAndGearDetector/ClassifierFiles/TrainingData.csv")
+					#endif
+				
+				);
             var counter = 0;
             while (!reader.EndOfStream)
             {
@@ -147,8 +155,15 @@ namespace Assembly_Planner
             Y = new int[134];
             X = new double[134][];
             var reader =
-                new StreamReader(
-                    File.OpenRead("src/Assembly Planner/InitialGraphMaker/BoltAndGearDetector/ClassifierFiles/TrainingData.csv"));
+				new StreamReader(
+
+					#if NOSRC
+					File.OpenRead(Program.state.inputDir+"/training/TrainingData.csv")
+					#else
+					File.OpenRead("src/Assembly Planner/InitialGraphMaker/BoltAndGearDetector/ClassifierFiles/TrainingData.csv")
+					#endif
+				
+				);
             var counter = 0;
             while (!reader.EndOfStream)
             {

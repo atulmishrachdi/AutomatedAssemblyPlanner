@@ -90,10 +90,10 @@
     <Reference Include="StarMath, Version=2.0.14.1114, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\StarMath.2.0.16.0529\lib\portable-net45+wp8+win8\StarMath.dll</HintPath>
     </Reference>
-    <Reference Include="TessellationAndVoxelizationGeometryLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="System.Management" />
+    <Reference Include="TessellationAndVoxelizationGeometryLibrary">
       <HintPath>..\packages\TVGL.1.0.17.719\lib\portable-net45+win8\TessellationAndVoxelizationGeometryLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="System.Management" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DisassemblyProcess\AStarInspiredRecursiveOptimizedSearch.cs" />
@@ -248,15 +248,15 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="License.txt" />
+    <None Include="TessellationAndVoxelizationGeometryLibrary.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="License.txt" />
     <Content Include="MIConvexHull.xml" />
     <Content Include="OptimizationToolbox.XML" />
     <Content Include="PropertyTools.dll" />
     <Content Include="PropertyTools.Wpf.dll" />
     <Content Include="StarMath.XML" />
-    <Content Include="TessellationAndVoxelizationGeometryLibrary.XML" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

@@ -12,7 +12,11 @@ namespace AssemblyPlanning
         static void Main(string[] args)
         {
 
-            Program.doAssemblyPlanning();
+			string dir = "";
+			if (args.Length > 0) {
+				dir = args [0];
+			}
+            Program.doAssemblyPlanning(dir);
 
         }
     }

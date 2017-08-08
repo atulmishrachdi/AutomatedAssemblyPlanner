@@ -117,10 +117,13 @@ namespace Assembly_Planner
 
         }
 
-        public static void doDisassemblyDirections()
+		public static void doDisassemblyDirections(string dir)
         {
-            state = new ProgramState();
-			ProgramState.Load("." + slash + "bin" + slash + "intermediate" + slash + "ProgramState.xml", ref state);
+			state = new ProgramState();
+			if (dir == "") {
+				dir = ".";
+			}
+			ProgramState.Load(dir + slash + "bin" + slash + "intermediate" + slash + "ProgramState.xml", ref state);
             LoadState();
 
 
@@ -145,10 +148,13 @@ namespace Assembly_Planner
         }
 
 
-		public static void doVerification(){
+		public static void doVerification(string dir){
 
 			state = new ProgramState();
-			ProgramState.Load("." + slash + "bin" + slash + "intermediate" + slash + "ProgramState.xml", ref state);
+			if (dir == "") {
+				dir = ".";
+			}
+			ProgramState.Load(dir + slash + "bin" + slash + "intermediate" + slash + "ProgramState.xml", ref state);
 			LoadState();
 
 			AssemblyGraph.RepairGraphConnections ();
@@ -175,10 +181,13 @@ namespace Assembly_Planner
 		}
 
 
-        public static void doAssemblyPlanning()
+		public static void doAssemblyPlanning(string dir)
         {
-            state = new ProgramState();
-			ProgramState.Load("." + slash + "bin" + slash + "intermediate" + slash + "ProgramState.xml", ref state);
+			state = new ProgramState();
+			if (dir == "") {
+				dir = ".";
+			}
+			ProgramState.Load(dir + slash + "bin" + slash + "intermediate" + slash + "ProgramState.xml", ref state);
 			LoadState();
 
 			checkDirs ();
@@ -297,7 +306,12 @@ namespace Assembly_Planner
                 SetInputArgumentsViaDialog(state);
             else
             {
-				state.inputDir = Directory.GetCurrentDirectory() + slash + "bin";//args[argsIndex];
+				Console.WriteLine ("Arguments:");
+				foreach (string a in args) {
+					Console.WriteLine (" -- "+a);
+				}
+				state.inputDir = args[argsIndex] + slash + "bin";
+				Console.WriteLine ("Setting inputDir to: " + state.inputDir);
                 if (args.Length > ++argsIndex)
                     DetectFasteners = args[argsIndex].Equals("y", StringComparison.CurrentCultureIgnoreCase);
                 if (DetectFasteners && args.Length > ++argsIndex)

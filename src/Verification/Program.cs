@@ -7,7 +7,11 @@ namespace Verification
 	{
 		public static void Main (string[] args)
 		{
-			Program.doVerification ();
+			string dir = "";
+			if (args.Length > 0) {
+				dir = args [0];
+			}
+			Program.doVerification (dir);
 		}
 	}
 }

@@ -9,7 +9,7 @@
             <currentType value="Real"/>
             <data>
                 <dataobject type="Real">
-                    <quantity magnitude="2.0" unit="kg"/>
+                    <quantity magnitude="1.0" unit="kg"/>
                 </dataobject>
             </data>
         </parameter>
@@ -17,14 +17,14 @@
             <currentType value="Real"/>
             <data>
                 <dataobject type="Real">
-                    <quantity magnitude="3.0" unit="kg"/>
+                    <quantity magnitude="1.0" unit="kg"/>
                 </dataobject>
             </data>
         </parameter>
         <parameter id="a2fedb22-dfee-1004-8376-5771df87f092" name="C">
             <currentType value="String"/>
             <data>
-                <dataobject type="String">5.0 kg/home/braxtoncuneo/Desktop/dome/dist/client</dataobject>
+                <dataobject type="String">2.0 kg/home/braxtoncuneo/Desktop/dome/dist/client</dataobject>
             </data>
         </parameter>
     </parameters>
@@ -35,7 +35,7 @@
                     <currentType value="Real"/>
                     <data>
                         <dataobject type="Real">
-                            <quantity magnitude="3.0" unit="kg"/>
+                            <quantity magnitude="1.0" unit="kg"/>
                         </dataobject>
                     </data>
                 </parameter>
@@ -43,22 +43,31 @@
                     <currentType value="Real"/>
                     <data>
                         <dataobject type="Real">
-                            <quantity magnitude="2.0" unit="kg"/>
+                            <quantity magnitude="1.0" unit="kg"/>
                         </dataobject>
                     </data>
                 </parameter>
                 <parameter id="a2fedb25-dfee-1004-8376-5771df87f092" name="C">
                     <currentType value="String"/>
                     <data>
-                        <dataobject type="String">5.0 kg/home/braxtoncuneo/Desktop/dome/dist/client</dataobject>
+                        <dataobject type="String">2.0 kg/home/braxtoncuneo/Desktop/dome/dist/client</dataobject>
                     </data>
                 </parameter>
             </parameters>
-            <body><![CDATA[import os;
+            <body><![CDATA[import sys;
+import subprocess;
+import os;
 
-D = os.getcwd();
+cwd = os.getcwd();
 
-C = str(A + B) + D;]]></body>
+subprocess.call("rm ./../../workspace/bin/intermediate/*",shell=True);
+
+subprocess.call(["./../../workspace/FastenerDetection.exe", "./../../workspace", "y", "1", "0.5", "y", "y"]);
+subprocess.call(["./../../workspace/DisassemblyDirections.exe", "./../../workspace", "y", "1", "0.5", "y", "y"]);
+subprocess.call(["./../../workspace/Verification.exe", "./../../workspace", "y", "1", "0.5", "y", "y"]);
+subprocess.call(["./../../workspace/AssemblyPlanning.exe", "./../../workspace", "y", "1", "0.5", "y", "y"]);
+
+C = str(A + B)+ cwd;]]></body>
             <dependencies>
                 <dependency idRef="a2fedb25-dfee-1004-8376-5771df87f092">
                     <parameter name="B" idRef="306434f2-dfed-1004-8467-a33a9a22dad2" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346"/>
@@ -81,14 +90,14 @@ C = str(A + B) + D;]]></body>
     </contexts>
     <mappings>
         <modelMappings>
+            <mappedParameter name="A" idRef="306434e3-dfed-1004-8467-a33a9a22dad2" idModelRef="a2fedb09-dfee-1004-8376-5771df87f092">
+                <parameter name="A" idRef="306434f5-dfed-1004-8467-a33a9a22dad2" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346"/>
+            </mappedParameter>
             <mappedParameter name="C" idRef="a2fedb25-dfee-1004-8376-5771df87f092" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346">
                 <parameter name="C" idRef="a2fedb22-dfee-1004-8376-5771df87f092" idModelRef="a2fedb09-dfee-1004-8376-5771df87f092"/>
             </mappedParameter>
-            <mappedParameter name="B" idRef="306434f2-dfed-1004-8467-a33a9a22dad2" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346">
-                <parameter name="B" idRef="306434e6-dfed-1004-8467-a33a9a22dad2" idModelRef="a2fedb09-dfee-1004-8376-5771df87f092"/>
-            </mappedParameter>
-            <mappedParameter name="A" idRef="306434f5-dfed-1004-8467-a33a9a22dad2" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346">
-                <parameter name="A" idRef="306434e3-dfed-1004-8467-a33a9a22dad2" idModelRef="a2fedb09-dfee-1004-8376-5771df87f092"/>
+            <mappedParameter name="B" idRef="306434e6-dfed-1004-8467-a33a9a22dad2" idModelRef="a2fedb09-dfee-1004-8376-5771df87f092">
+                <parameter name="B" idRef="306434f2-dfed-1004-8467-a33a9a22dad2" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346"/>
             </mappedParameter>
         </modelMappings>
     </mappings>

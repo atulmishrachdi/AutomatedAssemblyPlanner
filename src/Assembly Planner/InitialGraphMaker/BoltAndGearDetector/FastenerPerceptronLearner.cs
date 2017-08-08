@@ -1,4 +1,5 @@
-﻿using System;
+﻿#define NOSRC
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -143,9 +144,15 @@ namespace Assembly_Planner
             Y = new List<double>();
             X = new double[Training, Features];
             var reader =
-                new StreamReader(
-                    File.OpenRead(
-                        "src/Assembly Planner/InitialGraphMaker/BoltAndGearDetector/ClassifierFiles/TrainingData.csv"));
+				new StreamReader(
+
+					#if NOSRC
+					File.OpenRead(Program.state.inputDir+"/training/TrainingData.csv")
+					#else
+					File.OpenRead("src/Assembly Planner/InitialGraphMaker/BoltAndGearDetector/ClassifierFiles/TrainingData.csv")
+					#endif
+
+				);
             var counter = 0;
             while (!reader.EndOfStream)
             {
@@ -181,7 +188,13 @@ namespace Assembly_Planner
         {
             // the first m columns are weights (with m features (real features+1))
             // the last column is the vote
-            var path = "src/Assembly Planner/InitialGraphMaker/BoltAndGearDetector/ClassifierFiles";
+
+			var path =
+			#if NOSRC
+				Program.state.inputDir+"bin/training";
+			#else
+				"src/Assembly Planner/InitialGraphMaker/BoltAndGearDetector/ClassifierFiles";
+			#endif
 
             //Path to write the csv to:
             var weightsAndVotesPath = path + "/WeightsAndVotes.csv";
@@ -224,11 +237,23 @@ namespace Assembly_Planner
             //    2. if the csv doesnt exist or the user has new training stls, we can run it and
             //       improve the classifier.
 
-            var path = "src/Assembly Planner/InitialGraphMaker/BoltAndGearDetector";
+            var path = 
+
+				#if NOSRC 
+				Program.state.inputDir+"src/Assembly Planner/InitialGraphMaker/BoltAndGearDetector";
+				#else
+				"bin/training";
+				#endif
             
             //Path to write the csv to:
-            var trainingDataPath = path + "/ClassifierFiles/TrainingData.csv";
-            var weightsAndVotesPath = path + "/ClassifierFiles/WeightsAndVotes.csv";
+			#if NOSRC
+            var trainingDataPath = path + "/TrainingData.csv";
+            var weightsAndVotesPath = path + "/WeightsAndVotes.csv";
+			#else
+			var trainingDataPath = path + "/ClassifierFiles/TrainingData.csv";
+			var weightsAndVotesPath = path + "/ClassifierFiles/WeightsAndVotes.csv";
+			#endif
+
             if (!regenerateTrainingData && File.Exists(weightsAndVotesPath))
                 return;
             if (!regenerateTrainingData && !File.Exists(weightsAndVotesPath) && File.Exists(trainingDataPath))
@@ -242,11 +267,17 @@ namespace Assembly_Planner
                 //statusReporter.PrintMessage("BOUNDING GEOMETRIES ARE SUCCESSFULLY CREATED.", 1f);
             //Path to read STLs from:
 
-            var stlFastenerPath = path + "/TrainingSTLs/Fastener";
+			#if NOSRC
+			var stlFastenerPath = path + "/Fastener";
+			var stlNotFastenerPath = path + "/notFastener";
+			#else
+			var stlFastenerPath = path + "/TrainingSTLs/Fastener";
+			var stlNotFastenerPath = path + "/TrainingSTLs/notFastener";
+			#endif
+
             var fastenersTraining = StlToSolid(stlFastenerPath);
             var fastenerPrimitive = BlockingDetermination.PrimitiveMaker(fastenersTraining);
 
-            var stlNotFastenerPath = path + "/TrainingSTLs/notFastener";
             var ntFastenersTraining = StlToSolid(stlNotFastenerPath);
             var notFastenerPrimitive = BlockingDetermination.PrimitiveMaker(ntFastenersTraining);
 
@@ -323,7 +354,12 @@ namespace Assembly_Planner
             var reader =
                 new StreamReader(
                     File.OpenRead(
-                        "src/Assembly Planner/InitialGraphMaker/BoltAndGearDetector/ClassifierFiles/WeightsAndVotes.csv"));
+						#if NOSRC
+						Program.state.inputDir+"/fastener"
+						#else
+                        "src/Assembly Planner/InitialGraphMaker/BoltAndGearDetector/ClassifierFiles/WeightsAndVotes.csv"
+						#endif
+					));
             while (!reader.EndOfStream)
             {
                 var line = reader.ReadLine();
