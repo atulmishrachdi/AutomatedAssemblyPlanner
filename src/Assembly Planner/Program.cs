@@ -148,7 +148,7 @@ namespace Assembly_Planner
         }
 
 
-		public static void doVerification(string dir){
+		public static int doVerification(string dir){
 
 			state = new ProgramState();
 			if (dir == "") {
@@ -169,7 +169,7 @@ namespace Assembly_Planner
 			LoadDirections();
 			if (!DisassemblyDirectionsWithFastener.GraphIsConnected (AssemblyGraph)) {
 				Console.WriteLine("\n\nFailure: Graph is not connected");
-				return;
+				return 1;
 			}
 
 			Console.WriteLine("\n\nConnectedness verified");
@@ -177,6 +177,7 @@ namespace Assembly_Planner
 			state.Save(state.inputDir + slash + "intermediate" + slash + "ProgramState.xml");
 
 			Console.WriteLine("\nDone");
+            return 0;
 
 		}
 

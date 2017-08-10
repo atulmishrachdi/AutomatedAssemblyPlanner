@@ -5,13 +5,13 @@ namespace Verification
 {
 	class MainClass
 	{
-		public static void Main (string[] args)
+		public static int Main (string[] args)
 		{
 			string dir = "";
 			if (args.Length > 0) {
 				dir = args [0];
 			}
-			Program.doVerification (dir);
+			return Program.doVerification (dir);
 		}
 	}
 }

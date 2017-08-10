@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{59537C77-F397-4B2D-8949-ABB3F2060B73}</ProjectGuid>
+    <ProjectGuid>{A9848701-5B1F-4F3B-B10B-6A6D2DEA7746}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Verification</RootNamespace>
     <AssemblyName>Verification</AssemblyName>
