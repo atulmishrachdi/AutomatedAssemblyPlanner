@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model type="DomeModel" id="e903010b-dffa-1004-8ab4-1037084ba065" name="Test">
+    <modelinfo>
+        <version>0.0.1</version>
+    </modelinfo>
+    <parameters>
+        <parameter id="2de11cfb-dff9-1004-8053-4b6b5190a41e" name="InputStage">
+            <currentType value="Integer"/>
+            <data>
+                <dataobject type="Integer">
+                    <quantity magnitude="0" unit="No_Unit"/>
+                </dataobject>
+            </data>
+        </parameter>
+        <parameter id="2de11cff-dff9-1004-8053-4b6b5190a41e" name="OutputStage">
+            <currentType value="Integer"/>
+            <data>
+                <dataobject type="Integer">
+                    <quantity magnitude="0" unit="No_Unit"/>
+                </dataobject>
+            </data>
+        </parameter>
+        <parameter id="ed2f8a8a-dffc-1004-896f-4e4d575adaac" name="pageBase">
+            <currentType value="String"/>
+            <data>
+                <dataobject type="String"></dataobject>
+            </data>
+        </parameter>
+        <parameter id="ed2f8a8d-dffc-1004-896f-4e4d575adaac" name="pageMain">
+            <currentType value="String"/>
+            <data>
+                <dataobject type="String"></dataobject>
+            </data>
+        </parameter>
+        <parameter id="ed2f8a90-dffc-1004-896f-4e4d575adaac" name="pageUnit">
+            <currentType value="String"/>
+            <data>
+                <dataobject type="String"></dataobject>
+            </data>
+        </parameter>
+        <parameter id="ed2f8a97-dffc-1004-896f-4e4d575adaac" name="outputTemplate">
+            <currentType value="String"/>
+            <data>
+                <dataobject type="String"></dataobject>
+            </data>
+        </parameter>
+        <parameter id="ed2f8aa1-dffc-1004-896f-4e4d575adaac" name="Models">
+            <currentType value="List"/>
+            <data>
+                <dataobject type="List">
+                    <itemType>Real</itemType>
+                    <parameters/>
+                </dataobject>
+            </data>
+        </parameter>
+        <parameter id="ed2f8aa4-dffc-1004-896f-4e4d575adaac" name="inputStageData">
+            <currentType value="String"/>
+            <data>
+                <dataobject type="String"></dataobject>
+            </data>
+        </parameter>
+        <parameter id="ed2f8aa7-dffc-1004-896f-4e4d575adaac" name="outputStageData">
+            <currentType value="String"/>
+            <data>
+                <dataobject type="String"></dataobject>
+            </data>
+        </parameter>
+    </parameters>
+    <relations>
+        <relation type="Procedural" id="1f2fbf14-dfed-1004-8be0-58277b79f346" name="Test Relation">
+            <parameters>
+                <parameter id="2de11d02-dff9-1004-8053-4b6b5190a41e" name="OutputStage">
+                    <currentType value="Integer"/>
+                    <data>
+                        <dataobject type="Integer">
+                            <quantity magnitude="0" unit="No_Unit"/>
+                        </dataobject>
+                    </data>
+                </parameter>
+                <parameter id="2de11d03-dff9-1004-8053-4b6b5190a41e" name="InputStage">
+                    <currentType value="Integer"/>
+                    <data>
+                        <dataobject type="Integer">
+                            <quantity magnitude="0" unit="No_Unit"/>
+                        </dataobject>
+                    </data>
+                </parameter>
+                <parameter id="ed2f8a9a-dffc-1004-896f-4e4d575adaac" name="outputTemplate">
+                    <currentType value="String"/>
+                    <data>
+                        <dataobject type="String"></dataobject>
+                    </data>
+                </parameter>
+                <parameter id="ed2f8a9b-dffc-1004-896f-4e4d575adaac" name="pageBase">
+                    <currentType value="String"/>
+                    <data>
+                        <dataobject type="String"></dataobject>
+                    </data>
+                </parameter>
+                <parameter id="ed2f8a9c-dffc-1004-896f-4e4d575adaac" name="pageMain">
+                    <currentType value="String"/>
+                    <data>
+                        <dataobject type="String"></dataobject>
+                    </data>
+                </parameter>
+                <parameter id="ed2f8a9d-dffc-1004-896f-4e4d575adaac" name="pageUnit">
+                    <currentType value="String"/>
+                    <data>
+                        <dataobject type="String"></dataobject>
+                    </data>
+                </parameter>
+                <parameter id="ed2f8aaa-dffc-1004-896f-4e4d575adaac" name="Models">
+                    <currentType value="List"/>
+                    <data>
+                        <dataobject type="List">
+                            <itemType>Real</itemType>
+                            <parameters/>
+                        </dataobject>
+                    </data>
+                </parameter>
+                <parameter id="ed2f8aac-dffc-1004-896f-4e4d575adaac" name="outputStageData">
+                    <currentType value="String"/>
+                    <data>
+                        <dataobject type="String"></dataobject>
+                    </data>
+                </parameter>
+                <parameter id="ed2f8aad-dffc-1004-896f-4e4d575adaac" name="inputStageData">
+                    <currentType value="String"/>
+                    <data>
+                        <dataobject type="String"></dataobject>
+                    </data>
+                </parameter>
+            </parameters>
+            <body><![CDATA[import sys;
+import subprocess;
+import os;
+
+
+if InputStage == 0:
+	pageBase = temps["pageBase"];
+	pageMain = temps["uploadMain"];
+	pageUnit = "";
+	OutputStage1 = 0;
+else:
+	manFile = open("./../../workspace/bin/templates/manifest.txt","r");
+	manText = manFile.read();
+	manFile.close();
+	itemList = string.splitlines(manText);
+	temps = {};
+	for i in itemList:
+		if len(s) != 2 :
+			continue;
+		thePair = string.split(i,":")
+		theName = thePair[0];
+		valFile = open("./../../workspace/bin/templates/"+thePair[1],"r");
+		theVal = valFile.read();
+		valFile.close();
+		temps[theName] = theVal;
+
+if InputStage == 1:
+	subprocess.call("rm ./../../workspace/bin/intermediate/*",shell=True);
+	subprocess.call(["./../../workspace/FastenerDetection.exe", "./../../workspace", "y", "1", "0.5", "y", "y"]);
+	pageBase = temps["pageBase"];
+	pageMain = temps["partPropMain"];
+	pageUnit = temps["partEntry"];
+	OutputStage1 = 2;
+
+if InputStage == 2:
+	subprocess.call(["./../../workspace/DisassemblyDirections.exe", "./../../workspace", "y", "1", "0.5", "y", "y"]);
+	pageBase = temps["pageBase"];
+	pageMain = temps["dirConMain"];
+	pageUnit = temps["dirPair"];
+	OutputStage1 = 3;
+
+if InputStage == 3:
+	val = subprocess.call(["./../../workspace/Verification.exe", "./../../workspace", "y", "1", "0.5", "y", "y"]);
+	if val == 0:
+		OutputStage1 = 4;
+	else:
+		OutputStage1 = 3;
+
+if InputStage == 4:
+	subprocess.call(["./../../workspace/AssemblyPlanning.exe", "./../../workspace", "y", "1", "0.5", "y", "y"]);
+	pageBase = temps["pageBase"];
+	pageMain = temps["renderMain"];
+	pageUnit = temps["renderPart"];
+	OutputStage1 = 5;
+]]></body>
+            <dependencies>
+                <dependency idRef="ed2f8a9b-dffc-1004-896f-4e4d575adaac">
+                    <parameter name="InputStage" idRef="2de11d03-dff9-1004-8053-4b6b5190a41e" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346"/>
+                    <parameter name="Models" idRef="ed2f8aaa-dffc-1004-896f-4e4d575adaac" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346"/>
+                    <parameter name="inputStageData" idRef="ed2f8aad-dffc-1004-896f-4e4d575adaac" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346"/>
+                </dependency>
+                <dependency idRef="ed2f8a9a-dffc-1004-896f-4e4d575adaac">
+                    <parameter name="InputStage" idRef="2de11d03-dff9-1004-8053-4b6b5190a41e" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346"/>
+                    <parameter name="Models" idRef="ed2f8aaa-dffc-1004-896f-4e4d575adaac" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346"/>
+                    <parameter name="inputStageData" idRef="ed2f8aad-dffc-1004-896f-4e4d575adaac" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346"/>
+                </dependency>
+                <dependency idRef="ed2f8a9c-dffc-1004-896f-4e4d575adaac">
+                    <parameter name="InputStage" idRef="2de11d03-dff9-1004-8053-4b6b5190a41e" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346"/>
+                    <parameter name="Models" idRef="ed2f8aaa-dffc-1004-896f-4e4d575adaac" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346"/>
+                    <parameter name="inputStageData" idRef="ed2f8aad-dffc-1004-896f-4e4d575adaac" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346"/>
+                </dependency>
+                <dependency idRef="ed2f8a9d-dffc-1004-896f-4e4d575adaac">
+                    <parameter name="InputStage" idRef="2de11d03-dff9-1004-8053-4b6b5190a41e" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346"/>
+                    <parameter name="Models" idRef="ed2f8aaa-dffc-1004-896f-4e4d575adaac" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346"/>
+                    <parameter name="inputStageData" idRef="ed2f8aad-dffc-1004-896f-4e4d575adaac" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346"/>
+                </dependency>
+                <dependency idRef="ed2f8aac-dffc-1004-896f-4e4d575adaac">
+                    <parameter name="InputStage" idRef="2de11d03-dff9-1004-8053-4b6b5190a41e" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346"/>
+                    <parameter name="Models" idRef="ed2f8aaa-dffc-1004-896f-4e4d575adaac" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346"/>
+                    <parameter name="inputStageData" idRef="ed2f8aad-dffc-1004-896f-4e4d575adaac" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346"/>
+                </dependency>
+                <dependency idRef="2de11d02-dff9-1004-8053-4b6b5190a41e">
+                    <parameter name="InputStage" idRef="2de11d03-dff9-1004-8053-4b6b5190a41e" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346"/>
+                    <parameter name="Models" idRef="ed2f8aaa-dffc-1004-896f-4e4d575adaac" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346"/>
+                    <parameter name="inputStageData" idRef="ed2f8aad-dffc-1004-896f-4e4d575adaac" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346"/>
+                </dependency>
+            </dependencies>
+        </relation>
+    </relations>
+    <visualizations/>
+    <contexts>
+        <context id="BUILD_CXT" name="Build View">
+            <modelobjects>
+                <relation name="Test Relation" idRef="1f2fbf14-dfed-1004-8be0-58277b79f346"/>
+                <parameter name="InputStage" idRef="2de11cfb-dff9-1004-8053-4b6b5190a41e" idModelRef="e903010b-dffa-1004-8ab4-1037084ba065"/>
+                <parameter name="OutputStage" idRef="2de11cff-dff9-1004-8053-4b6b5190a41e" idModelRef="e903010b-dffa-1004-8ab4-1037084ba065"/>
+                <parameter name="pageBase" idRef="ed2f8a8a-dffc-1004-896f-4e4d575adaac" idModelRef="e903010b-dffa-1004-8ab4-1037084ba065"/>
+                <parameter name="pageMain" idRef="ed2f8a8d-dffc-1004-896f-4e4d575adaac" idModelRef="e903010b-dffa-1004-8ab4-1037084ba065"/>
+                <parameter name="pageUnit" idRef="ed2f8a90-dffc-1004-896f-4e4d575adaac" idModelRef="e903010b-dffa-1004-8ab4-1037084ba065"/>
+                <parameter name="outputTemplate" idRef="ed2f8a97-dffc-1004-896f-4e4d575adaac" idModelRef="e903010b-dffa-1004-8ab4-1037084ba065"/>
+                <parameter name="Models" idRef="ed2f8aa1-dffc-1004-896f-4e4d575adaac" idModelRef="e903010b-dffa-1004-8ab4-1037084ba065"/>
+                <parameter name="outputStageData" idRef="ed2f8aa7-dffc-1004-896f-4e4d575adaac" idModelRef="e903010b-dffa-1004-8ab4-1037084ba065"/>
+                <parameter name="inputStageData" idRef="ed2f8aa4-dffc-1004-896f-4e4d575adaac" idModelRef="e903010b-dffa-1004-8ab4-1037084ba065"/>
+            </modelobjects>
+        </context>
+        <context id="FILE_CXT" name="Files"/>
+    </contexts>
+    <mappings>
+        <modelMappings>
+            <mappedParameter name="outputTemplate" idRef="ed2f8a9a-dffc-1004-896f-4e4d575adaac" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346">
+                <parameter name="outputTemplate" idRef="ed2f8a97-dffc-1004-896f-4e4d575adaac" idModelRef="e903010b-dffa-1004-8ab4-1037084ba065"/>
+            </mappedParameter>
+            <mappedParameter name="pageMain" idRef="ed2f8a9c-dffc-1004-896f-4e4d575adaac" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346">
+                <parameter name="pageMain" idRef="ed2f8a8d-dffc-1004-896f-4e4d575adaac" idModelRef="e903010b-dffa-1004-8ab4-1037084ba065"/>
+            </mappedParameter>
+            <mappedParameter name="OutputStage" idRef="2de11cff-dff9-1004-8053-4b6b5190a41e" idModelRef="e903010b-dffa-1004-8ab4-1037084ba065">
+                <parameter name="OutputStage" idRef="2de11d02-dff9-1004-8053-4b6b5190a41e" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346"/>
+            </mappedParameter>
+            <mappedParameter name="outputStageData" idRef="ed2f8aac-dffc-1004-896f-4e4d575adaac" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346">
+                <parameter name="outputStageData" idRef="ed2f8aa7-dffc-1004-896f-4e4d575adaac" idModelRef="e903010b-dffa-1004-8ab4-1037084ba065"/>
+            </mappedParameter>
+            <mappedParameter name="inputStageData" idRef="ed2f8aad-dffc-1004-896f-4e4d575adaac" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346">
+                <parameter name="inputStageData" idRef="ed2f8aa4-dffc-1004-896f-4e4d575adaac" idModelRef="e903010b-dffa-1004-8ab4-1037084ba065"/>
+            </mappedParameter>
+            <mappedParameter name="InputStage" idRef="2de11d03-dff9-1004-8053-4b6b5190a41e" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346">
+                <parameter name="InputStage" idRef="2de11cfb-dff9-1004-8053-4b6b5190a41e" idModelRef="e903010b-dffa-1004-8ab4-1037084ba065"/>
+            </mappedParameter>
+            <mappedParameter name="pageBase" idRef="ed2f8a9b-dffc-1004-896f-4e4d575adaac" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346">
+                <parameter name="pageBase" idRef="ed2f8a8a-dffc-1004-896f-4e4d575adaac" idModelRef="e903010b-dffa-1004-8ab4-1037084ba065"/>
+            </mappedParameter>
+            <mappedParameter name="Models" idRef="ed2f8aaa-dffc-1004-896f-4e4d575adaac" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346">
+                <parameter name="Models" idRef="ed2f8aa1-dffc-1004-896f-4e4d575adaac" idModelRef="e903010b-dffa-1004-8ab4-1037084ba065"/>
+            </mappedParameter>
+        </modelMappings>
+    </mappings>
+    <auxfiles/>
+</model>

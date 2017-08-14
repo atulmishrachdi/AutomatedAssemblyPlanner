@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<modelinterface type="DomeModelInterface" id="e29c833f-dff8-1004-8618-def6c2acf082" name="Default Interface">
+    <interfaceinfo>
+        <version>0.0.1</version>
+        <defaultinterface/>
+    </interfaceinfo>
+    <mappingsandintermediates>
+        <mappings>
+            <interfacemappings>
+                <mappedParameter name="VerificationReady" idRef="e29c8353-dff8-1004-8618-def6c2acf082">
+                    <parameter name="VerificationReady" idRef="e29c8351-dff8-1004-8618-def6c2acf082" idModelRef="e29c8344-dff8-1004-8618-def6c2acf082"/>
+                </mappedParameter>
+                <mappedParameter name="DetectorReady" idRef="e29c8347-dff8-1004-8618-def6c2acf082">
+                    <parameter name="DetectorReady" idRef="e29c8345-dff8-1004-8618-def6c2acf082" idModelRef="e29c8344-dff8-1004-8618-def6c2acf082"/>
+                </mappedParameter>
+                <mappedParameter name="VerificationDone" idRef="e29c8356-dff8-1004-8618-def6c2acf082">
+                    <parameter name="VerificationDone" idRef="e29c8354-dff8-1004-8618-def6c2acf082" idModelRef="e29c8344-dff8-1004-8618-def6c2acf082"/>
+                </mappedParameter>
+                <mappedParameter name="PlannerDone" idRef="e29c835c-dff8-1004-8618-def6c2acf082">
+                    <parameter name="PlannerDone" idRef="e29c835a-dff8-1004-8618-def6c2acf082" idModelRef="e29c8344-dff8-1004-8618-def6c2acf082"/>
+                </mappedParameter>
+                <mappedParameter name="DirectionsDone" idRef="e29c8350-dff8-1004-8618-def6c2acf082">
+                    <parameter name="DirectionsDone" idRef="e29c834e-dff8-1004-8618-def6c2acf082" idModelRef="e29c8344-dff8-1004-8618-def6c2acf082"/>
+                </mappedParameter>
+                <mappedParameter name="PlannerReady" idRef="e29c8359-dff8-1004-8618-def6c2acf082">
+                    <parameter name="PlannerReady" idRef="e29c8357-dff8-1004-8618-def6c2acf082" idModelRef="e29c8344-dff8-1004-8618-def6c2acf082"/>
+                </mappedParameter>
+                <mappedParameter name="DetectorDone" idRef="e29c834a-dff8-1004-8618-def6c2acf082">
+                    <parameter name="DetectorDone" idRef="e29c8348-dff8-1004-8618-def6c2acf082" idModelRef="e29c8344-dff8-1004-8618-def6c2acf082"/>
+                </mappedParameter>
+                <mappedParameter name="DirectionsReady" idRef="e29c834d-dff8-1004-8618-def6c2acf082">
+                    <parameter name="DirectionsReady" idRef="e29c834b-dff8-1004-8618-def6c2acf082" idModelRef="e29c8344-dff8-1004-8618-def6c2acf082"/>
+                </mappedParameter>
+                <mappedParameter name="PlannerReady" idRef="e29c8358-dff8-1004-8618-def6c2acf082">
+                    <parameter name="PlannerReady" idRef="e29c8357-dff8-1004-8618-def6c2acf082" idModelRef="e29c8344-dff8-1004-8618-def6c2acf082"/>
+                </mappedParameter>
+                <mappedParameter name="VerificationReady" idRef="e29c8352-dff8-1004-8618-def6c2acf082">
+                    <parameter name="VerificationReady" idRef="e29c8351-dff8-1004-8618-def6c2acf082" idModelRef="e29c8344-dff8-1004-8618-def6c2acf082"/>
+                </mappedParameter>
+                <mappedParameter name="DetectorDone" idRef="e29c8349-dff8-1004-8618-def6c2acf082">
+                    <parameter name="DetectorDone" idRef="e29c8348-dff8-1004-8618-def6c2acf082" idModelRef="e29c8344-dff8-1004-8618-def6c2acf082"/>
+                </mappedParameter>
+                <mappedParameter name="VerificationDone" idRef="e29c8355-dff8-1004-8618-def6c2acf082">
+                    <parameter name="VerificationDone" idRef="e29c8354-dff8-1004-8618-def6c2acf082" idModelRef="e29c8344-dff8-1004-8618-def6c2acf082"/>
+                </mappedParameter>
+                <mappedParameter name="DirectionsReady" idRef="e29c834c-dff8-1004-8618-def6c2acf082">
+                    <parameter name="DirectionsReady" idRef="e29c834b-dff8-1004-8618-def6c2acf082" idModelRef="e29c8344-dff8-1004-8618-def6c2acf082"/>
+                </mappedParameter>
+                <mappedParameter name="DetectorReady" idRef="e29c8346-dff8-1004-8618-def6c2acf082">
+                    <parameter name="DetectorReady" idRef="e29c8345-dff8-1004-8618-def6c2acf082" idModelRef="e29c8344-dff8-1004-8618-def6c2acf082"/>
+                </mappedParameter>
+                <mappedParameter name="PlannerDone" idRef="e29c835b-dff8-1004-8618-def6c2acf082">
+                    <parameter name="PlannerDone" idRef="e29c835a-dff8-1004-8618-def6c2acf082" idModelRef="e29c8344-dff8-1004-8618-def6c2acf082"/>
+                </mappedParameter>
+                <mappedParameter name="DirectionsDone" idRef="e29c834f-dff8-1004-8618-def6c2acf082">
+                    <parameter name="DirectionsDone" idRef="e29c834e-dff8-1004-8618-def6c2acf082" idModelRef="e29c8344-dff8-1004-8618-def6c2acf082"/>
+                </mappedParameter>
+            </interfacemappings>
+        </mappings>
+        <intermediateobjects/>
+    </mappingsandintermediates>
+    <lookupdata>
+        <objectmap>
+            <parameter name="DetectorReady" idRef="e29c8345-dff8-1004-8618-def6c2acf082" idModelRef="e29c8344-dff8-1004-8618-def6c2acf082" description="key"/>
+            <parameter name="DetectorReady" idRef="e29c8346-dff8-1004-8618-def6c2acf082" description="value"/>
+            <parameter name="DetectorDone" idRef="e29c8348-dff8-1004-8618-def6c2acf082" idModelRef="e29c8344-dff8-1004-8618-def6c2acf082" description="key"/>
+            <parameter name="DetectorDone" idRef="e29c8349-dff8-1004-8618-def6c2acf082" description="value"/>
+            <parameter name="VerificationDone" idRef="e29c8354-dff8-1004-8618-def6c2acf082" idModelRef="e29c8344-dff8-1004-8618-def6c2acf082" description="key"/>
+            <parameter name="VerificationDone" idRef="e29c8355-dff8-1004-8618-def6c2acf082" description="value"/>
+            <parameter name="DirectionsDone" idRef="e29c834e-dff8-1004-8618-def6c2acf082" idModelRef="e29c8344-dff8-1004-8618-def6c2acf082" description="key"/>
+            <parameter name="DirectionsDone" idRef="e29c834f-dff8-1004-8618-def6c2acf082" description="value"/>
+            <parameter name="VerificationReady" idRef="e29c8351-dff8-1004-8618-def6c2acf082" idModelRef="e29c8344-dff8-1004-8618-def6c2acf082" description="key"/>
+            <parameter name="VerificationReady" idRef="e29c8352-dff8-1004-8618-def6c2acf082" description="value"/>
+            <parameter name="PlannerReady" idRef="e29c8357-dff8-1004-8618-def6c2acf082" idModelRef="e29c8344-dff8-1004-8618-def6c2acf082" description="key"/>
+            <parameter name="PlannerReady" idRef="e29c8358-dff8-1004-8618-def6c2acf082" description="value"/>
+            <parameter name="DirectionsReady" idRef="e29c834b-dff8-1004-8618-def6c2acf082" idModelRef="e29c8344-dff8-1004-8618-def6c2acf082" description="key"/>
+            <parameter name="DirectionsReady" idRef="e29c834c-dff8-1004-8618-def6c2acf082" description="value"/>
+            <parameter name="PlannerDone" idRef="e29c835a-dff8-1004-8618-def6c2acf082" idModelRef="e29c8344-dff8-1004-8618-def6c2acf082" description="key"/>
+            <parameter name="PlannerDone" idRef="e29c835b-dff8-1004-8618-def6c2acf082" description="value"/>
+        </objectmap>
+        <viewobjectmap>
+            <parameter name="PlannerReady" idRef="e29c8358-dff8-1004-8618-def6c2acf082" description="key"/>
+            <parameter name="PlannerReady" idRef="e29c8359-dff8-1004-8618-def6c2acf082" description="value"/>
+            <parameter name="VerificationReady" idRef="e29c8352-dff8-1004-8618-def6c2acf082" description="key"/>
+            <parameter name="VerificationReady" idRef="e29c8353-dff8-1004-8618-def6c2acf082" description="value"/>
+            <parameter name="DetectorDone" idRef="e29c8349-dff8-1004-8618-def6c2acf082" description="key"/>
+            <parameter name="DetectorDone" idRef="e29c834a-dff8-1004-8618-def6c2acf082" description="value"/>
+            <parameter name="VerificationDone" idRef="e29c8355-dff8-1004-8618-def6c2acf082" description="key"/>
+            <parameter name="VerificationDone" idRef="e29c8356-dff8-1004-8618-def6c2acf082" description="value"/>
+            <parameter name="DirectionsReady" idRef="e29c834c-dff8-1004-8618-def6c2acf082" description="key"/>
+            <parameter name="DirectionsReady" idRef="e29c834d-dff8-1004-8618-def6c2acf082" description="value"/>
+            <parameter name="DetectorReady" idRef="e29c8346-dff8-1004-8618-def6c2acf082" description="key"/>
+            <parameter name="DetectorReady" idRef="e29c8347-dff8-1004-8618-def6c2acf082" description="value"/>
+            <parameter name="PlannerDone" idRef="e29c835b-dff8-1004-8618-def6c2acf082" description="key"/>
+            <parameter name="PlannerDone" idRef="e29c835c-dff8-1004-8618-def6c2acf082" description="value"/>
+            <parameter name="DirectionsDone" idRef="e29c834f-dff8-1004-8618-def6c2acf082" description="key"/>
+            <parameter name="DirectionsDone" idRef="e29c8350-dff8-1004-8618-def6c2acf082" description="value"/>
+        </viewobjectmap>
+        <relationobjectmap/>
+    </lookupdata>
+</modelinterface>
