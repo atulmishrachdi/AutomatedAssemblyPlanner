@@ -1,0 +1,39 @@
+<select name="length units" id="lengthUnits">
+  <option value="millimeters">millimeters</option>
+  <option value="centimeters">centimeters</option>
+  <option value="inches">inches</option>
+  <option value="feet">feet</option>
+  <option value="meters">meters</option>
+</select>
+<select name="mass units" id="massUnits">
+  <option value="kilograms">kilograms</option>
+  <option value="pounds">pounds</option>
+</select>
+<button onclick="fillGlobalDensity()">Global Density</button>
+<input id="GlobalDensityInput" type="number"></input>
+
+<table id="table_id" class="display">
+	<thead>
+		<tr>
+			<th>NAME</th>
+			<th>VOLUME (units^3)</th>
+			<th>SURFACE AREA (units^2)</th>
+			<th>MASS (units)</th>
+			<th>FASTENER</th>
+			<th>AMBIGUITY</th>
+		</tr>
+	</thead>
+	<tbody id="body_id">
+
+	</tbody>
+	<tfoot>
+		<tr>
+			<th>NAME</th>
+			<th>VOLUME (units^3)</th>
+			<th>SURFACE AREA (units^2)</th>
+			<th>MASS (units)</th>
+			<th>FASTENER</th>
+			<th>AMBIGUITY</th>
+		</tr>
+	</tfoot>
+</table>

@@ -10,7 +10,7 @@
             <currentType value="Integer"/>
             <data>
                 <dataobject type="Integer">
-                    <quantity magnitude="0" unit="No_Unit"/>
+                    <quantity magnitude="2" unit="No_Unit"/>
                 </dataobject>
             </data>
         </parameter>
@@ -18,7 +18,7 @@
             <currentType value="Integer"/>
             <data>
                 <dataobject type="Integer">
-                    <quantity magnitude="0" unit="No_Unit"/>
+                    <quantity magnitude="3" unit="No_Unit"/>
                 </dataobject>
             </data>
         </parameter>
@@ -43,7 +43,7 @@
         <parameter id="ed2f8a98-dffc-1004-896f-4e4d575adaac" name="outputTemplate">
             <currentType value="String"/>
             <data>
-                <dataobject type="String"></dataobject>
+                <dataobject type="String">{{pageBase}}</dataobject>
             </data>
         </parameter>
         <parameter id="ed2f8aa2-dffc-1004-896f-4e4d575adaac" name="Models">
@@ -62,6 +62,18 @@
             </data>
         </parameter>
         <parameter id="ed2f8aa8-dffc-1004-896f-4e4d575adaac" name="outputStageData">
+            <currentType value="String"/>
+            <data>
+                <dataobject type="String"></dataobject>
+            </data>
+        </parameter>
+        <parameter id="e05ae007-e002-1004-8b78-46d8a5cbbeea" name="pageStyle">
+            <currentType value="String"/>
+            <data>
+                <dataobject type="String">body{ background-color:#444444; font-family: arial; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px; height:100%; width:100%; } .heading{ width: 100%; height: 10%; background-color:#44AAFF; margin: 0px 0px 0px 0px; } #display{ width: 80%; height: 100%; bottom: 0px; float:right; margin: 0px 0px 0px 0px; background-color:#AAAACC; } #directionLists{ width:20%; height: 100%; float:left; margin: 0px 0px 0px 0px; } #unconfirmedDiv{ height:47%; background-color:#CCAAAA; margin: 0px 0px 0px 0px; overflow:hidden; } #unconfirmed{ height:85%; margin: 0px 10px 10px 10px; background-color:#EECCCC; overflow:scroll; } #confirmedDiv{ height:47%; background-color:#AACCAA; margin: 0px 0px 0px 0px; } #confirmed{ height:85%; margin: 0px 10px 10px 10px; background-color:#CCEECC; overflow:scroll; } #opacityDiv{ height:6%; background-color:#AAAACC; margin: 0px 0px 0px 0px; } #main{ width: 100%; height:85%; background-color:#AAAAAA; margin: 0px 0px 0px 0px; overflow:hidden; } .dirPair{ margin: 0px 0px 0px 0px; border-color: #888888; border: solid; border-left-width: 2px; border-right-width: 2px; border-top-width: 1px; border-bottom-width: 1px; } .pairText{ font-size: 10px; } .dirButton{ background-color: #FFFFFF; color: #000000; } #vectorDiv{ position: absolute; float: right; top: 10%; left: 80%; right: 0%; background-color: #CCCCAA; margin: 0px 0px 0px 0px; padding: 5px; height: 85%; } #vectors{ height: 85%; background-color: #EEEECC; margin: 0px 0px 0px 0px; } #expandButton{ position: absolute; background-color: #000000; color: #FFFFFF; right: 0%; } .vecEntry{ padding: 5px; margin: 0px 0px 0px 0px; border-color: #888888; border: solid; border-left-width: 2px; border-right-width: 2px; border-top-width: 1px; border-bottom-width: 1px; } #vecList{ overflow: scroll; height: 100%; }</dataobject>
+            </data>
+        </parameter>
+        <parameter id="e05ae00a-e002-1004-8b78-46d8a5cbbeea" name="pageScript">
             <currentType value="String"/>
             <data>
                 <dataobject type="String"></dataobject>
@@ -88,7 +100,7 @@
         <parameter id="ed2f8a99-dffc-1004-896f-4e4d575adaac" name="outputTemplate">
             <currentType value="String"/>
             <data>
-                <dataobject type="String"></dataobject>
+                <dataobject type="String">{{pageBase}}</dataobject>
             </data>
         </parameter>
         <parameter id="ed2f8aa6-dffc-1004-896f-4e4d575adaac" name="inputStageData">
@@ -107,7 +119,7 @@
             <currentType value="Integer"/>
             <data>
                 <dataobject type="Integer">
-                    <quantity magnitude="0" unit="No_Unit"/>
+                    <quantity magnitude="3" unit="No_Unit"/>
                 </dataobject>
             </data>
         </parameter>
@@ -115,7 +127,7 @@
             <currentType value="Integer"/>
             <data>
                 <dataobject type="Integer">
-                    <quantity magnitude="0" unit="No_Unit"/>
+                    <quantity magnitude="2" unit="No_Unit"/>
                 </dataobject>
             </data>
         </parameter>
@@ -126,6 +138,18 @@
                     <itemType>Real</itemType>
                     <parameters/>
                 </dataobject>
+            </data>
+        </parameter>
+        <parameter id="e05ae008-e002-1004-8b78-46d8a5cbbeea" name="pageStyle">
+            <currentType value="String"/>
+            <data>
+                <dataobject type="String">body{ background-color:#444444; font-family: arial; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px; height:100%; width:100%; } .heading{ width: 100%; height: 10%; background-color:#44AAFF; margin: 0px 0px 0px 0px; } #display{ width: 80%; height: 100%; bottom: 0px; float:right; margin: 0px 0px 0px 0px; background-color:#AAAACC; } #directionLists{ width:20%; height: 100%; float:left; margin: 0px 0px 0px 0px; } #unconfirmedDiv{ height:47%; background-color:#CCAAAA; margin: 0px 0px 0px 0px; overflow:hidden; } #unconfirmed{ height:85%; margin: 0px 10px 10px 10px; background-color:#EECCCC; overflow:scroll; } #confirmedDiv{ height:47%; background-color:#AACCAA; margin: 0px 0px 0px 0px; } #confirmed{ height:85%; margin: 0px 10px 10px 10px; background-color:#CCEECC; overflow:scroll; } #opacityDiv{ height:6%; background-color:#AAAACC; margin: 0px 0px 0px 0px; } #main{ width: 100%; height:85%; background-color:#AAAAAA; margin: 0px 0px 0px 0px; overflow:hidden; } .dirPair{ margin: 0px 0px 0px 0px; border-color: #888888; border: solid; border-left-width: 2px; border-right-width: 2px; border-top-width: 1px; border-bottom-width: 1px; } .pairText{ font-size: 10px; } .dirButton{ background-color: #FFFFFF; color: #000000; } #vectorDiv{ position: absolute; float: right; top: 10%; left: 80%; right: 0%; background-color: #CCCCAA; margin: 0px 0px 0px 0px; padding: 5px; height: 85%; } #vectors{ height: 85%; background-color: #EEEECC; margin: 0px 0px 0px 0px; } #expandButton{ position: absolute; background-color: #000000; color: #FFFFFF; right: 0%; } .vecEntry{ padding: 5px; margin: 0px 0px 0px 0px; border-color: #888888; border: solid; border-left-width: 2px; border-right-width: 2px; border-top-width: 1px; border-bottom-width: 1px; } #vecList{ overflow: scroll; height: 100%; }</dataobject>
+            </data>
+        </parameter>
+        <parameter id="e05ae00b-e002-1004-8b78-46d8a5cbbeea" name="pageScript">
+            <currentType value="String"/>
+            <data>
+                <dataobject type="String"></dataobject>
             </data>
         </parameter>
     </parameters>
@@ -143,6 +167,8 @@
                 <parameter name="Models" idRef="ed2f8aa2-dffc-1004-896f-4e4d575adaac"/>
                 <parameter name="inputStageData" idRef="ed2f8aa5-dffc-1004-896f-4e4d575adaac"/>
                 <parameter name="outputStageData" idRef="ed2f8aa8-dffc-1004-896f-4e4d575adaac"/>
+                <parameter name="pageStyle" idRef="e05ae007-e002-1004-8b78-46d8a5cbbeea"/>
+                <parameter name="pageScript" idRef="e05ae00a-e002-1004-8b78-46d8a5cbbeea"/>
             </modelobjects>
         </context>
     </contexts>
@@ -159,24 +185,28 @@
                     <parameter name="OutputStage" idRef="2de11d01-dff9-1004-8053-4b6b5190a41e"/>
                     <parameter name="InputStage" idRef="2de11cfd-dff9-1004-8053-4b6b5190a41e"/>
                     <parameter name="Models" idRef="ed2f8aa3-dffc-1004-896f-4e4d575adaac"/>
+                    <parameter name="pageStyle" idRef="e05ae008-e002-1004-8b78-46d8a5cbbeea"/>
+                    <parameter name="pageScript" idRef="e05ae00b-e002-1004-8b78-46d8a5cbbeea"/>
                 </modelobjects>
             </context>
         </view>
         <view name="Interface Causality View">
             <filter id="INPUTS_FILTER" name="Inputs">
                 <parameters>
-                    <parameter name="inputStageData" idRef="ed2f8aa6-dffc-1004-896f-4e4d575adaac"/>
                     <parameter name="InputStage" idRef="2de11cfd-dff9-1004-8053-4b6b5190a41e"/>
                     <parameter name="Models" idRef="ed2f8aa3-dffc-1004-896f-4e4d575adaac"/>
+                    <parameter name="inputStageData" idRef="ed2f8aa6-dffc-1004-896f-4e4d575adaac"/>
                 </parameters>
             </filter>
             <filter id="OUTPUTS_FILTER" name="Outputs">
                 <parameters>
-                    <parameter name="outputTemplate" idRef="ed2f8a99-dffc-1004-896f-4e4d575adaac" causality="Result"/>
-                    <parameter name="OutputStage" idRef="2de11d01-dff9-1004-8053-4b6b5190a41e" causality="Result"/>
+                    <parameter name="outputStageData" idRef="ed2f8aa9-dffc-1004-896f-4e4d575adaac" causality="Result"/>
                     <parameter name="pageBase" idRef="ed2f8a8c-dffc-1004-896f-4e4d575adaac" causality="Result"/>
                     <parameter name="pageMain" idRef="ed2f8a8f-dffc-1004-896f-4e4d575adaac" causality="Result"/>
-                    <parameter name="outputStageData" idRef="ed2f8aa9-dffc-1004-896f-4e4d575adaac" causality="Result"/>
+                    <parameter name="OutputStage" idRef="2de11d01-dff9-1004-8053-4b6b5190a41e" causality="Result"/>
+                    <parameter name="outputTemplate" idRef="ed2f8a99-dffc-1004-896f-4e4d575adaac" causality="Result"/>
+                    <parameter name="pageScript" idRef="e05ae00b-e002-1004-8b78-46d8a5cbbeea" causality="Result"/>
+                    <parameter name="pageStyle" idRef="e05ae008-e002-1004-8b78-46d8a5cbbeea" causality="Result"/>
                 </parameters>
             </filter>
             <filter id="INDETERMINATES_FILTER" name="Indeterminates">
@@ -190,6 +220,8 @@
         <nodes>
             <node idRef="2de11cfd-dff9-1004-8053-4b6b5190a41e"/>
             <node idRef="2de11d01-dff9-1004-8053-4b6b5190a41e"/>
+            <node idRef="e05ae008-e002-1004-8b78-46d8a5cbbeea"/>
+            <node idRef="e05ae00b-e002-1004-8b78-46d8a5cbbeea"/>
             <node idRef="ed2f8a8c-dffc-1004-896f-4e4d575adaac"/>
             <node idRef="ed2f8a8f-dffc-1004-896f-4e4d575adaac"/>
             <node idRef="ed2f8a92-dffc-1004-896f-4e4d575adaac"/>
@@ -201,6 +233,8 @@
         <arcs>
             <from idRef="2de11cfd-dff9-1004-8053-4b6b5190a41e">
                 <to idRef="2de11d01-dff9-1004-8053-4b6b5190a41e"/>
+                <to idRef="e05ae008-e002-1004-8b78-46d8a5cbbeea"/>
+                <to idRef="e05ae00b-e002-1004-8b78-46d8a5cbbeea"/>
                 <to idRef="ed2f8a8c-dffc-1004-896f-4e4d575adaac"/>
                 <to idRef="ed2f8a8f-dffc-1004-896f-4e4d575adaac"/>
                 <to idRef="ed2f8a99-dffc-1004-896f-4e4d575adaac"/>
@@ -208,6 +242,8 @@
             </from>
             <from idRef="ed2f8aa3-dffc-1004-896f-4e4d575adaac">
                 <to idRef="2de11d01-dff9-1004-8053-4b6b5190a41e"/>
+                <to idRef="e05ae008-e002-1004-8b78-46d8a5cbbeea"/>
+                <to idRef="e05ae00b-e002-1004-8b78-46d8a5cbbeea"/>
                 <to idRef="ed2f8a8c-dffc-1004-896f-4e4d575adaac"/>
                 <to idRef="ed2f8a8f-dffc-1004-896f-4e4d575adaac"/>
                 <to idRef="ed2f8a99-dffc-1004-896f-4e4d575adaac"/>
@@ -215,6 +251,8 @@
             </from>
             <from idRef="ed2f8aa6-dffc-1004-896f-4e4d575adaac">
                 <to idRef="2de11d01-dff9-1004-8053-4b6b5190a41e"/>
+                <to idRef="e05ae008-e002-1004-8b78-46d8a5cbbeea"/>
+                <to idRef="e05ae00b-e002-1004-8b78-46d8a5cbbeea"/>
                 <to idRef="ed2f8a8c-dffc-1004-896f-4e4d575adaac"/>
                 <to idRef="ed2f8a8f-dffc-1004-896f-4e4d575adaac"/>
                 <to idRef="ed2f8a99-dffc-1004-896f-4e4d575adaac"/>
@@ -225,6 +263,8 @@
     <interfaceToRelParamMap>
         <iToRpMap relParamId="2de11cfd-dff9-1004-8053-4b6b5190a41e" ifaceId="2de11cfb-dff9-1004-8053-4b6b5190a41e"/>
         <iToRpMap relParamId="2de11d01-dff9-1004-8053-4b6b5190a41e" ifaceId="2de11cff-dff9-1004-8053-4b6b5190a41e"/>
+        <iToRpMap relParamId="e05ae008-e002-1004-8b78-46d8a5cbbeea" ifaceId="e05ae006-e002-1004-8b78-46d8a5cbbeea"/>
+        <iToRpMap relParamId="e05ae00b-e002-1004-8b78-46d8a5cbbeea" ifaceId="e05ae009-e002-1004-8b78-46d8a5cbbeea"/>
         <iToRpMap relParamId="ed2f8a8c-dffc-1004-896f-4e4d575adaac" ifaceId="ed2f8a8a-dffc-1004-896f-4e4d575adaac"/>
         <iToRpMap relParamId="ed2f8a8f-dffc-1004-896f-4e4d575adaac" ifaceId="ed2f8a8d-dffc-1004-896f-4e4d575adaac"/>
         <iToRpMap relParamId="ed2f8a92-dffc-1004-896f-4e4d575adaac" ifaceId="ed2f8a90-dffc-1004-896f-4e4d575adaac"/>
