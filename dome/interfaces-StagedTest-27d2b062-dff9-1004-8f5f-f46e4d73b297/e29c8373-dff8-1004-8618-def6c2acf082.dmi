@@ -10,7 +10,7 @@
             <currentType value="Integer"/>
             <data>
                 <dataobject type="Integer">
-                    <quantity magnitude="4" unit="No_Unit"/>
+                    <quantity magnitude="1" unit="No_Unit"/>
                 </dataobject>
             </data>
         </parameter>
@@ -18,7 +18,7 @@
             <currentType value="Integer"/>
             <data>
                 <dataobject type="Integer">
-                    <quantity magnitude="4" unit="No_Unit"/>
+                    <quantity magnitude="2" unit="No_Unit"/>
                 </dataobject>
             </data>
         </parameter>
@@ -26,7 +26,7 @@
             <currentType value="Integer"/>
             <data>
                 <dataobject type="Integer">
-                    <quantity magnitude="4" unit="No_Unit"/>
+                    <quantity magnitude="1" unit="No_Unit"/>
                 </dataobject>
             </data>
         </parameter>
@@ -34,7 +34,7 @@
             <currentType value="Integer"/>
             <data>
                 <dataobject type="Integer">
-                    <quantity magnitude="4" unit="No_Unit"/>
+                    <quantity magnitude="2" unit="No_Unit"/>
                 </dataobject>
             </data>
         </parameter>

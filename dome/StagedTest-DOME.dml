@@ -5,33 +5,11 @@
         <version>0.0.0</version>
     </modelinfo>
     <parameters>
-        <parameter id="306434e3-dfed-1004-8467-a33a9a22dad2" name="A">
-            <currentType value="Real"/>
-            <data>
-                <dataobject type="Real">
-                    <quantity magnitude="1.0" unit="kg"/>
-                </dataobject>
-            </data>
-        </parameter>
-        <parameter id="306434e6-dfed-1004-8467-a33a9a22dad2" name="B">
-            <currentType value="Real"/>
-            <data>
-                <dataobject type="Real">
-                    <quantity magnitude="1.0" unit="kg"/>
-                </dataobject>
-            </data>
-        </parameter>
-        <parameter id="a2fedb22-dfee-1004-8376-5771df87f092" name="C">
-            <currentType value="String"/>
-            <data>
-                <dataobject type="String">2.0 kgC:\Programs\dome\dist\client</dataobject>
-            </data>
-        </parameter>
         <parameter id="2de11cfb-dff9-1004-8053-4b6b5190a41e" name="InputStage">
             <currentType value="Integer"/>
             <data>
                 <dataobject type="Integer">
-                    <quantity magnitude="4" unit="No_Unit"/>
+                    <quantity magnitude="1" unit="No_Unit"/>
                 </dataobject>
             </data>
         </parameter>
@@ -39,7 +17,7 @@
             <currentType value="Integer"/>
             <data>
                 <dataobject type="Integer">
-                    <quantity magnitude="4" unit="No_Unit"/>
+                    <quantity magnitude="2" unit="No_Unit"/>
                 </dataobject>
             </data>
         </parameter>
@@ -47,33 +25,11 @@
     <relations>
         <relation type="Procedural" id="1f2fbf14-dfed-1004-8be0-58277b79f346" name="Test Relation">
             <parameters>
-                <parameter id="306434f2-dfed-1004-8467-a33a9a22dad2" name="B">
-                    <currentType value="Real"/>
-                    <data>
-                        <dataobject type="Real">
-                            <quantity magnitude="1.0" unit="kg"/>
-                        </dataobject>
-                    </data>
-                </parameter>
-                <parameter id="306434f5-dfed-1004-8467-a33a9a22dad2" name="A">
-                    <currentType value="Real"/>
-                    <data>
-                        <dataobject type="Real">
-                            <quantity magnitude="1.0" unit="kg"/>
-                        </dataobject>
-                    </data>
-                </parameter>
-                <parameter id="a2fedb25-dfee-1004-8376-5771df87f092" name="C">
-                    <currentType value="String"/>
-                    <data>
-                        <dataobject type="String">2.0 kgC:\Programs\dome\dist\client</dataobject>
-                    </data>
-                </parameter>
                 <parameter id="2de11d02-dff9-1004-8053-4b6b5190a41e" name="OutputStage">
                     <currentType value="Integer"/>
                     <data>
                         <dataobject type="Integer">
-                            <quantity magnitude="4" unit="No_Unit"/>
+                            <quantity magnitude="2" unit="No_Unit"/>
                         </dataobject>
                     </data>
                 </parameter>
@@ -81,7 +37,7 @@
                     <currentType value="Integer"/>
                     <data>
                         <dataobject type="Integer">
-                            <quantity magnitude="4" unit="No_Unit"/>
+                            <quantity magnitude="1" unit="No_Unit"/>
                         </dataobject>
                     </data>
                 </parameter>
@@ -89,8 +45,6 @@
             <body><![CDATA[import sys;
 import subprocess;
 import os;
-
-cwd = os.getcwd();
 
 if InputStage == 1:
 	subprocess.call("rm ./../../workspace/bin/intermediate/*",shell=True);
@@ -109,16 +63,10 @@ if InputStage == 3:
 		OutputStage = 3;
 
 if InputStage == 4:
-	subprocess.call(["./../../workspace/AssemblyPlanning.exe", "./../../workspace", "y", "1", "0.5", "y", "y"]);
-
-C = str(A + B) + cwd;]]></body>
+	subprocess.call(["./../../workspace/AssemblyPlanning.exe", "./../../workspace", "y", "1", "0.5", "y", "y"]);]]></body>
             <dependencies>
                 <dependency idRef="2de11d02-dff9-1004-8053-4b6b5190a41e">
                     <parameter name="InputStage" idRef="2de11d03-dff9-1004-8053-4b6b5190a41e" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346"/>
-                </dependency>
-                <dependency idRef="a2fedb25-dfee-1004-8376-5771df87f092">
-                    <parameter name="B" idRef="306434f2-dfed-1004-8467-a33a9a22dad2" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346"/>
-                    <parameter name="A" idRef="306434f5-dfed-1004-8467-a33a9a22dad2" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346"/>
                 </dependency>
             </dependencies>
         </relation>
@@ -128,9 +76,6 @@ C = str(A + B) + cwd;]]></body>
         <context id="BUILD_CXT" name="Build View">
             <modelobjects>
                 <relation name="Test Relation" idRef="1f2fbf14-dfed-1004-8be0-58277b79f346"/>
-                <parameter name="C" idRef="a2fedb22-dfee-1004-8376-5771df87f092" idModelRef="27d2b062-dff9-1004-8f5f-f46e4d73b297"/>
-                <parameter name="B" idRef="306434e6-dfed-1004-8467-a33a9a22dad2" idModelRef="27d2b062-dff9-1004-8f5f-f46e4d73b297"/>
-                <parameter name="A" idRef="306434e3-dfed-1004-8467-a33a9a22dad2" idModelRef="27d2b062-dff9-1004-8f5f-f46e4d73b297"/>
                 <parameter name="InputStage" idRef="2de11cfb-dff9-1004-8053-4b6b5190a41e" idModelRef="27d2b062-dff9-1004-8f5f-f46e4d73b297"/>
                 <parameter name="OutputStage" idRef="2de11cff-dff9-1004-8053-4b6b5190a41e" idModelRef="27d2b062-dff9-1004-8f5f-f46e4d73b297"/>
             </modelobjects>
@@ -139,20 +84,11 @@ C = str(A + B) + cwd;]]></body>
     </contexts>
     <mappings>
         <modelMappings>
-            <mappedParameter name="A" idRef="306434f5-dfed-1004-8467-a33a9a22dad2" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346">
-                <parameter name="A" idRef="306434e3-dfed-1004-8467-a33a9a22dad2" idModelRef="27d2b062-dff9-1004-8f5f-f46e4d73b297"/>
-            </mappedParameter>
-            <mappedParameter name="InputStage" idRef="2de11cfb-dff9-1004-8053-4b6b5190a41e" idModelRef="27d2b062-dff9-1004-8f5f-f46e4d73b297">
-                <parameter name="InputStage" idRef="2de11d03-dff9-1004-8053-4b6b5190a41e" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346"/>
-            </mappedParameter>
             <mappedParameter name="OutputStage" idRef="2de11d02-dff9-1004-8053-4b6b5190a41e" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346">
                 <parameter name="OutputStage" idRef="2de11cff-dff9-1004-8053-4b6b5190a41e" idModelRef="27d2b062-dff9-1004-8f5f-f46e4d73b297"/>
             </mappedParameter>
-            <mappedParameter name="C" idRef="a2fedb25-dfee-1004-8376-5771df87f092" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346">
-                <parameter name="C" idRef="a2fedb22-dfee-1004-8376-5771df87f092" idModelRef="27d2b062-dff9-1004-8f5f-f46e4d73b297"/>
-            </mappedParameter>
-            <mappedParameter name="B" idRef="306434e6-dfed-1004-8467-a33a9a22dad2" idModelRef="27d2b062-dff9-1004-8f5f-f46e4d73b297">
-                <parameter name="B" idRef="306434f2-dfed-1004-8467-a33a9a22dad2" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346"/>
+            <mappedParameter name="InputStage" idRef="2de11d03-dff9-1004-8053-4b6b5190a41e" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346">
+                <parameter name="InputStage" idRef="2de11cfb-dff9-1004-8053-4b6b5190a41e" idModelRef="27d2b062-dff9-1004-8f5f-f46e4d73b297"/>
             </mappedParameter>
         </modelMappings>
     </mappings>

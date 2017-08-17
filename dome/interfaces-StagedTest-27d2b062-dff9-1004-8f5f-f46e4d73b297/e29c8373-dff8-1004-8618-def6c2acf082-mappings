@@ -26,10 +26,10 @@
     </mappingsandintermediates>
     <lookupdata>
         <objectmap>
-            <parameter name="InputStage" idRef="2de11cfb-dff9-1004-8053-4b6b5190a41e" idModelRef="27d2b062-dff9-1004-8f5f-f46e4d73b297" description="key"/>
-            <parameter name="InputStage" idRef="2de11cfc-dff9-1004-8053-4b6b5190a41e" description="value"/>
             <parameter name="OutputStage" idRef="2de11cff-dff9-1004-8053-4b6b5190a41e" idModelRef="27d2b062-dff9-1004-8f5f-f46e4d73b297" description="key"/>
             <parameter name="OutputStage" idRef="2de11d00-dff9-1004-8053-4b6b5190a41e" description="value"/>
+            <parameter name="InputStage" idRef="2de11cfb-dff9-1004-8053-4b6b5190a41e" idModelRef="27d2b062-dff9-1004-8f5f-f46e4d73b297" description="key"/>
+            <parameter name="InputStage" idRef="2de11cfc-dff9-1004-8053-4b6b5190a41e" description="value"/>
         </objectmap>
         <viewobjectmap>
             <parameter name="InputStage" idRef="2de11cfc-dff9-1004-8053-4b6b5190a41e" description="key"/>
