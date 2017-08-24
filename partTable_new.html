@@ -3,11 +3,22 @@
 <html>
 	<style>
 		
+		html{
+			height: 98%;
+			width: 98%;
+		}
 		#theBody{
 			background-color: #aaaaaa;
+			position: relative;
+			height: 98%;
+			width: 98%;
 		}
 		#fileinput{
 			color: black;
+		}
+		#display{
+			height: 50%;
+			display: block;
 		}
 		button{
 			display: block; 
@@ -29,6 +40,7 @@
 		#table_id{
 		
 			font-family: Arial, Helvetica, sans-serif;
+			bottom: 0;
 		
 		}
 		
@@ -89,7 +101,10 @@
 		<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.css"/>
 
 		<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.js"></script>
-		<script src="./src/webVis/partTableScript.js"></script>
+		<script src="./src/webVis/jsstl.js"></script>
+		<script src="./src/webVis/three.min.js"></script>
+		<script src="./src/webVis/base3D.js"></script>
+		<script src="./src/webVis/partTableScript_new.js"></script>
 	
 	</body>
 

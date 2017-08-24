@@ -2,11 +2,6 @@
 
 
 
-//
-//    Pretty Important: Keep this as true unless/until you've incorperated some other
-//                      method of getting file input/output
-//
-var manualFileInput=true;
 
 
 
@@ -39,6 +34,7 @@ function recieveData(theXMLText){
 	console.log(theTable);
 
 }
+handleXML = recieveData;
 
 
 // Gets called when the user submits the table and everything is properly filled out
@@ -69,6 +65,7 @@ var inputXML=null;
 var textFile=null;
 var focusBox;
 var focusPoint;
+var focusPart=null;
 
 
 
@@ -89,6 +86,9 @@ var deltaQuat = new THREE.Quaternion(1,0,0,0);
 
 var leftDrag = false;
 var rightDrag = false;
+
+
+var wireSettings={transparent: true, opacity: 0.1, color: 0x444444, wireframe: false};
 
 
 
@@ -142,21 +142,11 @@ var densityMenu="<div class='dropdown-content' style='border-color: #666666; bac
 var densityDiv= "\n<div class='dropdown'>"+dropDensityButton+"</div>";
 
 
-var manualIO="<input type='file' id='fileinput' multiple ></input>"+
-"<button style='display: inline;' onclick='renderXML()'>Render XML</button>"+
-"<a href='' id='downloadLink' download='parts_properties2.xml' ></a>";
-
-
-if(manualFileInput==true){
-
-	document.getElementById("theBody").innerHTML=manualIO+document.getElementById("theBody").innerHTML;
-
-}
 
 
 // Setting up the table
 var theTable= $('#table_id').DataTable({
-	"scrollY": "400px",
+	"scrollY": "300px",
     "paging": false
 });
 
@@ -208,97 +198,6 @@ function getChildrenByTag(theNode,tag){
 	}
 	return result;
 }
-
-
-
-
-// Upon a file upload event triggering, defines and attaches each file's onload function 
-/**
-*
-* Accepts a fileinput event, presumably from a file upload event listener, and assigns
-* functions to each file reader listed in the event to be called upon the full loading
-* of that given reader's files 
-*
-* @method readMultipleFiles
-* @for partTableGlobal
-* @param {Event} evt A fileinput event, to be given by a fileinput event listener
-* @return {Void}
-* 
-*/
-function readMultipleFiles(evt) {
-	if(inputXML===null){
-		//Retrieve all the files from the FileList object
-		var files = evt.target.files; 
-				
-		if (files) {
-			for (var i=0, f; f=files[i]; i++) {
-				
-				var r = new FileReader();
-				var extension=grabExtension(f.name)[0];
-				
-				if(extension===undefined){
-					continue;
-				}
-				if(extension.toLowerCase()==="xml"){
-					if(!(inputXML===null)){
-						console.log("Warning: More than one XML file provided");
-					}
-					r.onload = (function(f) {
-						return function(e) {
-							var contents = e.target.result;
-							inputXML=r.result;
-							loadParts();
-						};
-					})(f);
-					r.readAsText(f,"US-ASCII");
-					fileReaders.push({Reader: r, Name: f.name});
-				}
-							
-			}
-		} 
-		else {
-			  alert("Failed to load files"); 
-		}
-	}
-	else {
-		  alert("Refresh page to reattempt upload of files"); 
-	}
-}
-
-
-// Sets up the file loading function
-document.getElementById('fileinput').addEventListener('change', readMultipleFiles, false);
-
-
-
-// Checks that all files are loaded. If so, fills out the table with the given information
-/**
-*
-* Called internally upon every recieved fileload event. Checks if every file reader in the 
-* array "fileReaders" has fully read each of their files. If so, then the function calls
-* "recieveData".
-*
-* @method loadParts
-* @for partTableGlobal
-* @return {Void}
-* 
-*/
-function loadParts (){
-	var pos=0;
-	var lim=fileReaders.length;
-	while(pos<lim){
-		if(!(fileReaders[pos].Reader.readyState===2)){
-			break;
-		}
-		pos++;
-	}
-	if(pos===lim){
-		console.log("Done loading parts");
-		recieveData(inputXML);				
-	}
-}
-
-
 
 
 // Returns the first child node in the given document element with the given class
@@ -853,10 +752,35 @@ function fillGlobalDensity(){
 
 
 
-
+/**
+*
+* Makes it so that the table row associated with this call has its part model
+* displayed
+*
+* @method clickFocus
+* @for partTableGlobal
+* @return {Void} 
+* 
+*/
 function clickFocus(){
 
-
+	var pos = 0;
+	var lim = parts.length;
+	while(pos<lim){
+		if(parts[pos].Name == getChildrenByTag(this,"TD")[0].innerHTML){
+			if(focusPart != null){
+				focusPart.Mesh.Material = new THREE.MeshLambertMaterial(wireSettings);
+			}
+			focusPart = parts[pos];
+			focusPart.Mesh.Material = new THREE.MeshLambertMaterial({color: 0x444444});
+		}
+		else{	
+			console.log(getChildrenByTag(this,"TD")[0].innerHTML);
+			console.log(parts[pos]);
+			console.log("~~~~~");
+		}
+		pos++;
+	}
 
 }
 
@@ -878,7 +802,7 @@ function clickFocus(){
 */
 function setupClickFocus(){
 	
-	var rowElems = document.getElementsByTagName("TR");
+	var rowElems = document.getElementById("body_id").childNodes;
 	var pos=0;
 	var lim=rowElems.length;
 	while(pos<lim){
@@ -1069,6 +993,32 @@ var render = function () {
 	requestAnimationFrame( render );
 	
 	
+	focusPart.Mesh.geometry.computeBoundingBox();
+	focusBox=focusPart.Mesh.geometry.boundingBox.clone();
+	
+	focusPoint= new THREE.Vector3(
+								  (focusBox.min.x+focusBox.max.x)/2,
+								  (focusBox.min.y+focusBox.max.y)/2,
+								  (focusBox.min.z+focusBox.max.z)/2
+								 );
+	
+	thePos.normalize();
+	
+	thePos.applyEuler(theEul);
+	theEul.set(0,0,0,'XYZ');
+	thePos.multiplyScalar(theDistance);
+	camera.position.copy(thePos);
+	camera.position.add(focusPoint);
+	camera.lookAt(focusPoint);
+	camera.updateMatrix();
+	
+	sunLight.position.set( (camera.position.x-focusPoint.x)*2+focusPoint.x,
+						   (camera.position.y-focusPoint.y)*2+focusPoint.y, 
+						   (camera.position.z-focusPoint.z)*2+focusPoint.z );
+	sunLight.target.position=focusPoint;
+	
+	updateAxisLines();
+	
 	renderer.render(scene, camera);
 };
 
@@ -1159,38 +1109,6 @@ function justDont(theEvent){
 */
 function doDrag(theEvent){
 	
-	
-	if(theAddAxis !== null){
-		
-		var theBox=currentPair.Mov.Mesh.geometry.boundingBox.clone();
-		var theArea = document.getElementById("display");
-		var areaW = theArea.clientWidth;
-		var areaH = theArea.clientHeight;
-		var areaT = theArea.offsetTop;
-		var areaL = theArea.offsetLeft;
-		var mouseX = theEvent.clientX;
-		var mouseY = theEvent.clientY;
-		//console.log("aW: "+areaW+" aH: "+areaH+" aT: "+areaT+" aL: "+areaL);
-		//console.log("mX: "+(((mouseX-areaL)-areaW/2)/(areaW/2))+" mY: "+((areaH/2-(mouseY-areaT))/(areaH/2)));
-		var theDir = getDirectionFromMouse( ((mouseX-areaL)-areaW/2)/(areaW/2), (areaH/2-(mouseY-areaT))/(areaH/2) );
-		
-		theAddAxis.geometry.vertices[0].set((theBox.min.x+theBox.max.x)/2,(theBox.min.y+theBox.max.y)/2,(theBox.min.z+theBox.max.z)/2);
-		theAddAxis.geometry.vertices[1].set((theBox.min.x+theBox.max.x)/2+theDirections[theDir].X*theDistance*0.6,
-											(theBox.min.y+theBox.max.y)/2+theDirections[theDir].Y*theDistance*0.6,
-											(theBox.min.z+theBox.max.z)/2+theDirections[theDir].Z*theDistance*0.6 );
-		console.log("X:"+(theBox.min.x+theBox.max.x)/2  +
-					" Y: "+(theBox.min.y+theBox.max.y)/2+
-					" Z: "+(theBox.min.z+theBox.max.z)/2 );
-					
-		console.log(" X: "+theDirections[theDir].X +
-					" Y: "+theDirections[theDir].Y +
-					" Z: "+theDirections[theDir].Z  );
-											
-		theAddAxis.geometry.verticesNeedUpdate=true;
-		
-	}
-	
-	
 	if(leftDrag==true){
 		thePos.normalize();
 		theEul.set(theEvent.movementY*(-0.02)*Math.cos(Math.atan2(thePos.x,thePos.z)),
@@ -1198,16 +1116,41 @@ function doDrag(theEvent){
 				   theEvent.movementY*(0.02)*Math.sin(Math.atan2(thePos.x,thePos.z)),
 				   'ZYX'); 
 	}
-	if(rightDrag==true){
-		addVectorFromMouse(theEvent.clientX, theEvent.clientY);
-	}
+	
 }
 
 document.getElementById("display").addEventListener("mousemove", doDrag);
 
 
 
+/**
+*
+* Given a mousewheel event, changes the distance of the camera from the center of the scene
+*
+* @method doMouseUp
+* @for directionConfirmGlobal
+* @param {mouseup event} theEvent
+* @return {Void}
+* 
+*/
+function doZoom(theEvent){
+	theDistance=theDistance*Math.pow(1.001,theEvent.wheelDelta);	
+}
 
+document.getElementById("display").addEventListener("wheel", doZoom);
+
+
+
+function doSetup(){
+
+	focusPart = parts[0];
+	focusPart.Mesh.Material = new THREE.MeshLambertMaterial({color: 0x444444});
+
+	initAxisLines();
+	
+	setupClickFocus();
+	
+}
 
 
 

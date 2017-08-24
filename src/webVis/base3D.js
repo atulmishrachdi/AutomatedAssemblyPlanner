@@ -1,3 +1,27 @@
+;
+
+
+//
+//    Pretty Important: Keep this as true unless/until you've incorperated some other
+//                      method of getting file input/output
+//
+var manualFileInput=true;
+
+
+
+
+var manualIO="<input type='file' id='fileinput' multiple ></input>"+
+"<button style='display: inline;' onclick='renderXML()'>Render XML</button>"+
+"<a href='' id='downloadLink' download='parts_properties2.xml' ></a>";
+
+
+if(manualFileInput==true){
+
+	document.getElementById("theBody").innerHTML=manualIO+document.getElementById("theBody").innerHTML;
+
+}
+
+
 
 
 // Array for storing fileReaders to keep track of them
@@ -21,6 +45,7 @@ var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera( 75, theWidth/theHeight, 1, 16000 );
 
 
+var skyColor= 0xFFFFFF;
 var theXAxis = null;
 var theYAxis = null;
 var theZAxis = null;
@@ -107,6 +132,25 @@ var sunLight = new THREE.SpotLight( 0x666666, 6, 32000, 1.2, 1, 1 );
 */
 function grabExtension(theName){
 	return (/[.]/.exec(theName)) ? /[^.]+$/.exec(theName) : undefined;
+}
+
+
+/**
+*
+* Accepts a string and outputs the string of all characters preceding the final '.' symbol
+* in the string.
+*
+* @method removeExtension
+* @for directionConfirmGlobal
+* @param {String} theName The file name to be processed
+* @return {String} the processed file name. If no extension is found, the 
+* 'undefined' value is returned.
+* 
+*/
+function removeExtension(theName){
+	
+	return (/[.]/.exec(theName)) ? /[^.]+^\./.exec(theName) : undefined;
+	
 }
 
 
@@ -256,6 +300,7 @@ function loadParts (){
 					partGeom=parseStlBinary(fileReaders[pos].Reader.result);
 				}
 				
+
 				//console.log(partGeom);
 				
 				partMesh=new THREE.Mesh( 
@@ -264,15 +309,19 @@ function loadParts (){
 				);
 				parts.push({
 					Mesh: partMesh,
-					Name: fileReaders[pos].Name
+					Name: removeExtension(fileReaders[pos].Name)
 				})
 				scene.add(partMesh);	
+			}
+			if(ext.toLowerCase()==="xml"){
+				handleXML(theXML);
 			}
 			
 			pos++;
 		}
 		
-		renderParts();
+		doSetup();
+		render();
 		
 	}
 	
@@ -284,25 +333,90 @@ function loadParts (){
 document.getElementById('fileinput').addEventListener('change', readMultipleFiles, false);
 
 
+/**
+*
+* Initializes the lines for the XYZ compass in the display
+*
+* @method initAxisLines
+* @for directionConfirmGlobal
+* @return {Void}
+* 
+*/
+function initAxisLines(){
+	
+	theXAxis = new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0xff0000, depthTest: false }));
+	theXAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
+	theXAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
+	theXAxis.frustumCulled = false;
+	
+	theYAxis = new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0x00ff00, depthTest: false }));
+	theYAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
+	theYAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
+	theYAxis.frustumCulled = false;
+	
+	theZAxis = new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0x0000ff, depthTest: false }));
+	theZAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
+	theZAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
+	theZAxis.frustumCulled = false;
+	
+	theAddAxis = new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0x00ff00, depthTest: true }));
+	theAddAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
+	theAddAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
+	theAddAxis.frustumCulled = false;
+	
+	
+	scene.add(theXAxis);
+	scene.add(theYAxis);
+	scene.add(theZAxis);
+	scene.add(theAddAxis);
 
-function pairPartsAndModels (partList,modelList) {
-
-	var result = {};
-	var pos = 0;
-	var lim = partList.length;
-	var modPos;
-	var modLim = modelList.length;
-	while(pos < lim){
-		modPos = 0;
-		while(){
-			if(partList[pos].Name == 
-			modPos++;
-		}
-		pos++;
-	}
-
-
+	
 }
+
+
+/**
+*
+* Updates the lines for the XYZ compass in the display
+*
+* @method updateAxisLines
+* @for directionConfirmGlobal
+* @return {Void}
+* 
+*/
+function updateAxisLines(){
+	
+	var theRot= new THREE.Quaternion(0,0,0,0);
+	theRot.setFromEuler(camera.rotation);
+	var theDir= new THREE.Vector3(-3,-3,-5);
+	
+	theDir.applyQuaternion(theRot);
+
+	
+	var thePosition = camera.position.clone();
+	
+	thePosition.add(theDir);
+	
+	theXAxis.geometry.vertices[0].copy(thePosition);
+	theXAxis.geometry.vertices[0].x-=0.5;
+	theXAxis.geometry.vertices[1].copy(thePosition);
+	theXAxis.geometry.vertices[1].x+=1;
+	theXAxis.geometry.verticesNeedUpdate=true;
+	
+	theYAxis.geometry.vertices[0].copy(thePosition);
+	theYAxis.geometry.vertices[0].y-=0.5;
+	theYAxis.geometry.vertices[1].copy(thePosition);
+	theYAxis.geometry.vertices[1].y+=1;
+	theYAxis.geometry.verticesNeedUpdate=true;
+	
+	theZAxis.geometry.vertices[0].copy(thePosition);
+	theZAxis.geometry.vertices[0].z-=0.5;
+	theZAxis.geometry.vertices[1].copy(thePosition);
+	theZAxis.geometry.vertices[1].z+=1;
+	theZAxis.geometry.verticesNeedUpdate=true;
+	
+}
+
+
 
 
 
