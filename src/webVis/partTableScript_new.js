@@ -66,7 +66,8 @@ var textFile=null;
 var focusBox;
 var focusPoint;
 var focusPart=null;
-
+var focusRow=null;
+var focusIdx=null;
 
 
 
@@ -86,6 +87,16 @@ var deltaQuat = new THREE.Quaternion(1,0,0,0);
 
 var leftDrag = false;
 var rightDrag = false;
+
+
+var inputState={
+	
+	W: false,
+	A: false,
+	S: false,
+	D: false,	
+
+}
 
 
 var wireSettings={transparent: true, opacity: 0.1, color: 0x444444, wireframe: false};
@@ -147,8 +158,152 @@ var densityDiv= "\n<div class='dropdown'>"+dropDensityButton+"</div>";
 // Setting up the table
 var theTable= $('#table_id').DataTable({
 	"scrollY": "300px",
+	"scroller": true,
+	"deferRender": false,
     "paging": false
 });
+
+document.addEventListener('keydown', registerDown , false);
+document.addEventListener('keyup', registerUp , false);
+
+
+
+
+
+
+
+
+
+
+
+// Changes key press states based off of key presses
+/**
+*
+* Accepts a key press event and, if the key press corresponds to one
+* of the keys used for manipulating the view, sets the proper components
+* of "inputState" to true.
+*
+* @method registerDown
+* @for partTableGlobal
+*
+* 
+* @param {Event} e The key down event to be supplied to the function by a key down event 
+* listener on the web page
+* @return {Void}
+* 
+*/
+function registerDown(e){
+	
+
+	
+	var theKey;
+	if (e.which == null) {
+		theKey= String.fromCharCode(e.keyCode) // IE
+	} else if (e.which!=0 /*&& e.charCode!=0*/) {
+		theKey= String.fromCharCode(e.which)   // the rest
+	} else {
+		return;// special key
+	}
+	theKey=theKey.toUpperCase();
+	
+	
+	
+	if(theKey=='A'){
+		if(inputState.A === false){
+			var box = getChildrenByTag(focusRow,"TD")[4].childNodes[0];
+			if(box.value === "on"){
+				box.click();
+			}
+		}
+		inputState.A=true;
+	}
+	if(theKey=='S'){
+		if(inputState.S === false){
+			var rowList = getChildrenByTag(document.getElementById("body_id"),"TR");
+			var tabLen = rowList.length;
+			if(focusIdx < tabLen-1){
+				rowList[focusIdx+1].onclick();
+			}
+		}
+		inputState.S=true;
+	}
+	if(theKey=='D'){
+		if(inputState.D === false){
+			var box = getChildrenByTag(focusRow,"TD")[4].childNodes[0];
+			if(box.value === "off"){
+				box.click();
+			}	
+		}
+		inputState.D=true;
+	}
+	if(theKey=='W'){
+		if(inputState.W === false){
+			var rowList = getChildrenByTag(document.getElementById("body_id"),"TR");
+			var tabLen = rowList.length;
+			if(focusIdx > 0){
+				rowList[focusIdx-1].onclick();
+			}
+		}
+		inputState.W=true;
+	}
+	return;
+	
+}
+
+
+
+
+/**
+*
+* Accepts a key press release and, if the key release corresponds to one
+* of the keys used for manipulating the view, sets the proper components
+* of "inputState" to false 
+*
+* @method registerUp
+* @for partTableGlobal
+*
+* 
+* @param {Event} e The key up event to be supplied to the function by a key up event 
+* listener on the web page
+* @return {Void}
+* 
+*/
+function registerUp(e){
+	
+	
+	var theKey;
+	if (e.which == null) {
+		theKey= String.fromCharCode(e.keyCode) // IE
+	} else if (e.which!=0 /*&& e.charCode!=0*/) {
+		theKey= String.fromCharCode(e.which)   // the rest
+	} else {
+		return;// special key
+	}
+	theKey=theKey.toUpperCase();
+	
+	
+	
+	if(theKey=='A'){
+		inputState.A=false;
+	}
+	if(theKey=='S'){
+		inputState.S=false;
+	}
+	if(theKey=='D'){
+		inputState.D=false;
+	}
+	if(theKey=='W'){
+		inputState.W=false;
+	}
+	return;
+	
+}
+
+
+
+
+
+
 
 //document.getElementById("downloadLink").setAttribute("style","display: none");
 
@@ -272,12 +427,12 @@ function addEntry(theEntry){
 	var theCertainty=Number.parseFloat(grab(theEntry,"fastener_certainty").innerHTML);
 	var theSurfaceArea=Number.parseFloat(grab(theEntry,"surface_area").innerHTML).toFixed(8);
 	
-	console.log(theCertainty);
+	//console.log(theCertainty);
 	
 	var fstChecked="<input type='checkbox' onchange='flipCheck(this)' value='off'></input>";
-	console.log(theCertainty);
+	//console.log(theCertainty);
 	if(theCertainty>0.5){
-		console.log("Box is checked");
+		//console.log("Box is checked");
 		fstChecked="<input type='checkbox' onchange='flipCheck(this)' value='on' checked></input>";
 	}
 	
@@ -698,12 +853,18 @@ function changeDensity(theButton){
 */
 function flipCheck(theBox){
 
+	var row = theBox.parentElement.parentElement;
+	row.className = (/even/.exec(row.className)) ? "even" : "odd";
+
 	if(theBox.value=='on'){
 		theBox.value='off';
+		row.classList.add("nfast");
 	}
 	else{
 		theBox.value='on';
+		row.classList.add("fast"); 
 	}
+	focusRow.onclick();
 
 }
 
@@ -724,6 +885,7 @@ function fillGlobalDensity(){
 	var densInp= document.getElementById("GlobalDensityInput");
 	var theDensity;
 	if(densInp.value===""){
+		
 		console.log(densInp);
 		return;
 	}
@@ -768,16 +930,52 @@ function clickFocus(){
 	var lim = parts.length;
 	while(pos<lim){
 		if(parts[pos].Name == getChildrenByTag(this,"TD")[0].innerHTML){
+			//console.log(getChildrenByTag(this,"TD")[0].innerHTML);
+			//console.log(parts[pos]);
+			//console.log("~~~~~");
 			if(focusPart != null){
-				focusPart.Mesh.Material = new THREE.MeshLambertMaterial(wireSettings);
+				focusPart.Mesh.material = new THREE.MeshLambertMaterial(wireSettings);
 			}
+			if(focusRow != null){
+				var tdList = getChildrenByTag(focusRow,"TD");
+				var tdPos = 0;
+				var tdLim = tdList.length;
+				while(tdPos<tdLim){
+					tdList[tdPos].classList.remove("focus");
+					tdPos++;
+				}
+			}
+			
 			focusPart = parts[pos];
-			focusPart.Mesh.Material = new THREE.MeshLambertMaterial({color: 0x444444});
-		}
-		else{	
-			console.log(getChildrenByTag(this,"TD")[0].innerHTML);
-			console.log(parts[pos]);
-			console.log("~~~~~");
+			focusRow = this;
+			
+			if(getChildrenByTag(this,"TD")[4].childNodes[0].value === "on"){
+				focusPart.Mesh.material = new THREE.MeshLambertMaterial({color: 0x884444});
+			}
+			else{
+				focusPart.Mesh.material = new THREE.MeshLambertMaterial({color: 0x444488});
+			}
+			var tdList = getChildrenByTag(focusRow,"TD");
+			var tdPos = 0;
+			var tdLim = tdList.length;
+			while(tdPos<tdLim){
+				tdList[tdPos].classList.add("focus");
+				tdPos++;
+			}
+			
+			var rowList = getChildrenByTag(document.getElementById("body_id"),"TR");
+			var rowPos = 0;
+			var lim = rowList.length;
+			while(rowPos<lim){
+				if(rowList[rowPos] == this){
+					break;
+				}
+				rowPos++;
+			}
+			var hStep = this.clientHeight;
+			this.parentElement.parentElement.parentElement.scrollTop = hStep*rowPos;
+			focusIdx = rowPos;
+			
 		}
 		pos++;
 	}
@@ -802,11 +1000,44 @@ function clickFocus(){
 */
 function setupClickFocus(){
 	
-	var rowElems = document.getElementById("body_id").childNodes;
+	var rowElems = getChildrenByTag(document.getElementById("body_id"),"TR");
 	var pos=0;
 	var lim=rowElems.length;
 	while(pos<lim){
 		rowElems[pos].onclick = clickFocus;
+		pos++;
+	}
+	
+}
+
+
+
+
+
+
+
+/**
+*
+* Sets up every table entry HTML element with color highlighting
+*
+* @method setupHighlighting
+* @for partTableGlobal
+* @return {Void} 
+* 
+*/
+function setupHighlight(){
+	
+	var rowElems = getChildrenByTag(document.getElementById("body_id"),"TR");
+	var pos=0;
+	var lim=rowElems.length;
+	while(pos<lim){
+		//console.log(rowElems);
+		if(rowElems[pos].childNodes[4].childNodes[0].value === "on"){
+			rowElems[pos].classList.add("fast");
+		}
+		else{
+			rowElems[pos].classList.add("nfast");
+		}
 		pos++;
 	}
 	
@@ -1143,12 +1374,11 @@ document.getElementById("display").addEventListener("wheel", doZoom);
 
 function doSetup(){
 
-	focusPart = parts[0];
-	focusPart.Mesh.Material = new THREE.MeshLambertMaterial({color: 0x444444});
-
 	initAxisLines();
 	
 	setupClickFocus();
+	setupHighlight();
+	getChildrenByTag(document.getElementById("body_id"),"TR")[0].onclick();
 	
 }
 

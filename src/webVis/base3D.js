@@ -149,7 +149,7 @@ function grabExtension(theName){
 */
 function removeExtension(theName){
 	
-	return (/[.]/.exec(theName)) ? /[^.]+^\./.exec(theName) : undefined;
+	return (/[.]/.exec(theName)) ? /^[^.]+/.exec(theName) : undefined;
 	
 }
 
@@ -309,7 +309,7 @@ function loadParts (){
 				);
 				parts.push({
 					Mesh: partMesh,
-					Name: removeExtension(fileReaders[pos].Name)
+					Name: removeExtension(fileReaders[pos].Name)[0]
 				})
 				scene.add(partMesh);	
 			}
