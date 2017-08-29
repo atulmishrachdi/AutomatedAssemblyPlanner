@@ -1103,7 +1103,8 @@ document.getElementById("display").addEventListener("mousemove", doDrag);
 * 
 */
 function doZoom(theEvent){
-	theDistance=theDistance*Math.pow(1.001,theEvent.wheelDelta);	
+	var theDelta = theEvent.deltaY == 0 ? 0 : ( theEvent.deltaY > 0 ? 1 : -1 );
+	theDistance=theDistance*Math.pow(1.001,theDelta*(-40));		
 }
 
 document.getElementById("display").addEventListener("wheel", doZoom);

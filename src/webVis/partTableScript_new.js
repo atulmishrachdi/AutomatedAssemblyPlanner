@@ -1342,9 +1342,9 @@ function doDrag(theEvent){
 	
 	if(leftDrag==true){
 		thePos.normalize();
-		theEul.set(theEvent.movementY*(-0.02)*Math.cos(Math.atan2(thePos.x,thePos.z)),
-				   theEvent.movementX*(-0.02),
-				   theEvent.movementY*(0.02)*Math.sin(Math.atan2(thePos.x,thePos.z)),
+		theEul.set(theEvent.movementY*(-0.008)*Math.cos(Math.atan2(thePos.x,thePos.z)),
+				   theEvent.movementX*(-0.008),
+				   theEvent.movementY*(0.008)*Math.sin(Math.atan2(thePos.x,thePos.z)),
 				   'ZYX'); 
 	}
 	
@@ -1365,7 +1365,8 @@ document.getElementById("display").addEventListener("mousemove", doDrag);
 * 
 */
 function doZoom(theEvent){
-	theDistance=theDistance*Math.pow(1.001,theEvent.wheelDelta);	
+	var theDelta = theEvent.deltaY == 0 ? 0 : ( theEvent.deltaY > 0 ? 1 : -1 );
+	theDistance=theDistance*Math.pow(1.001,theDelta*(-40));	
 }
 
 document.getElementById("display").addEventListener("wheel", doZoom);

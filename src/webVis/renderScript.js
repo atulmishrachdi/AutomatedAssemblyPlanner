@@ -278,7 +278,9 @@ document.addEventListener('keyup', registerUp , false);
 function zoomIt(e){
 	
 	//zoom=zoom*Math.pow(1.001,e.wheelDelta);
-	zoom+=e.wheelDelta*0.01;
+	var theDelta = e.deltaY == 0 ? 0 : ( e.deltaY > 0 ? 1 : -1 );
+	zoom+=theDelta*(-1);
+	
 }
 
 
