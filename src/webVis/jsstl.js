@@ -1,7 +1,7 @@
 // Code copied from Github repo of tonylukasavage (and somewhat modified)
 // License of this code, as stated on the repo is:
 //
-//    Do whatever you want with this code. I offer it without expectation or warranty. 
+//    Do whatever you want with this code. I offer it without expectation or warranty.
 //    No need to credit me in your project or source code. A digital high five would be
 //    nice, but is not required.
 //
@@ -15,19 +15,19 @@
 *
 * Converts a given block of binary stl data (as an arraybuffer) to a threeJS representation
 * of the geometry. Function courtesy of 'tonylukasavage' from Github, who released this to
-* the public domain. 
+* the public domain.
 *
 * @method parseStlBinary
 * @for renderGlobal
 * @param {Arraybuffer} stl The binary stl data
 * @return {Object} threeJS geometry object
-* 
+*
 */
 var parseStlBinary = function(stl) {
 	var geo = new THREE.Geometry();
 	var dv = new DataView(stl, 80); // 80 == unused header
 	var isLittleEndian = true;
-	var triangles = dv.getUint32(0, isLittleEndian); 
+	var triangles = dv.getUint32(0, isLittleEndian);
 	// console.log('arraybuffer length:  ' + stl.byteLength);
 	// console.log('number of triangles: ' + triangles);
 	var offset = 4;
@@ -52,19 +52,19 @@ var parseStlBinary = function(stl) {
 		}
 		// there's also a Uint16 "attribute byte count" that we
 		// don't need, it should always be zero.
-		offset += 2;   
-		// Create a new face for from the vertices and the normal             
+		offset += 2;
+		// Create a new face for from the vertices and the normal
 		geo.faces.push(new THREE.Face3(i*3, i*3+1, i*3+2, normal));
 	}
 	// The binary STL I'm testing with seems to have all
 	// zeroes for the normals, unlike its ASCII counterpart.
 	// We can use three.js to compute the normals for us, though,
-	// once we've assembled our geometry. This is a relatively 
+	// once we've assembled our geometry. This is a relatively
 	// expensive operation, but only needs to be done once.
 	geo.computeFaceNormals();
-	
+
 	return geo;
-};  
+};
 
 
 
@@ -77,7 +77,7 @@ var parseStlBinary = function(stl) {
 * @for renderGlobal
 * @param {String} str ASCII STL data
 * @return {String} processed string
-* 
+*
 */
 function trim (str) {
 	str = str.replace(/^\s+/, '');
@@ -89,9 +89,9 @@ function trim (str) {
 	}
 	return str;
 }
-			
 
-			
+
+
 // Added this in to turn the input buffer into an actual string
 /**
 *
@@ -99,8 +99,8 @@ function trim (str) {
 * @method arrayToString
 * @for renderGlobal
 * @param {Arraybuffer} buf The arraybuffer
-* @return {String} 
-* 
+* @return {String}
+*
 */
 function arrayToString(buf) {
 	var pos=0;
@@ -120,21 +120,21 @@ function arrayToString(buf) {
 *
 * Converts a given block of ASCII stl data (as an arraybuffer) to a threeJS representation
 * of the geometry. Function courtesy of 'tonylukasavage' from Github, who released this to
-* the public domain. 
+* the public domain.
 *
 * @method parseStl
 * @for renderGlobal
 * @param {Arraybuffer} stl The ASCII stl data
 * @return {Object} threeJS geometry object
-* 
+*
 */
 var parseStl = function(stl) {
-	
+
 	var state = '';
-	
+
 	stl=arrayToString(stl);
-	
-	
+
+
 	var lines = stl.split('\n');
 	var geo = new THREE.Geometry();
 	var name, parts, line, normal, done, vertices = [];
@@ -164,8 +164,8 @@ var parseStl = function(stl) {
 					return null;
 				} else {
 					normal = [
-						parseFloat(parts[2]), 
-						parseFloat(parts[3]), 
+						parseFloat(parts[2]),
+						parseFloat(parts[3]),
 						parseFloat(parts[4])
 					];
 					state = 'facet normal';
@@ -180,7 +180,7 @@ var parseStl = function(stl) {
 					state = 'vertex';
 				}
 				break;
-			case 'vertex': 
+			case 'vertex':
 				if (parts[0] === 'vertex') {
 					geo.vertices.push(new THREE.Vector3(
 						parseFloat(parts[1]),
@@ -212,8 +212,8 @@ var parseStl = function(stl) {
 					done = true;
 				} else if (parts[0] === 'facet' && parts[1] === 'normal') {
 					normal = [
-						parseFloat(parts[2]), 
-						parseFloat(parts[3]), 
+						parseFloat(parts[2]),
+						parseFloat(parts[3]),
 						parseFloat(parts[4])
 					];
 					if (vCount % 1000 === 0) {

@@ -17,7 +17,7 @@
 			  background-color: black;
 			}
 		  </style>-->
-		  
+
 		  <style>
 			#body{
 			  margin: 0px;
@@ -25,6 +25,9 @@
 			}
 			canvas {
 				display: inline;
+			}
+			text{
+				white-space: normal;
 			}
 			#theDisplay{
 				position: absolute;
@@ -64,19 +67,25 @@
 				padding: 10px 10px 10px 10px;
 			}
 			#treequenceDiv{
-				position: absolute;
+				display: inline-block;/*flex;
+				flex-direction: row;
+				flex-wrap: nowrap; // */
+				position: relative;
 				top: 90px;
 				left: 10px;
-				height: 80%;
-				display: inline-block;
+				height: 75%;
+				width: 85%;
 				font-size: 100%;
 				font-family: "Lucida Console";
-				background: rgba(1, 1, 1, 0.3);
+				background: rgba(255, 255, 255, 0.8);
 				border-style: solid;
 				border-color: #000000;
 				color: black;
 				padding: 10px 10px 10px 10px;
-				overflow: scroll;
+				overflow-x: scroll;
+			}
+			#treequenceDiv.hidden{
+				display: none;
 			}
 			#lockButton{
 				position: absolute;
@@ -91,9 +100,8 @@
 				display: inline-block;
 				font-size: 12px;
 			}
-			
 			#showHide{
-				position: absolute;
+				position: relative;
 				top: 70px;
 				left: 10px;
 				background-color: #000000;
@@ -104,15 +112,73 @@
 				text-decoration: none;
 				display: inline-block;
 				font-size: 12px;
+				vertical-align: top;
+			}
+			.refBranch{
+				display: block;/*flex;
+				flex-direction: row;
+				flex-wrap: nowrap;// */
+				padding: 0px 0px 0px 0px;
+				border-right-width: 0px;
+				padding-bottom: 10px;
+				border-left: solid #000088;
+				white-space: nowrap;
+			}
+			.movBranch{
+				display: block;/*flex;
+				flex-direction: row;
+				flex-wrap: nowrap;// */
+				padding: 0px 0px 0px 0px;
+				border-left: solid #880000;
+				padding-bottom: 10px;
+				white-space: nowrap;
+			}
+			.rootNode{
+				display: inline-block;
+				border-top: solid #000000;
+				border-right: solid #000000;
+				width: 400px;
+				padding: 0px 0px 0px 0px;
+				border-left-width: 0px;
+				white-space: normal;
+				vertical-align: top;
+				height: 100%;
+			}
+			.childNode{
+				display: inline-block;/*
+				flex-direction: column;
+				flex-wrap: nowrap;// */
+				padding: 0px 0px 0px 0px;
+				border-width: 0px;
+				white-space: nowrap;
+			}
+			.shown{
+				position: relative;
+			}
+			.expButton{
+				background-color: #000000;
+				border: none;
+				color: white;
+				text-align: center;
+				text-decoration: none;
+				display: inline-block;
+				font-size: 100% ;
+				width: 20px;
+				height: 20px;
+				white-space: nowrap;
+				vertical-align: top;
+			}
+			.hidden{
+				display: none;
 			}
 		  </style>
 	</head>
 	<div id="HUD">
-		
+
 		<button id="lockButton" onclick="tryMouseLock()" >Mouse Lock</button>
 		<button onclick='showHideTreequence()' id="showHide">Show/Hide</button>
 		<div id="treequenceDiv" state="shown" >
-			
+
 		</div>
 		<div id="infoDiv">
 			<div>
@@ -123,19 +189,19 @@
 			</div>
 		</div>
 	</div>
-	
-	
-	
-	
+
+
+
+
 	<script src="./src/webVis/jsstl.js"></script>
 	<script src="./src/webVis/treequence.js"></script>
 	<script src="./src/webVis/partRender.js"></script>
 	<script src="./src/webVis/jquery.js"></script>
 	<script src="./src/webVis/three.min.js"></script>
 	<script src="./src/webVis/renderScript.js"></script>
-	
-	
-	
+
+
+
 	<script id="chroma-vert" type="x-shader/x-vertex">
 		varying float theZ;
 		varying vec3 theNorm;
@@ -150,7 +216,7 @@
 		varying vec3 theNorm;
 		uniform float cameraNear;
 		uniform float cameraFar;
-		
+
 		void main() {
 			float Z = abs(theZ-cameraNear)/pow(abs((cameraFar-cameraNear)/4.0),0.95)-0.1;
 			float shade = 0.5+dot(theNorm,vec3(0.0,1.0,0.0))*0.5;
@@ -158,8 +224,32 @@
 			gl_FragColor.a = 1.0;
 		}
     </script>
-	
+	<script id="grid-vert" type="x-shader/x-vertex">
+		varying vec3 theNorm;
+		varying vec3 thePos;
+		void main() {
+			gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+			thePos = position;
+			theNorm = normal.xyz;
+		}
+    </script>
+	<script id="grid-frag" type="x-shader/x-fragment">
+		varying vec3 theNorm;
+		varying vec3 thePos;
+
+		void main() {
+			float delt = 400.0;
+			float mark = 0.05;
+			float shade = 0.1+(dot(theNorm,normalize(vec3(0.0,1.0,1.0)))+1.0)*0.5*0.9;
+			float gridShade =     (1.0-step(mod(thePos.x,delt)/delt,mark)*0.5)
+								* (1.0-step(mod(thePos.y+1.0,delt)/delt,mark)*0.5)
+								* (1.0-step(mod(thePos.z,delt)/delt,mark)*0.5);
+			gl_FragColor.rgb =  vec3( 1.0, 1.0, 1.0)* gridShade * shade;
+			gl_FragColor.a = 1.0;
+		}
+    </script>
+
 	<xmp id="warning"></xmp>
-	
+
 </body>
 </html>

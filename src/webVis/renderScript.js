@@ -106,7 +106,7 @@ var theTime=0;
 // Holder for parsed-in javascript objects from the XML document
 var theTreequence=null;
 
-var treequenceActive = true;
+var treequenceActive = false;
 
 
 var timeAdjustment = 0;
@@ -189,7 +189,7 @@ var momentum= new THREE.Vector3(0,0,0);
 var scene = new THREE.Scene();
 
 // The camera
-var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 1, 6000 );
+var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 5, 30000 );
 camera.position.x=0;
 camera.position.z=0;
 camera.position.y=0;
@@ -442,7 +442,7 @@ function registerDown(e){
 		inputState.W=true;
 	}
 	if(theKey==' '){
-		inputState.Space=true;
+		inputState.Space=false;
 	}
 	if(theKey=='Q'){
 		inputState.Q=true;
@@ -979,11 +979,13 @@ function renderParts(){
 	addDisplacement(movementTree, partFrames, 0);
 
 	// Populates the treequence graphic
+	document.getElementById("treequenceDiv").classList.add("refBranch");
 	insertTreequenceHTML(movementTree,document.getElementById("treequenceDiv"));
 	showHideTreequence();
 
 	// Fixes a minor thing in the treequence graphic
 	getChildrenByTag(document.getElementById("treequenceDiv"),"BUTTON")[0].innerHTML="+";
+	getChildrenByTag(document.getElementById("treequenceDiv"),"DIV")[0].classList.add("rootNode");
 	// Begins to display the parts
 	initAxisLines();
 
@@ -1021,26 +1023,13 @@ function showHideTreequence(){
 	TDiv=document.getElementById("treequenceDiv");
 	if(TDiv.state=="shown"){
 		TDiv.state="notShown";
-		document.getElementById("treequenceDiv").style=
-		"display: none;";
+		TDiv.classList.remove("shown");
+		TDiv.classList.add("hidden");
 	}
 	else{
 		TDiv.state="shown";
-		document.getElementById("treequenceDiv").style=
-		"position: absolute;"+
-		"top: 90px;"+
-		"left: 10px;"+
-		"height: 75%;"+
-		"width: 95%;"+
-		"display: inline-block;"+
-		"font-size: 100%;"+
-		"font-family: 'Lucida Console';"+
-		"background: rgba(1, 1, 1, 0.3);"+
-		"border-style: solid;"+
-		"border-color: #000000;"+
-		"color: black;"+
-		"padding: 10px 10px 10px 10px;"+
-		"overflow: scroll;";
+		TDiv.classList.remove("hidden");
+		TDiv.classList.add("shown");
 	}
 
 }

@@ -648,14 +648,7 @@ function insertTreequenceHTML(theTree,parentElement){
 	var theName="";
 	theButton.innerHTML="-";
 	theButton.setAttribute("onclick","swapHiding(parentElement)");
-	theButton.setAttribute("style","background-color: #000000;\
-							border: none;\
-							color: white;\
-							padding: 2px 4px 2px 4px;\
-							text-align: center;\
-							text-decoration: none;\
-							display: inline-block;\
-							font-size: 100% ;")
+	theButton.classList.add("expButton");
 
 
 	// If not a leaf, attach button
@@ -665,58 +658,42 @@ function insertTreequenceHTML(theTree,parentElement){
 	}
 	// If a leaf, make a placeholder symbol
 	else{
-		theName=getRandomUTF([
-								/*0x03B0,0x03FF,
-								0x0531,0x0556,
-								0x07C0,0x07EA,
-								0x10A0,0x10C5,
-								0x16A0,0x16EA,
-								0x1A00,0x1A16,
-								0x1B83,0x1BA0,
-								0x20A0,0x20BE,
-								0x2C00,0x2C2E,
-								0xA500,0xA62B*/
-
-								0x2600,0x2625,
-								0x2639,0x2668,
-								0x2690,0x269D,
-								0x26B3,0x23BE
-
-								/*0x1F300,0x1F3FA,
-								0x1F400,0x1F4FF,
-								0x1F600,0x1F64F,
-								0x1F910,0x1F91E,
-								0x1F920,0x1F927,
-								0x1F950,0x1F95E,
-								0x1F980,0x1F991*/
-								]);
-		parentElement.appendChild(document.createTextNode(theTree.Name.substring(0,theTree.Name.length-4)+"("+theName+")"));
+		theName = theTree.Name.substring(0,theTree.Name.length);
+		parentElement.appendChild(document.createTextNode(theName));
 	}
 
 	var movName;
 	var refName;
+	var childDiv = document.createElement("DIV");
+	childDiv.classList.add("childNode");
+	parentElement.appendChild(childDiv);
 
 	// Attach ref and mov branches and get their names
 	if(theTree.Mov!=null){
 		var theMov=document.createElement("DIV");
-		parentElement.appendChild(theMov);
+		theMov.classList.add("movBranch");
+		childDiv.appendChild(theMov);
 		movName=insertTreequenceHTML(theTree.Mov,theMov);
 	}
 	if(theTree.Ref!=null){
 		var theRef=document.createElement("DIV");
-		parentElement.appendChild(theRef);
+		theRef.classList.add("refBranch");
+		childDiv.appendChild(theRef);
 		refName=insertTreequenceHTML(theTree.Ref,theRef);
 	}
 
 	// If not a leaf, make name and insert it
 	if(theTree.Ref!=null || theTree.Mov!=null){
-		theName=movName+refName;
-		parentElement.insertBefore(document.createTextNode("  "+theName),theMov);
+		theName=movName+" --> "+refName;
+		var theText = document.createTextNode(theName);
+		var textDiv = document.createElement("DIV");
+		textDiv.appendChild(theText);
+		textDiv.classList.add("rootNode");
+		parentElement.insertBefore(textDiv,childDiv);
 	}
 
 	// Hide all children of the element
 	hideChildren(parentElement);
-
 
 	return theName;
 
@@ -776,9 +753,12 @@ function swapHiding(theNode){
 */
 function show(theNode){
 
-	var theText=getChildrenByTag(theNode,"TEXT");
-
-	theNode.setAttribute("style","display: block; position: relative; left: 15px; border-style: solid; border-color: #000000;");
+	if(theNode.classList.contains("hidden")){
+		theNode.classList.remove("hidden");
+	}
+	if(! theNode.classList.contains("shown")){
+		theNode.classList.add("shown");
+	}
 
 }
 
@@ -798,19 +778,12 @@ function show(theNode){
 */
 function hide(theNode){
 
-	var theText=getChildrenByTag(theNode,"TEXT");
-	/*
-	if(!(theText==null || theText.length<1)){
-		console.log("Hiding: "+theText[0].innerHTML);
+	if(theNode.classList.contains("shown")){
+		theNode.classList.remove("shown");
 	}
-	*/
-	var buttonState=getChildrenByTag(theNode,"BUTTON");
-	if(!(buttonState==null || buttonState.length<1)){
-		buttonState[0].innerHTML='+';
+	if(! theNode.classList.contains("hidden")){
+		theNode.classList.add("hidden");
 	}
-	theNode.setAttribute("style","display: none;");
-
-	//console.log("Just Hid: "+theNode.innerHTML);
 
 }
 
@@ -838,7 +811,7 @@ function showChildren(theNode){
 	var lim=theChildren.length;
 	while(pos<lim){
 		show(theChildren[pos]);
-		hideChildren(theChildren[pos]);
+		showChildren(theChildren[pos]);
 		pos++;
 	}
 
@@ -862,7 +835,6 @@ function showChildren(theNode){
 */
 function hideChildren(theNode){
 
-	theNode.setAttribute("style","display: block; position: relative; left: 15px; border-left: solid #000000; padding: 10px 5px 0px 5px;");
 	var theChildren = getChildrenByTag(theNode,"DIV");
 	var pos=0;
 	var lim=theChildren.length;

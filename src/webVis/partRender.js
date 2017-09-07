@@ -34,10 +34,17 @@ function getStdMaterial(){
 
 	}
 
-
-
 }
 
+
+function getGridMaterial(){
+
+	return new THREE.ShaderMaterial({
+		vertexShader: document.querySelector('#grid-vert').textContent.trim(),
+		fragmentShader: document.querySelector('#grid-frag').textContent.trim()
+	});
+
+}
 
 
 
@@ -1082,7 +1089,7 @@ function updateLines(movTree,parentNode,theTime, isMov, treeActive){
 				if(theTime>=movTree.Time){
 					var normTime=(parentNode.Time-theTime)/(parentNode.Time-movTree.Time);
 					if(treeActive){
-						movTree.TreeLine.geometry.vertices[0] = movTree.TreePosition.clone()
+						movTree.TreeLine.geometry.vertices.add(movTree.Disp)[0] = movTree.TreePosition.clone()
 						                                                        .lerp(parentNode.TreePosition,1-normTime);
 						movTree.Line.geometry.vertices[0]=movTree.Line.geometry.vertices[1].clone();
 					}
@@ -1491,24 +1498,42 @@ function addCurveKeyFrames(theFrameLists, startLocation){
 function addGrid(theSize, theDivs, theHeight, theColor){
 
 	var xpos = 0;
-	var zpos = 0;
-	var theLine = null;
+	var zpos;
+	var theFloor = null;
 	var theGeo = new THREE.Geometry();
+
+	/*
 	while(xpos<theDivs){
+		zpos = 0;
+		while(zpos<theDivs){
+			theGeo.vertices.push(new THREE.Vector3(0-theSize/2, theHeight, zpos*theSize/theDivs-theSize/2));
+			theGeo.vertices.push(new THREE.Vector3(theSize/2, theHeight , zpos*theSize/theDivs-theSize/2));
+			zpos++;
+		}
 		theGeo.vertices.push(new THREE.Vector3(xpos*theSize/theDivs-theSize/2, theHeight , 0-theSize/2));
 		theGeo.vertices.push(new THREE.Vector3(xpos*theSize/theDivs-theSize/2, theHeight , theSize/2));
 		xpos++;
-	}
-	while(zpos<theDivs){
-		theGeo.vertices.push(new THREE.Vector3(0-theSize/2, theHeight, zpos*theSize/theDivs-theSize/2));
-		theGeo.vertices.push(new THREE.Vector3(theSize/2, theHeight , zpos*theSize/theDivs-theSize/2));
-		zpos++;
-	}
-	theLine =  new THREE.LineSegments(
+	}// */
+
+	theGeo.vertices.push(new THREE.Vector3(0-theSize/2, theHeight , 0-theSize/2));
+	theGeo.vertices.push(new THREE.Vector3(0-theSize/2, theHeight , theSize/2));
+	theGeo.vertices.push(new THREE.Vector3(theSize/2, theHeight , theSize/2));
+	theGeo.faces.push(new THREE.Face3(0, 1, 2));
+
+	theGeo.vertices.push(new THREE.Vector3(0-theSize/2, theHeight , 0-theSize/2));
+	theGeo.vertices.push(new THREE.Vector3(theSize/2, theHeight , theSize/2));
+	theGeo.vertices.push(new THREE.Vector3(theSize/2, theHeight , 0-theSize/2));
+	theGeo.faces.push(new THREE.Face3(3, 4, 5));
+
+	theGeo.computeFaceNormals();
+
+	theFloor =  new THREE.Mesh(
 		theGeo,
-		getStdLine()
+		getGridMaterial()
 	);
-	scene.add(theLine);
+	scene.add(theFloor);
+
+	theFloor.geometry.verticesNeedUpdate = true;
 
 }
 
@@ -1536,40 +1561,56 @@ function addGrid(theSize, theDivs, theHeight, theColor){
 function addCylender(theRad, theBot, theTop, theX, theZ, slices, stacks, theColor){
 
 	var slicePos = 0;
-	var stackPos;
-	var theLine = null;
+	var theCyl = null;
 	var theGeo = new THREE.Geometry();
 	while(slicePos<slices){
-		stackPos = 0;
-		while(stackPos<stacks+1){
-			theGeo.vertices.push(new THREE.Vector3(
-													theX+theRad*Math.cos(Math.PI*2*slicePos/slices),
-			                                        theBot*stackPos/stacks+theTop*(stacks-stackPos)/stacks,
-													theZ+theRad*Math.sin(Math.PI*2*slicePos/slices)
-												  ));
-			theGeo.vertices.push(new THREE.Vector3(
-													theX+theRad*Math.cos(Math.PI*2*(slicePos+1)/slices),
-			                                        theBot*stackPos/stacks+theTop*(stacks-stackPos)/stacks,
-													theZ+theRad*Math.sin(Math.PI*2*(slicePos+1)/slices)
-												  ));
-			stackPos++;
-		}
+
 		theGeo.vertices.push(new THREE.Vector3(
-												theX+theRad*Math.cos(Math.PI*2*slicePos/slices),
-												theBot,
-												theZ+theRad*Math.sin(Math.PI*2*slicePos/slices)
-											  ));
+			theX+theRad*Math.cos(Math.PI*2*slicePos/slices),
+			theTop,
+			theZ+theRad*Math.sin(Math.PI*2*slicePos/slices)
+		));
 		theGeo.vertices.push(new THREE.Vector3(
-												theX+theRad*Math.cos(Math.PI*2*slicePos/slices),
-												theTop,
-												theZ+theRad*Math.sin(Math.PI*2*slicePos/slices)
-											  ));
+			theX+theRad*Math.cos(Math.PI*2*(slicePos+1)/slices),
+			theTop,
+			theZ+theRad*Math.sin(Math.PI*2*(slicePos+1)/slices)
+		));
+		theGeo.vertices.push(new THREE.Vector3(
+			theX+theRad*Math.cos(Math.PI*2*slicePos/slices),
+			theBot,
+			theZ+theRad*Math.sin(Math.PI*2*slicePos/slices)
+		));
+		theGeo.faces.push(new THREE.Face3(slicePos*6, slicePos*6+1, slicePos*6+2));
+
+		theGeo.vertices.push(new THREE.Vector3(
+			theX+theRad*Math.cos(Math.PI*2*(slicePos+1)/slices),
+			theTop,
+			theZ+theRad*Math.sin(Math.PI*2*(slicePos+1)/slices)
+		));
+		theGeo.vertices.push(new THREE.Vector3(
+			theX+theRad*Math.cos(Math.PI*2*(slicePos+1)/slices),
+			theBot,
+			theZ+theRad*Math.sin(Math.PI*2*(slicePos+1)/slices)
+		));
+		theGeo.vertices.push(new THREE.Vector3(
+			theX+theRad*Math.cos(Math.PI*2*slicePos/slices),
+			theBot,
+			theZ+theRad*Math.sin(Math.PI*2*slicePos/slices)
+		));
+		theGeo.faces.push(new THREE.Face3(slicePos*6+3, slicePos*6+4, slicePos*6+5));
+
 		slicePos++;
 	}
-	theLine =  new THREE.LineSegments(
+	theGeo.computeFaceNormals();
+
+	theCyl =  new THREE.Mesh(
 		theGeo,
-		getStdLine()
+		getGridMaterial()
 	);
-	scene.add(theLine);
+	scene.add(theCyl);
+
+	theCyl.geometry.verticesNeedUpdate = true;
+
+
 
 }
