@@ -4,65 +4,65 @@
 <head>
 	<style>
 		body{
-			background-color:#444444; 
-			font-family: arial; 
-			padding: 0px 0px 0px 0px; 
-			margin: 0px 0px 0px 0px; 
-			height:100%; 
+			background-color:#444444;
+			font-family: arial;
+			padding: 0px 0px 0px 0px;
+			margin: 0px 0px 0px 0px;
+			height:100%;
 			width:100%;
 		}
 		.heading{
-			width: 100%; 
-			height: 10%; 
-			background-color:#44AAFF; 
+			width: 100%;
+			height: 10%;
+			background-color:#44AAFF;
 			margin: 0px 0px 0px 0px;
 		}
 		#display{
-			width: 80%; 
+			width: 80%;
 			height: 100%;
 			bottom: 0px;
-			float:right;  
-			margin: 0px 0px 0px 0px; 
+			float:right;
+			margin: 0px 0px 0px 0px;
 			background-color:#AAAACC;
 		}
 		#directionLists{
-			width:20%; 
-			height: 100%; 
-			float:left;  
+			width:20%;
+			height: 100%;
+			float:left;
 			margin: 0px 0px 0px 0px;
 		}
 		#unconfirmedDiv{
-			height:47%; 
-			background-color:#CCAAAA; 
-			margin: 0px 0px 0px 0px; 
+			height:47%;
+			background-color:#CCAAAA;
+			margin: 0px 0px 0px 0px;
 			overflow:hidden;
 		}
 		#unconfirmed{
 			height:85%;
-			margin: 0px 10px 10px 10px; 
-			background-color:#EECCCC; 
+			margin: 0px 10px 10px 10px;
+			background-color:#EECCCC;
 			overflow:scroll;
 		}
 		#confirmedDiv{
-			height:47%;  
+			height:47%;
 			background-color:#AACCAA;
 			margin: 0px 0px 0px 0px;
 		}
 		#confirmed{
-			height:85%; 
-			margin: 0px 10px 10px 10px; 
-			background-color:#CCEECC; 
+			height:85%;
+			margin: 0px 10px 10px 10px;
+			background-color:#CCEECC;
 			overflow:scroll;
 		}
 		#opacityDiv{
-			height:6%;  
+			height:6%;
 			background-color:#AAAACC;
 			margin: 0px 0px 0px 0px;
 		}
 		#main{
-			width: 100%; height:85%; 
-			background-color:#AAAAAA; 
-			margin: 0px 0px 0px 0px; 
+			width: 100%; height:85%;
+			background-color:#AAAAAA;
+			margin: 0px 0px 0px 0px;
 			overflow:hidden;
 		}
 		.dirPair{
@@ -117,7 +117,7 @@
 			overflow: scroll;
 			height: 100%;
 		}
-		
+
 	</style>
 </head>
 
@@ -133,32 +133,34 @@
 
 <div id="main">
 
-<div id="directionLists" >
-	<div id="unconfirmedDiv" >
-		<h3 style="margin: 0px 0px 0px 0px;">Unconfirmed Directions</h3>
-		<div id="unconfirmed" >
-		</div>
-	</div>
-	<div id="opacityDiv">
-		<text style="padding: 2px 2px 2px 2px;">Opacity</text>
-		<input style="display:inline;" type="range" name="External Opacity" min="0" max="1" step="0.01" onchange="fixOpacity(this)"></input>
-	</div>
-	<div id="confirmedDiv">
-		<h3 style="margin: 0px 0px 0px 0px;">Confirmed Directions</h3>
-		<div id="confirmed">
-		</div>
-	</div>
-</div>
-
-<div id="display" onmousedown="doMouseDown(event)" 
-                  onmouseup="doMouseUp(event)" 
+<div id="display" onmousedown="doMouseDown(event)"
+                  onmouseup="doMouseUp(event)"
 				  onmouseleave="doMouseLeave(event)"
 				  oncontextmenu="justDont(event)">
 </div>
 
-<div id="vectorDiv">
-	<button id="expandButton" onclick="insertVectorView(this)">Show/Hide</button>
-</div>
+<table id="table_id" class="display">
+	<thead>
+		<tr>
+			<th>REFERENCE</th>
+			<th>MOVING</th>
+			<th>VECTORS</th>
+			<th>GROUPING</th>
+			<th>CONFIRMED</th>
+		</tr>
+	</thead>
+	<tbody id="body_id">
+	</tbody>
+	<tfoot>
+		<tr>
+			<th>REFERENCE</th>
+			<th>MOVING</th>
+			<th>VECTORS</th>
+			<th>GROUPING</th>
+			<th>CONFIRMED</th>
+		</tr>
+	</tfoot>
+</table>
 
 </div>
 
@@ -167,6 +169,46 @@
 <script src="./src/webVis/jsstl.js"></script>
 <script src="./src/webVis/jquery.js"></script>
 <script src="./src/webVis/three.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.css"/>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.js"></script>
 <script src="./src/webVis/dirConfirmScript.js"></script>
+
+
+<style>
+	#table_id{
+		font-family: Arial, Helvetica, sans-serif;
+		bottom: 0;
+	}
+	table.dataTable.display tbody tr.even.fast{
+		background-color: #FF8888
+	}
+	table.dataTable.display tbody tr.odd.fast{
+		background-color: #F98181
+	}
+	table.dataTable.display tbody tr.even.nfast{
+		background-color: #8888FF
+	}
+	table.dataTable.display tbody tr.odd.nfast{
+		background-color: #8181F9
+	}
+	table.dataTable.display tbody tr.odd > .sorting_1.focus, table.dataTable.order-column.stripe tbody tr.odd:first-child > .sorting_1.focus{
+		background-color: #FFFFFF
+	}
+	table.dataTable.display tbody tr.even > .sorting_1.focus, table.dataTable.order-column.stripe tbody tr.even:first-child > .sorting_1.focus{
+		background-color: #FFFFFF
+	}
+	table.dataTable.display tbody tr.odd > .sorting_1, table.dataTable.order-column.stripe tbody tr.odd > .sorting_1{
+		background-color: #A3F9A3
+	}
+	table.dataTable.display tbody tr.even > .sorting_1, table.dataTable.order-column.stripe tbody tr.even > .sorting_1{
+		background-color: #AAFFAA
+	}
+	table.dataTable.display tbody tr.odd > .sorting_1.focus, table.dataTable.order-column.stripe tbody tr.odd > .sorting_1.focus{
+		background-color: #FFFFFF
+	}
+	table.dataTable.display tbody tr.even > .sorting_1.focus, table.dataTable.order-column.stripe tbody tr.even > .sorting_1.focus{
+		background-color: #FFFFFF
+	}
+</style>
 
 </html>

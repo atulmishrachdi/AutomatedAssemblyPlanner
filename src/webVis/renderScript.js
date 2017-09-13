@@ -190,6 +190,9 @@ var scene = new THREE.Scene();
 
 // The camera
 var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 5, 30000 );
+			 /*new THREE.OrthographicCamera(	10*window.innerWidth/-2, 10*window.innerWidth/2,
+				 							10*window.innerHeight/-2, 10*window.innerHeight/2,
+											5, 70000);*/
 camera.position.x=0;
 camera.position.z=0;
 camera.position.y=0;
@@ -202,6 +205,7 @@ var pointerIsLocked=false;
 var renderer = new THREE.WebGLRenderer();
 renderer.setClearColor( skyColor, 1 );
 renderer.setSize( window.innerWidth*0.98, window.innerHeight*0.96);
+renderer.setFaceCulling(THREE.CullFaceNone,THREE.FrontFaceDirectionCCW);
 document.body.appendChild( renderer.domElement );
 
 // Setting camera to Yaw-Pitch-Roll configuration
