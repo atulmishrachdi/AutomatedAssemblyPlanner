@@ -26,15 +26,15 @@ namespace GPprocess
     public class CalculateAssemblyTimeAndSD
     {
 		#if NOSRC
-		public static Dictionary<List<double[]>, List<double[,]>> MoveDictionary = SaveandLoadData.ReadCSVforclusters(Program.state.inputDir+"/training/ClusterMove.csv");
-		public static Dictionary<List<double[]>, List<double[,]>> InstallDictionary = SaveandLoadData.ReadCSVforclusters(Program.state.inputDir+"/training/ClusterInstall.csv");
-		public static Dictionary<List<double[]>, List<double[,]>> SecureDictionary = SaveandLoadData.ReadCSVforclusters(Program.state.inputDir+"/training/ClusterSecure.csv");
-		public static Dictionary<List<double[]>, List<double[,]>> RotateDictionary = SaveandLoadData.ReadCSVforclusters(Program.state.inputDir+"/training/ClusterRotate.csv");
-		public static List<double[]> usermovedata = SaveandLoadData.ReadUserFeedback(Program.state.inputDir+"/training/UserMoveData.csv");
-		public static List<double[]> userinstalldata = SaveandLoadData.ReadUserFeedback(Program.state.inputDir+"/training/UserInstallData.csv");
-		public static List<double[]> usersecuredata = SaveandLoadData.ReadUserFeedback(Program.state.inputDir+"/training/UserSecureData.csv");
-		public static List<double[]> userrotatedata = SaveandLoadData.ReadUserFeedback(Program.state.inputDir+"/training/UserRotateData.csv");
-		public static List<double[]> usermoveplusinstalldata = SaveandLoadData.ReadUserFeedback(Program.state.inputDir+"/training/UserMoveplusInstallData.csv");
+		public static Dictionary<List<double[]>, List<double[,]>> MoveDictionary = SaveandLoadData.ReadCSVforclusters(Program.state.inputDir+"/../training/ClusterMove.csv");
+		public static Dictionary<List<double[]>, List<double[,]>> InstallDictionary = SaveandLoadData.ReadCSVforclusters(Program.state.inputDir+"/../training/ClusterInstall.csv");
+		public static Dictionary<List<double[]>, List<double[,]>> SecureDictionary = SaveandLoadData.ReadCSVforclusters(Program.state.inputDir+"/../training/ClusterSecure.csv");
+		public static Dictionary<List<double[]>, List<double[,]>> RotateDictionary = SaveandLoadData.ReadCSVforclusters(Program.state.inputDir+"/../training/ClusterRotate.csv");
+		public static List<double[]> usermovedata = SaveandLoadData.ReadUserFeedback(Program.state.inputDir+"/../training/UserMoveData.csv");
+		public static List<double[]> userinstalldata = SaveandLoadData.ReadUserFeedback(Program.state.inputDir+"/../training/UserInstallData.csv");
+		public static List<double[]> usersecuredata = SaveandLoadData.ReadUserFeedback(Program.state.inputDir+"/../training/UserSecureData.csv");
+		public static List<double[]> userrotatedata = SaveandLoadData.ReadUserFeedback(Program.state.inputDir+"/../training/UserRotateData.csv");
+		public static List<double[]> usermoveplusinstalldata = SaveandLoadData.ReadUserFeedback(Program.state.inputDir+"/../training/UserMoveplusInstallData.csv");
 		#else
 		public static Dictionary<List<double[]>, List<double[,]>> MoveDictionary = SaveandLoadData.ReadCSVforclusters(Directory.GetCurrentDirectory() + "/src/Assembly Planner/Evaluation/TrainningTimeData/ClusterMove.csv");
 		public static Dictionary<List<double[]>, List<double[,]>> InstallDictionary = SaveandLoadData.ReadCSVforclusters(Directory.GetCurrentDirectory() + "/src/Assembly Planner/Evaluation/TrainningTimeData/ClusterInstall.csv");

@@ -47,6 +47,7 @@ namespace Assembly_Planner
         public static List<double> gprotate = new List<double>();
         public static ProgramState state;
 		public static char slash = Path.DirectorySeparatorChar;
+		const bool serverMode = true;
 
         private static void Main(string[] args)
         {
@@ -112,7 +113,12 @@ namespace Assembly_Planner
             SerializeSolidProperties();
 
             SaveState();
-            state.Save(state.inputDir + slash + "intermediate" + slash + "ProgramState.xml");
+			if (serverMode) {
+				state.Save(state.inputDir + slash + "intermediate" + slash + "ProgramState.xml");
+			}
+			else {
+				state.Save(state.inputDir + slash + "bin" + slash + "intermediate" + slash + "ProgramState.xml");
+			}
             Console.WriteLine("\nDone");
 
         }
@@ -123,8 +129,12 @@ namespace Assembly_Planner
 			if (dir == "") {
 				dir = ".";
 			}
-			ProgramState.Load(dir + slash + "bin" + slash + "intermediate" + slash + "ProgramState.xml", ref state);
-            LoadState();
+			if (serverMode) {
+				ProgramState.Load (dir + slash + "intermediate" + slash + "ProgramState.xml", ref state);
+			} else {
+				ProgramState.Load (dir + slash + "bin" + slash + "intermediate" + slash + "ProgramState.xml", ref state);
+			}
+			LoadState();
 
 
 			AssemblyGraph.RepairGraphConnections ();
@@ -141,8 +151,13 @@ namespace Assembly_Planner
             //the second user interaction must happen here
             SaveDirections();
 
-            SaveState();
-			state.Save(state.inputDir + slash + "intermediate" + slash + "ProgramState.xml");
+			SaveState();
+			if (serverMode) {
+				state.Save(state.inputDir + slash + "intermediate" + slash + "ProgramState.xml");
+			}
+			else {
+				state.Save(state.inputDir + slash + "bin" + slash + "intermediate" + slash + "ProgramState.xml");
+			}
             Console.WriteLine("\nDone");
 
         }
@@ -154,7 +169,11 @@ namespace Assembly_Planner
 			if (dir == "") {
 				dir = ".";
 			}
-			ProgramState.Load(dir + slash + "bin" + slash + "intermediate" + slash + "ProgramState.xml", ref state);
+			if (serverMode) {
+				ProgramState.Load (dir + slash + "intermediate" + slash + "ProgramState.xml", ref state);
+			} else {
+				ProgramState.Load (dir + slash + "bin" + slash + "intermediate" + slash + "ProgramState.xml", ref state);
+			}
 			LoadState();
 
 			AssemblyGraph.RepairGraphConnections ();
@@ -174,7 +193,12 @@ namespace Assembly_Planner
 
 			Console.WriteLine("\n\nConnectedness verified");
 			SaveState();
-			state.Save(state.inputDir + slash + "intermediate" + slash + "ProgramState.xml");
+			if (serverMode) {
+				state.Save(state.inputDir + slash + "intermediate" + slash + "ProgramState.xml");
+			}
+			else {
+				state.Save(state.inputDir + slash + "bin" + slash + "intermediate" + slash + "ProgramState.xml");
+			}
 
 			Console.WriteLine("\nDone");
             return 0;
@@ -188,7 +212,11 @@ namespace Assembly_Planner
 			if (dir == "") {
 				dir = ".";
 			}
-			ProgramState.Load(dir + slash + "bin" + slash + "intermediate" + slash + "ProgramState.xml", ref state);
+			if (serverMode) {
+				ProgramState.Load (dir + slash + "intermediate" + slash + "ProgramState.xml", ref state);
+			} else {
+				ProgramState.Load (dir + slash + "bin" + slash + "intermediate" + slash + "ProgramState.xml", ref state);
+			}
 			LoadState();
 
 			checkDirs ();
@@ -215,8 +243,13 @@ namespace Assembly_Planner
 			cand.SaveToDisk(state.inputDir  + slash + "XML" + slash + "solution.xml");
             WorkerAllocation.Run(solutions);
 
-            SaveState();
-			state.Save(state.inputDir + slash + "intermediate" + slash + "ProgramState.xml");
+			SaveState();
+			if (serverMode) {
+				state.Save(state.inputDir + slash + "intermediate" + slash + "ProgramState.xml");
+			}
+			else {
+				state.Save(state.inputDir + slash + "bin" + slash + "intermediate" + slash + "ProgramState.xml");
+			}
             Console.WriteLine("\n\nDone");
 
         }
@@ -311,7 +344,7 @@ namespace Assembly_Planner
 				foreach (string a in args) {
 					Console.WriteLine (" -- "+a);
 				}
-				state.inputDir = args[argsIndex] + slash + "bin";
+				state.inputDir = args[argsIndex];
 				Console.WriteLine ("Setting inputDir to: " + state.inputDir);
                 if (args.Length > ++argsIndex)
                     DetectFasteners = args[argsIndex].Equals("y", StringComparison.CurrentCultureIgnoreCase);

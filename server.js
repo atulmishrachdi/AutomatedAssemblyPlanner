@@ -4,16 +4,16 @@
 // content of index.js
 const express = require('express');
 const bodyParser = require('body-parser');
-var multer = require('multer'); // v1.0.5
-var upload = multer();
+const multer = require('multer'); // v1.0.5
+const upload = multer();
 const handlebars = require('handlebars');
 const fs = require('fs');
 const exec = require('child_process').exec;
 const execSync = require('child_process').execSync;
 const app = express();
 const port = 3000;
-const tempRoute = "";
-const sessionRoute = "";
+const tempRoute = "templates";
+const sessionRoute = "workspace";
 const theTimeout = 1000*60*60*24;
 var theDate = new Date();
 
@@ -165,7 +165,6 @@ function makeSession(){
         theId = makeID();
     var bodyParser = require('body-parser');
     }
-
     return {
         filePath: sessionRoute + "/" +theID,
         id: theID,
@@ -217,7 +216,6 @@ function verifResponse(response, theID){
 
 
 function progResponse(response, theID, theFile, session, field){
-
     fs.readFile(sessData.filePath+"/intermediates/prog.txt",
         (function(err,data){
             var prog;
@@ -250,7 +248,6 @@ function progResponse(response, theID, theFile, session, field){
             );
         })
     );
-
 }
 
 
@@ -281,7 +278,7 @@ app.post('/', (request, response) => {
             for( p in data.models){
                 fs.writeFileSync(sessData.filePath + "/models/" + p.Name, p.Data, 'ascii');
             }
-            exec("workspace/FastenerDetection.exe", "workspace", "y", "1", "0.5", "y", "y",basicResponse(response,sessID));
+            exec("FastenerDetection.exe", "/workspace", "y", "1", "0.5", "y", "y",basicResponse(response,sessID));
             break;
         //================================//================================//================================
         case 1:
@@ -289,7 +286,7 @@ app.post('/', (request, response) => {
             break;
         //================================//================================//================================
         case 2:
-            exec("workspace/DisassemblyDirections.exe", "workspace", "y", "1", "0.5", "y", "y",basicResponse(response,sessID));
+            exec("DisassemblyDirections.exe", "/workspace", "y", "1", "0.5", "y", "y",basicResponse(response,sessID));
             break;
         //================================//================================//================================
         case 3:
@@ -297,11 +294,11 @@ app.post('/', (request, response) => {
             break;
         //================================//================================//================================
         case 4:
-            exec("workspace/Verification.exe", "workspace", "y", "1", "0.5", "y", "y",verifResponse(response,sessID));
+            exec("Verification.exe", "/workspace", "y", "1", "0.5", "y", "y",verifResponse(response,sessID));
             break;
         //================================//================================//================================
         case 5:
-            exec("workspace/AssemblyPlanning.exe", "workspace", "y", "1", "0.5", "y", "y",basicResponse(response,sessID));
+            exec("AssemblyPlanning.exe", "/workspace", "y", "1", "0.5", "y", "y",basicResponse(response,sessID));
             break;
         //================================//================================//================================
         case 6:

@@ -130,7 +130,7 @@ namespace Assembly_Planner
                 new StreamReader(
 
 					#if NOSRC
-					File.OpenRead(Program.state.inputDir+"/training/TrainingData.csv")
+					File.OpenRead(Program.state.inputDir+"/../training/TrainingData.csv")
 					#else
 					File.OpenRead("src/Assembly Planner/InitialGraphMaker/BoltAndGearDetector/ClassifierFiles/TrainingData.csv")
 					#endif
@@ -158,7 +158,7 @@ namespace Assembly_Planner
 				new StreamReader(
 
 					#if NOSRC
-					File.OpenRead(Program.state.inputDir+"/training/TrainingData.csv")
+					File.OpenRead(Program.state.inputDir+"/../training/TrainingData.csv")
 					#else
 					File.OpenRead("src/Assembly Planner/InitialGraphMaker/BoltAndGearDetector/ClassifierFiles/TrainingData.csv")
 					#endif
