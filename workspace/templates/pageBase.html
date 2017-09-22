@@ -1,13 +1,20 @@
-<div>
+<!DOCTYPE html>
+<html style="height:100%; width:100%;">
+
+<head>
 	<style>
-	{{pageStyle}}
+	{{styleBase}}
 	</style>
-	<div id="theBody">
-	{{pageMain}}
+</head>
+<body>
+	<div id="stageContent">
 	</div>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/threejs/r76/three.min.js"></script>
 	<script>
-	{{pageScript}}
+	{{jsstl}}
+	{{treequence}}
+	{{partRender}}
+	{{scriptBase}}
 	</script>
-</div>
+</body>

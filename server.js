@@ -25,6 +25,12 @@ var contentManifest = {
     treequence:"treequence.js",
     partRender:"partRender.js",
 
+    pageBase:"pageBase.html",
+    stageBase:"stageBase.html",
+
+    pageBaseStyle:"pageBaseStyle.css",
+    pageBaseScript:"pageBaseScript.js",
+
     uploadMain:"upload.html",
     uploadStyle:"uploadStyle.css",
     uploadScript:"uploadScript.js",
@@ -55,11 +61,12 @@ var contentManifest = {
 
 };
 
-var template = Handlebars.compile(fs.readFileSync(tempRoute+pageBase.html));
+var content = {};
+
+var baseTemplate = handlebars.compile(fs.readFileSync(tempRoute+contentManifest.pageBase));
+var stageTemplate = handlebars.compile(fs.readFileSync(tempRoute+contentManifest.pageBase));
 
 var sessions = {};
-
-var content = {};
 
 function killDir(thePath){
 
@@ -99,7 +106,7 @@ function sweepSessions(){
             killDir(sessions[k].filePath+"/intermediate");
             killDir(sessions[k].filePath+"/models");
             killDir(sessions[k].filePath+"/XML");
-            killDir(sessions[k].filePath+);
+            killDir(sessions[k].filePath);
             delete sessions[k];
         }
     }
@@ -140,13 +147,13 @@ function makeID(){
         if(idPos & 1 != 0){
             check1 += array[idPos];
         }
-        if(idPos & 2 != 0{
+        if(idPos & 2 != 0){
             check2 += array[idPos];
         }
         if(idPos & 4 != 0){
             check4 += array[idPos];
         }
-        if(idPos & 8 != 0{
+        if(idPos & 8 != 0){
             check8 += array[idPos];
         }
         result = result + getHex(array[idPos]);
@@ -170,7 +177,7 @@ function makeSession(){
         id: theID,
         startTime: theDate.now(),
         stage: 0,
-        state = {
+        state: {
             models: [],
             partsPropertiesIn: "",
             partsPropertiesOut: "",
@@ -306,20 +313,29 @@ app.post('/', (request, response) => {
             break;
     }
 
-);
+});
+
+
+app.get('/', (request, response) => {
+
+    var context = {
+        jsstl:content.jsstl,
+        treequence:content.treequence,
+        partRender:content.partRender,
+        scriptBase: content.scriptBase,
+        styleBase: content.styleBase
+    };
+
+    response.send(baseTemplate(context));
+
+});
 
 
 app.get('/:stage', (request, response) => {
 
     var stage = request.params.stage;
 
-    var context = {
-        jquery:content.jquery,
-        threeJS:content.threeJS,
-        jsstl:content.jsstl,
-        treequence:content.treequence,
-        partRender:content.partRender
-    };
+    var context = {};
 
 
     switch(stage){
@@ -359,7 +375,7 @@ app.get('/:stage', (request, response) => {
             context.styleBase = content.renderStyle;
             break;
     }
-    response.send(template(context));
+    response.send(stageTemplate(context));
 
 });
 

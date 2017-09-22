@@ -27,6 +27,18 @@ function advanceStage(response,status){
 
 }
 
+function updateProg(response,status){
+
+    if(status === "success"){
+        if(respData.stage === stage){
+
+        }
+        else{
+
+        }
+    }
+
+}
 
 function requestAdvance(){
 
@@ -42,7 +54,7 @@ function requestAdvance(){
 function checkIn(){
 
     $.ajax({
-        complete: advanceStage,
+        complete: updateProg,
         dataType: "json",
         method: "POST",
         timeout: 10000
