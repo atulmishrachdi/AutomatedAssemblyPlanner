@@ -28,6 +28,10 @@ var contentManifest = {
     pageBase:"pageBase.html",
     stageBase:"stageBase.html",
 
+    progMain:"progress.html",
+    progStyle:"progress.css",
+    progScript:"progess.js",
+
     pageBaseStyle:"pageBaseStyle.css",
     pageBaseScript:"pageBaseScript.js",
 
@@ -35,25 +39,13 @@ var contentManifest = {
     uploadStyle:"uploadStyle.css",
     uploadScript:"uploadScript.js",
 
-    partLoadMain:"partLoad.html",
-    partLoadStyle:"partLoadStyle.css",
-    partLoadScript:"partLoadScript.js",
-
     partPropMain:"partProp.html",
     partStyle:"partPropStyle.css",
     partScript:"partPropScript.js",
 
-    dirLoadMain:"dirLoad.html",
-    dirLoadStyle:"dirLoadStyle.css",
-    dirLoadScript:"dirLoadScript.js",
-
     dirConMain:"dirCon.html",
     dirStyle:"dirConStyle.css",
     dirScript:"dirConScript.js",
-
-    planLoadMain:"planLoad.html",
-    planLoadStyle:"planLoadStyle.css",
-    planLoadScript:"planLoadScript.js",
 
     renderMain:"render.html",
     renderStyle:"renderStyle.css",
@@ -119,6 +111,10 @@ function setupSession(thePath,theModels){
     fs.mkdirSync(thePath+"/intermediate");
     fs.mkdirSync(thePath+"/models");
     fs.mkdirSync(thePath+"/XML");
+
+    for( p in theModels){
+        fs.writeFileSync(thePath+"/models/" + p.Name, p.Data, 'ascii');
+    }
 
 }
 
@@ -202,6 +198,26 @@ function basicResponse(response, theID){
 
 }
 
+function runResponse(exeFile,sessID,textFile,textData){
+
+    return (function(){
+            exec(exeFile, sessions[sessID].filePath, "y", "1", "0.5", "y", "y",basicResponse(response,sessID));
+    });
+
+}
+
+function execResponse(exeFile,sessID,textFile,textData){
+
+    if(textFile === ""){
+        (runResponse(exeFile,sessID,textFile,textData))();
+    }
+    else{
+        writeFile(textFile,textData,runResponse(exeFile,sessID,textFile,textData));
+    }
+
+}
+
+
 function verifResponse(response, theID){
 
     return function(error,stdout,stderr){
@@ -223,7 +239,7 @@ function verifResponse(response, theID){
 
 
 function progResponse(response, theID, theFile, session, field){
-    fs.readFile(sessData.filePath+"/intermediates/prog.txt",
+    fs.readFile(session.filePath+"/intermediates/prog.txt",
         (function(err,data){
             var prog;
             if(data !== null){
@@ -281,11 +297,8 @@ app.post('/', (request, response) => {
     switch(stage){
         //================================//================================//================================
         case 0:
-            setupSession(sessData.filePath);
-            for( p in data.models){
-                fs.writeFileSync(sessData.filePath + "/models/" + p.Name, p.Data, 'ascii');
-            }
-            exec("FastenerDetection.exe", "/workspace", "y", "1", "0.5", "y", "y",basicResponse(response,sessID));
+            setupSession(sessData.filePath,sessData.models);
+            execResponse("FastenerDetection.exe",sessID,"","");
             break;
         //================================//================================//================================
         case 1:
@@ -293,22 +306,26 @@ app.post('/', (request, response) => {
             break;
         //================================//================================//================================
         case 2:
-            exec("DisassemblyDirections.exe", "/workspace", "y", "1", "0.5", "y", "y",basicResponse(response,sessID));
+            execResponse("DisassemblyDirections.exe",sessID,sessData.filePath+"parts_properties2.xml",textData)
             break;
         //================================//================================//================================
         case 3:
-            progResponse(response, sessID, sessData.filePath+"/XML/directionlist.xml", sessData, "dirConfirmIn");
+            progResponse(response, sessID, sessData.filePath+"/XML/directionList.xml", sessData, "dirConfirmIn");
             break;
         //================================//================================//================================
         case 4:
-            exec("Verification.exe", "/workspace", "y", "1", "0.5", "y", "y",verifResponse(response,sessID));
+            execResponse("Verification.exe",sessID,sessData.filePath+"/XML/directionList2.xml",textData)
             break;
         //================================//================================//================================
         case 5:
-            exec("AssemblyPlanning.exe", "/workspace", "y", "1", "0.5", "y", "y",basicResponse(response,sessID));
+            progResponse(response, sessID, sessData.filePath+"/XML/verification.xml", sessData, "dirConfirmIn");
             break;
         //================================//================================//================================
         case 6:
+            execResponse("AssemblyPlanning.exe",sessID,sessData.filePath+"/XML/directionList2.xml",textData)
+            break;
+        //================================//================================//================================
+        case 7:
             progResponse(response, sessID, sessData.filePath+"/XML/solution.xml", sessData, "renderIn");
             break;
     }
@@ -337,42 +354,41 @@ app.get('/:stage', (request, response) => {
 
     var context = {};
 
-
     switch(stage){
         case 0:
-            context.pageBase = content.uploadMain;
-            context.scriptBase = content.scriptBase;
-            context.styleBase = content.styleBase;
+            context.stageHTML = content.uploadMain;
+            context.stageScript = content.scriptBase;
+            context.stageStyle = content.styleBase;
             break;
         case 1:
-            context.pageBase = content.partLoadMain;
-            context.scriptBase = content.partLoadScript;
-            context.styleBase = content.partLoadStyle;
+            context.stageHTML = content.progMain;
+            context.stageScript = content.progScript;
+            context.stageStyle = content.progStyle;
             break;
         case 2:
-            context.pageBase = content.partPropMain;
-            context.scriptBase = content.partScript;
-            context.styleBase = content.partStyle;
+            context.stageHTML = content.partPropMain;
+            context.stageScript = content.partScript;
+            context.stageStyle = content.partStyle;
             break;
         case 3:
-            context.pageBase = content.dirLoadMain;
-            context.scriptBase = content.dirLoadScript;
-            context.styleBase = content.dirLoadStyle;
+            context.stageHTML = content.progMain;
+            context.stageScript = content.progScript;
+            context.stageStyle = content.progStyle;
             break;
         case 4:
-            context.pageBase = content.dirConMain;
-            context.scriptBase = content.dirScript;
-            context.styleBase = content.dirStyle;
+            context.stageHTML = content.dirConMain;
+            context.stageScript = content.dirScript;
+            context.stageStyle = content.dirStyle;
             break;
         case 5:
-            context.pageBase = content.planLoadMain;
-            context.scriptBase = content.planLoadScript;
-            context.styleBase = content.planLoadStyle;
+            context.stageHTML = content.progMain;
+            context.stageScript = content.progScript;
+            context.stageStyle = content.progStyle;
             break;
         case 6:
-            context.pageBase = content.renderMain;
-            context.scriptBase = content.renderScript;
-            context.styleBase = content.renderStyle;
+            context.stageHTML = content.renderMain;
+            context.stageScript = content.renderScript;
+            context.stageStyle = content.renderStyle;
             break;
     }
     response.send(stageTemplate(context));
