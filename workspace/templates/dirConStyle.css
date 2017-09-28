@@ -1,63 +1,64 @@
+
 body{
-	background-color:#444444; 
-	font-family: arial; 
-	padding: 0px 0px 0px 0px; 
-	margin: 0px 0px 0px 0px; 
-	height:100%; 
+	background-color:#444444;
+	font-family: arial;
+	padding: 0px 0px 0px 0px;
+	margin: 0px 0px 0px 0px;
+	height:100%;
 	width:100%;
 }
 .heading{
-	width: 100%; 
-	height: 10%; 
-	background-color:#44AAFF; 
+	width: 100%;
+	height: 10%;
+	background-color:#44AAFF;
 	margin: 0px 0px 0px 0px;
 }
 #display{
-	width: 80%; 
+	width: 80%;
 	height: 100%;
 	bottom: 0px;
-	float:right;  
-	margin: 0px 0px 0px 0px; 
+	float:right;
+	margin: 0px 0px 0px 0px;
 	background-color:#AAAACC;
 }
 #directionLists{
-	width:20%; 
-	height: 100%; 
-	float:left;  
+	width:20%;
+	height: 100%;
+	float:left;
 	margin: 0px 0px 0px 0px;
 }
 #unconfirmedDiv{
-	height:47%; 
-	background-color:#CCAAAA; 
-	margin: 0px 0px 0px 0px; 
+	height:47%;
+	background-color:#CCAAAA;
+	margin: 0px 0px 0px 0px;
 	overflow:hidden;
 }
 #unconfirmed{
 	height:85%;
-	margin: 0px 10px 10px 10px; 
-	background-color:#EECCCC; 
+	margin: 0px 10px 10px 10px;
+	background-color:#EECCCC;
 	overflow:scroll;
 }
 #confirmedDiv{
-	height:47%;  
+	height:47%;
 	background-color:#AACCAA;
 	margin: 0px 0px 0px 0px;
 }
 #confirmed{
-	height:85%; 
-	margin: 0px 10px 10px 10px; 
-	background-color:#CCEECC; 
+	height:85%;
+	margin: 0px 10px 10px 10px;
+	background-color:#CCEECC;
 	overflow:scroll;
 }
 #opacityDiv{
-	height:6%;  
+	height:6%;
 	background-color:#AAAACC;
 	margin: 0px 0px 0px 0px;
 }
 #main{
-	width: 100%; height:85%; 
-	background-color:#AAAAAA; 
-	margin: 0px 0px 0px 0px; 
+	width: 100%; height:85%;
+	background-color:#AAAAAA;
+	margin: 0px 0px 0px 0px;
 	overflow:hidden;
 }
 .dirPair{

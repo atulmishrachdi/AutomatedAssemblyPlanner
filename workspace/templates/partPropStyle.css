@@ -1,11 +1,22 @@
+html{
+	height: 98%;
+	width: 98%;
+}
 #theBody{
 	background-color: #aaaaaa;
+	position: relative;
+	height: 98%;
+	width: 98%;
 }
 #fileinput{
 	color: black;
 }
+#display{
+	height: 50%;
+	display: block;
+}
 button{
-	display: block; 
+	display: block;
 	width: 150px;
 	background-color: #DDDDDD;
 	border: 1px solid #888888;
@@ -20,9 +31,4 @@ button:hover{
 	color: #000000;
 	background-color: #EEEEEE;
 	border: 1px dashed #AAAAAA;
-}
-#table_id{
-
-	font-family: Arial, Helvetica, sans-serif;
-
 }

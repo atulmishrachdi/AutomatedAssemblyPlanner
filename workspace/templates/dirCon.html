@@ -1,3 +1,5 @@
+
+
 <div class="heading">
 	<h1  style="margin: 0px 0px 0px 0px;">Dissassembly Direction Confirmation</h1>
 	<input type='file' id='fileinput' multiple />
@@ -8,31 +10,80 @@
 
 <div id="main">
 
-<div id="directionLists" >
-	<div id="unconfirmedDiv" >
-		<h3 style="margin: 0px 0px 0px 0px;">Unconfirmed Directions</h3>
-		<div id="unconfirmed" >
-		</div>
-	</div>
-	<div id="opacityDiv">
-		<text style="padding: 2px 2px 2px 2px;">Opacity</text>
-		<input style="display:inline;" type="range" name="External Opacity" min="0" max="1" step="0.01" onchange="fixOpacity(this)"></input>
-	</div>
-	<div id="confirmedDiv">
-		<h3 style="margin: 0px 0px 0px 0px;">Confirmed Directions</h3>
-		<div id="confirmed">
-		</div>
-	</div>
-</div>
-
-<div id="display" onmousedown="doMouseDown(event)" 
-                  onmouseup="doMouseUp(event)" 
+<div id="display" onmousedown="doMouseDown(event)"
+                  onmouseup="doMouseUp(event)"
 				  onmouseleave="doMouseLeave(event)"
 				  oncontextmenu="justDont(event)">
 </div>
 
-<div id="vectorDiv">
-	<button id="expandButton" onclick="insertVectorView(this)">Show/Hide</button>
-</div>
+<table id="table_id" class="display">
+	<thead>
+		<tr>
+			<th>REFERENCE</th>
+			<th>MOVING</th>
+			<th>VECTORS</th>
+			<th>GROUPING</th>
+			<th>CONFIRMED</th>
+		</tr>
+	</thead>
+	<tbody id="body_id">
+	</tbody>
+	<tfoot>
+		<tr>
+			<th>REFERENCE</th>
+			<th>MOVING</th>
+			<th>VECTORS</th>
+			<th>GROUPING</th>
+			<th>CONFIRMED</th>
+		</tr>
+	</tfoot>
+</table>
 
 </div>
+
+</body>
+
+<script src="./src/webVis/jsstl.js"></script>
+<script src="./src/webVis/jquery.js"></script>
+<script src="./src/webVis/three.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.css"/>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.js"></script>
+<script src="./src/webVis/dirConfirmScript.js"></script>
+
+
+<style>
+	#table_id{
+		font-family: Arial, Helvetica, sans-serif;
+		bottom: 0;
+	}
+	table.dataTable.display tbody tr.even.fast{
+		background-color: #FF8888
+	}
+	table.dataTable.display tbody tr.odd.fast{
+		background-color: #F98181
+	}
+	table.dataTable.display tbody tr.even.nfast{
+		background-color: #8888FF
+	}
+	table.dataTable.display tbody tr.odd.nfast{
+		background-color: #8181F9
+	}
+	table.dataTable.display tbody tr.odd > .sorting_1.focus, table.dataTable.order-column.stripe tbody tr.odd:first-child > .sorting_1.focus{
+		background-color: #FFFFFF
+	}
+	table.dataTable.display tbody tr.even > .sorting_1.focus, table.dataTable.order-column.stripe tbody tr.even:first-child > .sorting_1.focus{
+		background-color: #FFFFFF
+	}
+	table.dataTable.display tbody tr.odd > .sorting_1, table.dataTable.order-column.stripe tbody tr.odd > .sorting_1{
+		background-color: #A3F9A3
+	}
+	table.dataTable.display tbody tr.even > .sorting_1, table.dataTable.order-column.stripe tbody tr.even > .sorting_1{
+		background-color: #AAFFAA
+	}
+	table.dataTable.display tbody tr.odd > .sorting_1.focus, table.dataTable.order-column.stripe tbody tr.odd > .sorting_1.focus{
+		background-color: #FFFFFF
+	}
+	table.dataTable.display tbody tr.even > .sorting_1.focus, table.dataTable.order-column.stripe tbody tr.even > .sorting_1.focus{
+		background-color: #FFFFFF
+	}
+</style>

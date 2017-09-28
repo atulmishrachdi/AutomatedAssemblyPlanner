@@ -12,66 +12,71 @@ const exec = require('child_process').exec;
 const execSync = require('child_process').execSync;
 const app = express();
 const port = 3000;
-const tempRoute = "templates";
-const sessionRoute = "workspace";
+const sessionRoute = fs.realpathSync(".")+"/workspace";
+const tempRoute = sessionRoute+"/templates";
 const theTimeout = 1000*60*60*24;
 var theDate = new Date();
 
 var contentManifest = {
 
-    jquery:"jquery.js",
-    threeJS:"three.min.js",
-    jsstl:"jsstl.js",
-    treequence:"treequence.js",
-    partRender:"partRender.js",
+	jquery:"jquery.js",
+	threeJS:"three.min.js",
+	jsstl:"jsstl.js",
+	treequence:"treequence.js",
+	partRender:"partRender.js",
 
-    pageBase:"pageBase.html",
-    stageBase:"stageBase.html",
+	pageBase:"pageBase.html",
+	stageBase:"stageBase.html",
 
-    progMain:"progress.html",
-    progStyle:"progress.css",
-    progScript:"progess.js",
+	progMain:"progress.html",
+	progStyle:"progressStyle.css",
+	progScript:"progressScript.js",
 
-    pageBaseStyle:"pageBaseStyle.css",
-    pageBaseScript:"pageBaseScript.js",
+	pageBaseStyle:"pageBaseStyle.css",
+	pageBaseScript:"pageBaseScript.js",
 
-    uploadMain:"upload.html",
-    uploadStyle:"uploadStyle.css",
-    uploadScript:"uploadScript.js",
+	uploadMain:"upload.html",
+	uploadStyle:"uploadStyle.css",
+	uploadScript:"uploadScript.js",
 
-    partPropMain:"partProp.html",
-    partStyle:"partPropStyle.css",
-    partScript:"partPropScript.js",
+	partPropMain:"partProp.html",
+	partStyle:"partPropStyle.css",
+	partScript:"partPropScript.js",
 
-    dirConMain:"dirCon.html",
-    dirStyle:"dirConStyle.css",
-    dirScript:"dirConScript.js",
+	dirConMain:"dirCon.html",
+	dirStyle:"dirConStyle.css",
+	dirScript:"dirConScript.js",
 
-    renderMain:"render.html",
-    renderStyle:"renderStyle.css",
-    renderScript:"renderScript.js"
+	renderMain:"render.html",
+	renderStyle:"renderStyle.css",
+	renderScript:"renderScript.js"
 
 };
 
 var content = {};
 
-var baseTemplate = handlebars.compile(fs.readFileSync(tempRoute+contentManifest.pageBase));
-var stageTemplate = handlebars.compile(fs.readFileSync(tempRoute+contentManifest.pageBase));
+for (var key of Object.keys(contentManifest)) {
+    content[key] = fs.readFileSync(tempRoute+"/"+contentManifest[key],'utf8');
+}
+
+
+var baseTemplate = handlebars.compile(content.pageBase);
+var stageTemplate = handlebars.compile(content.stageBase);
 
 var sessions = {};
 
 function killDir(thePath){
 
-    fs.readdir(thePath,
-        (function(dirPath){
-            return (function(err,theFiles){
-                for( f in theFiles ){
-                    fs.unlinkSync();
-                }
-                rmdirSync(dirPath);
-            })
-        })(thePath)
-    );
+	fs.readdir(thePath,
+		(function(dirPath){
+			return (function(err,theFiles){
+				for( f in theFiles ){
+					fs.unlinkSync();
+				}
+				rmdirSync(dirPath);
+			})
+		})(thePath)
+	);
 
 }
 
@@ -91,72 +96,85 @@ function sweepDir(thePath){
 
 function sweepSessions(){
 
-    var theKeys = Object.keys(sessions);
-    var rightNow = theDate.now();
-    for ( k in theKeys ){
-        if(sessions[k].startTime + theTimeout < rightNow){
-            killDir(sessions[k].filePath+"/intermediate");
-            killDir(sessions[k].filePath+"/models");
-            killDir(sessions[k].filePath+"/XML");
-            killDir(sessions[k].filePath);
-            delete sessions[k];
-        }
-    }
+	var theKeys = Object.keys(sessions);
+	var rightNow = theDate.now();
+	for ( k in theKeys ){
+		if(sessions[k].startTime + theTimeout < rightNow){
+			killDir(sessions[k].filePath+"/intermediate");
+			killDir(sessions[k].filePath+"/models");
+			killDir(sessions[k].filePath+"/XML");
+			killDir(sessions[k].filePath);
+			delete sessions[k];
+		}
+	}
 
 }
 
 function setupSession(thePath,theModels){
 
-    fs.mkdirSync(thePath);
-    fs.mkdirSync(thePath+"/intermediate");
-    fs.mkdirSync(thePath+"/models");
-    fs.mkdirSync(thePath+"/XML");
+	fs.mkdirSync(thePath);
+	fs.mkdirSync(thePath+"/intermediate");
+	fs.mkdirSync(thePath+"/models");
+	fs.mkdirSync(thePath+"/XML");
 
-    for( p in theModels){
-        fs.writeFileSync(thePath+"/models/" + p.Name, p.Data, 'ascii');
-    }
+	for( p in theModels){
+		fs.writeFileSync(thePath+"/models/" + p.Name, p.Data, 'ascii');
+	}
 
 }
 
 function getHex( theChar ){
 
-    var hex = "0123456789ABCDEF";
-    var bottom = theChar%16;
-    var top = (theChar/16)%16;
-    return hex[top]+hex[bottom];
+	var hex = "0123456789ABCDEF";
+	var bottom = theChar%16;
+	var top = (theChar/16)%16;
+	return hex[top]+hex[bottom];
 
 }
 
 function makeID(){
 
-    var idLen = 16;
-    var array = new Uint8Array(idLen);
-    window.crypto.getRandomValues(array);
-    var result = "";
-    var check1 = 0;
-    var check2 = 0;
-    var check4 = 0;
-    var check8 = 0;
+	var idLen = 16;
+	var array = new Uint8Array(idLen);
+	window.crypto.getRandomValues(array);
+	var result = "";
+	var check1 = 0;
+	var check2 = 0;
+	var check4 = 0;
+	var check8 = 0;
 
-    var idPos = 0;
-    while(idPos < idLen){
-        if(idPos & 1 != 0){
-            check1 += array[idPos];
-        }
-        if(idPos & 2 != 0){
-            check2 += array[idPos];
-        }
-        if(idPos & 4 != 0){
-            check4 += array[idPos];
-        }
-        if(idPos & 8 != 0){
-            check8 += array[idPos];
-        }
-        result = result + getHex(array[idPos]);
-        idPos++;
-    }
+	var idPos = 0;
+	while(idPos < idLen){
+		if(idPos & 1 != 0){
+			check1 += array[idPos];
+		}
+		if(idPos & 2 != 0){
+			check2 += array[idPos];
+		}		if(idPos & 1 != 0){
+			check1 += array[idPos];
+		}
+		if(idPos & 2 != 0){
+			check2 += array[idPos];
+		}
+		if(idPos & 4 != 0){
+			check4 += array[idPos];
+		}
+		if(idPos & 8 != 0){
+			check8 += array[idPos];
+		}
+		result = result + getHex(array[idPos]);
+		idPos++;
+		if(idPos & 4 != 0){
+			check4 += array[idPos];
+		}
+		if(idPos & 8 != 0){
+			check8 += array[idPos];
+		}
+		result = result + getHex(array[idPos]);
+		idPos++;
+	}
 
-    result = result + getHex(check1) + getHex(check2) + getHex(check4) + getHex(check8);
+	result = result + getHex(check1) + getHex(check2) + getHex(check4) + getHex(check8);
 
 }
 
@@ -352,6 +370,8 @@ app.get('/:stage', (request, response) => {
 
     var stage = request.params.stage;
 
+	console.log(request);
+
     var context = {};
 
     switch(stage){
@@ -391,6 +411,7 @@ app.get('/:stage', (request, response) => {
             context.stageStyle = content.renderStyle;
             break;
     }
+	console.log(stageTemplate(context));
     response.send(stageTemplate(context));
 
 });

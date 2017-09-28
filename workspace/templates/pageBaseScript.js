@@ -69,12 +69,13 @@ function updateProg(response,status){
 
 function requestAdvance(reqStage){
 
+	console.log(reqStage);
     $.ajax({
         complete: advanceStage,
         dataType: "json",
-        method: "POST",
+        method: "GET",
         timeout: 10000,
-        url: "/"+reqStage,
+        url: "/"+reqStage
     });
 
 }

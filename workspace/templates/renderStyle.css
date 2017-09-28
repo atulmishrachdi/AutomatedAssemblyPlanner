@@ -1,87 +1,152 @@
-	#body{
-	  margin: 0px;
-	  overflow: hidden;
-	}
-	canvas {
-		display: inline;
-	}
-	#theDisplay{
-		position: absolute;
-		background-color: black;
-		padding: 0px 0px 0px 0px;
-	}
-	#HUD{
-		position: absolute;
-		width:98%;
-		height: 96%;
-		font-family: "Lucida Console";
-		color: black;
-	}
-	#fileinput{
-		position: absolute;
-		top: 20px;
-		left: 10px;
-		width: 250px;
-		font-size: 75%;
-		font-family: "Lucida Console";
-		background: rgba(1, 1, 1, 0.3);
-		border-style: solid;
-		border-color: #000000;
-		color: black;
-		padding: 10px 10px 10px 10px;
-	}
-	#infoDiv{
-		position: absolute;
-		bottom: 0px;
-		right: 0px;
-		font-size: 150%;
-		font-family: "Lucida Console";
-		background: rgba(1, 1, 1, 0.3);
-		border-style: solid;
-		border-color: #000000;
-		color: white;
-		padding: 10px 10px 10px 10px;
-	}
-	#treequenceDiv{
-		position: absolute;
-		top: 90px;
-		left: 10px;
-		height: 80%;
-		display: inline-block;
-		font-size: 100%;
-		font-family: "Lucida Console";
-		background: rgba(1, 1, 1, 0.3);
-		border-style: solid;
-		border-color: #000000;
-		color: black;
-		padding: 10px 10px 10px 10px;
-		overflow: scroll;
-	}
-	#lockButton{
-		position: absolute;
-		top: 20px;
-		right: 0px;
-		background-color: #000000;
-		border: none;
-		color: white;
-		padding: 10px 10px;
-		text-align: center;
-		text-decoration: none;
-		display: inline-block;
-		font-size: 12px;
-	}
-	
-	#showHide{
-		position: absolute;
-		top: 70px;
-		left: 10px;
-		background-color: #000000;
-		border: none;
-		color: white;
-		padding: 5px 5px;
-		text-align: center;
-		text-decoration: none;
-		display: inline-block;
-		font-size: 12px;
-	}
-
+#body{
+  margin: 0px;
+  overflow: hidden;
+}
+canvas {
+	display: inline;
+}
+text{
+	white-space: normal;
+}
+#theDisplay{
+	position: absolute;
+	background-color: black;
+	padding: 0px 0px 0px 0px;
+}
+#HUD{
+	position: absolute;
+	width:98%;
+	height: 96%;
+	font-family: "Lucida Console";
+	color: black;
+}
+#fileinput{
+	position: absolute;
+	top: 20px;
+	left: 10px;
+	width: 250px;
+	font-size: 75%;
+	font-family: "Lucida Console";
+	background: rgba(1, 1, 1, 0.3);
+	border-style: solid;
+	border-color: #000000;
+	color: black;
+	padding: 10px 10px 10px 10px;
+}
+#infoDiv{
+	position: absolute;
+	bottom: 0px;
+	right: 0px;
+	font-size: 150%;
+	font-family: "Lucida Console";
+	background: rgba(1, 1, 1, 0.3);
+	border-style: solid;
+	border-color: #000000;
+	color: white;
+	padding: 10px 10px 10px 10px;
+}
+#treequenceDiv{
+	display: inline-block;/*flex;
+	flex-direction: row;
+	flex-wrap: nowrap; // */
+	position: relative;
+	top: 90px;
+	left: 10px;
+	height: 75%;
+	width: 85%;
+	font-size: 100%;
+	font-family: "Lucida Console";
+	background: rgba(255, 255, 255, 0.8);
+	border-style: solid;
+	border-color: #000000;
+	color: black;
+	padding: 10px 10px 10px 10px;
+	overflow-x: scroll;
+}
+#treequenceDiv.hidden{
+	display: none;
+}
+#lockButton{
+	position: absolute;
+	top: 20px;
+	right: 0px;
+	background-color: #000000;
+	border: none;
+	color: white;
+	padding: 10px 10px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 12px;
+}
+#showHide{
+	position: relative;
+	top: 70px;
+	left: 10px;
+	background-color: #000000;
+	border: none;
+	color: white;
+	padding: 5px 5px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 12px;
+	vertical-align: top;
+}
+.refBranch{
+	display: block;/*flex;
+	flex-direction: row;
+	flex-wrap: nowrap;// */
+	padding: 0px 0px 0px 0px;
+	border-right-width: 0px;
+	padding-bottom: 10px;
+	border-left: solid #000088;
+	white-space: nowrap;
+}
+.movBranch{
+	display: block;/*flex;
+	flex-direction: row;
+	flex-wrap: nowrap;// */
+	padding: 0px 0px 0px 0px;
+	border-left: solid #880000;
+	padding-bottom: 10px;
+	white-space: nowrap;
+}
+.rootNode{
+	display: inline-block;
+	border-top: solid #000000;
+	border-right: solid #000000;
+	width: 400px;
+	padding: 0px 0px 0px 0px;
+	border-left-width: 0px;
+	white-space: normal;
+	vertical-align: top;
+	height: 100%;
+}
+.childNode{
+	display: inline-block;/*
+	flex-direction: column;
+	flex-wrap: nowrap;// */
+	padding: 0px 0px 0px 0px;
+	border-width: 0px;
+	white-space: nowrap;
+}
+.shown{
+	position: relative;
+}
+.expButton{
+	background-color: #000000;
+	border: none;
+	color: white;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 100% ;
+	width: 20px;
+	height: 20px;
+	white-space: nowrap;
+	vertical-align: top;
+}
+.hidden{
+	display: none;
+}
