@@ -178,6 +178,7 @@ function makeID(){
 
 }
 
+
 function makeSession(){
 
     var theId = makeID();
@@ -292,6 +293,7 @@ function progResponse(response, theID, theFile, session, field){
 }
 
 
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -353,66 +355,61 @@ app.post('/', (request, response) => {
 
 app.get('/', (request, response) => {
 
-    var context = {
-        jsstl:content.jsstl,
-        treequence:content.treequence,
-        partRender:content.partRender,
-        scriptBase: content.scriptBase,
-        styleBase: content.styleBase
-    };
-
-    response.send(baseTemplate(context));
+    response.send(baseTemplate({}));
 
 });
 
 
-app.get('/:stage', (request, response) => {
+app.get('/static/:name', (request, response) => {
+
+	var name = request.params.name;
+	console.log(name);
+	response.send(content[name]);
+
+});
+
+
+app.get('/stage/:stage', (request, response) => {
 
     var stage = request.params.stage;
-
-	console.log(request);
+	console.log(stage);
 
     var context = {};
 
-    switch(stage){
-        case 0:
-            context.stageHTML = content.uploadMain;
-            context.stageScript = content.scriptBase;
-            context.stageStyle = content.styleBase;
-            break;
-        case 1:
-            context.stageHTML = content.progMain;
-            context.stageScript = content.progScript;
-            context.stageStyle = content.progStyle;
-            break;
-        case 2:
-            context.stageHTML = content.partPropMain;
-            context.stageScript = content.partScript;
-            context.stageStyle = content.partStyle;
-            break;
-        case 3:
-            context.stageHTML = content.progMain;
-            context.stageScript = content.progScript;
-            context.stageStyle = content.progStyle;
-            break;
-        case 4:
-            context.stageHTML = content.dirConMain;
-            context.stageScript = content.dirScript;
-            context.stageStyle = content.dirStyle;
-            break;
-        case 5:
-            context.stageHTML = content.progMain;
-            context.stageScript = content.progScript;
-            context.stageStyle = content.progStyle;
-            break;
-        case 6:
-            context.stageHTML = content.renderMain;
-            context.stageScript = content.renderScript;
-            context.stageStyle = content.renderStyle;
-            break;
-    }
+	switch(stage){
+		case "0":
+			context.stageHTML = content.uploadMain;
+			context.stageStyle = content.uploadStyle;
+			console.log(context);
+			break;
+		case "1":
+			context.stageHTML = content.progMain;
+			context.stageStyle = content.progStyle;
+			break;
+		case "2":
+			context.stageHTML = content.partPropMain;
+			context.stageStyle = content.partStyle;
+			break;
+		case "3":
+			context.stageHTML = content.progMain;
+			context.stageStyle = content.progStyle;
+			break;
+		case "4":
+			context.stageHTML = content.dirConMain;
+			context.stageStyle = content.dirStyle;
+			break;
+		case "5":
+			context.stageHTML = content.progMain;
+			context.stageStyle = content.progStyle;
+			break;
+		case "6":
+			context.stageHTML = content.renderMain;
+			context.stageStyle = content.renderStyle;
+			break;
+	}
+	console.log(context);
 	console.log(stageTemplate(context));
-    response.send(stageTemplate(context));
+	response.send(stageTemplate(context));
 
 });
 

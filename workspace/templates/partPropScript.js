@@ -1,6 +1,21 @@
 ;
 
 
+if( typeof(startupScripts) == 'undefined'){
+
+	var startupScripts = [
+		function(){},
+		function(){},
+		function(){},
+		function(){},
+		function(){},
+		function(){},
+		function(){},
+		function(){}
+	];
+
+}
+
 
 
 
@@ -34,7 +49,7 @@ function recieveData(theXMLText){
 	console.log(theTable);
 
 }
-handleXML = recieveData;
+
 
 
 // Gets called when the user submits the table and everything is properly filled out
@@ -58,114 +73,6 @@ function sendData(theXMLText){
 }
 
 
-
-
-var fileReaders=[];
-var inputXML=null;
-var textFile=null;
-var focusBox;
-var focusPoint;
-var focusPart=null;
-var focusRow=null;
-var focusIdx=null;
-
-
-
-var skyColor= 0xFFFFFF;
-var assemblyPairs=[];
-var namePairs=[];
-var theDirections=[];
-var theXML=null;
-var thePos= new THREE.Vector3(1,0,0);
-var lastMouse=null;
-var theDistance= 300;
-var theVectors= []; //new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0x0000ff}))
-
-var theEul= new THREE.Euler(0,0,0,'XYZ');
-var baseQuat = new THREE.Quaternion(1,0,0,0);
-var deltaQuat = new THREE.Quaternion(1,0,0,0);
-
-var leftDrag = false;
-var rightDrag = false;
-
-
-var inputState={
-
-	W: false,
-	A: false,
-	S: false,
-	D: false,
-
-}
-
-
-var wireSettings={transparent: true, opacity: 0.1, color: 0x444444, wireframe: false};
-
-
-
-// Array for storing fileReaders to keep track of them
-var fileReaders=[];
-
-// Array for processed STLs
-var STLs=[];
-
-//  Array for processed parts
-var parts=[];
-
-
-
-
-
-// Some HTML bits to insert into the table as needed
-
-// Starting Input for mass cells
-var massElem="<div class='masselem'>"+
-				"<button onclick='insertMassInput(this)'>Input By Mass</button>"+
-				"<button onclick='insertDensityInput(this)'>Input By Volume+Density</button>"+
-			 "</div>";
-
-
-// Starting Input for Volume cells
-var volElem="<button onclick='insertHollowInput(this)'>Is Hollow</button>";
-
-
-// The button for showing the sample density dropdown menu
-var dropDensityButton="<button class='dropbtn' onclick='doDensityDrop(this)'>Sample Densities</button>";
-
-// The button for removing the sample density dropdown menu
-var undropDensityButton="<button class='dropbtn' onclick='undoDensityDrop(this)'>Sample Densities</button>";
-
-// The sample density dropdown menu
-var densityMenu="<div class='dropdown-content' style='border-color: #666666; background-color: #DDDDDD; border-style: solid; padding: 10px 10px 10px 10px;'>"+
-					"<button onclick='changeDensity(this)'>Aluminum</button>"+
-					"<button onclick='changeDensity(this)'>Glass</button>"+
-					"<button onclick='changeDensity(this)'>Plastic (Hi-Density)</button>"+
-					"<button onclick='changeDensity(this)'>Plastic (Med-Density)</button>"+
-					"<button onclick='changeDensity(this)'>Plastic (Low-Density)</button>"+
-					"<button onclick='changeDensity(this)'>Rubber</button>"+
-					"<button onclick='changeDensity(this)'>Steel</button>"+
-					"<button onclick='changeDensity(this)'>Titanium</button>"+
-					"<button onclick='changeDensity(this)'>Wood</button>"+
-				"</div>";
-
-
-// Starting input for density cells
-var densityDiv= "\n<div class='dropdown'>"+dropDensityButton+"</div>";
-
-
-
-
-// Setting up the table
-var theTable= $('#table_id').DataTable({
-	"scrollY": "300px",
-	"scroller": true,
-	"deferRender": false,
-	"paging": false,
-	"searching": false
-});
-
-document.addEventListener('keydown', registerDown , false);
-document.addEventListener('keyup', registerUp , false);
 
 
 
@@ -1093,10 +1000,6 @@ function conversion (theString){
 
 
 
-var massElem="<div class='masselem'>"+
-				"<button onclick='insertMassInput(this)'>Input By Mass</button>"+
-				"<button onclick='insertDensityInput(this)'>Input By Volume+Density</button>"+
-			 "</div>";
 
 /**
 *
@@ -1124,8 +1027,7 @@ function makeMassElem(){
 }
 
 
-// Starting Input for Volume cells
-var volElem="<button onclick='insertHollowInput(this)'>Is Hollow</button>";
+
 
 /**
 *
@@ -1146,8 +1048,7 @@ function makeVolElem(){
 }
 
 
-// The button for showing the sample density dropdown menu
-var dropDensityButton="<button class='dropbtn' onclick='doDensityDrop(this)'>Sample Densities</button>";
+
 
 /**
 *
@@ -1168,8 +1069,7 @@ function makeDropButton(){
 
 }
 
-// The button for removing the sample density dropdown menu
-var undropDensityButton="<button class='dropbtn' onclick='undoDensityDrop(this)'>Sample Densities</button>";
+
 /**
 *
 * Returns a standard button to remove a density dropdown element
@@ -1190,8 +1090,6 @@ function makeUndropButton(){
 }
 
 
-// Starting input for density cells
-var densityDiv= "\n<div class='dropdown'>"+dropDensityButton+"</div>";
 
 /**
 *
@@ -1292,6 +1190,7 @@ function doMouseDown(theEvent){
 }
 
 
+
 /**
 *
 * Given a mouseleave event, sets corresponding internal button states for mouse-related controls
@@ -1348,7 +1247,6 @@ function doDrag(theEvent){
 
 }
 
-document.getElementById("display").addEventListener("mousemove", doDrag);
 
 
 
@@ -1367,8 +1265,6 @@ function doZoom(theEvent){
 	theDistance=theDistance*Math.pow(1.001,theDelta*(-40));
 }
 
-document.getElementById("display").addEventListener("wheel", doZoom);
-
 
 
 function doSetup(){
@@ -1378,5 +1274,122 @@ function doSetup(){
 	setupClickFocus();
 	setupHighlight();
 	getChildrenByTag(document.getElementById("body_id"),"TR")[0].onclick();
+
+}
+
+
+
+startupScripts[2] = function (){
+
+	handleXML = recieveData;
+
+	var fileReaders=[];
+	var inputXML=null;
+	var textFile=null;
+	var focusBox;
+	var focusPoint;
+	var focusPart=null;
+	var focusRow=null;
+	var focusIdx=null;
+
+
+
+	var skyColor= 0xFFFFFF;
+	var assemblyPairs=[];
+	var namePairs=[];
+	var theDirections=[];
+	var theXML=null;
+	var thePos= new THREE.Vector3(1,0,0);
+	var lastMouse=null;
+	var theDistance= 300;
+	var theVectors= []; //new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0x0000ff}))
+
+	var theEul= new THREE.Euler(0,0,0,'XYZ');
+	var baseQuat = new THREE.Quaternion(1,0,0,0);
+	var deltaQuat = new THREE.Quaternion(1,0,0,0);
+
+	var leftDrag = false;
+	var rightDrag = false;
+
+
+	var inputState={
+
+		W: false,
+		A: false,
+		S: false,
+		D: false,
+
+	}
+
+
+	var wireSettings={transparent: true, opacity: 0.1, color: 0x444444, wireframe: false};
+
+
+
+	// Array for storing fileReaders to keep track of them
+	var fileReaders=[];
+
+	// Array for processed STLs
+	var STLs=[];
+
+	//  Array for processed parts
+	var parts=[];
+
+
+
+
+
+	// Some HTML bits to insert into the table as needed
+
+	// Starting Input for mass cells
+	var massElem="<div class='masselem'>"+
+					"<button onclick='insertMassInput(this)'>Input By Mass</button>"+
+					"<button onclick='insertDensityInput(this)'>Input By Volume+Density</button>"+
+				 "</div>";
+
+
+	// Starting Input for Volume cells
+	var volElem="<button onclick='insertHollowInput(this)'>Is Hollow</button>";
+
+
+	// The button for showing the sample density dropdown menu
+	var dropDensityButton="<button class='dropbtn' onclick='doDensityDrop(this)'>Sample Densities</button>";
+
+	// The button for removing the sample density dropdown menu
+	var undropDensityButton="<button class='dropbtn' onclick='undoDensityDrop(this)'>Sample Densities</button>";
+
+	// The sample density dropdown menu
+	var densityMenu="<div class='dropdown-content' style='border-color: #666666; background-color: #DDDDDD; border-style: solid; padding: 10px 10px 10px 10px;'>"+
+						"<button onclick='changeDensity(this)'>Aluminum</button>"+
+						"<button onclick='changeDensity(this)'>Glass</button>"+
+						"<button onclick='changeDensity(this)'>Plastic (Hi-Density)</button>"+
+						"<button onclick='changeDensity(this)'>Plastic (Med-Density)</button>"+
+						"<button onclick='changeDensity(this)'>Plastic (Low-Density)</button>"+
+						"<button onclick='changeDensity(this)'>Rubber</button>"+
+						"<button onclick='changeDensity(this)'>Steel</button>"+
+						"<button onclick='changeDensity(this)'>Titanium</button>"+
+						"<button onclick='changeDensity(this)'>Wood</button>"+
+					"</div>";
+
+
+	// Starting input for density cells
+	var densityDiv= "\n<div class='dropdown'>"+dropDensityButton+"</div>";
+
+
+
+
+	// Setting up the table
+	var theTable= $('#table_id').DataTable({
+		"scrollY": "300px",
+		"scroller": true,
+		"deferRender": false,
+		"paging": false,
+		"searching": false
+	});
+
+	document.addEventListener('keydown', registerDown , false);
+	document.addEventListener('keyup', registerUp , false);
+	document.getElementById("display").addEventListener("mousemove", doDrag);
+	document.getElementById("display").addEventListener("wheel", doZoom);
 
 }

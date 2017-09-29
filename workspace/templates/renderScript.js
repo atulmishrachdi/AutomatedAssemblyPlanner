@@ -2,6 +2,21 @@
 
 
 
+if( typeof(startupScripts) == 'undefined'){
+
+	var startupScripts = [
+		function(){},
+		function(){},
+		function(){},
+		function(){},
+		function(){},
+		function(){},
+		function(){},
+		function(){}
+	];
+
+}
+
 
 /**
 *
@@ -11,11 +26,6 @@
 */
 
 
-//
-//    Pretty Important: Keep this as true unless/until you've incorperated some other
-//                      method of getting file input/output
-//
-var manualFileInput=true;
 
 
 // Put recieved data about assembly into here. The code handles the rest.
@@ -76,212 +86,6 @@ function receiveData(theXMLFile, theSTLFiles){
 
 
 
-if(manualFileInput==true){
-
-	document.getElementById("HUD").innerHTML="<input type='file' id='fileinput' multiple />"+document.getElementById("HUD").innerHTML;
-
-}
-
-
-
-// Holder for parsed-in XML documents
-var theXML=null;
-
-// Array for storing fileReaders to keep track of them
-var fileReaders=[];
-
-// Array for processed STLs
-var STLs=[];
-
-//  Array for processed parts
-var parts=[];
-
-// Holder for animation frames for parts
-var partFrames=null;
-
-// Sets the time to 0, for the sake of starting the animation at the right time
-var theTime=0;
-
-
-// Holder for parsed-in javascript objects from the XML document
-var theTreequence=null;
-
-var treequenceActive = false;
-
-
-var timeAdjustment = 0;
-
-var standard = false;
-
-
-// Holds the state of button press inputs to smooth out control response
-
-
-/**
-*
-* Contains a representation of the last keyboard events reported by the
-* web page for each given key that acts as input for manipulating the
-* visulization: 'W','A','S','D','R','F', and the 'Space' key
-*
-* @element inputState
-* @for renderGlobal
-* @return {Void}
-*
-*/
-var inputState={
-
-	W: false,
-	A: false,
-	S: false,
-	D: false,
-	R: false,
-	F: false,
-	Q: false,
-	E: false,
-	Space: false,
-	switchPrimed: false
-
-}
-
-
-// The color of the background of the scene
-var skyColor= 0xFFFFFF;
-
-if(standard){
-	skyColor = 0x000000;
-}
-
-// The tree structure holding animation data
-var movementTree=null;
-var theCenter= new THREE.Vector3(0,0,0);
-
-// The part directly in front of the camera, if any such part exists
-var objectOfInterest=null;
-
-// The part being locked onto by using the 'F' key
-var focusPoint=null;
-
-// Name of the part being looked at, if there is any such part
-var mouseOverText="";
-
-// Time dialation coefficeint
-var zoom=0.2;
-
-// Base Accelleration
-var theSpeed=0.2;
-
-// Accelleration bonus variables
-var theBoost=1; // Initial accelleration bonus
-var boostLim=25; // Limit to accelleration bonus
-var boostInc=0.1; // Rate of accelleration bonus increase
-
-// Coefficient of drag camera experiences
-var theDrag=0.96;
-
-// Angles of camera
-var camYaw=0;
-var camPitch=Math.PI/2;
-
-// The momentum of the camera
-var momentum= new THREE.Vector3(0,0,0);
-
-// The scene of the assembly animation
-var scene = new THREE.Scene();
-
-// The camera
-var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 5, 30000 );
-			 /*new THREE.OrthographicCamera(	10*window.innerWidth/-2, 10*window.innerWidth/2,
-				 							10*window.innerHeight/-2, 10*window.innerHeight/2,
-											5, 70000);*/
-camera.position.x=0;
-camera.position.z=0;
-camera.position.y=0;
-
-// The variable holding the state of whether or not the pointer is locked
-var pointerIsLocked=false;
-
-
-// Setting up the renderer with the default color and display size
-var renderer = new THREE.WebGLRenderer();
-renderer.setClearColor( skyColor, 1 );
-renderer.setSize( window.innerWidth*0.98, window.innerHeight*0.96);
-renderer.setFaceCulling(THREE.CullFaceNone,THREE.FrontFaceDirectionCCW);
-document.body.appendChild( renderer.domElement );
-
-// Setting camera to Yaw-Pitch-Roll configuration
-camera.rotation.reorder('YXZ');
-
-
-// Adding in a whole bunch of lights for the scene, so the parts are well-lit
-var directionalLight = new THREE.DirectionalLight( 0x888888 );
-		directionalLight.position.x = 0;
-		directionalLight.position.y = 0;
-		directionalLight.position.z = 1;
-		directionalLight.position.normalize();
-		scene.add( directionalLight );
-
-var directionalLight = new THREE.DirectionalLight( 0x888888 );
-		directionalLight.position.x = 0;
-		directionalLight.position.y = 1;
-		directionalLight.position.z = 0;
-		directionalLight.position.normalize();
-		scene.add( directionalLight );
-
-var directionalLight = new THREE.DirectionalLight( 0x888888 );
-		directionalLight.position.x = 1;
-		directionalLight.position.y = 0;
-		directionalLight.position.z = 0;
-		directionalLight.position.normalize();
-		scene.add( directionalLight );
-var directionalLight = new THREE.DirectionalLight( 0x888888 );
-		directionalLight.position.x = 0;
-		directionalLight.position.y = 0;
-		directionalLight.position.z = -1;
-		directionalLight.position.normalize();
-		scene.add( directionalLight );
-
-var directionalLight = new THREE.DirectionalLight( 0x888888 );
-		directionalLight.position.x = 0;
-		directionalLight.position.y = -1;
-		directionalLight.position.z = 0;
-		directionalLight.position.normalize();
-		scene.add( directionalLight );
-
-var directionalLight = new THREE.DirectionalLight( 0x888888 );
-		directionalLight.position.x = -1;
-		directionalLight.position.y = 0;
-		directionalLight.position.z = 0;
-		directionalLight.position.normalize();
-		scene.add( directionalLight );
-
-
-// Adding in one more light
-var sunLight = new THREE.SpotLight( 0xaa5533, 6, 32000, 1.2, 1, 1 );
-		sunLight.position.set( 4000, 4000, 4000 );
-		scene.add( sunLight );
-
-
-
-var theFog=new THREE.Fog( skyColor, 4000, 6000 );
-scene.fog=theFog;
-
-var theXAxis=null;
-var theYAxis=null;
-var theZAxis=null;
-var xRet=null;
-var yRet=null;
-
-
-
-
-// Adding a whole bunch of event listeners for input
-document.getElementById("theDisplay").addEventListener("wheel", zoomIt);
-document.addEventListener('pointerlockchange', lockChange, false);
-document.addEventListener('mozpointerlockchange', lockChange, false);
-document.addEventListener('webkitpointerlockchange', lockChange, false);
-document.addEventListener('keydown', registerDown , false);
-document.addEventListener('keyup', registerUp , false);
-
 
 // Dialates time with the scrolling of the mouse
 function zoomIt(e){
@@ -313,6 +117,7 @@ function tryMouseLock(){
 	element.requestPointerLock();
 
 }
+
 
 
 /**
@@ -834,8 +639,6 @@ function readMultipleFiles(evt) {
 }
 
 
-// Inserts the file loading manager into the document
-document.getElementById('fileinput').addEventListener('change', readMultipleFiles, false);
 
 
 /**
@@ -1036,4 +839,225 @@ function showHideTreequence(){
 		TDiv.classList.add("shown");
 	}
 
+}
+
+
+
+startupScripts[6] = function(){
+	//
+	//    Pretty Important: Keep this as true unless/until you've incorperated some other
+	//                      method of getting file input/output
+	//
+	var manualFileInput=true;
+
+
+	if(manualFileInput==true){
+
+		document.getElementById("HUD").innerHTML="<input type='file' id='fileinput' multiple />"+document.getElementById("HUD").innerHTML;
+
+	}
+
+
+
+	// Holder for parsed-in XML documents
+	var theXML=null;
+
+	// Array for storing fileReaders to keep track of them
+	var fileReaders=[];
+
+	// Array for processed STLs
+	var STLs=[];
+
+	//  Array for processed parts
+	var parts=[];
+
+	// Holder for animation frames for parts
+	var partFrames=null;
+
+	// Sets the time to 0, for the sake of starting the animation at the right time
+	var theTime=0;
+
+
+	// Holder for parsed-in javascript objects from the XML document
+	var theTreequence=null;
+
+	var treequenceActive = false;
+
+
+	var timeAdjustment = 0;
+
+	var standard = false;
+
+
+	// Holds the state of button press inputs to smooth out control response
+
+
+
+	/**
+	*
+	* Contains a representation of the last keyboard events reported by the
+	* web page for each given key that acts as input for manipulating the
+	* visulization: 'W','A','S','D','R','F', and the 'Space' key
+	*
+	* @element inputState
+	* @for renderGlobal
+	* @return {Void}
+	*
+	*/
+	var inputState={
+
+		W: false,
+		A: false,
+		S: false,
+		D: false,
+		R: false,
+		F: false,
+		Q: false,
+		E: false,
+		Space: false,
+		switchPrimed: false
+
+	}
+
+
+	// The color of the background of the scene
+	var skyColor= 0xFFFFFF;
+
+	if(standard){
+		skyColor = 0x000000;
+	}
+
+	// The tree structure holding animation data
+	var movementTree=null;
+	var theCenter= new THREE.Vector3(0,0,0);
+
+	// The part directly in front of the camera, if any such part exists
+	var objectOfInterest=null;
+
+	// The part being locked onto by using the 'F' key
+	var focusPoint=null;
+
+	// Name of the part being looked at, if there is any such part
+	var mouseOverText="";
+
+	// Time dialation coefficeint
+	var zoom=0.2;
+
+	// Base Accelleration
+	var theSpeed=0.2;
+
+	// Accelleration bonus variables
+	var theBoost=1; // Initial accelleration bonus
+	var boostLim=25; // Limit to accelleration bonus
+	var boostInc=0.1; // Rate of accelleration bonus increase
+
+	// Coefficient of drag camera experiences
+	var theDrag=0.96;
+
+	// Angles of camera
+	var camYaw=0;
+	var camPitch=Math.PI/2;
+
+	// The momentum of the camera
+	var momentum= new THREE.Vector3(0,0,0);
+
+	// The scene of the assembly animation
+	var scene = new THREE.Scene();
+
+	// The camera
+	var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 5, 30000 );
+				 /*new THREE.OrthographicCamera(	10*window.innerWidth/-2, 10*window.innerWidth/2,
+					 							10*window.innerHeight/-2, 10*window.innerHeight/2,
+												5, 70000);*/
+	camera.position.x=0;
+	camera.position.z=0;
+	camera.position.y=0;
+
+	// The variable holding the state of whether or not the pointer is locked
+	var pointerIsLocked=false;
+
+
+	// Setting up the renderer with the default color and display size
+	var renderer = new THREE.WebGLRenderer();
+	renderer.setClearColor( skyColor, 1 );
+	renderer.setSize( window.innerWidth*0.98, window.innerHeight*0.96);
+	renderer.setFaceCulling(THREE.CullFaceNone,THREE.FrontFaceDirectionCCW);
+	document.body.appendChild( renderer.domElement );
+
+	// Setting camera to Yaw-Pitch-Roll configuration
+	camera.rotation.reorder('YXZ');
+
+
+	// Adding in a whole bunch of lights for the scene, so the parts are well-lit
+	var directionalLight = new THREE.DirectionalLight( 0x888888 );
+			directionalLight.position.x = 0;
+			directionalLight.position.y = 0;
+			directionalLight.position.z = 1;
+			directionalLight.position.normalize();
+			scene.add( directionalLight );
+
+	var directionalLight = new THREE.DirectionalLight( 0x888888 );
+			directionalLight.position.x = 0;
+			directionalLight.position.y = 1;
+			directionalLight.position.z = 0;
+			directionalLight.position.normalize();
+			scene.add( directionalLight );
+
+	var directionalLight = new THREE.DirectionalLight( 0x888888 );
+			directionalLight.position.x = 1;
+			directionalLight.position.y = 0;
+			directionalLight.position.z = 0;
+			directionalLight.position.normalize();
+			scene.add( directionalLight );
+	var directionalLight = new THREE.DirectionalLight( 0x888888 );
+			directionalLight.position.x = 0;
+			directionalLight.position.y = 0;
+			directionalLight.position.z = -1;
+			directionalLight.position.normalize();
+			scene.add( directionalLight );
+
+	var directionalLight = new THREE.DirectionalLight( 0x888888 );
+			directionalLight.position.x = 0;
+			directionalLight.position.y = -1;
+			directionalLight.position.z = 0;
+			directionalLight.position.normalize();
+			scene.add( directionalLight );
+
+	var directionalLight = new THREE.DirectionalLight( 0x888888 );
+			directionalLight.position.x = -1;
+			directionalLight.position.y = 0;
+			directionalLight.position.z = 0;
+			directionalLight.position.normalize();
+			scene.add( directionalLight );
+
+
+	// Adding in one more light
+	var sunLight = new THREE.SpotLight( 0xaa5533, 6, 32000, 1.2, 1, 1 );
+			sunLight.position.set( 4000, 4000, 4000 );
+			scene.add( sunLight );
+
+
+
+	var theFog=new THREE.Fog( skyColor, 4000, 6000 );
+	scene.fog=theFog;
+
+	var theXAxis=null;
+	var theYAxis=null;
+	var theZAxis=null;
+	var xRet=null;
+	var yRet=null;
+
+
+
+
+	// Adding a whole bunch of event listeners for input
+	document.getElementById("theDisplay").addEventListener("wheel", zoomIt);
+	document.addEventListener('pointerlockchange', lockChange, false);
+	document.addEventListener('mozpointerlockchange', lockChange, false);
+	document.addEventListener('webkitpointerlockchange', lockChange, false);
+	document.addEventListener('keydown', registerDown , false);
+	document.addEventListener('keyup', registerUp , false);
+
+	// Inserts the file loading manager into the document
+	document.getElementById('fileinput').addEventListener('change', readMultipleFiles, false);
 }

@@ -1,5 +1,22 @@
 ;
 
+
+if( typeof(startupScripts) == 'undefined'){
+
+	var startupScripts = [
+		function(){},
+		function(){},
+		function(){},
+		function(){},
+		function(){},
+		function(){},
+		function(){},
+		function(){}
+	];
+
+}
+
+
 /**
 *
 * Accepts a fileinput event, presumably from a file upload event listener, and assigns
@@ -15,7 +32,7 @@
 function readMultipleFiles(evt) {
 	//Retrieve all the files from the FileList object
 	var files = evt.target.files;
-
+scriptBase
 	if (files) {
 		for (var i=0, f; f=files[i]; i++) {
 
@@ -49,8 +66,6 @@ function readMultipleFiles(evt) {
 }
 
 
-// Inserts the file loading manager into the document
-document.getElementById('fileinput').addEventListener('change', readMultipleFiles, false);
 
 
 
@@ -115,4 +130,11 @@ function loadParts (){
 		requestAdvance(1);
 	}
 
+}
+
+
+startupScripts[0] = function (){
+	// Inserts the file loading manager into the document
+	document.getElementById('fileinput').addEventListener('change', readMultipleFiles, false);
+	
 }

@@ -1,12 +1,22 @@
 ;
 
 
+if( typeof(startupScripts) == 'undefined'){
 
-//
-//    Pretty Important: Keep this as true unless/until you've incorperated some other
-//                      method of getting file input/output
-//
-var manualFileInput=true;
+	var startupScripts = [
+		function(){},
+		function(){},
+		function(){},
+		function(){},
+		function(){},
+		function(){},
+		function(){},
+		function(){}
+	];
+
+}
+
+
 
 
 // Put recieved data about assembly into here. The code handles the rest.
@@ -84,134 +94,9 @@ function sendData(theXMLText){
 
 
 
-var skyColor= 0xFFFFFF;
-var assemblyPairs=[];
-var namePairs=[];
-var confDirs=null;
-var unconfDirs=null;
-var theDirections=[];
-var theXML=null;
-var thePos= new THREE.Vector3(1,0,0);
-var lastMouse=null;
-var theDistance= 300;
-var theVectors= []; //new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0x0000ff}))
-
-var theEul= new THREE.Euler(0,0,0,'XYZ');
-var baseQuat = new THREE.Quaternion(1,0,0,0);
-var deltaQuat = new THREE.Quaternion(1,0,0,0);
-
-var leftDrag = false;
-var rightDrag = false;
-
-var textFile=null;
-
-var wireSettings={transparent: true, opacity: 0.1, color: 0x444444, wireframe: false};
 
 
-// Array for storing fileReaders to keep track of them
-var fileReaders=[];
 
-// Array for processed STLs
-var STLs=[];
-
-//  Array for processed parts
-var parts=[];
-
-
-var lastPair=null;
-var currentPair=null;
-
-var theWidth=document.getElementById("display").clientWidth;
-var theHeight= document.getElementById("display").clientHeight;
-
-// The scene of the assembly animation
-var scene = new THREE.Scene();
-
-// The camera
-var camera = new THREE.PerspectiveCamera( 75, theWidth/theHeight, 1, 16000 );
-
-
-var theXAxis = null;
-var theYAxis = null;
-var theZAxis = null;
-var theAddAxis = null;
-var xRet=null;
-var yRet=null;
-
-// Setting up the renderer with the default color and display size
-var renderer = new THREE.WebGLRenderer();
-renderer.setClearColor( skyColor, 1 );
-renderer.setSize(theWidth,theHeight);
-console.log(theWidth);
-console.log(theHeight);
-document.getElementById("display").appendChild( renderer.domElement );
-
-
-// Setting up the table
-var theTable= $('#table_id').DataTable({
-	"scrollY": "300px",
-	"scroller": true,
-	"deferRender": false,
-	"paging": false,
-	"searching": false
-});
-
-
-// Setting camera to Yaw-Pitch-Roll configuration
-camera.rotation.reorder('YXZ');
-camera.position.x=1;
-camera.position.y=1;
-camera.position.z=1;
-console.log(camera.position);
-
-
-// Adding in a whole bunch of lights for the scene, so the parts are well-lit
-var directionalLight = new THREE.DirectionalLight( 0x888888 );
-		directionalLight.position.x = 0;
-		directionalLight.position.y = 0;
-		directionalLight.position.z = 1;
-		directionalLight.position.normalize();
-		scene.add( directionalLight );
-
-var directionalLight = new THREE.DirectionalLight( 0x888888 );
-		directionalLight.position.x = 0;
-		directionalLight.position.y = 1;
-		directionalLight.position.z = 0;
-		directionalLight.position.normalize();
-		scene.add( directionalLight );
-
-var directionalLight = new THREE.DirectionalLight( 0x888888 );
-		directionalLight.position.x = 1;
-		directionalLight.position.y = 0;
-		directionalLight.position.z = 0;
-		directionalLight.position.normalize();
-		scene.add( directionalLight );
-var directionalLight = new THREE.DirectionalLight( 0x888888 );
-		directionalLight.position.x = 0;
-		directionalLight.position.y = 0;
-		directionalLight.position.z = -1;
-		directionalLight.position.normalize();
-		scene.add( directionalLight );
-
-var directionalLight = new THREE.DirectionalLight( 0x888888 );
-		directionalLight.position.x = 0;
-		directionalLight.position.y = -1;
-		directionalLight.position.z = 0;
-		directionalLight.position.normalize();
-		scene.add( directionalLight );
-
-var directionalLight = new THREE.DirectionalLight( 0x888888 );
-		directionalLight.position.x = -1;
-		directionalLight.position.y = 0;
-		directionalLight.position.z = 0;
-		directionalLight.position.normalize();
-		scene.add( directionalLight );
-
-
-// Adding in one more light
-var sunLight = new THREE.SpotLight( 0x666666, 6, 32000, 1.2, 1, 1 );
-		sunLight.position.set( 4000, 4000, 4000 );
-		scene.add( sunLight );
 /**
 *
 * Given an HTML element corresponding to a "confirm" button, moves the parent element
@@ -286,6 +171,7 @@ function changeCurrentPair(theButton){
 
 }
 
+
 /**
 *
 * Given a jQuery object and a string, returns the first child of the given element with
@@ -311,9 +197,7 @@ function grab(theTree,theMember){
 }
 
 
-var time=0;
-var focusBox;
-var focusPoint;
+
 
 
 /**
@@ -491,8 +375,6 @@ function readMultipleFiles(evt) {
 }
 
 
-// Inserts the file loading manager into the document
-document.getElementById('fileinput').addEventListener('change', readMultipleFiles, false);
 
 
 /**
@@ -1172,7 +1054,9 @@ function doDrag(theEvent){
 	}
 }
 
-document.getElementById("display").addEventListener("mousemove", doDrag);
+
+
+
 
 /**
 *
@@ -1189,7 +1073,6 @@ function doZoom(theEvent){
 	theDistance=theDistance*Math.pow(1.001,theDelta*(-40));
 }
 
-document.getElementById("display").addEventListener("wheel", doZoom);
 
 
 
@@ -1350,6 +1233,7 @@ function removeVectorView(theButton){
 	theButton.onclick=function () {insertVectorView(this);};
 
 }
+
 
 
 /**
@@ -1832,5 +1716,157 @@ function flipCheck(theBox){
 		row.classList.add("unconfirmed");
 	}
 	focusRow.onclick();
+
+}
+
+
+
+
+startupScripts[4] = function() {
+	//
+	//    Pretty Important: Keep this as true unless/until you've incorperated some other
+	//                      method of getting file input/output
+	//
+	var manualFileInput=true;
+
+	var skyColor= 0xFFFFFF;
+	var assemblyPairs=[];
+	var namePairs=[];
+	var confDirs=null;
+	var unconfDirs=null;
+	var theDirections=[];
+	var theXML=null;
+	var thePos= new THREE.Vector3(1,0,0);
+	var lastMouse=null;
+	var theDistance= 300;
+	var theVectors= []; //new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0x0000ff}))
+
+	var theEul= new THREE.Euler(0,0,0,'XYZ');
+	var baseQuat = new THREE.Quaternion(1,0,0,0);
+	var deltaQuat = new THREE.Quaternion(1,0,0,0);
+
+	var leftDrag = false;
+	var rightDrag = false;
+
+	var textFile=null;
+
+	var wireSettings={transparent: true, opacity: 0.1, color: 0x444444, wireframe: false};
+
+
+
+	// Array for storing fileReaders to keep track of them
+	var fileReaders=[];
+
+	// Array for processed STLs
+	var STLs=[];
+
+	//  Array for processed parts
+	var parts=[];
+
+
+	var lastPair=null;
+	var currentPair=null;
+
+	var theWidth=document.getElementById("display").clientWidth;
+	var theHeight= document.getElementById("display").clientHeight;
+
+	// The scene of the assembly animation
+	var scene = new THREE.Scene();
+
+	// The camera
+	var camera = new THREE.PerspectiveCamera( 75, theWidth/theHeight, 1, 16000 );
+
+
+	var theXAxis = null;
+	var theYAxis = null;
+	var theZAxis = null;
+	var theAddAxis = null;
+	var xRet=null;
+	var yRet=null;
+
+	// Setting up the renderer with the default color and display size
+	var renderer = new THREE.WebGLRenderer();
+	renderer.setClearColor( skyColor, 1 );
+	renderer.setSize(theWidth,theHeight);
+	console.log(theWidth);
+	console.log(theHeight);
+	document.getElementById("display").appendChild( renderer.domElement );
+
+
+	// Setting up the table
+	var theTable= $('#table_id').DataTable({
+		"scrollY": "300px",
+		"scroller": true,
+		"deferRender": false,
+		"paging": false,
+		"searching": false
+	});
+
+
+	// Setting camera to Yaw-Pitch-Roll configuration
+	camera.rotation.reorder('YXZ');
+	camera.position.x=1;
+	camera.position.y=1;
+	camera.position.z=1;
+	console.log(camera.position);
+
+
+	// Adding in a whole bunch of lights for the scene, so the parts are well-lit
+	var directionalLight = new THREE.DirectionalLight( 0x888888 );
+			directionalLight.position.x = 0;
+			directionalLight.position.y = 0;
+			directionalLight.position.z = 1;
+			directionalLight.position.normalize();
+			scene.add( directionalLight );
+
+	var directionalLight = new THREE.DirectionalLight( 0x888888 );
+			directionalLight.position.x = 0;
+			directionalLight.position.y = 1;
+			directionalLight.position.z = 0;
+			directionalLight.position.normalize();
+			scene.add( directionalLight );
+
+	var directionalLight = new THREE.DirectionalLight( 0x888888 );
+			directionalLight.position.x = 1;
+			directionalLight.position.y = 0;
+			directionalLight.position.z = 0;
+			directionalLight.position.normalize();
+			scene.add( directionalLight );
+	var directionalLight = new THREE.DirectionalLight( 0x888888 );
+			directionalLight.position.x = 0;
+			directionalLight.position.y = 0;
+			directionalLight.position.z = -1;
+			directionalLight.position.normalize();
+			scene.add( directionalLight );
+
+	var directionalLight = new THREE.DirectionalLight( 0x888888 );
+			directionalLight.position.x = 0;
+			directionalLight.position.y = -1;
+			directionalLight.position.z = 0;
+			directionalLight.position.normalize();
+			scene.add( directionalLight );
+
+	var directionalLight = new THREE.DirectionalLight( 0x888888 );
+			directionalLight.position.x = -1;
+			directionalLight.position.y = 0;
+			directionalLight.position.z = 0;
+			directionalLight.position.normalize();
+			scene.add( directionalLight );
+
+
+	// Adding in one more light
+	var sunLight = new THREE.SpotLight( 0x666666, 6, 32000, 1.2, 1, 1 );
+			sunLight.position.set( 4000, 4000, 4000 );
+			scene.add( sunLight );
+
+
+	var time=0;
+	var focusBox;
+	var focusPoint;
+
+	// Inserts the file loading manager into the document
+	document.getElementById('fileinput').addEventListener('change', readMultipleFiles, false);
+	document.getElementById("display").addEventListener("mousemove", doDrag);
+	document.getElementById("display").addEventListener("wheel", doZoom);
 
 }
