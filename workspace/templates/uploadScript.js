@@ -32,7 +32,6 @@ if( typeof(startupScripts) == 'undefined'){
 function readMultipleFiles(evt) {
 	//Retrieve all the files from the FileList object
 	var files = evt.target.files;
-scriptBase
 	if (files) {
 		for (var i=0, f; f=files[i]; i++) {
 
@@ -48,8 +47,8 @@ scriptBase
 					return function(e) {
 					//console.log(f.name);
 						var contents = e.target.result;
-						if(r.result!=null){
-							STLs.push(r.result);
+						if(r.result!==null){
+							STLs.push({ Name: f.name, Data: arrayToString(r.result)});
 						}
 						loadParts();
 					};
@@ -98,7 +97,7 @@ function loadParts (){
 
 	// Executes if all files are loaded
 	if(pos===lim){
-		console.log("ALL DONE");
+		console.log("Processing model data...");
 		parts.length=0;
 		pos=0;
 		var partGeom=null;
@@ -121,13 +120,14 @@ function loadParts (){
 				parts.push({
 					Mesh: partMesh,
 					Name: fileReaders[pos].Name
-				})
-				scene.add(partMesh);
+				});
 
 			}
 			pos++;
 		}
-		requestAdvance(1);
+		console.log("Model data processed");
+		console.log("Sending model data to server...");
+		giveModels();
 	}
 
 }
@@ -136,5 +136,5 @@ function loadParts (){
 startupScripts[0] = function (){
 	// Inserts the file loading manager into the document
 	document.getElementById('fileinput').addEventListener('change', readMultipleFiles, false);
-	
+
 }

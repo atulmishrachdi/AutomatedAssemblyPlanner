@@ -218,7 +218,7 @@ if( typeof(startupScripts) == 'undefined'){
 
 function advanceStage(response,status){
 
-	if(response.status === 200){
+	if(status === "success"){
 		console.log(response.responseText);
 		var contentElem = document.getElementById("stageContent");
 		contentElem.innerHTML = response.responseText;
@@ -227,56 +227,89 @@ function advanceStage(response,status){
 		}
 		(startupScripts[stage])();
 	}
+    else{
+        alert("Server returned status '"+status+"'");
+    }
 
 }
 
 function updateProg(response,status){
 
-    if(status === "success"){
-        if(response.prog <= prog){
-            checkinWait = checkinWait * 2;
-        }
-        else{
-            checkinWait = checkinWait / 2;
-        }
-        if(response.stage === stage){
-            updateLoad();
-            return;
-        }
-        else{
+	if(status === "success"){
+		if(response.prog <= prog){
+			checkinWait = checkinWait * 2;
+		}
+		else{
+			checkinWait = checkinWait / 2;
+		}
+		if(response.stage === stage){
+			updateLoad();
+			return;
+		}
+		else{
 			stage = response.stage;
-            updateLoad();
-            clearInterval(updateProg);
-            requestAdvance(response.stage);
-        }
-    }
-    else{
-        alert("Experiencing Connection Problems");
-    }
+			updateLoad();
+			clearInterval(updateProg);
+			requestAdvance(response.stage);
+		}
+	}
+	else{
+		alert("Server returned status '"+status+"'");
+	}
 
 }
 
+
+function giveModelsResponse(response,status){
+
+	if(status === "success"){
+		if(response.success !== true){
+			alert("Failed to upload models.");
+		}
+		requestAdvance(1);
+	}
+	else{
+		alert("Server returned status '"+status+"'");
+	}
+
+}
+
+function setID(response,status){
+
+	if(status === "success"){
+		sessID = response.responseJSON.sessID;
+		console.log("Server assigned ID: " + response.responseJSON.sessID);
+	}
+	else{
+		alert("Server returned status '"+status+"'");
+	}
+
+}
+
+
 function requestAdvance(reqStage){
 
+	stage = reqStage;
 	console.log("--->>"+reqStage);
-    $.ajax({
-        complete: advanceStage,
-        dataType: "json",
-        method: "GET",
-        timeout: 10000,
-        url: "/stage/"+reqStage
-    });
+	$.ajax({
+		complete: advanceStage,
+		dataType: "text",
+		method: "GET",
+		timeout: 10000,
+		url: "/stage/"+reqStage
+	});
 
 }
 
 function checkIn(){
 
+	console.log("Sending out check in");
     $.ajax({
         complete: updateProg,
         dataType: "json",
         method: "POST",
         timeout: 10000,
-        url: "/",
+        url: "/checkIn",
         data: {
             stage: stage,
             sessID: sessID,
@@ -287,4 +320,31 @@ function checkIn(){
 
 }
 
+function giveModels(){
+	console.log(STLs);
+	$.ajax({
+		complete: giveModelsResponse,
+		contentType: "application/json;charset=UTF-8",
+		dataType: "json",
+		method: "POST",
+		timeout: 10000,
+		url: "/giveModels",
+		data: JSON.stringify({ models: STLs })
+	});
+
+}
+
+function getID(){
+
+	$.ajax({
+		complete: setID,
+		dataType: "json",
+		method: "POST",
+		timeout: 10000,
+		url: "/getID"
+	});
+
+}
+
+getID();
 requestAdvance(0);

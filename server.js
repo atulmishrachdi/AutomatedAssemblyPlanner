@@ -10,12 +10,12 @@ const handlebars = require('handlebars');
 const fs = require('fs');
 const exec = require('child_process').exec;
 const execSync = require('child_process').execSync;
+const crypto = require('crypto');
 const app = express();
 const port = 3000;
 const sessionRoute = fs.realpathSync(".")+"/workspace";
 const tempRoute = sessionRoute+"/templates";
 const theTimeout = 1000*60*60*24;
-var theDate = new Date();
 
 var contentManifest = {
 
@@ -127,7 +127,8 @@ function getHex( theChar ){
 
 	var hex = "0123456789ABCDEF";
 	var bottom = theChar%16;
-	var top = (theChar/16)%16;
+	var top = Math.floor(theChar/16)%16;
+	// console.log("Bottom: "+bottom+" Top: "+top+" -> "+hex[top]+hex[bottom]);
 	return hex[top]+hex[bottom];
 
 }
@@ -135,8 +136,7 @@ function getHex( theChar ){
 function makeID(){
 
 	var idLen = 16;
-	var array = new Uint8Array(idLen);
-	window.crypto.getRandomValues(array);
+	var array =  crypto.randomBytes(idLen);
 	var result = "";
 	var check1 = 0;
 	var check2 = 0;
@@ -145,29 +145,16 @@ function makeID(){
 
 	var idPos = 0;
 	while(idPos < idLen){
-		if(idPos & 1 != 0){
+		if(idPos % 2 <= 0){
 			check1 += array[idPos];
 		}
-		if(idPos & 2 != 0){
-			check2 += array[idPos];
-		}		if(idPos & 1 != 0){
-			check1 += array[idPos];
-		}
-		if(idPos & 2 != 0){
+		if(idPos % 4 <= 1){
 			check2 += array[idPos];
 		}
-		if(idPos & 4 != 0){
+		if(idPos % 8 <= 3){
 			check4 += array[idPos];
 		}
-		if(idPos & 8 != 0){
-			check8 += array[idPos];
-		}
-		result = result + getHex(array[idPos]);
-		idPos++;
-		if(idPos & 4 != 0){
-			check4 += array[idPos];
-		}
-		if(idPos & 8 != 0){
+		if(idPos % 16 <= 7){
 			check8 += array[idPos];
 		}
 		result = result + getHex(array[idPos]);
@@ -176,52 +163,48 @@ function makeID(){
 
 	result = result + getHex(check1) + getHex(check2) + getHex(check4) + getHex(check8);
 
+	return result;
+
 }
 
 
 function makeSession(){
 
-    var theId = makeID();
-    while( typeof sessions[theId] != 'undefined'){
-        sweepSessions();
-        theId = makeID();
-    var bodyParser = require('body-parser');
-    }
-    return {
-        filePath: sessionRoute + "/" +theID,
-        id: theID,
-        startTime: theDate.now(),
-        stage: 0,
-        state: {
-            models: [],
-            partsPropertiesIn: "",
-            partsPropertiesOut: "",
-            dirConfirmIn: "",
-            dirConfirmOut: "",
-            renderIn:""
-        }
-    }
+	var theID = makeID();
+	while( typeof (sessions[theID]) !== 'undefined'){
+		sweepSessions();
+		theID = makeID();
+		var bodyParser = require('body-parser');
+	}
+	return {
+		filePath: sessionRoute + "/" +theID,
+		id: theID,
+		startTime: Date.now(),
+		stage: 0,
+		state: {
+			models: [],
+			partsPropertiesIn: "",
+			partsPropertiesOut: "",
+			dirConfirmIn: "",
+			dirConfirmOut: "",
+			renderIn:""
+		}
+	};
 
 }
 
 
 
-function basicResponse(response, theID){
-
-    return function(error,stdout,stderr){
-        response.json({
-            sessID: theID,
-            failed: (error === null)
-        });
-    }
-
-}
 
 function runResponse(exeFile,sessID,textFile,textData){
 
-    return (function(){
-            exec(exeFile, sessions[sessID].filePath, "y", "1", "0.5", "y", "y",basicResponse(response,sessID));
-    });
+	return (function(){
+			exec("" + exeFile + " " + sessions[sessID].filePath + "  y  1  0.5  y  y", null);
+			response.json({
+				sessID: theID,
+				failed: (error === null)
+			});
+	});
 
 }
 
@@ -258,38 +241,39 @@ function verifResponse(response, theID){
 
 
 function progResponse(response, theID, theFile, session, field){
-    fs.readFile(session.filePath+"/intermediates/prog.txt",
-        (function(err,data){
-            var prog;
-            if(data !== null){
-                prog = data.length;
-            }
-            else{
-                prog = 0;
-            }
-            fs.readFile(theFile,
-                (function(err,data){
-                    if(data !== null){
-                        session.state[field] = data;
-                        response.json({
-                            sessID: theID,
-                            progress: prog,
-                            data: data,
-                            failed: false
-                        });
-                    }
-                    else{
-                        response.json({
-                            sessID: theID,
-                            progress: prog,
-                            data: null,
-                            failed: false
-                        });
-                    }
-                })
-            );
-        })
-    );
+	fs.readFile(session.filePath+"/intermediates/prog.txt",
+		(function(err,data){
+			var prog;
+			if(data !== null){
+				prog = data.length;
+			}
+			else{
+				prog = 0;
+			}
+			fs.readFile(theFile,
+				(function(err,data){
+					console.log("Read in prog, result was: "+data);
+					if(data !== null){
+						session.state[field] = data;
+						response.json({
+							sessID: theID,
+							progress: prog,
+							data: data,
+							failed: false
+						});
+					}
+					else{
+						response.json({
+							sessID: theID,
+							progress: prog,
+							data: null,
+							failed: false
+						});
+					}
+				})
+			);
+		})
+	);
 }
 
 
@@ -297,27 +281,21 @@ function progResponse(response, theID, theFile, session, field){
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.post('/', (request, response) => {
+app.post('/checkIn', (request, response) => {
 
     var data = request.body;
 
     var stage = data.stage;
     var sessData;
     var sessID;
-    if(stage === 0){
-        sessData = makeSession();
-        sessID = sessData.id;
-        sessions[sessID] = sessData;
-    }
-    else{
-        sessID = data.sessID;
-        sessData = sessions[sessID];
-    }
+
+    sessID = data.sessID;
+    sessData = sessions[sessID];
+	console.log("Recieved check in from session "+sessID);
 
     switch(stage){
         //================================//================================//================================
         case 0:
-            setupSession(sessData.filePath,sessData.models);
             execResponse("FastenerDetection.exe",sessID,"","");
             break;
         //================================//================================//================================
@@ -363,7 +341,6 @@ app.get('/', (request, response) => {
 app.get('/static/:name', (request, response) => {
 
 	var name = request.params.name;
-	console.log(name);
 	response.send(content[name]);
 
 });
@@ -372,7 +349,6 @@ app.get('/static/:name', (request, response) => {
 app.get('/stage/:stage', (request, response) => {
 
     var stage = request.params.stage;
-	console.log(stage);
 
     var context = {};
 
@@ -380,7 +356,6 @@ app.get('/stage/:stage', (request, response) => {
 		case "0":
 			context.stageHTML = content.uploadMain;
 			context.stageStyle = content.uploadStyle;
-			console.log(context);
 			break;
 		case "1":
 			context.stageHTML = content.progMain;
@@ -407,11 +382,37 @@ app.get('/stage/:stage', (request, response) => {
 			context.stageStyle = content.renderStyle;
 			break;
 	}
-	console.log(context);
-	console.log(stageTemplate(context));
 	response.send(stageTemplate(context));
 
 });
+
+app.post('/getID', (request, response) => {
+
+	var sessData = makeSession();
+	var sessID = sessData.id;
+	sessions[sessID] = sessData;
+	console.log("Set up session "+sessID);
+	response.json({
+		sessID: sessID
+	});
+
+
+});
+
+
+app.post('/giveModels', (request, response) => {
+
+	console.log(request.body);
+	var sessData = sessions[request.data.sessID];
+	setupSession(sessData.filePath,sessData.models);
+	console.log("Recieved models for "+request.data.sessID);
+	response.json({
+		success: true
+	});
+
+
+});
+
 
 app.listen(port, (err) => {
     if (err) {
