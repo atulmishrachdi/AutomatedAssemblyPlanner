@@ -45,11 +45,6 @@ function readMultipleFiles(evt) {
 			if(extension.toLowerCase()==="stl"){
 				r.onload = (function(f) {
 					return function(e) {
-					//console.log(f.name);
-						var contents = e.target.result;
-						if(r.result!==null){
-							STLs.push({ Name: f.name, Data: arrayToString(r.result)});
-						}
 						loadParts();
 					};
 				})(f);
@@ -97,38 +92,71 @@ function loadParts (){
 
 	// Executes if all files are loaded
 	if(pos===lim){
-		console.log("Processing model data...");
-		parts.length=0;
-		pos=0;
-		var partGeom=null;
-		var partMesh;
-		var theCenter;
-		var ext;
-		while(pos<lim){
-			ext=grabExtension(fileReaders[pos].Name)[0];
-			if(ext.toLowerCase()==="stl"){
-				partGeom=parseStl(fileReaders[pos].Reader.result);
-				if(partGeom===null){
-					partGeom=parseStlBinary(fileReaders[pos].Reader.result);
-				}
-				//console.log(partGeom);
-				var postMaterial =
-				partMesh=new THREE.Mesh(
-						partGeom,
-						getStdMaterial()
-				);
-				parts.push({
-					Mesh: partMesh,
-					Name: fileReaders[pos].Name
-				});
-
-			}
-			pos++;
-		}
-		console.log("Model data processed");
-		console.log("Sending model data to server...");
-		giveModels();
+		spinOff(handleModels);
 	}
+
+}
+
+function handleModels(){
+
+	console.log("Processing model data...");
+	parts.length=0;
+	var pos=0;
+	var lim=fileReaders.length;
+	var partGeom=null;
+	var partMesh;
+	var theCenter;
+	var ext;
+	var theReader;
+	while(pos<lim){
+		theReader = fileReaders[pos];
+		spinOff((function(r){
+			return function(){
+				ext=grabExtension(r.Name)[0];
+				if(ext.toLowerCase()==="stl"){
+					partGeom=parseStl(r.Reader.result);
+					if(partGeom===null){
+						partGeom=parseStlBinary(r.Reader.result);
+					}
+					//console.log(partGeom);
+					var postMaterial =
+					partMesh=new THREE.Mesh(
+							partGeom,
+							getStdMaterial()
+					);
+					parts.push({
+						Mesh: partMesh,
+						Name: r.Name
+					});
+
+				}
+			}
+		}) (theReader));
+		pos++;
+	}
+	console.log("Model data processed");
+
+	spinOff(handleSTLs);
+
+}
+
+function handleSTLs(){
+
+	parts.length=0;
+	var pos=0;
+	var lim=fileReaders.length;
+	var ext;
+	while(pos<lim){
+		console.log("Stringing model data");
+		ext=grabExtension(fileReaders[pos].Name)[0];
+		if(ext.toLowerCase()==="stl"){
+			STLs.push({ Name: fileReaders[pos].Reader.name, Data: arrayToString(fileReaders[pos].Reader.result)});
+		}
+		pos++;
+	}
+	//console.log(f.name);
+
+	spinOff(giveModels());
 
 }
 

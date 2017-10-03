@@ -321,7 +321,7 @@ function checkIn(){
 }
 
 function giveModels(){
-	console.log(STLs);
+	console.log("Sending off models");
 	$.ajax({
 		complete: giveModelsResponse,
 		contentType: "application/json;charset=UTF-8",
@@ -344,6 +344,10 @@ function getID(){
 		url: "/getID"
 	});
 
+}
+
+function spinOff(func) {
+    setTimeout(func, 0);
 }
 
 getID();
