@@ -59,6 +59,10 @@ var timeAdjustment = 0;
 
 var standard = false;
 
+var modelNum = 0;
+var stlNum = 0;
+var uploadNum = 0;
+
 
 // Holds the state of button press inputs to smooth out control response
 
@@ -223,7 +227,8 @@ function advanceStage(response,status){
 		var contentElem = document.getElementById("stageContent");
 		contentElem.innerHTML = response.responseText;
 		if(stage === 1 || stage === 3 || stage === 5 || stage === 7){
-			setInterval(updateProg);
+			checkinWait = 512;
+			setTimeout(updateProg,checkinWait);
 		}
 		(startupScripts[stage])();
 	}
@@ -235,26 +240,28 @@ function advanceStage(response,status){
 
 function updateProg(response,status){
 
+	console.log("Update Prog Status:" + status);
 	if(status === "success"){
-		if(response.prog <= prog){
+		if(response.responseJSON.prog <= prog){
 			checkinWait = checkinWait * 2;
 		}
 		else{
 			checkinWait = checkinWait / 2;
 		}
-		if(response.stage === stage){
+		if(response.responseJSON.stage === stage){
 			updateLoad();
+			setTimeout(updateProg,checkinWait);
 			return;
 		}
 		else{
-			stage = response.stage;
+			stage = response.responseJSON.stage;
 			updateLoad();
-			clearInterval(updateProg);
-			requestAdvance(response.stage);
+			requestAdvance(response.responseJSON.stage);
 		}
 	}
 	else{
-		alert("Server returned status '"+status+"'");
+		//alert("Server returned status '"+status+"'");
+		alert("Server did not return success");
 	}
 
 }
@@ -263,13 +270,22 @@ function updateProg(response,status){
 function giveModelsResponse(response,status){
 
 	if(status === "success"){
-		if(response.success !== true){
+		var sucVal = (response.responseJSON.success !== true);
+		console.log(sucVal);
+		if(sucVal){
 			alert("Failed to upload models.");
+		}
+		else{
+			uploadNum++;
+		}
+		if(uploadNum < modelNum){
+			return;
 		}
 		requestAdvance(1);
 	}
 	else{
-		alert("Server returned status '"+status+"'");
+		//alert("Server returned status '"+status+"'");
+		alert("Server did not return success");
 	}
 
 }
@@ -281,7 +297,8 @@ function setID(response,status){
 		console.log("Server assigned ID: " + response.responseJSON.sessID);
 	}
 	else{
-		alert("Server returned status '"+status+"'");
+		//alert("Server returned status '"+status+"'");
+		alert("Server did not return success");
 	}
 
 }
@@ -321,16 +338,23 @@ function checkIn(){
 }
 
 function giveModels(){
+	if(STLs.length < modelNum){
+		return;
+	}
 	console.log("Sending off models");
-	$.ajax({
-		complete: giveModelsResponse,
-		contentType: "application/json;charset=UTF-8",
-		dataType: "json",
-		method: "POST",
-		timeout: 10000,
-		url: "/giveModels",
-		data: JSON.stringify({ models: STLs })
-	});
+	var pos = 0;
+	while(pos < modelNum){
+		$.ajax({
+			complete: giveModelsResponse,
+			contentType: "application/json;charset=UTF-8",
+			dataType: "json",
+			method: "POST",
+			timeout: 10000,
+			url: "/giveModel",
+			data: JSON.stringify( { sessID: sessID, Model: STLs[pos] } )
+		});
+		pos++;
+	}
 
 }
 

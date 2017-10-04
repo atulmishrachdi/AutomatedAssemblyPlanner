@@ -117,10 +117,6 @@ function setupSession(thePath,theModels){
 	fs.mkdirSync(thePath+"/models");
 	fs.mkdirSync(thePath+"/XML");
 
-	for( p in theModels){
-		fs.writeFileSync(thePath+"/models/" + p.Name, p.Data, 'ascii');
-	}
-
 }
 
 function getHex( theChar ){
@@ -278,7 +274,7 @@ function progResponse(response, theID, theFile, session, field){
 
 
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '500gb'}));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post('/checkIn', (request, response) => {
@@ -391,6 +387,7 @@ app.post('/getID', (request, response) => {
 	var sessData = makeSession();
 	var sessID = sessData.id;
 	sessions[sessID] = sessData;
+	setupSession(sessData.filePath);
 	console.log("Set up session "+sessID);
 	response.json({
 		sessID: sessID
@@ -400,16 +397,15 @@ app.post('/getID', (request, response) => {
 });
 
 
-app.post('/giveModels', (request, response) => {
+app.post('/giveModel', (request, response) => {
 
-	console.log(request.body);
-	var sessData = sessions[request.data.sessID];
-	setupSession(sessData.filePath,sessData.models);
-	console.log("Recieved models for "+request.data.sessID);
+	var sessData = sessions[request.body.sessID];
+	var model = request.body.Model;
+	sessData.state.models.push(model);
+	fs.writeFileSync(sessData.filePath+"/models/" + model.Name, model.Data, 'ascii');
 	response.json({
 		success: true
 	});
-
 
 });
 

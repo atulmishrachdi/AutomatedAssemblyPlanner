@@ -108,6 +108,19 @@ function handleModels(){
 	var theCenter;
 	var ext;
 	var theReader;
+
+	while(pos<lim){
+		theReader = fileReaders[pos];
+		ext=grabExtension(theReader.Name)[0];
+		if(ext.toLowerCase()==="stl"){
+			modelNum++;
+		}
+		pos++;
+	}
+
+	console.log("Found "+modelNum+" models");
+
+	pos = 0;
 	while(pos<lim){
 		theReader = fileReaders[pos];
 		spinOff((function(r){
@@ -128,7 +141,7 @@ function handleModels(){
 						Mesh: partMesh,
 						Name: r.Name
 					});
-
+					spinOff(handleSTLs);
 				}
 			}
 		}) (theReader));
@@ -136,27 +149,34 @@ function handleModels(){
 	}
 	console.log("Model data processed");
 
-	spinOff(handleSTLs);
-
 }
 
 function handleSTLs(){
+
+	stlNum++;
+	if(stlNum < modelNum){
+		return;
+	}
+	console.log("Handling "+stlNum+" model files");
 
 	parts.length=0;
 	var pos=0;
 	var lim=fileReaders.length;
 	var ext;
 	while(pos<lim){
-		console.log("Stringing model data");
-		ext=grabExtension(fileReaders[pos].Name)[0];
-		if(ext.toLowerCase()==="stl"){
-			STLs.push({ Name: fileReaders[pos].Reader.name, Data: arrayToString(fileReaders[pos].Reader.result)});
-		}
+		theReader = fileReaders[pos];
+		spinOff((function(r){
+			return function(){
+				ext=grabExtension(r.Name)[0];
+				if(ext.toLowerCase()==="stl"){
+					STLs.push({ Name: r.Name, Data: arrayToString(r.Reader.result) });
+					spinOff(giveModels());
+				}
+			}
+		}) (theReader));
 		pos++;
 	}
-	//console.log(f.name);
 
-	spinOff(giveModels());
 
 }
 
