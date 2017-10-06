@@ -230,15 +230,30 @@ function advanceStage(response,status){
 		contentElem.innerHTML = response.responseText;
 		if(stage === 1 || stage === 3 || stage === 5 || stage === 7){
 			checkinWait = 512;
+			exec();
 			setTimeout(checkIn,checkinWait);
 		}
 		(startupScripts[stage])();
+		console.log(startupScripts[stage]);
 	}
     else{
         alert("Server returned status '"+status+"'");
     }
 
 }
+
+
+function execResp(response,status){
+
+	if(status === "success"){
+		console.log("Executed for stage "+stage);
+	}
+    else{
+        alert("Server returned status '"+status+"'");
+    }
+
+}
+
 
 function updateProg(response,status){
 
@@ -261,10 +276,9 @@ function updateProg(response,status){
 			return;
 		}
 		else{
-			stage = resp.stage;
 			theXMLText = resp.data;
 			updateLoad();
-			requestAdvance(resp.stage);
+			requestAdvance(stage+1);
 		}
 	}
 	else{
@@ -288,7 +302,6 @@ function giveModelsResponse(response,status){
 		if(uploadNum < modelNum){
 			return;
 		}
-		checkIn(0);
 		requestAdvance(1);
 	}
 	else{
@@ -335,6 +348,24 @@ function checkIn(){
         method: "POST",
         timeout: 10000,
         url: "/checkIn",
+        data: {
+            stage: stage,
+            sessID: sessID,
+            textData: outText
+        }
+    });
+
+}
+
+function exec(){
+
+	console.log("Sending out check in");
+    $.ajax({
+        complete: execResp,
+        dataType: "json",
+        method: "POST",
+        timeout: 10000,
+        url: "/exec",
         data: {
             stage: stage,
             sessID: sessID,

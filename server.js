@@ -231,7 +231,6 @@ function runResponse(response,exeFile,sessID,textFile,textData){
 	return (function(err,data){
 			fs.writeFileSync(sessions[sessID].filePath +"/prog.txt","0");
 			exec("mono " + exeFile + " " + sessions[sessID].filePath + "  y  1  0.5  y  y", exeDone(exeFile,sessID));
-			sessions[sessID].stage++;
 			response.json({
 				stage: sessions[sessID].stage,
 				progress: 0,
@@ -287,7 +286,6 @@ function progResponse(response, theID, theFile, session, field){
 			console.log("Read in data, result was: "+data);
 			if(typeof(data) !== "undefined"){
 				session.state[field] = data;
-				sessions[sessID].stage++;
 				response.json({
 					stage: session.stage,
 					progress: prog,
@@ -319,8 +317,40 @@ app.post('/checkIn', (request, response) => {
     var data = request.body;
 
     var stage = data.stage;
-    var sessData;
-    var sessID;
+    sessID = data.sessID;
+    sessData = sessions[sessID];
+	console.log("Recieved check in from session "+sessID+" for stage "+stage);
+	console.log(request.body);
+
+    switch(stage){
+        case "1":
+            progResponse(response, sessID, sessData.filePath+"/XML/parts_properties.xml", sessData, "partsPropertiesIn");
+            break;
+        //================================//================================//================================
+        case "3":
+            progResponse(response, sessID, sessData.filePath+"/XML/directionList.xml", sessData, "dirConfirmIn");
+            break;
+        //================================//================================//================================
+        case "5":
+            progResponse(response, sessID, sessData.filePath+"/XML/verification.xml", sessData, "dirConfirmIn");
+            break;
+        //================================//================================//================================
+        case "7":
+            progResponse(response, sessID, sessData.filePath+"/XML/solution.xml", sessData, "renderIn");
+            break;
+		default:
+			console.log("Invalid stage value '"+stage+"' fell through");
+    }
+
+});
+
+app.post('/exec', (request, response) => {
+
+    var data = request.body;
+
+    var stage = data.stage;
+
+	var textData = data.textData;
 
     sessID = data.sessID;
     sessData = sessions[sessID];
@@ -329,36 +359,20 @@ app.post('/checkIn', (request, response) => {
 
     switch(stage){
         //================================//================================//================================
-        case "0":
+        case "1":
             execResponse(response,"FastenerDetection.exe",sessID,"","");
             break;
         //================================//================================//================================
-        case "1":
-            progResponse(response, sessID, sessData.filePath+"/XML/parts_properties.xml", sessData, "partsPropertiesIn");
-            break;
-        //================================//================================//================================
-        case "2":
+        case "3":
             execResponse(response,"DisassemblyDirections.exe",sessID,sessData.filePath+"parts_properties2.xml",textData)
             break;
         //================================//================================//================================
-        case "3":
-            progResponse(response, sessID, sessData.filePath+"/XML/directionList.xml", sessData, "dirConfirmIn");
-            break;
-        //================================//================================//================================
-        case "4":
+        case "5":
             execResponse(response,"Verification.exe",sessID,sessData.filePath+"/XML/directionList2.xml",textData)
             break;
         //================================//================================//================================
-        case "5":
-            progResponse(response, sessID, sessData.filePath+"/XML/verification.xml", sessData, "dirConfirmIn");
-            break;
-        //================================//================================//================================
-        case "6":
-            execResponse(response,"AssemblyPlanning.exe",sessID,sessData.filePath+"/XML/directionList2.xml",textData)
-            break;
-        //================================//================================//================================
         case "7":
-            progResponse(response, sessID, sessData.filePath+"/XML/solution.xml", sessData, "renderIn");
+            execResponse(response,"AssemblyPlanning.exe",sessID,sessData.filePath+"/XML/directionList2.xml",textData)
             break;
 		default:
 			console.log("Invalid stage value '"+stage+"' fell through");
