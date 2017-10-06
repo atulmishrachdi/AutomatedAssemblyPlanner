@@ -1,4 +1,6 @@
 ﻿using Assembly_Planner;
+using System.IO;
+using System;
 
 namespace FastenerDetection
 {
@@ -7,7 +9,6 @@ namespace FastenerDetection
 
         static void Main(string[] args)
         {
-
             Program.doFastenerDetection(args);
 
         }

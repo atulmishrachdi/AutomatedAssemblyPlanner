@@ -65,6 +65,36 @@ var stageTemplate = handlebars.compile(content.stageBase);
 
 var sessions = {};
 
+
+function safeRead(file){
+
+	var result = null;
+	var done = false;
+	while(result === null){
+		try{
+			result = fs.readFileSync(file,'ascii');
+		}
+		catch(theError){
+			result = null;
+			switch(theError.code){
+				case "ETXTBSY":
+					console.log("File busy when trying to read file "+file);
+					break;
+				case "ENOENT":
+					console.log("No file found when trying to read file "+file);
+					result = "";
+					break;
+				default:
+					console.log("Experienced error "+theError+" when trying to read file "+file);
+					result = "";
+					break;
+			}
+		}
+	}
+	return result;
+
+}
+
 function killDir(thePath){
 
 	fs.readdir(thePath,
@@ -190,27 +220,36 @@ function makeSession(){
 }
 
 
+function exeDone(exeFile,sessID){
+	return (function(err,data){
+		console.log(exeFile+" finished for session "+sessID);
+	})
+}
 
+function runResponse(response,exeFile,sessID,textFile,textData){
 
-function runResponse(exeFile,sessID,textFile,textData){
-
-	return (function(){
-			exec("" + exeFile + " " + sessions[sessID].filePath + "  y  1  0.5  y  y", null);
+	return (function(err,data){
+			fs.writeFileSync(sessions[sessID].filePath +"/prog.txt","0");
+			exec("mono " + exeFile + " " + sessions[sessID].filePath + "  y  1  0.5  y  y", exeDone(exeFile,sessID));
+			sessions[sessID].stage++;
 			response.json({
-				sessID: theID,
-				failed: (error === null)
+				stage: sessions[sessID].stage,
+				progress: 0,
+				data: null,
+				failed: false
 			});
 	});
 
 }
 
-function execResponse(exeFile,sessID,textFile,textData){
+function execResponse(response,exeFile,sessID,textFile,textData){
 
+	console.log("Executing file '"+exeFile+"' for "+sessID);
     if(textFile === ""){
-        (runResponse(exeFile,sessID,textFile,textData))();
+        (runResponse(response,exeFile,sessID,textFile,textData))();
     }
     else{
-        writeFile(textFile,textData,runResponse(exeFile,sessID,textFile,textData));
+        fs.writeFile(textFile,textData,runResponse(response,exeFile,sessID,textFile,textData));
     }
 
 }
@@ -237,40 +276,38 @@ function verifResponse(response, theID){
 
 
 function progResponse(response, theID, theFile, session, field){
-	fs.readFile(session.filePath+"/intermediates/prog.txt",
+
+	var prog = safeRead(session.filePath+"/prog.txt");
+	if( prog === ""){
+		prog = "0";
+	}
+	console.log("Read in prog, result was: "+prog);
+	fs.readFile(theFile,'ascii',
 		(function(err,data){
-			var prog;
-			if(data !== null){
-				prog = data.length;
+			console.log("Read in data, result was: "+data);
+			if(typeof(data) !== "undefined"){
+				session.state[field] = data;
+				sessions[sessID].stage++;
+				response.json({
+					stage: session.stage,
+					progress: prog,
+					data: data,
+					failed: false
+				});
 			}
 			else{
-				prog = 0;
+				response.json({
+					stage: session.stage,
+					progress: prog,
+					data: null,
+					failed: false
+				});
 			}
-			fs.readFile(theFile,
-				(function(err,data){
-					console.log("Read in prog, result was: "+data);
-					if(data !== null){
-						session.state[field] = data;
-						response.json({
-							sessID: theID,
-							progress: prog,
-							data: data,
-							failed: false
-						});
-					}
-					else{
-						response.json({
-							sessID: theID,
-							progress: prog,
-							data: null,
-							failed: false
-						});
-					}
-				})
-			);
 		})
 	);
+
 }
+
 
 
 
@@ -287,41 +324,44 @@ app.post('/checkIn', (request, response) => {
 
     sessID = data.sessID;
     sessData = sessions[sessID];
-	console.log("Recieved check in from session "+sessID);
+	console.log("Recieved check in from session "+sessID+" for stage "+stage);
+	console.log(request.body);
 
     switch(stage){
         //================================//================================//================================
-        case 0:
-            execResponse("FastenerDetection.exe",sessID,"","");
+        case "0":
+            execResponse(response,"FastenerDetection.exe",sessID,"","");
             break;
         //================================//================================//================================
-        case 1:
+        case "1":
             progResponse(response, sessID, sessData.filePath+"/XML/parts_properties.xml", sessData, "partsPropertiesIn");
             break;
         //================================//================================//================================
-        case 2:
-            execResponse("DisassemblyDirections.exe",sessID,sessData.filePath+"parts_properties2.xml",textData)
+        case "2":
+            execResponse(response,"DisassemblyDirections.exe",sessID,sessData.filePath+"parts_properties2.xml",textData)
             break;
         //================================//================================//================================
-        case 3:
+        case "3":
             progResponse(response, sessID, sessData.filePath+"/XML/directionList.xml", sessData, "dirConfirmIn");
             break;
         //================================//================================//================================
-        case 4:
-            execResponse("Verification.exe",sessID,sessData.filePath+"/XML/directionList2.xml",textData)
+        case "4":
+            execResponse(response,"Verification.exe",sessID,sessData.filePath+"/XML/directionList2.xml",textData)
             break;
         //================================//================================//================================
-        case 5:
+        case "5":
             progResponse(response, sessID, sessData.filePath+"/XML/verification.xml", sessData, "dirConfirmIn");
             break;
         //================================//================================//================================
-        case 6:
-            execResponse("AssemblyPlanning.exe",sessID,sessData.filePath+"/XML/directionList2.xml",textData)
+        case "6":
+            execResponse(response,"AssemblyPlanning.exe",sessID,sessData.filePath+"/XML/directionList2.xml",textData)
             break;
         //================================//================================//================================
-        case 7:
+        case "7":
             progResponse(response, sessID, sessData.filePath+"/XML/solution.xml", sessData, "renderIn");
             break;
+		default:
+			console.log("Invalid stage value '"+stage+"' fell through");
     }
 
 });

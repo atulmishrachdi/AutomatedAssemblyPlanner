@@ -3,16 +3,16 @@
 
 if( typeof(startupScripts) == 'undefined'){
 
-	var startupScripts = [
-		function(){},
-		function(){},
-		function(){},
-		function(){},
-		function(){},
-		function(){},
-		function(){},
-		function(){}
-	];
+	var startupScripts = {
+		"0":function(){},
+		"1":function(){},
+		"2":function(){},
+		"3":function(){},
+		"4":function(){},
+		"5":function(){},
+		"6":function(){},
+		"7":function(){}
+	};
 
 }
 
@@ -181,7 +181,7 @@ function handleSTLs(){
 }
 
 
-startupScripts[0] = function (){
+startupScripts["0"] = function (){
 	// Inserts the file loading manager into the document
 	document.getElementById('fileinput').addEventListener('change', readMultipleFiles, false);
 

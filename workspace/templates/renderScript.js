@@ -4,18 +4,19 @@
 
 if( typeof(startupScripts) == 'undefined'){
 
-	var startupScripts = [
-		function(){},
-		function(){},
-		function(){},
-		function(){},
-		function(){},
-		function(){},
-		function(){},
-		function(){}
-	];
+	var startupScripts = {
+		"0":function(){},
+		"1":function(){},
+		"2":function(){},
+		"3":function(){},
+		"4":function(){},
+		"5":function(){},
+		"6":function(){},
+		"7":function(){}
+	};
 
 }
+
 
 
 /**
@@ -704,7 +705,7 @@ function showHideTreequence(){
 
 
 
-startupScripts[6] = function(){
+startupScripts["6"] = function(){
 	//
 	//    Pretty Important: Keep this as true unless/until you've incorperated some other
 	//                      method of getting file input/output
@@ -920,5 +921,5 @@ startupScripts[6] = function(){
 	document.addEventListener('keyup', registerUp , false);
 
 	renderParts();
-	
+
 }

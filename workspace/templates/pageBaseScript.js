@@ -57,6 +57,7 @@ var treequenceActive = false;
 
 var timeAdjustment = 0;
 
+
 var standard = false;
 
 var modelNum = 0;
@@ -65,6 +66,7 @@ var uploadNum = 0;
 
 
 // Holds the state of button press inputs to smooth out control response
+
 
 
 
@@ -204,16 +206,16 @@ var yRet=null;
 
 if( typeof(startupScripts) == 'undefined'){
 
-	var startupScripts = [
-		function(){},
-		function(){},
-		function(){},
-		function(){},
-		function(){},
-		function(){},
-		function(){},
-		function(){}
-	];
+	var startupScripts = {
+		"0":function(){},
+		"1":function(){},
+		"2":function(){},
+		"3":function(){},
+		"4":function(){},
+		"5":function(){},
+		"6":function(){},
+		"7":function(){}
+	};
 
 }
 
@@ -228,7 +230,7 @@ function advanceStage(response,status){
 		contentElem.innerHTML = response.responseText;
 		if(stage === 1 || stage === 3 || stage === 5 || stage === 7){
 			checkinWait = 512;
-			setTimeout(updateProg,checkinWait);
+			setTimeout(checkIn,checkinWait);
 		}
 		(startupScripts[stage])();
 	}
@@ -242,21 +244,27 @@ function updateProg(response,status){
 
 	console.log("Update Prog Status:" + status);
 	if(status === "success"){
-		if(response.responseJSON.prog <= prog){
+		var resp = response.responseJSON;
+		console.log(resp);
+		if(resp.failed){
+			alert("Something went wrong on the server, and so this process may not continue. Please contact the webmaster.");
+		}
+		if(resp.progress <= prog){
 			checkinWait = checkinWait * 2;
 		}
 		else{
 			checkinWait = checkinWait / 2;
 		}
-		if(response.responseJSON.stage === stage){
+		if(resp.data !== null /*Number.parseInt(resp.progress) < 100*/){
 			updateLoad();
-			setTimeout(updateProg,checkinWait);
+			setTimeout(checkIn,checkinWait);
 			return;
 		}
 		else{
-			stage = response.responseJSON.stage;
+			stage = resp.stage;
+			theXMLText = resp.data;
 			updateLoad();
-			requestAdvance(response.responseJSON.stage);
+			requestAdvance(resp.stage);
 		}
 	}
 	else{
@@ -271,7 +279,6 @@ function giveModelsResponse(response,status){
 
 	if(status === "success"){
 		var sucVal = (response.responseJSON.success !== true);
-		console.log(sucVal);
 		if(sucVal){
 			alert("Failed to upload models.");
 		}
@@ -281,6 +288,7 @@ function giveModelsResponse(response,status){
 		if(uploadNum < modelNum){
 			return;
 		}
+		checkIn(0);
 		requestAdvance(1);
 	}
 	else{
@@ -330,7 +338,6 @@ function checkIn(){
         data: {
             stage: stage,
             sessID: sessID,
-            models: (stage == 0) ? parts : [],
             textData: outText
         }
     });

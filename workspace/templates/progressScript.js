@@ -3,9 +3,9 @@
 
 function updateLoad(){
 
-    var theText = document.getElementByID("loadText");
-    var thePercent = document.getElementByID("loadPercent");
-    var theBar = document.getElementByID("loadProgress");
+    var theText = document.getElementById("loadText");
+    var thePercent = document.getElementById("loadPercent");
+    var theBar = document.getElementById("loadProgress");
     switch(stage){
         case 1:
             theText.innerHTML = "Anylizing Part Models...";
