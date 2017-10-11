@@ -200,65 +200,6 @@ function grab(theTree,theMember){
 
 
 
-/**
-*
-* The rendering function for the webpage
-*
-* @for directionConfirmGlobal
-* @return {Void}
-*
-*/
-var render = function () {
-
-	// The function that will manage frame requests
-	requestAnimationFrame( render );
-
-	if(lastPair!==null){
-		var holder=currentPair;
-		currentPair=lastPair;
-		deHighlight(currentPair);
-		currentPair=holder;
-		highlight(currentPair);
-		lastPair=null;
-	}
-
-	currentPair.Ref.Mesh.geometry.computeBoundingBox();
-	currentPair.Mov.Mesh.geometry.computeBoundingBox();
-	focusBox=currentPair.Ref.Mesh.geometry.boundingBox.clone();
-	focusBox.union(currentPair.Mov.Mesh.geometry.boundingBox);
-
-	focusPoint= new THREE.Vector3(
-								  (focusBox.min.x+focusBox.max.x)/2,
-								  (focusBox.min.y+focusBox.max.y)/2,
-								  (focusBox.min.z+focusBox.max.z)/2
-								 );
-
-	thePos.normalize();
-
-	thePos.applyEuler(theEul);
-	theEul.set(0,0,0,'XYZ');
-	thePos.multiplyScalar(theDistance);
-	camera.position.copy(thePos);
-	camera.position.add(focusPoint);
-	camera.lookAt(focusPoint);
-	camera.updateMatrix();
-
-	sunLight.position.set( (camera.position.x-focusPoint.x)*2+focusPoint.x,
-						   (camera.position.y-focusPoint.y)*2+focusPoint.y,
-						   (camera.position.z-focusPoint.z)*2+focusPoint.z );
-	sunLight.target.position=focusPoint;
-
-
-	time+=0.01;
-
-	updateAxisLines();
-
-	// Call for the render
-	renderer.render(scene, camera);
-};
-
-
-
 
 /**
 *
@@ -787,7 +728,7 @@ function doMouseDown(theEvent){
 		var theBox=currentPair.Mov.Mesh.geometry.boundingBox.clone();
 		var theArea = document.getElementById("display");
 		var areaW = theArea.clientWidth;
-		var areaH = theArea.clientHeight;
+		var areaH = theArea.clientHeight;m
 		var areaT = theArea.offsetTop;
 		var areaL = theArea.offsetLeft;
 		var mouseX = theEvent.clientX;
@@ -1630,6 +1571,68 @@ startupScripts[4] = function() {
 
 	var lastPair=null;
 	var currentPair=null;
+
+
+
+
+	/**
+	*
+	* The rendering function for the webpage
+	*
+	* @for directionConfirmGlobal
+	* @return {Void}
+	*
+	*/
+	render = function () {
+
+		// The function that will manage frame requests
+		requestAnimationFrame( render );
+
+		if(lastPair!==null){
+			var holder=currentPair;
+			currentPair=lastPair;
+			deHighlight(currentPair);
+			currentPair=holder;
+			highlight(currentPair);
+			lastPair=null;
+		}
+
+		currentPair.Ref.Mesh.geometry.computeBoundingBox();
+		currentPair.Mov.Mesh.geometry.computeBoundingBox();
+		focusBox=currentPair.Ref.Mesh.geometry.boundingBox.clone();
+		focusBox.union(currentPair.Mov.Mesh.geometry.boundingBox);
+
+		focusPoint= new THREE.Vector3(
+									  (focusBox.min.x+focusBox.max.x)/2,
+									  (focusBox.min.y+focusBox.max.y)/2,
+									  (focusBox.min.z+focusBox.max.z)/2
+									 );
+
+		thePos.normalize();
+
+		thePos.applyEuler(theEul);
+		theEul.set(0,0,0,'XYZ');
+		thePos.multiplyScalar(theDistance);
+		camera.position.copy(thePos);
+		camera.position.add(focusPoint);
+		camera.lookAt(focusPoint);
+		camera.updateMatrix();
+
+		sunLight.position.set( (camera.position.x-focusPoint.x)*2+focusPoint.x,
+							   (camera.position.y-focusPoint.y)*2+focusPoint.y,
+							   (camera.position.z-focusPoint.z)*2+focusPoint.z );
+		sunLight.target.position=focusPoint;
+
+
+		time+=0.01;
+
+		updateAxisLines();
+
+		// Call for the render
+		renderer.render(scene, camera);
+	};
+
+
 
 	var theWidth=document.getElementById("display").clientWidth;
 	var theHeight= document.getElementById("display").clientHeight;

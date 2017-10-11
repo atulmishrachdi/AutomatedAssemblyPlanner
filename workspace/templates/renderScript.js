@@ -449,95 +449,6 @@ function manageControls(){
 
 
 
-/**update
-*
-* The main portion of the visualization's rendering cycle, managing frame rate,
-* input, camera decelleration, keyframe manipulation, model animation, object highlighting,
-* and informational display.
-*
-* @method render
-* @for renderGlobal
-* @return {Void}
-*
-*/
-var render = function () {
-
-	// The function that will manage frame requests
-	requestAnimationFrame( render );
-
-
-
-	// Recieve input and set the appropriate state
-	manageControls();
-
-	// Apply air friction to camera
-	momentum.multiplyScalar(theDrag);
-
-
-	// Moves the parts along the appropriate motions of the animation
-	if(zoom>=0){
-		theTime=animate(partFrames,theTime,Math.pow(zoom,1.008),treequenceActive);
-	}
-	else{
-		theTime=animate(partFrames,theTime,0-Math.pow(0-zoom,1.008),treequenceActive);
-	}
-
-
-	// Reset the appearence of the last object of interest
-	if(objectOfInterest!=null){
-		objectOfInterest.Mesh.material=getStdMaterial();
-	}
-
-	// Get the first part being directly looked at and sets it as object of interest
-	objectOfInterest=getFirstIntersect(scene,camera,partFrames);
-
-
-	// Change appearence of the object of interest and display the appropriate information
-	if(objectOfInterest!==null && standard !== true){
-
-		mouseOverText=" "+objectOfInterest.Name.substring(0,objectOfInterest.Name.length-4);
-		objectOfInterest.Mesh.material=new THREE.MeshStandardMaterial({
-			color:0xbbbbbb,
-			roughness: 1.0,
-			metalness: 1.0,
-			shading: THREE.SmoothShading
-		} );
-
-	}
-	else{
-
-		mouseOverText="";
-
-	}
-
-
-	// Change appearence of the focus point mesh
-	if(focusPoint!=null && standard !== true){
-
-		focusPoint.Mesh.material=new THREE.MeshStandardMaterial({
-			color:0xff6666,
-			roughness: 1.0,
-			metalness: 1.0,
-			shading: THREE.SmoothShading
-		} );
-
-	}
-
-
-	// Display information about the object of interest
-	document.getElementById("mouseoverName").innerHTML="PART: "+mouseOverText;
-	document.getElementById("theTime").innerHTML=("TIME: "+ theTime.toFixed(10)).toString();
-
-	// Update the installation trace lines
-	updateLines(movementTree,null,theTime-timeAdjustment,false,treequenceActive);
-
-	updateAxisLines();
-
-
-	// Call for the render
-	renderer.render(scene, camera);
-
-};
 
 
 
@@ -823,6 +734,99 @@ startupScripts["6"] = function(){
 	// The momentum of the camera
 	var momentum= new THREE.Vector3(0,0,0);
 
+
+
+	/**update
+	*
+	* The main portion of the visualization's rendering cycle, managing frame rate,
+	* input, camera decelleration, keyframe manipulation, model animation, object highlighting,
+	* and informational display.
+	*
+	* @method render
+	* @for renderGlobal
+	* @return {Void}
+	*
+	*/
+	render = function () {
+
+		// The function that will manage frame requests
+		requestAnimationFrame( render );
+
+
+
+		// Recieve input and set the appropriate state
+		manageControls();
+
+		// Apply air friction to camera
+		momentum.multiplyScalar(theDrag);
+
+
+		// Moves the parts along the appropriate motions of the animation
+		if(zoom>=0){
+			theTime=animate(partFrames,theTime,Math.pow(zoom,1.008),treequenceActive);
+		}
+		else{
+			theTime=animate(partFrames,theTime,0-Math.pow(0-zoom,1.008),treequenceActive);
+		}
+
+
+		// Reset the appearence of the last object of interest
+		if(objectOfInterest!=null){
+			objectOfInterest.Mesh.material=getStdMaterial();
+		}
+
+		// Get the first part being directly looked at and sets it as object of interest
+		objectOfInterest=getFirstIntersect(scene,camera,partFrames);
+
+
+		// Change appearence of the object of interest and display the appropriate information
+		if(objectOfInterest!==null && standard !== true){
+
+			mouseOverText=" "+objectOfInterest.Name.substring(0,objectOfInterest.Name.length-4);
+			objectOfInterest.Mesh.material=new THREE.MeshStandardMaterial({
+				color:0xbbbbbb,
+				roughness: 1.0,
+				metalness: 1.0,
+				shading: THREE.SmoothShading
+			} );
+
+		}
+		else{
+
+			mouseOverText="";
+
+		}
+
+
+		// Change appearence of the focus point mesh
+		if(focusPoint!=null && standard !== true){
+
+			focusPoint.Mesh.material=new THREE.MeshStandardMaterial({
+				color:0xff6666,
+				roughness: 1.0,
+				metalness: 1.0,
+				shading: THREE.SmoothShading
+			} );
+
+		}
+
+
+		// Display information about the object of interest
+		document.getElementById("mouseoverName").innerHTML="PART: "+mouseOverText;
+		document.getElementById("theTime").innerHTML=("TIME: "+ theTime.toFixed(10)).toString();
+
+		// Update the installation trace lines
+		updateLines(movementTree,null,theTime-timeAdjustment,false,treequenceActive);
+
+		updateAxisLines();
+
+
+		// Call for the render
+		renderer.render(scene, camera);
+
+	};
+
+
 	// The scene of the assembly animation
 	var scene = new THREE.Scene();
 
@@ -839,8 +843,14 @@ startupScripts["6"] = function(){
 	var pointerIsLocked=false;
 
 
+	// The scene of the assembly animation
+	scene = new THREE.Scene();
+
+	// The camera
+	camera = new THREE.PerspectiveCamera( 75, theWidth/theHeight, 1, 16000 );
+
 	// Setting up the renderer with the default color and display size
-	var renderer = new THREE.WebGLRenderer();
+	renderer = new THREE.WebGLRenderer();
 	renderer.setClearColor( skyColor, 1 );
 	renderer.setSize( window.innerWidth*0.98, window.innerHeight*0.96);
 	renderer.setFaceCulling(THREE.CullFaceNone,THREE.FrontFaceDirectionCCW);

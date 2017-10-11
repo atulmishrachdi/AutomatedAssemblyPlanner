@@ -29,7 +29,6 @@ var STLs = [];
 
 var manualFileInput=true;
 
-
 // Holder for parsed-in XML documents
 var theXML=null;
 
@@ -38,9 +37,6 @@ var fileReaders=[];
 
 // Array for processed STLs
 var STLs=[];
-
-//  Array for processed parts
-var parts=[];
 
 // Holder for animation frames for parts
 var partFrames=null;
@@ -139,69 +135,67 @@ var camPitch=Math.PI/2;
 var momentum= new THREE.Vector3(0,0,0);
 
 // The scene of the assembly animation
-var scene = new THREE.Scene();
+var scene;
 
 // The camera
-var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 5, 30000 );
+var camera;
 
-// Adding in a whole bunch of lights for the scene, so the parts are well-lit
-var directionalLight = new THREE.DirectionalLight( 0x888888 );
-		directionalLight.position.x = 0;
-		directionalLight.position.y = 0;
-		directionalLight.position.z = 1;
-		directionalLight.position.normalize();
-		scene.add( directionalLight );
-
-var directionalLight = new THREE.DirectionalLight( 0x888888 );
-		directionalLight.position.x = 0;
-		directionalLight.position.y = 1;
-		directionalLight.position.z = 0;
-		directionalLight.position.normalize();
-		scene.add( directionalLight );
-
-var directionalLight = new THREE.DirectionalLight( 0x888888 );
-		directionalLight.position.x = 1;
-		directionalLight.position.y = 0;
-		directionalLight.position.z = 0;
-		directionalLight.position.normalize();
-		scene.add( directionalLight );
-var directionalLight = new THREE.DirectionalLight( 0x888888 );
-		directionalLight.position.x = 0;
-		directionalLight.position.y = 0;
-		directionalLight.position.z = -1;
-		directionalLight.position.normalize();
-		scene.add( directionalLight );
-
-var directionalLight = new THREE.DirectionalLight( 0x888888 );
-		directionalLight.position.x = 0;
-		directionalLight.position.y = -1;
-		directionalLight.position.z = 0;
-		directionalLight.position.normalize();
-		scene.add( directionalLight );
-
-var directionalLight = new THREE.DirectionalLight( 0x888888 );
-		directionalLight.position.x = -1;
-		directionalLight.position.y = 0;
-		directionalLight.position.z = 0;
-		directionalLight.position.normalize();
-		scene.add( directionalLight );
-
-
-// Adding in one more light
-var sunLight = new THREE.SpotLight( 0xaa5533, 6, 32000, 1.2, 1, 1 );
-		sunLight.position.set( 4000, 4000, 4000 );
-		scene.add( sunLight );
+// The scene of the assembly animation
+var scene;
+// The camera
+var camera;
 
 
 
-var theFog=new THREE.Fog( skyColor, 4000, 6000 );
-scene.fog=theFog;
+// Setting up the renderer with the default color and display size
+var renderer;
+var render;
 
 var theXAxis=null;
 var theYAxis=null;
 var theZAxis=null;
 var xRet=null;
 var yRet=null;
+
+
+var theTable;
+
+
+// Some HTML bits to insert into the part properties table as needed
+
+// Starting Input for mass cells
+var massElem="<div class='masselem'>"+
+				"<button onclick='insertMassInput(this)'>Input By Mass</button>"+
+				"<button onclick='insertDensityInput(this)'>Input By Volume+Density</button>"+
+			 "</div>";
+
+
+// Starting Input for Volume cells
+var volElem="<button onclick='insertHollowInput(this)'>Is Hollow</button>";
+
+
+// The button for showing the sample density dropdown menu
+var dropDensityButton="<button class='dropbtn' onclick='doDensityDrop(this)'>Sample Densities</button>";
+
+// The button for removing the sample density dropdown menu
+var undropDensityButton="<button class='dropbtn' onclick='undoDensityDrop(this)'>Sample Densities</button>";
+
+// The sample density dropdown menu
+var densityMenu="<div class='dropdown-content' style='border-color: #666666; background-color: #DDDDDD; border-style: solid; padding: 10px 10px 10px 10px;'>"+
+					"<button onclick='changeDensity(this)'>Aluminum</button>"+
+					"<button onclick='changeDensity(this)'>Glass</button>"+
+					"<button onclick='changeDensity(this)'>Plastic (Hi-Density)</button>"+
+					"<button onclick='changeDensity(this)'>Plastic (Med-Density)</button>"+
+					"<button onclick='changeDensity(this)'>Plastic (Low-Density)</button>"+
+					"<button onclick='changeDensity(this)'>Rubber</button>"+
+					"<button onclick='changeDensity(this)'>Steel</button>"+
+					"<button onclick='changeDensity(this)'>Titanium</button>"+
+					"<button onclick='changeDensity(this)'>Wood</button>"+
+				"</div>";
+
+
+// Starting input for density cells
+var densityDiv= "\n<div class='dropdown'>"+dropDensityButton+"</div>";
 
 
 if( typeof(startupScripts) == 'undefined'){
@@ -221,11 +215,45 @@ if( typeof(startupScripts) == 'undefined'){
 
 
 
+/**
+*
+* Accepts a string and outputs the string of all characters following the final '.' symbol
+* in the string. This is used internally to extract file extensions from file names.
+*
+* @method grabExtension
+* @for partTableGlobal
+* @param {String} theName The file name to be processed
+* @return {String} the extension in the given file name. If no extension is found, the
+* 'undefined' value is returned.
+*
+*/
+function grabExtension(theName){
+	return (/[.]/.exec(theName)) ? /[^.]+$/.exec(theName) : undefined;
+}
+
+
+
+/**
+*
+* Accepts a string and outputs the string of all characters following the final '.' symbol
+* in the string. This is used internally to extract file extensions from file names.
+*
+* @method grabExtension
+* @for partTableGlobal
+* @param {String} theName The file name to be processed
+* @return {String} the extension in the given file name. If no extension is found, the
+* 'undefined' value is returned.
+*
+*/
+function grabName(theName){
+	return (/[.]/.exec(theName)) ? /^(.+)(\.[^ .]+)?$/.exec(theName) : undefined;
+}
+
 
 function advanceStage(response,status){
 
 	if(status === "success"){
-		console.log(response.responseText);
+		//console.log(response.responseText);
 		var contentElem = document.getElementById("stageContent");
 		contentElem.innerHTML = response.responseText;
 		if(stage === 1 || stage === 3 || stage === 5 || stage === 7){
@@ -234,7 +262,7 @@ function advanceStage(response,status){
 			setTimeout(checkIn,checkinWait);
 		}
 		(startupScripts[stage])();
-		console.log(startupScripts[stage]);
+		//console.log(startupScripts[stage]);
 	}
     else{
         alert("Server returned status '"+status+"'");
@@ -260,7 +288,7 @@ function updateProg(response,status){
 	console.log("Update Prog Status:" + status);
 	if(status === "success"){
 		var resp = response.responseJSON;
-		console.log(resp);
+		//console.log(resp);
 		if(resp.failed){
 			alert("Something went wrong on the server, and so this process may not continue. Please contact the webmaster.");
 		}
@@ -270,15 +298,17 @@ function updateProg(response,status){
 		else{
 			checkinWait = checkinWait / 2;
 		}
-		if(resp.data !== null /*Number.parseInt(resp.progress) < 100*/){
+		if(resp.data === null /*Number.parseInt(resp.progress) < 100*/){
 			updateLoad();
 			setTimeout(checkIn,checkinWait);
 			return;
 		}
 		else{
-			theXMLText = resp.data;
+			inText = resp.data;
+			//console.log(inText);
 			updateLoad();
 			requestAdvance(stage+1);
+			return;
 		}
 	}
 	else{

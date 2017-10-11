@@ -217,22 +217,6 @@ function registerUp(e){
 
 
 
-// A simple function for getting the extension from a file name (sans period)
-/**
-*
-* Accepts a string and outputs the string of all characters following the final '.' symbol
-* in the string. This is used internally to extract file extensions from file names.
-*
-* @method grabExtension
-* @for partTableGlobal
-* @param {String} theName The file name to be processed
-* @return {String} the extension in the given file name. If no extension is found, the
-* 'undefined' value is returned.
-*
-*/
-function grabExtension(theName){
-	return (/[.]/.exec(theName)) ? /[^.]+$/.exec(theName) : undefined;
-}
 
 
 // Returns a list of all immediate children of the input html element which have the given tag name
@@ -830,14 +814,14 @@ function fillGlobalDensity(){
 *
 */
 function clickFocus(){
-
+	console.log("Table click registered");
 	var pos = 0;
 	var lim = parts.length;
 	while(pos<lim){
-		if(parts[pos].Name == getChildrenByTag(this,"TD")[0].innerHTML){
-			//console.log(getChildrenByTag(this,"TD")[0].innerHTML);
-			//console.log(parts[pos]);
-			//console.log("~~~~~");
+		console.log(getChildrenByTag(this,"TD")[0].innerHTML);
+		console.log(grabName(parts[pos].Name));
+		console.log("~~~~~");
+		if(parts[pos].Name  == grabName(getChildrenByTag(this,"TD")[0].innerHTML)){
 			if(focusPart != null){
 				focusPart.Mesh.material = new THREE.MeshLambertMaterial(wireSettings);
 			}
@@ -1114,40 +1098,6 @@ function makeDensityDiv(){
 
 
 
-var render = function () {
-
-	// The function that will manage frame requests
-	requestAnimationFrame( render );
-
-
-	focusPart.Mesh.geometry.computeBoundingBox();
-	focusBox=focusPart.Mesh.geometry.boundingBox.clone();
-
-	focusPoint= new THREE.Vector3(
-								  (focusBox.min.x+focusBox.max.x)/2,
-								  (focusBox.min.y+focusBox.max.y)/2,
-								  (focusBox.min.z+focusBox.max.z)/2
-								 );
-
-	thePos.normalize();
-
-	thePos.applyEuler(theEul);
-	theEul.set(0,0,0,'XYZ');
-	thePos.multiplyScalar(theDistance);
-	camera.position.copy(thePos);
-	camera.position.add(focusPoint);
-	camera.lookAt(focusPoint);
-	camera.updateMatrix();
-
-	sunLight.position.set( (camera.position.x-focusPoint.x)*2+focusPoint.x,
-						   (camera.position.y-focusPoint.y)*2+focusPoint.y,
-						   (camera.position.z-focusPoint.z)*2+focusPoint.z );
-	sunLight.target.position=focusPoint;
-
-	updateAxisLines();
-
-	renderer.render(scene, camera);
-};
 
 
 /**
@@ -1273,13 +1223,16 @@ function doSetup(){
 
 	setupClickFocus();
 	setupHighlight();
-	getChildrenByTag(document.getElementById("body_id"),"TR")[0].onclick();
+	getChildrenByTag(document.getElementById("body_id"),"TR")[0].click();
 
 }
 
 
 
 startupScripts["2"] = function (){
+
+
+
 
 	handleXML = recieveData;
 
@@ -1329,57 +1282,9 @@ startupScripts["2"] = function (){
 	// Array for storing fileReaders to keep track of them
 	var fileReaders=[];
 
-	// Array for processed STLs
-	var STLs=[];
-
-	//  Array for processed parts
-	var parts=[];
-
-
-
-
-
-	// Some HTML bits to insert into the table as needed
-
-	// Starting Input for mass cells
-	var massElem="<div class='masselem'>"+
-					"<button onclick='insertMassInput(this)'>Input By Mass</button>"+
-					"<button onclick='insertDensityInput(this)'>Input By Volume+Density</button>"+
-				 "</div>";
-
-
-	// Starting Input for Volume cells
-	var volElem="<button onclick='insertHollowInput(this)'>Is Hollow</button>";
-
-
-	// The button for showing the sample density dropdown menu
-	var dropDensityButton="<button class='dropbtn' onclick='doDensityDrop(this)'>Sample Densities</button>";
-
-	// The button for removing the sample density dropdown menu
-	var undropDensityButton="<button class='dropbtn' onclick='undoDensityDrop(this)'>Sample Densities</button>";
-
-	// The sample density dropdown menu
-	var densityMenu="<div class='dropdown-content' style='border-color: #666666; background-color: #DDDDDD; border-style: solid; padding: 10px 10px 10px 10px;'>"+
-						"<button onclick='changeDensity(this)'>Aluminum</button>"+
-						"<button onclick='changeDensity(this)'>Glass</button>"+
-						"<button onclick='changeDensity(this)'>Plastic (Hi-Density)</button>"+
-						"<button onclick='changeDensity(this)'>Plastic (Med-Density)</button>"+
-						"<button onclick='changeDensity(this)'>Plastic (Low-Density)</button>"+
-						"<button onclick='changeDensity(this)'>Rubber</button>"+
-						"<button onclick='changeDensity(this)'>Steel</button>"+
-						"<button onclick='changeDensity(this)'>Titanium</button>"+
-						"<button onclick='changeDensity(this)'>Wood</button>"+
-					"</div>";
-
-
-	// Starting input for density cells
-	var densityDiv= "\n<div class='dropdown'>"+dropDensityButton+"</div>";
-
-
-
 
 	// Setting up the table
-	var theTable= $('#table_id').DataTable({
+	theTable= $('#table_id').DataTable({
 		"scrollY": "300px",
 		"scroller": true,
 		"deferRender": false,
@@ -1391,5 +1296,73 @@ startupScripts["2"] = function (){
 	document.addEventListener('keyup', registerUp , false);
 	document.getElementById("display").addEventListener("mousemove", doDrag);
 	document.getElementById("display").addEventListener("wheel", doZoom);
+
+	var theXML=$.parseXML(inText);
+	var theEntries=grab(theXML,"parts_properties");
+	var theEntries=$(theEntries).children("part_properties");
+	console.log(theEntries);
+	var pos=0;
+	var lim=theEntries.length;
+	var name;
+	var classif;
+	while(pos<lim){
+		addEntry(theEntries[pos]);
+		pos++;
+	}
+
+	var theWidth=document.getElementById("display").clientWidth;
+	var theHeight= document.getElementById("display").clientHeight;
+
+
+	render = function () {
+
+		// The function that will manage frame requests
+		requestAnimationFrame( render );
+
+
+		focusPart.Mesh.geometry.computeBoundingBox();
+		focusBox=focusPart.Mesh.geometry.boundingBox.clone();
+
+		focusPoint= new THREE.Vector3(
+									  (focusBox.min.x+focusBox.max.x)/2,
+									  (focusBox.min.y+focusBox.max.y)/2,
+									  (focusBox.min.z+focusBox.max.z)/2
+									 );
+
+		thePos.normalize();
+
+		thePos.applyEuler(theEul);
+		theEul.set(0,0,0,'XYZ');
+		thePos.multiplyScalar(theDistance);
+		camera.position.copy(thePos);
+		camera.position.add(focusPoint);
+		camera.lookAt(focusPoint);
+		camera.updateMatrix();
+
+		sunLight.position.set( (camera.position.x-focusPoint.x)*2+focusPoint.x,
+							   (camera.position.y-focusPoint.y)*2+focusPoint.y,
+							   (camera.position.z-focusPoint.z)*2+focusPoint.z );
+		sunLight.target.position=focusPoint;
+
+		updateAxisLines();
+
+		renderer.render(scene, camera);
+	};
+
+	scene = new THREE.Scene();
+
+	// The camera
+	camera = new THREE.PerspectiveCamera( 75, theWidth/theHeight, 1, 16000 );
+
+	// Setting up the renderer with the default color and display size
+	renderer = new THREE.WebGLRenderer();
+	renderer.setClearColor( skyColor, 1 );
+	renderer.setSize(theWidth,theHeight);
+	console.log(theWidth);
+	console.log(theHeight);
+	document.getElementById("display").appendChild( renderer.domElement );
+
+	doSetup();
+	render();
 
 }

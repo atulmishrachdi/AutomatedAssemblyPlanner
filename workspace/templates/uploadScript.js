@@ -100,7 +100,7 @@ function loadParts (){
 function handleModels(){
 
 	console.log("Processing model data...");
-	parts.length=0;
+	//parts.length=0;
 	var pos=0;
 	var lim=fileReaders.length;
 	var partGeom=null;
@@ -141,6 +141,7 @@ function handleModels(){
 						Mesh: partMesh,
 						Name: r.Name
 					});
+					console.log("Parts: "+parts.length);
 					spinOff(handleSTLs);
 				}
 			}
@@ -159,7 +160,7 @@ function handleSTLs(){
 	}
 	console.log("Handling "+stlNum+" model files");
 
-	parts.length=0;
+	//parts.length=0;
 	var pos=0;
 	var lim=fileReaders.length;
 	var ext;

@@ -24,6 +24,9 @@ var contentManifest = {
 	jsstl:"jsstl.js",
 	treequence:"treequence.js",
 	partRender:"partRender.js",
+	tableScript:"datatables.js",
+
+	tableStyle:"datatables.css",
 
 	pageBase:"pageBase.html",
 	stageBase:"stageBase.html",
@@ -280,11 +283,11 @@ function progResponse(response, theID, theFile, session, field){
 	if( prog === ""){
 		prog = "0";
 	}
-	console.log("Read in prog, result was: "+prog);
+	//console.log("Read in prog, result was: "+prog);
 	fs.readFile(theFile,'ascii',
 		(function(err,data){
-			console.log("Read in data, result was: "+data);
 			if(typeof(data) !== "undefined"){
+				//console.log("Read in data, result was: "+data);
 				session.state[field] = data;
 				response.json({
 					stage: session.stage,
@@ -294,6 +297,7 @@ function progResponse(response, theID, theFile, session, field){
 				});
 			}
 			else{
+				//console.log("Failed to load in result. Error: "+err);
 				response.json({
 					stage: session.stage,
 					progress: prog,
