@@ -821,11 +821,14 @@ function clickFocus(){
 		console.log(getChildrenByTag(this,"TD")[0].innerHTML);
 		console.log(grabName(parts[pos].Name));
 		console.log("~~~~~");
-		if(parts[pos].Name  == grabName(getChildrenByTag(this,"TD")[0].innerHTML)){
-			if(focusPart != null){
+		if(grabName(parts[pos].Name)  === getChildrenByTag(this,"TD")[0].innerHTML){
+			console.log("Found match between "+grabName(parts[pos].Name)+" and "+getChildrenByTag(this,"TD")[0].innerHTML)
+			if(focusPart !== null){
 				focusPart.Mesh.material = new THREE.MeshLambertMaterial(wireSettings);
 			}
-			if(focusRow != null){
+
+			console.log("AAAAAAH");
+			if(focusRow !== null){
 				var tdList = getChildrenByTag(focusRow,"TD");
 				var tdPos = 0;
 				var tdLim = tdList.length;
@@ -835,7 +838,12 @@ function clickFocus(){
 				}
 			}
 
+			console.log("AAAAAAH");
+
 			focusPart = parts[pos];
+
+			console.log("AAAAAAH");
+			console.log(focusPart);
 			focusRow = this;
 
 			if(getChildrenByTag(this,"TD")[4].childNodes[0].value === "on"){
@@ -1174,28 +1182,7 @@ function justDont(theEvent){
 }
 
 
-/**
-*
-* Given a mousedrag event, rotates the camera or adds a vector to the currently displayed pair,
-* depending upon whether or not the left or right mouse button is depressed
-*
-* @method doDrag
-* @for directionConfirmGlobal
-* @param {mouseup event} theEvent
-* @return {Void}
-*
-*/
-function doDrag(theEvent){
 
-	if(leftDrag==true){
-		thePos.normalize();
-		theEul.set(theEvent.movementY*(-0.008)*Math.cos(Math.atan2(thePos.x,thePos.z)),
-				   theEvent.movementX*(-0.008),
-				   theEvent.movementY*(0.008)*Math.sin(Math.atan2(thePos.x,thePos.z)),
-				   'ZYX');
-	}
-
-}
 
 
 
@@ -1236,36 +1223,31 @@ startupScripts["2"] = function (){
 
 	handleXML = recieveData;
 
-	var fileReaders=[];
-	var inputXML=null;
-	var textFile=null;
-	var focusBox;
-	var focusPoint;
-	var focusPart=null;
-	var focusRow=null;
-	var focusIdx=null;
+	fileReaders=[];
+	inputXML=null;
+	textFile=null;
+	focusBox=null;
+	focusPoint=null;
+	focusIdx=null;
+
+	assemblyPairs=[];
+	namePairs=[];
+	theDirections=[];
+	theXML=null;
+	thePos= new THREE.Vector3(1,0,0);
+	lastMouse=null;
+	theDistance= 300;
+	theVectors= []; //new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0x0000ff}))
+
+	theEul= new THREE.Euler(0,0,0,'XYZ');
+	baseQuat = new THREE.Quaternion(1,0,0,0);
+	deltaQuat = new THREE.Quaternion(1,0,0,0);
+
+	leftDrag = false;
+	rightDrag = false;
 
 
-
-	var skyColor= 0xFFFFFF;
-	var assemblyPairs=[];
-	var namePairs=[];
-	var theDirections=[];
-	var theXML=null;
-	var thePos= new THREE.Vector3(1,0,0);
-	var lastMouse=null;
-	var theDistance= 300;
-	var theVectors= []; //new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0x0000ff}))
-
-	var theEul= new THREE.Euler(0,0,0,'XYZ');
-	var baseQuat = new THREE.Quaternion(1,0,0,0);
-	var deltaQuat = new THREE.Quaternion(1,0,0,0);
-
-	var leftDrag = false;
-	var rightDrag = false;
-
-
-	var inputState={
+	inputState={
 
 		W: false,
 		A: false,
@@ -1275,12 +1257,12 @@ startupScripts["2"] = function (){
 	}
 
 
-	var wireSettings={transparent: true, opacity: 0.1, color: 0x444444, wireframe: false};
+	wireSettings={transparent: true, opacity: 0.1, color: 0x444444, wireframe: false};
 
 
 
 	// Array for storing fileReaders to keep track of them
-	var fileReaders=[];
+	fileReaders=[];
 
 
 	// Setting up the table
@@ -1297,21 +1279,19 @@ startupScripts["2"] = function (){
 	document.getElementById("display").addEventListener("mousemove", doDrag);
 	document.getElementById("display").addEventListener("wheel", doZoom);
 
-	var theXML=$.parseXML(inText);
-	var theEntries=grab(theXML,"parts_properties");
-	var theEntries=$(theEntries).children("part_properties");
+	theXML=$.parseXML(inText);
+	theEntries=grab(theXML,"parts_properties");
+	theEntries=$(theEntries).children("part_properties");
 	console.log(theEntries);
-	var pos=0;
-	var lim=theEntries.length;
-	var name;
-	var classif;
+	pos=0;
+	lim=theEntries.length;
+	//name = null;
+	//classif = null;
 	while(pos<lim){
 		addEntry(theEntries[pos]);
 		pos++;
 	}
 
-	var theWidth=document.getElementById("display").clientWidth;
-	var theHeight= document.getElementById("display").clientHeight;
 
 
 	render = function () {
@@ -1349,18 +1329,33 @@ startupScripts["2"] = function (){
 		renderer.render(scene, camera);
 	};
 
-	scene = new THREE.Scene();
 
-	// The camera
-	camera = new THREE.PerspectiveCamera( 75, theWidth/theHeight, 1, 16000 );
 
-	// Setting up the renderer with the default color and display size
-	renderer = new THREE.WebGLRenderer();
-	renderer.setClearColor( skyColor, 1 );
-	renderer.setSize(theWidth,theHeight);
-	console.log(theWidth);
-	console.log(theHeight);
-	document.getElementById("display").appendChild( renderer.domElement );
+	/**
+	*
+	* Given a mousedrag event, rotates the camera or adds a vector to the currently displayed pair,
+	* depending upon whether or not the left or right mouse button is depressed
+	*
+	* @method doDrag
+	* @for directionConfirmGlobal
+	* @param {mouseup event} theEvent
+	* @return {Void}
+	*
+	*/
+	doDrag = function (theEvent){
+
+		if(leftDrag==true){
+			thePos.normalize();
+			theEul.set(theEvent.movementY*(-0.008)*Math.cos(Math.atan2(thePos.x,thePos.z)),
+					   theEvent.movementX*(-0.008),
+					   theEvent.movementY*(0.008)*Math.sin(Math.atan2(thePos.x,thePos.z)),
+					   'ZYX');
+		}
+
+	}
+
+	clearScene("display");
+
 
 	doSetup();
 	render();

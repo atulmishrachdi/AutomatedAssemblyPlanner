@@ -802,66 +802,6 @@ function justDont(theEvent){
 }
 
 
-/**
-*
-* Given a mousedrag event, rotates the camera or adds a vector to the currently displayed pair,
-* depending upon whether or not the left or right mouse button is depressed
-*
-* @method doDrag
-* @for directionConfirmGlobal
-* @param {mouseup event} theEvent
-* @return {Void}
-*
-*/
-function doDrag(theEvent){
-
-
-	if(theAddAxis !== null){
-
-		var theBox=currentPair.Mov.Mesh.geometry.boundingBox.clone();
-		var theArea = document.getElementById("display");
-		var areaW = theArea.clientWidth;
-		var areaH = theArea.clientHeight;
-		var areaT = theArea.offsetTop;
-		var areaL = theArea.offsetLeft;
-		var mouseX = theEvent.clientX;
-		var mouseY = theEvent.clientY;
-		//console.log("aW: "+areaW+" aH: "+areaH+" aT: "+areaT+" aL: "+areaL);
-		//console.log("mX: "+(((mouseX-areaL)-areaW/2)/(areaW/2))+" mY: "+((areaH/2-(mouseY-areaT))/(areaH/2)));
-		var theDir = getDirectionFromMouse( ((mouseX-areaL)-areaW/2)/(areaW/2), (areaH/2-(mouseY-areaT))/(areaH/2) );
-
-		theAddAxis.geometry.vertices[0].set((theBox.min.x+theBox.max.x)/2,(theBox.min.y+theBox.max.y)/2,(theBox.min.z+theBox.max.z)/2);
-		theAddAxis.geometry.vertices[1].set((theBox.min.x+theBox.max.x)/2+theDirections[theDir].X*theDistance*0.6,
-											(theBox.min.y+theBox.max.y)/2+theDirections[theDir].Y*theDistance*0.6,
-											(theBox.min.z+theBox.max.z)/2+theDirections[theDir].Z*theDistance*0.6 );
-		console.log("X:"+(theBox.min.x+theBox.max.x)/2  +
-					" Y: "+(theBox.min.y+theBox.max.y)/2+
-					" Z: "+(theBox.min.z+theBox.max.z)/2 );
-
-		console.log(" X: "+theDirections[theDir].X +
-					" Y: "+theDirections[theDir].Y +
-					" Z: "+theDirections[theDir].Z  );
-
-		theAddAxis.geometry.verticesNeedUpdate=true;
-
-	}
-
-
-	if(leftDrag==true){
-		thePos.normalize();
-		theEul.set(theEvent.movementY*(-0.02)*Math.cos(Math.atan2(thePos.x,thePos.z)),
-				   theEvent.movementX*(-0.02),
-				   theEvent.movementY*(0.02)*Math.sin(Math.atan2(thePos.x,thePos.z)),
-				   'ZYX');
-	}
-	if(rightDrag==true){
-		addVectorFromMouse(theEvent.clientX, theEvent.clientY);
-	}
-}
-
-
-
-
 
 /**
 *
@@ -1631,6 +1571,70 @@ startupScripts[4] = function() {
 		// Call for the render
 		renderer.render(scene, camera);
 	};
+
+
+
+
+	/**
+	*
+	* Given a mousedrag event, rotates the camera or adds a vector to the currently displayed pair,
+	* depending upon whether or not the left or right mouse button is depressed
+	*
+	* @method doDrag
+	* @for directionConfirmGlobal
+	* @param {mouseup event} theEvent
+	* @return {Void}
+	*
+	*/
+	doDrag = function (theEvent){
+
+
+		if(theAddAxis !== null){
+
+			var theBox=currentPair.Mov.Mesh.geometry.boundingBox.clone();
+			var theArea = document.getElementById("display");
+			var areaW = theArea.clientWidth;
+			var areaH = theArea.clientHeight;
+			var areaT = theArea.offsetTop;
+			var areaL = theArea.offsetLeft;
+			var mouseX = theEvent.clientX;
+			var mouseY = theEvent.clientY;
+			//console.log("aW: "+areaW+" aH: "+areaH+" aT: "+areaT+" aL: "+areaL);
+			//console.log("mX: "+(((mouseX-areaL)-areaW/2)/(areaW/2))+" mY: "+((areaH/2-(mouseY-areaT))/(areaH/2)));
+			var theDir = getDirectionFromMouse( ((mouseX-areaL)-areaW/2)/(areaW/2), (areaH/2-(mouseY-areaT))/(areaH/2) );
+
+			theAddAxis.geometry.vertices[0].set((theBox.min.x+theBox.max.x)/2,(theBox.min.y+theBox.max.y)/2,(theBox.min.z+theBox.max.z)/2);
+			theAddAxis.geometry.vertices[1].set((theBox.min.x+theBox.max.x)/2+theDirections[theDir].X*theDistance*0.6,
+												(theBox.min.y+theBox.max.y)/2+theDirections[theDir].Y*theDistance*0.6,
+												(theBox.min.z+theBox.max.z)/2+theDirections[theDir].Z*theDistance*0.6 );
+			console.log("X:"+(theBox.min.x+theBox.max.x)/2  +
+						" Y: "+(theBox.min.y+theBox.max.y)/2+
+						" Z: "+(theBox.min.z+theBox.max.z)/2 );
+
+			console.log(" X: "+theDirections[theDir].X +
+						" Y: "+theDirections[theDir].Y +
+						" Z: "+theDirections[theDir].Z  );
+
+			theAddAxis.geometry.verticesNeedUpdate=true;
+
+		}
+
+
+		if(leftDrag==true){
+			thePos.normalize();
+			theEul.set(theEvent.movementY*(-0.02)*Math.cos(Math.atan2(thePos.x,thePos.z)),
+					   theEvent.movementX*(-0.02),
+					   theEvent.movementY*(0.02)*Math.sin(Math.atan2(thePos.x,thePos.z)),
+					   'ZYX');
+		}
+		if(rightDrag==true){
+			addVectorFromMouse(theEvent.clientX, theEvent.clientY);
+		}
+	}
+
+
+
+
 
 
 

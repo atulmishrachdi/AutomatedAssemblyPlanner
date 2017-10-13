@@ -826,15 +826,6 @@ startupScripts["6"] = function(){
 
 	};
 
-
-	// The scene of the assembly animation
-	var scene = new THREE.Scene();
-
-	// The camera
-	var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 5, 30000 );
-				 /*new THREE.OrthographicCamera(	10*window.innerWidth/-2, 10*window.innerWidth/2,
-					 							10*window.innerHeight/-2, 10*window.innerHeight/2,
-												5, 70000);*/
 	camera.position.x=0;
 	camera.position.z=0;
 	camera.position.y=0;
@@ -842,76 +833,11 @@ startupScripts["6"] = function(){
 	// The variable holding the state of whether or not the pointer is locked
 	var pointerIsLocked=false;
 
-
-	// The scene of the assembly animation
-	scene = new THREE.Scene();
-
-	// The camera
-	camera = new THREE.PerspectiveCamera( 75, theWidth/theHeight, 1, 16000 );
-
-	// Setting up the renderer with the default color and display size
-	renderer = new THREE.WebGLRenderer();
-	renderer.setClearColor( skyColor, 1 );
-	renderer.setSize( window.innerWidth*0.98, window.innerHeight*0.96);
-	renderer.setFaceCulling(THREE.CullFaceNone,THREE.FrontFaceDirectionCCW);
-	document.body.appendChild( renderer.domElement );
+	clearScene();
 
 	// Setting camera to Yaw-Pitch-Roll configuration
 	camera.rotation.reorder('YXZ');
 
-
-	// Adding in a whole bunch of lights for the scene, so the parts are well-lit
-	var directionalLight = new THREE.DirectionalLight( 0x888888 );
-			directionalLight.position.x = 0;
-			directionalLight.position.y = 0;
-			directionalLight.position.z = 1;
-			directionalLight.position.normalize();
-			scene.add( directionalLight );
-
-	var directionalLight = new THREE.DirectionalLight( 0x888888 );
-			directionalLight.position.x = 0;
-			directionalLight.position.y = 1;
-			directionalLight.position.z = 0;
-			directionalLight.position.normalize();
-			scene.add( directionalLight );
-
-	var directionalLight = new THREE.DirectionalLight( 0x888888 );
-			directionalLight.position.x = 1;
-			directionalLight.position.y = 0;
-			directionalLight.position.z = 0;
-			directionalLight.position.normalize();
-			scene.add( directionalLight );
-	var directionalLight = new THREE.DirectionalLight( 0x888888 );
-			directionalLight.position.x = 0;
-			directionalLight.position.y = 0;
-			directionalLight.position.z = -1;
-			directionalLight.position.normalize();
-			scene.add( directionalLight );
-
-	var directionalLight = new THREE.DirectionalLight( 0x888888 );
-			directionalLight.position.x = 0;
-			directionalLight.position.y = -1;
-			directionalLight.position.z = 0;
-			directionalLight.position.normalize();
-			scene.add( directionalLight );
-
-	var directionalLight = new THREE.DirectionalLight( 0x888888 );
-			directionalLight.position.x = -1;
-			directionalLight.position.y = 0;
-			directionalLight.position.z = 0;
-			directionalLight.position.normalize();
-			scene.add( directionalLight );
-
-
-	// Adding in one more light
-	var sunLight = new THREE.SpotLight( 0xaa5533, 6, 32000, 1.2, 1, 1 );
-			sunLight.position.set( 4000, 4000, 4000 );
-			scene.add( sunLight );
-
-
-
-	var theFog=new THREE.Fog( skyColor, 4000, 6000 );
-	scene.fog=theFog;
 
 	var theXAxis=null;
 	var theYAxis=null;

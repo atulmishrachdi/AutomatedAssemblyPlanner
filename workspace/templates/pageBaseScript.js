@@ -100,6 +100,17 @@ if(standard){
 	skyColor = 0x000000;
 }
 
+
+
+
+// Adding in one more light
+var sunLight = new THREE.SpotLight( 0xaa5533, 6, 32000, 1.2, 1, 1 );
+		sunLight.position.set( 4000, 4000, 4000 );
+
+
+
+var theFog=new THREE.Fog( skyColor, 4000, 6000 );
+
 // The tree structure holding animation data
 var movementTree=null;
 var theCenter= new THREE.Vector3(0,0,0);
@@ -108,7 +119,9 @@ var theCenter= new THREE.Vector3(0,0,0);
 var objectOfInterest=null;
 
 // The part being locked onto by using the 'F' key
-var focusPoint=null;
+var focusPoint = null;
+var focusPart = null;
+var focusRow = null;
 
 // Name of the part being looked at, if there is any such part
 var mouseOverText="";
@@ -131,25 +144,21 @@ var theDrag=0.96;
 var camYaw=0;
 var camPitch=Math.PI/2;
 
+var camera;
+
 // The momentum of the camera
 var momentum= new THREE.Vector3(0,0,0);
 
-// The scene of the assembly animation
-var scene;
-
-// The camera
-var camera;
-
-// The scene of the assembly animation
-var scene;
-// The camera
-var camera;
+scene = new THREE.Scene();
 
 
 
-// Setting up the renderer with the default color and display size
-var renderer;
+// Setting up the renderer with the default color
+renderer = new THREE.WebGLRenderer();
+renderer.setClearColor( skyColor, 1 );
+
 var render;
+var doDrag;
 
 var theXAxis=null;
 var theYAxis=null;
@@ -246,7 +255,7 @@ function grabExtension(theName){
 *
 */
 function grabName(theName){
-	return (/[.]/.exec(theName)) ? /^(.+)(\.[^ .]+)?$/.exec(theName) : undefined;
+	return theName.substr(0, theName.lastIndexOf('.')) || theName;
 }
 
 
@@ -440,6 +449,80 @@ function getID(){
 
 function spinOff(func) {
     setTimeout(func, 0);
+}
+
+function clearScene( dispID ){
+
+	var cullList = [];
+	for( x in scene.children ){
+		cullList.push(x);
+	}
+
+	for( x in cullList ){
+		scene.remove(x);
+	}
+
+	var theWidth=document.getElementById(dispID).clientWidth;
+	var theHeight= document.getElementById(dispID).clientHeight;
+
+	// The camera
+	camera = new THREE.PerspectiveCamera( 75, theWidth/theHeight, 1, 16000 );
+
+	renderer.setSize(theWidth,theHeight);
+	document.getElementById(dispID).appendChild( renderer.domElement );
+
+	// Adding in a whole bunch of lights for the scene, so the parts are well-lit
+	var directionalLight = new THREE.DirectionalLight( 0x888888 );
+			directionalLight.position.x = 0;
+			directionalLight.position.y = 0;
+			directionalLight.position.z = 1;
+			directionalLight.position.normalize();
+			scene.add( directionalLight );
+
+	var directionalLight = new THREE.DirectionalLight( 0x888888 );
+			directionalLight.position.x = 0;
+			directionalLight.position.y = 1;
+			directionalLight.position.z = 0;
+			directionalLight.position.normalize();
+			scene.add( directionalLight );
+
+	var directionalLight = new THREE.DirectionalLight( 0x888888 );
+			directionalLight.position.x = 1;
+			directionalLight.position.y = 0;
+			directionalLight.position.z = 0;
+			directionalLight.position.normalize();
+			scene.add( directionalLight );
+	var directionalLight = new THREE.DirectionalLight( 0x888888 );
+			directionalLight.position.x = 0;
+			directionalLight.position.y = 0;
+			directionalLight.position.z = -1;
+			directionalLight.position.normalize();
+			scene.add( directionalLight );
+
+	var directionalLight = new THREE.DirectionalLight( 0x888888 );
+			directionalLight.position.x = 0;
+			directionalLight.position.y = -1;
+			directionalLight.position.z = 0;
+			directionalLight.position.normalize();
+			scene.add( directionalLight );
+
+	var directionalLight = new THREE.DirectionalLight( 0x888888 );
+			directionalLight.position.x = -1;
+			directionalLight.position.y = 0;
+			directionalLight.position.z = 0;
+			directionalLight.position.normalize();
+			scene.add( directionalLight );
+
+
+
+	sunLight.position.set( 4000, 4000, 4000 );
+	scene.add( sunLight );
+
+
+
+	var theFog=new THREE.Fog( skyColor, 4000, 6000 );
+	scene.fog=theFog;
+
 }
 
 getID();
