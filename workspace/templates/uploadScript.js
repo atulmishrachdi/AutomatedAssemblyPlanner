@@ -141,6 +141,7 @@ function handleModels(){
 						Mesh: partMesh,
 						Name: r.Name
 					});
+					scene.add(partMesh);
 					console.log("Parts: "+parts.length);
 					spinOff(handleSTLs);
 				}

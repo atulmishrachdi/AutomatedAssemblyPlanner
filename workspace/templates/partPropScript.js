@@ -26,24 +26,24 @@ if( typeof(startupScripts) == 'undefined'){
 *
 * Given the contents of a part table XML file (as a string), fills out the table in the web page.
 *
-* @method recieveData
+* @method part_recieveData
 * @for partTableGlobal
 * @param {String} theXMLText The contents of a part table
 * @return {Void}
 *
 */
-function recieveData(theXMLText){
+function part_recieveData(theXMLText){
 
 	var theXML=$.parseXML(theXMLText);
 	console.log(theXML);
-	var theEntries=grab(theXML,"parts_properties");
-	var theEntries=$(theEntries).children("part_properties");
+	var theEntries=part_grab(theXML,"parts_properties");
+	var theEntries=$(theEntries).children("properties");
 	var pos=0;
 	var lim=theEntries.length;
 	var name;
 	var classif;
 	while(pos<lim){
-		addEntry(theEntries[pos]);
+		part_addEntry(theEntries[pos]);
 		pos++;
 	}
 	console.log(theTable);
@@ -58,14 +58,14 @@ function recieveData(theXMLText){
 * Is called whenever the user submits the part table and every entry has been
 * properly filled out.
 *
-* @method sendData
+* @method part_sendData
 * @for partTableGlobal
 * @param {String} theXMLText The contents of the part table in the webpage, as a string
 * in XML formatting
 * @return {Void}
 *
 */
-function sendData(theXMLText){
+function part_sendData(theXMLText){
 
 	// Do whatever you want with the resulting data to send it off, if you want
 
@@ -91,7 +91,7 @@ function sendData(theXMLText){
 * of the keys used for manipulating the view, sets the proper components
 * of "inputState" to true.
 *
-* @method registerDown
+* @method part_registerDown
 * @for partTableGlobal
 *
 *
@@ -100,7 +100,7 @@ function sendData(theXMLText){
 * @return {Void}
 *
 */
-function registerDown(e){
+function part_registerDown(e){
 
 
 
@@ -118,7 +118,7 @@ function registerDown(e){
 
 	if(theKey=='A'){
 		if(inputState.A === false){
-			var box = getChildrenByTag(focusRow,"TD")[4].childNodes[0];
+			var box = part_getChildrenByTag(focusRow,"TD")[4].childNodes[0];
 			if(box.value === "on"){
 				box.click();
 			}
@@ -127,7 +127,7 @@ function registerDown(e){
 	}
 	if(theKey=='S'){
 		if(inputState.S === false){
-			var rowList = getChildrenByTag(document.getElementById("body_id"),"TR");
+			var rowList = part_getChildrenByTag(document.getElementById("body_id"),"TR");
 			var tabLen = rowList.length;
 			if(focusIdx < tabLen-1){
 				rowList[focusIdx+1].onclick();
@@ -137,7 +137,7 @@ function registerDown(e){
 	}
 	if(theKey=='D'){
 		if(inputState.D === false){
-			var box = getChildrenByTag(focusRow,"TD")[4].childNodes[0];
+			var box = part_getChildrenByTag(focusRow,"TD")[4].childNodes[0];
 			if(box.value === "off"){
 				box.click();
 			}
@@ -146,7 +146,7 @@ function registerDown(e){
 	}
 	if(theKey=='W'){
 		if(inputState.W === false){
-			var rowList = getChildrenByTag(document.getElementById("body_id"),"TR");
+			var rowList = part_getChildrenByTag(document.getElementById("body_id"),"TR");
 			var tabLen = rowList.length;
 			if(focusIdx > 0){
 				rowList[focusIdx-1].onclick();
@@ -167,7 +167,7 @@ function registerDown(e){
 * of the keys used for manipulating the view, sets the proper components
 * of "inputState" to false
 *
-* @method registerUp
+* @method part_registerUp
 * @for partTableGlobal
 *
 *
@@ -176,7 +176,7 @@ function registerDown(e){
 * @return {Void}
 *
 */
-function registerUp(e){
+function part_registerUp(e){
 
 
 	var theKey;
@@ -225,14 +225,14 @@ function registerUp(e){
 * Given an HTML element and a string, returns a list containing all child elements
 * of the given element with a tag equivalent to the given string
 *
-* @method getChildrenByTag
+* @method part_getChildrenByTag
 * @for partTableGlobal
 * @param {HTML Element} theNode The HTML element whose children are to be searched
 * @param {String} tag The string to be used when searching for element children
 * @return {Void}
 *
 */
-function getChildrenByTag(theNode,tag){
+function part_getChildrenByTag(theNode,tag){
 	var childs=theNode.children;
 	var pos=0;
 	var lim=childs.length;
@@ -253,7 +253,7 @@ function getChildrenByTag(theNode,tag){
 * Given a jQuery object and a string, returns the first child of the given element with
 * a tag equivalent to the given string.
 *
-* @method grab
+* @method part_grab
 * @for partTableGlobal
 * @param {jQuery Object} theTree The jQuery object whose child is to be returned
 * @param {String} theMember The name of the tag being searched
@@ -261,7 +261,7 @@ function getChildrenByTag(theNode,tag){
 * exist, null is returned.
 *
 */
-function grab(theTree,theMember){
+function part_grab(theTree,theMember){
 	if($(theTree).children(theMember).length!=0){
 		return $(theTree).children(theMember)[0];
 	}
@@ -277,7 +277,7 @@ function grab(theTree,theMember){
 * Given a jQuery object and an integer "N", returns the Nth child of the given element with
 * the given tag.
 *
-* @method grabInd
+* @method part_grabInd
 * @for partTableGlobal
 * @param {jQuery Object} theTree The jQuery object whose child is to be returned
 * @param {String} theMember The name of the tag being searched
@@ -286,7 +286,7 @@ function grab(theTree,theMember){
 * If such a child does not exist, null is returned.
 *
 */
-function grabInd(theTree,theMember, theIndex){
+function part_grabInd(theTree,theMember, theIndex){
 	if($(theTree).children(theMember).length>theIndex){
 		return $(theTree).children(theMember)[theIndex];
 	}
@@ -303,29 +303,29 @@ function grabInd(theTree,theMember, theIndex){
 * Given a jQuery object representation of a part entry, inserts an html representation
 * of that entry in the table
 *
-* @method addEntry
+* @method part_addEntry
 * @for partTableGlobal
 * @param {jQuery Object} theEntry The jQuery object containing the representation of a table
 * entry, as extracted from an XML document
 * @return {Void}
 *
 */
-function addEntry(theEntry){
+function part_addEntry(theEntry){
 
-	var theName=grab(theEntry,"name").innerHTML;
-	var theVolume="<text>"+Number.parseFloat(grab(theEntry,"volume").innerHTML).toFixed(8)+"</text><br/>"+volElem;
+	var theName=part_grab(theEntry,"name").innerHTML;
+	var theVolume="<text>"+Number.parseFloat(part_grab(theEntry,"volume").innerHTML).toFixed(8)+"</text><br/>"+volElem;
 
 	var theMass=massElem;
-	var theCertainty=Number.parseFloat(grab(theEntry,"fastener_certainty").innerHTML);
-	var theSurfaceArea=Number.parseFloat(grab(theEntry,"surface_area").innerHTML).toFixed(8);
+	var theCertainty=Number.parseFloat(part_grab(theEntry,"fastener_certainty").innerHTML);
+	var theSurfaceArea=Number.parseFloat(part_grab(theEntry,"surface_area").innerHTML).toFixed(8);
 
 	//console.log(theCertainty);
 
-	var fstChecked="<input type='checkbox' onchange='flipCheck(this)' value='off'></input>";
+	var fstChecked="<input type='checkbox' onchange='part_flipCheck(this)' value='off'></input>";
 	//console.log(theCertainty);
 	if(theCertainty>0.5){
 		//console.log("Box is checked");
-		fstChecked="<input type='checkbox' onchange='flipCheck(this)' value='on' checked></input>";
+		fstChecked="<input type='checkbox' onchange='part_flipCheck(this)' value='on' checked></input>";
 	}
 
 	var theAmbiguity=1-2*Math.abs(theCertainty-0.5);
@@ -352,12 +352,12 @@ function addEntry(theEntry){
 * Parses through each entry in the table and, if all entries are fully filled out, converts the table into an
 * XML file and adds a download link for that file to the webpage
 *
-* @method renderXML
+* @method part_renderXML
 * @for partTableGlobal
 * @return {Void}
 *
 */
-function renderXML(){
+function part_renderXML(){
 
 	theTable.search("").draw();
 
@@ -368,7 +368,7 @@ function renderXML(){
 	theTable=document.getElementById("body_id");
 
 
-	var theEntries=getChildrenByTag(theTable,"TR");
+	var theEntries=part_getChildrenByTag(theTable,"TR");
 
 	var entryPos=0;
 	var entryLim=theEntries.length;
@@ -379,7 +379,7 @@ function renderXML(){
 
 	while(entryPos<entryLim){
 
-		thisResult=renderEntry(getChildrenByTag(theEntries[entryPos],"TD"));
+		thisResult=prat_part_renderEntry(part_getChildrenByTag(theEntries[entryPos],"TD"));
 		if(thisResult!=null){
 			result=result+thisResult;
 		}
@@ -394,7 +394,7 @@ function renderXML(){
 
 
 
-	sendData(result);
+	part_sendData(result);
 
 
 	if(manualFileInput){
@@ -419,26 +419,65 @@ function renderXML(){
 
 
 
+
+function part_render() {
+
+		// The function that will manage frame requests
+		requestAnimationFrame( part_render );
+
+
+		focusPart.Mesh.geometry.computeBoundingBox();
+		focusBox=focusPart.Mesh.geometry.boundingBox.clone();
+
+		focusPoint= new THREE.Vector3(
+									  (focusBox.min.x+focusBox.max.x)/2,
+									  (focusBox.min.y+focusBox.max.y)/2,
+									  (focusBox.min.z+focusBox.max.z)/2
+									 );
+
+		thePos.normalize();
+
+		thePos.applyEuler(theEul);
+		theEul.set(0,0,0,'XYZ');
+		thePos.multiplyScalar(theDistance);
+		camera.position.copy(thePos);
+		camera.position.add(focusPoint);
+		camera.lookAt(focusPoint);
+		camera.updateMatrix();
+
+		sunLight.position.set( (camera.position.x-focusPoint.x)*2+focusPoint.x,
+							   (camera.position.y-focusPoint.y)*2+focusPoint.y,
+							   (camera.position.z-focusPoint.z)*2+focusPoint.z );
+		sunLight.target.position=focusPoint;
+
+		updateAxisLines();
+
+		renderer.render(scene, camera);
+	};
+
+
+
+
 // Converts the information in the given table entry to an XML element (as a plaintext string)
 /**
 *
 * Given an html row element containing data regarding a part, converts the information into an
 * xml formatted string and returns it
 *
-* @method renderEntry
+* @method part_renderEntry
 * @for partTableGlobal
 * @param {HTML Element} theCells An html row element containing information about a part
 * @return {String} XML representation of the table entry
 *
 */
-function renderEntry(theCells){
+function part_renderEntry(theCells){
 
 	var massCell=theCells[3];
-	massCell=getChildrenByTag(massCell,"DIV")[0];
+	massCell=part_getChildrenByTag(massCell,"DIV")[0];
 
-	var texts = getChildrenByTag(massCell,"TEXT");
-	var inputs = getChildrenByTag(massCell,"INPUT");
-	var conv = conversion(document.getElementById("massUnits"));
+	var texts = part_getChildrenByTag(massCell,"TEXT");
+	var inputs = part_getChildrenByTag(massCell,"INPUT");
+	var conv = part_conversion(document.getElementById("massUnits"));
 
 	var massText="";
 	if(inputs.length==0 || isNaN(Number.parseFloat(inputs[0].value))){
@@ -471,23 +510,23 @@ function renderEntry(theCells){
 
 	var checkText="  <fastener_certainty>0</fastener_certainty>\n";
 
-	if(getChildrenByTag(theCells[4],"INPUT")[0].value=="on"){
+	if(part_getChildrenByTag(theCells[4],"INPUT")[0].value=="on"){
 		checkText="  <fastener_certainty>1</fastener_certainty>\n";
 	}
 
 
 	var result="";
-	result=result+"<part_properties>\n";
+	result=result+"<properties>\n";
 	result=result+"  <name>"+theCells[0].innerHTML+"</name>\n";
 	result=result+massText;
-	if(getChildrenByTag(theCells[1],"TEXT")[0].innerHTML=="" || isNaN(Number.parseFloat(getChildrenByTag(theCells[1],"TEXT")[0].innerHTML))){
+	if(part_getChildrenByTag(theCells[1],"TEXT")[0].innerHTML=="" || isNaN(Number.parseFloat(part_getChildrenByTag(theCells[1],"TEXT")[0].innerHTML))){
 		alert("Volume data not provided for one or more cells");
 		return null;
 	}
-	result=result+"  <volume>"+getChildrenByTag(theCells[1],"TEXT")[0].innerHTML+"</volume>\n";
+	result=result+"  <volume>"+part_getChildrenByTag(theCells[1],"TEXT")[0].innerHTML+"</volume>\n";
 	result=result+"  <surface_area>"+theCells[2].innerHTML+"</surface_area>\n";
 	result=result+checkText;
-	result=result+"</part_properties>\n";
+	result=result+"</properties>\n";
 	return result;
 
 }
@@ -514,17 +553,17 @@ function revertHollowOpt(theTextBox){
 * in an entry's mass section when pressed. Changes the parent mass section to contain a
 * text input element and a button allowing the user to switch over to density input.
 *
-* @method insertMassInput
+* @method part_insertMassInput
 * @for partTableGlobal
 * @param {HTML Element} theButton The button that calls this function
 * @return {Void}
 *
 */
-function insertMassInput(theButton){
+function part_insertMassInput(theButton){
 	theButton.parentElement.innerHTML=	"<div class='masselem'>"+
 										"<text>Mass:</text> "+
 										"<input type='text'></input>"+
-										"<button onclick='insertDensityInput(this)'>Input By Volume+Density</button>"+
+										"<button onclick='part_insertDensityInput(this)'>Input By Volume+Density</button>"+
 										"</div>";
 }
 
@@ -535,18 +574,18 @@ function insertMassInput(theButton){
 * in an entry's mass section when pressed. Changes the parent mass section to contain a
 * text input element and a button allowing the user to switch over to mass input.
 *
-* @method insertDensityInput
+* @method part_insertDensityInput
 * @for partTableGlobal
 * @param {HTML Element} theButton The button that calls this function
 * @return {Void}
 *
 */
-function insertDensityInput(theButton){
+function part_insertDensityInput(theButton){
 	theButton.parentElement.innerHTML=	"<div class='masselem'>"+
 										"<text></text><text>Density:</text> "+
-										"<input type='text' onchange='updateMassDisplay(this)'></input>"+
+										"<input type='text' onchange='part_insertMassDisplay(this)'></input>"+
 										densityDiv+
-										"<button onclick='insertMassInput(this)' >Input By Mass</button>"+
+										"<button onclick='part_insertMassInput(this)' >Input By Mass</button>"+
 										"</div>";
 }
 
@@ -558,17 +597,17 @@ function insertDensityInput(theButton){
 * in an entry's volume section when pressed. Changes the parent volume section to contain a
 * text input element and a button allowing the user to indicate the part is not hollow.
 *
-* @method insertHollowInput
+* @method part_insertHollowInput
 * @for partTableGlobal
 * @param {HTML Element} theButton The button that calls this function
 * @return {Void}
 *
 */
-function insertHollowInput(theButton){
-	var storage="<p style='display: none;'>"+Number.parseFloat(getChildrenByTag(theButton.parentElement,"TEXT")[0].innerHTML)+"</p>";
+function part_insertHollowInput(theButton){
+	var storage="<p style='display: none;'>"+Number.parseFloat(part_getChildrenByTag(theButton.parentElement,"TEXT")[0].innerHTML)+"</p>";
 	var display="<text></text>";
 	var backButton="<button onclick='removeHollowInput(this)'>Is Not Hollow</button>";
-	var thicknessBox="Thickness: <input type='text' onchange='updateVolumeDisplay(this)'></input>";
+	var thicknessBox="Thickness: <input type='text' onchange='part_insertVolumeDisplay(this)'></input>";
 	theButton.parentElement.innerHTML=storage+display+thicknessBox+backButton;
 }
 
@@ -587,8 +626,8 @@ function insertHollowInput(theButton){
 *
 */
 function removeHollowInput(theButton){
-	var storage="<text style='display: block;'>"+Number.parseFloat(getChildrenByTag(theButton.parentElement,"P")[0].innerHTML)+"</text>";
-	var backButton="<button onclick='insertHollowInput(this)'>Is Hollow</button>";
+	var storage="<text style='display: block;'>"+Number.parseFloat(part_getChildrenByTag(theButton.parentElement,"P")[0].innerHTML)+"</text>";
+	var backButton="<button onclick='part_insertHollowInput(this)'>Is Hollow</button>";
 	theButton.parentElement.innerHTML=storage+backButton;
 }
 
@@ -602,17 +641,17 @@ function removeHollowInput(theButton){
 * in an entry's volume section when changed. Changes the currently displayed volume to
 * match the given thickness
 *
-* @method updateVolumeDisplay
+* @method part_insertVolumeDisplay
 * @for partTableGlobal
 * @param {HTML Element} theBox The text input element that calls this function
 * @return {Void}
 *
 */
-function updateVolumeDisplay(theBox){
-	var theThickness=Number.parseFloat(getChildrenByTag(theBox.parentElement,"INPUT")[0].value);
-	var area=Number.parseFloat(getChildrenByTag(theBox.parentElement.parentElement.parentElement,"TD")[2].innerHTML);
+function part_insertVolumeDisplay(theBox){
+	var theThickness=Number.parseFloat(part_getChildrenByTag(theBox.parentElement,"INPUT")[0].value);
+	var area=Number.parseFloat(part_getChildrenByTag(theBox.parentElement.parentElement.parentElement,"TD")[2].innerHTML);
 	var vol=theThickness*area;
-	getChildrenByTag(theBox.parentElement,"TEXT")[0].innerHTML=vol.toString()+"\n";
+	part_getChildrenByTag(theBox.parentElement,"TEXT")[0].innerHTML=vol.toString()+"\n";
 }
 
 
@@ -623,17 +662,17 @@ function updateVolumeDisplay(theBox){
 * in an entry's mass section when changed. Changes the currently displayed mass to
 * match the given density
 *
-* @method updateMassDisplay
+* @method part_insertMassDisplay
 * @for partTableGlobal
 * @param {HTML Element} theBox The text input element that calls this function
 * @return {Void}
 *
 */
-function updateMassDisplay(theBox){
-	var theDensity=Number.parseFloat(getChildrenByTag(theBox.parentElement,"INPUT")[0].value);
-	var theVolume=Number.parseFloat(getChildrenByTag(getChildrenByTag(theBox.parentElement.parentElement.parentElement,"TD")[1],"TEXT")[0].innerHTML);
+function part_insertMassDisplay(theBox){
+	var theDensity=Number.parseFloat(part_getChildrenByTag(theBox.parentElement,"INPUT")[0].value);
+	var theVolume=Number.parseFloat(part_getChildrenByTag(part_getChildrenByTag(theBox.parentElement.parentElement.parentElement,"TD")[1],"TEXT")[0].innerHTML);
 	var mass=theDensity*theVolume;
-	getChildrenByTag(theBox.parentElement,"TEXT")[0].innerHTML= (mass.toFixed(8)).toString()+"\n";
+	part_getChildrenByTag(theBox.parentElement,"TEXT")[0].innerHTML= (mass.toFixed(8)).toString()+"\n";
 }
 
 
@@ -645,13 +684,13 @@ function updateMassDisplay(theBox){
 * A function automatically called by button elements associated with accessing sample densities.
 * Adds a div element containing several sample density options.
 *
-* @method doDensityDrop
+* @method part_doDensityDrop
 * @for partTableGlobal
 * @param {HTML Element} theButton The button element that called this function
 * @return {Void}
 *
 */
-function doDensityDrop(theButton){
+function part_doDensityDrop(theButton){
 	theButton.parentElement.innerHTML=undropDensityButton+densityMenu;
 }
 
@@ -662,13 +701,13 @@ function doDensityDrop(theButton){
 * A function automatically called by button elements associated with accessing sample densities.
 * Removes the sample density option div element.
 *
-* @method undoDensityDrop
+* @method unpart_doDensityDrop
 * @for partTableGlobal
 * @param {HTML Element} theButton The button element that called this function
 * @return {Void}
 *
 */
-function undoDensityDrop(theButton){
+function unpart_doDensityDrop(theButton){
 	theButton.parentElement.innerHTML=dropDensityButton;
 }
 
@@ -681,13 +720,13 @@ function undoDensityDrop(theButton){
 * A function automatically called by button elements associated with sample densities. Will fill
 * the associated density input box with the value associated with the inner text of the button.
 *
-* @method changeDensity
+* @method part_changeDensity
 * @for partTableGlobal
 * @param {HTML Element} theButton The button element that called this function
 * @return {Void}
 *
 */
-function changeDensity(theButton){
+function part_changeDensity(theButton){
 
 	var mat=theButton.innerHTML;
 	var val;
@@ -723,8 +762,8 @@ function changeDensity(theButton){
 		return;
 	}
 
-	getChildrenByTag(theButton.parentElement.parentElement.parentElement,"INPUT")[0].value=val;
-	updateMassDisplay(getChildrenByTag(theButton.parentElement.parentElement.parentElement,"INPUT")[0]);
+	part_getChildrenByTag(theButton.parentElement.parentElement.parentElement,"INPUT")[0].value=val;
+	part_insertMassDisplay(part_getChildrenByTag(theButton.parentElement.parentElement.parentElement,"INPUT")[0]);
 
 }
 
@@ -735,13 +774,13 @@ function changeDensity(theButton){
 * A function automatically called by text box elements upon becoming checked/unchecked.
 * Sets an internal value to indicate the checked state of the element.
 *
-* @method flipCheck
+* @method part_flipCheck
 * @for partTableGlobal
 * @param {HTML Element} theBox The checkbox element calling this function
 * @return {Void}
 *
 */
-function flipCheck(theBox){
+function part_flipCheck(theBox){
 
 	var row = theBox.parentElement.parentElement;
 
@@ -764,12 +803,12 @@ function flipCheck(theBox){
 * Takes the value present in the global density input textbox and applies it to all
 * parts currently in the table.
 *
-* @method fillGlobalDensity
+* @method part_fillGlobalDensity
 * @for partTableGlobal
 * @return {Void}
 *
 */
-function fillGlobalDensity(){
+function part_fillGlobalDensity(){
 
 	var densInp= document.getElementById("GlobalDensityInput");
 	var theDensity;
@@ -788,11 +827,11 @@ function fillGlobalDensity(){
 	var lim=massElems.length;
 	while(pos<lim){
 		massElems[pos].innerHTML=		"<text></text><text><br>Density:</text> "+
-										"<input type='text' onchange='updateMassDisplay(this)' value='"+(theDensity.toFixed(8)).toString()+"'>"+
+										"<input type='text' onchange='part_insertMassDisplay(this)' value='"+(theDensity.toFixed(8)).toString()+"'>"+
 										"</input>"+
 										densityDiv+
-										"<button onclick='insertMassInput(this)' >Input By Mass</button>";
-		updateMassDisplay(getChildrenByTag(massElems[pos],"BUTTON")[0]);
+										"<button onclick='part_insertMassInput(this)' >Input By Mass</button>";
+		part_insertMassDisplay(part_getChildrenByTag(massElems[pos],"BUTTON")[0]);
 		pos++;
 	}
 
@@ -808,28 +847,29 @@ function fillGlobalDensity(){
 * Makes it so that the table row associated with this call has its part model
 * displayed
 *
-* @method clickFocus
+* @method part_clickFocus
 * @for partTableGlobal
 * @return {Void}
 *
 */
-function clickFocus(){
+function part_clickFocus(){
 	console.log("Table click registered");
 	var pos = 0;
 	var lim = parts.length;
+	
 	while(pos<lim){
-		console.log(getChildrenByTag(this,"TD")[0].innerHTML);
-		console.log(grabName(parts[pos].Name));
-		console.log("~~~~~");
-		if(grabName(parts[pos].Name)  === getChildrenByTag(this,"TD")[0].innerHTML){
-			console.log("Found match between "+grabName(parts[pos].Name)+" and "+getChildrenByTag(this,"TD")[0].innerHTML)
+		//console.log(part_getChildrenByTag(this,"TD")[0].innerHTML);
+		//console.log(grabName(parts[pos].Name));
+		//console.log("~~~~~");
+		if(grabName(parts[pos].Name)  === part_getChildrenByTag(this,"TD")[0].innerHTML){
+			console.log("Found match between "+grabName(parts[pos].Name)+" and "+part_getChildrenByTag(this,"TD")[0].innerHTML)
 			if(focusPart !== null){
 				focusPart.Mesh.material = new THREE.MeshLambertMaterial(wireSettings);
 			}
 
-			console.log("AAAAAAH");
+			//console.log("AAAAAAH");
 			if(focusRow !== null){
-				var tdList = getChildrenByTag(focusRow,"TD");
+				var tdList = part_getChildrenByTag(focusRow,"TD");
 				var tdPos = 0;
 				var tdLim = tdList.length;
 				while(tdPos<tdLim){
@@ -838,21 +878,21 @@ function clickFocus(){
 				}
 			}
 
-			console.log("AAAAAAH");
+			//console.log("AAAAAAH");
 
 			focusPart = parts[pos];
 
-			console.log("AAAAAAH");
-			console.log(focusPart);
+			//console.log("AAAAAAH");
+			//console.log(focusPart);
 			focusRow = this;
 
-			if(getChildrenByTag(this,"TD")[4].childNodes[0].value === "on"){
+			if(part_getChildrenByTag(this,"TD")[4].childNodes[0].value === "on"){
 				focusPart.Mesh.material = new THREE.MeshLambertMaterial({color: 0x884444});
 			}
 			else{
 				focusPart.Mesh.material = new THREE.MeshLambertMaterial({color: 0x444488});
 			}
-			var tdList = getChildrenByTag(focusRow,"TD");
+			var tdList = part_getChildrenByTag(focusRow,"TD");
 			var tdPos = 0;
 			var tdLim = tdList.length;
 			while(tdPos<tdLim){
@@ -860,7 +900,7 @@ function clickFocus(){
 				tdPos++;
 			}
 
-			var rowList = getChildrenByTag(document.getElementById("body_id"),"TR");
+			var rowList = part_getChildrenByTag(document.getElementById("body_id"),"TR");
 			var rowPos = 0;
 			var lim = rowList.length;
 			while(rowPos<lim){
@@ -890,18 +930,18 @@ function clickFocus(){
 * Sets up every table entry HTML element with the focus function as its "onclick"
 * attribute
 *
-* @method setupClickFocus
+* @method part_setupClickFocus
 * @for partTableGlobal
 * @return {Void}
 *
 */
-function setupClickFocus(){
+function part_setupClickFocus(){
 
-	var rowElems = getChildrenByTag(document.getElementById("body_id"),"TR");
+	var rowElems = part_getChildrenByTag(document.getElementById("body_id"),"TR");
 	var pos=0;
 	var lim=rowElems.length;
 	while(pos<lim){
-		rowElems[pos].onclick = clickFocus;
+		rowElems[pos].onclick = part_clickFocus;
 		pos++;
 	}
 
@@ -917,18 +957,18 @@ function setupClickFocus(){
 *
 * Sets up every table entry HTML element with color highlighting
 *
-* @method setupHighlighting
+* @method part_setupHighlighting
 * @for partTableGlobal
 * @return {Void}
 *
 */
-function setupHighlight(){
+function part_setupHighlight(){
 
-	var rowElems = getChildrenByTag(document.getElementById("body_id"),"TR");
+	var rowElems = part_getChildrenByTag(document.getElementById("body_id"),"TR");
+	console.log(rowElems);
 	var pos=0;
 	var lim=rowElems.length;
 	while(pos<lim){
-		//console.log(rowElems);
 		if(rowElems[pos].childNodes[4].childNodes[0].value === "on"){
 			rowElems[pos].classList.add("fast");
 		}
@@ -947,17 +987,17 @@ function setupHighlight(){
 
 /**
 *
-* Accepts a string and outputs a conversion value for the string's described unit to the standard
-* units of this application. If no suitable unit is identified in the string, the conversion value
+* Accepts a string and outputs a part_conversion value for the string's described unit to the standard
+* units of this application. If no suitable unit is identified in the string, the part_conversion value
 * returned is 0.
 *
-* @method conversion
+* @method part_conversion
 * @for partTableGlobal
 * @param {String} theString A string representation of the unit being looked up
-* @return {Float} the unit conversion value
+* @return {Float} the unit part_conversion value
 *
 */
-function conversion (theString){
+function part_conversion (theString){
 
 	switch(theString){
 		case "millimeters" :
@@ -997,20 +1037,20 @@ function conversion (theString){
 *
 * Returns a blank mass input element for use in the table
 *
-* @method makeMassElem
+* @method part_makeMassElem
 * @for partTableGlobal
 * @return {HTML element} a blank mass input element
 *
 */
-function makeMassElem(){
+function part_makeMassElem(){
 
 	var result=document.createElement("DIV");
 	result.className="masselem";
 	var massButton=document.createElement("BUTTON");
-	massButton.onclick="insertMassInput(this)";
+	massButton.onclick="part_insertMassInput(this)";
 	massButton.innerHTML="Input By Mass";
 	var densityButton=document.createElement("BUTTON");
-	densityButton.onclick="insertDensityInput(this)";
+	densityButton.onclick="part_insertDensityInput(this)";
 	densityButton.innerHTML="Input By Volume+Density";
 	result.appendChild(massButton);
 	result.appendChild(densityButton);
@@ -1025,15 +1065,15 @@ function makeMassElem(){
 *
 * Returns a blank volume input element for use in the table
 *
-* @method makeVolElem
+* @method part_makeVolElem
 * @for partTableGlobal
 * @return {HTML element} a blank volume input element
 *
 */
-function makeVolElem(){
+function part_makeVolElem(){
 
 	result=document.creatElement("BUTTON");
-	result.onclick="insertHollowInput(this)";
+	result.onclick="part_insertHollowInput(this)";
 	result.innerHTML="Is Hollow";
 	return result;
 
@@ -1046,16 +1086,16 @@ function makeVolElem(){
 *
 * Returns a standard button for a density dropdown menu
 *
-* @method makeDropButton
+* @method part_makeDropButton
 * @for partTableGlobal
 * @return {HTML element} a standard density dropdown button
 *
 */
-function makeDropButton(){
+function part_makeDropButton(){
 
 	result=document.creatElement("BUTTON");
 	result.className="dropbtn";
-	result.onclick="doDensityDrop(this)";
+	result.onclick="part_doDensityDrop(this)";
 	result.innerHTML="Sample Densities";
 	return result;
 
@@ -1066,16 +1106,16 @@ function makeDropButton(){
 *
 * Returns a standard button to remove a density dropdown element
 *
-* @method makeUndropButton
+* @method part_makeUndropButton
 * @for partTableGlobal
 * @return {HTML element} a standard density dropdown removal button
 *
 */
-function makeUndropButton(){
+function part_makeUndropButton(){
 
 	result=document.creatElement("BUTTON");
 	result.className="dropbtn";
-	result.onclick="undoDensityDrop(this)";
+	result.onclick="unpart_doDensityDrop(this)";
 	result.innerHTML="Sample Densities";
 	return result;
 
@@ -1087,12 +1127,12 @@ function makeUndropButton(){
 *
 * Returns a standard sample density dropdown menu
 *
-* @method makeDensityDiv
+* @method part_makeDensityDiv
 * @for partTableGlobal
 * @return {HTML element} a sample density dropdown menu
 *
 */
-function makeDensityDiv(){
+function part_makeDensityDiv(){
 
 	result=document.creatElement("DIV");
 	result.className="dropdown";
@@ -1112,13 +1152,13 @@ function makeDensityDiv(){
 *
 * Given a mouseup event, sets corresponding internal button states for mouse-related controls
 *
-* @method doMouseUp
+* @method part_doMouseUp
 * @for directionConfirmGlobal
 * @param {mouseup event} theEvent
 * @return {Void}
 *
 */
-function doMouseUp(theEvent){
+function part_doMouseUp(theEvent){
 	if(theEvent.button == 0){
 		leftDrag = false;
 	}
@@ -1132,13 +1172,13 @@ function doMouseUp(theEvent){
 *
 * Given a mousedown event, sets corresponding internal button states for mouse-related controls
 *
-* @method doMouseDown
+* @method part_doMouseDown
 * @for directionConfirmGlobal
 * @param {mousedown event} theEvent
 * @return {Void}
 *
 */
-function doMouseDown(theEvent){
+function part_doMouseDown(theEvent){
 	if(theEvent.button == 0){
 		leftDrag = true;
 	}
@@ -1153,13 +1193,13 @@ function doMouseDown(theEvent){
 *
 * Given a mouseleave event, sets corresponding internal button states for mouse-related controls
 *
-* @method doMouseLeave
+* @method part_doMouseLeave
 * @for directionConfirmGlobal
 * @param {mouseup event} theEvent
 * @return {Void}
 *
 */
-function doMouseLeave(theEvent){
+function part_doMouseLeave(theEvent){
 	leftDrag = false;
 	rightDrag = false;
 	lastMouse = null;
@@ -1168,16 +1208,40 @@ function doMouseLeave(theEvent){
 
 /**
 *
+* Given a mousedrag event, rotates the camera or adds a vector to the currently displayed pair,
+* depending upon whether or not the left or right mouse button is depressed
+*
+* @method doPartDrag
+* @for directionConfirmGlobal
+* @param {mouseup event} theEvent
+* @return {Void}
+*
+*/
+function part_doDrag (theEvent){
+	console.log("doPartDrag called");
+	if(leftDrag===true){
+		thePos.normalize();
+		theEul.set(theEvent.movementY*(-0.008)*Math.cos(Math.atan2(thePos.x,thePos.z)),
+				   theEvent.movementX*(-0.008),
+				   theEvent.movementY*(0.008)*Math.sin(Math.atan2(thePos.x,thePos.z)),
+				   'ZYX');
+	}
+
+}
+
+
+/**
+*
 * Prevents the default response of the given event (used to prevent dropdown menus when right
 * clicking on the display).
 *
-* @method justDont
+* @method part_justDont
 * @for directionConfirmGlobal
 * @param {Event Object} theEvent The event to suppress the default response of.
 * @return {Void}
 *
 */
-function justDont(theEvent){
+function part_justDont(theEvent){
 	theEvent.preventDefault();
 }
 
@@ -1191,26 +1255,26 @@ function justDont(theEvent){
 *
 * Given a mousewheel event, changes the distance of the camera from the center of the scene
 *
-* @method doMouseUp
+* @method part_doZoom
 * @for directionConfirmGlobal
 * @param {mouseup event} theEvent
 * @return {Void}
 *
 */
-function doZoom(theEvent){
+function part_doZoom(theEvent){
 	var theDelta = theEvent.deltaY == 0 ? 0 : ( theEvent.deltaY > 0 ? 1 : -1 );
 	theDistance=theDistance*Math.pow(1.001,theDelta*(-40));
 }
 
 
 
-function doSetup(){
+function part_doSetup(){
 
 	initAxisLines();
 
-	setupClickFocus();
-	setupHighlight();
-	getChildrenByTag(document.getElementById("body_id"),"TR")[0].click();
+	part_setupClickFocus();
+	part_setupHighlight();
+	part_getChildrenByTag(document.getElementById("body_id"),"TR")[0].click();
 
 }
 
@@ -1220,8 +1284,6 @@ startupScripts["2"] = function (){
 
 
 
-
-	handleXML = recieveData;
 
 	fileReaders=[];
 	inputXML=null;
@@ -1269,18 +1331,19 @@ startupScripts["2"] = function (){
 	theTable= $('#table_id').DataTable({
 		"scrollY": "300px",
 		"scroller": true,
-		"deferRender": false,
+		"deferpart_render": false,
 		"paging": false,
 		"searching": false
 	});
 
-	document.addEventListener('keydown', registerDown , false);
-	document.addEventListener('keyup', registerUp , false);
-	document.getElementById("display").addEventListener("mousemove", doDrag);
-	document.getElementById("display").addEventListener("wheel", doZoom);
+	document.addEventListener('keydown', part_registerDown , false);
+	document.addEventListener('keyup', part_registerUp , false);
+	document.getElementById("display").addEventListener("mousemove", part_doDrag);
+	document.getElementById("display").addEventListener("wheel", part_doZoom);
 
 	theXML=$.parseXML(inText);
-	theEntries=grab(theXML,"parts_properties");
+	console.log(theXML);
+	theEntries=part_grab(theXML,"parts_properties");
 	theEntries=$(theEntries).children("part_properties");
 	console.log(theEntries);
 	pos=0;
@@ -1288,76 +1351,16 @@ startupScripts["2"] = function (){
 	//name = null;
 	//classif = null;
 	while(pos<lim){
-		addEntry(theEntries[pos]);
+		part_addEntry(theEntries[pos]);
 		pos++;
 	}
 
 
-
-	render = function () {
-
-		// The function that will manage frame requests
-		requestAnimationFrame( render );
-
-
-		focusPart.Mesh.geometry.computeBoundingBox();
-		focusBox=focusPart.Mesh.geometry.boundingBox.clone();
-
-		focusPoint= new THREE.Vector3(
-									  (focusBox.min.x+focusBox.max.x)/2,
-									  (focusBox.min.y+focusBox.max.y)/2,
-									  (focusBox.min.z+focusBox.max.z)/2
-									 );
-
-		thePos.normalize();
-
-		thePos.applyEuler(theEul);
-		theEul.set(0,0,0,'XYZ');
-		thePos.multiplyScalar(theDistance);
-		camera.position.copy(thePos);
-		camera.position.add(focusPoint);
-		camera.lookAt(focusPoint);
-		camera.updateMatrix();
-
-		sunLight.position.set( (camera.position.x-focusPoint.x)*2+focusPoint.x,
-							   (camera.position.y-focusPoint.y)*2+focusPoint.y,
-							   (camera.position.z-focusPoint.z)*2+focusPoint.z );
-		sunLight.target.position=focusPoint;
-
-		updateAxisLines();
-
-		renderer.render(scene, camera);
-	};
-
-
-
-	/**
-	*
-	* Given a mousedrag event, rotates the camera or adds a vector to the currently displayed pair,
-	* depending upon whether or not the left or right mouse button is depressed
-	*
-	* @method doDrag
-	* @for directionConfirmGlobal
-	* @param {mouseup event} theEvent
-	* @return {Void}
-	*
-	*/
-	doDrag = function (theEvent){
-
-		if(leftDrag==true){
-			thePos.normalize();
-			theEul.set(theEvent.movementY*(-0.008)*Math.cos(Math.atan2(thePos.x,thePos.z)),
-					   theEvent.movementX*(-0.008),
-					   theEvent.movementY*(0.008)*Math.sin(Math.atan2(thePos.x,thePos.z)),
-					   'ZYX');
-		}
-
-	}
-
 	clearScene("display");
 
 
-	doSetup();
-	render();
+	part_doSetup();
+	part_render();
 
 }
+

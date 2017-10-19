@@ -687,13 +687,13 @@ function fixOpacity(theSlider){
 *
 * Given a mouseup event, sets corresponding internal button states for mouse-related controls
 *
-* @method doMouseUp
+* @method doDirMouseUp
 * @for directionConfirmGlobal
 * @param {mouseup event} theEvent
 * @return {Void}
 *
 */
-function doMouseUp(theEvent){
+function doDirMouseUp(theEvent){
 	if(theEvent.button == 0){
 		leftDrag = false;
 	}
@@ -707,13 +707,13 @@ function doMouseUp(theEvent){
 *
 * Given a mousedown event, sets corresponding internal button states for mouse-related controls
 *
-* @method doMouseDown
+* @method doDirMouseDown
 * @for directionConfirmGlobal
 * @param {mousedown event} theEvent
 * @return {Void}
 *
 */
-function doMouseDown(theEvent){
+function doDirMouseDown(theEvent){
 
 	if(theEvent.button == 0){
 		leftDrag = true;
@@ -773,13 +773,13 @@ function doMouseDown(theEvent){
 *
 * Given a mouseleave event, sets corresponding internal button states for mouse-related controls
 *
-* @method doMouseLeave
+* @method doDirMouseLeave
 * @for directionConfirmGlobal
 * @param {mouseup event} theEvent
 * @return {Void}
 *
 */
-function doMouseLeave(theEvent){
+function doDirMouseLeave(theEvent){
 	leftDrag = false;
 	rightDrag = false;
 	lastMouse = null;
@@ -807,7 +807,7 @@ function justDont(theEvent){
 *
 * Given a mousewheel event, changes the distance of the camera from the center of the scene
 *
-* @method doMouseUp
+* @method doZoom
 * @for directionConfirmGlobal
 * @param {mouseup event} theEvent
 * @return {Void}

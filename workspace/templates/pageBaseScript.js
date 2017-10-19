@@ -453,14 +453,8 @@ function spinOff(func) {
 
 function clearScene( dispID ){
 
-	var cullList = [];
-	for( x in scene.children ){
-		cullList.push(x);
-	}
 
-	for( x in cullList ){
-		scene.remove(x);
-	}
+
 
 	var theWidth=document.getElementById(dispID).clientWidth;
 	var theHeight= document.getElementById(dispID).clientHeight;
@@ -472,41 +466,41 @@ function clearScene( dispID ){
 	document.getElementById(dispID).appendChild( renderer.domElement );
 
 	// Adding in a whole bunch of lights for the scene, so the parts are well-lit
-	var directionalLight = new THREE.DirectionalLight( 0x888888 );
+	var directionalLight = new THREE.DirectionalLight( 0xBBBBBB );
 			directionalLight.position.x = 0;
 			directionalLight.position.y = 0;
 			directionalLight.position.z = 1;
 			directionalLight.position.normalize();
 			scene.add( directionalLight );
 
-	var directionalLight = new THREE.DirectionalLight( 0x888888 );
+	var directionalLight = new THREE.DirectionalLight( 0xBBBBBB );
 			directionalLight.position.x = 0;
 			directionalLight.position.y = 1;
 			directionalLight.position.z = 0;
 			directionalLight.position.normalize();
 			scene.add( directionalLight );
 
-	var directionalLight = new THREE.DirectionalLight( 0x888888 );
+	var directionalLight = new THREE.DirectionalLight( 0xBBBBBB );
 			directionalLight.position.x = 1;
 			directionalLight.position.y = 0;
 			directionalLight.position.z = 0;
 			directionalLight.position.normalize();
 			scene.add( directionalLight );
-	var directionalLight = new THREE.DirectionalLight( 0x888888 );
+	var directionalLight = new THREE.DirectionalLight( 0xBBBBBB );
 			directionalLight.position.x = 0;
 			directionalLight.position.y = 0;
 			directionalLight.position.z = -1;
 			directionalLight.position.normalize();
 			scene.add( directionalLight );
 
-	var directionalLight = new THREE.DirectionalLight( 0x888888 );
+	var directionalLight = new THREE.DirectionalLight( 0xBBBBBB );
 			directionalLight.position.x = 0;
 			directionalLight.position.y = -1;
 			directionalLight.position.z = 0;
 			directionalLight.position.normalize();
 			scene.add( directionalLight );
 
-	var directionalLight = new THREE.DirectionalLight( 0x888888 );
+	var directionalLight = new THREE.DirectionalLight( 0xBBBBBB );
 			directionalLight.position.x = -1;
 			directionalLight.position.y = 0;
 			directionalLight.position.z = 0;
@@ -514,14 +508,17 @@ function clearScene( dispID ){
 			scene.add( directionalLight );
 
 
-
+/*
 	sunLight.position.set( 4000, 4000, 4000 );
 	scene.add( sunLight );
 
-
+*/
 
 	var theFog=new THREE.Fog( skyColor, 4000, 6000 );
 	scene.fog=theFog;
+
+	
+	
 
 }
 

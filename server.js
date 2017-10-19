@@ -28,6 +28,7 @@ var contentManifest = {
 
 	tableStyle:"datatables.css",
 
+	baseStyle:"pageBaseStyle.css",
 	pageBase:"pageBase.html",
 	stageBase:"stageBase.html",
 
@@ -387,7 +388,8 @@ app.post('/exec', (request, response) => {
 
 app.get('/', (request, response) => {
 
-    response.send(baseTemplate({}));
+    response.send(baseTemplate({baseStyle: 		content["tableStyle"] 
+										+ "\n"+ content["baseStyle"]}));
 
 });
 
