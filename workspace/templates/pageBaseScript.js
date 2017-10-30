@@ -267,7 +267,7 @@ function advanceStage(response,status){
 		contentElem.innerHTML = response.responseText;
 		if(stage === 1 || stage === 3 || stage === 5 || stage === 7){
 			checkinWait = 512;
-			exec();
+			execute();
 			setTimeout(checkIn,checkinWait);
 		}
 		(startupScripts[stage])();
@@ -396,7 +396,7 @@ function checkIn(){
 
 }
 
-function exec(){
+function execute(){
 
 	console.log("Sending out check in");
     $.ajax({

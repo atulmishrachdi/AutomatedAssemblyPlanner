@@ -359,8 +359,6 @@ function part_addEntry(theEntry){
 */
 function part_renderXML(){
 
-	theTable.search("").draw();
-
 	console.log(theTable.rows().data());
 
 	var result="<?xml version='1.0' encoding='utf-8'?>\n<parts_properties xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>\n";
@@ -379,7 +377,7 @@ function part_renderXML(){
 
 	while(entryPos<entryLim){
 
-		thisResult=prat_part_renderEntry(part_getChildrenByTag(theEntries[entryPos],"TD"));
+		thisResult=part_renderEntry(part_getChildrenByTag(theEntries[entryPos],"TD"));
 		if(thisResult!=null){
 			result=result+thisResult;
 		}
@@ -394,24 +392,8 @@ function part_renderXML(){
 
 
 
-	part_sendData(result);
-
-
-	if(manualFileInput){
-
-		var data = new Blob([result], {type: 'text/plain'});
-
-		if (textFile !== null) {
-		  window.URL.revokeObjectURL(textFile);
-		}
-
-		textFile = window.URL.createObjectURL(data);
-
-		document.getElementById("downloadLink").setAttribute("style","color: white; display: inline;");
-		document.getElementById("downloadLink").innerHTML="Download";
-		document.getElementById("downloadLink").href=textFile;
-
-	}
+	outText = result;
+	requestAdvance(3);
 
 
 }
@@ -516,7 +498,7 @@ function part_renderEntry(theCells){
 
 
 	var result="";
-	result=result+"<properties>\n";
+	result=result+"<part_properties>\n";
 	result=result+"  <name>"+theCells[0].innerHTML+"</name>\n";
 	result=result+massText;
 	if(part_getChildrenByTag(theCells[1],"TEXT")[0].innerHTML=="" || isNaN(Number.parseFloat(part_getChildrenByTag(theCells[1],"TEXT")[0].innerHTML))){
@@ -526,7 +508,7 @@ function part_renderEntry(theCells){
 	result=result+"  <volume>"+part_getChildrenByTag(theCells[1],"TEXT")[0].innerHTML+"</volume>\n";
 	result=result+"  <surface_area>"+theCells[2].innerHTML+"</surface_area>\n";
 	result=result+checkText;
-	result=result+"</properties>\n";
+	result=result+"</part_properties>\n";
 	return result;
 
 }

@@ -369,7 +369,7 @@ app.post('/exec', (request, response) => {
             break;
         //================================//================================//================================
         case "3":
-            execResponse(response,"DisassemblyDirections.exe",sessID,sessData.filePath+"parts_properties2.xml",textData)
+            execResponse(response,"DisassemblyDirections.exe",sessID,sessData.filePath+"/XML/parts_properties2.xml",textData)
             break;
         //================================//================================//================================
         case "5":
