@@ -53,7 +53,7 @@ function dir_receiveData(theXMLFile, theSTLFiles){
 		
 		partMesh=new THREE.Mesh( 
 				partGeom,
-				new THREE.MeshNormalMaterial( )
+				new THREE.MeshNormalMaterial()
 		);
 		parts.push({
 			Mesh: partMesh,
@@ -1422,18 +1422,8 @@ function dir_renderXML(){
 	
 	var result = start + dirContent + arcContent + end;
 	
-	var data = new Blob([result], {type: 'text/plain'});
-
-	if (textFile !== null) {
-	  window.URL.revokeObjectURL(textFile);
-	}
-
-	textFile = window.URL.createObjectURL(data);
-
-	document.getElementById("downloadLink").setAttribute("style","color: white; display: inline;");
-	document.getElementById("downloadLink").innerHTML="Download";
-	document.getElementById("downloadLink").href=textFile;
-	
+	outText = result;
+	requestAdvance(5);	
 	
 }
 
@@ -1624,7 +1614,6 @@ startupScripts[4] = function() {
 	currentPair=null;
 
 
-
 	theWidth=document.getElementById("display").clientWidth;
 	theHeight= document.getElementById("display").clientHeight;
 
@@ -1644,6 +1633,9 @@ startupScripts[4] = function() {
 	document.getElementById("display").addEventListener("mousemove", dir_doDrag);
 	document.getElementById("display").addEventListener("wheel", dir_doZoom);
 
+	theXML = inText;
+
 	dir_renderParts();
 
 }
+

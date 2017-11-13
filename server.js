@@ -17,6 +17,8 @@ const sessionRoute = fs.realpathSync(".")+"/workspace";
 const tempRoute = sessionRoute+"/templates";
 const theTimeout = 1000*60*60*24;
 
+var OS = process.platform;
+
 var contentManifest = {
 
 	jquery:"jquery.js",
@@ -25,6 +27,7 @@ var contentManifest = {
 	treequence:"treequence.js",
 	partRender:"partRender.js",
 	tableScript:"datatables.js",
+	directionList:"directionList.js",
 
 	tableStyle:"datatables.css",
 
@@ -89,7 +92,8 @@ function safeRead(file){
 					result = "";
 					break;
 				default:
-					console.log("Experienced error "+theError+" when trying to read file "+file);
+					console.log("Experienced error "+theError+
+								" when trying to read file "+file);
 					result = "";
 					break;
 			}
@@ -211,6 +215,7 @@ function makeSession(){
 		id: theID,
 		startTime: Date.now(),
 		stage: 0,
+		workingOn: 0,
 		state: {
 			models: [],
 			partsPropertiesIn: "",
@@ -232,9 +237,18 @@ function exeDone(exeFile,sessID){
 
 function runResponse(response,exeFile,sessID,textFile,textData){
 
+
 	return (function(err,data){
 			fs.writeFileSync(sessions[sessID].filePath +"/prog.txt","0");
-			exec("mono " + exeFile + " " + sessions[sessID].filePath + "  y  1  0.5  y  y", exeDone(exeFile,sessID));
+			if(OS === 'win32'){
+				exec(	exeFile + " " + sessions[sessID].filePath +
+						"  y  1  0.5  y  y", exeDone(exeFile,sessID));
+			}
+			else{
+				exec(	"mono " + exeFile + " " + sessions[sessID].filePath +
+						"  y  1  0.5  y  y", exeDone(exeFile,sessID));
+			}
+			
 			response.json({
 				stage: sessions[sessID].stage,
 				progress: 0,
@@ -315,7 +329,7 @@ function progResponse(response, theID, theFile, session, field){
 
 
 app.use(bodyParser.json({limit: '500gb'}));
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({limit: '500gb', extended: true}));
 
 app.post('/checkIn', (request, response) => {
 
@@ -362,6 +376,7 @@ app.post('/exec', (request, response) => {
 	console.log("Recieved check in from session "+sessID+" for stage "+stage);
 	console.log(request.body);
 
+	sessions[sessID].workingOn = stage;
     switch(stage){
         //================================//================================//================================
         case "1":
