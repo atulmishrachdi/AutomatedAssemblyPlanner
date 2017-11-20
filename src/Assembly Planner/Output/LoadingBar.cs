@@ -14,20 +14,25 @@ namespace Assembly_Planner
 		private static void updateProg(float completion){
 			int progVal = (int) (completion * 100);
 
-			bool done = false;
-			StreamWriter progStream;
-			while (!done) {
-				try{
-					progStream = new System.IO.StreamWriter("./prog.txt");
-					progStream.Write(progVal.ToString());
-					progStream.Close();
-					done = true;
-				}
-				catch (Exception){
-				}
-			}
+            if (Program.serverMode)
+            {
+                StreamWriter writer = null;
+                while (writer == null)
+                {
+                    try
+                    {
+                        writer = new StreamWriter(Program.state.inputDir + Program.slash + "prog.txt");
+                    }
+                    catch (IOException e)
+                    {
+                        writer = null;
+                    }
+                }
+                writer.Write(completion*100);
+                writer.Close();
+            }
 
-		}
+        }
 
         public static void start(int width, float completion)
         {
@@ -46,6 +51,9 @@ namespace Assembly_Planner
             }
             bar = bar + "]";
             Console.Write(bar);
+
+            updateProg(completion);
+
         }
 
         public static void refresh(int width, float completion)
@@ -66,6 +74,9 @@ namespace Assembly_Planner
             bar = bar + "]";
 			updateProg (completion);
             Console.Write(bar);
+
+            updateProg(completion);
+
         }
 
     }

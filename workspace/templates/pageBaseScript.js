@@ -1,4 +1,4 @@
-
+//<script>
 //  Array for processed parts
 var parts=[];
 
@@ -265,7 +265,7 @@ function advanceStage(response,status){
 		//console.log(response.responseText);
 		var contentElem = document.getElementById("stageContent");
 		contentElem.innerHTML = response.responseText;
-		if(stage === 1 || stage === 3 || stage === 5 || stage === 7){
+		if(stage === 1 || stage === 3 || stage === 5 || stage === 6){
 			checkinWait = 512;
 			execute();
 			setTimeout(checkIn,checkinWait);
@@ -301,11 +301,12 @@ function updateProg(response,status){
 		if(resp.failed){
 			alert("Something went wrong on the server, and so this process may not continue. Please contact the webmaster.");
 		}
-		if(resp.progress <= prog){
+		if(resp.progress == prog){
 			checkinWait = checkinWait * 2;
 		}
 		else{
 			checkinWait = checkinWait / 2;
+			prog = resp.progress;
 		}
 		if(resp.data === null /*Number.parseInt(resp.progress) < 100*/){
 			updateLoad();
@@ -314,6 +315,11 @@ function updateProg(response,status){
 		}
 		else{
 			inText = resp.data;
+			if(stage === 5 && inText === "false"){
+				updateLoad();
+				requestAdvance(stage-1);
+				return;
+			}
 			//console.log(inText);
 			updateLoad();
 			requestAdvance(stage+1);
@@ -517,10 +523,13 @@ function clearScene( dispID ){
 	var theFog=new THREE.Fog( skyColor, 4000, 6000 );
 	scene.fog=theFog;
 
-	
-	
+
+
 
 }
 
 getID();
 requestAdvance(0);
+
+
+//</script>

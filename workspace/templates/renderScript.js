@@ -1,3 +1,4 @@
+//<script>
 ;
 
 
@@ -37,14 +38,14 @@ if( typeof(startupScripts) == 'undefined'){
 * The function which handles the actual rendering of the solution file animation
 * and loading in the models
 *
-* @method recieveData
+* @method rdr_recieveData
 * @for renderGlobal
 * @param {String} theXMLFile
 * @param {Object} theSTLFiles
 * @return {Void}
 *
 */
-function receiveData(theXMLFile, theSTLFiles){
+function rdr_receiveData(theXMLFile, theSTLFiles){
 
 	theXML=theXMLFile;
 
@@ -76,7 +77,7 @@ function receiveData(theXMLFile, theSTLFiles){
 		pos++;
 	}
 
-	renderParts();
+	rdr_renderParts();
 
 }
 
@@ -89,7 +90,7 @@ function receiveData(theXMLFile, theSTLFiles){
 
 
 // Dialates time with the scrolling of the mouse
-function zoomIt(e){
+function rdr_zoomIt(e){
 
 	//zoom=zoom*Math.pow(1.001,e.wheelDelta);
 	var theDelta = e.deltaY == 0 ? 0 : ( e.deltaY > 0 ? 1 : -1 );
@@ -102,12 +103,12 @@ function zoomIt(e){
 *
 *  Attempts to lock the mouse for camera manupulation
 *
-* @method tryMouseLock
+* @method rdr_tryMouseLock
 * @for renderGlobal
 * @return {Void}
 *
 */
-function tryMouseLock(){
+function rdr_tryMouseLock(){
 
 	var element= document.getElementById("theDisplay");
 
@@ -129,7 +130,7 @@ function tryMouseLock(){
 * whereas the unlocking of the mouse results in the removal of appropriate
 * listeners.
 *
-* @method lockChange
+* @method rdr_lockChange
 * @for renderGlobal
 *
 *
@@ -139,7 +140,7 @@ function tryMouseLock(){
 *
 *
 */
-function lockChange(e){
+function rdr_lockChange(e){
 
 	var theTarget=document.getElementById("theDisplay");
 	if (document.pointerLockElement === theTarget ||
@@ -147,13 +148,13 @@ function lockChange(e){
 		document.webkitPointerLockElement === theTarget) {
 		// Pointer was just locked
 		// Enable the mousemove listener
-		document.addEventListener("mousemove", mouseMoved, false);
+		document.addEventListener("mousemove", rdr_mouseMoved, false);
 		pointerIsLocked=true;
 	}
 	else {
 		// Pointer was just unlocked
 		// Disable the mousemove listener
-		document.removeEventListener("mousemove", mouseMoved, false);
+		document.removeEventListener("mousemove", rdr_mouseMoved, false);
 		pointerIsLocked=false;
 	}
 
@@ -168,7 +169,7 @@ function lockChange(e){
 * corresponds to change in the yaw of the camera whereas Y-axis movement
 * corresponds to a change in the pitch of the camera.
 *
-* @method mouseMoved
+* @method rdr_mouseMoved
 * @for renderGlobal
 *
 * @param {Event} e The mouse movement event to be supplied to the function by a mouse
@@ -176,7 +177,7 @@ function lockChange(e){
 * @return {Void}
 *
 */
-function mouseMoved(e){
+function rdr_mouseMoved(e){
 
 	var movementX = e.movementX ||
 		  e.mozMovementX        ||
@@ -214,7 +215,7 @@ function mouseMoved(e){
 * of the keys used for manipulating the view, sets the proper components
 * of "inputState" to true.
 *
-* @method registerDown
+* @method rdr_registerDown
 * @for renderGlobal
 *
 *
@@ -223,7 +224,7 @@ function mouseMoved(e){
 * @return {Void}
 *
 */
-function registerDown(e){
+function rdr_registerDown(e){
 
 
 
@@ -279,7 +280,7 @@ function registerDown(e){
 * of the keys used for manipulating the view, sets the proper components
 * of "inputState" to false
 *
-* @method registerUp
+* @method rdr_registerUp
 * @for renderGlobal
 *
 *
@@ -288,7 +289,7 @@ function registerDown(e){
 * @return {Void}
 *
 */
-function registerUp(e){
+function rdr_registerUp(e){
 
 
 	var theKey;
@@ -343,12 +344,12 @@ function registerUp(e){
 * affected by the W,S,A, and D keys, and the rotation of the camera if the F key
 * is depressed and there currently is a highlighted object of interest
 *
-* @method manageControls
+* @method rdr_manageControls
 * @for renderGlobal
 * @return {Void}
 *
 */
-function manageControls(){
+function rdr_manageControls(){
 
 	// Set up rotation and relative position deltas
 	var theRot= new THREE.Quaternion(0,0,0,0);
@@ -457,19 +458,19 @@ function manageControls(){
 * Accepts a string and outputs the string of all characters following the final '.' symbol
 * in the string. This is used internally to extract file extensions from file names.
 *
-* @method grabExtension
+* @method rdr_grabExtension
 * @for renderGlobal
 * @param {String} theName The file name to be processed
 * @return {String} the extension in the given file name. If no extension is found, the
 * 'undefined' value is returned.
 *
 */
-function grabExtension(theName){
+function rdr_grabExtension(theName){
 	return (/[.]/.exec(theName)) ? /[^.]+$/.exec(theName) : undefined;
 }
 
 // Returns from the given list of file readers those that have not completed loading
-function whoIsLeft(theReaders){
+function rdr_whoIsLeft(theReaders){
 
 	var pos=0;
 	var lim=fileReaders.length;
@@ -495,15 +496,15 @@ function whoIsLeft(theReaders){
 * parts in "partFrames". Additionally, generates the path lines for each subassembly
 * and inserts those lines into "scene".
 *
-* @method renderParts
+* @method rdr_renderParts
 * @for renderGlobal
 * @return {Void}
 *
 */
-function renderParts(){
+function rdr_renderParts(){
 
 
-
+	theXML = inText;
 	// Cuts of the common first characters from all the part names
 	cutoffPartNames(parts);
 
@@ -520,7 +521,7 @@ function renderParts(){
 	treeQ=grab(treeQ,"SubAssembly");
 
 	// Turns the treequence into a tree storing the movement data of each subassembly
-	console.log(new THREE.Vector3(0,0,0));
+	console.log(treeQ);
 	var moveTree=getMovement(treeQ,0,0,0,new THREE.Vector3(0,0,0),0);
 	console.log(moveTree);
 
@@ -561,7 +562,7 @@ function renderParts(){
 	// Populates the treequence graphic
 	document.getElementById("treequenceDiv").classList.add("refBranch");
 	insertTreequenceHTML(movementTree,document.getElementById("treequenceDiv"));
-	showHideTreequence();
+	rdr_showHideTreequence();
 
 	// Fixes a minor thing in the treequence graphic
 	getChildrenByTag(document.getElementById("treequenceDiv"),"BUTTON")[0].innerHTML="+";
@@ -580,7 +581,7 @@ function renderParts(){
 		pos++;
 	}
 
-	render();
+	rdr_render();
 
 }
 
@@ -593,12 +594,12 @@ function renderParts(){
 * Toggles the display of the HTML div element containing the treequence representation of
 * the assembly.
 *
-* @method showHideTreequence
+* @method rdr_showHideTreequence
 * @for renderGlobal
 * @return {Void}
 *
 */
-function showHideTreequence(){
+function rdr_showHideTreequence(){
 
 	TDiv=document.getElementById("treequenceDiv");
 	if(TDiv.state=="shown"){
@@ -747,15 +748,15 @@ startupScripts["6"] = function(){
 	* @return {Void}
 	*
 	*/
-	render = function () {
+	rdr_render = function () {
 
 		// The function that will manage frame requests
-		requestAnimationFrame( render );
+		requestAnimationFrame( rdr_render );
 
 
 
 		// Recieve input and set the appropriate state
-		manageControls();
+		rdr_manageControls();
 
 		// Apply air friction to camera
 		momentum.multiplyScalar(theDrag);
@@ -833,7 +834,7 @@ startupScripts["6"] = function(){
 	// The variable holding the state of whether or not the pointer is locked
 	var pointerIsLocked=false;
 
-	clearScene();
+	clearScene("theDisplay");
 
 	// Setting camera to Yaw-Pitch-Roll configuration
 	camera.rotation.reorder('YXZ');
@@ -849,13 +850,15 @@ startupScripts["6"] = function(){
 
 
 	// Adding a whole bunch of event listeners for input
-	document.getElementById("theDisplay").addEventListener("wheel", zoomIt);
-	document.addEventListener('pointerlockchange', lockChange, false);
-	document.addEventListener('mozpointerlockchange', lockChange, false);
-	document.addEventListener('webkitpointerlockchange', lockChange, false);
-	document.addEventListener('keydown', registerDown , false);
-	document.addEventListener('keyup', registerUp , false);
+	document.getElementById("theDisplay").addEventListener("wheel", rdr_zoomIt);
+	document.addEventListener('pointerlockchange', rdr_lockChange, false);
+	document.addEventListener('mozpointerlockchange', rdr_lockChange, false);
+	document.addEventListener('webkitpointerlockchange', rdr_lockChange, false);
+	document.addEventListener('keydown', rdr_registerDown , false);
+	document.addEventListener('keyup', rdr_registerUp , false);
 
-	renderParts();
+	rdr_renderParts();
 
 }
+
+//</script>

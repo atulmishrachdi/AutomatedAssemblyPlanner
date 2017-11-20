@@ -47,7 +47,7 @@ namespace Assembly_Planner
         public static List<double> gprotate = new List<double>();
         public static ProgramState state;
 		public static char slash = Path.DirectorySeparatorChar;
-		const bool serverMode = true;
+		public const bool serverMode = true;
 
         private static void Main(string[] args)
         {
@@ -188,17 +188,20 @@ namespace Assembly_Planner
 			LoadDirections();
 			if (!DisassemblyDirectionsWithFastener.GraphIsConnected (AssemblyGraph)) {
 				Console.WriteLine("\n\nFailure: Graph is not connected");
+                SaveVerification("false");
 				return 1;
 			}
 
 			Console.WriteLine("\n\nConnectedness verified");
 			SaveState();
 			if (serverMode) {
+                SaveVerification("true");
 				state.Save(state.inputDir + slash + "intermediate" + slash + "ProgramState.xml");
 			}
 			else {
 				state.Save(state.inputDir + slash + "bin" + slash + "intermediate" + slash + "ProgramState.xml");
 			}
+
 
 			Console.WriteLine("\nDone");
             return 0;
@@ -437,7 +440,6 @@ namespace Assembly_Planner
 			var writer = new StreamWriter(state.inputDir + slash + "XML" + slash + "directionList.xml");
             var theData = new DirectionSaveStructure();
             theData.arcs = AssemblyGraph.arcs;
-            theData.Directions = DisassemblyDirectionsWithFastener.Directions;
             ser.Serialize(writer, theData);
 
         }
@@ -453,7 +455,16 @@ namespace Assembly_Planner
 			checkDirs ();
         }
 
-	
+
+        internal static void SaveVerification(string result)
+        {
+
+            var writer = new StreamWriter(state.inputDir + slash + "XML" + slash + "verificationState.txt");
+            writer.Write(result);
+            writer.Close();
+
+        }
+
 
         private static void UpdateGraphArcs(List<arc> reviewedArc)
         {

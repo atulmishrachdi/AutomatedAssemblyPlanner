@@ -1,4 +1,4 @@
-
+//<script>
 
 
 // content of index.js
@@ -8,13 +8,15 @@ const multer = require('multer'); // v1.0.5
 const upload = multer();
 const handlebars = require('handlebars');
 const fs = require('fs');
+const path = require('path');
+const sep = path.sep;
 const exec = require('child_process').exec;
 const execSync = require('child_process').execSync;
 const crypto = require('crypto');
 const app = express();
 const port = 3000;
-const sessionRoute = fs.realpathSync(".")+"/workspace";
-const tempRoute = sessionRoute+"/templates";
+const sessionRoute = fs.realpathSync(".")+sep+"workspace";
+const tempRoute = sessionRoute+sep+"templates";
 const theTimeout = 1000*60*60*24;
 
 var OS = process.platform;
@@ -63,7 +65,7 @@ var contentManifest = {
 var content = {};
 
 for (var key of Object.keys(contentManifest)) {
-    content[key] = fs.readFileSync(tempRoute+"/"+contentManifest[key],'utf8');
+    content[key] = fs.readFileSync(tempRoute+sep+contentManifest[key],'utf8');
 }
 
 
@@ -138,9 +140,9 @@ function sweepSessions(){
 	var rightNow = theDate.now();
 	for ( k in theKeys ){
 		if(sessions[k].startTime + theTimeout < rightNow){
-			killDir(sessions[k].filePath+"/intermediate");
-			killDir(sessions[k].filePath+"/models");
-			killDir(sessions[k].filePath+"/XML");
+			killDir(sessions[k].filePath+sep+"intermediate");
+			killDir(sessions[k].filePath+sep+"models");
+			killDir(sessions[k].filePath+sep+"XML");
 			killDir(sessions[k].filePath);
 			delete sessions[k];
 		}
@@ -151,9 +153,9 @@ function sweepSessions(){
 function setupSession(thePath,theModels){
 
 	fs.mkdirSync(thePath);
-	fs.mkdirSync(thePath+"/intermediate");
-	fs.mkdirSync(thePath+"/models");
-	fs.mkdirSync(thePath+"/XML");
+	fs.mkdirSync(thePath+sep+"intermediate");
+	fs.mkdirSync(thePath+sep+"models");
+	fs.mkdirSync(thePath+sep+"XML");
 
 }
 
@@ -211,7 +213,7 @@ function makeSession(){
 		var bodyParser = require('body-parser');
 	}
 	return {
-		filePath: sessionRoute + "/" +theID,
+		filePath: sessionRoute + sep +theID,
 		id: theID,
 		startTime: Date.now(),
 		stage: 0,
@@ -230,8 +232,10 @@ function makeSession(){
 
 
 function exeDone(exeFile,sessID){
-	return (function(err,data){
+	return (function(err,stdout,stderr){
 		console.log(exeFile+" finished for session "+sessID);
+		console.log("Output was: \n\n\n"+stdout+"\n\n\n");
+		console.log("Error stuff was: \n\n\n"+stderr+"\n\n\n");
 	})
 }
 
@@ -239,16 +243,19 @@ function runResponse(response,exeFile,sessID,textFile,textData){
 
 
 	return (function(err,data){
-			fs.writeFileSync(sessions[sessID].filePath +"/prog.txt","0");
+			fs.writeFileSync(sessions[sessID].filePath + sep + "prog.txt","0");
 			if(OS === 'win32'){
-				exec(	exeFile + " " + sessions[sessID].filePath +
-						"  y  1  0.5  y  y", exeDone(exeFile,sessID));
+				console.log("Executing: "+exeFile + " \"" +
+							sessions[sessID].filePath + "\"  y  1  0.5  y  y");
+				exec(	exeFile + " \"" + sessions[sessID].filePath +
+						"\"  y  1  0.5  y  y", exeDone(exeFile,sessID));
 			}
 			else{
+				console.log("Executing for Linux");
 				exec(	"mono " + exeFile + " " + sessions[sessID].filePath +
 						"  y  1  0.5  y  y", exeDone(exeFile,sessID));
 			}
-			
+
 			response.json({
 				stage: sessions[sessID].stage,
 				progress: 0,
@@ -294,7 +301,7 @@ function verifResponse(response, theID){
 
 function progResponse(response, theID, theFile, session, field){
 
-	var prog = safeRead(session.filePath+"/prog.txt");
+	var prog = safeRead(session.filePath+sep+"prog.txt");
 	if( prog === ""){
 		prog = "0";
 	}
@@ -338,24 +345,32 @@ app.post('/checkIn', (request, response) => {
     var stage = data.stage;
     sessID = data.sessID;
     sessData = sessions[sessID];
-	console.log("Recieved check in from session "+sessID+" for stage "+stage);
-	console.log(request.body);
+	console.log("Received check in from session "+sessID+" for stage "+stage);
+	//console.log(request.body);
 
     switch(stage){
         case "1":
-            progResponse(response, sessID, sessData.filePath+"/XML/parts_properties.xml", sessData, "partsPropertiesIn");
+            progResponse(response, sessID, 	sessData.filePath+sep+
+											"XML"+sep+"parts_properties.xml",
+											sessData, "partsPropertiesIn");
             break;
-        //================================//================================//================================
+        //================================//================================//==
         case "3":
-            progResponse(response, sessID, sessData.filePath+"/XML/directionList.xml", sessData, "dirConfirmIn");
+            progResponse(response, sessID, 	sessData.filePath+sep+"XML"+sep+
+											"directionList.xml",
+											sessData, "dirConfirmIn");
             break;
-        //================================//================================//================================
+        //================================//================================//==
         case "5":
-            progResponse(response, sessID, sessData.filePath+"/XML/verification.xml", sessData, "dirConfirmIn");
+            progResponse(response, sessID, 	sessData.filePath+sep+"XML"+sep+
+											"verificationState.txt", sessData,
+											"dirConfirmIn");
             break;
-        //================================//================================//================================
-        case "7":
-            progResponse(response, sessID, sessData.filePath+"/XML/solution.xml", sessData, "renderIn");
+        //================================//================================//==
+        case "6":
+            progResponse(response, sessID, 	sessData.filePath+sep+"XML"+sep+
+											"solution.xml", sessData,
+											"renderIn");
             break;
 		default:
 			console.log("Invalid stage value '"+stage+"' fell through");
@@ -374,25 +389,31 @@ app.post('/exec', (request, response) => {
     sessID = data.sessID;
     sessData = sessions[sessID];
 	console.log("Recieved check in from session "+sessID+" for stage "+stage);
-	console.log(request.body);
+	//console.log(request.body);
 
 	sessions[sessID].workingOn = stage;
     switch(stage){
-        //================================//================================//================================
+        //================================//================================//==
         case "1":
             execResponse(response,"FastenerDetection.exe",sessID,"","");
             break;
-        //================================//================================//================================
+        //================================//================================//==
         case "3":
-            execResponse(response,"DisassemblyDirections.exe",sessID,sessData.filePath+"/XML/parts_properties2.xml",textData)
+            execResponse(response,	"DisassemblyDirections.exe",sessID,
+									sessData.filePath+sep+"XML"+sep+
+									"parts_properties2.xml",textData);
             break;
-        //================================//================================//================================
+        //================================//================================//==
         case "5":
-            execResponse(response,"Verification.exe",sessID,sessData.filePath+"/XML/directionList2.xml",textData)
+            execResponse(response,	"Verification.exe",sessID,
+									sessData.filePath+sep+"XML"+sep+
+									"directionList2.xml",textData);
             break;
-        //================================//================================//================================
-        case "7":
-            execResponse(response,"AssemblyPlanning.exe",sessID,sessData.filePath+"/XML/directionList2.xml",textData)
+        //================================//================================//==
+        case "6":
+            execResponse(response,	"AssemblyPlanning.exe",sessID,
+									sessData.filePath+sep+"XML"+sep+
+									"directionList2.xml",textData);
             break;
 		default:
 			console.log("Invalid stage value '"+stage+"' fell through");
@@ -403,7 +424,7 @@ app.post('/exec', (request, response) => {
 
 app.get('/', (request, response) => {
 
-    response.send(baseTemplate({baseStyle: 		content["tableStyle"] 
+    response.send(baseTemplate({baseStyle: 		content["tableStyle"]
 										+ "\n"+ content["baseStyle"]}));
 
 });
@@ -449,6 +470,10 @@ app.get('/stage/:stage', (request, response) => {
 			context.stageStyle = content.progStyle;
 			break;
 		case "6":
+			context.stageHTML = content.progMain;
+			context.stageStyle = content.progStyle;
+			break;
+		case "7":
 			context.stageHTML = content.renderMain;
 			context.stageStyle = content.renderStyle;
 			break;
@@ -477,7 +502,8 @@ app.post('/giveModel', (request, response) => {
 	var sessData = sessions[request.body.sessID];
 	var model = request.body.Model;
 	sessData.state.models.push(model);
-	fs.writeFileSync(sessData.filePath+"/models/" + model.Name, model.Data, 'ascii');
+	fs.writeFileSync(	sessData.filePath+sep+"models"+sep+
+						model.Name, model.Data, 'ascii');
 	response.json({
 		success: true
 	});
@@ -491,3 +517,6 @@ app.listen(port, (err) => {
     }
     console.log(`server is listening on ${port}`)
 });
+
+
+//</script>

@@ -1,4 +1,5 @@
 ;
+//<script>
 
 
 if( typeof(startupScripts) == 'undefined'){
@@ -32,7 +33,7 @@ if( typeof(startupScripts) == 'undefined'){
 * @param {String} theXMLFile
 * @param {Object} theSTLFiles
 * @return {Void}
-* 
+*
 */
 function dir_receiveData(theXMLFile, theSTLFiles){
 
@@ -50,8 +51,8 @@ function dir_receiveData(theXMLFile, theSTLFiles){
 		if(partGeom===null){
 			partGeom=parseStlBinary(fileReaders[pos].Reader.result);
 		}
-		
-		partMesh=new THREE.Mesh( 
+
+		partMesh=new THREE.Mesh(
 				partGeom,
 				new THREE.MeshNormalMaterial()
 		);
@@ -60,13 +61,13 @@ function dir_receiveData(theXMLFile, theSTLFiles){
 			Name: fileReaders[pos].Name
 		})
 		scene.add(partMesh);
-		
+
 		pos++;
 	}
-	
+
 	dir_renderParts();
 
-}	
+}
 
 
 
@@ -81,12 +82,12 @@ function dir_receiveData(theXMLFile, theSTLFiles){
 * @param {String} theXMLText The contents of the disassembly directions in the webpage, as a string
 * in XML formatting
 * @return {Void}
-* 
+*
 */
 function dir_sendData(theXMLText){
 
 	// Do whatever you want with the resulting data to send it off, if you want
-	
+
 
 }
 
@@ -94,7 +95,7 @@ function dir_sendData(theXMLText){
 
 
 
-		
+
 /**
 *
 * Given an HTML element corresponding to a "confirm" button, moves the parent element
@@ -104,7 +105,7 @@ function dir_sendData(theXMLText){
 * @for directionConfirmGlobal
 * @param {HTML Element} theButton The confirm button of the element to be moved
 * @return {Void}
-* 
+*
 */
 function dir_confirmPair(theButton){
 	document.getElementById("confirmed").appendChild(theButton.parentElement);
@@ -125,7 +126,7 @@ function dir_confirmPair(theButton){
 * @for directionConfirmGlobal
 * @param {HTML Element} theButton The unconfirm button of the element to be moved
 * @return {Void}
-* 
+*
 */
 function dir_deconfirmPair(theButton){
 	document.getElementById("unconfirmed").appendChild(theButton.parentElement);
@@ -140,20 +141,20 @@ function dir_deconfirmPair(theButton){
 /**
 *
 * Given an HTML element corresponding to a "focus" button, makes the corresponding pair
-* of parts to be displayed  
+* of parts to be displayed
 *
 * @method dir_changeCurrentPair
 * @for directionConfirmGlobal
 * @param {HTML Element} theButton The confirm button of the element to be moved
 * @return {Void}
-* 
+*
 */
 function dir_changeCurrentPair(theButton){
-	
+
 	if(lastPair!==null){
 		return;
 	}
-	
+
 	lastPair=currentPair;
 	var theRef=theButton.parentElement.Ref;
 	var theMov=theButton.parentElement.Mov;
@@ -166,7 +167,7 @@ function dir_changeCurrentPair(theButton){
 		}
 		pos++;
 	}
-	
+
 }
 
 /**
@@ -178,9 +179,9 @@ function dir_changeCurrentPair(theButton){
 * @for  directionConfirmGlobal
 * @param {jQuery Object} theTree The jQuery object whose child is to be returned
 * @param {String} theMember The name of the tag being searched
-* @return {jQuery Object} The first child with the given tag. If such a child does not 
+* @return {jQuery Object} The first child with the given tag. If such a child does not
 * exist, null is returned.
-* 
+*
 */
 function dir_grab(theTree,theMember){
 
@@ -205,13 +206,13 @@ var focusPoint;
 *
 * @for directionConfirmGlobal
 * @return {Void}
-* 
+*
 */
 var dir_render = function () {
 
 	// The function that will manage frame requests
 	requestAnimationFrame( dir_render );
-	
+
 	if(lastPair!==null){
 		var holder=currentPair;
 		currentPair=lastPair;
@@ -220,20 +221,20 @@ var dir_render = function () {
 		dir_highlight(currentPair);
 		lastPair=null;
 	}
-	
+
 	currentPair.Ref.Mesh.geometry.computeBoundingBox();
 	currentPair.Mov.Mesh.geometry.computeBoundingBox();
 	focusBox=currentPair.Ref.Mesh.geometry.boundingBox.clone();
 	focusBox.union(currentPair.Mov.Mesh.geometry.boundingBox);
-	
+
 	focusPoint= new THREE.Vector3(
 								  (focusBox.min.x+focusBox.max.x)/2,
 								  (focusBox.min.y+focusBox.max.y)/2,
 								  (focusBox.min.z+focusBox.max.z)/2
 								 );
-	
+
 	thePos.normalize();
-	
+
 	thePos.applyEuler(theEul);
 	theEul.set(0,0,0,'XYZ');
 	thePos.multiplyScalar(theDistance);
@@ -241,27 +242,20 @@ var dir_render = function () {
 	camera.position.add(focusPoint);
 	camera.lookAt(focusPoint);
 	camera.updateMatrix();
-	
+
 	sunLight.position.set( (camera.position.x-focusPoint.x)*2+focusPoint.x,
-						   (camera.position.y-focusPoint.y)*2+focusPoint.y, 
+						   (camera.position.y-focusPoint.y)*2+focusPoint.y,
 						   (camera.position.z-focusPoint.z)*2+focusPoint.z );
 	sunLight.target.position=focusPoint;
-	
-	
+
+
 	time+=0.01;
-	
+
 	dir_updateAxisLines();
-	
+
 	// Call for the render
 	renderer.render(scene, camera);
 };
-
-
-
-
-
-
-
 
 
 
@@ -274,9 +268,9 @@ var dir_render = function () {
 * @method dir_grabExtension
 * @for directionConfirmGlobal
 * @param {String} theName The file name to be processed
-* @return {String} the extension in the given file name. If no extension is found, the 
+* @return {String} the extension in the given file name. If no extension is found, the
 * 'undefined' value is returned.
-* 
+*
 */
 function dir_grabExtension(theName){
 	return (/[.]/.exec(theName)) ? /[^.]+$/.exec(theName) : undefined;
@@ -289,14 +283,14 @@ function dir_grabExtension(theName){
 // Returns from the given list of file readers those that have not completed loading
 /**
 *
-* Outputs through the console the list of FileReaders in theReaders which have 
+* Outputs through the console the list of FileReaders in theReaders which have
 * not yet completed their loading
 *
 * @method dir_whoIsLeft
 * @for  directionConfirmGlobal
 * @param {FileReader Object List} theReaders The list of FileReaders to be checked
 * @return {Void}
-* 
+*
 */
 function dir_whoIsLeft(theReaders){
 
@@ -320,25 +314,25 @@ function dir_whoIsLeft(theReaders){
 *
 * Accepts a fileinput event, presumably from a file upload event listener, and assigns
 * functions to each file reader listed in the event to be called upon the full loading
-* of that given reader's files 
+* of that given reader's files
 *
 * @method dir_readMultipleFiles
 * @for directionConfirmGlobal
 * @param {Event} evt A fileinput event, to be given by a fileinput event listener
 * @return {Void}
-* 
+*
 */
 function dir_readMultipleFiles(evt) {
 	//Retrieve all the files from the FileList object
-	var files = evt.target.files; 
-			
+	var files = evt.target.files;
+
 	if (files) {
 		for (var i=0, f; f=files[i]; i++) {
-			
+
 			var r = new FileReader();
 			var extension=dir_grabExtension(f.name)[0];
 			//console.log(f.name);
-			
+
 			if(extension===undefined){
 				continue;
 			}
@@ -372,12 +366,12 @@ function dir_readMultipleFiles(evt) {
 				r.readAsText(f,"US-ASCII");
 				fileReaders.push({Reader: r, Name: f.name});
 			}
-						
+
 		}
 		console.log(fileReaders);
-	} 
+	}
 	else {
-		  alert("Failed to load files"); 
+		  alert("Failed to load files");
 	}
 }
 
@@ -386,18 +380,18 @@ function dir_readMultipleFiles(evt) {
 
 /**
 *
-* Called internally upon every recieved fileload event. Checks if every file reader in the 
+* Called internally upon every recieved fileload event. Checks if every file reader in the
 * array "fileReaders" has fully read each of their files. If so, then the function converts
 * all recieved stl files into threeJS models and executes "dir_renderParts".
 *
 * @method dir_loadParts
 * @for directionConfirmGlobal
 * @return {Void}
-* 
+*
 */
 function dir_loadParts (){
 
-	
+
 		// Looks for unloaded files
 		var pos=0;
 		var lim=fileReaders.length;
@@ -409,8 +403,8 @@ function dir_loadParts (){
 			}
 			pos++;
 		}
-	
-	
+
+
 	// Executes if all files are loaded
 	if(pos===lim){
 		//console.log("ALL DONE");
@@ -424,15 +418,15 @@ function dir_loadParts (){
 			ext=dir_grabExtension(fileReaders[pos].Name)[0];
 
 			if(ext.toLowerCase()==="stl"){
-				
+
 				partGeom=parseStl(fileReaders[pos].Reader.result);
 				if(partGeom===null){
 					partGeom=parseStlBinary(fileReaders[pos].Reader.result);
 				}
-				
+
 				//console.log(partGeom);
-				
-				partMesh=new THREE.Mesh( 
+
+				partMesh=new THREE.Mesh(
 						partGeom,
 						new THREE.MeshLambertMaterial(wireSettings)
 				);
@@ -440,23 +434,23 @@ function dir_loadParts (){
 					Mesh: partMesh,
 					Name: fileReaders[pos].Name
 				})
-				scene.add(partMesh);	
+				scene.add(partMesh);
 			}
-			
+
 			pos++;
 		}
-		
+
 		dir_renderParts();
-		
+
 	}
-	
+
 
 }
 
 
 function dir_renderParts(){
-	
-	
+
+
 	dir_parseData();
 	dir_linkParts();
 	console.log(assemblyPairs);
@@ -466,8 +460,8 @@ function dir_renderParts(){
 	dir_insertAssemblyPairs();
 	dir_initAxisLines();
 	dir_render();
-	
-	
+
+
 }
 
 
@@ -484,19 +478,19 @@ function dir_renderParts(){
 * @param {String} b The second part name
 * @param {Vector3} vec The vector to be added to the pair
 * @return {Object} The resulting pair object
-* 
+*
 */
 function dir_linkPair(a,b,vec){
-	
+
 	var thePair={Ref: null,
 				 Mov: null,
 				 Vec: null,
 				 Directed: null,
 				 DoublyDirected: null,
 				 InfiniteDirections: null};
-	
+
 	//console.log(parts);
-	
+
 	var pos=0;
 	var lim=parts.length;
 	while(pos<lim){
@@ -515,7 +509,7 @@ function dir_linkPair(a,b,vec){
 	}
 	//console.log(thePair);
 	return null;
-	
+
 }
 
 
@@ -528,17 +522,17 @@ function dir_linkPair(a,b,vec){
 * @method dir_linkParts
 * @for directionConfirmGlobal
 * @return {Void}
-* 
+*
 */
 function dir_linkParts(){
-	
+
 	var pos=0;
 	var lim=namePairs.length;
 	var thePair=null;
-	
+
 	while(pos<lim){
 		thePair=dir_linkPair(namePairs[pos].Ref,namePairs[pos].Mov,namePairs[pos].Vec);
-		
+
 		if(thePair!=null){
 			thePair.InfiniteDirections = namePairs[pos].InfiniteDirections;
 			assemblyPairs.push(thePair);
@@ -556,10 +550,10 @@ function dir_linkParts(){
 * @method dir_parseData
 * @for directionConfirmGlobal
 * @return {Void}
-* 
+*
 */
 function dir_parseData(){
-	
+
 	//console.log(theXML);
 	var doc = $.parseXML(theXML);
 	//console.log(doc);
@@ -585,26 +579,26 @@ function dir_parseData(){
 	var docDubDirs;
 	var infiniteDirections;
 	var docInfDirs;
-	
+
 	while(pos<lim){
-		
+
 		theRef=dir_grab(thePairs[pos],"To");
 		theMov=dir_grab(thePairs[pos],"From");
-		
+
 		docDirs=dir_grab(thePairs[pos],"directed");
 		directed=[];
-		
+
 		docDubDirs=dir_grab(thePairs[pos],"doublyDirected");
 		doublyDirected=[];
-		
+
 		docInfDirs=dir_grab(thePairs[pos],"InfiniteDirections");
 		infiniteDirections=[];
-		
+
 		docFinDirs=dir_grab(thePairs[pos],"FiniteDirections");
 		finiteDirections=[];
-		
-		
-		
+
+
+
 		if($(docDirs[vecPos]).innerHTML != "false"){
 			docDirs = $(docDirs).children("int");
 			vecPos=0;
@@ -615,8 +609,8 @@ function dir_parseData(){
 				vecPos++;
 			}
 		}
-		
-		
+
+
 		if($(docDubDirs[vecPos]).innerHTML != "false"){
 			docDubDirs = $(docDubDirs).children("int");
 			vecPos=0;
@@ -627,7 +621,7 @@ function dir_parseData(){
 				vecPos++;
 			}
 		}
-		
+
 		if($(docInfDirs[vecPos]).innerHTML != "false"){
 			docInfDirs = $(docInfDirs).children("int");
 			vecPos=0;
@@ -638,7 +632,7 @@ function dir_parseData(){
 				vecPos++;
 			}
 		}
-		
+
 
 		theVec=dir_grab(thePairs[pos],"vector");
 		namePairs.push({
@@ -657,22 +651,7 @@ function dir_parseData(){
 		});
 		pos++;
 	}
-	
-	
-	pos=0;
-	lim=directions.length;
-	var theDirection;
-	while(pos<lim){
-		theDirection=$(directions[pos]).children("double");
-		theDirections.push({
-			X: parseFloat(theDirection[0].innerHTML),
-			Y: parseFloat(theDirection[1].innerHTML),
-			Z: parseFloat(theDirection[2].innerHTML)
-		});
-		pos++;
-	}	
-	
-	
+
 }
 
 
@@ -685,10 +664,10 @@ function dir_parseData(){
 * @method dir_insertAssemblyPairs
 * @for directionConfirmGlobal
 * @return {Void}
-* 
+*
 */
 function dir_insertAssemblyPairs(){
-	
+
 	var pos=0;
 	var lim=assemblyPairs.length;
 	while(pos<lim){
@@ -708,7 +687,7 @@ function dir_insertAssemblyPairs(){
 				console.log("assigning currentPair");
 				console.log(position);
 				console.log(assemblyPairs[position]);
-				currentPair=assemblyPairs[position]; 
+				currentPair=assemblyPairs[position];
 				console.log ("Doing the focus thing");
 			}
 		})(pos);
@@ -724,7 +703,7 @@ function dir_insertAssemblyPairs(){
 		pos++;
 	}
 	pos--;
-	
+
 }
 
 
@@ -737,9 +716,9 @@ function dir_insertAssemblyPairs(){
 *
 * @method dir_dehighlight
 * @for directionConfirmGlobal
-* @param {Object} thePair The pair object to be dir_dehighlighted 
+* @param {Object} thePair The pair object to be dir_dehighlighted
 * @return {Void}
-* 
+*
 */
 function dir_dehighlight(thePair){
 	console.log("The number of vectors is ",theVectors.length);
@@ -756,13 +735,13 @@ function dir_dehighlight(thePair){
 *
 * @method dir_highlight
 * @for directionConfirmGlobal
-* @param {Object} thePair The pair object to be dir_highlighted 
+* @param {Object} thePair The pair object to be dir_highlighted
 * @return {Void}
-* 
+*
 */
 
 function dir_highlight(thePair){
-	
+
 	console.log(thePair);
 	thePair.Ref.Mesh.material=new THREE.MeshLambertMaterial({color: 0x4444FF /*, transparent: true, opacity: 0.6, depthTest: false */});
 	thePair.Mov.Mesh.material=new THREE.MeshLambertMaterial({color: 0xFF4444 /*, transparent: true, opacity: 0.6, depthTest: false */});
@@ -771,27 +750,27 @@ function dir_highlight(thePair){
 	var theBox=thePair.Mov.Mesh.geometry.boundingBox.clone();
 	var distBox = thePair.Mov.Mesh.geometry.boundingBox.clone();
 	distBox.union(thePair.Ref.Mesh.geometry.boundingBox);
-	
-	
-	
+
+
+
 	var pos=0;
 	var lim=theVectors.length;
 	while(pos<lim){
 		scene.remove( theVectors[pos] );
 		pos++;
 	}
-	
+
 
 	theVectors.length=0;
 	console.log("Just set the Vectors to 0");
 	console.log("The pair is: ", thePair);
 	var theVec;
-	
+
 	var theDist = Math.sqrt(Math.pow(distBox.max.x-distBox.min.x,2)+
 							Math.pow(distBox.max.y-distBox.min.y,2)+
 							Math.pow(distBox.max.y-distBox.min.y,2));
-	
-	
+
+
 	pos=0;
 	lim=thePair.InfiniteDirections.length;
 	while(pos<lim){
@@ -811,7 +790,7 @@ function dir_highlight(thePair){
 		console.log("Vector List Size is: ",theVectors.length);
 		pos++;
 	}
-	
+
 	dir_insertVectorView(document.getElementById("expandButton"));
 
 }
@@ -828,10 +807,10 @@ function dir_highlight(thePair){
 * @for directionConfirmGlobal
 * @param {Object} theSlider The slider which is to be referenced when setting object opacity
 * @return {Void}
-* 
+*
 */
 function dir_fixOpacity(theSlider){
-	
+
 	console.log("Changing Opacity");
 	var val = theSlider.value;
 	wireSettings.opacity=val;
@@ -843,7 +822,7 @@ function dir_fixOpacity(theSlider){
 		}
 		pos++;
 	}
-	
+
 }
 
 
@@ -856,7 +835,7 @@ function dir_fixOpacity(theSlider){
 * @for directionConfirmGlobal
 * @param {mouseup event} theEvent
 * @return {Void}
-* 
+*
 */
 function dir_doMouseUp(theEvent){
 	if(theEvent.button == 0){
@@ -876,7 +855,7 @@ function dir_doMouseUp(theEvent){
 * @for directionConfirmGlobal
 * @param {mousedown event} theEvent
 * @return {Void}
-* 
+*
 */
 function dir_doMouseDown(theEvent){
 	if(theEvent.button == 0){
@@ -896,7 +875,7 @@ function dir_doMouseDown(theEvent){
 * @for directionConfirmGlobal
 * @param {mouseup event} theEvent
 * @return {Void}
-* 
+*
 */
 function dir_doMouseLeave(theEvent){
 	leftDrag = false;
@@ -914,7 +893,7 @@ function dir_doMouseLeave(theEvent){
 * @for directionConfirmGlobal
 * @param {Event Object} theEvent The event to suppress the default response of.
 * @return {Void}
-* 
+*
 */
 function dir_justDont(theEvent){
 	theEvent.preventDefault();
@@ -930,13 +909,13 @@ function dir_justDont(theEvent){
 * @for directionConfirmGlobal
 * @param {mouseup event} theEvent
 * @return {Void}
-* 
+*
 */
 function dir_doDrag(theEvent){
-	
-	
+
+
 	if(theAddAxis !== null){
-		
+
 		var theBox=currentPair.Mov.Mesh.geometry.boundingBox.clone();
 		var theArea = document.getElementById("display");
 		var areaW = theArea.clientWidth;
@@ -948,30 +927,31 @@ function dir_doDrag(theEvent){
 		//console.log("aW: "+areaW+" aH: "+areaH+" aT: "+areaT+" aL: "+areaL);
 		//console.log("mX: "+(((mouseX-areaL)-areaW/2)/(areaW/2))+" mY: "+((areaH/2-(mouseY-areaT))/(areaH/2)));
 		var theDir = dir_getDirectionFromMouse( ((mouseX-areaL)-areaW/2)/(areaW/2), (areaH/2-(mouseY-areaT))/(areaH/2) );
-		
+
 		theAddAxis.geometry.vertices[0].set((theBox.min.x+theBox.max.x)/2,(theBox.min.y+theBox.max.y)/2,(theBox.min.z+theBox.max.z)/2);
 		theAddAxis.geometry.vertices[1].set((theBox.min.x+theBox.max.x)/2+theDirections[theDir].X*theDistance*0.6,
 											(theBox.min.y+theBox.max.y)/2+theDirections[theDir].Y*theDistance*0.6,
 											(theBox.min.z+theBox.max.z)/2+theDirections[theDir].Z*theDistance*0.6 );
-		console.log("X:"+(theBox.min.x+theBox.max.x)/2  +
+
+		console.log( "X: "+(theBox.min.x+theBox.max.x)/2+
 					" Y: "+(theBox.min.y+theBox.max.y)/2+
 					" Z: "+(theBox.min.z+theBox.max.z)/2 );
-					
+
 		console.log(" X: "+theDirections[theDir].X +
 					" Y: "+theDirections[theDir].Y +
 					" Z: "+theDirections[theDir].Z  );
-											
+
 		theAddAxis.geometry.verticesNeedUpdate=true;
-		
+
 	}
-	
-	
+
+
 	if(leftDrag==true){
 		thePos.normalize();
 		theEul.set(theEvent.movementY*(-0.02)*Math.cos(Math.atan2(thePos.x,thePos.z)),
 				   theEvent.movementX*(-0.02),
 				   theEvent.movementY*(0.02)*Math.sin(Math.atan2(thePos.x,thePos.z)),
-				   'ZYX'); 
+				   'ZYX');
 	}
 	if(rightDrag==true){
 		dir_addVectorFromMouse(theEvent.clientX, theEvent.clientY);
@@ -987,11 +967,11 @@ function dir_doDrag(theEvent){
 * @for directionConfirmGlobal
 * @param {mouseup event} theEvent
 * @return {Void}
-* 
+*
 */
 function dir_doZoom(theEvent){
 	var theDelta = theEvent.deltaY == 0 ? 0 : ( theEvent.deltaY > 0 ? 1 : -1 );
-	theDistance=theDistance*Math.pow(1.001,theDelta*(-40));		
+	theDistance=theDistance*Math.pow(1.001,theDelta*(-40));
 }
 
 
@@ -1006,26 +986,26 @@ function dir_doZoom(theEvent){
 * @for directionConfirmGlobal
 * @param {HTML Element} theButton The vector viewing button
 * @return {Void}
-* 
+*
 */
 function dir_insertVectorView(theButton){
-	
+
 	console.log("doing dir_insertVectorView");
-	
+
 	if(currentPair==null){
 		return;
 	}
-	
+
 	currentPair.Ref.Mesh.geometry.computeBoundingBox();
 	currentPair.Mov.Mesh.geometry.computeBoundingBox();
 	var theBox=currentPair.Mov.Mesh.geometry.boundingBox.clone();
 	var distBox = currentPair.Mov.Mesh.geometry.boundingBox.clone()
 	distBox.union(currentPair.Ref.Mesh.geometry.boundingBox);
-	
+
 	var theDist = Math.sqrt(Math.pow(distBox.max.x-distBox.min.x,2)+
 							Math.pow(distBox.max.y-distBox.min.y,2)+
 							Math.pow(distBox.max.y-distBox.min.y,2));
-	
+
 	var theDiv=theButton.parentElement;
 	console.log(theDiv);
 	theButton.onclick=function () {dir_removeVectorView(this);};
@@ -1035,7 +1015,7 @@ function dir_insertVectorView(theButton){
 	addButton.innerHTML="Add Vector";
 	addButton.id="addButton";
 	addButton.onclick=function () {dir_addVectorToPair(this);};
-	
+
 	var pos=0;
 	var lim=theVectors.length;
 	var theEntry;
@@ -1072,7 +1052,7 @@ function dir_insertVectorView(theButton){
 		zInp.step=0.01;
 		zInp.value=(theVectors[pos].geometry.vertices[1].z-theVectors[pos].geometry.vertices[0].z)/theDist;
 		zInp.onchange=function () {dir_vecEntryUpdate(this);};
-		
+
 		theEntry.appendChild(xLab);
 		theEntry.appendChild(xInp);
 		theEntry.appendChild(document.createElement("br"));
@@ -1083,17 +1063,17 @@ function dir_insertVectorView(theButton){
 		theEntry.appendChild(zInp);
 		theEntry.appendChild(document.createElement("br"));
 		theEntry.appendChild(remBut);
-		
+
 		theEntry.counterPart=theVectors[pos];
 		theEntry.className="vecEntry";
-		
+
 		theVecList.appendChild(theEntry);
 		pos++;
 	}
-	
+
 	theDiv.appendChild(addButton);
 	theDiv.appendChild(theVecList);
-	
+
 }
 
 
@@ -1108,22 +1088,22 @@ function dir_insertVectorView(theButton){
 * @for directionConfirmGlobal
 * @param {HTML Element} theButton The vector viewing button
 * @return {Void}
-* 
+*
 */
 function dir_removeVectorView(theButton){
-	
+
 	console.log("doing dir_removeVectorView");
-	
+
 	var theDiv=theButton.parentElement;
 	var vecListHolder=document.getElementById("vecList");
-	
 
-	
-	if(vecListHolder!=null){	
+
+
+	if(vecListHolder!=null){
 		var vecPos=0;
 		var vecLim=theVectors.length;
 		console.log(theVectors);
-		
+
 		var best;
 		var ang;
 		var testVector;
@@ -1141,18 +1121,18 @@ function dir_removeVectorView(theButton){
 				currentPair.InfiniteDirections.push(pos);
 				console.log("<--->");
 			}
-			
+
 			console.log("Vector List Size is: ",theVectors.length);
 			console.log("InfDir List Size is: ",currentPair.InfiniteDirections.length);
 			vecPos++;
 		}
-		
+
 		theDiv.removeChild(vecListHolder);
 		theDiv.removeChild(document.getElementById("addButton"));
 	}
 
 	theButton.onclick=function () {dir_insertVectorView(this);};
-	
+
 }
 
 
@@ -1164,16 +1144,16 @@ function dir_removeVectorView(theButton){
 * @for directionConfirmGlobal
 * @param {HTML Element} theButton The "add vector" button
 * @return {Void}
-* 
+*
 */
 function dir_addVectorToPair(theButton){
-	
+
 	console.log("doing dir_addVectorToPair");
-	
+
 	var theDiv=theButton.parentElement;
 	var theVecList=document.getElementById("vecList");
 	//console.log(theVecList);
-	
+
 	var theEntry=document.createElement("div");
 	var remBut=document.createElement("button");
 	remBut.innerHTML="Remove";
@@ -1196,7 +1176,7 @@ function dir_addVectorToPair(theButton){
 	zInp.type="number";
 	zInp.step=0.01;
 	zInp.onchange=function () {dir_vecEntryUpdate(this);};
-	
+
 	theEntry.appendChild(xLab);
 	theEntry.appendChild(xInp);
 	theEntry.appendChild(document.createElement("br"));
@@ -1207,13 +1187,13 @@ function dir_addVectorToPair(theButton){
 	theEntry.appendChild(zInp);
 	theEntry.appendChild(document.createElement("br"));
 	theEntry.appendChild(remBut);
-	
+
 	theEntry.counterPart=null;
 	theEntry.className="vecEntry";
-	
+
 	theVecList.appendChild(theEntry);
 	return theEntry;
-	
+
 }
 
 
@@ -1227,21 +1207,21 @@ function dir_addVectorToPair(theButton){
 * @for directionConfirmGlobal
 * @param {HTML Element} theButton The "remove" button of the widget to be removed
 * @return {Void}
-* 
+*
 */
 function dir_remVectorFromPair(theButton){
-	
+
 	console.log("doing dir_remVectorFromPair");
 	if(theButton.parentElement.counterPart!=null){
 		scene.remove(theButton.parentElement.counterPart);
 	}
-	
+
 	console.log("The vector length before splice: ",theVectors.lenth);
 	theVectors.splice(theVectors.indexOf(theButton.parentElement.counterPart),1);
 	console.log("The vector length after splice: ",theVectors.lenth);
-	
+
 	theButton.parentElement.parentElement.removeChild(theButton.parentElement);
-	
+
 }
 
 
@@ -1252,25 +1232,25 @@ function dir_remVectorFromPair(theButton){
 * @for directionConfirmGlobal
 * @param {HTML Element} theInput An input element of the vector's widget
 * @return {Void}
-* 
+*
 */
 function dir_vecEntryUpdate(theInput){
-	
+
 	console.log("doing dir_vecEntryUpdate");
-	
+
 	var theBox=currentPair.Mov.Mesh.geometry.boundingBox.clone();
-	
+
 	currentPair.Ref.Mesh.geometry.computeBoundingBox();
 	currentPair.Mov.Mesh.geometry.computeBoundingBox();
 	var theBox=currentPair.Mov.Mesh.geometry.boundingBox.clone();
 	var distBox = currentPair.Mov.Mesh.geometry.boundingBox.clone();
 	distBox.union(currentPair.Ref.Mesh.geometry.boundingBox);
-	
+
 	var theDist = Math.sqrt(Math.pow(distBox.max.x-distBox.min.x,2)+
 							Math.pow(distBox.max.y-distBox.min.y,2)+
 							Math.pow(distBox.max.y-distBox.min.y,2));
-							
-	
+
+
 	var theEntry=theInput.parentElement;
 	var theInputs=theEntry.getElementsByTagName("INPUT");
 	var pos=0;
@@ -1283,14 +1263,14 @@ function dir_vecEntryUpdate(theInput){
 		}
 		pos++;
 	}
-	
+
 	var theMag = Math.sqrt( Math.pow(parseFloat(theInputs[0].value),2)+
 							Math.pow(parseFloat(theInputs[1].value),2)+
 							Math.pow(parseFloat(theInputs[2].value),2));
 	theInputs[0].value = theInputs[0].value/theMag;
 	theInputs[1].value = theInputs[1].value/theMag;
 	theInputs[2].value = theInputs[2].value/theMag;
-	
+
 	console.log(theInputs);
 	if(theEntry.counterPart===null){
 		var theVec = new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0xff0000}));
@@ -1303,7 +1283,7 @@ function dir_vecEntryUpdate(theInput){
 													  theVec.geometry.vertices[0].y+parseFloat(theInputs[1].value)*theDist,
 													  theVec.geometry.vertices[0].z+parseFloat(theInputs[2].value)*theDist);
 
-													 
+
 
 		scene.add(theVec);
 		theVectors.push(theVec);
@@ -1320,7 +1300,7 @@ function dir_vecEntryUpdate(theInput){
 		theEntry.counterPart.geometry.verticesNeedUpdate=true;
 	}
 	console.log(theEntry.counterPart.geometry.vertices);
-	
+
 }
 
 
@@ -1334,10 +1314,10 @@ function dir_vecEntryUpdate(theInput){
 * @for directionConfirmGlobal
 * @param {Vector3} theVec The vector to be searched with
 * @return {Int} The index of the best matching direction in the list of usable vector directions
-* 
+*
 */
 function dir_getDir(theVec){
-	
+
 	var maxDot=-1;
 	var theDot;
 	var best=-1;
@@ -1352,42 +1332,28 @@ function dir_getDir(theVec){
 		pos++;
 	}
 	return best;
-	
+
 }
 
 
 
 /**
 *
-* Processes the information in the webpage into an XML string and inserts a download link 
+* Processes the information in the webpage into an XML string and inserts a download link
 * for the data into the top of the page
 *
 * @method dir_renderXML
 * @for directionConfirmGlobal
 * @return {Void}
-* 
+*
 */
 function dir_renderXML(){
-	
-	
+
+
 	var start= "<?xml version='1.0' encoding='utf-8'?>\n"+
 				"<DirectionSaveStructure xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>\n";
 	var end= "</DirectionSaveStructure>\n";
-	
-	var dirContent= "<Directions>\n";
-	var pos=0;
-	var lim=theDirections.length;
-	while(pos<lim){
-		dirContent=dirContent+"<ArrayOfDouble>\n";
-		dirContent=dirContent+"<double>"+theDirections[pos].X.toString()+"</double>\n";
-		dirContent=dirContent+"<double>"+theDirections[pos].Y.toString()+"</double>\n";
-		dirContent=dirContent+"<double>"+theDirections[pos].Z.toString()+"</double>\n";
-		dirContent=dirContent+"</ArrayOfDouble>\n";
-		pos++;
-	}
-	dirContent = dirContent + "</Directions>\n";
-	
-	
+
 	var arcContent = "<arcs>\n";
 	var idxPos;
 	var idxLim;
@@ -1414,17 +1380,17 @@ function dir_renderXML(){
 		arcContent = arcContent+"<Fasteners>"+namePairs[pos].Fasteners+"</Fasteners>\n";
 		arcContent = arcContent+"<Certainty>"+namePairs[pos].Certainty+"</Certainty>\n";
 		arcContent = arcContent+"<ConnectionType>"+namePairs[pos].ConnectionType+"</ConnectionType>\n";
-		
+
 		arcContent = arcContent+"</arc>\n";
 		pos++;
 	}
 	arcContent= arcContent + "</arcs>\n";
-	
-	var result = start + dirContent + arcContent + end;
-	
+
+	var result = start + arcContent + end;
+
 	outText = result;
-	requestAdvance(5);	
-	
+	requestAdvance(5);
+
 }
 
 
@@ -1436,37 +1402,37 @@ function dir_renderXML(){
 * @method dir_initAxisLines
 * @for directionConfirmGlobal
 * @return {Void}
-* 
+*
 */
 function dir_initAxisLines(){
-	
+
 	theXAxis = new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0xff0000, depthTest: false }));
 	theXAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
 	theXAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
 	theXAxis.frustumCulled = false;
-	
+
 	theYAxis = new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0x00ff00, depthTest: false }));
 	theYAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
 	theYAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
 	theYAxis.frustumCulled = false;
-	
+
 	theZAxis = new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0x0000ff, depthTest: false }));
 	theZAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
 	theZAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
 	theZAxis.frustumCulled = false;
-	
+
 	theAddAxis = new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0x00ff00, depthTest: true }));
 	theAddAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
 	theAddAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
 	theAddAxis.frustumCulled = false;
-	
-	
+
+
 	scene.add(theXAxis);
 	scene.add(theYAxis);
 	scene.add(theZAxis);
 	scene.add(theAddAxis);
 
-	
+
 }
 
 
@@ -1477,39 +1443,39 @@ function dir_initAxisLines(){
 * @method dir_updateAxisLines
 * @for directionConfirmGlobal
 * @return {Void}
-* 
+*
 */
 function dir_updateAxisLines(){
-	
+
 	var theRot= new THREE.Quaternion(0,0,0,0);
 	theRot.setFromEuler(camera.rotation);
 	var theDir= new THREE.Vector3(-3,-3,-5);
-	
+
 	theDir.applyQuaternion(theRot);
 
-	
+
 	var thePosition = camera.position.clone();
-	
+
 	thePosition.add(theDir);
-	
+
 	theXAxis.geometry.vertices[0].copy(thePosition);
 	theXAxis.geometry.vertices[0].x-=0.5;
 	theXAxis.geometry.vertices[1].copy(thePosition);
 	theXAxis.geometry.vertices[1].x+=1;
 	theXAxis.geometry.verticesNeedUpdate=true;
-	
+
 	theYAxis.geometry.vertices[0].copy(thePosition);
 	theYAxis.geometry.vertices[0].y-=0.5;
 	theYAxis.geometry.vertices[1].copy(thePosition);
 	theYAxis.geometry.vertices[1].y+=1;
 	theYAxis.geometry.verticesNeedUpdate=true;
-	
+
 	theZAxis.geometry.vertices[0].copy(thePosition);
 	theZAxis.geometry.vertices[0].z-=0.5;
 	theZAxis.geometry.vertices[1].copy(thePosition);
 	theZAxis.geometry.vertices[1].z+=1;
 	theZAxis.geometry.verticesNeedUpdate=true;
-	
+
 }
 
 
@@ -1525,10 +1491,10 @@ function dir_updateAxisLines(){
 * @param {Float} mouseX
 * @param {Float} mouseY
 * @return {Int}
-* 
+*
 */
 function dir_getDirectionFromMouse( mouseX, mouseY ){
-	
+
 	var mouseZ;
 	mouseZ = Math.pow(1-((mouseX*mouseX)+(mouseY*mouseY)),0.5);
 
@@ -1538,10 +1504,10 @@ function dir_getDirectionFromMouse( mouseX, mouseY ){
 									0,
 									'ZYX' );
 	theVec.applyEuler(theRot);
-	
+
 	var theDir = dir_getDir(theVec);
 	return theDir;
-	
+
 }
 
 
@@ -1553,13 +1519,13 @@ function dir_getDirectionFromMouse( mouseX, mouseY ){
 *
 * @method dir_addVectorFromMouse
 * @for directionConfirmGlobal
-* @param {Float} mouseX The X position of the mouse 
+* @param {Float} mouseX The X position of the mouse
 * @param {Float} mouseY The Y position of the mouse
 * @return {Void}
-* 
+*
 */
 function dir_addVectorFromMouse ( mouseX, mouseY ){
-	
+
 	var theButton = document.getElementById("addButton");
 	var theArea = document.getElementById("display");
 	var areaW = theArea.clientWidth;
@@ -1569,8 +1535,8 @@ function dir_addVectorFromMouse ( mouseX, mouseY ){
 	console.log("aW: "+areaW+" aH: "+areaH+" aT: "+areaT+" aL: "+areaL);
 	console.log("mX: "+(((mouseX-areaL)-areaW/2)/(areaW/2))+" mY: "+((areaH/2-(mouseY-areaT))/(areaH/2)));
 	var theDir = dir_getDirectionFromMouse( ((mouseX-areaL)-areaW/2)/(areaW/2), (areaH/2-(mouseY-areaT))/(areaH/2) );
-	
-	
+
+
 	var theVecList=document.getElementById("vecList");
 	var theVecs = theVecList.childNodes;
 	var pos = 0;
@@ -1595,7 +1561,7 @@ function dir_addVectorFromMouse ( mouseX, mouseY ){
 	theInputs[1].value = theDirections[theDir].Y;
 	theInputs[2].value = theDirections[theDir].Z;
 	theInputs[0].onchange();
-	
+
 }
 
 
@@ -1607,8 +1573,8 @@ function dir_addVectorFromMouse ( mouseX, mouseY ){
 
 
 
-startupScripts[4] = function() {
-	
+startupScripts["4"] = function() {
+
 
 	lastPair=null;
 	currentPair=null;
@@ -1635,7 +1601,19 @@ startupScripts[4] = function() {
 
 	theXML = inText;
 
+	var i = 0;
+	var lim = directionList.length;
+	theDirections = [];
+	while( i < lim ){
+		theDirections.push({
+			X: directionList[i][0],
+			Y: directionList[i][1],
+			Z: directionList[i][2]
+		});
+		i++;
+	}
+
 	dir_renderParts();
 
 }
-
+//</script>

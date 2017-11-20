@@ -8,12 +8,15 @@ function updateLoad(){
     var theBar = document.getElementById("loadProgress");
     switch(stage){
         case 1:
-            theText.innerHTML = "Anylizing Part Models...";
+            theText.innerHTML = "Analyzing Part Models...";
             break;
         case 3:
-            theText.innerHTML = "Detecting Disassembly Directons...";
+            theText.innerHTML = "Detecting Disassembly Directions...";
             break;
-        case 6:
+        case 5:
+            theText.innerHTML = "Verifying Assembly Connectedness...";
+            break;
+		case 6:
             theText.innerHTML = "Generating Assembly Plan...";
             break;
         default:

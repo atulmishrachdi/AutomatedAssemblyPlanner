@@ -12,7 +12,6 @@ namespace Assembly_Planner
 {
     public class DirectionSaveStructure
     {
-        public List<double[]> Directions;
 
         public List<arc> arcs;
 
