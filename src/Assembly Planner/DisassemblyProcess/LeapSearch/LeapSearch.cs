@@ -454,6 +454,12 @@ namespace Assembly_Planner
                 EvaluationForBinaryTree.GetSubassemblyVolume(nodes.ToList()),
                 EvaluationForBinaryTree.GetSubassemblyCenterOfMass(nodes.ToList()));
             MemoData D = new MemoData(0, sa);
+
+            if (Memo.ContainsKey(nodes))
+            {
+                nodes.ToList().ForEach(a =>  Console.WriteLine(a.ToString()));
+                return;
+            }
             lock (Memo)
             {
                 Memo.Add(nodes, D);

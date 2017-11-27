@@ -195,9 +195,9 @@ namespace Assembly_Planner
 			Console.WriteLine("\n\nConnectedness verified");
 			SaveState();
 			if (serverMode) {
-                SaveVerification("true");
 				state.Save(state.inputDir + slash + "intermediate" + slash + "ProgramState.xml");
-			}
+                SaveVerification("true");
+            }
 			else {
 				state.Save(state.inputDir + slash + "bin" + slash + "intermediate" + slash + "ProgramState.xml");
 			}

@@ -511,7 +511,7 @@ function rdr_renderParts(){
 	// Parses in the xml of the treequence
 	//console.log(theXML);
 	var treeQ = $.parseXML(theXML);
-	//console.log(treeQ);
+	console.log(treeQ);
 	treeQ=grab(treeQ,"AssemblyCandidate");
 	//console.log(treeQ);
 	treeQ=grab(treeQ,"Sequence");
@@ -617,12 +617,12 @@ function rdr_showHideTreequence(){
 
 
 
-startupScripts["6"] = function(){
+startupScripts["7"] = function(){
 	//
 	//    Pretty Important: Keep this as true unless/until you've incorperated some other
 	//                      method of getting file input/output
 	//
-	var manualFileInput=true;
+	manualFileInput=false;
 
 
 	if(manualFileInput==true){
@@ -630,37 +630,22 @@ startupScripts["6"] = function(){
 		document.getElementById("HUD").innerHTML="<input type='file' id='fileinput' multiple />"+document.getElementById("HUD").innerHTML;
 
 	}
-
-
-
-	// Holder for parsed-in XML documents
-	var theXML=null;
-
-	// Array for storing fileReaders to keep track of them
-	var fileReaders=[];
-
-	// Array for processed STLs
-	var STLs=[];
-
-	//  Array for processed parts
-	var parts=[];
-
 	// Holder for animation frames for parts
-	var partFrames=null;
+	partFrames=null;
 
 	// Sets the time to 0, for the sake of starting the animation at the right time
-	var theTime=0;
+	theTime=0;
 
 
 	// Holder for parsed-in javascript objects from the XML document
-	var theTreequence=null;
+	theTreequence=null;
 
-	var treequenceActive = false;
+	treequenceActive = false;
 
 
-	var timeAdjustment = 0;
+	timeAdjustment = 0;
 
-	var standard = false;
+	standard = false;
 
 
 	// Holds the state of button press inputs to smooth out control response
@@ -678,7 +663,7 @@ startupScripts["6"] = function(){
 	* @return {Void}
 	*
 	*/
-	var inputState={
+	inputState={
 
 		W: false,
 		A: false,
@@ -695,45 +680,45 @@ startupScripts["6"] = function(){
 
 
 	// The color of the background of the scene
-	var skyColor= 0xFFFFFF;
+	skyColor= 0xFFFFFF;
 
 	if(standard){
 		skyColor = 0x000000;
 	}
 
 	// The tree structure holding animation data
-	var movementTree=null;
-	var theCenter= new THREE.Vector3(0,0,0);
+	movementTree=null;
+	theCenter= new THREE.Vector3(0,0,0);
 
 	// The part directly in front of the camera, if any such part exists
-	var objectOfInterest=null;
+	objectOfInterest=null;
 
 	// The part being locked onto by using the 'F' key
-	var focusPoint=null;
+	focusPoint=null;
 
 	// Name of the part being looked at, if there is any such part
-	var mouseOverText="";
+	mouseOverText="";
 
 	// Time dialation coefficeint
-	var zoom=0.2;
+	zoom=0.2;
 
 	// Base Accelleration
-	var theSpeed=0.2;
+	theSpeed=0.2;
 
 	// Accelleration bonus variables
-	var theBoost=1; // Initial accelleration bonus
-	var boostLim=25; // Limit to accelleration bonus
-	var boostInc=0.1; // Rate of accelleration bonus increase
+	theBoost=1; // Initial accelleration bonus
+	boostLim=25; // Limit to accelleration bonus
+	boostInc=0.1; // Rate of accelleration bonus increase
 
 	// Coefficient of drag camera experiences
-	var theDrag=0.96;
+	theDrag=0.96;
 
 	// Angles of camera
-	var camYaw=0;
-	var camPitch=Math.PI/2;
+	camYaw=0;
+	camPitch=Math.PI/2;
 
 	// The momentum of the camera
-	var momentum= new THREE.Vector3(0,0,0);
+	momentum= new THREE.Vector3(0,0,0);
 
 
 
@@ -780,7 +765,7 @@ startupScripts["6"] = function(){
 		objectOfInterest=getFirstIntersect(scene,camera,partFrames);
 
 
-		// Change appearence of the object of interest and display the appropriate information
+		// Change appearance of the object of interest and display the appropriate information
 		if(objectOfInterest!==null && standard !== true){
 
 			mouseOverText=" "+objectOfInterest.Name.substring(0,objectOfInterest.Name.length-4);
@@ -799,7 +784,7 @@ startupScripts["6"] = function(){
 		}
 
 
-		// Change appearence of the focus point mesh
+		// Change appearance of the focus point mesh
 		if(focusPoint!=null && standard !== true){
 
 			focusPoint.Mesh.material=new THREE.MeshStandardMaterial({
@@ -832,7 +817,7 @@ startupScripts["6"] = function(){
 	camera.position.y=0;
 
 	// The variable holding the state of whether or not the pointer is locked
-	var pointerIsLocked=false;
+	pointerIsLocked=false;
 
 	clearScene("theDisplay");
 
@@ -840,11 +825,11 @@ startupScripts["6"] = function(){
 	camera.rotation.reorder('YXZ');
 
 
-	var theXAxis=null;
-	var theYAxis=null;
-	var theZAxis=null;
-	var xRet=null;
-	var yRet=null;
+	theXAxis=null;
+	theYAxis=null;
+	theZAxis=null;
+	xRet=null;
+	yRet=null;
 
 
 

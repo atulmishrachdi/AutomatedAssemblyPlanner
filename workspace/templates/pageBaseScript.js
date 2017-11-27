@@ -315,7 +315,8 @@ function updateProg(response,status){
 		}
 		else{
 			inText = resp.data;
-			if(stage === 5 && inText === "false"){
+			//console.log("inText is '"+inText+"'");
+			if(stage === 5 && inText !== "true"){
 				updateLoad();
 				requestAdvance(stage-1);
 				return;

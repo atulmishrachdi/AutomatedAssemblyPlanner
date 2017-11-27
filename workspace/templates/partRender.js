@@ -1,4 +1,4 @@
-;
+//<script>;
 
 
 
@@ -12,12 +12,12 @@
 * @method getStdMaterial
 * @for renderGlobal
 * @return {Object}
-* 
+*
 */
 function getStdMaterial(){
-	
+
 	if(standard === true){
-		
+
 		return new THREE.ShaderMaterial({
 					vertexShader: document.querySelector('#chroma-vert').textContent.trim(),
 					fragmentShader: document.querySelector('#chroma-frag').textContent.trim(),
@@ -26,16 +26,16 @@ function getStdMaterial(){
 						cameraFar:  { value: camera.far }
 					}
 				});
-		
+
 	}
 	else{
-		
+
 		return new THREE.MeshNormalMaterial({transparent: true} );
-		
+
 	}
-	
-	
-	
+
+
+
 }
 
 
@@ -49,12 +49,12 @@ function getStdMaterial(){
 * @method getStdMaterial
 * @for renderGlobal
 * @return {Object}
-* 
+*
 */
 function getStdLine(){
-	
+
 	if(standard === true){
-		
+
 		return new THREE.ShaderMaterial({
 					vertexShader: document.querySelector('#chroma-vert').textContent.trim(),
 					fragmentShader: document.querySelector('#chroma-frag').textContent.trim(),
@@ -63,21 +63,21 @@ function getStdLine(){
 						cameraFar:  { value: camera.far }
 					}
 				});
-		
+
 	}
 	else{
-		
+
 		return new THREE.LineDashedMaterial({
 					color: 0x333333,
 					dashSize: 50,
 					gapSize:50
-				
+
 				})
-		
+
 	}
-	
-	
-	
+
+
+
 }
 
 /**
@@ -91,10 +91,10 @@ function getStdLine(){
 * @param {Object Array} partFrames An array of objects, each of which should containin
 * a property called "Name" with a non-null string.
 * @return {Int} The first index where any two "Name" properties in the array are different.
-* 
+*
 */
 function getPartNameCutoff(partFrames){
-	
+
 	var pos=1;
 	var lim=partFrames.length;
 	var checkPos;
@@ -109,9 +109,9 @@ function getPartNameCutoff(partFrames){
 		}
 		pos++;
 	}
-	
+
 	return checkLim;
-	
+
 }
 
 
@@ -127,19 +127,19 @@ function getPartNameCutoff(partFrames){
 * @param {Object Array} partFrames An array of objects, each of which should containin
 * a property called "Name" with a non-null string.
 * @return {Void}
-* 
+*
 */
 function cutoffPartNames(partFrames){
-	
+
 	var cut=getPartNameCutoff(partFrames);
-	
+
 	var pos=0;
 	var lim=partFrames.length;
 	while(pos<lim){
 		partFrames[pos].Name=partFrames[pos].Name.substr(cut,partFrames[pos].Name.length-(cut+4));
 		pos++;
 	}
-	
+
 }
 
 
@@ -153,10 +153,10 @@ function cutoffPartNames(partFrames){
 * @return {threeJS Vector3 Object} A 3d coordinate, with each component being the unweighted
 * average of the corresponding component in each vector in the provided geometry object. If nodeName
 * vertices are present in the object, a zeroed vector is returned.
-* 
+*
 */
 function centerGeometry(theGeo){
-	
+
 	var verts=theGeo.vertices;
 	var pos=0;
 	var lim=verts.length;
@@ -172,9 +172,9 @@ function centerGeometry(theGeo){
 		avgZ+=verts[pos].z;
 		pos++;
 	}
-	
-	
-	
+
+
+
 	avgX/=lim;
 	avgY/=lim;
 	avgZ/=lim;
@@ -185,9 +185,9 @@ function centerGeometry(theGeo){
 		verts[pos].z-=avgZ;
 		pos++;
 	}
-	
+
 	return new THREE.Vector3(avgX,avgY,avgZ);
-	
+
 }
 
 
@@ -199,13 +199,13 @@ function centerGeometry(theGeo){
 * of ThreeJS objects.
 *
 * @method getGeometries
-* @for renderGlobal 
+* @for renderGlobal
 * @param {Buffer Object List} theSTLs
 * @return {ThreeJS Object List}
-* 
+*
 */
 function getGeometries(theSTLs){
-	
+
 	var result=[];
 	var pos=0;
 	var lim=theSTLs.length;
@@ -214,7 +214,7 @@ function getGeometries(theSTLs){
 		pos++;
 	}
 	return result;
-	
+
 }
 
 
@@ -222,37 +222,37 @@ function getGeometries(theSTLs){
 
 /**
 *
-* Combines a given array of objects (each associating an array of keyframes to name) with a 
+* Combines a given array of objects (each associating an array of keyframes to name) with a
 * given array of objects (each associating a threeJS mesh with a name), creating an array
 * of objects with keyFrame arrays and threeJS meshes associated with the same name
 *
 * @method bindPartsToKeyFrames
 * @for renderGlobal
-* @param {Array} theKeyFrameLists An array of objects, each containing an array of keyframe objects 
+* @param {Array} theKeyFrameLists An array of objects, each containing an array of keyframe objects
 * called "Frames" and a string property called "Name")
 * @param {Array} theParts An array of objects, each containing a threeJS mesh object called "Mesh" and
 * a string property called "Name"
-* @return {Array} 
+* @return {Array}
 *
 */
 function bindPartsToKeyFrames(theKeyFrameLists, theParts){
-	
+
 	//console.log(theKeyFrameLists);
 	//console.log (theParts);
-	
+
 	var pos=0;
 	var searchPos;
 	var lim=theKeyFrameLists.length;
 	var searchLim=theParts.length;
 	var result=[];
-	
-	
-	
+
+
+
 	while(pos<lim){
 		searchPos=0;
 		while(searchPos<searchLim){
 			//console.log(theKeyFrameLists[pos].Name+" -- "+theParts[searchPos].Name);
-			if(theKeyFrameLists[pos].Name===theParts[searchPos].Name || 
+			if(theKeyFrameLists[pos].Name===theParts[searchPos].Name ||
 			   theKeyFrameLists[pos].Name+".STL"===theParts[searchPos].Name ||
 			   theKeyFrameLists[pos].Name===theParts[searchPos].Name+".STL"){
 				   //console.log("===========");
@@ -278,11 +278,11 @@ function bindPartsToKeyFrames(theKeyFrameLists, theParts){
 		});*/
 		pos++;
 	}
-	
+
 	flipTheTimes(result);
 
 	return result;
-	
+
 }
 
 
@@ -299,7 +299,7 @@ function bindPartsToKeyFrames(theKeyFrameLists, theParts){
 *
 */
 function longestTimeFromFrames(partFrames){
-	
+
 	var x=0;
 	var y;
 	var xLim=partFrames.length;
@@ -316,7 +316,7 @@ function longestTimeFromFrames(partFrames){
 	}
 	//console.log(best);
 	return best;
-	
+
 }
 
 
@@ -334,7 +334,7 @@ function longestTimeFromFrames(partFrames){
 *
 */
 function flipTheTimes(partFrames){
-	
+
 	var x=0;
 	var y;
 	var xLim=partFrames.length;
@@ -351,7 +351,7 @@ function flipTheTimes(partFrames){
 		x++;
 	}
 	return;
-	
+
 }
 
 
@@ -367,7 +367,7 @@ function flipTheTimes(partFrames){
 *
 */
 function showFrames(partFrames){
-	
+
 	var x=0;
 	var y;
 	var xLim=partFrames.length;
@@ -389,7 +389,7 @@ function showFrames(partFrames){
 	}
 
 	return;
-	
+
 }
 
 
@@ -405,9 +405,9 @@ function showFrames(partFrames){
 *
 */
 function sayFrame(theFrame){
-	
+
 	console.log("X: "+theFrame.Position.x+" Y: "+theFrame.Position.y+" Z: "+theFrame.Position.z+" Time: "+theFrame.Time);
-	
+
 }
 
 
@@ -422,9 +422,9 @@ function sayFrame(theFrame){
 *
 */
 function hasNaN(theFrame){
-	
+
 	return (isNaN(theFrame.Position.x) || isNaN(theFrame.Position.y) || isNaN(theFrame.Position.z));
-	
+
 }
 
 
@@ -465,17 +465,17 @@ function copyFrame(theFrame){
 *
 */
 function copyFrameList (theFrameList){
-	
+
 	var pos=0;
 	var lim=theFrameList.length;
 	var result=[];
-	while(pos<lim){		
+	while(pos<lim){
 		result.push(copyFrame(theFrameList[pos]));
 		pos++;
 	}
-	
+
 	return result;
-	
+
 }
 
 
@@ -487,52 +487,52 @@ function copyFrameList (theFrameList){
 * Creates a keyframe list for the given fastener object and adds it to currentFrameList
 *
 * @method makeFastenerKeyFrames
-* @for renderGlobal 
+* @for renderGlobal
 * @param {Object} theFst The object representation of the fastener being keyframed
 * @param {Object List} runningList The current running list of keyframes
 * @param {Object List} currentFrameList The list of part-keyframe list objects
 * @return {Void}
-* 
+*
 */
 function makeFastenerKeyFrames(theFst,runningList,currentFrameList){
-	
+
 	var newQuat= new THREE.Quaternion();
 	newQuat.setFromEuler(new THREE.Euler(0,0,0,'XYZ'));
-	
+
 	var presentFrame={
-						Quat: newQuat, 
+						Quat: newQuat,
 						Position: new THREE.Vector3(theFst.X,theFst.Y,theFst.Z),
 						Time: theFst.Time
 					};
 
-	
+
 	runningList.push(presentFrame);
-	
+
 	var copiedList= copyFrameList(runningList);
 	//console.log("-----------");
 	if(copiedList.length===1){
 		copiedList.length = 2;
 		copiedList[1] = copiedList[0];
 		copiedList[0] = {
-						Quat: newQuat, 
+						Quat: newQuat,
 						Position: new THREE.Vector3(0.0,0.0,0.0),
 						Time: 0.00
 					};
 	}
 	currentFrameList.push({Name: theFst.Name, Frames: copiedList});
-	
+
 	console.log({Name: theFst.Name, Frames: copiedList});
 	runningList.pop();
 
 	return;
-	
+
 }
 
 
 /**
 *
 * Given a tree representation of the assembly process through nested javascript objects, returns an array
-* of keyframe array objects, with each keyframe array object being a representation of the movement of each part 
+* of keyframe array objects, with each keyframe array object being a representation of the movement of each part
 * in the tree representation throughout the assembly proceess, with a list of keyframe objects and a given part name
 *
 * @method makeKeyFrames
@@ -551,22 +551,22 @@ function makeKeyFrames(theTree, runningList, currentFrameList){
 		/*console.log("ROOT");
 		console.log(theTree);*/
 	}
-	
+
 	//console.log(theTree);
-	
+
 	var newQuat= new THREE.Quaternion();
 	newQuat.setFromEuler(new THREE.Euler(0,0,0,'XYZ'));
-	
+
 	var presentFrame = {
-						Quat: newQuat, 
+						Quat: newQuat,
 						Position: new THREE.Vector3(theTree.X,theTree.Y,theTree.Z),
 						Time: theTree.Time,
 						Alpha: 1.0
 					};
 
-	
+
 	runningList.push(presentFrame);
-	
+
 	if(theTree.Ref === null){
 		var copiedList= copyFrameList(runningList);
 		//console.log("-----------");
@@ -578,21 +578,21 @@ function makeKeyFrames(theTree, runningList, currentFrameList){
 		makeKeyFrames(theTree.Mov,runningList,currentFrameList);
 		runningList.pop();
 	}
-	
+
 	var pos = 0;
 	var lim = theTree.Fst.length;
 	while(pos<lim){
 		makeFastenerKeyFrames(theTree.Fst[pos],runningList,currentFrameList);
 		pos++;
 	}
-	
-	
+
+
 	if(isRoot===1){
 		//console.log(currentFrameList);
 		return currentFrameList;
 	}
 	return;
-	
+
 }
 
 
@@ -613,9 +613,9 @@ function makeKeyFrames(theTree, runningList, currentFrameList){
 *
 */
 function interpolate(keyFrame1, keyFrame2, proportion){
-	
+
 	var result={ Quat: new THREE.Quaternion(), Position: new THREE.Vector3(0,0,0), Time: null, Alpha: 1.0 };
-	
+
 	THREE.Quaternion.slerp (keyFrame1.Quat, keyFrame2.Quat, result.Quat, proportion);
 	//result.Position.lerp(keyFrame1.Position,keyFrame2.Position,proportion);
 	result.Position.x=keyFrame1.Position.x*(1-proportion)+keyFrame2.Position.x*proportion;
@@ -631,10 +631,10 @@ function interpolate(keyFrame1, keyFrame2, proportion){
 		sayFrame(keyFrame2);
 		sayFrame(result);
 		console.log("^^^^^^^^^^^^");
-	}	
+	}
 	*/
 	return result;
-	
+
 }
 
 
@@ -654,17 +654,17 @@ function interpolate(keyFrame1, keyFrame2, proportion){
 *
 */
 function grabInterp(frameList, time){
-	
+
 
 	var pos=0;
 	var lim=frameList.length;
 	//var timeReport="";
 	while((pos<lim) && (time>frameList[pos].Time)){
 		//timeReport=timeReport+" -> "+frameList[pos].Time.toString();
-		pos++; 
+		pos++;
 	}
-	
-	
+
+
 	/*if(pos<lim){
 		timeReport=timeReport+" -> "+time+" <- "+frameList[pos].Time.toString();
 	}
@@ -672,41 +672,41 @@ function grabInterp(frameList, time){
 		timeReport=timeReport+" -> "+frameList[lim-1].Time.toString()+" -> "+time;
 	}
 	console.log(timeReport);*/
-	
+
 	if(pos==0){
 		//console.log(time.toString()+"<"+frameList[0].Time.toString());
 		var theResult= copyFrame(frameList[0]);
-		
+
 	}
 	else if(pos==lim){
 		//console.log(time.toString()+">"+frameList[lim-1].Time.toString());
 		var theResult= copyFrame(frameList[lim-1]);
 	}
 	else{
-		
+
 		var prop=(time-frameList[pos-1].Time)/(frameList[pos].Time-frameList[pos-1].Time);
 		var theResult=interpolate(frameList[pos-1],frameList[pos],prop);
 	}
-	
+
 	//sayFrame(theResult);
 	return theResult;
-	
+
 }
 
 
 
 /**
 *
-* Given an array of objects (each containing a threeJS mesh object and an array of 
+* Given an array of objects (each containing a threeJS mesh object and an array of
 * keyFrame objects), and two floating points "time" and "timeWarp", will animate each
-* mesh in the array along the keyframes in their associate objects according to the 
+* mesh in the array along the keyframes in their associate objects according to the
 * given "time" and returns the new time as given by the standard time step multiplied
-* by "timeWarp" 
+* by "timeWarp"
 *
 * @method animate
 * @for renderGlobal
-* @param {Array} partFrames List of objects relating threeJS mesh objects with their 
-* respective keyframe arrays 
+* @param {Array} partFrames List of objects relating threeJS mesh objects with their
+* respective keyframe arrays
 * @param {Float} time The time to be used when interpolating keyFrames for the models
 * @param {Float} timeWarp The coefficeint to be applied to the timestep in the
 * animation
@@ -714,16 +714,16 @@ function grabInterp(frameList, time){
 *
 */
 function animate(partFrames, time, timeWarp){
-	
+
 	var pos=0;
 	var lim=partFrames.length;
 	var interp;
 	var eul= new THREE.Euler();
 	var delt=new THREE.Vector3();
 	while(pos<lim){
-		
+
 		interp=grabInterp(partFrames[pos].Frames,time,partFrames[pos].Mesh.position);
-		
+
 		eul.setFromQuaternion(interp.Quat);
 		partFrames[pos].Mesh.rotation.x=eul.x;
 		partFrames[pos].Mesh.rotation.y=eul.y;
@@ -735,11 +735,11 @@ function animate(partFrames, time, timeWarp){
 
 		pos++;
 	}
-	
+
 	var timeStep=timeWarp/60;
 	time+=timeStep;
 	return time;
-	
+
 }
 
 
@@ -758,7 +758,7 @@ function animate(partFrames, time, timeWarp){
 *
 */
 function combineBounds(a,b){
-	
+
 	var r={};
 	r.min= new THREE.Vector3();
 	r.max= new THREE.Vector3();
@@ -769,7 +769,7 @@ function combineBounds(a,b){
 	r.min.z = Math.min(a.min.z,b.min.z);
 	r.max.z= Math.max(a.max.z,b.max.z);
 	return r;
-	
+
 }
 
 
@@ -787,11 +787,11 @@ function combineBounds(a,b){
 *
 */
 function getGlobBounds(partFrames){
-	
-	
+
+
 	partFrames[0].Mesh.geometry.computeBoundingBox();
 	var runningBound=partFrames[0].Mesh.geometry.boundingBox;
-	
+
 	var pos=1;
 	var lim=partFrames.length;
 	while(pos<lim){
@@ -799,9 +799,9 @@ function getGlobBounds(partFrames){
 		runningBound=combineBounds(runningBound,partFrames[pos].Mesh.geometry.boundingBox);
 		pos++;
 	}
-	
+
 	return runningBound;
-	
+
 }
 
 
@@ -821,16 +821,16 @@ function getGlobBounds(partFrames){
 *
 */
 function getPartCenter(part){
-	
+
 	part.Mesh.geometry.computeBoundingBox();
 	var bound=part.Mesh.geometry.boundingBox;
 	var center= new THREE.Vector3((bound.min.x+bound.max.x)/2,(bound.min.y+bound.max.y)/2,(bound.min.z+bound.max.z)/2);
 	center.x+=part.Mesh.position.x;
 	center.y+=part.Mesh.position.y;
 	center.z+=part.Mesh.position.z;
-	
+
 	return center;
-	
+
 }
 
 
@@ -842,10 +842,10 @@ function getPartCenter(part){
 * @method alignAssemblyCenter
 * @for renderGlobal
 * @return {Void}
-* 
+*
 */
 function alignAssemblyCenter(){
-	
+
 	var pos = 0;
 	var lim = partFrames.length;
 	var result = new THREE.Vector3(0,0,0);
@@ -858,7 +858,7 @@ function alignAssemblyCenter(){
 	result.normalize();
 	camYaw = Math.atan2(result.x,result.z) - Math.PI;
 	camPitch = Math.atan2(Math.pow(result.x*result.x+result.z*result.z,0.5),result.y);
-	
+
 }
 
 
@@ -867,14 +867,14 @@ function alignAssemblyCenter(){
 *
 * Given a threeJS scene object, a threeJS camera object, and an array of objects containing
 * threeJS mesh objects, finds the first mesh in the scene which is intersected the ray extending
-* through the center of the camera's field of vision. If this mesh is in the provided array of 
+* through the center of the camera's field of vision. If this mesh is in the provided array of
 * objects, then that object is returned, otherwise null is returned instead
 *
 * @method getFirstIntersect
 * @for renderGlobal
 * @param {Object} theScene The threeJS scene object in which intersections should
 * be tested
-* @param {Object} theCamera The threeJS camera object to be used to test for 
+* @param {Object} theCamera The threeJS camera object to be used to test for
 * ray intersections
 * @param {Array} partFrames An array containing a series of objects, each of which
 * contain a threeJS mesh object (under the property "Mesh") to be tested for intersections
@@ -882,19 +882,19 @@ function alignAssemblyCenter(){
 *
 */
 function getFirstIntersect(theScene, theCamera, partFrames){
-	
+
 	var caster= new THREE.Raycaster();
 	var mousePos= new THREE.Vector2(0,0);
-	
+
 	caster.setFromCamera(mousePos,theCamera);
-	
+
 	var intersectList=caster.intersectObjects(theScene.children);
-	
+
 	if(intersectList.length===0){
 		return null;
 	}
 	else{
-		
+
 		var pos=0;
 		var lim=partFrames.length;
 		var part=intersectList[0].object;
@@ -904,9 +904,9 @@ function getFirstIntersect(theScene, theCamera, partFrames){
 			}
 			pos++;
 		}
-		return null;		
+		return null;
 	}
-	
+
 }
 
 
@@ -930,7 +930,7 @@ function getFirstIntersect(theScene, theCamera, partFrames){
 *
 */
 function addLines(movTree,parentNode,theScene,isMov){
-	
+
 	if(movTree==null){
 		return;
 	}
@@ -962,10 +962,10 @@ function addLines(movTree,parentNode,theScene,isMov){
 			}
 			pos++;
 		}
-		
+
 		return;
 	}
-	
+
 }
 
 
@@ -973,7 +973,7 @@ function addLines(movTree,parentNode,theScene,isMov){
 
 /**
 *
-* Given an tree representation of the movement of parts in an assembly sequence, an 
+* Given an tree representation of the movement of parts in an assembly sequence, an
 * array of Objects each associating a list of keyframes with a threeJS mesh object and aLinkcolor
 * string, and the index of the keyframe associated with the tree's root node, displaces the movement
 * line points associated with that particular part of the assembly to match the displacement of the
@@ -991,7 +991,7 @@ function addLines(movTree,parentNode,theScene,isMov){
 *
 */
 function addDisplacement(movTree, partFrames, it){
-	
+
 	if(movTree==null){
 		return;
 	}
@@ -1007,7 +1007,7 @@ function addDisplacement(movTree, partFrames, it){
 			}
 			it=mov;
 		}
-		
+
 		if(mov==null || ref==null){
 			movTree.Disp=getPartCenter(partFrames[it]);
 			it++;
@@ -1018,9 +1018,9 @@ function addDisplacement(movTree, partFrames, it){
 		}
 		if(movTree.Line!=null){
 			movTree.Line.geometry.vertices[0].addVectors(movTree.Line.geometry.vertices[0],movTree.Disp);
-			movTree.Line.geometry.vertices[1].addVectors(movTree.Line.geometry.vertices[1],movTree.Disp);	
+			movTree.Line.geometry.vertices[1].addVectors(movTree.Line.geometry.vertices[1],movTree.Disp);
 		}
-		
+
 		return it;
 	}
 }
@@ -1042,7 +1042,7 @@ function addDisplacement(movTree, partFrames, it){
 *
 */
 function updateLines(movTree,parentNode,theTime, isMov){
-	
+
 	if(movTree==null){
 		return;
 	}
@@ -1066,10 +1066,10 @@ function updateLines(movTree,parentNode,theTime, isMov){
 			}
 			movTree.Line.geometry.verticesNeedUpdate=true;
 		}
-		
+
 		updateLines(movTree.Ref,movTree,theTime,false);
 		updateLines(movTree.Mov,movTree,theTime,true);
-		
+
 		var pos = 0;
 		var lim = movTree.Fst.length;
 		while(pos<lim){
@@ -1083,7 +1083,7 @@ function updateLines(movTree,parentNode,theTime, isMov){
 		}
 		return;
 	}
-	
+
 }
 
 
@@ -1099,38 +1099,38 @@ function updateLines(movTree,parentNode,theTime, isMov){
 *
 */
 function initAxisLines(){
-	
+
 	theXAxis = new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0xff0000, depthTest: false }));
 	theXAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
 	theXAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
 	theXAxis.frustumCulled = false;
-	
+
 	theYAxis = new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0x00ff00, depthTest: false }));
 	theYAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
 	theYAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
 	theYAxis.frustumCulled = false;
-	
+
 	theZAxis = new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0x0000ff, depthTest: false }));
 	theZAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
 	theZAxis.geometry.vertices.push(new THREE.Vector3(0,0,0));
 	theZAxis.frustumCulled = false;
-	
+
 	xRet = new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0x000000 }));
 	xRet.geometry.vertices.push(new THREE.Vector3(0,0,0));
 	xRet.geometry.vertices.push(new THREE.Vector3(0,0,0));
 	xRet.frustumCulled = false;
-	
+
 	yRet = new THREE.Line(  new THREE.Geometry(),  new THREE.LineBasicMaterial({color: 0x000000 }));
 	yRet.geometry.vertices.push(new THREE.Vector3(0,0,0));
 	yRet.geometry.vertices.push(new THREE.Vector3(0,0,0));
 	yRet.frustumCulled = false;
-	
+
 	scene.add(theXAxis);
 	scene.add(theYAxis);
 	scene.add(theZAxis);
 	scene.add(xRet);
 	scene.add(yRet);
-	
+
 }
 
 
@@ -1146,7 +1146,7 @@ function initAxisLines(){
 *
 */
 function updateAxisLines(){
-	
+
 	var theRot= new THREE.Quaternion(0,0,0,0);
 	theRot.setFromEuler(camera.rotation);
 	var theDir= new THREE.Vector3(-3,-3,-5);
@@ -1154,65 +1154,65 @@ function updateAxisLines(){
 	var retX1= new THREE.Vector3(0.3,0,-5);
 	var retY0= new THREE.Vector3(0,-0.08,-5);
 	var retY1= new THREE.Vector3(0,0.08,-5);
-	
+
 	theDir.applyQuaternion(theRot);
 	retX0.applyQuaternion(theRot);
 	retX1.applyQuaternion(theRot);
 	retY0.applyQuaternion(theRot);
 	retY1.applyQuaternion(theRot);
-	
+
 	var thePosition = camera.position.clone();
-	
+
 	thePosition.add(theDir);
-	
+
 	theXAxis.geometry.vertices[0].copy(thePosition);
 	theXAxis.geometry.vertices[0].x-=0.5;
 	theXAxis.geometry.vertices[1].copy(thePosition);
 	theXAxis.geometry.vertices[1].x+=1;
 	theXAxis.geometry.verticesNeedUpdate=true;
-	
+
 	theYAxis.geometry.vertices[0].copy(thePosition);
 	theYAxis.geometry.vertices[0].y-=0.5;
 	theYAxis.geometry.vertices[1].copy(thePosition);
 	theYAxis.geometry.vertices[1].y+=1;
 	theYAxis.geometry.verticesNeedUpdate=true;
-	
+
 	theZAxis.geometry.vertices[0].copy(thePosition);
 	theZAxis.geometry.vertices[0].z-=0.5;
 	theZAxis.geometry.vertices[1].copy(thePosition);
 	theZAxis.geometry.vertices[1].z+=1;
 	theZAxis.geometry.verticesNeedUpdate=true;
-	
-	
-	
+
+
+
 	thePosition.copy(camera.position);
 	thePosition.add(retX0);
-	xRet.geometry.vertices[0].copy(thePosition);	
-	
+	xRet.geometry.vertices[0].copy(thePosition);
+
 	thePosition.copy(camera.position);
 	thePosition.add(retX1);
 	xRet.geometry.vertices[1].copy(thePosition);
 	xRet.geometry.verticesNeedUpdate=true;
-	
+
 	thePosition.copy(camera.position);
 	thePosition.add(retY0);
 	yRet.geometry.vertices[0].copy(thePosition);
-	
+
 	thePosition.copy(camera.position);
 	thePosition.add(retY1);
 	yRet.geometry.vertices[1].copy(thePosition);
 	yRet.geometry.verticesNeedUpdate=true;
-	
-	
+
+
 }
 
 
 /**
 *
-* Performs a bezier curve interpolation of the control points in pointlist given 
+* Performs a bezier curve interpolation of the control points in pointlist given
 * the time value T, and returns a ThreeJS Vector3 object with the interpolated coordinates.
 *
-* @method interp 
+* @method interp
 * @for renderGlobal
 * @param {Vector3 Array} pointList A list of control points for use in interpolation.
 * @param {Float} T A normalized value for use as a time value in interpolation.
@@ -1220,7 +1220,7 @@ function updateAxisLines(){
 *
 */
 function interp (pointList, T){
-	
+
 	var pos = 0;
 	var lim = pointList.length;
 	var listCopy = [];
@@ -1238,7 +1238,7 @@ function interp (pointList, T){
 		lim--;
 	}
 	return listCopy[1];
-	
+
 }
 
 
@@ -1246,16 +1246,16 @@ function interp (pointList, T){
 *
 * Returns a string describing the x, y, and z coordinates of theVec.
 *
-* @method vecDesc 
+* @method vecDesc
 * @for renderGlobal
 * @param {Vector3} theVec The ThreeJS Vector3 object to be described by the output string
 * @return {String}
 *
 */
 function vecDesc(theVec){
-	
+
 	return "X: "+theVec.x+" Y: "+theVec.y+" Z: "+theVec.z;
-	
+
 }
 
 
@@ -1266,8 +1266,8 @@ function vecDesc(theVec){
 * and endDisp in an arc centered at the Vector3 object center. Each layer of recursion
 * adds the midpoint of the arc from startDisp to endDisp until level = 0.
 *
-* @method addArcSubDiv 
-* @for renderGlobal 
+* @method addArcSubDiv
+* @for renderGlobal
 * @param {Vector3 Array} target The list where the calculated Vector3 objects should be added
 * @param {Vector3} center The point which the generated arc should be centered on
 * @param {Vector3} startDisp The starting point of the arc
@@ -1277,7 +1277,7 @@ function vecDesc(theVec){
 *
 */
 function addArcSubDiv (target, center, startDisp, endDisp, level){
-	
+
 	var midVec = new THREE.Vector3(0,0,0);
 	var midDisp = new THREE.Vector3(0,0,0);
 	var startVec = new THREE.Vector3(0,0,0);
@@ -1292,8 +1292,8 @@ function addArcSubDiv (target, center, startDisp, endDisp, level){
 	startVec.add(center);
 	endVec.add(endDisp);
 	endVec.add(center);
-	
-	
+
+
 	if(level <= 0){
 		target.push(midVec);
 		target.push(endVec);
@@ -1302,7 +1302,7 @@ function addArcSubDiv (target, center, startDisp, endDisp, level){
 		addArcSubDiv(target,center,startDisp,midDisp, level-1);
 		addArcSubDiv(target,center,midDisp,endDisp, level-1);
 	}
-	
+
 }
 
 
@@ -1316,7 +1316,7 @@ function addArcSubDiv (target, center, startDisp, endDisp, level){
 * terminating at endpoint, and centered around center
 *
 * @method makeArcPointList
-* @for renderGlobal 
+* @for renderGlobal
 * @param {Vector3} startPoint The starting point of the arc
 * @param {Vector3} center The point which the generated arc should be centered on
 * @param {Vector3} endPoint The ending point of the arc
@@ -1325,7 +1325,7 @@ function addArcSubDiv (target, center, startDisp, endDisp, level){
 *
 */
 function makeArcPointList(startPoint, center, endPoint, resolution){
-	
+
 	var pos = 0;
 	var lim = 5;
 	var result = [];
@@ -1334,18 +1334,18 @@ function makeArcPointList(startPoint, center, endPoint, resolution){
 	var crossVector = new THREE.Vector3 ( 0,0,0 );
 	var startDisp = new THREE.Vector3 ( 0,0,0 );
 	var endDisp = new THREE.Vector3 ( 0,0,0 );
-	
+
 	workVector.copy(endPoint);
 	workVector.sub(center);
-	
+
 	startDisp.copy(startPoint);
 	startDisp.sub(center);
-	
+
 	crossVector.clone(startDisp);
-	
+
 	endDisp.copy(endPoint);
 	endDisp.sub(center);
-	
+
 	if(Math.abs(workVector.dot(crossVector)) > 0.98){
 		while(Math.abs(workVector.dot(crossVector)) > 0.98){
 			crossVector.set(Math.random()*100, Math.random()*100, Math.random()*100);
@@ -1353,7 +1353,7 @@ function makeArcPointList(startPoint, center, endPoint, resolution){
 		crossVector.cross(workVector);
 		crossVector.normalize();
 		crossVector.multiplyScalar((startDisp.length()+endDisp.length())/2);
-		
+
 		addArcSubDiv(result,center,endDisp,crossVector,resolution-1);
 		addArcSubDiv(result,center,crossVector,startDisp,resolution-1);
 	}
@@ -1362,35 +1362,35 @@ function makeArcPointList(startPoint, center, endPoint, resolution){
 		crossVector = null;
 		addArcSubDiv(result,center,endDisp,startDisp,resolution);
 	}
-	
+
 	return result;
 
 }
-   
-   
-   
-   
-   
+
+
+
+
+
 /**
 *
 * Adds keyframes onto the keyframe lists provided so that the keyframed parts begin their
 * animation at start location and move in an arc to their previously defined start position
 *
 * @method addCurveKeyFrames
-* @for renderGlobal 
+* @for renderGlobal
 * @param {Object List} theFrameLists A list of keyframe lists describing the movement of 3d models
 * @param {Vector3} startLocation The desired new start location of the 3d models in the animation
 * @return {Void}
 *
 */
 function addCurveKeyFrames(theFrameLists, startLocation){
-	
+
 	var pos = 0;
 	var lim = theFrameLists.length;
 	var center = new THREE.Vector3(0,0,0);
 	center.add(startLocation);
 	center.multiplyScalar(0.5);
-	
+
 	pos = 0;
 	lim = theFrameLists.length;
 	var framePos;
@@ -1400,7 +1400,7 @@ function addCurveKeyFrames(theFrameLists, startLocation){
 	var interpPoints;
 	var offSet;
 	var resolution = 4;
-	
+
 	while(pos<lim){
 		interpPoints = [];
 		startFrame = (theFrameLists[pos].Frames)[(theFrameLists[pos].Frames.length)-1];
@@ -1423,7 +1423,7 @@ function addCurveKeyFrames(theFrameLists, startLocation){
 		pos++;
 	}
 	return 8 + Math.pow(2,resolution+1);
-	
+
 }
 
 
@@ -1432,14 +1432,14 @@ function addCurveKeyFrames(theFrameLists, startLocation){
 * Adds a simple square grid of width equal to theSize and a number of lines equal to theDivs at Y=-1000
 *
 * @method addGrid
-* @for renderGlobal 
+* @for renderGlobal
 * @param {Int} theSize The desired grid width
 * @param {Int} theDivs The desired number of lines per side of the grid
 * @return {Void}
 *
 */
 function addGrid(theSize, theDivs, theHeight, theColor){
-	
+
 	var xpos = 0;
 	var zpos = 0;
 	var theLine = null;
@@ -1448,7 +1448,7 @@ function addGrid(theSize, theDivs, theHeight, theColor){
 		theGeo.vertices.push(new THREE.Vector3(xpos*theSize/theDivs-theSize/2, theHeight , 0-theSize/2));
 		theGeo.vertices.push(new THREE.Vector3(xpos*theSize/theDivs-theSize/2, theHeight , theSize/2));
 		xpos++;
-	}	
+	}
 	while(zpos<theDivs){
 		theGeo.vertices.push(new THREE.Vector3(0-theSize/2, theHeight, zpos*theSize/theDivs-theSize/2));
 		theGeo.vertices.push(new THREE.Vector3(theSize/2, theHeight , zpos*theSize/theDivs-theSize/2));
@@ -1459,7 +1459,7 @@ function addGrid(theSize, theDivs, theHeight, theColor){
 		getStdLine()
 	);
 	scene.add(theLine);
-	
+
 }
 
 
@@ -1467,11 +1467,11 @@ function addGrid(theSize, theDivs, theHeight, theColor){
 /**
 *
 * Adds a simple vertical column with a radius of theRad, a base Y value of theBot, a top terminating at
-* theTop, an x and z position equal to theX and theZ, a line color of theColor, a number of vertical 
+* theTop, an x and z position equal to theX and theZ, a line color of theColor, a number of vertical
 * segmentations equal to stacks, and a number of radial segmentations equal to slices
 *
 * @method addGrid
-* @for renderGlobal 
+* @for renderGlobal
 * @param {Float} theRad The desired radius of the column
 * @param {Float} theBot The desired bottom y value of the column
 * @param {Float} theTop The desired top y value of the column
@@ -1484,7 +1484,7 @@ function addGrid(theSize, theDivs, theHeight, theColor){
 *
 */
 function addCylender(theRad, theBot, theTop, theX, theZ, slices, stacks, theColor){
-	
+
 	var slicePos = 0;
 	var stackPos;
 	var theLine = null;
@@ -1492,26 +1492,26 @@ function addCylender(theRad, theBot, theTop, theX, theZ, slices, stacks, theColo
 	while(slicePos<slices){
 		stackPos = 0;
 		while(stackPos<stacks+1){
-			theGeo.vertices.push(new THREE.Vector3( 
-													theX+theRad*Math.cos(Math.PI*2*slicePos/slices), 
-			                                        theBot*stackPos/stacks+theTop*(stacks-stackPos)/stacks, 
+			theGeo.vertices.push(new THREE.Vector3(
+													theX+theRad*Math.cos(Math.PI*2*slicePos/slices),
+			                                        theBot*stackPos/stacks+theTop*(stacks-stackPos)/stacks,
 													theZ+theRad*Math.sin(Math.PI*2*slicePos/slices)
 												  ));
-			theGeo.vertices.push(new THREE.Vector3( 
-													theX+theRad*Math.cos(Math.PI*2*(slicePos+1)/slices), 
-			                                        theBot*stackPos/stacks+theTop*(stacks-stackPos)/stacks, 
+			theGeo.vertices.push(new THREE.Vector3(
+													theX+theRad*Math.cos(Math.PI*2*(slicePos+1)/slices),
+			                                        theBot*stackPos/stacks+theTop*(stacks-stackPos)/stacks,
 													theZ+theRad*Math.sin(Math.PI*2*(slicePos+1)/slices)
 												  ));
 			stackPos++;
 		}
-		theGeo.vertices.push(new THREE.Vector3( 
-												theX+theRad*Math.cos(Math.PI*2*slicePos/slices), 
-												theBot, 
+		theGeo.vertices.push(new THREE.Vector3(
+												theX+theRad*Math.cos(Math.PI*2*slicePos/slices),
+												theBot,
 												theZ+theRad*Math.sin(Math.PI*2*slicePos/slices)
 											  ));
-		theGeo.vertices.push(new THREE.Vector3( 
-												theX+theRad*Math.cos(Math.PI*2*slicePos/slices), 
-												theTop, 
+		theGeo.vertices.push(new THREE.Vector3(
+												theX+theRad*Math.cos(Math.PI*2*slicePos/slices),
+												theTop,
 												theZ+theRad*Math.sin(Math.PI*2*slicePos/slices)
 											  ));
 		slicePos++;
@@ -1521,11 +1521,11 @@ function addCylender(theRad, theBot, theTop, theX, theZ, slices, stacks, theColo
 		getStdLine()
 	);
 	scene.add(theLine);
-	
+
 }
 
 
 
 
 
-
+//</script>
