@@ -28,7 +28,7 @@ Currently, the tool is not "live" on a website. However, you can run the softwar
 4. Download node.js (https://nodejs.org/) and install.
 5. With a command-line tool, navigate to the main folder and type "node server.js"
 6. In your favorite browser, navigate to http://localhost:3000
-7. Upload your 3D models and follow along with the prompts.
+7. Upload your 3D models and follow along with the prompts. There are samples in the repository under "Test" that can be used initially.
 
 ...scratch...
 6. In the resulting table, enter the density/mass information for each part and correct the fastener classification of each part, as needed, using the check boxes of each corresponding entry.
