@@ -2,9 +2,9 @@
 This repository represents a tool to automatically determine the best assembly plan for a given assembly. The basic method can be invoked:
 * as a plugin to ESI's IC.IDO Virtual Reality software
 * as a command line executable 
-* as a app for the Digital Manufacturing Commons.
+* as a web-based app.
 However, the first one has significantly changed given the functionality of IC.IDO and is no longer included here. This work was funded under DARPA AVM iFAB from 
-2012 to 2015 and then by DMDII from 2015 to present (set to expire on 3/31/2017).
+2012 to 2015 and then by DMDII from 2015 to 2017.
 The work is being done primarily by the Design Engineering Lab at Oregon State University.
 
 ## What does the application do? ##
@@ -13,7 +13,7 @@ Given an CAD assembly representing a product to be assembled, the application se
 
 ## What does the application require (inputs/outputs)? ##
 ###Inputs###
-A folder of shapes where each shape is positioned relative to one another in a global coordinate frame. The shapes can be in STL, PLY, 3MF or AMF file formats. 
+A group of shape files where each shape is a part positioned relative to one another in a global coordinate frame. The shapes can be in STL, PLY, 3MF or AMF file formats. 
 
 ###Outputs###
 A single plan is created as an .xml file which describes a "treequence". A treequence (portmanteau of tree and sequence) is an assembly tree showing what parts come together in a particular order. 
@@ -21,16 +21,16 @@ Given the timing associated with the actions and the accommodation for parallel 
 particularly user-friendly. So, an external visualization has been created which shows the tree and an animation of the assembly process.
 
 ## How do I get set up? ##
+Currently, the tool is not "live" on a website. However, you can run the software locally. Here are the steps to do so.
 1. Clone the repository 
 2. Open the file "Assembly Planner.sln" in visual studio. 
-3. Build. This should create a file in the root folder called "AssemblyPlanner.exe".
+3. Build the solution (e.g. compile the code).
+4. Download node.js (https://nodejs.org/) and install.
+5. With a command-line tool, navigate to the main folder and type "node server.js"
+6. In your favorite browser, navigate to http://localhost:3000
+7. Upload your 3D models and follow along with the prompts.
 
-## How to run the application ##
-1. The root directory is populated with a number of folders and binaries. All the dll's are there to support the main exe, AssemblyPlanner.exe. 
-2. In the folder, "workspace", place your shape files for your assembly (stls, plys, AMFs or 3MFs). Remove all other files.
-3. Now, run AssemblyPlanner.exe. A console window will open and begin sending status updates about the process. Do not close this window.
-4. This process will pause with the following statement, "Press enter once input parts table generated". At this time, go back to the root folder and open the file "partTable.html"
-5. In the newly opened web page, click on the "choose files" button in the upper-left corner of the screen and select the file named "parts_properties.xml" in the folder "workspace" (which should have just been generate by the program).
+...scratch...
 6. In the resulting table, enter the density/mass information for each part and correct the fastener classification of each part, as needed, using the check boxes of each corresponding entry.
 7. Once the entire table has been filled out, click the button labeled "Render XML". This should cause a "download" link to appear next to the button. Click on this and move the downloaded file (which should be called "parts_properties2.xml") into the "workspace" folder.
 8. Navigate back to the console application and press enter.
