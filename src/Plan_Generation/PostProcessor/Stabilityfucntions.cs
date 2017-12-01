@@ -5,19 +5,16 @@ using System.Data.OleDb;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BaseClasses;
-using BaseClasses.AssemblyEvaluation;
-using BaseClasses.Representation;
-using Geometric_Reasoning;
-using Plan_Generation;
-using Plan_Generation.AssemblyEvaluation;
+using Assembly_Planner;
+using Assembly_Planner.GraphSynth.BaseClasses;
+using GraphSynth.Representation;
 using StarMathLib;
 using TVGL;
 using RandomGen;
-using Component = BaseClasses.Component;
+using Component = Assembly_Planner.GraphSynth.BaseClasses.Component;
 
 
-namespace Plan_Generation
+namespace Assembly_Planner
 {
     public class Stabilityfunctions
     {
@@ -236,7 +233,7 @@ namespace Plan_Generation
             var Gvector = tofaceNormal.multiply(9.8);
             foreach (var ind in Program.globalDirPool)
             {
-                var dir = StartProcess.Directions[ind];
+                var dir = DisassemblyDirections.Directions[ind];
                 var bestful = new double[3];
                 var trueful = new double[3];
                 //if (dir.dotProduct(tofaceNormal) > 0)
@@ -304,13 +301,15 @@ namespace Plan_Generation
         private static Dictionary<string, List<int>> GetSubPartRemovealDirectionIndexs(node checknode, List<arc> refarcs,
             bool s)
         {
+
             var removedirsbetweeneveryparts = new Dictionary<string, List<int>>();
             var checkarcs = refarcs.FindAll(a => a.From.name.Equals(checknode.name) || a.To.name.Equals(checknode.name));
 
             foreach (Connection arc in checkarcs.Where(a => a is Connection))
-            {
+			{
+				
                 var currentindex = new List<int>();
-                var othernodes = new List<node>();
+                var othernodes = new List<node>(); 
                 if (arc.From.name == checknode.name)
                 {
                     othernodes.Add(arc.To);
@@ -321,16 +320,17 @@ namespace Plan_Generation
                     removedirsbetweeneveryparts.Add(arc.XmlTo, currentindex);
                 }
                 else
-                {
+					
+				{
                     othernodes.Add(arc.From);
                     foreach (var dir in arc.InfiniteDirections)
                     {
-                        var a = StartProcess.Directions[dir];
-                        var b = StartProcess.Directions[StartProcess.DirectionsAndOppositsForGlobalpool[dir]];
+                        var a = DisassemblyDirections.Directions[dir];
+                        var b = DisassemblyDirections.Directions[DisassemblyDirections.DirectionsAndOppositsForGlobalpool[dir]];
                         var bb =
-                            StartProcess.Directions.First(
+                            DisassemblyDirections.Directions.First(
                                 d => d[0] == b[0] && d[1] == b[1] && d[2] == b[2]);
-                        var tureindex2 = StartProcess.Directions.IndexOf(bb);
+                        var tureindex2 = DisassemblyDirections.Directions.IndexOf(bb);
                         currentindex.Add(tureindex2);
                     }
                     removedirsbetweeneveryparts.Add(arc.XmlFrom, currentindex);
@@ -361,12 +361,12 @@ namespace Plan_Generation
                     othernodes.Add(arc.From);
                     foreach (var dir in arc.InfiniteDirections)
                     {
-                        var a = StartProcess.Directions[dir];
-                        var b = StartProcess.Directions[StartProcess.DirectionsAndOppositsForGlobalpool[dir]];
+                        var a = DisassemblyDirections.Directions[dir];
+                        var b = DisassemblyDirections.Directions[DisassemblyDirections.DirectionsAndOppositsForGlobalpool[dir]];
                         var bb =
-                            StartProcess.Directions.First(
+                            DisassemblyDirections.Directions.First(
                                 d => d[0] == b[0] && d[1] == b[1] && d[2] == b[2]);
-                        var tureindex2 = StartProcess.Directions.IndexOf(bb);
+                        var tureindex2 = DisassemblyDirections.Directions.IndexOf(bb);
                         angleindexs.Add(tureindex2);
                     }
                 }
@@ -448,7 +448,7 @@ namespace Plan_Generation
             var alldirs = new List<double[]>();
             foreach (var dirindex in currentremovaldirindexs)
             {
-                alldirs.Add(StartProcess.Directions[dirindex]);
+                alldirs.Add(DisassemblyDirections.Directions[dirindex]);
             }
             var dirs = new List<double[]>();
             var facenormals = new List<double[]>();
@@ -982,7 +982,7 @@ namespace Plan_Generation
             var turedir = new List<double[]>();
             foreach (var ind in newdirindexs)
             {
-                turedir.Add(StartProcess.Directions[ind]);
+                turedir.Add(DisassemblyDirections.Directions[ind]);
             }
             return newdirindexs;
             //   return currentdirs;
@@ -1344,7 +1344,7 @@ namespace Plan_Generation
                     List<Vertex> newConvexHullVerts = new List<Vertex>();
                     try
                     {
-                        var newconvexull = new TVGLConvexHull(uniquelistver, 1e-20);
+                        var newconvexull = new TVGLConvexHull(uniquelistver, 1e-8);
                         newConvexHullVerts = newconvexull.Vertices.ToList();
                         if (newConvexHullVerts == null)
                         {

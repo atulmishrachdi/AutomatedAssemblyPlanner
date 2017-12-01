@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BaseClasses;
-using BaseClasses.AssemblyEvaluation;
+using Assembly_Planner;
+using Assembly_Planner.GraphSynth.BaseClasses;
+using GraphSynth.Representation;
 
-namespace Plan_Generation
+namespace Assembly_Planner.DisassemblyProcess
 {
 //    internal class AStarInspiredRecursiveOptimizedSearch
 //    {
@@ -489,7 +490,7 @@ namespace Plan_Generation
 
     //stores memoization information
     // same as RecursiveOptimizedSearch.cs except for Parents and Children comment
-    /*internal class MemoData
+    internal class MemoData
     {
         public double Value;
         public SubAssembly sa;
@@ -529,7 +530,7 @@ namespace Plan_Generation
 
             return MovNodes.GetHashCode().CompareTo(other.MovNodes.GetHashCode());
         }
-    }*/
+    }
 
     /*
 	class sortTreeCandidates:IComparer<TreeCandidate>

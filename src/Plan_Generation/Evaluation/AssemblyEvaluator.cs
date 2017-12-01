@@ -1,5 +1,7 @@
 ﻿using System.Data;
 using Assembly_Planner;
+using GraphSynth;
+using GraphSynth.Representation;
 using MIConvexHull;
 using System;
 using System.Collections.Generic;
@@ -8,14 +10,9 @@ using System.Net;
 using StarMathLib;
 using TVGL.IOFunctions;
 using TVGL;
-using BaseClasses;
-using BaseClasses.AssemblyEvaluation;
-using BaseClasses.Representation;
-using Geometric_Reasoning;
-using Plan_Generation;
-using Constants = BaseClasses.AssemblyEvaluation.Constants;
+using Assembly_Planner.GraphSynth.BaseClasses;
 
-namespace Plan_Generation.AssemblyEvaluation
+namespace Assembly_Planner
 {
     public class AssemblyEvaluator
     {
@@ -59,7 +56,7 @@ namespace Plan_Generation.AssemblyEvaluation
             var insertionDirection = FindPartDisconnectMovement(connectingArcs, refNodes, out insertionDistance);
 
             var firstArc = connectingArcs[0];
-            var i = firstArc.localVariables.IndexOf(Constants.Values.CLASH_LOCATION);
+            var i = firstArc.localVariables.IndexOf(Constants.CLASH_LOCATION);
             var insertionPoint = (i == -1) ? new Vertex(new[] { 0.0, 0.0, 0.0 })
                 : new Vertex(new[] { firstArc.localVariables[i + 1], firstArc.localVariables[i + 2], firstArc.localVariables[i + 3] });
 
@@ -110,14 +107,14 @@ namespace Plan_Generation.AssemblyEvaluation
             // find install direction by averaging all visible_DOF
             //foreach (var arc in connectingArcs)
             //{
-            //    var index = arc.localVariables.FindIndex(x => x == Constants.Values.VISIBLE_DOF || x == Constants.Values.CONCENTRIC_DOF);
+            //    var index = arc.localVariables.FindIndex(x => x == Constants.VISIBLE_DOF || x == Constants.CONCENTRIC_DOF);
             //    while (index != -1)
             //    {
             //        var dir = new Vector(arc.localVariables[++index], arc.localVariables[++index], arc.localVariables[++index]);
             //        dir.NormalizeInPlace();
             //        installDirection.AddInPlace(dir);
             //        if (double.IsNaN(dir.Position[0])) continue;
-            //        index = arc.localVariables.FindIndex(index, x => x == Constants.Values.VISIBLE_DOF || x == Constants.Values.CONCENTRIC_DOF);
+            //        index = arc.localVariables.FindIndex(index, x => x == Constants.VISIBLE_DOF || x == Constants.CONCENTRIC_DOF);
             //    }
             //}
             //installDirection.NormalizeInPlace();
@@ -131,7 +128,7 @@ namespace Plan_Generation.AssemblyEvaluation
             //    foreach (var a in connectingArcs)
             //    {
             //        var n = a.To;
-            //        var index = n.localVariables.FindIndex(x => x == Constants.Values.TRANSLATION);
+            //        var index = n.localVariables.FindIndex(x => x == Constants.TRANSLATION);
             //        if (index != -1)
             //        {
             //            if (refNodes.Contains(n))
@@ -150,7 +147,7 @@ namespace Plan_Generation.AssemblyEvaluation
             //            }
             //        }
             //        n = a.From;
-            //        index = n.localVariables.FindIndex(x => x == Constants.Values.TRANSLATION);
+            //        index = n.localVariables.FindIndex(x => x == Constants.TRANSLATION);
             //        if (index != -1)
             //        {
             //            if (refNodes.Contains(n))

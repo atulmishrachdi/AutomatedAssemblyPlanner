@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BaseClasses.AssemblyEvaluation;
-using Plan_Generation;
+using Assembly_Planner;
 
-namespace Plan_Generation
+namespace Assembly_Planner
 {
     class UpdatePostProcessor
     {

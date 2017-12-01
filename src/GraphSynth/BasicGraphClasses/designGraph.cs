@@ -30,7 +30,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Xml.Serialization;
 
-namespace BaseClasses.Representation
+namespace GraphSynth.Representation
 {
     /// <summary>
     ///   The quintessential class in all of this research. The graph of nodes,
@@ -38,7 +38,6 @@ namespace BaseClasses.Representation
     ///   is a carry-over from other research, but indicates that GraphSynth is really
     ///   about designing with graphs.
     /// </summary>
-
     public class designGraph
     {
         #region Fields & Properties

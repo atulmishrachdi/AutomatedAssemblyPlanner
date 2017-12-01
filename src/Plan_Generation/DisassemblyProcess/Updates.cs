@@ -4,15 +4,14 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Assembly_Planner;
+using GraphSynth.Representation;
 using StarMathLib;
-using BaseClasses;
-using BaseClasses.AssemblyEvaluation;
-using BaseClasses.Representation;
-using Geometric_Reasoning;
+using Assembly_Planner.GraphSynth.BaseClasses;
 using TVGL;
-using Constants = BaseClasses.AssemblyEvaluation.Constants;
+using Constants = Assembly_Planner.Constants;
 
-namespace Plan_Generation
+namespace Assembly_Planner
 {
     internal class Updates
     {
@@ -50,10 +49,10 @@ namespace Plan_Generation
             // The function removes one of each parallel direction pair.
             for (var i = 0; i < globalDirPool.Count - 1; i++)
             {
-                var dir1 = StartProcess.Directions[globalDirPool[i]];
+                var dir1 = DisassemblyDirections.Directions[globalDirPool[i]];
                 for (var j = i + 1; j < globalDirPool.Count; j++)
                 {
-                    var dir2 = StartProcess.Directions[globalDirPool[j]];
+                    var dir2 = DisassemblyDirections.Directions[globalDirPool[j]];
                     if (Math.Abs(1 + dir1.dotProduct(dir2)) > 1e-3) continue;
                     globalDirPool.RemoveAt(j);
                     j--;
@@ -92,19 +91,19 @@ namespace Plan_Generation
                 var node = assemblyGraph.nodes.Cast<Component>().Where(n => n.name == Convert.ToString(values[0])).ToList()[0];
                 while (i < 9)
                 {
-                    if (Convert.ToDouble(values[i]) == Constants.Values.WEIGHT)
+                    if (Convert.ToDouble(values[i]) == Constants.WEIGHT)
                     {
                         node.Mass = Convert.ToDouble(values[i + 1]);
                         i+=2;
                         continue;
                     }
-                    if (Convert.ToDouble(values[i]) == Constants.Values.VOLUME)
+                    if (Convert.ToDouble(values[i]) == Constants.VOLUME)
                     {
                         node.Volume = Convert.ToDouble(values[i + 1]);
                         i += 2;
                         continue;
                     }
-                    if (Convert.ToDouble(values[i]) == Constants.Values.CENTEROFMASS)
+                    if (Convert.ToDouble(values[i]) == Constants.CENTEROFMASS)
                     {
                         node.CenterOfMass = new[] { Convert.ToDouble(values[i + 1]), Convert.ToDouble(values[i + 2]), Convert.ToDouble(values[i + 3]) };
                         i += 4;

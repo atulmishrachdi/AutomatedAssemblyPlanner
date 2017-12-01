@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
-using BaseClasses.AssemblyEvaluation;
+using Assembly_Planner;
 using TVGL;
 
-namespace BaseClasses
-
+namespace Assembly_Planner
 {
     public class FastenerBase : InstallAction
     {

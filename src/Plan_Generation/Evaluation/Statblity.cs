@@ -90,8 +90,8 @@
 //                    f1pionts.Add(point);
 //                }
 //                var ListOfConvexHullVer = MinimumEnclosure.ConvexHull2D(f1pionts);
-//                var x = msnode.localVariables[msnode.localVariables.IndexOf(Constants.Values.CENTEROFMASS) + 1];
-//                var y = msnode.localVariables[msnode.localVariables.IndexOf(Constants.Values.CENTEROFMASS) + 2];
+//                var x = msnode.localVariables[msnode.localVariables.IndexOf(Constants.CENTEROFMASS) + 1];
+//                var y = msnode.localVariables[msnode.localVariables.IndexOf(Constants.CENTEROFMASS) + 2];
 //                var newvertex = new TVGL.Vertex[9] ;
 //                var newpoint = new TVGL.Point(newvertex[0],x,y);
 //                f1pionts.Add(newpoint);

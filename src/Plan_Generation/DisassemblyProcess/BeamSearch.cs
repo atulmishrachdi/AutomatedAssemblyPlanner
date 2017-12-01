@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Assembly_Planner;
-using BaseClasses;
-using BaseClasses.AssemblyEvaluation;
-using BaseClasses.Representation;
-using Plan_Generation.AssemblyEvaluation;
+using GraphSynth;
+using GraphSynth.Representation;
+//using GraphSynth.Search;
+using Assembly_Planner.GraphSynth.BaseClasses;
 using TVGL;
 
-namespace Plan_Generation
+namespace Assembly_Planner
 {
     public class BeamSearch
     {

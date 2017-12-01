@@ -1,4 +1,4 @@
-﻿using BaseClasses.Representation;
+﻿using GraphSynth.Representation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace BaseClasses
+namespace Assembly_Planner.GraphSynth.BaseClasses
 {
     public class Component : node
     {

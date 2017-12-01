@@ -4,7 +4,7 @@ using System.Runtime.Versioning;
 using StarMathLib;
 using TVGL;
 
-namespace Geometric_Reasoning
+namespace Assembly_Planner
 {
     public class OBB
     {
@@ -14,7 +14,7 @@ namespace Geometric_Reasoning
         //   3. Using convex hull
         // I will only implement the "using points" method here.
 
-        public static BoundingBox BuildUsingPoints(List<Vertex> points)
+        internal static BoundingBox BuildUsingPoints(List<Vertex> points)
         {
             var mu = new[] {0.0, 0.0, 0.0};
             var C = new double[3, 3];
@@ -48,7 +48,7 @@ namespace Geometric_Reasoning
             double[][] dirs;
             double volume;
             var verts = BuildFromCovarianceMatrix(C, points, out dirs, out volume);
-            return new BoundingBox {CornerVertices = verts.ToArray(), Volume = volume, Directions = dirs};
+            return new BoundingBox {CornerVertices = verts, Volume = volume, Directions = dirs};
         }
 
         internal static Vertex[] BuildFromCovarianceMatrix(double[,] C, List<Vertex> points, out double[][] eigenVecs, out double volume)

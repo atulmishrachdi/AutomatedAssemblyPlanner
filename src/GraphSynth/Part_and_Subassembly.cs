@@ -1,13 +1,14 @@
-﻿using MIConvexHull;
+﻿using GraphSynth.Representation;
+using MIConvexHull;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
 using StarMathLib;
-using BaseClasses;
+using Assembly_Planner.GraphSynth.BaseClasses;
 using TVGL;
 
-namespace BaseClasses.AssemblyEvaluation
+namespace Assembly_Planner
 {
 
     public class Part

@@ -1,4 +1,5 @@
-﻿using System;
+﻿#define NOSRC
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Dynamic;
@@ -9,28 +10,44 @@ using System.Text;
 using System.Threading.Tasks;
 using RandomGen;
 using StarMathLib;
+using OptimizationToolbox;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Xml.Linq;
+using Accord.Statistics;
 using Assembly_Planner;
 using StarMathLib;
-using BaseClasses.AssemblyEvaluation;
-using Plan_Generation.AssemblyEvaluation;
+using System.Management.Instrumentation;
+
+
 
 namespace GPprocess
 {
     public class CalculateAssemblyTimeAndSD
     {
-        public static Dictionary<List<double[]>, List<double[,]>> MoveDictionary = SaveandLoadData.ReadCSVforclusters(Directory.GetCurrentDirectory() + "/src/Assembly Planner/Evaluation/TrainningTimeData/ClusterMove.csv");
-        public static Dictionary<List<double[]>, List<double[,]>> InstallDictionary = SaveandLoadData.ReadCSVforclusters(Directory.GetCurrentDirectory() + "/src/Assembly Planner/Evaluation/TrainningTimeData/ClusterInstall.csv");
-        public static Dictionary<List<double[]>, List<double[,]>> SecureDictionary = SaveandLoadData.ReadCSVforclusters(Directory.GetCurrentDirectory() + "/src/Assembly Planner/Evaluation/TrainningTimeData/ClusterSecure.csv");
-        public static Dictionary<List<double[]>, List<double[,]>> RotateDictionary = SaveandLoadData.ReadCSVforclusters(Directory.GetCurrentDirectory() + "/src/Assembly Planner/Evaluation/TrainningTimeData/ClusterRotate.csv");
-        public static List<double[]> usermovedata = SaveandLoadData.ReadUserFeedback(Directory.GetCurrentDirectory() + "/src/Assembly Planner/Evaluation/TrainningTimeData/UserMoveData.csv");
-        public static List<double[]> userinstalldata = SaveandLoadData.ReadUserFeedback(Directory.GetCurrentDirectory() + "/src/Assembly Planner/Evaluation/TrainningTimeData/UserInstallData.csv");
-        public static List<double[]> usersecuredata = SaveandLoadData.ReadUserFeedback(Directory.GetCurrentDirectory() + "/src/Assembly Planner/Evaluation/TrainningTimeData/UserSecureData.csv");
-        public static List<double[]> userrotatedata = SaveandLoadData.ReadUserFeedback(Directory.GetCurrentDirectory() + "/src/Assembly Planner/Evaluation/TrainningTimeData/UserRotateData.csv");
-        public static List<double[]> usermoveplusinstalldata = SaveandLoadData.ReadUserFeedback(Directory.GetCurrentDirectory() + "/src/Assembly Planner/Evaluation/TrainningTimeData/UserMoveplusInstallData.csv");
-        //  Gettrainningdata(address, actionname, out obdataX, out obdataY);
+		#if NOSRC
+		public static Dictionary<List<double[]>, List<double[,]>> MoveDictionary = SaveandLoadData.ReadCSVforclusters(Program.state.inputDir+"/../training/ClusterMove.csv");
+		public static Dictionary<List<double[]>, List<double[,]>> InstallDictionary = SaveandLoadData.ReadCSVforclusters(Program.state.inputDir+"/../training/ClusterInstall.csv");
+		public static Dictionary<List<double[]>, List<double[,]>> SecureDictionary = SaveandLoadData.ReadCSVforclusters(Program.state.inputDir+"/../training/ClusterSecure.csv");
+		public static Dictionary<List<double[]>, List<double[,]>> RotateDictionary = SaveandLoadData.ReadCSVforclusters(Program.state.inputDir+"/../training/ClusterRotate.csv");
+		public static List<double[]> usermovedata = SaveandLoadData.ReadUserFeedback(Program.state.inputDir+"/../training/UserMoveData.csv");
+		public static List<double[]> userinstalldata = SaveandLoadData.ReadUserFeedback(Program.state.inputDir+"/../training/UserInstallData.csv");
+		public static List<double[]> usersecuredata = SaveandLoadData.ReadUserFeedback(Program.state.inputDir+"/../training/UserSecureData.csv");
+		public static List<double[]> userrotatedata = SaveandLoadData.ReadUserFeedback(Program.state.inputDir+"/../training/UserRotateData.csv");
+		public static List<double[]> usermoveplusinstalldata = SaveandLoadData.ReadUserFeedback(Program.state.inputDir+"/../training/UserMoveplusInstallData.csv");
+		#else
+		public static Dictionary<List<double[]>, List<double[,]>> MoveDictionary = SaveandLoadData.ReadCSVforclusters(Directory.GetCurrentDirectory() + "/src/Assembly Planner/Evaluation/TrainningTimeData/ClusterMove.csv");
+		public static Dictionary<List<double[]>, List<double[,]>> InstallDictionary = SaveandLoadData.ReadCSVforclusters(Directory.GetCurrentDirectory() + "/src/Assembly Planner/Evaluation/TrainningTimeData/ClusterInstall.csv");
+		public static Dictionary<List<double[]>, List<double[,]>> SecureDictionary = SaveandLoadData.ReadCSVforclusters(Directory.GetCurrentDirectory() + "/src/Assembly Planner/Evaluation/TrainningTimeData/ClusterSecure.csv");
+		public static Dictionary<List<double[]>, List<double[,]>> RotateDictionary = SaveandLoadData.ReadCSVforclusters(Directory.GetCurrentDirectory() + "/src/Assembly Planner/Evaluation/TrainningTimeData/ClusterRotate.csv");
+		public static List<double[]> usermovedata = SaveandLoadData.ReadUserFeedback(Directory.GetCurrentDirectory() + "/src/Assembly Planner/Evaluation/TrainningTimeData/UserMoveData.csv");
+		public static List<double[]> userinstalldata = SaveandLoadData.ReadUserFeedback(Directory.GetCurrentDirectory() + "/src/Assembly Planner/Evaluation/TrainningTimeData/UserInstallData.csv");
+		public static List<double[]> usersecuredata = SaveandLoadData.ReadUserFeedback(Directory.GetCurrentDirectory() + "/src/Assembly Planner/Evaluation/TrainningTimeData/UserSecureData.csv");
+		public static List<double[]> userrotatedata = SaveandLoadData.ReadUserFeedback(Directory.GetCurrentDirectory() + "/src/Assembly Planner/Evaluation/TrainningTimeData/UserRotateData.csv");
+		public static List<double[]> usermoveplusinstalldata = SaveandLoadData.ReadUserFeedback(Directory.GetCurrentDirectory() + "/src/Assembly Planner/Evaluation/TrainningTimeData/UserMoveplusInstallData.csv");
+		#endif
+
+		//  Gettrainningdata(address, actionname, out obdataX, out obdataY);
         public static void GetTimeAndSD(double[] testpoints, string actionname, out double time, out double SD)
         {
             var inputdictionary = new Dictionary<List<double[]>, List<double[,]>>();

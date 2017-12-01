@@ -4,14 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Assembly_Planner;
-using BaseClasses;
-using BaseClasses.AssemblyEvaluation;
-using Geometric_Reasoning;
-using Plan_Generation.AssemblyEvaluation;
 using StarMathLib;
 using TVGL;
 
-namespace Plan_Generation
+namespace Assembly_Planner
 {
     public class OptimalOrientation
     {
@@ -29,7 +25,7 @@ namespace Plan_Generation
         public static readonly double[] GravityVector = { 0.0, 0.0, -1.0 };
         public static readonly double[] Ground = { 0, 0, -0.25533295 };//{0, 0, 0};
         private const int GravityAxis = 3; // 1:x, 2:y, 3:z
-        private static List<double[]> VertsOnCircle;
+        public static List<double[]> VertsOnCircle;
 
         public class PreAndCost
         {
@@ -40,7 +36,7 @@ namespace Plan_Generation
             public SubAssembly FromSubAssembly;
         }
 
-        public static Dictionary<string, double> Run(AssemblySequence solution)
+        internal static Dictionary<string, double> Run(AssemblySequence solution)
         {
             TranslateToMagicBoxDic = new Dictionary<string, double[,]>();
             TranslateToMagicBox();
@@ -76,7 +72,7 @@ namespace Plan_Generation
             // A point at angle theta on the circle whose centre is (x0,y0) and whose radius is r is (x0 + r cos theta, y0 + r sin theta).
             // The center of the circle can be anything. I will take the projected center of the whole AABB
             VertsOnCircle = new List<double[]>();
-            var allVertcs = StartProcess.Solids.SelectMany(s => s.Value.SelectMany(g => g.Vertices)).ToList();
+            var allVertcs = Program.Solids.SelectMany(s => s.Value.SelectMany(g => g.Vertices)).ToList();
             var x = new[] { allVertcs.Min(v => v.X), allVertcs.Max(v => v.X) };
             var y = new[] { allVertcs.Min(v => v.Y), allVertcs.Max(v => v.Y) };
             var z = new[] { allVertcs.Min(v => v.Z), allVertcs.Max(v => v.Z) };
@@ -298,7 +294,7 @@ namespace Plan_Generation
             SubAssembly lastSubAssEachMoving, Dictionary<string, double> taskCommands)
         {
             // take the faces of the final assembly. calculate the cost of 
-            if (lastSubAssEachMoving.PartNames.Count == StartProcess.SolidsNoFastener.Count)
+            if (lastSubAssEachMoving.PartNames.Count == Program.SolidsNoFastener.Count)
             {
                 // This is where we want our final assembly to be in a specific orientation
                 // for example we dont want our car to be flipped! :|
@@ -398,7 +394,7 @@ namespace Plan_Generation
             SubAssembly lastSubAssEachMoving, Dictionary<string, double> taskCommands)
         {
             // take the faces of the final assembly. calculate the cost of 
-            if (lastSubAssEachMoving.PartNames.Count == StartProcess.SolidsNoFastener.Count)
+            if (lastSubAssEachMoving.PartNames.Count == Program.SolidsNoFastener.Count)
             {
                 // This is where we want our final assembly to be in a specific orientation
                 // for example we dont want our car to be flipped! :|
@@ -478,35 +474,35 @@ namespace Plan_Generation
         private static void CreateFastenerInstallDirectionAndDistance(SubAssembly subAssembly, Fastener fastener,
             double[,] transMatr, double[,] rotationMatrix)
         {
-            fastener.InstallDirection = StartProcess.Directions[fastener.RemovalDirection].multiply(-1.0);
+            fastener.InstallDirection = DisassemblyDirections.Directions[fastener.RemovalDirection].multiply(-1.0);
             fastener.InstallDirectionRotated = RotateInstallDirection(fastener.InstallDirection, rotationMatrix);
             fastener.InstallDistance =
                 DetermineDistanceToSeparateHull(subAssembly.CVXHull, fastener.Solid.ConvexHull,
-                    fastener.InstallDirection) / StartProcess.MeshMagnifier;
+                    fastener.InstallDirection) / Program.MeshMagnifier;
             if (fastener.Nuts == null) fastener.Nuts = new List<Nut>();
             if (fastener.Washer == null) fastener.Washer = new List<Washer>();
             foreach (var nut in fastener.Nuts)
             {
-                nut.InstallDirection = StartProcess.Directions[nut.RemovalDirection].multiply(-1.0);
+                nut.InstallDirection = DisassemblyDirections.Directions[nut.RemovalDirection].multiply(-1.0);
                 nut.InstallDirectionRotated = RotateInstallDirection(nut.InstallDirection, rotationMatrix);
                 fastener.InstallDistance =
                     DetermineDistanceToSeparateHull(subAssembly.CVXHull, nut.Solid.ConvexHull, nut.InstallDirection) /
-                    StartProcess.MeshMagnifier;
+                    Program.MeshMagnifier;
             }
             foreach (var washer in fastener.Washer)
             {
-                washer.InstallDirection = StartProcess.Directions[washer.RemovalDirection].multiply(-1.0);
+                washer.InstallDirection = DisassemblyDirections.Directions[washer.RemovalDirection].multiply(-1.0);
                 washer.InstallDirectionRotated = RotateInstallDirection(washer.InstallDirection, rotationMatrix);
                 fastener.InstallDistance =
                     DetermineDistanceToSeparateHull(subAssembly.CVXHull, washer.Solid.ConvexHull,
-                        washer.InstallDirection) / StartProcess.MeshMagnifier;
+                        washer.InstallDirection) / Program.MeshMagnifier;
             }
         }
 
 
         private static void TranslateToMagicBox()
         {
-            foreach (var solid in StartProcess.Solids)
+            foreach (var solid in Program.Solids)
             {
                 var allVertcs = solid.Value.SelectMany(g => g.Vertices).ToList();
                 var x = new[] { allVertcs.Min(v => v.X), allVertcs.Max(v => v.X) };
@@ -514,16 +510,16 @@ namespace Plan_Generation
                 var z = new[] { allVertcs.Min(v => v.Z), allVertcs.Max(v => v.Z) };
                 var midBox = new[]
                 {
-                    (x[0] + x[1])/(2.0*StartProcess.MeshMagnifier),
-                    (y[0] + y[1])/(2.0*StartProcess.MeshMagnifier),
-                    (z[0] + z[1])/(2.0*StartProcess.MeshMagnifier)
+                    (x[0] + x[1])/(2.0*Program.MeshMagnifier),
+                    (y[0] + y[1])/(2.0*Program.MeshMagnifier),
+                    (z[0] + z[1])/(2.0*Program.MeshMagnifier)
                 };
                 // now translate midBox to Bridge.PointInMagicBox
                 var matrix = new[,]
                 {
-                    {1.0, 0, 0, StartProcess.PointInMagicBox[0] - midBox[0]},
-                    {0, 1.0, 0, StartProcess.PointInMagicBox[1] - midBox[1]},
-                    {0, 0, 1.0, StartProcess.PointInMagicBox[2] - midBox[2]},
+                    {1.0, 0, 0, Program.PointInMagicBox[0] - midBox[0]},
+                    {0, 1.0, 0, Program.PointInMagicBox[1] - midBox[1]},
+                    {0, 0, 1.0, Program.PointInMagicBox[2] - midBox[2]},
                     {0, 0, 0.0, 1.0}
                 };
                 TranslateToMagicBoxDic.Add(solid.Key, matrix);
@@ -567,7 +563,7 @@ namespace Plan_Generation
             // This is what I need to assume:
             //     The input units are m. I multiplied them by 1000, so they are now mm. 
             // For NIOSH, they are all cm.
-            var toCentimeter = (1 / StartProcess.MeshMagnifier) * 100;
+            var toCentimeter = (1 / Program.MeshMagnifier) * 100;
             var workbenchHeight = 88.9; // in cm
             var liftingIndices = new LiftingIndices();
 
@@ -735,16 +731,16 @@ namespace Plan_Generation
             };
             var translateToOrigin = new[,]
             {
-                {1, 0, 0, (-1)*COM.Position[0]/StartProcess.MeshMagnifier},
-                {0, 1, 0, (-1)*COM.Position[1]/StartProcess.MeshMagnifier},
-                {0, 0, 1, (-1)*COM.Position[2]/StartProcess.MeshMagnifier},
+                {1, 0, 0, (-1)*COM.Position[0]/Program.MeshMagnifier},
+                {0, 1, 0, (-1)*COM.Position[1]/Program.MeshMagnifier},
+                {0, 0, 1, (-1)*COM.Position[2]/Program.MeshMagnifier},
                 {0, 0, 0, 1.0}
             };
             var translateBackToOriginal = new[,]
             {
-                {1, 0, 0, COM.Position[0]/StartProcess.MeshMagnifier},
-                {0, 1, 0, COM.Position[1]/StartProcess.MeshMagnifier},
-                {0, 0, 1, COM.Position[2]/StartProcess.MeshMagnifier},
+                {1, 0, 0, COM.Position[0]/Program.MeshMagnifier},
+                {0, 1, 0, COM.Position[1]/Program.MeshMagnifier},
+                {0, 0, 1, COM.Position[2]/Program.MeshMagnifier},
                 {0, 0, 0, 1.0}
             };
             var first = MatrixTimesMatrix(translateBackToOriginal, rotationMatrix);
@@ -798,16 +794,16 @@ namespace Plan_Generation
             };
             var translateToOrigin = new[,]
             {
-                {1, 0, 0, (-1)*COM.Position[0]/StartProcess.MeshMagnifier},
-                {0, 1, 0, (-1)*COM.Position[1]/StartProcess.MeshMagnifier},
-                {0, 0, 1, (-1)*COM.Position[2]/StartProcess.MeshMagnifier},
+                {1, 0, 0, (-1)*COM.Position[0]/Program.MeshMagnifier},
+                {0, 1, 0, (-1)*COM.Position[1]/Program.MeshMagnifier},
+                {0, 0, 1, (-1)*COM.Position[2]/Program.MeshMagnifier},
                 {0, 0, 0, 1.0}
             };
             var translateBackToOriginal = new[,]
             {
-                {1, 0, 0, COM.Position[0]/StartProcess.MeshMagnifier},
-                {0, 1, 0, COM.Position[1]/StartProcess.MeshMagnifier},
-                {0, 0, 1, COM.Position[2]/StartProcess.MeshMagnifier},
+                {1, 0, 0, COM.Position[0]/Program.MeshMagnifier},
+                {0, 1, 0, COM.Position[1]/Program.MeshMagnifier},
+                {0, 0, 1, COM.Position[2]/Program.MeshMagnifier},
                 {0, 0, 0, 1.0}
             };
             var transformMatrix = MatrixTimesMatrix(rotationMatrix, translateToOrigin);
@@ -834,9 +830,9 @@ namespace Plan_Generation
                 VertsOnCircle.RemoveAt(0);
                 return new[,]
                 {
-                    {1, 0, 0, uniquePositionini[0]/StartProcess.MeshMagnifier},
-                    {0, 1, 0, uniquePositionini[1]/StartProcess.MeshMagnifier},
-                    {0, 0, 1, uniquePositionini[2]/StartProcess.MeshMagnifier},
+                    {1, 0, 0, uniquePositionini[0]/Program.MeshMagnifier},
+                    {0, 1, 0, uniquePositionini[1]/Program.MeshMagnifier},
+                    {0, 0, 1, uniquePositionini[2]/Program.MeshMagnifier},
                     {0, 0, 0, 1.0}
                 };
             }
@@ -852,17 +848,17 @@ namespace Plan_Generation
             };
             var translateToOrigin = new[,]
             {
-                {1, 0, 0, (-1)*COM.Position[0]/StartProcess.MeshMagnifier},
-                {0, 1, 0, (-1)*COM.Position[1]/StartProcess.MeshMagnifier},
-                {0, 0, 1, (-1)*COM.Position[2]/StartProcess.MeshMagnifier},
+                {1, 0, 0, (-1)*COM.Position[0]/Program.MeshMagnifier},
+                {0, 1, 0, (-1)*COM.Position[1]/Program.MeshMagnifier},
+                {0, 0, 1, (-1)*COM.Position[2]/Program.MeshMagnifier},
                 {0, 0, 0, 1.0}
             };
             var uniquePosition = VertsOnCircle[0];
             var translateToUniquePosition = new[,]
             {
-                {1, 0, 0, uniquePosition[0]/StartProcess.MeshMagnifier},
-                {0, 1, 0, uniquePosition[1]/StartProcess.MeshMagnifier},
-                {0, 0, 1, uniquePosition[2]/StartProcess.MeshMagnifier},
+                {1, 0, 0, uniquePosition[0]/Program.MeshMagnifier},
+                {0, 1, 0, uniquePosition[1]/Program.MeshMagnifier},
+                {0, 0, 1, uniquePosition[2]/Program.MeshMagnifier},
                 {0, 0, 0, 1.0}
             };
             var first = MatrixTimesMatrix(translateToUniquePosition, rotationMatrix);
@@ -913,16 +909,16 @@ namespace Plan_Generation
 
             var translateToOrigin = new[,]
             {
-                {1, 0, 0, (-1)*COM.Position[0]/StartProcess.MeshMagnifier},
-                {0, 1, 0, (-1)*COM.Position[1]/StartProcess.MeshMagnifier},
-                {0, 0, 1, (-1)*COM.Position[2]/StartProcess.MeshMagnifier},
+                {1, 0, 0, (-1)*COM.Position[0]/Program.MeshMagnifier},
+                {0, 1, 0, (-1)*COM.Position[1]/Program.MeshMagnifier},
+                {0, 0, 1, (-1)*COM.Position[2]/Program.MeshMagnifier},
                 {0, 0, 0, 1.0}
             };
             var translateBackToOriginal = new[,]
             {
-                {1, 0, 0, COM.Position[0]/StartProcess.MeshMagnifier},
-                {0, 1, 0, COM.Position[1]/StartProcess.MeshMagnifier},
-                {0, 0, 1, COM.Position[2]/StartProcess.MeshMagnifier},
+                {1, 0, 0, COM.Position[0]/Program.MeshMagnifier},
+                {0, 1, 0, COM.Position[1]/Program.MeshMagnifier},
+                {0, 0, 1, COM.Position[2]/Program.MeshMagnifier},
                 {0, 0, 0, 1.0}
             };
             var first = MatrixTimesMatrix(rotationMatrix, translateToOrigin);
@@ -944,9 +940,9 @@ namespace Plan_Generation
                 VertsOnCircle.RemoveAt(0);
                 return new[,]
                 {
-                    {1, 0, 0, uniquePositionini[0]/StartProcess.MeshMagnifier},
-                    {0, 1, 0, uniquePositionini[1]/StartProcess.MeshMagnifier},
-                    {0, 0, 1, uniquePositionini[2]/StartProcess.MeshMagnifier},
+                    {1, 0, 0, uniquePositionini[0]/Program.MeshMagnifier},
+                    {0, 1, 0, uniquePositionini[1]/Program.MeshMagnifier},
+                    {0, 0, 1, uniquePositionini[2]/Program.MeshMagnifier},
                     {0, 0, 0, 1.0}
                 };
             }
@@ -975,17 +971,17 @@ namespace Plan_Generation
 
             var translateToOrigin = new[,]
             {
-                {1, 0, 0, (-1)*COM.Position[0]/StartProcess.MeshMagnifier},
-                {0, 1, 0, (-1)*COM.Position[1]/StartProcess.MeshMagnifier},
-                {0, 0, 1, (-1)*COM.Position[2]/StartProcess.MeshMagnifier},
+                {1, 0, 0, (-1)*COM.Position[0]/Program.MeshMagnifier},
+                {0, 1, 0, (-1)*COM.Position[1]/Program.MeshMagnifier},
+                {0, 0, 1, (-1)*COM.Position[2]/Program.MeshMagnifier},
                 {0, 0, 0, 1.0}
             };
             var uniquePosition = VertsOnCircle[0];
             var translateToUniquePosition = new[,]
             {
-                {1, 0, 0, uniquePosition[0]/StartProcess.MeshMagnifier},
-                {0, 1, 0, uniquePosition[1]/StartProcess.MeshMagnifier},
-                {0, 0, 1, uniquePosition[2]/StartProcess.MeshMagnifier},
+                {1, 0, 0, uniquePosition[0]/Program.MeshMagnifier},
+                {0, 1, 0, uniquePosition[1]/Program.MeshMagnifier},
+                {0, 0, 1, uniquePosition[2]/Program.MeshMagnifier},
                 {0, 0, 0, 1.0}
             };
             var first = MatrixTimesMatrix(rotationMatrix, translateToOrigin);
@@ -1025,9 +1021,9 @@ namespace Plan_Generation
 
             foreach (var f in subAssem.Face.Faces)
             {
-                var ver0 = f.Vertices[0].Position.divide(StartProcess.MeshMagnifier);
-                var ver1 = f.Vertices[1].Position.divide(StartProcess.MeshMagnifier);
-                var ver2 = f.Vertices[2].Position.divide(StartProcess.MeshMagnifier);
+                var ver0 = f.Vertices[0].Position.divide(Program.MeshMagnifier);
+                var ver1 = f.Vertices[1].Position.divide(Program.MeshMagnifier);
+                var ver2 = f.Vertices[2].Position.divide(Program.MeshMagnifier);
                 var newVer0 = MatrixTimesMatrix(subAssem.SubAssembly.Rotate.TransformationMatrix,
                     new[] { ver0[0], ver0[1], ver0[2], 1.0 });
                 var newVer1 = MatrixTimesMatrix(subAssem.SubAssembly.Rotate.TransformationMatrix,
@@ -1084,7 +1080,7 @@ namespace Plan_Generation
             }
             // then take a vertex from this face, multiply it by tansformation matrix,
             // and see how far it is from the ground
-            var newVer = MatrixTimesMatrix(transformMatrix, face.Vertices[0].Position.divide(StartProcess.MeshMagnifier));
+            var newVer = MatrixTimesMatrix(transformMatrix, face.Vertices[0].Position.divide(Program.MeshMagnifier));
             var disToGround = newVer[GravityAxis - 1];
             //var check1 = MatrixTimesMatrix(transformMatrix, face.Vertices[1].Position.divide(Bridge.MeshMagnifier))[1];
             //var check2 = MatrixTimesMatrix(transformMatrix, face.Vertices[2].Position.divide(Bridge.MeshMagnifier))[1];

@@ -35,10 +35,10 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
-using BaseClasses.Representation;
+using GraphSynth.Representation;
 #endregion
 
-namespace BaseClasses
+namespace GraphSynth
 {
     /// <summary>
     ///   This method saves and opens basic graphs and rules (doesn't include WPF shapes)

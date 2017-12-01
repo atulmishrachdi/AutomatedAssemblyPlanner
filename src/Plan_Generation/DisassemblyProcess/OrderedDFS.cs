@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BaseClasses;
-using BaseClasses.AssemblyEvaluation;
-using BaseClasses.Representation;
-using Plan_Generation.AssemblyEvaluation;
+using Assembly_Planner;
+using GraphSynth;
+using GraphSynth.Representation;
 //using GraphSynth.Search;
 using TVGL.IOFunctions;
 using TVGL;
+using Assembly_Planner.GraphSynth.BaseClasses;
 
-namespace Plan_Generation
+namespace Assembly_Planner
 {
     class OrderedDFS
     {

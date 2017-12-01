@@ -99,7 +99,7 @@ namespace Assembly_Planner
 
         private static void lookForSomeModels(string theDirectory)
         {
-            Console.Write("\nSubdirectories containing valid parts files:");
+            Console.Write("\nSubdirectories containing valid parts files:\n");
             bool done = false;
 
             List<string> directories=new List<string>();

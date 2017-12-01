@@ -1,0 +1,6 @@
+/home/braxtoncuneo/Desktop/AutomatedAssemblyPlanner/src/Verification/obj/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/home/braxtoncuneo/Desktop/AutomatedAssemblyPlanner/Accord.dll.config
+/home/braxtoncuneo/Desktop/AutomatedAssemblyPlanner/Verification.exe.mdb
+/home/braxtoncuneo/Desktop/AutomatedAssemblyPlanner/Verification.exe
+/home/braxtoncuneo/Desktop/AutomatedAssemblyPlanner/src/Verification/obj/Debug/Verification.exe
+/home/braxtoncuneo/Desktop/AutomatedAssemblyPlanner/src/Verification/obj/Debug/Verification.exe.mdb

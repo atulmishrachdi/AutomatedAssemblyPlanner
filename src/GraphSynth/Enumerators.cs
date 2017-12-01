@@ -1,5 +1,5 @@
 ﻿
-namespace BaseClasses.AssemblyEvaluation
+namespace Assembly_Planner
 {
     public enum tool
     {

@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BaseClasses;
-using Geometric_Reasoning;
+using Assembly_Planner;
 using StarMathLib;
 using TVGL;
 using Vertex = TVGL.Vertex;
 
-namespace Fastener_Detection
+namespace Assembly_Planner
 {
     internal class FastenerBoundingBoxPartition
     {

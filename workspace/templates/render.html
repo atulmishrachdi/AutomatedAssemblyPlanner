@@ -1,0 +1,74 @@
+<output id="list"></output>
+<div id="theDisplay" >
+
+<meta charset="UTF-16"></meta>
+
+<div id="HUD">
+
+	<button id="lockButton" onclick="rdr_tryMouseLock()" >Mouse Lock</button>
+	<button onclick='rdr_showHideTreequence()' id="showHide">Show/Hide</button>
+	<div id="treequenceDiv" state="shown" >
+
+	</div>
+	<div id="infoDiv">
+		<div>
+		<text id="mouseoverName" color="#000000" size="20" >PART: </text>
+		</div>
+		<div>
+		<text id="theTime" color="#000000" size="20" >TIME: 0.0000000000</text>
+		</div>
+	</div>
+</div>
+
+
+
+<script id="chroma-vert" type="x-shader/x-vertex">
+	varying float theZ;
+	varying vec3 theNorm;
+	void main() {
+		gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+		theZ = gl_Position.z;
+		theNorm = normal.xyz;
+	}
+</script>
+<script id="chroma-frag" type="x-shader/x-fragment">
+	varying float theZ;
+	varying vec3 theNorm;
+	uniform float cameraNear;
+	uniform float cameraFar;
+
+	void main() {
+		float Z = abs(theZ-cameraNear)/pow(abs((cameraFar-cameraNear)/4.0),0.95)-0.1;
+		float shade = 0.5+dot(theNorm,vec3(0.0,1.0,0.0))*0.5;
+		gl_FragColor.rgb = vec3( clamp((1.0-Z),0.0,1.0), 1.0-clamp(abs(1.0-Z*1.5),0.0,1.0), clamp(Z-0.5,0.0,1.0) ) * shade ;
+		gl_FragColor.a = 1.0;
+	}
+</script>
+<script id="grid-vert" type="x-shader/x-vertex">
+	varying vec3 theNorm;
+	varying vec3 thePos;
+	void main() {
+		gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+		thePos = position;
+		theNorm = normal.xyz;
+	}
+</script>
+<script id="grid-frag" type="x-shader/x-fragment">
+	varying vec3 theNorm;
+	varying vec3 thePos;
+
+	void main() {
+		float delt = 400.0;
+		float mark = 0.05;
+		float shade = 0.1+(dot(theNorm,normalize(vec3(0.0,1.0,1.0)))+1.0)*0.5*0.9;
+		float gridShade =     (1.0-step(mod(thePos.x,delt)/delt,mark)*0.5)
+							* (1.0-step(mod(thePos.y+1.0,delt)/delt,mark)*0.5)
+							* (1.0-step(mod(thePos.z,delt)/delt,mark)*0.5);
+		gl_FragColor.rgb =  vec3( 1.0, 1.0, 1.0)* gridShade * shade;
+		gl_FragColor.a = 1.0;
+	}
+</script>
+
+<xmp id="warning"></xmp>
+
+</div>

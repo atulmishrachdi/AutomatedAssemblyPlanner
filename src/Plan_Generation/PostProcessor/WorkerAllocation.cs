@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BaseClasses.AssemblyEvaluation;
+using Assembly_Planner;
 
-namespace Plan_Generation
+namespace Assembly_Planner
 {
     public class WorkerAllocation
     {
@@ -13,7 +13,7 @@ namespace Plan_Generation
         static Dictionary<string, double> FollowingTime;
         public static Dictionary<string, double> StartingTimes;
 
-        public static void Run(AssemblySequence solution)
+        internal static void Run(AssemblySequence solution)
         {
             Console.WriteLine("\n\nAssigning workers to the task....");
             //foreach (var c in solutions.Where(c => c != null))
@@ -119,7 +119,7 @@ namespace Plan_Generation
         private static void CheckValuesWithCandidate(double totalTime1, double totalTime2,
             double makeSpan1, double makeSpan2)
         {
-            if (Math.Abs(totalTime1 - totalTime2) > Constants.Values.SameWithinError || Math.Abs(makeSpan1 - makeSpan2) > Constants.Values.SameWithinError)
+            if (Math.Abs(totalTime1 - totalTime2) > Constants.SameWithinError || Math.Abs(makeSpan1 - makeSpan2) > Constants.SameWithinError)
                 throw new Exception("Times do not match.");
         }
 

@@ -22,7 +22,7 @@ using MIConvexHull;
 using StarMathLib;
 using TVGL;
 
-namespace BaseClasses
+namespace Assembly_Planner
 {
     public class Ray
     {

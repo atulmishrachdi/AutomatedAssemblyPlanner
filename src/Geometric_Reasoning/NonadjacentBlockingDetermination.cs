@@ -4,18 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using BaseClasses;
-using BaseClasses.Representation;
+using Assembly_Planner;
+using Assembly_Planner.GraphSynth.BaseClasses;
+using GraphSynth.Representation;
 using MIConvexHull;
 using StarMathLib;
 using TVGL;
 using Vertex = TVGL.Vertex;
 
-namespace Geometric_Reasoning
+namespace Assembly_Planner
 {
-    public class NonadjacentBlockingDetermination
+    internal class NonadjacentBlockingDetermination
     {
-        public static Dictionary<int, List<NonAdjacentBlockings>> NonAdjacentBlocking =
+        internal static Dictionary<int, List<NonAdjacentBlockings>> NonAdjacentBlocking =
             new Dictionary<int, List<NonAdjacentBlockings>>();
 
         static readonly List<int[]> binaryFaceIndices = new List<int[]>
@@ -31,7 +32,7 @@ namespace Geometric_Reasoning
             //Parallel.ForEach(gDir, dir =>
             foreach (var dir in gDir)
             {
-                var direction = StartProcess.Directions[dir];
+                var direction = DisassemblyDirections.Directions[dir];
                 var blockingsForDirection = new List<NonAdjacentBlockings>();
 
                 //Parallel.ForEach(solids.Where(s => graph.nodes.Any(n => n.name == s.Name)), solid =>
@@ -169,11 +170,11 @@ namespace Geometric_Reasoning
         {
             foreach (var key in NonAdjacentBlocking.Keys.ToList())
             {
-                var dirs = (from gDir in StartProcess.Directions
+                var dirs = (from gDir in DisassemblyDirections.Directions
                     where
-                        1 - Math.Abs(gDir.dotProduct(StartProcess.Directions[key])) <
+                        1 - Math.Abs(gDir.dotProduct(DisassemblyDirections.Directions[key])) <
                         OverlappingFuzzification.CheckWithGlobDirsParall
-                    select StartProcess.Directions.IndexOf(gDir)).ToList();
+                    select DisassemblyDirections.Directions.IndexOf(gDir)).ToList();
                 var oppositeDir = dirs.Where(d => d != key).ToList();
                 foreach (var blockings in NonAdjacentBlocking[key])
                 {
@@ -305,10 +306,7 @@ namespace Geometric_Reasoning
 
                 // set up a single face with the normal along the direction v in which the other 6 corner of the
                 // block make some sort of hexagonal face
-                var superficialBlockingFace = new PolygonalFace()
-                {
-                    //Normal = v
-                };
+                var superficialBlockingFace = new PolygonalFace(v);
                 var index = 0;
                 for (int i = 0; i < 8; i++)
                 {
@@ -410,7 +408,7 @@ namespace Geometric_Reasoning
 
         public static bool RayIntersectsWithFace(Ray ray, PolygonalFace face)
         {
-            if (Math.Abs(ray.Direction.dotProduct(face.Normal)) < BaseClasses.AssemblyEvaluation.Constants.Values.NearlyParallelFace) return false;
+            if (Math.Abs(ray.Direction.dotProduct(face.Normal)) < Assembly_Planner.Constants.NearlyParallelFace) return false;
             var inPlaneVerts = new Vertex[3];
             var negativeDirCounter = 3;
             for (var i = 0; i < 3; i++)
@@ -436,7 +434,7 @@ namespace Geometric_Reasoning
                     inPlaneVerts[i].Position.subtract(ray.Position)
                         .normalizeInPlace(3)
                         .crossProduct(inPlaneVerts[j].Position.subtract(ray.Position).normalizeInPlace(3));
-                if (crossProductsFrom_i_To_j.norm2(true) < BaseClasses.AssemblyEvaluation.Constants.Values.NearlyOnLine) return false;
+                if (crossProductsFrom_i_To_j.norm2(true) < Assembly_Planner.Constants.NearlyOnLine) return false;
                 crossProductsToCorners.Add(crossProductsFrom_i_To_j);
             }
             for (int i = 0; i < 3; i++)
@@ -461,7 +459,7 @@ namespace Geometric_Reasoning
                 var crossProductsFrom_i_To_j =
                     face.Vertices[i].Position.subtract(raysPointOnFacePlane).normalize()
                         .crossProduct(face.Vertices[j].Position.subtract(ray.Position).normalize());
-                if (crossProductsFrom_i_To_j.norm2(true) < BaseClasses.AssemblyEvaluation.Constants.Values.NearlyOnLine) return false;
+                if (crossProductsFrom_i_To_j.norm2(true) < Assembly_Planner.Constants.NearlyOnLine) return false;
                 crossProductsToCorners.Add(crossProductsFrom_i_To_j);
             }
             for (int i = 0; i < 3; i++)
@@ -479,12 +477,12 @@ namespace Geometric_Reasoning
             infDirs = new List<int>();
             foreach (var dir in localDirInd)
             {
-                var direction = StartProcess.Directions[dir];
+                var direction = DisassemblyDirections.Directions[dir];
                 var rays = new List<Ray>();
                 foreach (var vertex in solid2.ConvexHull.Vertices)
                     rays.Add(new Ray(new Vertex(new[] { vertex.Position[0], vertex.Position[1], vertex.Position[2] }),
                                     new[] { direction[0], direction[1], direction[2] }));
-                var direction2 = StartProcess.Directions[dir].multiply(-1.0);
+                var direction2 = DisassemblyDirections.Directions[dir].multiply(-1.0);
                 var rays2 = new List<Ray>();
                 foreach (var vertex in solid1.ConvexHull.Vertices)
                     rays2.Add(new Ray(new Vertex(new[] { vertex.Position[0], vertex.Position[1], vertex.Position[2] }),
@@ -500,7 +498,7 @@ namespace Geometric_Reasoning
             }
         }
 
-        public static void FiniteDirectionsBetweenConnectedPartsWithPartitioning(List<TessellatedSolid> subAssem1,
+        internal static void FiniteDirectionsBetweenConnectedPartsWithPartitioning(List<TessellatedSolid> subAssem1,
             List<TessellatedSolid> subAssem2, List<int> localDirInd, out List<int> finDirs, out List<int> infDirs)
         {
             // solid1 is Reference and solid2 is Moving
@@ -516,7 +514,7 @@ namespace Geometric_Reasoning
             //foreach (var dir in localDirInd)
             {
                 var finite = false;
-                var direction = StartProcess.Directions[dir];
+                var direction = DisassemblyDirections.Directions[dir];
                 var rays = new List<Ray>();
                 foreach (var vertex in subAssem2.SelectMany(s => s.ConvexHull.Vertices))
                     rays.Add(new Ray(new Vertex(new[] { vertex.Position[0], vertex.Position[1], vertex.Position[2] }),
@@ -530,7 +528,7 @@ namespace Geometric_Reasoning
                     return;
                 }
 
-                var direction2 = StartProcess.Directions[dir].multiply(-1.0);
+                var direction2 = DisassemblyDirections.Directions[dir].multiply(-1.0);
                 var rays2 = new List<Ray>();
                 foreach (var vertex in subAssem1.SelectMany(s => s.ConvexHull.Vertices))
                     rays2.Add(new Ray(new Vertex(new[] { vertex.Position[0], vertex.Position[1], vertex.Position[2] }),

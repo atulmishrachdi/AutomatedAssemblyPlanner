@@ -3,24 +3,25 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Dynamic;
 using System.Linq;
-using BaseClasses;
+using Assembly_Planner.GraphSynth.BaseClasses;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
-using BaseClasses.Representation;
+using Assembly_Planner;
+using GraphSynth.Representation;
 using StarMathLib;
 using TVGL;
 
-namespace Geometric_Reasoning
+namespace Assembly_Planner
 {
-    public class NonadjacentBlockingWithPartitioning
+    class NonadjacentBlockingWithPartitioning
     {
         // Dictonary to store CVH faces of each solid into a HashSet. So it is easier to 
         internal static Dictionary<TessellatedSolid, HashSet<PolygonalFace>> CvhHashSet =
             new Dictionary<TessellatedSolid, HashSet<PolygonalFace>>();
         internal static Dictionary<TessellatedSolid, HashSet<PolygonalFace>> ObbFacesHashSet =
             new Dictionary<TessellatedSolid, HashSet<PolygonalFace>>();
-        public static Dictionary<string, TVGLConvexHull> CombinedCVHForMultipleGeometries;
+        internal static Dictionary<string, TVGLConvexHull> CombinedCVHForMultipleGeometries;
         // This class is added as an alternative for current Nonadjacent blocking determination approach.
         // The overal approach is the same as before (ray shooting), but number of both rays and blocking 
         // triangles are droped to speedup the function.
@@ -31,7 +32,7 @@ namespace Geometric_Reasoning
         //       determination. Code gets really really slow when it goes to check intersection of the ray
         //       and all the triangles of the solid. We are avoiding this problem here by partitionaning
         //       our search space into k number of sections obtained originally from OBB of the solid.
-        public static void Run(designGraph graph, Dictionary<string, List<TessellatedSolid>> subAssems, List<int> gDir)
+        internal static void Run(designGraph graph, Dictionary<string, List<TessellatedSolid>> subAssems, List<int> gDir)
         {
             Console.WriteLine("\n\nNonadjacent Blocking Determination is running ....");
             long totalCases = 0;
@@ -53,15 +54,27 @@ namespace Geometric_Reasoning
             long counter = 0;
             foreach (var subAssem in subAssems)
             {
+                List<BoundingBox> pairList = new List<BoundingBox>();
                 foreach (var s in subAssem.Value)
                 {
                     //CvhHashSet.Add(s, new HashSet<PolygonalFace>(s.ConvexHull.Faces));
-                    ObbFacesHashSet.Add(s,
+
+
+                    //$ What was used previously
+                    /*
+                     * ObbFacesHashSet.Add(s,
                         new HashSet<PolygonalFace>(
                             PartitioningSolid.TwelveFaceGenerator(
                                 BoundingGeometry.OrientedBoundingBoxDic.First(b=> b.Key.Name == s.Name).Value.CornerVertices.Select(
                                     cv => new Vertex(cv.Position)).ToArray())));
+                                    */
+                    KeyValuePair<TessellatedSolid,BoundingBox> pair = BoundingGeometry.OrientedBoundingBoxDic.FirstOrDefault(b => b.Key.Name == s.Name);
+                    if (! pair.Equals(default (KeyValuePair<TessellatedSolid, BoundingBox>)) ){
+                        ObbFacesHashSet.Add(s, new HashSet<PolygonalFace>(PartitioningSolid.TwelveFaceGenerator(pair.Value.CornerVertices.Select(cv => new Vertex(cv.Position)).ToArray())));
+                    }                    
+
                 }
+
             }
 
             CreateCombinedCVHs(subAssems);
@@ -75,7 +88,7 @@ namespace Geometric_Reasoning
             int total = (solidsL.Count + 1) * (solidsL.Count / 2);
             int refresh = (int)Math.Ceiling(((float)total) / ((float)(width)));
             int check = 0;
-            //LoadingBar.start(width, 0);
+            LoadingBar.start(width, 0);
 
 
             for (var i = 0; i < solidsL.Count; i++)
@@ -86,7 +99,7 @@ namespace Geometric_Reasoning
                     
                     if (check % refresh == 0)
                     {
-                        //LoadingBar.refresh(width, ((float)check) / ((float)total));
+                        LoadingBar.refresh(width, ((float)check) / ((float)total));
                     }
                     check++;
 
@@ -109,7 +122,7 @@ namespace Geometric_Reasoning
                     graph.addArc(from, to, from.name + to.name, typeof(SecondaryConnection));
                     var lastAddedSecArc = (SecondaryConnection)graph.arcs.Last();
                     var filteredDirections = FilterGlobalDirections(solidMoving, solidBlocking, gDir);
-                    var oppositeFiltrdDirs = filteredDirections.Select(d => StartProcess.DirectionsAndOppositsForGlobalpool[d]).ToList();
+                    var oppositeFiltrdDirs = filteredDirections.Select(d => DisassemblyDirections.DirectionsAndOppositsForGlobalpool[d]).ToList();
                     // remember this: if solid2 is not blocking solid1, we need to check if solid1 is blocking 2 in the opposite direction.
                     // if filteredDirections.Count == gDir.Count then the CVHs overlap
                     // Only directions need to be checked which the moving part can move along them:
@@ -122,22 +135,22 @@ namespace Geometric_Reasoning
                             scndFilteredDirectionsMoving.Where(
                                 d =>
                                     !scndFilteredDirectionsBlocking.Contains(
-                                        StartProcess.DirectionsAndOppositsForGlobalpool[d])))
-                        scndFilteredDirectionsBlocking.Add(StartProcess.DirectionsAndOppositsForGlobalpool[d]);
+                                        DisassemblyDirections.DirectionsAndOppositsForGlobalpool[d])))
+                        scndFilteredDirectionsBlocking.Add(DisassemblyDirections.DirectionsAndOppositsForGlobalpool[d]);
                     foreach (
                         var d in
                             scndFilteredDirectionsBlocking.Where(
                                 d =>
                                     !scndFilteredDirectionsMoving.Contains(
-                                        StartProcess.DirectionsAndOppositsForGlobalpool[d])))
-                        scndFilteredDirectionsMoving.Add(StartProcess.DirectionsAndOppositsForGlobalpool[d]);
+                                        DisassemblyDirections.DirectionsAndOppositsForGlobalpool[d])))
+                        scndFilteredDirectionsMoving.Add(DisassemblyDirections.DirectionsAndOppositsForGlobalpool[d]);
                     if (filteredDirections.Count == gDir.Count)
                     {
                         //continue;
                         Parallel.ForEach(scndFilteredDirectionsMoving, filtDir =>
                         //foreach (var filtDir in filteredDirections)
                         {
-                            var direction = StartProcess.Directions[filtDir];
+                            var direction = DisassemblyDirections.Directions[filtDir];
                             blocked = BlockingDeterminationWithCvhOverlapping(direction, solidMoving, solidBlocking);
                             if (blocked)
                             {
@@ -145,20 +158,20 @@ namespace Geometric_Reasoning
                                     lastAddedSecArc.Directions.Add(filtDir);
                                 if (
                                     scndFilteredDirectionsBlocking.Contains(
-                                        StartProcess.DirectionsAndOppositsForGlobalpool[filtDir]))
+                                        DisassemblyDirections.DirectionsAndOppositsForGlobalpool[filtDir]))
                                     scndFilteredDirectionsBlocking.Remove(
-                                        StartProcess.DirectionsAndOppositsForGlobalpool[filtDir]);
+                                        DisassemblyDirections.DirectionsAndOppositsForGlobalpool[filtDir]);
                             }
                         });
                         Parallel.ForEach(scndFilteredDirectionsBlocking, filtDir =>
                         //foreach (var filtDir in filteredDirections)
                         {
-                            var direction = StartProcess.Directions[filtDir];
+                            var direction = DisassemblyDirections.Directions[filtDir];
                             blocked = BlockingDeterminationWithCvhOverlapping(direction, solidBlocking, solidMoving);
                             if (blocked)
                             {
                                 lock (lastAddedSecArc.Directions)
-                                    lastAddedSecArc.Directions.Add(StartProcess.DirectionsAndOppositsForGlobalpool[filtDir]);
+                                    lastAddedSecArc.Directions.Add(DisassemblyDirections.DirectionsAndOppositsForGlobalpool[filtDir]);
                             }
                         });
                         if (lastAddedSecArc.Directions.Count == 0)
@@ -168,10 +181,12 @@ namespace Geometric_Reasoning
                     {
                         //continue;
                         // If CVHs dont overlap:
+
+                        //$ Made this non-parallel for debugging purposes - switch back later
                         Parallel.ForEach(scndFilteredDirectionsMoving, filtDir =>
                         //foreach (var filtDir in filteredDirections)
                         {
-                            var direction = StartProcess.Directions[filtDir];
+                            var direction = DisassemblyDirections.Directions[filtDir];
                             blocked = BlockingDeterminationNoCvhOverlapping(direction, solidMoving, solidBlocking);
                             if (blocked)
                             {
@@ -179,20 +194,21 @@ namespace Geometric_Reasoning
                                     lastAddedSecArc.Directions.Add(filtDir);
                                 if (
                                     scndFilteredDirectionsBlocking.Contains(
-                                        StartProcess.DirectionsAndOppositsForGlobalpool[filtDir]))
+                                        DisassemblyDirections.DirectionsAndOppositsForGlobalpool[filtDir]))
                                     scndFilteredDirectionsBlocking.Remove(
-                                        StartProcess.DirectionsAndOppositsForGlobalpool[filtDir]);
+                                        DisassemblyDirections.DirectionsAndOppositsForGlobalpool[filtDir]);
                             }
                         });
+
                         Parallel.ForEach(scndFilteredDirectionsBlocking, filtDir =>
                         //foreach (var filtDir in filteredDirections)
                         {
-                            var direction = StartProcess.Directions[filtDir];
+                            var direction = DisassemblyDirections.Directions[filtDir];
                             blocked = BlockingDeterminationNoCvhOverlapping(direction, solidBlocking, solidMoving);
                             if (blocked)
                             {
                                 lock (lastAddedSecArc.Directions)
-                                    lastAddedSecArc.Directions.Add(StartProcess.DirectionsAndOppositsForGlobalpool[filtDir]);
+                                    lastAddedSecArc.Directions.Add(DisassemblyDirections.DirectionsAndOppositsForGlobalpool[filtDir]);
                             }
                         });
                         if (lastAddedSecArc.Directions.Count == 0)
@@ -200,7 +216,7 @@ namespace Geometric_Reasoning
                     }
                 }
             }
-            //LoadingBar.refresh(width, 1);
+            LoadingBar.refresh(width, 1);
             CreateSameDirectionDictionary(gDir);
         }
 
@@ -211,19 +227,19 @@ namespace Geometric_Reasoning
 
         private static void CreateSameDirectionDictionary(List<int> gDir)
         {
-            StartProcess.DirectionsAndSame = new Dictionary<int, HashSet<int>>();
+            DisassemblyDirections.DirectionsAndSame = new Dictionary<int, HashSet<int>>();
             foreach (var gD in gDir)
             {
-                if (StartProcess.DirectionsAndSame.ContainsKey(gD)) continue;
+                if (DisassemblyDirections.DirectionsAndSame.ContainsKey(gD)) continue;
                 var sameDirs =
                     gDir.Where(
                         d =>
                             /*d != gD &&*/
-                            Math.Abs(1 -
-                                     StartProcess.Directions[d].dotProduct(StartProcess.Directions[gD])) <
+                    Math.Abs(1 -
+                                     DisassemblyDirections.Directions[d].dotProduct(DisassemblyDirections.Directions[gD])) <
                             OverlappingFuzzification.CheckWithGlobDirsParall2);
 
-                StartProcess.DirectionsAndSame.Add(gD, new HashSet<int>(sameDirs));
+                DisassemblyDirections.DirectionsAndSame.Add(gD, new HashSet<int>(sameDirs));
             }
         }
 
@@ -251,15 +267,15 @@ namespace Geometric_Reasoning
             var arcTo = graph.arcs.Where(a => a is Connection).Cast<Connection>().Where(a => a.To.name == solid[0].Name).ToList();
             foreach (var c in arcTo)
             {
-                foreach (var i in c.InfiniteDirections.Where(i => filteredDirections.Contains(StartProcess.DirectionsAndOppositsForGlobalpool[i])))
+                foreach (var i in c.InfiniteDirections.Where(i => filteredDirections.Contains(DisassemblyDirections.DirectionsAndOppositsForGlobalpool[i])))
                 {
-                    var oppos = StartProcess.DirectionsAndOppositsForGlobalpool[i];
+                    var oppos = DisassemblyDirections.DirectionsAndOppositsForGlobalpool[i];
                     if (dirs.Contains(oppos)) continue;
                     dirs.Add(oppos);
                 }
-                foreach (var i in c.FiniteDirections.Where(i => filteredDirections.Contains(StartProcess.DirectionsAndOppositsForGlobalpool[i])))
+                foreach (var i in c.FiniteDirections.Where(i => filteredDirections.Contains(DisassemblyDirections.DirectionsAndOppositsForGlobalpool[i])))
                 {
-                    var oppos = StartProcess.DirectionsAndOppositsForGlobalpool[i];
+                    var oppos = DisassemblyDirections.DirectionsAndOppositsForGlobalpool[i];
                     if (dirs.Contains(oppos)) continue;
                     dirs.Add(oppos);
                 }
@@ -313,7 +329,7 @@ namespace Geometric_Reasoning
                 else
                 {
                     var vers = subAssem.Value.SelectMany(s => s.ConvexHull.Vertices);
-                    CombinedCVHForMultipleGeometries.Add(subAssem.Key, new TVGLConvexHull(vers.ToArray(),subAssem.Value[0].SameTolerance));
+                    CombinedCVHForMultipleGeometries.Add(subAssem.Key, new TVGLConvexHull(vers.ToArray(),1e-8));
                 }
             }
         }
@@ -422,7 +438,7 @@ namespace Geometric_Reasoning
                             visitedCvhFaces.All(visF => Math.Abs(s1F.Normal.dotProduct(visF.Normal) - 1) < 0.0005)*/))
             {
                 filteredGlobDirs1 =
-                    filteredGlobDirs1.Where(gD => StartProcess.Directions[gD].dotProduct(s1CvhFace.Normal) > 0)
+                    filteredGlobDirs1.Where(gD => DisassemblyDirections.Directions[gD].dotProduct(s1CvhFace.Normal) > 0)
                         .ToList();
                 //visitedCvhFaces.Add(s1CvhFace);
                 break;
@@ -437,7 +453,7 @@ namespace Geometric_Reasoning
                             visitedCvhFaces.All(visF => Math.Abs(s2F.Normal.dotProduct(visF.Normal) - 1) < 0.0005)*/))
             {
                 filteredGlobDirs2 =
-                    filteredGlobDirs2.Where(gD => StartProcess.Directions[gD].dotProduct(s2CvhFace.Normal) < 0)
+                    filteredGlobDirs2.Where(gD => DisassemblyDirections.Directions[gD].dotProduct(s2CvhFace.Normal) < 0)
                         .ToList();
                 //visitedCvhFaces.Add(s2CvhFace);
                 break;

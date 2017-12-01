@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Serialization;
+using Assembly_Planner;
 
-namespace BaseClasses.AssemblyEvaluation
+namespace Assembly_Planner
 {
     public class Action
     {

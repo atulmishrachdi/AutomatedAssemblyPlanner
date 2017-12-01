@@ -8,21 +8,18 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Assembly_Planner;
-using BaseClasses;
-using BaseClasses.AssemblyEvaluation;
-using BaseClasses.Representation;
-using Fastener_Detection;
-using Geometric_Reasoning;
-using Plan_Generation;
-//using GPprocess;
+using Assembly_Planner.GraphSynth.BaseClasses;
+using GPprocess;
+using GraphSynth.Representation;
 using StarMathLib;
 using TVGL;
 using TVGL.IOFunctions;
 
 namespace Assembly_Planner
 {
-    internal class Program
+    public class Program
     {
+
         public static List<double> DegreeOfFreedoms = new List<double>();
         public static List<double> StablbiblityScores = new List<double>();
         public static Dictionary<string, List<TessellatedSolid>> Solids = new Dictionary<string, List<TessellatedSolid>>();
@@ -34,11 +31,11 @@ namespace Assembly_Planner
         public static double StabilityWeightChosenByUser = 0;
         public static double UncertaintyWeightChosenByUser = 0;
         public static double MeshMagnifier = 1;
-        public static double[] PointInMagicBox = {0,0,0.0};
+        public static double[] PointInMagicBox = { 0, 0, 0.0 };
         public static int BeamWidth;
-        protected static bool DetectFasteners = true;
-        protected internal static int AvailableWorkers = 0;
-        protected static int FastenersAreThreaded = 0; // 0: none, 1: all, 2: subset
+        public static bool DetectFasteners = true; 
+        public static int AvailableWorkers = 0;
+        public static int FastenersAreThreaded = 0;
         public static double StabilityScore = 0;
         public static bool RobustSolution = false;
         public static List<int> globalDirPool = new List<int>();
@@ -48,45 +45,43 @@ namespace Assembly_Planner
         public static List<double> gpinstalltime = new List<double>();
         public static List<double> gpsecuretime = new List<double>();
         public static List<double> gprotate = new List<double>();
+        public static ProgramState state;
+		public static char slash = Path.DirectorySeparatorChar;
+		public const bool serverMode = true;
 
         private static void Main(string[] args)
         {
-            InititalConfigurations();
-            string inputDir;
-#if InputDialog
-             inputDir = consoleFrontEnd.getPartsDirectory();
-#else
-            inputDir = "workspace";
-            var ss = //Directory.GetCurrentDirectory();
-            "src/Test/PumpWExtention";
-
-#endif
-            Solids = GetSTLs(inputDir);
+            state = new ProgramState();
+            SetInputArguments(state, args);
+            LoadState();
+            Solids = GetSTLs(state.inputDir);
             EnlargeTheSolid();
 
             AssemblyGraph = new designGraph();
-            Process.Start("Geometric_Reasoning.exe");
-            if (DetectFasteners)
-                Process.Start("Fastener_Detection.exe");
-            Process.Start("Graph_Generation.exe");
-            Process.Start("Plan_Generation.exe");
             DisassemblyDirectionsWithFastener.RunGeometricReasoning(Solids);
+            if (DetectFasteners)
+                DisassemblyDirectionsWithFastener.RunFastenerDetection(Solids, FastenersAreThreaded);
             //SolidsNoFastener = Solids;
             SerializeSolidProperties();
             Console.WriteLine("\nPress enter once input parts table generated >>");
+
+
             Console.ReadLine();
             DeserializeSolidProperties();
             globalDirPool = DisassemblyDirectionsWithFastener.RunGraphGeneration(AssemblyGraph, SolidsNoFastener);
             //the second user interaction must happen here
             SaveDirections();
             var connectedGraph = false;
+
             while (!connectedGraph)
             {
                 Console.WriteLine("\n\nPress enter once input directions generated >>");
                 Console.ReadLine();
                 LoadDirections();
-                connectedGraph = Graph_Generation.Program.GraphIsConnected(AssemblyGraph);
+                connectedGraph = DisassemblyDirectionsWithFastener.GraphIsConnected(AssemblyGraph);
             }
+
+
             NonadjacentBlockingWithPartitioning.Run(AssemblyGraph, SolidsNoFastenerSimplified, globalDirPool);
             GraphSaving.SaveTheGraph(AssemblyGraph);
             Stabilityfunctions.GenerateReactionForceInfo(AssemblyGraph);
@@ -94,13 +89,278 @@ namespace Assembly_Planner
             var solutions = leapSearch.Run(AssemblyGraph, Solids, globalDirPool);
             OptimalOrientation.Run(solutions);
             var cand = new AssemblyCandidate() { Sequence = solutions };
-            cand.SaveToDisk(Directory.GetCurrentDirectory() + "\\workspace\\solution.xml");
+            cand.SaveToDisk(state.inputDir + "solution.xml");
             WorkerAllocation.Run(solutions);
             Console.WriteLine("\n\nDone");
             Console.ReadLine();
         }
 
-        private static void InititalConfigurations()
+
+        public static void doFastenerDetection(string[] args)
+        {
+            state = new ProgramState();
+            SetInputArguments(state, args);
+            LoadState();
+
+            Solids = GetSTLs(state.inputDir);
+            EnlargeTheSolid();
+            AssemblyGraph = new designGraph();
+            DisassemblyDirectionsWithFastener.RunGeometricReasoning(Solids);
+            if (DetectFasteners)
+            {
+                DisassemblyDirectionsWithFastener.RunFastenerDetection(Solids, FastenersAreThreaded);
+            }
+            SerializeSolidProperties();
+
+            SaveState();
+			if (serverMode) {
+				state.Save(state.inputDir + slash + "intermediate" + slash + "ProgramState.xml");
+			}
+			else {
+				state.Save(state.inputDir + slash + "bin" + slash + "intermediate" + slash + "ProgramState.xml");
+			}
+            Console.WriteLine("\nDone");
+
+        }
+
+		public static void doDisassemblyDirections(string dir)
+        {
+			state = new ProgramState();
+			if (dir == "") {
+				dir = ".";
+			}
+			if (serverMode) {
+				ProgramState.Load (dir + slash + "intermediate" + slash + "ProgramState.xml", ref state);
+			} else {
+				ProgramState.Load (dir + slash + "bin" + slash + "intermediate" + slash + "ProgramState.xml", ref state);
+			}
+			LoadState();
+
+
+			AssemblyGraph.RepairGraphConnections ();
+			//RefreshGraphArcs ();
+
+			//$ Adding this so that bounding box related functionalities still work
+			BoundingGeometry.OrientedBoundingBoxDic = new Dictionary<TessellatedSolid, BoundingBox>();
+			BoundingGeometry.BoundingCylinderDic = new Dictionary<TessellatedSolid, BoundingCylinder>();
+			BoundingGeometry.CreateOBB2(Solids);
+			BoundingGeometry.CreateBoundingCylinder(Solids);
+
+            DeserializeSolidProperties();
+            globalDirPool = DisassemblyDirectionsWithFastener.RunGraphGeneration(AssemblyGraph, SolidsNoFastener);
+            //the second user interaction must happen here
+            SaveDirections();
+
+			SaveState();
+			if (serverMode) {
+				state.Save(state.inputDir + slash + "intermediate" + slash + "ProgramState.xml");
+			}
+			else {
+				state.Save(state.inputDir + slash + "bin" + slash + "intermediate" + slash + "ProgramState.xml");
+			}
+            Console.WriteLine("\nDone");
+
+        }
+
+
+		public static int doVerification(string dir){
+
+			state = new ProgramState();
+			if (dir == "") {
+				dir = ".";
+			}
+			if (serverMode) {
+				ProgramState.Load (dir + slash + "intermediate" + slash + "ProgramState.xml", ref state);
+			} else {
+				ProgramState.Load (dir + slash + "bin" + slash + "intermediate" + slash + "ProgramState.xml", ref state);
+			}
+			LoadState();
+
+			AssemblyGraph.RepairGraphConnections ();
+
+			//$ Adding this so that bounding box related functionalities still work
+			BoundingGeometry.OrientedBoundingBoxDic = new Dictionary<TessellatedSolid, BoundingBox>();
+			BoundingGeometry.BoundingCylinderDic = new Dictionary<TessellatedSolid, BoundingCylinder>();
+			BoundingGeometry.CreateOBB2(Solids);
+			BoundingGeometry.CreateBoundingCylinder(Solids);
+
+			Console.WriteLine("\n\nChecking connectedness...");
+			LoadDirections();
+			if (!DisassemblyDirectionsWithFastener.GraphIsConnected (AssemblyGraph)) {
+				Console.WriteLine("\n\nFailure: Graph is not connected");
+                SaveVerification("false");
+				return 1;
+			}
+
+			Console.WriteLine("\n\nConnectedness verified");
+			SaveState();
+			if (serverMode) {
+				state.Save(state.inputDir + slash + "intermediate" + slash + "ProgramState.xml");
+                SaveVerification("true");
+            }
+			else {
+				state.Save(state.inputDir + slash + "bin" + slash + "intermediate" + slash + "ProgramState.xml");
+			}
+
+
+			Console.WriteLine("\nDone");
+            return 0;
+
+		}
+
+
+		public static void doAssemblyPlanning(string dir)
+        {
+			state = new ProgramState();
+			if (dir == "") {
+				dir = ".";
+			}
+			if (serverMode) {
+				ProgramState.Load (dir + slash + "intermediate" + slash + "ProgramState.xml", ref state);
+			} else {
+				ProgramState.Load (dir + slash + "bin" + slash + "intermediate" + slash + "ProgramState.xml", ref state);
+			}
+			LoadState();
+
+			checkDirs ();
+			AssemblyGraph.RepairGraphConnections ();
+
+
+			//$ Adding this so that bounding box related functionalities still work
+			BoundingGeometry.OrientedBoundingBoxDic = new Dictionary<TessellatedSolid, BoundingBox>();
+			BoundingGeometry.BoundingCylinderDic = new Dictionary<TessellatedSolid, BoundingCylinder>();
+			BoundingGeometry.CreateOBB2(Solids);
+			BoundingGeometry.CreateBoundingCylinder(Solids);
+
+			PartitioningSolid.Partitions = new Dictionary<TessellatedSolid, Partition[]>();
+			PartitioningSolid.PartitionsAABB = new Dictionary<TessellatedSolid, PartitionAABB[]>();
+			PartitioningSolid.CreatePartitions(Program.SimplifiedSolids);
+
+            NonadjacentBlockingWithPartitioning.Run(AssemblyGraph, SolidsNoFastenerSimplified, globalDirPool);
+            GraphSaving.SaveTheGraph(AssemblyGraph);
+            Stabilityfunctions.GenerateReactionForceInfo(AssemblyGraph);
+            var leapSearch = new LeapSearch();
+            var solutions = leapSearch.Run(AssemblyGraph, Solids, globalDirPool);
+            OptimalOrientation.Run(solutions);
+            var cand = new AssemblyCandidate() { Sequence = solutions };
+			cand.SaveToDisk(state.inputDir  + slash + "XML" + slash + "solution.xml");
+            WorkerAllocation.Run(solutions);
+
+			SaveState();
+			if (serverMode) {
+				state.Save(state.inputDir + slash + "intermediate" + slash + "ProgramState.xml");
+			}
+			else {
+				state.Save(state.inputDir + slash + "bin" + slash + "intermediate" + slash + "ProgramState.xml");
+			}
+            Console.WriteLine("\n\nDone");
+
+        }
+
+
+
+
+        public static void LoadState()
+        {
+
+            DegreeOfFreedoms = state.DegreeOfFreedoms;
+            StablbiblityScores = state.StablbiblityScores;
+            Solids = state.Solids;
+            SolidsNoFastener = state.SolidsNoFastener;
+            SolidsNoFastenerSimplified = state.SolidsNoFastenerSimplified;
+            SimplifiedSolids = state.SimplifiedSolids;
+            SolidsMass = state.SolidsMass;
+            AssemblyGraph = state.AssemblyGraph;
+            StabilityWeightChosenByUser = state.StabilityWeightChosenByUser;
+            UncertaintyWeightChosenByUser = state.UncertaintyWeightChosenByUser;
+            MeshMagnifier = state.MeshMagnifier;
+            PointInMagicBox = state.PointInMagicBox;
+            BeamWidth = state.BeamWidth;
+            DetectFasteners = state.DetectFasteners;
+            AvailableWorkers = state.AvailableWorkers;
+            FastenersAreThreaded = state.FastenersAreThreaded;
+            StabilityScore = state.StabilityScore;
+            RobustSolution = state.RobustSolution;
+            globalDirPool = state.globalDirPool;
+            allmtime = state.allmtime;
+            allitime = state.allitime;
+            gpmovingtime = state.gpmovingtime;
+            gpinstalltime = state.gpinstalltime;
+            gpsecuretime = state.gpsecuretime;
+            gprotate = state.gprotate;
+
+        }
+
+        public static void SaveState()
+        {
+
+			System.IO.DirectoryInfo folder = new DirectoryInfo(state.inputDir + slash + "intermediate");
+            foreach (FileInfo file in folder.GetFiles())
+            {
+                file.Delete();
+            }
+
+            state.DegreeOfFreedoms = DegreeOfFreedoms;
+            state.StablbiblityScores = StablbiblityScores;
+            state.Solids = Solids;
+            state.SolidsNoFastener = SolidsNoFastener;
+            state.SolidsNoFastenerSimplified = SolidsNoFastenerSimplified;
+            state.SimplifiedSolids = SimplifiedSolids;
+            state.SolidsMass = SolidsMass;
+            state.AssemblyGraph = AssemblyGraph;
+            state.StabilityWeightChosenByUser = StabilityWeightChosenByUser;
+            state.UncertaintyWeightChosenByUser = UncertaintyWeightChosenByUser;
+            state.MeshMagnifier = MeshMagnifier;
+            state.PointInMagicBox = PointInMagicBox;
+            state.BeamWidth = BeamWidth;
+            state.DetectFasteners = DetectFasteners;
+            state.AvailableWorkers = AvailableWorkers;
+            state.FastenersAreThreaded = FastenersAreThreaded;
+            state.StabilityScore = StabilityScore;
+            state.RobustSolution = RobustSolution;
+            state.globalDirPool = globalDirPool;
+            state.allmtime = allmtime;
+            state.allitime = allitime;
+            state.gpmovingtime = gpmovingtime;
+            state.gpinstalltime = gpinstalltime;
+            state.gpsecuretime = gpsecuretime;
+            state.gprotate = gprotate;
+
+        }
+
+
+
+        private static void SetInputArguments(ProgramState state, string[] args)
+        {
+            var argsIndex = 0;
+            if (!args.Any())
+            {
+                Console.WriteLine("No arguments provided. Using default values.");
+                SetInputArguments(state, Constants.DefaultInputArguments);
+                return;
+            }
+            if (args[argsIndex].Equals("dialog", StringComparison.CurrentCultureIgnoreCase))
+                SetInputArgumentsViaDialog(state);
+            else
+            {
+				Console.WriteLine ("Arguments:");
+				foreach (string a in args) {
+					Console.WriteLine (" -- "+a);
+				}
+				state.inputDir = args[argsIndex];
+				Console.WriteLine ("Setting inputDir to: " + state.inputDir);
+                if (args.Length > ++argsIndex)
+                    DetectFasteners = args[argsIndex].Equals("y", StringComparison.CurrentCultureIgnoreCase);
+                if (DetectFasteners && args.Length > ++argsIndex)
+                    FastenersAreThreaded = int.Parse(args[argsIndex]);
+                if (args.Length > ++argsIndex)
+                    StabilityScore = double.Parse(args[argsIndex]);
+                if (args.Length > ++argsIndex)
+                    RobustSolution = args[argsIndex].Equals("y", StringComparison.CurrentCultureIgnoreCase);
+            }
+        }
+
+        private static void SetInputArgumentsViaDialog(ProgramState state)
         {
             var autoFastenersDetect = "m";
             while (autoFastenersDetect != "y" && autoFastenersDetect != "n" && autoFastenersDetect != "Y" &&
@@ -142,35 +402,34 @@ namespace Assembly_Planner
                 RobustSolution = true;
         }
 
-
         private static void SerializeSolidProperties()
         {
             XmlSerializer ser = new XmlSerializer(typeof(PartsProperties));
             var partsProperties = new PartsProperties();
             partsProperties.GenerateProperties();
-            var writer = new StreamWriter("workspace/parts_properties.xml");
+			var writer = new StreamWriter(state.inputDir + slash + "XML" + slash + "parts_properties.xml");
             ser.Serialize(writer, partsProperties);
         }
 
         private static void DeserializeSolidProperties()
         {
             XmlSerializer ser = new XmlSerializer(typeof(PartsProperties));
-            var reader = new StreamReader("workspace/parts_properties2.xml");
+			var reader = new StreamReader(state.inputDir + slash + "XML" + slash + "parts_properties2.xml");
             var partsProperties = (PartsProperties)ser.Deserialize(reader);
             //now update everything with the revised properties
             UpdateSolidsProperties(partsProperties);
             UpdateFasteners(partsProperties);
         }
 
-        private static void UpdateSolidsProperties(Fastener_Detection.PartsProperties partsProperties)
+        private static void UpdateSolidsProperties(PartsProperties partsProperties)
         {
             foreach (var solidName in Solids.Keys)
             {
                 var userUpdated = partsProperties.parts.First(p => p.Name == solidName);
                 SolidsMass.Add(solidName,
                     userUpdated.Mass > 0
-                        ? userUpdated.Mass*Math.Pow(MeshMagnifier, 3)
-                        : userUpdated.Volume*Math.Pow(MeshMagnifier, 3));
+                        ? userUpdated.Mass * Math.Pow(MeshMagnifier, 3)
+                        : userUpdated.Volume * Math.Pow(MeshMagnifier, 3));
             }
         }
 
@@ -178,10 +437,9 @@ namespace Assembly_Planner
         {
 
             XmlSerializer ser = new XmlSerializer(typeof(DirectionSaveStructure));
-            var writer = new StreamWriter("workspace/directionList.xml");
+			var writer = new StreamWriter(state.inputDir + slash + "XML" + slash + "directionList.xml");
             var theData = new DirectionSaveStructure();
             theData.arcs = AssemblyGraph.arcs;
-            theData.Directions = DisassemblyDirectionsWithFastener.Directions;
             ser.Serialize(writer, theData);
 
         }
@@ -189,26 +447,62 @@ namespace Assembly_Planner
         internal static void LoadDirections()
         {
             XmlSerializer ser = new XmlSerializer(typeof(DirectionSaveStructure));
-            var reader = new StreamReader("workspace/directionList2.xml");
+			var reader = new StreamReader(state.inputDir  + slash + "XML" + slash + "directionList2.xml");
             var theData = (DirectionSaveStructure)ser.Deserialize(reader);
             var reviewedArc = theData.arcs;
+			checkDirs ();
             UpdateGraphArcs(reviewedArc);
+			checkDirs ();
         }
+
+
+        internal static void SaveVerification(string result)
+        {
+
+            var writer = new StreamWriter(state.inputDir + slash + "XML" + slash + "verificationState.txt");
+            writer.Write(result);
+            writer.Close();
+
+        }
+
 
         private static void UpdateGraphArcs(List<arc> reviewedArc)
         {
+			
+
             foreach (Connection arc in reviewedArc)
             {
-                var counterpart =
-                    AssemblyGraph.arcs.Cast<Connection>().First(c => c.XmlFrom == arc.XmlFrom && c.XmlTo == arc.XmlTo);
-                if (arc.Certainty == 0)
-                    AssemblyGraph.arcs.Remove(counterpart);
-                counterpart.FiniteDirections = AddDirections(arc.FiniteDirections);
-                counterpart.InfiniteDirections = AddDirections(arc.InfiniteDirections);
-            }
+				//$ Incorperated the ability to add arcs, because otherwise resolving incomplete graphs
+				//  would be impossible
+
+				bool reversed = false;
+				var counterpart = (Connection) AssemblyGraph.arcs.FirstOrDefault(c => c.XmlFrom == arc.XmlFrom && c.XmlTo == arc.XmlTo);
+
+				if (counterpart == null) {
+					counterpart =(Connection) AssemblyGraph.arcs.FirstOrDefault(c => c.XmlTo == arc.XmlFrom && c.XmlFrom == arc.XmlTo);
+					if (counterpart != null) {
+						reversed = true;
+					}
+				}
+
+				if (counterpart == null) {
+					AssemblyGraph.addArc(AssemblyGraph.nodes.First(a => a.name == arc.XmlFrom),
+						                 AssemblyGraph.nodes.First(a => a.name == arc.XmlTo),"",typeof(Connection));
+					counterpart = (Connection)AssemblyGraph.arcs.Last ();
+				} else {
+					if (arc.Certainty == 0) {
+						AssemblyGraph.removeArc(counterpart);
+					}
+				}
+
+				counterpart.FiniteDirections = AddDirections (arc.FiniteDirections);
+				counterpart.InfiniteDirections = AddDirections (arc.InfiniteDirections);
+
+			}
+
         }
 
-        private static void UpdateFasteners(Fastener_Detection.PartsProperties partsProperties)
+        private static void UpdateFasteners(PartsProperties partsProperties)
         {
             foreach (var solidName in Solids.Keys)
             {
@@ -234,14 +528,19 @@ namespace Assembly_Planner
 
         private static Dictionary<string, List<TessellatedSolid>> GetSTLs(string InputDir)
         {
-            Console.WriteLine("\nLoading STLs ....");
+            Console.WriteLine("\nLoading STLs ....\n");
             var parts = new List<TessellatedSolid>();
-            var di = new DirectoryInfo(InputDir);
-            var fis = di.EnumerateFiles("*.STL");
+			var di = new DirectoryInfo(InputDir + slash + "models");
+            var fis = di.EnumerateFiles("*");
             // Parallel.ForEach(fis, fileInfo =>
             var i = 0;
             foreach (var fileInfo in fis)
             {
+                // debug: does this work? does extension include "." or capitals?
+                if (!Constants.ValidShapeFileTypes.Any(s =>
+                s.Equals(fileInfo.Extension, StringComparison.CurrentCultureIgnoreCase)))
+                    continue;
+
                 var ts = IO.Open(fileInfo.Open(FileMode.Open), fileInfo.Name);
                 //ts.Name = ts.Name.Remove(0, 1);
                 //lock (parts) 
@@ -253,7 +552,7 @@ namespace Assembly_Planner
                 {
                     try
                     {
-                        ts[0].SimplifyByPercentage(0.5);
+                        ts[0].Simplify(ts[0].NumberOfFaces / 2);
                     }
                     catch (Exception)
                     {
@@ -267,11 +566,17 @@ namespace Assembly_Planner
             Console.WriteLine("All the files are loaded successfully");
             Console.WriteLine("    * Number of tessellated solids:   " + parts.Count);
             Console.WriteLine("    * Total Number of Triangles:   " + parts.Sum(s => s.Faces.Count()));
-            return parts.ToDictionary(tessellatedSolid => tessellatedSolid.FileName, tessellatedSolid => new List<TessellatedSolid> { tessellatedSolid });
+            return parts.ToDictionary(tessellatedSolid => tessellatedSolid.Name, tessellatedSolid => new List<TessellatedSolid> { tessellatedSolid });
         }
 
         private static List<int> AddDirections(List<int> reviewedDirections)
         {
+
+			//$ Filling DisassemblyDirections 
+			//DisassemblyDirections.Directions;
+			//
+
+
             var dirInds = new List<int>();
             if (reviewedDirections == null) return dirInds;
             var toBeAddedToGDir = new List<int>();
@@ -280,46 +585,55 @@ namespace Assembly_Planner
                 dirInds.Add(dir);
                 if (!globalDirPool.Contains(dir))
                 {
+					//$ Added to check for invalid values. Remove later 
+					if (dir < 0 || dir > DisassemblyDirections.Directions.Count) {
+						Console.Write ("\n");
+						Console.Write (dir);
+						Console.Write (" - ");
+						Console.Write (DisassemblyDirections.Directions.Count);
+					}
+					//
+
                     globalDirPool.Add(dir);
                     var temp =
                         globalDirPool.Where(
                             d =>
                                 Math.Abs(1 +
-                                         DisassemblyDirectionsWithFastener.Directions[d].dotProduct(
-                                             DisassemblyDirectionsWithFastener.Directions[dir])) < 0.01).ToList();
+                                         DisassemblyDirections.Directions[d].dotProduct(
+                                             DisassemblyDirections.Directions[dir])) < 0.01).ToList();
                     if (temp.Any())
-                       Geometric_Reasoning.StartProcess.DirectionsAndOppositsForGlobalpool.Add(dir, temp[0]);
+                        DisassemblyDirections.DirectionsAndOppositsForGlobalpool.Add(dir, temp[0]);
                     else
                     {
-                        var dir2 = DisassemblyDirectionsWithFastener.Directions[dir];
-                        DisassemblyDirectionsWithFastener.Directions.Add(dir2.multiply(-1));
-                        Geometric_Reasoning.StartProcess.DirectionsAndOppositsForGlobalpool.Add(dir, DisassemblyDirectionsWithFastener.Directions.Count - 1);
-                        toBeAddedToGDir.Add(DisassemblyDirectionsWithFastener.Directions.Count - 1);
+                        var dir2 = DisassemblyDirections.Directions[dir];
+                        DisassemblyDirections.Directions.Add(dir2.multiply(-1));
+                        DisassemblyDirections.DirectionsAndOppositsForGlobalpool.Add(dir, DisassemblyDirections.Directions.Count - 1);
+                        toBeAddedToGDir.Add(DisassemblyDirections.Directions.Count - 1);
                     }
                 }
             }
             foreach (var newD in toBeAddedToGDir)
             {
                 globalDirPool.Add(newD);
-                var key = Geometric_Reasoning.StartProcess.DirectionsAndOppositsForGlobalpool.Where(k => k.Value == newD).ToList();
-                Geometric_Reasoning.StartProcess.DirectionsAndOppositsForGlobalpool.Add(newD, key[0].Key);
+                var key = DisassemblyDirections.DirectionsAndOppositsForGlobalpool.Where(k => k.Value == newD).ToList();
+                DisassemblyDirections.DirectionsAndOppositsForGlobalpool.Add(newD, key[0].Key);
             }
             return dirInds;
         }
 
         private static void EnlargeTheSolid()
         {
-            Console.WriteLine("\nScaling the parts ....");
+            Console.WriteLine("\nScaling the parts ....\n");
             MeshMagnifier = DetermineTheMagnifier();
             var solidsMagnified = new Dictionary<string, List<TessellatedSolid>>();
             Parallel.ForEach(Solids, dic =>
-                //foreach (var dic in Solids)
+            //foreach (var dic in Solids)
             {
                 var solids = new List<TessellatedSolid>();
                 var solidsConstant = new List<TessellatedSolid>();
                 foreach (var ts in dic.Value)
                 {
-                    var newVer = ts.Vertices.Select(vertex => new TempVer {Ver = vertex, IndexInList = 0}).ToList();
+                    var newVer = ts.Vertices.Select(vertex => new TempVer { Ver = vertex, IndexInList = 0 }).ToList();
                     var newFace =
                         ts.Faces.Select(
                             face =>
@@ -376,7 +690,38 @@ namespace Assembly_Planner
                 new[] { minX, minY, minZ });
             return 500000 / diagonalLength;
         }
+
+
+		//$ Remove this once nonsense is resolved
+		public static void checkDirs(){
+
+			/*
+			if (AssemblyGraph != null) {
+				Console.Write ("\n\n************\n\n");
+				foreach (arc arc in AssemblyGraph.arcs) {
+					arc other = AssemblyGraph.arcs.FirstOrDefault (a => a.XmlFrom == arc.XmlTo && a.XmlTo == arc.XmlFrom);
+					if (other != null) {
+						Console.Write ("\n\n" + arc.XmlFrom + " -- " + arc.XmlTo);
+					}
+				}
+				Console.Write ("\n\n============\n\n");
+				foreach (arc arc in AssemblyGraph.arcs.Where(a => a is Connection)) {
+					arc other = AssemblyGraph.arcs.FirstOrDefault (a => a.XmlFrom == arc.XmlTo && a.XmlTo == arc.XmlFrom);
+					if (other != null) {
+						Console.Write ("\n\n" + arc.XmlFrom + " -- " + arc.XmlTo);
+					}
+				}
+				Console.Write ("\n\n************\n\n");
+			}
+			*/
+
+		}
+
+
     }
+
+
+
 
     class TempVer
     {

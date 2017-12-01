@@ -6,14 +6,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Assembly_Planner;
-using BaseClasses;
-using BaseClasses.AssemblyEvaluation;
-using BaseClasses.Representation;
-using Plan_Generation.AssemblyEvaluation;
+using GraphSynth;
+using GraphSynth.Representation;
+//using GraphSynth.Search;
+using Assembly_Planner.GraphSynth.BaseClasses;
 using TVGL;
-using Constants = BaseClasses.AssemblyEvaluation.Constants;
+using Constants = Assembly_Planner.Constants;
 
-namespace Plan_Generation
+namespace Assembly_Planner
 {
     class RecursiveOptimizedSearch
     {
@@ -431,7 +431,7 @@ namespace Plan_Generation
                 else
                 {
                     var opposities =
-                        seConn.Directions.Select(d => Geometric_Reasoning.StartProcess.DirectionsAndOpposits[d]);
+                        seConn.Directions.Select(d => DisassemblyDirections.DirectionsAndOpposits[d]);
                     dirs.RemoveWhere(opposities.Contains);
                 }
             }
@@ -449,7 +449,7 @@ namespace Plan_Generation
                 else
                 {
                     var opposities =
-                        connection.InfiniteDirections.Select(inD => Geometric_Reasoning.StartProcess.DirectionsAndOpposits[inD]);
+                        connection.InfiniteDirections.Select(inD => DisassemblyDirections.DirectionsAndOpposits[inD]);
                     union.UnionWith(opposities.Where(d => !union.Contains(d)));
                 }
             }
@@ -477,7 +477,7 @@ namespace Plan_Generation
     }
 
     //stores memoization information
-   internal class MemoData
+    class MemoData
     {
         public double Value;
         public SubAssembly sa;
@@ -490,7 +490,7 @@ namespace Plan_Generation
     }
 
     //Stores information about a candidate option
-    public class TreeCandidate : IComparable<TreeCandidate>
+    class TreeCandidate : IComparable<TreeCandidate>
     {
         public TreeCandidate parent;
         public SubAssembly sa;

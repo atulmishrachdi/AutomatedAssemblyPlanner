@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model type="DomeModel" id="a2fedb09-dfee-1004-8376-5771df87f092" name="Test">
+    <modelinfo>
+        <version>0.0.0</version>
+    </modelinfo>
+    <parameters>
+        <parameter id="306434e3-dfed-1004-8467-a33a9a22dad2" name="A">
+            <currentType value="Real"/>
+            <data>
+                <dataobject type="Real">
+                    <quantity magnitude="1.0" unit="kg"/>
+                </dataobject>
+            </data>
+        </parameter>
+        <parameter id="306434e6-dfed-1004-8467-a33a9a22dad2" name="B">
+            <currentType value="Real"/>
+            <data>
+                <dataobject type="Real">
+                    <quantity magnitude="1.0" unit="kg"/>
+                </dataobject>
+            </data>
+        </parameter>
+        <parameter id="a2fedb22-dfee-1004-8376-5771df87f092" name="C">
+            <currentType value="String"/>
+            <data>
+                <dataobject type="String">2.0 kgC:\Programs\dome\dist\client</dataobject>
+            </data>
+        </parameter>
+    </parameters>
+    <relations>
+        <relation type="Procedural" id="1f2fbf14-dfed-1004-8be0-58277b79f346" name="Test Relation">
+            <parameters>
+                <parameter id="306434f2-dfed-1004-8467-a33a9a22dad2" name="B">
+                    <currentType value="Real"/>
+                    <data>
+                        <dataobject type="Real">
+                            <quantity magnitude="1.0" unit="kg"/>
+                        </dataobject>
+                    </data>
+                </parameter>
+                <parameter id="306434f5-dfed-1004-8467-a33a9a22dad2" name="A">
+                    <currentType value="Real"/>
+                    <data>
+                        <dataobject type="Real">
+                            <quantity magnitude="1.0" unit="kg"/>
+                        </dataobject>
+                    </data>
+                </parameter>
+                <parameter id="a2fedb25-dfee-1004-8376-5771df87f092" name="C">
+                    <currentType value="String"/>
+                    <data>
+                        <dataobject type="String">2.0 kgC:\Programs\dome\dist\client</dataobject>
+                    </data>
+                </parameter>
+            </parameters>
+            <body><![CDATA[import sys;
+import subprocess;
+import os;
+
+cwd = os.getcwd();
+
+subprocess.call("rm ./../../workspace/bin/intermediate/*",shell=True);
+
+subprocess.call(["./../../workspace/FastenerDetection.exe", "./../../workspace", "y", "1", "0.5", "y", "y"]);
+subprocess.call(["./../../workspace/DisassemblyDirections.exe", "./../../workspace", "y", "1", "0.5", "y", "y"]);
+subprocess.call(["./../../workspace/Verification.exe", "./../../workspace", "y", "1", "0.5", "y", "y"]);
+subprocess.call(["./../../workspace/AssemblyPlanning.exe", "./../../workspace", "y", "1", "0.5", "y", "y"]);
+
+C = str(A + B)+ cwd;]]></body>
+            <dependencies>
+                <dependency idRef="a2fedb25-dfee-1004-8376-5771df87f092">
+                    <parameter name="B" idRef="306434f2-dfed-1004-8467-a33a9a22dad2" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346"/>
+                    <parameter name="A" idRef="306434f5-dfed-1004-8467-a33a9a22dad2" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346"/>
+                </dependency>
+            </dependencies>
+        </relation>
+    </relations>
+    <visualizations/>
+    <contexts>
+        <context id="BUILD_CXT" name="Build View">
+            <modelobjects>
+                <relation name="Test Relation" idRef="1f2fbf14-dfed-1004-8be0-58277b79f346"/>
+                <parameter name="C" idRef="a2fedb22-dfee-1004-8376-5771df87f092" idModelRef="a2fedb09-dfee-1004-8376-5771df87f092"/>
+                <parameter name="B" idRef="306434e6-dfed-1004-8467-a33a9a22dad2" idModelRef="a2fedb09-dfee-1004-8376-5771df87f092"/>
+                <parameter name="A" idRef="306434e3-dfed-1004-8467-a33a9a22dad2" idModelRef="a2fedb09-dfee-1004-8376-5771df87f092"/>
+            </modelobjects>
+        </context>
+        <context id="FILE_CXT" name="Files"/>
+    </contexts>
+    <mappings>
+        <modelMappings>
+            <mappedParameter name="B" idRef="306434f2-dfed-1004-8467-a33a9a22dad2" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346">
+                <parameter name="B" idRef="306434e6-dfed-1004-8467-a33a9a22dad2" idModelRef="a2fedb09-dfee-1004-8376-5771df87f092"/>
+            </mappedParameter>
+            <mappedParameter name="C" idRef="a2fedb25-dfee-1004-8376-5771df87f092" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346">
+                <parameter name="C" idRef="a2fedb22-dfee-1004-8376-5771df87f092" idModelRef="a2fedb09-dfee-1004-8376-5771df87f092"/>
+            </mappedParameter>
+            <mappedParameter name="A" idRef="306434f5-dfed-1004-8467-a33a9a22dad2" idRelationRef="1f2fbf14-dfed-1004-8be0-58277b79f346">
+                <parameter name="A" idRef="306434e3-dfed-1004-8467-a33a9a22dad2" idModelRef="a2fedb09-dfee-1004-8376-5771df87f092"/>
+            </mappedParameter>
+        </modelMappings>
+    </mappings>
+    <auxfiles/>
+</model>

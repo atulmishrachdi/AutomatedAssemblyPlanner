@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<modelinterface type="DomeModelInterface" id="e29c8373-dff8-1004-8618-def6c2acf082" name="Default Interface">
+    <interfaceinfo>
+        <version>0.0.1</version>
+        <defaultinterface/>
+    </interfaceinfo>
+    <parameters/>
+    <visualizations/>
+    <relations/>
+    <contexts>
+        <context id="IFACE_MODEL_CXT" name="Model View"/>
+    </contexts>
+    <views>
+        <view name="Build View">
+            <context id="IFACE_BUILD_CXT" name="Build View"/>
+        </view>
+        <view name="Interface Causality View">
+            <filter id="INPUTS_FILTER" name="Inputs"/>
+            <filter id="OUTPUTS_FILTER" name="Outputs"/>
+            <filter id="INDETERMINATES_FILTER" name="Indeterminates"/>
+        </view>
+    </views>
+    <directedGraph id="e29c8373-dff8-1004-8618-def6c2acf082">
+        <nodes/>
+        <arcs/>
+    </directedGraph>
+</modelinterface>

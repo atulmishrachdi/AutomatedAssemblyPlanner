@@ -4,19 +4,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Assembly_Planner;
+using GraphSynth.Representation;
 using MIConvexHull;
-using BaseClasses;
-using BaseClasses.AssemblyEvaluation;
-using BaseClasses.Representation;
-using Geometric_Reasoning;
+using Assembly_Planner.GraphSynth.BaseClasses;
 using StarMathLib;
 using TVGL;
-using Constants = BaseClasses.AssemblyEvaluation.Constants;
+using Constants = Assembly_Planner.Constants;
 using RandomGen;
 using GPprocess;
-using Plan_Generation;
-
-namespace Plan_Generation.AssemblyEvaluation
+namespace Assembly_Planner
 {
     /// <summary>
     /// Class EvaluationForBinaryTree - this is a stub for evaluating a particular install step
@@ -62,10 +59,10 @@ namespace Plan_Generation.AssemblyEvaluation
             foreach (var dir in insertionDirections)
             {
                 double cvhOverlapDist;
-                var dis = DetermineDistanceToSeparateHull(sub, dir, out cvhOverlapDist) / StartProcess.MeshMagnifier;
+                var dis = DetermineDistanceToSeparateHull(sub, dir, out cvhOverlapDist) / Program.MeshMagnifier;
                 if (dis >= minDis) continue;
                 minDis = dis;
-                distanceToFree = cvhOverlapDist / StartProcess.MeshMagnifier * 1000;
+                distanceToFree = cvhOverlapDist / Program.MeshMagnifier * 1000;
                 bestInstallDirection = dir;
             }
             sub.Install.InstallDirection = bestInstallDirection;
@@ -83,15 +80,15 @@ namespace Plan_Generation.AssemblyEvaluation
                 distanceToFree = 0.3;
             }
             EvaluateSubFirstThreeTime(sub, refnodes, movingnodes, distanceToFree);
-            //   EvaluateSubFirstThreeTime(sub, refnodes, movingnodes, distanceToFree, out sub.Install.Time, out sub.Install.TimeSD, out sub.Secure.Time, out sub.Secure.TimeSD);
+         //   EvaluateSubFirstThreeTime(sub, refnodes, movingnodes, distanceToFree, out sub.Install.Time, out sub.Install.TimeSD, out sub.Secure.Time, out sub.Secure.TimeSD);
 
-
+            
             if (sub.Install.Time < 0)
                 sub.Install.Time = 0.5;
-
+            
             if (sub.MoveRoate.Time < 0)
                 sub.MoveRoate.Time = 0.5;
-
+          
             //if (DetermineWeight)
             //{
             //    LeapSearch.InitialTimes.Add(sub.Install.Time+sub.MoveRoate.Time);
@@ -134,7 +131,7 @@ namespace Plan_Generation.AssemblyEvaluation
                     othersubassembly = optNodes;
                 }
                 var overallstatiblity = 0.0;
-                var ss = AssemblySequence.CreateCombinedConvexHull2(subassembly, EvaluationForBinaryTree.ConvexHullsForParts);
+                var ss = EvaluationForBinaryTree.CreateCombinedConvexHull2(subassembly);
                 var reductedfaces = AssemblyEvaluator.MergingFaces(ss.Faces.ToList());
                 var maxsigleDOF = 0.0;
                 var minsigleSB = double.PositiveInfinity;
@@ -285,7 +282,7 @@ namespace Plan_Generation.AssemblyEvaluation
                         {
                             //Gdirection = Gdirection.add(DisassemblyDirections.Directions[indxe]);
 
-                            Gdirection = Gdirection.add(StartProcess.Directions[indxe].multiply(-1));
+                            Gdirection = Gdirection.add(DisassemblyDirections.Directions[indxe].multiply(-1));
                         }
 
                         var selected = new double[3];
@@ -380,7 +377,7 @@ namespace Plan_Generation.AssemblyEvaluation
         public static void EvaluateSubFirstThreeTime(SubAssembly sub, List<Component> refnodes, List<Component> movingnodes,
             double olpdis)
         {
-            var inputunitscaler = Geometric_Reasoning.StartProcess.MeshMagnifier / 1000;//magnifier translate unit to cm
+            var inputunitscaler = Program.MeshMagnifier / 1000;//magnifier translate unit to cm
             var movingsolids = new List<TessellatedSolid>();
             var referencesolids = new List<TessellatedSolid>();
             var movingvertex = new List<Vertex>();
@@ -391,7 +388,7 @@ namespace Plan_Generation.AssemblyEvaluation
             ///////
             foreach (var n in movingnodes)
             {
-                movingsolids.Add(StartProcess.Solids[n.name][0]); //cheange bbbbb class
+                movingsolids.Add(Program.Solids[n.name][0]); //cheange bbbbb class
             }
             foreach (var v in sub.Install.Moving.CVXHull.Vertices)
             {
@@ -567,11 +564,11 @@ namespace Plan_Generation.AssemblyEvaluation
                 optNodes.Select(n => n.name).ToList().All(sub.Install.Reference.PartNames.Contains))
             {
                 foreach (var dir in validDirs)
-                    dirs.Add(StartProcess.Directions[dir]);
+                    dirs.Add(DisassemblyDirections.Directions[dir]);
                 return dirs;
             }
             foreach (var dir in validDirs)
-                dirs.Add(StartProcess.Directions[dir].multiply(-1.0));
+                dirs.Add(DisassemblyDirections.Directions[dir].multiply(-1.0));
             return dirs;
         }
 
@@ -656,7 +653,7 @@ namespace Plan_Generation.AssemblyEvaluation
             }
             else
             {
-                var combinedCVXHullM = AssemblySequence.CreateCombinedConvexHull2(movingNodes, EvaluationForBinaryTree.ConvexHullsForParts);
+                var combinedCVXHullM = CreateCombinedConvexHull2(movingNodes);
                 var VolumeM = GetSubassemblyVolume(movingNodes);
                 var MassM = GetSubassemblyMass(movingNodes);
                 var centerOfMass = GetSubassemblyCenterOfMass(movingNodes);
@@ -679,14 +676,14 @@ namespace Plan_Generation.AssemblyEvaluation
             }
             else
             {
-                var combinedCVXHullR = AssemblySequence.CreateCombinedConvexHull2(referenceHyperArcnodes, EvaluationForBinaryTree.ConvexHullsForParts);
+                var combinedCVXHullR = CreateCombinedConvexHull2(referenceHyperArcnodes);
                 var VolumeR = GetSubassemblyVolume(referenceHyperArcnodes);
                 var MassR = GetSubassemblyMass(referenceHyperArcnodes);
                 var centerOfMass = GetSubassemblyCenterOfMass(referenceHyperArcnodes);
                 refAssembly = new SubAssembly(new HashSet<Component>(referenceHyperArcnodes), combinedCVXHullR, MassR,
                     VolumeR, centerOfMass);
             }
-            var combinedCvxHull = AssemblySequence.CreateCombinedConvexHull(refAssembly.CVXHull, movingAssembly.CVXHull);
+            var combinedCvxHull = CreateCombinedConvexHull(refAssembly.CVXHull, movingAssembly.CVXHull);
             List<PolygonalFace> movingFacesInCombined;
             List<PolygonalFace> refFacesInCombined;
             var InstallCharacter = shouldReferenceAndMovingBeSwitched(refAssembly, movingAssembly, combinedCvxHull,
@@ -718,6 +715,24 @@ namespace Plan_Generation.AssemblyEvaluation
                     (newSubassembly.Install.Moving.CenterOfMass.Position[2] +
                      newSubassembly.Install.Reference.CenterOfMass.Position[2])/2
                 });
+        }
+
+        private TVGLConvexHull CreateCombinedConvexHull(TVGLConvexHull refCVXHull, TVGLConvexHull movingCVXHull)
+        {
+            var pointCloud = new List<Vertex>(refCVXHull.Vertices);
+            pointCloud.AddRange(movingCVXHull.Vertices);
+            return new TVGLConvexHull(pointCloud, 1e-8);
+        }
+
+        public static TVGLConvexHull CreateCombinedConvexHull2(List<Component> nodes)
+        {
+            var pointCloud = new List<Vertex>();
+            foreach (var n in nodes)
+            {
+                var nodeName = n.name;
+                pointCloud.AddRange(ConvexHullsForParts[nodeName].Vertices);
+            }
+            return new TVGLConvexHull(pointCloud, 1e-8);
         }
 
         public static double GetSubassemblyVolume(List<Component> nodes)
@@ -811,18 +826,18 @@ namespace Plan_Generation.AssemblyEvaluation
             /* if the former face area does not take up a significant portion of 
              * the new faces then we do not have the confidence to make the judgement
              * based on this fact. */
-            if (formerFacesArea / totalFaceArea > Constants.Values.CVXFormerFaceConfidence)
+            if (formerFacesArea / totalFaceArea > Constants.CVXFormerFaceConfidence)
             {
                 /* there are two check here: if the common area is very small, we assume the 
                  * subassembly is inside the other. If not, maybe it is more on the outside
                  * but a smaller effect on resulting convex hull. */
-                if (refFaceArea / formerFacesArea < Constants.Values.CVXOnInsideThreshold)
+                if (refFaceArea / formerFacesArea < Constants.CVXOnInsideThreshold)
                     return InstallCharacterType.ReferenceIsInsideMoving;
-                if (movingFaceArea / formerFacesArea < Constants.Values.CVXOnInsideThreshold)
+                if (movingFaceArea / formerFacesArea < Constants.CVXOnInsideThreshold)
                     return InstallCharacterType.MovingIsInsideReference;
-                if (refFaceArea / formerFacesArea < Constants.Values.CVXOnOutsideThreshold)
+                if (refFaceArea / formerFacesArea < Constants.CVXOnOutsideThreshold)
                     return InstallCharacterType.ReferenceIsOnOutsideOfMoving;
-                if (movingFaceArea / formerFacesArea < Constants.Values.CVXOnOutsideThreshold)
+                if (movingFaceArea / formerFacesArea < Constants.CVXOnOutsideThreshold)
                     return InstallCharacterType.MovingIsOnOutsideOfReference;
             }
             /* if we cannot confidently use face area then we switch to comparing

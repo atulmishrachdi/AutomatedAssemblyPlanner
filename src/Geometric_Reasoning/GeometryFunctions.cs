@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BaseClasses;
+using Assembly_Planner;
 using StarMathLib;
 using TVGL;
 using Vertex = TVGL.Vertex;
 
-namespace Geometric_Reasoning
+namespace Assembly_Planner
 {
     public class GeometryFunctions
     {
@@ -20,13 +20,13 @@ namespace Geometric_Reasoning
                           (Math.Pow(vertex1[2] - vertex2[2], 2)));
         }
 
-        public static double DistanceBetweenLineAndVertex(double[] vector, double[] pointOnLine, double[] p)
+        internal static double DistanceBetweenLineAndVertex(double[] vector, double[] pointOnLine, double[] p)
         {
             var cross = vector.crossProduct(pointOnLine.subtract(p));
             return Math.Sqrt(Math.Pow(cross[0], 2) + Math.Pow(cross[1], 2) + Math.Pow(cross[2], 2));
         }
 
-        public static double DistanceBetweenVertexAndPlane(double[] ver, PolygonalFace plane)
+        internal static double DistanceBetweenVertexAndPlane(double[] ver, PolygonalFace plane)
         {
             // create a vector from a vertex on plane to the ver
             var vector = ver.subtract(plane.Vertices[0].Position);
@@ -34,7 +34,7 @@ namespace Geometric_Reasoning
             return vector.dotProduct(plane.Normal);
         }
 
-        public static double DistanceBetweenVertexAndPlane(double[] ver, double[] planeNormal, double[] pointOnLine)
+        internal static double DistanceBetweenVertexAndPlane(double[] ver, double[] planeNormal, double[] pointOnLine)
         {
             // create a vector from a vertex on plane to the ver
             var vector = ver.subtract(pointOnLine);
@@ -42,13 +42,13 @@ namespace Geometric_Reasoning
             return vector.dotProduct(planeNormal);
         }
 
-        public static double DistanceBetweenTwoPlanes(PolygonalFace plane1, PolygonalFace plane2)
+        internal static double DistanceBetweenTwoPlanes(PolygonalFace plane1, PolygonalFace plane2)
         {
             return
                 Math.Abs((plane1.Vertices[0].Position.subtract(plane2.Vertices[0].Position)).dotProduct(plane1.Normal));
         }
 
-        public static List<int> ConvertCrossProductToSign(List<double[]> crossP)
+        internal static List<int> ConvertCrossProductToSign(List<double[]> crossP)
         {
             var signs = new List<int> { 1 };
             var mainCross = crossP[0];
@@ -68,7 +68,7 @@ namespace Geometric_Reasoning
             return signs;
         }
 
-        public static double[] SortedEdgeLengthOfTriangle(PolygonalFace triangle)
+        internal static double[] SortedEdgeLengthOfTriangle(PolygonalFace triangle)
         {
             // shortest, medium, longest. this function returns the lenght of medium
             var lengths = new List<double>
@@ -81,7 +81,7 @@ namespace Geometric_Reasoning
             return lengths.ToArray();
         }
 
-        public static double[] SortedLengthOfObbEdges(BoundingBox boundingBox)
+        internal static double[] SortedLengthOfObbEdges(BoundingBox boundingBox)
         {
             var lengths = new List<double>
             {
@@ -96,7 +96,7 @@ namespace Geometric_Reasoning
             return lengths.ToArray();
         }
 
-        public static Vertex[][] SortedEdgesOfTriangle(PolygonalFace triangle)
+        internal static Vertex[][] SortedEdgesOfTriangle(PolygonalFace triangle)
         {
             // the first one is the shortest edge, the last one is the longest
             var sorted = new Vertex[3][];
@@ -121,7 +121,7 @@ namespace Geometric_Reasoning
             return sorted;
         }
 
-        public static Edge[] SortedEdgesOfTriangle2(PolygonalFace triangle)
+        internal static Edge[] SortedEdgesOfTriangle2(PolygonalFace triangle)
         {
             // the first one is the shortest edge, the last one is the longest
             var sorted = new Edge[3];
@@ -275,7 +275,7 @@ namespace Geometric_Reasoning
             return (dot >= -0.001);
         }
 
-        public static PolygonalFace[] LongestPlaneOfObbDetector(BoundingBox obb, out PolygonalFace facePrepToRD1,
+        internal static PolygonalFace[] LongestPlaneOfObbDetector(BoundingBox obb, out PolygonalFace facePrepToRD1,
     out PolygonalFace facePrepToRD2)
         {
             // it returns longest side. (two adjacent triangles)
@@ -348,7 +348,7 @@ namespace Geometric_Reasoning
             return null;
         }
 
-        public static PolygonalFace[] LongestPlaneOfObbDetector(double[][] obb, bool clockWise, out PolygonalFace facePrepToRD1,
+        internal static PolygonalFace[] LongestPlaneOfObbDetector(double[][] obb, bool clockWise, out PolygonalFace facePrepToRD1,
             out PolygonalFace facePrepToRD2)
         {
             // I am not using this function anymore
@@ -422,7 +422,7 @@ namespace Geometric_Reasoning
             return null;
         }
 
-        public static PolygonalFace BoundingCylindertoFaceOnObbRespectiveSide(TessellatedSolid solid,
+        internal static PolygonalFace BoundingCylindertoFaceOnObbRespectiveSide(TessellatedSolid solid,
             out Vertex[] startingVerts, out double[] partnCreationVect)
         {
             var bCy = BoundingGeometry.BoundingCylinderDic[solid];

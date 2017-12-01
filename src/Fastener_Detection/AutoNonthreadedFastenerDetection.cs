@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using BaseClasses;
-using Geometric_Reasoning;
 using TVGL;
 using StarMathLib;
 
-namespace Fastener_Detection
+namespace Assembly_Planner
 {
     internal class AutoNonthreadedFastenerDetection
     {
@@ -26,9 +24,9 @@ namespace Fastener_Detection
             //      3. Detect the fasteners using multiple references. (for each similar object, detect one of them) 
             var width = 55;
             var check = 0;
-            //LoadingBar.start(width, 0);
+            LoadingBar.start(width, 0);
 
-            var smallParts = FastenerDetector.SmallObjectsDetector(Geometric_Reasoning.StartProcess.PartsWithOneGeom);
+            var smallParts = FastenerDetector.SmallObjectsDetector(DisassemblyDirectionsWithFastener.PartsWithOneGeom);
                 //new List<TessellatedSolid>(DisassemblyDirectionsWithFastener.PartsWithOneGeom);
 
             PreSelectedFastenerToFastenerClass(solidPrimitive, multipleRefs);
@@ -89,7 +87,7 @@ namespace Fastener_Detection
             {
                 if (check % refresh == 0)
                 {
-                    //LoadingBar.refresh(width, ((float)check) / ((float)uniqueParts.Count));
+                    LoadingBar.refresh(width, ((float)check) / ((float)uniqueParts.Count));
                 }
                 check++;
 
@@ -156,8 +154,7 @@ namespace Fastener_Detection
             // I will try to look for that.
             // Is there anyway to detect more?
             ConnectFastenersNutsAndWashers(groupedPotentialFasteners);
-            //LoadingBar.refresh(width, 1);
-            Console.WriteLine("\n");
+            LoadingBar.refresh(width, 1);
         }
 
         private static void PreSelectedFastenerToFastenerClass(
@@ -540,8 +537,8 @@ namespace Fastener_Detection
                 break;
             }
             var equInDirections =
-                Geometric_Reasoning.StartProcess.Directions.Where(d => Math.Abs(d.dotProduct(normal) - 1) < 0.001).ToList()[0];
-            return Geometric_Reasoning.StartProcess.Directions.IndexOf(equInDirections);
+                DisassemblyDirections.Directions.Where(d => Math.Abs(d.dotProduct(normal) - 1) < 0.001).ToList()[0];
+            return DisassemblyDirections.Directions.IndexOf(equInDirections);
         }
 
         private static int RemovalDirectionFinderForAllenHexPhillips(List<Flat> flatPrims, BoundingBox solid)
@@ -550,7 +547,7 @@ namespace Fastener_Detection
             // For slot, it will be different
             var normalGuess = NormalGuessFinder(flatPrims);
             var equInDirections =
-                Geometric_Reasoning.StartProcess.Directions.Where(d => Math.Abs(d.dotProduct(normalGuess) - 1) < 0.01).ToList()[0];
+                DisassemblyDirections.Directions.Where(d => Math.Abs(d.dotProduct(normalGuess) - 1) < 0.01).ToList()[0];
             // find the furthest vertex (b) to a vertex (a) from allen faces. if
             // Normal.dotproduct(a-b) must be positive. If it was negative, return 
             // multiply(-1)
@@ -566,8 +563,8 @@ namespace Fastener_Detection
             }
             var reference = a.Position.subtract(farthestVer.Position);
             if (normalGuess.dotProduct(reference) > 0)
-                return Geometric_Reasoning.StartProcess.Directions.IndexOf(equInDirections);
-            return Geometric_Reasoning.StartProcess.Directions.IndexOf(equInDirections.multiply(-1.0));
+                return DisassemblyDirections.Directions.IndexOf(equInDirections);
+            return DisassemblyDirections.Directions.IndexOf(equInDirections.multiply(-1.0));
         }
 
         private static double[] NormalGuessFinder(List<Flat> flatPrims)
@@ -632,7 +629,7 @@ namespace Fastener_Detection
                 //if (group.Count == 1) continue;
 
                 //----------------------------------- Cases 2,3,4 ---------------------------------
-                var nutAndWasherRemovalDirection = Geometric_Reasoning.StartProcess.DirectionsAndOpposits[fastener.RemovalDirection];
+                var nutAndWasherRemovalDirection = DisassemblyDirections.DirectionsAndOpposits[fastener.RemovalDirection];
                 var nuts = FastenerDetector.Nuts.Where(n => group.Contains(n.Solid)).ToList();
                 var nutList = new List<Nut>();
                 if (nuts.Any())
@@ -724,8 +721,8 @@ namespace Fastener_Detection
                                 Diameter = nut.Diameter,
                                 Certainty = 0.3
                             };
-                            nutAndWasherRemovalDirection = Geometric_Reasoning.StartProcess.Directions.IndexOf(
-                                Geometric_Reasoning.StartProcess.Directions[fastener.RemovalDirection].multiply(-1.0));
+                            nutAndWasherRemovalDirection = DisassemblyDirections.Directions.IndexOf(
+                                DisassemblyDirections.Directions[fastener.RemovalDirection].multiply(-1.0));
                         }
                         if (pF.Volume < nut.Solid.Volume)
                         {

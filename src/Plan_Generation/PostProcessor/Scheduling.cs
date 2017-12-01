@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BaseClasses.AssemblyEvaluation;
+using Assembly_Planner;
 
-namespace Plan_Generation
+namespace Assembly_Planner
 {
     // The implemented worker allocation code is using s heuristic which is not assigning tasks optimally.
     // In other word, it doesn't guarabtee the minimum "Makespan" or "Critical Time".

@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BaseClasses;
-using Geometric_Reasoning;
+using Assembly_Planner;
 using StarMathLib;
 using TVGL;
-using BoundingCylinder = Geometric_Reasoning.BoundingCylinder;
 
-
-namespace Fastener_Detection
+namespace Assembly_Planner
 {
     class GearPolynomialTrend
     {

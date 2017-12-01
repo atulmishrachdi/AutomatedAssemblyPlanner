@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Assembly_Planner.GraphSynth.BaseClasses;
+using GraphSynth.Representation;
+using System.Collections.Generic;
 using System.Linq;
-using BaseClasses;
 
-namespace Plan_Generation.AssemblyEvaluation
+namespace Assembly_Planner
 {
     class FeasibilityEvaluator
     {                     

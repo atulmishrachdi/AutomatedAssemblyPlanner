@@ -10,7 +10,7 @@ var manualFileInput=true;
 
 
 
-// Put recieved data about the parts in here. 
+// Put recieved data about the parts in here.
 // Fills out the table with the information in the given xml document text (as a string, mind you)
 /**
 *
@@ -20,7 +20,7 @@ var manualFileInput=true;
 * @for partTableGlobal
 * @param {String} theXMLText The contents of a part table
 * @return {Void}
-* 
+*
 */
 function recieveData(theXMLText){
 
@@ -52,12 +52,12 @@ function recieveData(theXMLText){
 * @param {String} theXMLText The contents of the part table in the webpage, as a string
 * in XML formatting
 * @return {Void}
-* 
+*
 */
 function sendData(theXMLText){
 
 	// Do whatever you want with the resulting data to send it off, if you want
-	
+
 
 }
 
@@ -89,10 +89,10 @@ var volElem="<button onclick='insertHollowInput(this)'>Is Hollow</button>";
 
 // The button for showing the sample density dropdown menu
 var dropDensityButton="<button class='dropbtn' onclick='doDensityDrop(this)'>Sample Densities</button>";
-	
+
 // The button for removing the sample density dropdown menu
 var undropDensityButton="<button class='dropbtn' onclick='undoDensityDrop(this)'>Sample Densities</button>";
-	
+
 // The sample density dropdown menu
 var densityMenu="<div class='dropdown-content' style='border-color: #666666; background-color: #DDDDDD; border-style: solid; padding: 10px 10px 10px 10px;'>"+
 					"<button onclick='changeDensity(this)'>Aluminum</button>"+
@@ -141,9 +141,9 @@ var theTable= $('#table_id').DataTable({
 * @method grabExtension
 * @for partTableGlobal
 * @param {String} theName The file name to be processed
-* @return {String} the extension in the given file name. If no extension is found, the 
+* @return {String} the extension in the given file name. If no extension is found, the
 * 'undefined' value is returned.
-* 
+*
 */
 function grabExtension(theName){
 	return (/[.]/.exec(theName)) ? /[^.]+$/.exec(theName) : undefined;
@@ -161,7 +161,7 @@ function grabExtension(theName){
 * @param {HTML Element} theNode The HTML element whose children are to be searched
 * @param {String} tag The string to be used when searching for element children
 * @return {Void}
-* 
+*
 */
 function getChildrenByTag(theNode,tag){
 	var childs=theNode.children;
@@ -180,30 +180,30 @@ function getChildrenByTag(theNode,tag){
 
 
 
-// Upon a file upload event triggering, defines and attaches each file's onload function 
+// Upon a file upload event triggering, defines and attaches each file's onload function
 /**
 *
 * Accepts a fileinput event, presumably from a file upload event listener, and assigns
 * functions to each file reader listed in the event to be called upon the full loading
-* of that given reader's files 
+* of that given reader's files
 *
 * @method readMultipleFiles
 * @for partTableGlobal
 * @param {Event} evt A fileinput event, to be given by a fileinput event listener
 * @return {Void}
-* 
+*
 */
 function readMultipleFiles(evt) {
 	if(inputXML===null){
 		//Retrieve all the files from the FileList object
-		var files = evt.target.files; 
-				
+		var files = evt.target.files;
+
 		if (files) {
 			for (var i=0, f; f=files[i]; i++) {
-				
+
 				var r = new FileReader();
 				var extension=grabExtension(f.name)[0];
-				
+
 				if(extension===undefined){
 					continue;
 				}
@@ -221,15 +221,15 @@ function readMultipleFiles(evt) {
 					r.readAsText(f,"US-ASCII");
 					fileReaders.push({Reader: r, Name: f.name});
 				}
-							
+
 			}
-		} 
+		}
 		else {
-			  alert("Failed to load files"); 
+			  alert("Failed to load files");
 		}
 	}
 	else {
-		  alert("Refresh page to reattempt upload of files"); 
+		  alert("Refresh page to reattempt upload of files");
 	}
 }
 
@@ -242,14 +242,14 @@ document.getElementById('fileinput').addEventListener('change', readMultipleFile
 // Checks that all files are loaded. If so, fills out the table with the given information
 /**
 *
-* Called internally upon every recieved fileload event. Checks if every file reader in the 
+* Called internally upon every recieved fileload event. Checks if every file reader in the
 * array "fileReaders" has fully read each of their files. If so, then the function calls
 * "recieveData".
 *
 * @method loadParts
 * @for partTableGlobal
 * @return {Void}
-* 
+*
 */
 function loadParts (){
 	var pos=0;
@@ -262,7 +262,7 @@ function loadParts (){
 	}
 	if(pos===lim){
 		console.log("Done loading parts");
-		recieveData(inputXML);				
+		recieveData(inputXML);
 	}
 }
 
@@ -279,9 +279,9 @@ function loadParts (){
 * @for partTableGlobal
 * @param {jQuery Object} theTree The jQuery object whose child is to be returned
 * @param {String} theMember The name of the tag being searched
-* @return {jQuery Object} The first child with the given tag. If such a child does not 
+* @return {jQuery Object} The first child with the given tag. If such a child does not
 * exist, null is returned.
-* 
+*
 */
 function grab(theTree,theMember){
 	if($(theTree).children(theMember).length!=0){
@@ -297,16 +297,16 @@ function grab(theTree,theMember){
 /**
 *
 * Given a jQuery object and an integer "N", returns the Nth child of the given element with
-* the given tag. 
+* the given tag.
 *
 * @method grabInd
 * @for partTableGlobal
 * @param {jQuery Object} theTree The jQuery object whose child is to be returned
 * @param {String} theMember The name of the tag being searched
 * @param {String} theIndex The ordinal of the matching child to be returned
-* @return {jQuery Object} The child meeting the tag and ordinal requirement. 
+* @return {jQuery Object} The child meeting the tag and ordinal requirement.
 * If such a child does not exist, null is returned.
-* 
+*
 */
 function grabInd(theTree,theMember, theIndex){
 	if($(theTree).children(theMember).length>theIndex){
@@ -323,37 +323,37 @@ function grabInd(theTree,theMember, theIndex){
 /**
 *
 * Given a jQuery object representation of a part entry, inserts an html representation
-* of that entry in the table 
+* of that entry in the table
 *
 * @method addEntry
 * @for partTableGlobal
 * @param {jQuery Object} theEntry The jQuery object containing the representation of a table
 * entry, as extracted from an XML document
 * @return {Void}
-* 
+*
 */
 function addEntry(theEntry){
 
 	var theName=grab(theEntry,"name").innerHTML;
 	var theVolume="<text>"+Number.parseFloat(grab(theEntry,"volume").innerHTML).toFixed(8)+"</text><br/>"+volElem;
-	
+
 	var theMass=massElem;
 	var theCertainty=Number.parseFloat(grab(theEntry,"fastener_certainty").innerHTML);
 	var theSurfaceArea=Number.parseFloat(grab(theEntry,"surface_area").innerHTML).toFixed(8);
-	
+
 	console.log(theCertainty);
-	
+
 	var fstChecked="<input type='checkbox' onchange='flipCheck(this)' value='off'></input>";
 	console.log(theCertainty);
 	if(theCertainty>0.5){
 		console.log("Box is checked");
 		fstChecked="<input type='checkbox' onchange='flipCheck(this)' value='on' checked></input>";
 	}
-	
+
 	var theAmbiguity=1-2*Math.abs(theCertainty-0.5);
 	theAmbiguity=theAmbiguity.toFixed(2);
-	
-	
+
+
 	theTable.row.add( [
 		theName,
 		theVolume,
@@ -363,7 +363,7 @@ function addEntry(theEntry){
 		theAmbiguity
 	] ).draw();
 
-	
+
 }
 
 
@@ -379,30 +379,30 @@ function addEntry(theEntry){
 * @method renderXML
 * @for partTableGlobal
 * @return {Void}
-* 
+*
 */
 function renderXML(){
 
 	theTable.search("").draw();
-	
+
 	console.log(theTable.rows().data());
-	
+
 	var result="<?xml version='1.0' encoding='utf-8'?>\n<parts_properties xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>\n";
-	
+
 	theTable=document.getElementById("body_id");
 
-	
+
 	var theEntries=getChildrenByTag(theTable,"TR");
 
 	var entryPos=0;
 	var entryLim=theEntries.length;
-	
+
 	var theCells;
 	var thisResult;
-	
-	
+
+
 	while(entryPos<entryLim){
-		
+
 		thisResult=renderEntry(getChildrenByTag(theEntries[entryPos],"TD"));
 		if(thisResult!=null){
 			result=result+thisResult;
@@ -410,19 +410,19 @@ function renderXML(){
 		else{
 			return null;
 		}
-		
+
 		entryPos++;
 	}
-	
-	result+="</parts_properties>";
-	
 
-	
+	result+="</parts_properties>";
+
+
+
 	sendData(result);
-	
-	
+
+
 	if(manualFileInput){
-	
+
 		var data = new Blob([result], {type: 'text/plain'});
 
 		if (textFile !== null) {
@@ -434,7 +434,7 @@ function renderXML(){
 		document.getElementById("downloadLink").setAttribute("style","color: white; display: inline;");
 		document.getElementById("downloadLink").innerHTML="Download";
 		document.getElementById("downloadLink").href=textFile;
-	
+
 	}
 
 
@@ -453,7 +453,7 @@ function renderXML(){
 * @for partTableGlobal
 * @param {HTML Element} theCells An html row element containing information about a part
 * @return {String} XML representation of the table entry
-* 
+*
 */
 function renderEntry(theCells){
 
@@ -463,7 +463,7 @@ function renderEntry(theCells){
 	var texts = getChildrenByTag(massCell,"TEXT");
 	var inputs = getChildrenByTag(massCell,"INPUT");
 	var conv = conversion(document.getElementById("massUnits"));
-	
+
 	var massText="";
 	if(inputs.length==0 || isNaN(Number.parseFloat(inputs[0].value))){
 		console.log(inputs);
@@ -491,14 +491,14 @@ function renderEntry(theCells){
 	else{
 		alert("HTML Corrupted");
 	}
-	
-	
+
+
 	var checkText="  <fastener_certainty>0</fastener_certainty>\n";
 
 	if(getChildrenByTag(theCells[4],"INPUT")[0].value=="on"){
 		checkText="  <fastener_certainty>1</fastener_certainty>\n";
 	}
-	
+
 
 	var result="";
 	result=result+"<part_properties>\n";
@@ -542,7 +542,7 @@ function revertHollowOpt(theTextBox){
 * @for partTableGlobal
 * @param {HTML Element} theButton The button that calls this function
 * @return {Void}
-* 
+*
 */
 function insertMassInput(theButton){
 	theButton.parentElement.innerHTML=	"<div class='masselem'>"+
@@ -563,7 +563,7 @@ function insertMassInput(theButton){
 * @for partTableGlobal
 * @param {HTML Element} theButton The button that calls this function
 * @return {Void}
-* 
+*
 */
 function insertDensityInput(theButton){
 	theButton.parentElement.innerHTML=	"<div class='masselem'>"+
@@ -586,7 +586,7 @@ function insertDensityInput(theButton){
 * @for partTableGlobal
 * @param {HTML Element} theButton The button that calls this function
 * @return {Void}
-* 
+*
 */
 function insertHollowInput(theButton){
 	var storage="<p style='display: none;'>"+Number.parseFloat(getChildrenByTag(theButton.parentElement,"TEXT")[0].innerHTML)+"</p>";
@@ -608,9 +608,9 @@ function insertHollowInput(theButton){
 * @for partTableGlobal
 * @param {HTML Element} theButton The button that calls this function
 * @return {Void}
-* 
+*
 */
-function removeHollowInput(theButton){ 
+function removeHollowInput(theButton){
 	var storage="<text style='display: block;'>"+Number.parseFloat(getChildrenByTag(theButton.parentElement,"P")[0].innerHTML)+"</text>";
 	var backButton="<button onclick='insertHollowInput(this)'>Is Hollow</button>";
 	theButton.parentElement.innerHTML=storage+backButton;
@@ -623,14 +623,14 @@ function removeHollowInput(theButton){
 /**
 *
 * A function automatically called by text input elements associated with the hollow option
-* in an entry's volume section when changed. Changes the currently displayed volume to 
+* in an entry's volume section when changed. Changes the currently displayed volume to
 * match the given thickness
 *
 * @method updateVolumeDisplay
 * @for partTableGlobal
 * @param {HTML Element} theBox The text input element that calls this function
 * @return {Void}
-* 
+*
 */
 function updateVolumeDisplay(theBox){
 	var theThickness=Number.parseFloat(getChildrenByTag(theBox.parentElement,"INPUT")[0].value);
@@ -644,14 +644,14 @@ function updateVolumeDisplay(theBox){
 /**
 *
 * A function automatically called by text input elements associated with the density option
-* in an entry's mass section when changed. Changes the currently displayed mass to 
+* in an entry's mass section when changed. Changes the currently displayed mass to
 * match the given density
 *
 * @method updateMassDisplay
 * @for partTableGlobal
 * @param {HTML Element} theBox The text input element that calls this function
 * @return {Void}
-* 
+*
 */
 function updateMassDisplay(theBox){
 	var theDensity=Number.parseFloat(getChildrenByTag(theBox.parentElement,"INPUT")[0].value);
@@ -673,7 +673,7 @@ function updateMassDisplay(theBox){
 * @for partTableGlobal
 * @param {HTML Element} theButton The button element that called this function
 * @return {Void}
-* 
+*
 */
 function doDensityDrop(theButton){
 	theButton.parentElement.innerHTML=undropDensityButton+densityMenu;
@@ -690,7 +690,7 @@ function doDensityDrop(theButton){
 * @for partTableGlobal
 * @param {HTML Element} theButton The button element that called this function
 * @return {Void}
-* 
+*
 */
 function undoDensityDrop(theButton){
 	theButton.parentElement.innerHTML=dropDensityButton;
@@ -709,10 +709,10 @@ function undoDensityDrop(theButton){
 * @for partTableGlobal
 * @param {HTML Element} theButton The button element that called this function
 * @return {Void}
-* 
+*
 */
 function changeDensity(theButton){
-	
+
 	var mat=theButton.innerHTML;
 	var val;
 	var coef=1000*1000*1000;
@@ -746,7 +746,7 @@ function changeDensity(theButton){
 	else{
 		return;
 	}
-	
+
 	getChildrenByTag(theButton.parentElement.parentElement.parentElement,"INPUT")[0].value=val;
 	updateMassDisplay(getChildrenByTag(theButton.parentElement.parentElement.parentElement,"INPUT")[0]);
 
@@ -763,7 +763,7 @@ function changeDensity(theButton){
 * @for partTableGlobal
 * @param {HTML Element} theBox The checkbox element calling this function
 * @return {Void}
-* 
+*
 */
 function flipCheck(theBox){
 
@@ -780,13 +780,13 @@ function flipCheck(theBox){
 
 /**
 *
-* Takes the value present in the global density input textbox and applies it to all 
+* Takes the value present in the global density input textbox and applies it to all
 * parts currently in the table.
 *
 * @method fillGlobalDensity
 * @for partTableGlobal
-* @return {Void} 
-* 
+* @return {Void}
+*
 */
 function fillGlobalDensity(){
 	var densInp= document.getElementById("GlobalDensityInput");
@@ -798,7 +798,7 @@ function fillGlobalDensity(){
 	else{
 		theDensity=parseFloat(densInp.value);
 	}
-	
+
 	var massElems = document.getElementsByClassName('masselem');
 	console.log(massElems);
 	var pos=0;
@@ -812,7 +812,7 @@ function fillGlobalDensity(){
 		updateMassDisplay(getChildrenByTag(massElems[pos],"BUTTON")[0]);
 		pos++;
 	}
-	
+
 }
 
 
@@ -828,10 +828,10 @@ function fillGlobalDensity(){
 * @for partTableGlobal
 * @param {String} theString A string representation of the unit being looked up
 * @return {Float} the unit conversion value
-* 
+*
 */
 function conversion (theString){
-	
+
 	switch(theString){
 		case "millimeters" :
 			return 1.0;
@@ -859,7 +859,7 @@ function conversion (theString){
 			break;
 	}
 	return 1.0;
-	
+
 }
 
 
@@ -869,7 +869,7 @@ var massElem="<div class='masselem'>"+
 				"<button onclick='insertMassInput(this)'>Input By Mass</button>"+
 				"<button onclick='insertDensityInput(this)'>Input By Volume+Density</button>"+
 			 "</div>";
-			 
+
 /**
 *
 * Returns a blank mass input element for use in the table
@@ -877,10 +877,10 @@ var massElem="<div class='masselem'>"+
 * @method makeMassElem
 * @for partTableGlobal
 * @return {HTML element} a blank mass input element
-* 
+*
 */
 function makeMassElem(){
-	
+
 	var result=document.createElement("DIV");
 	result.className="masselem";
 	var massButton=document.createElement("BUTTON");
@@ -892,7 +892,7 @@ function makeMassElem(){
 	result.appendChild(massButton);
 	result.appendChild(densityButton);
 	return result;
-	
+
 }
 
 
@@ -906,15 +906,15 @@ var volElem="<button onclick='insertHollowInput(this)'>Is Hollow</button>";
 * @method makeVolElem
 * @for partTableGlobal
 * @return {HTML element} a blank volume input element
-* 
+*
 */
 function makeVolElem(){
-	
+
 	result=document.creatElement("BUTTON");
 	result.onclick="insertHollowInput(this)";
 	result.innerHTML="Is Hollow";
 	return result;
-	
+
 }
 
 
@@ -928,18 +928,18 @@ var dropDensityButton="<button class='dropbtn' onclick='doDensityDrop(this)'>Sam
 * @method makeDropButton
 * @for partTableGlobal
 * @return {HTML element} a standard density dropdown button
-* 
+*
 */
 function makeDropButton(){
-	
+
 	result=document.creatElement("BUTTON");
 	result.className="dropbtn";
 	result.onclick="doDensityDrop(this)";
 	result.innerHTML="Sample Densities";
 	return result;
-	
+
 }
-	
+
 // The button for removing the sample density dropdown menu
 var undropDensityButton="<button class='dropbtn' onclick='undoDensityDrop(this)'>Sample Densities</button>";
 /**
@@ -949,18 +949,18 @@ var undropDensityButton="<button class='dropbtn' onclick='undoDensityDrop(this)'
 * @method makeUndropButton
 * @for partTableGlobal
 * @return {HTML element} a standard density dropdown removal button
-* 
+*
 */
 function makeUndropButton(){
-	
+
 	result=document.creatElement("BUTTON");
 	result.className="dropbtn";
 	result.onclick="undoDensityDrop(this)";
 	result.innerHTML="Sample Densities";
 	return result;
-	
+
 }
-	
+
 // The sample density dropdown menu
 var densityMenu="<div class='dropdown-content' style='border-color: #666666; background-color: #DDDDDD; border-style: solid; padding: 10px 10px 10px 10px;'>"+
 					"<button onclick='changeDensity(this)'>Aluminum</button>"+
@@ -984,14 +984,13 @@ var densityDiv= "\n<div class='dropdown'>"+dropDensityButton+"</div>";
 * @method makeDensityDiv
 * @for partTableGlobal
 * @return {HTML element} a sample density dropdown menu
-* 
+*
 */
 function makeDensityDiv(){
-	
+
 	result=document.creatElement("DIV");
 	result.className="dropdown";
 	result.innerHTML=densityMenu;
 	return result;
-	
-}
 
+}

@@ -9,20 +9,18 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Assembly_Planner;
-using BaseClasses;
-using BaseClasses.AssemblyEvaluation;
-using BaseClasses.Representation;
-using Geometric_Reasoning;
-using Plan_Generation;
-using Plan_Generation.AssemblyEvaluation;
+using GraphSynth;
+using GraphSynth.Representation;
+//using GraphSynth.Search;
+using Assembly_Planner.GraphSynth.BaseClasses;
 using RandomGen;
 using StarMathLib;
 using TVGL;
-using Constants = BaseClasses.AssemblyEvaluation.Constants;
+using Constants = Assembly_Planner.Constants;
 
-namespace Plan_Generation
+namespace Assembly_Planner
 {
-    public class LeapSearch
+    class LeapSearch
     {
         protected static EvaluationForBinaryTree AssemblyEvaluator;
         protected static designGraph Graph;
@@ -40,13 +38,13 @@ namespace Plan_Generation
         public static double stabilityscore;
         protected static int FalseLoop;
 
-        internal static Dictionary<HashSet<Component>, MemoData> Memo =
+        protected static Dictionary<HashSet<Component>, MemoData> Memo =
             new Dictionary<HashSet<Component>, MemoData>(HashSet<Component>.CreateSetComparer());
 
         protected static Dictionary<HashSet<Component>, HashSet<TreeCandidate>> MemoCandidates =
             new Dictionary<HashSet<Component>, HashSet<TreeCandidate>>(HashSet<Component>.CreateSetComparer());
 
-        public AssemblySequence Run(designGraph graph, Dictionary<string, List<TessellatedSolid>> solids,
+        internal AssemblySequence Run(designGraph graph, Dictionary<string, List<TessellatedSolid>> solids,
             List<int> globalDirPool)
         {
             var s = new Stopwatch();
@@ -76,7 +74,7 @@ namespace Plan_Generation
             InitializeMemo();*/
             var tree = LeapOptimizationSearch();
             s.Stop();
-            return new AssemblySequence { Subassemblies = new List<SubAssembly> { tree } };
+            return new AssemblySequence {Subassemblies = new List<SubAssembly> {tree}};
         }
 
         private static SubAssembly LeapOptimizationSearch()
@@ -87,7 +85,7 @@ namespace Plan_Generation
 
             var cands = GetCandidates(new HashSet<Component>(Graph.nodes.Cast<Component>()), 0);
             foreach (var c in cands)
-                SortedStack.Add(c.G + c.H, new List<TreeCandidate> { c });
+                SortedStack.Add(c.G + c.H, new List<TreeCandidate> {c});
             FalseLoop = 0;
             while (SortedStack.Any())
             {
@@ -134,11 +132,11 @@ namespace Plan_Generation
                            (treeCandidate.MovingH >= Memo[treeCandidate.MovNodes].Value)))))
                     {
                         var value = Math.Max(Memo[treeCandidate.MovNodes].Value, Memo[treeCandidate.RefNodes].Value) +
-                                    FinalTimeWeight * (treeCandidate.sa.Install.Time + treeCandidate.sa.MoveRoate.Time +
-                                                     Program.UncertaintyWeightChosenByUser *
+                                    FinalTimeWeight*(treeCandidate.sa.Install.Time + treeCandidate.sa.MoveRoate.Time +
+                                                     Program.UncertaintyWeightChosenByUser*
                                                      (treeCandidate.sa.Install.TimeSD +
                                                       treeCandidate.sa.MoveRoate.TimeSD)) +
-                                    FinalStableWeight * treeCandidate.sa.InternalStabilityInfo.Totalsecore;
+                                    FinalStableWeight*treeCandidate.sa.InternalStabilityInfo.Totalsecore;
                         var d = new MemoData(value, treeCandidate.sa);
                         if (!Memo.ContainsKey(treeCandidateNodes))
                         {
@@ -451,11 +449,17 @@ namespace Plan_Generation
         {
             // this is for the time that I cannot disassemble some parts from each other.
             // what I do is that I take them as one part and add them to the memo
-            var sa = new SubAssembly(nodes, AssemblySequence.CreateCombinedConvexHull2(nodes.ToList(), EvaluationForBinaryTree.ConvexHullsForParts),
+            var sa = new SubAssembly(nodes, EvaluationForBinaryTree.CreateCombinedConvexHull2(nodes.ToList()),
                 EvaluationForBinaryTree.GetSubassemblyMass(nodes.ToList()),
                 EvaluationForBinaryTree.GetSubassemblyVolume(nodes.ToList()),
                 EvaluationForBinaryTree.GetSubassemblyCenterOfMass(nodes.ToList()));
             MemoData D = new MemoData(0, sa);
+
+            if (Memo.ContainsKey(nodes))
+            {
+                nodes.ToList().ForEach(a =>  Console.WriteLine(a.ToString()));
+                return;
+            }
             lock (Memo)
             {
                 Memo.Add(nodes, D);
@@ -526,18 +530,18 @@ namespace Plan_Generation
                     continue;
                 }
                 TC.RefNodes =
-                    new HashSet<Component>(TC.sa.Install.Reference.PartNames.Select(n => (Component)Graph[n]));
+                    new HashSet<Component>(TC.sa.Install.Reference.PartNames.Select(n => (Component) Graph[n]));
                 TC.MovNodes =
-                    new HashSet<Component>(TC.sa.Install.Moving.PartNames.Select(n => (Component)Graph[n]));
+                    new HashSet<Component>(TC.sa.Install.Moving.PartNames.Select(n => (Component) Graph[n]));
                 //if (Math.Min (TC.RefNodes.Count, TC.MovNodes.Count) > 21)	//example constraint
                 //	continue;
                 var HR = H(TC.RefNodes);
                 var HM = H(TC.MovNodes);
                 TC.G = parentTransitionCost +
-                       FinalTimeWeight *
+                       FinalTimeWeight*
                        (TC.sa.Install.Time + TC.sa.MoveRoate.Time +
-                        Program.UncertaintyWeightChosenByUser * (TC.sa.Install.TimeSD + TC.sa.MoveRoate.TimeSD)) +
-                       FinalStableWeight * TC.sa.InternalStabilityInfo.Totalsecore;
+                        Program.UncertaintyWeightChosenByUser*(TC.sa.Install.TimeSD + TC.sa.MoveRoate.TimeSD)) +
+                       FinalStableWeight*TC.sa.InternalStabilityInfo.Totalsecore;
                 TC.H = Math.Max(HR, HM);
                 TC.MovingH = HM;
                 TC.ReferenceH = HR;
@@ -584,7 +588,7 @@ namespace Plan_Generation
             foreach (Connection arc in tempHy.IntraArcs.Where(a => a is Connection))
                 filteredDirections.AddRange(arc.InfiniteDirections.Where(id => !filteredDirections.Contains(id)));
             filteredDirections.AddRange(
-                filteredDirections.Select(f => StartProcess.DirectionsAndOppositsForGlobalpool[f])
+                filteredDirections.Select(f => DisassemblyDirections.DirectionsAndOppositsForGlobalpool[f])
                     .Where(id => !filteredDirections.Contains(id)).ToList());
             Graph.removeHyperArc(tempHy);
             foreach (var cndDirInd in filteredDirections)
@@ -615,7 +619,7 @@ namespace Plan_Generation
             foreach (Connection arc in hy.IntraArcs.Where(a => a is Connection))
             {
                 HashSet<Component> arcnodes =
-                    new HashSet<Component>(new Component[] { (Component)arc.From, (Component)arc.To });
+                    new HashSet<Component>(new Component[] {(Component) arc.From, (Component) arc.To});
                 Values.Add(Memo[arcnodes].Value);
             }
             Graph.removeHyperArc(hy);
@@ -632,8 +636,8 @@ namespace Plan_Generation
         {
             foreach (Connection arc in Graph.arcs.Where(a => a is Connection))
             {
-                var Asm = new HashSet<Component>(new Component[] { (Component)arc.From, (Component)arc.To });
-                var Fr = new List<Component>(new Component[] { (Component)arc.From });
+                var Asm = new HashSet<Component>(new Component[] {(Component) arc.From, (Component) arc.To});
+                var Fr = new List<Component>(new Component[] {(Component) arc.From});
                 var dirs = new HashSet<int>(arc.InfiniteDirections);
                 SubAssembly sa;
                 if (AssemblyEvaluator.EvaluateSub(Graph, Asm, Fr, dirs, out sa) > 0)
@@ -649,8 +653,8 @@ namespace Plan_Generation
 
             foreach (var node in Graph.nodes)
             {
-                var component = (Component)node;
-                var N = new HashSet<Component>(new[] { component });
+                var component = (Component) node;
+                var N = new HashSet<Component>(new[] {component});
                 var sa = new SubAssembly(N, EvaluationForBinaryTree.ConvexHullsForParts[component.name], component.Mass,
                     component.Volume, new Vertex(component.CenterOfMass));
                 MemoData D = new MemoData(0, sa);
@@ -668,7 +672,7 @@ namespace Plan_Generation
                 var combinations = CombinationFinder(i);
                 var column = new HashSet<HashSet<Component>>();
                 foreach (var comb in combinations)
-                //Parallel.ForEach(combinations, comb =>
+                    //Parallel.ForEach(combinations, comb =>
                 {
                     foreach (var subAssem1 in newMemo[comb[0] - 1])
                     {
@@ -742,8 +746,8 @@ namespace Plan_Generation
             var column = new HashSet<HashSet<Component>>();
             foreach (var node in Graph.nodes)
             {
-                var component = (Component)node;
-                var N = new HashSet<Component>(new[] { component });
+                var component = (Component) node;
+                var N = new HashSet<Component>(new[] {component});
                 var sa = new SubAssembly(N, EvaluationForBinaryTree.ConvexHullsForParts[component.name], component.Mass,
                     component.Volume, new Vertex(component.CenterOfMass));
                 MemoData D = new MemoData(0, sa);
@@ -757,8 +761,8 @@ namespace Plan_Generation
             column = new HashSet<HashSet<Component>>();
             foreach (Connection arc in Graph.arcs.Where(a => a is Connection))
             {
-                var Asm = new HashSet<Component>(new Component[] { (Component)arc.From, (Component)arc.To });
-                var Fr = new List<Component>(new Component[] { (Component)arc.From });
+                var Asm = new HashSet<Component>(new Component[] {(Component) arc.From, (Component) arc.To});
+                var Fr = new List<Component>(new Component[] {(Component) arc.From});
                 var dirs = new HashSet<int>(arc.InfiniteDirections);
                 SubAssembly sa;
                 if (AssemblyEvaluator.EvaluateSub(Graph, Asm, Fr, dirs, out sa) > 0)
@@ -787,7 +791,7 @@ namespace Plan_Generation
                 else
                 {
                     var opposities =
-                        seConn.Directions.Select(d => StartProcess.DirectionsAndOppositsForGlobalpool[d]);
+                        seConn.Directions.Select(d => DisassemblyDirections.DirectionsAndOppositsForGlobalpool[d]);
                     dirs.RemoveWhere(d => ContainsADirection(new HashSet<int>(opposities), d));
                 }
             }
@@ -806,7 +810,7 @@ namespace Plan_Generation
                 {
                     var opposities =
                         connection.InfiniteDirections.Select(
-                            inD => StartProcess.DirectionsAndOppositsForGlobalpool[inD]);
+                            inD => DisassemblyDirections.DirectionsAndOppositsForGlobalpool[inD]);
                     union.UnionWith(opposities.Where(d => !union.Contains(d)));
                 }
             }
@@ -819,7 +823,7 @@ namespace Plan_Generation
                 dirs.Any(
                     dir =>
                         Math.Abs(1 -
-                                 StartProcess.Directions[dir].dotProduct(StartProcess.Directions[d])) <
+                                 DisassemblyDirections.Directions[dir].dotProduct(DisassemblyDirections.Directions[d])) <
                         OverlappingFuzzification.CheckWithGlobDirsParall2)) return true;
             return false;
         }
@@ -830,7 +834,7 @@ namespace Plan_Generation
             if (num == 1) return list;
             for (var i = 1; i < num; i++)
                 for (var j = i; j < num; j++)
-                    if (i + j == num) list.Add(new[] { i, j });
+                    if (i + j == num) list.Add(new[] {i, j});
             return list;
         }
 
@@ -1032,15 +1036,15 @@ namespace Plan_Generation
                     globalDirPool.Where(
                         dir2 =>
                             Math.Abs(1 -
-                                     StartProcess.Directions[dir2].dotProduct(
-                                         StartProcess.Directions[dir])) <
+                                     DisassemblyDirections.Directions[dir2].dotProduct(
+                                         DisassemblyDirections.Directions[dir])) <
                             OverlappingFuzzification.CheckWithGlobDirsParall2);
                 var parallelAndOppos =
                     globalDirPool.Where(
                         dir2 =>
                             Math.Abs(1 +
-                                     StartProcess.Directions[dir2].dotProduct(
-                                         StartProcess.Directions[dir])) <
+                                     DisassemblyDirections.Directions[dir2].dotProduct(
+                                         DisassemblyDirections.Directions[dir])) <
                             OverlappingFuzzification.CheckWithGlobDirsParall2);
                 var parallels = new HashSet<int>(parallelAndSame);
                 parallels.UnionWith(parallelAndOppos);
@@ -1055,9 +1059,9 @@ namespace Plan_Generation
             var partsCount = Program.AssemblyGraph.nodes.Count;
             var baseCount = 8 - Math.Log(partsCount);
             if (baseCount < 0) Program.BeamWidth = 1;
-            else if (partsCount < 12) Program.BeamWidth = 16 * (int)Math.Floor(baseCount);
-            else if (partsCount < 25) Program.BeamWidth = 8 * (int)Math.Floor(baseCount);
-            else Program.BeamWidth = 8 * (int)Math.Floor(baseCount / 2.0);
+            else if (partsCount < 12) Program.BeamWidth = 16*(int)Math.Floor(baseCount);
+            else if (partsCount < 25) Program.BeamWidth = 8*(int)Math.Floor(baseCount);
+            else Program.BeamWidth = 8*(int)Math.Floor(baseCount / 2.0);
         }
     }
     class LeapCandidate : IComparable<LeapCandidate>

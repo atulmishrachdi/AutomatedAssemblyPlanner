@@ -1,4 +1,4 @@
-﻿using BaseClasses.Representation;
+﻿using GraphSynth.Representation;
 using MIConvexHull;
 using System;
 using System.CodeDom;
@@ -7,12 +7,10 @@ using System.Linq;
 using System.Xml.Serialization;
 //using System.Runtime.InteropServices.WindowsRuntime;
 using StarMathLib;
-using BaseClasses;
-using BaseClasses.AssemblyEvaluation;
+using Assembly_Planner.GraphSynth.BaseClasses;
 using TVGL;
-using Constants = BaseClasses.AssemblyEvaluation.Constants;
 
-namespace BaseClasses.AssemblyEvaluation
+namespace Assembly_Planner
 {
     public class AssemblySequence
     {
@@ -211,18 +209,18 @@ namespace BaseClasses.AssemblyEvaluation
             /* if the former face area does not take up a significant portion of 
              * the new faces then we do not have the confidence to make the judgement
              * based on this fact. */
-            if (formerFacesArea / totalFaceArea > Constants.Values.CVXFormerFaceConfidence)
+            if (formerFacesArea / totalFaceArea > Constants.CVXFormerFaceConfidence)
             {
                 /* there are two check here: if the common area is very small, we assume the 
                  * subassembly is inside the other. If not, maybe it is more on the outside
                  * but a smaller effect on resulting convex hull. */
-                if (refFaceArea / formerFacesArea < Constants.Values.CVXOnInsideThreshold)
+                if (refFaceArea / formerFacesArea < Constants.CVXOnInsideThreshold)
                     return InstallCharacterType.ReferenceIsInsideMoving;
-                if (movingFaceArea / formerFacesArea < Constants.Values.CVXOnInsideThreshold)
+                if (movingFaceArea / formerFacesArea < Constants.CVXOnInsideThreshold)
                     return InstallCharacterType.MovingIsInsideReference;
-                if (refFaceArea / formerFacesArea < Constants.Values.CVXOnOutsideThreshold)
+                if (refFaceArea / formerFacesArea < Constants.CVXOnOutsideThreshold)
                     return InstallCharacterType.ReferenceIsOnOutsideOfMoving;
-                if (movingFaceArea / formerFacesArea < Constants.Values.CVXOnOutsideThreshold)
+                if (movingFaceArea / formerFacesArea < Constants.CVXOnOutsideThreshold)
                     return InstallCharacterType.MovingIsOnOutsideOfReference;
             }
                 /* if we cannot confidently use face area then we switch to comparing
@@ -295,26 +293,14 @@ namespace BaseClasses.AssemblyEvaluation
         }
 
 
-        /// <summary>
-        /// Creates the combined convex hull.
-        /// </summary>
-        /// <param name="refCVXHull">The reference CVX hull.</param>
-        /// <param name="movingCVXHull">The moving CVX hull.</param>
-        /// <returns>TVGLConvexHull.</returns>
-        public static TVGLConvexHull CreateCombinedConvexHull(TVGLConvexHull refCVXHull, TVGLConvexHull movingCVXHull)
+        private TVGLConvexHull CreateCombinedConvexHull(TVGLConvexHull refCVXHull, TVGLConvexHull movingCVXHull)
         {
-            var pointCloud = new List<TVGL.Vertex>(refCVXHull.Vertices);
+            var pointCloud = new List<Vertex>(refCVXHull.Vertices);
             pointCloud.AddRange(movingCVXHull.Vertices);
-            return new TVGLConvexHull(pointCloud, 1e-10);
+            return new TVGLConvexHull(pointCloud, 1e-8);
         }
 
-        /// <summary>
-        /// Creates the combined convex hull2.
-        /// </summary>
-        /// <param name="nodes">The nodes.</param>
-        /// <param name="convexHullForParts">The convex hull for parts.</param>
-        /// <returns>TVGLConvexHull.</returns>
-        public static TVGLConvexHull CreateCombinedConvexHull2(List<Component> nodes, Dictionary<string, TVGLConvexHull> convexHullForParts)
+        private TVGLConvexHull CreateCombinedConvexHull2(List<Component> nodes, Dictionary<string, TVGLConvexHull> convexHullForParts)
         {
             var pointCloud = new List<Vertex>();
             foreach (var n in nodes)
@@ -322,7 +308,7 @@ namespace BaseClasses.AssemblyEvaluation
                 var nodeName = n.name;
                 pointCloud.AddRange(convexHullForParts[nodeName].Vertices);
             }
-            return new TVGLConvexHull(pointCloud, 1e-10);
+            return new TVGLConvexHull(pointCloud, 1e-8);
         }
 
 

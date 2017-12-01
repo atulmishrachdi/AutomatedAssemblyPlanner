@@ -1,11 +1,11 @@
-﻿using BaseClasses;
-using BaseClasses.Representation;
+﻿using GraphSynth;
+using GraphSynth.Representation;
 using System;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 
-namespace BaseClasses.AssemblyEvaluation
+namespace Assembly_Planner
 {
     public class AssemblyCandidate : candidate
     {

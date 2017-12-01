@@ -1,0 +1,39 @@
+html{
+	height: 98%;
+	width: 98%;
+}
+element{
+	padding: 0px;
+	border: 0px;
+	margin: 0px;
+}
+#theBody{
+	background-color: #aaaaaa;
+	position: relative;
+	height: 98%;
+	width: 98%;
+}
+#fileinput{
+	color: black;
+}
+#display{
+	height: 50%;
+	display: block;
+}
+button{
+	display: block;
+	width: 150px;
+	background-color: #DDDDDD;
+	border: 1px solid #888888;
+	color: #444444;
+	padding: 5px 8px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 12px;
+}
+button:hover{
+	color: #000000;
+	background-color: #EEEEEE;
+	border: 1px dashed #AAAAAA;
+}

@@ -1,23 +1,19 @@
-﻿using System;
+﻿using GraphSynth.Representation;
+using StarMathLib;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
-using BaseClasses;
-using BaseClasses.Representation;
-using StarMathLib;
 using TVGL;
 
-namespace Geometric_Reasoning
+namespace Assembly_Planner
 {
-    public class BlockingDetermination
+    internal class BlockingDetermination
     {
         public static List<OverlappedSurfaces> OverlappingSurfaces = new List<OverlappedSurfaces>();
 
-        public static Dictionary<TessellatedSolid, List<PrimitiveSurface>> PrimitiveMaker(List<TessellatedSolid> parts)
+        internal static Dictionary<TessellatedSolid, List<PrimitiveSurface>> PrimitiveMaker(List<TessellatedSolid> parts)
         {
             Console.WriteLine();
             Console.WriteLine("Classifying Primitives for " + parts.Count + " unique parts ....");
@@ -27,23 +23,23 @@ namespace Geometric_Reasoning
             int width = 55;
             int refresh = (int) Math.Ceiling(((float) parts.Count) / ((float)(width)) );
             int check = 0;
-            //LoadingBar.start(width, 0);
+            LoadingBar.start(width, 0);
 
             Parallel.ForEach(parts, solid =>
             //foreach (var solid in parts)
             {
                 if (check % refresh == 0)
                 {
-                    //LoadingBar.refresh(width, ((float)check) / ((float)parts.Count));
+                    LoadingBar.refresh(width, ((float)check) / ((float)parts.Count));
                 }
                 check++;
 
-                var solidPrim = TVGL.Primitive_Classification.Run(solid);
+                var solidPrim = solid.ClassifyPrimitiveSurfaces(true);
                 lock (partPrimitive)
                     partPrimitive.Add(solid, solidPrim);
             }
              );//
-            //LoadingBar.refresh(width, 1);
+            LoadingBar.refresh(width, 1);
             return partPrimitive;
         }
 
@@ -74,7 +70,7 @@ namespace Geometric_Reasoning
             }
             return geometriesToBeClassified;
         }
-        public static bool DefineBlocking(TessellatedSolid solid1, TessellatedSolid solid2,
+        internal static bool DefineBlocking(TessellatedSolid solid1, TessellatedSolid solid2,
             List<int> globalDirPool, List<int> localDirInd, out double certainty)
         {
 
@@ -91,8 +87,8 @@ namespace Geometric_Reasoning
                                 final.Any(
                                     d =>
                                         1 -
-                                        StartProcess.Directions[d].dotProduct(
-                                            StartProcess.Directions[i]) < 0.07)) continue;
+                                        DisassemblyDirections.Directions[d].dotProduct(
+                                            DisassemblyDirections.Directions[i]) < 0.07)) continue;
                             final.Add(i);
                         }
                         lock (globalDirPool)
@@ -116,8 +112,8 @@ namespace Geometric_Reasoning
                                     globalDirPool.Where(
                                         d =>
                                             1 -
-                                            StartProcess.Directions[d].dotProduct(
-                                                StartProcess.Directions[i]) < 0.01).ToList();
+                                            DisassemblyDirections.Directions[d].dotProduct(
+                                                DisassemblyDirections.Directions[i]) < 0.01).ToList();
                                 if (!temp.Any())
                                 {
                                     if (!finalLocalDirInd.Contains(i))
@@ -211,18 +207,18 @@ namespace Geometric_Reasoning
             foreach (var dir in mainDris)
             {
                 var index = -1;
-                for (var i = 0; i < StartProcess.Directions.Count; i++)
+                for (var i = 0; i < DisassemblyDirections.Directions.Count; i++)
                 {
-                    var d = StartProcess.Directions[i];
+                    var d = DisassemblyDirections.Directions[i];
                     if (d[0] == dir[0] && d[1] == dir[1] && d[2] == dir[2]) index = i;
                 }
                 if (!finalLocalDirInd.Contains(index))
                 {
-                    var firstFilter = temp.Where(d => 1 - dir.dotProduct(StartProcess.Directions[d]) <= 0.07).ToList();
+                    var firstFilter = temp.Where(d => 1 - dir.dotProduct(DisassemblyDirections.Directions[d]) <= 0.07).ToList();
                     if (firstFilter.Any())
                     {
                         var secondFilter =
-                            firstFilter.Where(d => 1 - dir.dotProduct(StartProcess.Directions[d]) <= 0.007)
+                            firstFilter.Where(d => 1 - dir.dotProduct(DisassemblyDirections.Directions[d]) <= 0.007)
                                 .ToList();
                         finalLocalDirInd.Add(index);
                         if (!globalDirPool.Contains(index)) globalDirPool.Add(index);
@@ -294,13 +290,13 @@ namespace Geometric_Reasoning
                                 continue;
                         }
                         var delete1 =
-                            localDirInd.Where(dir => a.Normal.dotProduct(StartProcess.Directions[dir]) < -0.06).ToList();
+                            localDirInd.Where(dir => a.Normal.dotProduct(DisassemblyDirections.Directions[dir]) < -0.06).ToList();
                         List<int> delete2;
                         if (Math.Abs(a.Normal.dotProduct(newNorm) - 1) < 0.000001)
                             delete2 = delete1;
                         else
                             delete2 =
-                            localDirInd.Where(dir => newNorm.dotProduct(StartProcess.Directions[dir]) < -0.06).ToList();
+                            localDirInd.Where(dir => newNorm.dotProduct(DisassemblyDirections.Directions[dir]) < -0.06).ToList();
                         if (delete1.Count() < delete2.Count())
                         {
                             foreach (var i1 in delete1)
@@ -324,9 +320,9 @@ namespace Geometric_Reasoning
             foreach (var tto in triTriOver)
             {
                 var prim1 =
-                    StartProcess.SolidPrimitive[solid1].Where(sp => sp.Faces.Contains(tto[0])).ToList();
+                    DisassemblyDirectionsWithFastener.SolidPrimitive[solid1].Where(sp => sp.Faces.Contains(tto[0])).ToList();
                 var prim2 =
-                    StartProcess.SolidPrimitive[solid2].Where(sp => sp.Faces.Contains(tto[1])).ToList();
+                    DisassemblyDirectionsWithFastener.SolidPrimitive[solid2].Where(sp => sp.Faces.Contains(tto[1])).ToList();
                 if (!prim1.Any() || !prim2.Any()) continue;
                 if (primOver.Any(p => p[0] == prim1[0] && p[1] == prim2[0])) continue;
                 primOver.Add(new[] { prim1[0], prim2[0] });
@@ -402,7 +398,66 @@ namespace Geometric_Reasoning
             }
         }
 
-        public static bool TriangleOverlapping(PolygonalFace tri1, PolygonalFace tri2)
+        internal static bool ProximityFastener(TessellatedSolid solid1, TessellatedSolid solid2)
+        {
+            var OverlapAABBPartitions = new List<PartitionAABB[]>();
+            PartitionOverlapFinder(PartitioningSolid.PartitionsAABB[solid1], PartitioningSolid.PartitionsAABB[solid2], OverlapAABBPartitions);
+            var memoFace = new HashSet<HashSet<PolygonalFace>>(HashSet<PolygonalFace>.CreateSetComparer());
+            var counter1 = 0;
+            var counter2 = 0;
+            var counter3 = 0;
+            var counter4 = 0;
+            // first one is for solid1, second one is for solid2
+            var finalProb = 0.0;
+
+            foreach (var overlapPrtn in OverlapAABBPartitions)
+            {
+                foreach (var a in overlapPrtn[0].SolidTriangles)
+                {
+                    if (a.Vertices.Count < 3) continue;
+                    foreach (var b in overlapPrtn[1].SolidTriangles)
+                    {
+                        if (b.Vertices.Count < 3) continue;
+                        var newSet = new HashSet<PolygonalFace> { a, b };
+                        if (memoFace.Contains(newSet)) continue;
+                        memoFace.Add(newSet);
+                        counter1++;
+                        var localProb = 0.0;
+                        var parallel = Math.Abs(a.Normal.dotProduct(b.Normal) + 1);
+                        var probPara = OverlappingFuzzification.FuzzyProbabilityCalculator(0.0055, 0.01, parallel);
+                        if (probPara == 0) continue; // 0.0055
+                        // if they are on the wrong side of each other
+                        if (a.Vertices.All(av => (av.Position.subtract(b.Vertices[0].Position)).dotProduct(b.Normal) < 0.0) ||
+                            b.Vertices.All(bv => (bv.Position.subtract(a.Vertices[0].Position)).dotProduct(a.Normal) < 0.0)) continue;
+                        counter2++;
+                        var aAverageEdgeLength = a.Edges.Sum(e => e.Length) / 3.0;
+                        var bAverageEdgeLength = b.Edges.Sum(e => e.Length) / 3.0;
+                        var q = a.Center;
+                        var p = b.Center;
+                        var pq = q.subtract(p);
+                        var qp = p.subtract(q);
+                        var devisionFactor = Math.Min(aAverageEdgeLength, bAverageEdgeLength);
+                        var samePlane1 = Math.Abs(pq.dotProduct(a.Normal)) / devisionFactor; // I need to devide it by a better factor
+                        var samePlane2 = Math.Abs(qp.dotProduct(b.Normal)) / devisionFactor;
+                        var probPlane1 = OverlappingFuzzification.FuzzyProbabilityCalculator(0.1, 0.6, samePlane1); //0.4, 0.5
+                        var probPlane2 = OverlappingFuzzification.FuzzyProbabilityCalculator(0.1, 0.6, samePlane2); //0.4, 0.5
+                        if (probPlane1 == 0 && probPlane2 == 0) continue; //0.11 //0.005
+                        counter3++;
+                        if (!TriangleOverlapping(a, b)) continue;
+                        return true;
+                    }
+                }
+            }
+            if (counter3 > 0)
+                Fastener.PotentialCollisionOfFastenerAndSolid.Add(solid2.Name);
+            else if (counter2 > 0)
+                Fastener.PotentialCollisionOfFastenerAndSolidStep2.Add(solid2.Name);
+            else if (counter1 > 0)
+                Fastener.PotentialCollisionOfFastenerAndSolidStep3.Add(solid2.Name);
+            return false;
+        }
+
+        internal static bool TriangleOverlapping(PolygonalFace tri1, PolygonalFace tri2)
         {
             var edges1 = new HashSet<Vertex[]>();
             var edges2 = new HashSet<Vertex[]>();
@@ -467,7 +522,7 @@ namespace Geometric_Reasoning
         {
             return p.Position.subtract(r.Position).crossProduct(q.Position.subtract(r.Position));
         }
-        public static void PartitionOverlapFinder(PartitionAABB[] partitionAABB1, PartitionAABB[] partitionAABB2, List<PartitionAABB[]> overlapAabbPartitions)
+        private static void PartitionOverlapFinder(PartitionAABB[] partitionAABB1, PartitionAABB[] partitionAABB2, List<PartitionAABB[]> overlapAabbPartitions)
         {
             foreach (var prtn1 in partitionAABB1)
             {
@@ -544,7 +599,7 @@ namespace Geometric_Reasoning
                    assemblyGraph[solid2.Name].localLabels.Contains(DisConstants.Gear);
         }
 
-        public static bool ConvexHullOverlap(TessellatedSolid a, TessellatedSolid b)
+        internal static bool ConvexHullOverlap(TessellatedSolid a, TessellatedSolid b)
         {
             foreach (var f in a.ConvexHull.Faces)
             {
@@ -561,7 +616,7 @@ namespace Geometric_Reasoning
             return true;
         }
 
-        public static bool BoundingBoxOverlap(TessellatedSolid a, TessellatedSolid b)
+        internal static bool BoundingBoxOverlap(TessellatedSolid a, TessellatedSolid b)
         {
             var aveXLength = (Math.Abs(a.XMax - a.XMin) + Math.Abs(b.XMax - b.XMin)) / 2.0;
             var aveYLength = (Math.Abs(a.YMax - a.YMin) + Math.Abs(b.YMax - b.YMin)) / 2.0;
@@ -581,10 +636,10 @@ namespace Geometric_Reasoning
         internal static List<int> NormalIndexInGlobalDirns(double[] p)
         {
             var dirs =
-                StartProcess.Directions.Where(
+                DisassemblyDirections.Directions.Where(
                     globalDirn => 1 - Math.Abs(p.dotProduct(globalDirn)) < OverlappingFuzzification.EqualToZeroL)
                     .ToList();
-            return dirs.Select(dir => StartProcess.Directions.IndexOf(dir)).ToList();
+            return dirs.Select(dir => DisassemblyDirections.Directions.IndexOf(dir)).ToList();
         }
 
 
@@ -673,7 +728,7 @@ namespace Geometric_Reasoning
                     counter1++;
                     for (var k = 0; k < localDirInd.Count; k++)
                     {
-                        var dir = StartProcess.Directions[localDirInd[k]];
+                        var dir = DisassemblyDirections.Directions[localDirInd[k]];
                         if (a.Normal.dotProduct(dir) < -0.04)
                         {
                             localDirInd.Remove(localDirInd[k]);
@@ -690,7 +745,7 @@ namespace Geometric_Reasoning
                 if (
                     final.Any(
                         d =>
-                            1 - StartProcess.Directions[d].dotProduct(StartProcess.Directions[i]) <
+                            1 - DisassemblyDirections.Directions[d].dotProduct(DisassemblyDirections.Directions[i]) <
                             0.05)) continue;
                 final.Add(i);
             }
@@ -700,27 +755,27 @@ namespace Geometric_Reasoning
         }
     }
 
-    public class OverlappedSurfaces
+    internal class OverlappedSurfaces
     {
         // This class is written for Weifeng's stability code
         /// <summary>
         /// Gets or sets the Solid1.
         /// </summary>
         /// <value>The Solid1.</value>
-        public TessellatedSolid Solid1 { set; get; }
+        internal TessellatedSolid Solid1 { set; get; }
 
         /// <summary>
         /// Gets or sets the Solid2.
         /// </summary>
         /// <value>The Solid2.</value>
-        public TessellatedSolid Solid2 { set; get; }
+        internal TessellatedSolid Solid2 { set; get; }
 
         /// <summary>
         /// The first element of array is surface of the Solid1 and
         /// the second one is surface of Solid2
         /// </summary>
         /// <value>The Overlapping surfaces</value>
-        public List<PrimitiveSurface[]> Overlappings {set; get;} 
+        internal List<PrimitiveSurface[]> Overlappings {set; get;} 
 
     }
 }

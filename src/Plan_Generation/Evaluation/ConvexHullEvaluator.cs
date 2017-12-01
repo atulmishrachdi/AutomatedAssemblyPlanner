@@ -5,13 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BaseClasses;
-using BaseClasses.AssemblyEvaluation;
+using GraphSynth.Representation;
 using MIConvexHull;
 using StarMathLib;
 using TVGL;
 
-namespace Plan_Generation.AssemblyEvaluation
+namespace Assembly_Planner
 {
     public class ConvexHullEvaluator
     {

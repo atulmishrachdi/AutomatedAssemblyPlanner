@@ -1,0 +1,23 @@
+
+
+#loadText{
+    margin:auto;
+    font-size: 32px;
+}
+
+#loadContainer{
+    margin:auto;
+    width: 95%;
+    background-color: #060606;
+    border-width: 1px 1px 1px 1px;
+    border-color: #000000
+}
+
+#loadProgress{
+    background-color: #000000;
+}
+
+#loadPercent{
+    margin:auto;
+    font-size: 24px;
+}

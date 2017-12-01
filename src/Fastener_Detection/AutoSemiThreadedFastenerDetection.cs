@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BaseClasses;
-using Geometric_Reasoning;
 using TVGL;
 
-namespace Fastener_Detection
+namespace Assembly_Planner
 {
     internal class AutoSemiThreadedFastenerDetection
     {
@@ -17,9 +15,9 @@ namespace Fastener_Detection
         {
             var width = 55;
             var check = 0;
-            //LoadingBar.start(width, 0);
+            LoadingBar.start(width, 0);
 
-            var smallParts = FastenerDetector.SmallObjectsDetector(Geometric_Reasoning.StartProcess.PartsWithOneGeom);
+            var smallParts = FastenerDetector.SmallObjectsDetector(DisassemblyDirectionsWithFastener.PartsWithOneGeom);
 
             PreSelectedFastenerToFastenerClass(solidPrimitive, multipleRefs);
             foreach (
@@ -63,7 +61,7 @@ namespace Fastener_Detection
             {
                 if (check % refresh == 0)
                 {
-                    //LoadingBar.refresh(width, ((float)check) / ((float)uniqueParts.Count));
+                    LoadingBar.refresh(width, ((float)check) / ((float)uniqueParts.Count));
                 }
                 check++;
 
@@ -221,8 +219,7 @@ namespace Fastener_Detection
                 );
             // now use groupped small objects:
             AutoNonthreadedFastenerDetection.ConnectFastenersNutsAndWashers(groupedPotentialFasteners);
-            //LoadingBar.refresh(width, 1);
-            Console.WriteLine("\n");
+            LoadingBar.refresh(width, 1);
         }
 
         private static void AddThreadedOrNonthreadedFastener(TessellatedSolid solid, List<TessellatedSolid> repeated,

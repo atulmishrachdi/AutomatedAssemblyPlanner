@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<parts_properties xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <part_properties>
+    <name>PumpAssembly - PumpExtention-2 PinL-1</name>
+    <mass>0</mass>
+    <volume>691.06266269328137</volume>
+    <surface_area>724.6411751994101</surface_area>
+    <fastener_certainty>0.15868950513591384</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>PumpAssembly - PumpExtention-2 PinL-2</name>
+    <mass>0</mass>
+    <volume>691.06293335684632</volume>
+    <surface_area>724.64268187091454</surface_area>
+    <fastener_certainty>0.15868950513591384</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>PumpAssembly - PumpExtention-2 InnerRing-1</name>
+    <mass>0</mass>
+    <volume>11765.593009158023</volume>
+    <surface_area>5493.7407504084695</surface_area>
+    <fastener_certainty>0.14786550519456484</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>PumpAssembly - PumpExtention-2 Pipe-1</name>
+    <mass>0</mass>
+    <volume>23429.125261532965</volume>
+    <surface_area>19277.410000249893</surface_area>
+    <fastener_certainty>0</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>PumpAssembly - BackLid2-1</name>
+    <mass>0</mass>
+    <volume>33265.374685943185</volume>
+    <surface_area>34573.661082466017</surface_area>
+    <fastener_certainty>0</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>PumpAssembly - LargeScrew2-1</name>
+    <mass>0</mass>
+    <volume>6264.4395638903416</volume>
+    <surface_area>2133.5845344156915</surface_area>
+    <fastener_certainty>0.24003200411796569</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>PumpAssembly - LargeScrew1-1</name>
+    <mass>0</mass>
+    <volume>6264.441235515078</volume>
+    <surface_area>2133.583896787999</surface_area>
+    <fastener_certainty>0.24003200411796569</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>PumpAssembly - Screw2-1</name>
+    <mass>0</mass>
+    <volume>486.15184812091468</volume>
+    <surface_area>456.15796712690388</surface_area>
+    <fastener_certainty>0.23695200413465506</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>PumpAssembly - Screw1-1</name>
+    <mass>0</mass>
+    <volume>486.15092175320513</volume>
+    <surface_area>456.1577125475917</surface_area>
+    <fastener_certainty>0.23695200413465506</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>PumpAssembly - PumpExtention-2 Side-1</name>
+    <mass>0</mass>
+    <volume>11513.611651923584</volume>
+    <surface_area>6072.4475924789913</surface_area>
+    <fastener_certainty>0</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>PumpAssembly - PumpExtention-2 Side-2</name>
+    <mass>0</mass>
+    <volume>11513.676329504862</volume>
+    <surface_area>6072.442881846624</surface_area>
+    <fastener_certainty>0</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>PumpAssembly - Screw3-1</name>
+    <mass>0</mass>
+    <volume>486.15196036514118</volume>
+    <surface_area>456.15820609132066</surface_area>
+    <fastener_certainty>0.23695200413465506</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>PumpAssembly - Ring-1</name>
+    <mass>0</mass>
+    <volume>1510.2224314450086</volume>
+    <surface_area>1640.4089000105205</surface_area>
+    <fastener_certainty>0.11895640732178725</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>PumpAssembly - Screw4-1</name>
+    <mass>0</mass>
+    <volume>486.14978999499954</volume>
+    <surface_area>456.15710258073625</surface_area>
+    <fastener_certainty>0.23695200413465506</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>PumpAssembly - PumpExtention-2 ShaftThrough-1</name>
+    <mass>0</mass>
+    <volume>36758.2617979176</volume>
+    <surface_area>8696.2935475101567</surface_area>
+    <fastener_certainty>0</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>PumpAssembly - Screw5-1</name>
+    <mass>0</mass>
+    <volume>486.15038462148073</volume>
+    <surface_area>456.15748149004855</surface_area>
+    <fastener_certainty>0.23695200413465506</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>PumpAssembly - Screw6-1</name>
+    <mass>0</mass>
+    <volume>232.38022423574273</volume>
+    <surface_area>252.40831721544339</surface_area>
+    <fastener_certainty>0.24909600406885143</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>PumpAssembly - Screw8-1</name>
+    <mass>0</mass>
+    <volume>232.37968240280145</volume>
+    <surface_area>252.40847770462059</surface_area>
+    <fastener_certainty>0.24909600406885143</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>PumpAssembly - ScrewLong-1</name>
+    <mass>0</mass>
+    <volume>859.59645532000127</volume>
+    <surface_area>658.55693429516248</surface_area>
+    <fastener_certainty>0.23167200416326528</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>PumpAssembly - Screw7-1</name>
+    <mass>0</mass>
+    <volume>232.38062023477588</volume>
+    <surface_area>252.40851658533302</surface_area>
+    <fastener_certainty>0.24909600406885143</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>PumpAssembly - ScrewLong-2</name>
+    <mass>0</mass>
+    <volume>859.59633240750088</volume>
+    <surface_area>658.55704294893724</surface_area>
+    <fastener_certainty>0.23167200416326528</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>PumpAssembly - ScrewLong-4</name>
+    <mass>0</mass>
+    <volume>859.597487916998</volume>
+    <surface_area>658.557557880708</surface_area>
+    <fastener_certainty>0.23167200416326528</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>PumpAssembly - Shaft-1</name>
+    <mass>0</mass>
+    <volume>156960.82627547983</volume>
+    <surface_area>19089.977592700572</surface_area>
+    <fastener_certainty>0</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>PumpAssembly - ScrewLong-3</name>
+    <mass>0</mass>
+    <volume>859.597798421499</volume>
+    <surface_area>658.55768434931929</surface_area>
+    <fastener_certainty>0.23167200416326528</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>PumpAssembly - Lid-1</name>
+    <mass>0</mass>
+    <volume>58145.329444492454</volume>
+    <surface_area>26315.877189062885</surface_area>
+    <fastener_certainty>0</fastener_certainty>
+  </part_properties>
+  <part_properties>
+    <name>PumpAssembly - Pump-1</name>
+    <mass>0</mass>
+    <volume>513533.4572726044</volume>
+    <surface_area>111769.58011501309</surface_area>
+    <fastener_certainty>0</fastener_certainty>
+  </part_properties>
+</parts_properties>

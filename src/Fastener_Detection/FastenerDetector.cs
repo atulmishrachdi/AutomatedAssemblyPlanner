@@ -29,7 +29,7 @@ namespace Fastener_Detection
             var s = Stopwatch.StartNew();
             s.Start();
             Console.WriteLine();
-            Console.WriteLine("\nDetecting Fasteners ....");
+            Console.WriteLine("\nDetecting Fasteners ....\n");
             Fasteners.Clear();
             Nuts.Clear();
             Washers.Clear();
