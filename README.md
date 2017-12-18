@@ -23,7 +23,7 @@ particularly user-friendly. So, an external visualization has been created which
 ## How do I get set up? ##
 Currently, the tool is not "live" on a website. However, you can run the software locally. Here are the steps to do so.
 1. Clone the repository 
-2. Open the file "Assembly Planner.sln" in visual studio. 
+2. Open the file "Assembly Planner.sln", which is located in the "src" directory, in visual studio. 
 3. Build the solution (e.g. compile the code).
 4. Download node.js (https://nodejs.org/) and install.
 5. With a command-line tool, navigate to the main folder and type "node server.js"
