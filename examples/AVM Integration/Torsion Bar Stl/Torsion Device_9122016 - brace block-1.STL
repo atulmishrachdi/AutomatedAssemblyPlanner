@@ -1,0 +1,86 @@
+solid Torsion Device_9122016 - brace block-1
+   facet normal -1.000000e+000 0.000000e+000 0.000000e+000
+      outer loop
+         vertex 8.147717e+000 1.652865e+001 3.662773e+000
+         vertex 8.147717e+000 1.652865e+001 4.662773e+000
+         vertex 8.147717e+000 1.727865e+001 3.662773e+000
+      endloop
+   endfacet
+   facet normal -1.000000e+000 0.000000e+000 0.000000e+000
+      outer loop
+         vertex 8.147717e+000 1.727865e+001 3.662773e+000
+         vertex 8.147717e+000 1.652865e+001 4.662773e+000
+         vertex 8.147717e+000 1.727865e+001 4.662773e+000
+      endloop
+   endfacet
+   facet normal 0.000000e+000 0.000000e+000 -1.000000e+000
+      outer loop
+         vertex 8.897717e+000 1.652865e+001 3.662773e+000
+         vertex 8.147717e+000 1.652865e+001 3.662773e+000
+         vertex 8.897717e+000 1.727865e+001 3.662773e+000
+      endloop
+   endfacet
+   facet normal 0.000000e+000 0.000000e+000 -1.000000e+000
+      outer loop
+         vertex 8.897717e+000 1.727865e+001 3.662773e+000
+         vertex 8.147717e+000 1.652865e+001 3.662773e+000
+         vertex 8.147717e+000 1.727865e+001 3.662773e+000
+      endloop
+   endfacet
+   facet normal 1.000000e+000 0.000000e+000 0.000000e+000
+      outer loop
+         vertex 8.897717e+000 1.652865e+001 4.662773e+000
+         vertex 8.897717e+000 1.652865e+001 3.662773e+000
+         vertex 8.897717e+000 1.727865e+001 4.662773e+000
+      endloop
+   endfacet
+   facet normal 1.000000e+000 0.000000e+000 0.000000e+000
+      outer loop
+         vertex 8.897717e+000 1.727865e+001 4.662773e+000
+         vertex 8.897717e+000 1.652865e+001 3.662773e+000
+         vertex 8.897717e+000 1.727865e+001 3.662773e+000
+      endloop
+   endfacet
+   facet normal 9.106160e-017 0.000000e+000 1.000000e+000
+      outer loop
+         vertex 8.147717e+000 1.652865e+001 4.662773e+000
+         vertex 8.897717e+000 1.652865e+001 4.662773e+000
+         vertex 8.147717e+000 1.727865e+001 4.662773e+000
+      endloop
+   endfacet
+   facet normal 9.106160e-017 0.000000e+000 1.000000e+000
+      outer loop
+         vertex 8.147717e+000 1.727865e+001 4.662773e+000
+         vertex 8.897717e+000 1.652865e+001 4.662773e+000
+         vertex 8.897717e+000 1.727865e+001 4.662773e+000
+      endloop
+   endfacet
+   facet normal 0.000000e+000 -1.000000e+000 0.000000e+000
+      outer loop
+         vertex 8.897717e+000 1.652865e+001 3.662773e+000
+         vertex 8.897717e+000 1.652865e+001 4.662773e+000
+         vertex 8.147717e+000 1.652865e+001 3.662773e+000
+      endloop
+   endfacet
+   facet normal 0.000000e+000 -1.000000e+000 0.000000e+000
+      outer loop
+         vertex 8.147717e+000 1.652865e+001 3.662773e+000
+         vertex 8.897717e+000 1.652865e+001 4.662773e+000
+         vertex 8.147717e+000 1.652865e+001 4.662773e+000
+      endloop
+   endfacet
+   facet normal 0.000000e+000 1.000000e+000 0.000000e+000
+      outer loop
+         vertex 8.897717e+000 1.727865e+001 4.662773e+000
+         vertex 8.897717e+000 1.727865e+001 3.662773e+000
+         vertex 8.147717e+000 1.727865e+001 4.662773e+000
+      endloop
+   endfacet
+   facet normal 0.000000e+000 1.000000e+000 0.000000e+000
+      outer loop
+         vertex 8.147717e+000 1.727865e+001 4.662773e+000
+         vertex 8.897717e+000 1.727865e+001 3.662773e+000
+         vertex 8.147717e+000 1.727865e+001 3.662773e+000
+      endloop
+   endfacet
+endsolid
