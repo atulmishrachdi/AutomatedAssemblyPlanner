@@ -1,5 +1,0 @@
-C:\Users\Matt Campbell\Documents\GitHub\AssemblyPlanner\src\PrimitiveClassificationOfTessellatedSolids\obj\Release\PrimitiveClassificationOfTessellatedSolids.csprojResolveAssemblyReference.cache
-C:\Users\Matt Campbell\Documents\GitHub\AssemblyPlanner\src\PrimitiveClassificationOfTessellatedSolids\obj\Release\PrimitiveClassificationOfTessellatedSolids.dll
-C:\Users\Matt Campbell\Documents\GitHub\AssemblyPlanner\src\PrimitiveClassificationOfTessellatedSolids\obj\Release\PrimitiveClassificationOfTessellatedSolids.pdb
-C:\Users\Matt Campbell\Documents\GitHub\AssemblyPlanner\PrimitiveClassificationOfTessellatedSolids.dll
-C:\Users\Matt Campbell\Documents\GitHub\AssemblyPlanner\PrimitiveClassificationOfTessellatedSolids.pdb

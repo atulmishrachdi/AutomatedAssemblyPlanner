@@ -1,0 +1,86 @@
+solid 000-UltraSoundMachine_Johnsonville - 700-LipTop-1 704-PlateBottom-1
+   facet normal 1.000000e+000 0.000000e+000 -1.673535e-016
+      outer loop
+         vertex 2.680695e+002 1.169900e+003 1.868925e+002
+         vertex 2.680695e+002 1.169900e+003 5.185925e+002
+         vertex 2.680695e+002 1.168400e+003 1.868925e+002
+      endloop
+   endfacet
+   facet normal 1.000000e+000 0.000000e+000 -1.673535e-016
+      outer loop
+         vertex 2.680695e+002 1.168400e+003 1.868925e+002
+         vertex 2.680695e+002 1.169900e+003 5.185925e+002
+         vertex 2.680695e+002 1.168400e+003 5.185925e+002
+      endloop
+   endfacet
+   facet normal 0.000000e+000 0.000000e+000 -1.000000e+000
+      outer loop
+         vertex 1.418195e+002 1.169900e+003 1.868925e+002
+         vertex 2.680695e+002 1.169900e+003 1.868925e+002
+         vertex 1.418195e+002 1.168400e+003 1.868925e+002
+      endloop
+   endfacet
+   facet normal 0.000000e+000 0.000000e+000 -1.000000e+000
+      outer loop
+         vertex 1.418195e+002 1.168400e+003 1.868925e+002
+         vertex 2.680695e+002 1.169900e+003 1.868925e+002
+         vertex 2.680695e+002 1.168400e+003 1.868925e+002
+      endloop
+   endfacet
+   facet normal -1.000000e+000 0.000000e+000 0.000000e+000
+      outer loop
+         vertex 1.418195e+002 1.169900e+003 5.185925e+002
+         vertex 1.418195e+002 1.169900e+003 1.868925e+002
+         vertex 1.418195e+002 1.168400e+003 5.185925e+002
+      endloop
+   endfacet
+   facet normal -1.000000e+000 0.000000e+000 0.000000e+000
+      outer loop
+         vertex 1.418195e+002 1.168400e+003 5.185925e+002
+         vertex 1.418195e+002 1.169900e+003 1.868925e+002
+         vertex 1.418195e+002 1.168400e+003 1.868925e+002
+      endloop
+   endfacet
+   facet normal 0.000000e+000 0.000000e+000 1.000000e+000
+      outer loop
+         vertex 2.680695e+002 1.169900e+003 5.185925e+002
+         vertex 1.418195e+002 1.169900e+003 5.185925e+002
+         vertex 2.680695e+002 1.168400e+003 5.185925e+002
+      endloop
+   endfacet
+   facet normal 0.000000e+000 0.000000e+000 1.000000e+000
+      outer loop
+         vertex 2.680695e+002 1.168400e+003 5.185925e+002
+         vertex 1.418195e+002 1.169900e+003 5.185925e+002
+         vertex 1.418195e+002 1.168400e+003 5.185925e+002
+      endloop
+   endfacet
+   facet normal 0.000000e+000 1.000000e+000 0.000000e+000
+      outer loop
+         vertex 1.418195e+002 1.169900e+003 1.868925e+002
+         vertex 1.418195e+002 1.169900e+003 5.185925e+002
+         vertex 2.680695e+002 1.169900e+003 1.868925e+002
+      endloop
+   endfacet
+   facet normal 0.000000e+000 1.000000e+000 0.000000e+000
+      outer loop
+         vertex 2.680695e+002 1.169900e+003 1.868925e+002
+         vertex 1.418195e+002 1.169900e+003 5.185925e+002
+         vertex 2.680695e+002 1.169900e+003 5.185925e+002
+      endloop
+   endfacet
+   facet normal 0.000000e+000 -1.000000e+000 0.000000e+000
+      outer loop
+         vertex 1.418195e+002 1.168400e+003 5.185925e+002
+         vertex 1.418195e+002 1.168400e+003 1.868925e+002
+         vertex 2.680695e+002 1.168400e+003 5.185925e+002
+      endloop
+   endfacet
+   facet normal 0.000000e+000 -1.000000e+000 0.000000e+000
+      outer loop
+         vertex 2.680695e+002 1.168400e+003 5.185925e+002
+         vertex 1.418195e+002 1.168400e+003 1.868925e+002
+         vertex 2.680695e+002 1.168400e+003 1.868925e+002
+      endloop
+   endfacet
+endsolid
