@@ -6,7 +6,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="old\Graph_Generation_Program.cs" />
+    <Compile Remove="old\PrimitivePrimitiveInteractions.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\AutomatedAssemblyPlannerLibrary\AutomatedAssemblyPlannerLibrary.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="old\" />
   </ItemGroup>
 
 </Project>

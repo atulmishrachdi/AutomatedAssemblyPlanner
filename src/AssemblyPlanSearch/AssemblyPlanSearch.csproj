@@ -6,7 +6,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="old\Plan_Generation_Program.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\AutomatedAssemblyPlannerLibrary\AutomatedAssemblyPlannerLibrary.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="old\" />
   </ItemGroup>
 
 </Project>
