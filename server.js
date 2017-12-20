@@ -395,23 +395,23 @@ app.post('/exec', (request, response) => {
     switch(stage){
         //================================//================================//==
         case "1":
-            execResponse(response,"FastenerDetection.exe",sessID,"","");
+            execResponse(response,"bin/netcoreapp2.0/FastenerDetection.exe",sessID,"","");
             break;
         //================================//================================//==
         case "3":
-            execResponse(response,	"DisassemblyDirections.exe",sessID,
+            execResponse(response,	"bin/netcoreapp2.0/DisassemblyDirections.exe",sessID,
 									sessData.filePath+sep+"XML"+sep+
 									"parts_properties2.xml",textData);
             break;
         //================================//================================//==
         case "5":
-            execResponse(response,	"Verification.exe",sessID,
+            execResponse(response,	"bin/netcoreapp2.0/Verification.exe",sessID,
 									sessData.filePath+sep+"XML"+sep+
 									"directionList2.xml",textData);
             break;
         //================================//================================//==
         case "6":
-            execResponse(response,	"AssemblyPlanning.exe",sessID,
+            execResponse(response,	"bin/netcoreapp2.0/AssemblyPlanning.exe",sessID,
 									sessData.filePath+sep+"XML"+sep+
 									"directionList2.xml",textData);
             break;
