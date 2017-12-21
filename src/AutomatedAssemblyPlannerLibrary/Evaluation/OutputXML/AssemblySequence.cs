@@ -243,10 +243,10 @@ namespace Assembly_Planner
             return 0.5 * v1.crossProduct(v2).norm2();
         }
 
-        private double GetSubassemblyMass(List<Component> Nodes)
+        internal static double GetSubassemblyMass(List<Component> Nodes)
         { return Nodes.Sum(n => GetPartMass(n)); }
 
-        private Vertex GetSubassemblyCenterOfMass(List<Component> Nodes)
+        internal static Vertex GetSubassemblyCenterOfMass(List<Component> Nodes)
         {
             var sumMx = 0.0;
             var sumMy = 0.0;
@@ -265,7 +265,7 @@ namespace Assembly_Planner
             return new Vertex(new[] { sumMx / M, sumMy / M, sumMz / M });
         }
 
-        private double GetPartMass(Component n)
+        private static double GetPartMass(Component n)
         {
             //var j = n.localVariables.IndexOf(-6000);
             //if (j == -1) return 0.0; //in case we don't have a weight tag, treat the part as zero instead
@@ -273,7 +273,7 @@ namespace Assembly_Planner
             return n.Mass;
         }
 
-        private Vertex GetPartCenterOfMass(Component n)
+        private static Vertex GetPartCenterOfMass(Component n)
         {
             //var j = n.localVariables.IndexOf(-6005);
             //if (j == -1) return null; //in case we don't have a center of mass tag, treat the part as zero instead
@@ -281,10 +281,10 @@ namespace Assembly_Planner
             return new Vertex(new[] { n.CenterOfMass[0], n.CenterOfMass[1], n.CenterOfMass[2] });
         }
 
-        private double GetSubassemblyVolume(List<Component> Nodes)
+        internal static double GetSubassemblyVolume(List<Component> Nodes)
         { return Nodes.Sum(n => GetPartVolume(n)); }
         
-        private double GetPartVolume(Component n)
+        private static double GetPartVolume(Component n)
         {
             //var j = n.localVariables.IndexOf(-6001);
             //if (j == -1) return 0.0; //in case we don't have a volume tag, treat the part as zero instead

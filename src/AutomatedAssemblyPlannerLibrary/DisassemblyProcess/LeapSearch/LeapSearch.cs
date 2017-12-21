@@ -441,9 +441,9 @@ namespace Assembly_Planner
             // this is for the time that I cannot disassemble some parts from each other.
             // what I do is that I take them as one part and add them to the memo
             var sa = new SubAssembly(nodes, EvaluationForBinaryTree.CreateCombinedConvexHull2(nodes.ToList()),
-                EvaluationForBinaryTree.GetSubassemblyMass(nodes.ToList()),
-                EvaluationForBinaryTree.GetSubassemblyVolume(nodes.ToList()),
-                EvaluationForBinaryTree.GetSubassemblyCenterOfMass(nodes.ToList()));
+                AssemblySequence.GetSubassemblyMass(nodes.ToList()),
+                AssemblySequence.GetSubassemblyVolume(nodes.ToList()),
+                AssemblySequence.GetSubassemblyCenterOfMass(nodes.ToList()));
             MemoData D = new MemoData(0, sa);
 
             if (Memo.ContainsKey(nodes))

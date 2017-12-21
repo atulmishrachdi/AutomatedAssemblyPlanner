@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data.OleDb;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AssemblyEvaluation;
-using Assembly_Planner.GraphSynth.BaseClasses;
+﻿using Assembly_Planner.GraphSynth.BaseClasses;
 using GraphSynth.Representation;
-using StarMathLib;
-using TVGL;
 using RandomGen;
+using StarMathLib;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using TVGL;
 using Component = Assembly_Planner.GraphSynth.BaseClasses.Component;
 
 
@@ -432,10 +427,10 @@ namespace Assembly_Planner
             }
             var allupforcePoints = MiscFunctions.Get2DProjectionPoints(allupforceVertices, tofaceNormal);
             var nodecomponent = (Component)refnode;
-            var forceCVH = MinimumEnclosure.ConvexHull2DMinimal(allupforcePoints);
+            var forceCVH = MinimumEnclosure.ConvexHull2D(allupforcePoints);
             var allWithCOM = MiscFunctions.Get2DProjectionPoints(new List<Vertex> { new Vertex(nodecomponent.CenterOfMass) }, tofaceNormal).ToList();
             allWithCOM.AddRange(allupforcePoints);
-            var forceandCMCVH = MinimumEnclosure.ConvexHull2DMinimal(allWithCOM);
+            var forceandCMCVH = MinimumEnclosure.ConvexHull2D(allWithCOM);
 
             var comlist1 = new List<double[]>();
             var comlist2 = new List<double[]>();
