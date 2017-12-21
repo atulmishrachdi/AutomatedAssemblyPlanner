@@ -1,11 +1,16 @@
-﻿using Assembly_Planner.GraphSynth.BaseClasses;
-using GraphSynth.Representation;
-using RandomGen;
-using StarMathLib;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data.OleDb;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using AssemblyEvaluation;
+using Assembly_Planner.GraphSynth.BaseClasses;
+using GraphSynth.Representation;
+using StarMathLib;
 using TVGL;
+using RandomGen;
 using Component = Assembly_Planner.GraphSynth.BaseClasses.Component;
 
 
@@ -28,7 +33,259 @@ namespace Assembly_Planner
             public FootprintFace FromFace;
             public SubAssembly FromSubAssembly;
         }
+        public static double EvaluateSubStability(designGraph graph, List<Component> optNodes, List<Component> rest,
+            SubAssembly sub, double[] Gravitydir)
+        {
 
+            var subassembly = new List<Component>();
+            var othersubassembly = new List<Component>();
+            double finalscore = 0;
+            var currentremovalindex = new List<int>();
+
+            var maxsigleDOF = 0.0;
+            var minTipDifficulty = 9.8;
+            var maxSlideDifficulty = double.NegativeInfinity;
+            var totaldof = new List<double>();
+            var AllTippingScore = new List<double>();
+            var AllSlidingScore = new List<double>();
+            var SumAllDOF = 0.0;
+
+            var dofinfo = new List<double>();
+            var tipinfo = new List<double>();
+            var slideinfo = new List<double>();
+
+            var alltsd = new List<double>();
+            var movingnames = new List<string>();
+            var referencenames = new List<string>();
+            var refarcs = new List<Connection>();
+
+            foreach (var n in optNodes)
+            {
+                referencenames.Add(n.name);
+            }
+            foreach (var n in rest)
+            {
+                movingnames.Add(n.name);
+            }
+
+            foreach (var n in optNodes)
+            {
+                var NodeRefarcs =
+                    Program.AssemblyGraph.arcs.Where(a => a is Connection).Cast<Connection>()
+                        .Where(
+                            a =>
+                                (a.XmlFrom.Equals(n.name) && !movingnames.Contains(a.XmlTo) && referencenames.Contains(a.XmlTo))
+                                ||
+                                (a.XmlTo.Equals(n.name) && !movingnames.Contains(a.XmlFrom) && referencenames.Contains(a.XmlFrom)
+                                )).ToList();
+                foreach (var subn in NodeRefarcs)
+                {
+                    refarcs.Add(subn);
+                }
+            }
+            foreach (Component refnode in optNodes)
+            {
+                bool anyscoreinarc = false;
+                bool isanyfastener = false;
+                double stability = 0;
+                var alldof = new double[12];
+                var othernodes = graph.nodes.Where(n => !n.name.Equals(refnode.name)).ToList();
+
+                var refarcsnames = new HashSet<string>();
+
+                if (refarcs.Count == 0)
+                {
+                    continue;
+                }
+                foreach (Connection a in refarcs.Where(a => a is Connection))
+                {
+                    refarcsnames.Add(a.name);
+                }
+                //debug
+                var refnodename = refnode.name;
+
+                var firstkey = new HashSet<string>();
+                if (graph.nodes.Where(n => n is Component).Cast<Component>().First(n => n.name.Equals(refnode.name))
+                    .SingleStabilityAndDOF.Keys.Any(
+                        k =>
+                            (k.Intersect(refarcsnames).Count().Equals(k.Count) &&
+                             k.Intersect(refarcsnames).Count().Equals(refarcsnames.Count))))
+                {
+                    firstkey = graph.nodes.Where(n => n is Component)
+                        .Cast<Component>()
+                        .First(n => n.name.Equals(refnode.name))
+                        .SingleStabilityAndDOF.Keys.First(
+                            k =>
+                                (k.Intersect(refarcsnames).Count().Equals(k.Count) &&
+                                 k.Intersect(refarcsnames).Count().Equals(refarcsnames.Count)));
+                    // anyscoreinarc = true;
+                }
+                var val = new List<double>();
+
+                ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                /// Get DOF
+                //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (anyscoreinarc == true)
+                {
+                    val =
+                        graph.nodes.Where(n => n is Component)
+                            .Cast<Component>()
+                            .First(n => n.name.Equals(refnode.name))
+                            .SingleStabilityAndDOF[firstkey];
+                    minTipDifficulty = val[0];
+                    for (int j = 1; j < 13; j++)
+                    {
+                        alldof[j - 1] = val[j];
+                    }
+                }
+                foreach (Connection carc in refarcs.Where(a => a is Connection))
+                {
+                    if (carc.Fasteners.Count != 0)
+                    {
+                        isanyfastener = true;
+                        break;
+                    }
+                }
+                if (isanyfastener == true && anyscoreinarc == false)
+                {
+                    alldof = new double[12];
+                }
+                else if (isanyfastener == false && anyscoreinarc == false)
+                {
+                    var curind = new List<int>();
+                    var xyz = new List<double[]>();
+                    alldof = GetDOF(refnode, refarcs, out curind, out xyz);
+                    currentremovalindex = curind;
+                    dofinfo.Add(alldof.Sum());
+                }
+                /////////////anyscoreinarc == false
+                var linearDOF = new double[6];
+                var rotateDOF = new double[6];
+                var sumlinearDOF = new double();
+                var sumrotateDOF = new double();
+                for (int k = 0; k < 6; k++)
+                {
+                    linearDOF[k] = alldof[k];
+                    rotateDOF[k] = alldof[6 + k];
+                    sumlinearDOF += alldof[k];
+                    sumrotateDOF += alldof[6 + k];
+                }
+                //debug wait nima to fix bug
+                if (linearDOF.Sum() == 3)
+                {
+                    var ind = new List<int>();
+                    var xyz = new List<double[]>();
+                    alldof = GetDOF(refnode, refarcs, out ind, out xyz);
+                }
+                var sumdof = alldof.SumAllElements();
+                SumAllDOF += sumdof;
+
+
+                totaldof.Add(sumdof);
+                if (sumdof > maxsigleDOF)
+                {
+                    maxsigleDOF = sumdof;
+                }
+
+
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                /// check slidding difficulty // the bigger the worse
+                /// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                var CurrentPartSlideDifficulty = 0.0;
+
+                var alldirs = new List<double[]>();
+                foreach (var ind in currentremovalindex)
+                {
+                    alldirs.Add(DisassemblyDirections.Directions[ind]);
+                }
+                var lineardispsecore = 0.0;
+
+                foreach (var d in alldirs)
+                {
+
+                    var TempPartSlideDifficulty = d.dotProduct(Gravitydir);
+
+                    if (TempPartSlideDifficulty > maxSlideDifficulty)
+                    {
+                        maxSlideDifficulty = TempPartSlideDifficulty;
+                    }
+                }
+                CurrentPartSlideDifficulty = maxSlideDifficulty;
+                slideinfo.Add(CurrentPartSlideDifficulty);
+                AllSlidingScore.Add(CurrentPartSlideDifficulty);
+
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                /// check tipping difficulty //the smaller the worse
+                /// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+                var mindir = new double[3];
+                var stabilityanddof = new List<double>();
+                var CurrentPartTipDifficulty = 0.0;
+                if ((sumlinearDOF <= 1 && sumrotateDOF <= 1) || isanyfastener == true)
+                //need new if only 1 DOF or 1 roitate DOF
+                {
+                    CurrentPartTipDifficulty = 9.8;
+                    tipinfo.Add(CurrentPartTipDifficulty);
+                    stabilityanddof.Add(CurrentPartTipDifficulty);
+                    AllTippingScore.Add(CurrentPartTipDifficulty);
+
+                    for (int j = 0; j < 12; j++)
+                    {
+                        stabilityanddof.Add(alldof[j]);
+                    }
+                    graph.nodes.Where(n => n is Component).Cast<Component>().First(n => n.name.Equals(refnode.name))
+                        .SingleStabilityAndDOF.Add(refarcsnames, stabilityanddof);
+                }
+                else if (anyscoreinarc == false)
+                {
+                    var removalindex = Stabilityfunctions.GetSubPartRemovealDirectionIndexs(refnode, refarcs);
+                    var Gdirection = new double[3];
+                    ///perpendicular to the ground. TBD
+                    foreach (var indxe in removalindex) ///siglepare stability
+                    {
+                        //Gdirection = Gdirection.add(DisassemblyDirections.Directions[indxe]);
+
+                        Gdirection = Gdirection.add(DisassemblyDirections.Directions[indxe].multiply(-1));
+                    }
+
+                    var selected = new double[3];
+                    // stability = RotateBeforeTreeSearch.Getstabilityscore(refnode, refarcs, reduceface.Normal, out mindir);
+
+
+                    CurrentPartTipDifficulty = GetTippingscore(refnode, refarcs, Gravitydir,
+                        out mindir,
+                        out selected);
+                    tipinfo.Add(CurrentPartTipDifficulty);
+                    //stability = Stabilityfunctions.Getstabilityscore(refnode, refarcs, Gravitydir,
+                    //    out mindir,
+                    //    out selected);
+                    //if (stability < miniTipDifficulty)
+                    //{
+                    //    miniTipDifficulty = stability;
+                    //}
+                    //   if (stability == 0) //at least one part can tip without any acceleration
+                    //sub.InternalStabilityInfo.needfixture = true;
+                    //minimum acceleration to tip a part
+
+                    stabilityanddof.Add(CurrentPartTipDifficulty);
+                    if (CurrentPartTipDifficulty < minTipDifficulty)
+                    {
+                        minTipDifficulty = CurrentPartTipDifficulty;
+                    }
+                    AllTippingScore.Add(CurrentPartTipDifficulty);
+
+                }
+
+
+            }
+
+            //the less the better
+
+            finalscore = Math.Log(SumAllDOF / optNodes.Count - Math.Log(minTipDifficulty) + maxSlideDifficulty);
+            return finalscore;
+        }
         /*public static double Getstabilityscore(node refnode, List<arc> refarcs, double[] tofaceNormal,
             out double[] mindir)
         {
@@ -108,7 +365,7 @@ namespace Assembly_Planner
 
 
         //here
-        public static double Getstabilityscore(node refnode, List<Connection> refarcs, double[] tofaceNormal,
+        public static double GetTippingscore(node refnode, List<Connection> refarcs, double[] tofaceNormal,
             out double[] mindir, out double[] selected)
         {
             if (refnode.name.StartsWith("PumpAssembly.15") || refnode.name.StartsWith("PumpAssembly.21"))
@@ -175,10 +432,10 @@ namespace Assembly_Planner
             }
             var allupforcePoints = MiscFunctions.Get2DProjectionPoints(allupforceVertices, tofaceNormal);
             var nodecomponent = (Component)refnode;
-            var forceCVH = MinimumEnclosure.ConvexHull2D(allupforcePoints);
+            var forceCVH = MinimumEnclosure.ConvexHull2DMinimal(allupforcePoints);
             var allWithCOM = MiscFunctions.Get2DProjectionPoints(new List<Vertex> { new Vertex(nodecomponent.CenterOfMass) }, tofaceNormal).ToList();
             allWithCOM.AddRange(allupforcePoints);
-            var forceandCMCVH = MinimumEnclosure.ConvexHull2D(allWithCOM);
+            var forceandCMCVH = MinimumEnclosure.ConvexHull2DMinimal(allWithCOM);
 
             var comlist1 = new List<double[]>();
             var comlist2 = new List<double[]>();
@@ -191,9 +448,6 @@ namespace Assembly_Planner
                 comlist2.Add(p.Position2D);
             }
 
-            var sssf = comlist1.Count();
-            var sssss = comlist2.Count;
-            var sqer = comlist1.Except(comlist2).ToList();
 
             if (comlist1.Count != comlist2.Count)
             {
@@ -285,7 +539,617 @@ namespace Assembly_Planner
             //return totalscore;
             return score;
         }
+        public static double[] GetDOF(Component checknode, List<Connection> checkarcs, out List<int> currentremovaldirindexs, out List<double[]> XYZaxles)
+        {
+            int DOF = 12;
+            currentremovaldirindexs = new List<int>();
+            XYZaxles = new List<double[]>();
+            bool TwodirectionalPjoint = false;
+            //tofacenormal = new double[] {0, -1, 0};
+            //var x = new double[] { 1, 0, 0 };
+            //var z = new double[] { 0, 0, 1 };
 
+            // tofacenormal = new double[] { 0, -0.7071, 0.7071 };
+            // var x = new double[] { 1, 0, 0 };
+            // var z = new double[] { 0, 0.7071, 0.7071 };
+            // var checkaxes = new List<double[]> { x, z };
+
+            var nodecomponent = (Component)checknode;
+            var cylindars = new List<Cylinder>();
+            var cones = new List<Cone>();
+            var flats = new List<Flat>();
+            var allolpfs =
+                BlockingDetermination.OverlappingSurfaces.FindAll(
+                    s =>
+                        (s.Solid1.Name == checknode.name) ||
+                        (s.Solid2.Name == checknode.name));
+
+            var newolpfs = new List<OverlappedSurfaces>();
+            foreach (Connection arc in checkarcs.Where(a => a is Connection))
+            {
+                foreach (var olp in allolpfs)
+                {
+                    if ((olp.Solid1.Name.Equals(arc.XmlFrom) && olp.Solid2.Name.Equals(arc.XmlTo))
+                        || (olp.Solid2.Name.Equals(arc.XmlFrom) && olp.Solid1.Name.Equals(arc.XmlTo)))
+                        newolpfs.Add(olp);
+                }
+            }
+            ////liner movement
+            var newforcedirections = new List<double[]>();
+            var newforcelocations = new List<double[]>();
+            var newforcepoints = new List<List<double[]>>();
+            var crossproducts = new List<double[]>();
+            var linearDOF = new double[] { 0, 0, 0, 0, 0, 0 }; //x -x y -y z -z // 1 can move
+            GetnewforcedirectionAndlocation(checkarcs, checknode, out newforcedirections, out newforcelocations,
+                out newforcepoints);
+            // if (newforcedirections.Count > 1)
+            currentremovaldirindexs = GetSubPartRemovealDirectionIndexs(checknode, checkarcs);
+            //  var currentremovaldirindexs = Getcurrentremovaldirection(checknode, checkarcs);
+            //   if (newforcedirections.Count > 1)
+            var alldirs = new List<double[]>();
+            foreach (var dirindex in currentremovaldirindexs)
+            {
+                alldirs.Add(DisassemblyDirections.Directions[dirindex]);
+            }
+            var tempdirs = new List<double[]>();
+            var dirs = new List<double[]>();
+            var samedireground = new List<List<double[]>>();
+            foreach (var f in alldirs)
+            {
+                //if (newforcedirections.Any(d => d.dotProduct(f) < -0.1))
+                //{
+                //    continue;
+                //}
+                //else
+                //{
+                tempdirs.Add(f.normalize());
+                //   }
+            }
+
+            var added = false;
+
+            // delet similar direction
+            foreach (var tdir in tempdirs)
+            {
+                if (dirs.Any(d => d.dotProduct(tdir) < 0.8) || dirs.Count == 0)
+                {
+                    dirs.Add(tdir);
+
+                }
+            }
+
+
+
+            //foreach (var tdir in tempdirs)
+            //{
+            //    var duplication = tempdirs.FindAll(d => d.dotProduct(tdir)>0.8);
+            //    var indextodelet = new List<int>();
+            //    //foreach (var due in duplication)
+            //    //{
+            //    //    indextodelet.Add(duplication.IndexOf(due));
+            //    //}
+            //    //for (int i = 1; i < indextodelet.Count; i++)
+            //    //{
+            //    //    duplication.RemoveAt(indextodelet[i] - i);
+            //    //}
+
+
+            //    if (duplication.Count()<2)
+            //    {
+            //        dirs.Add(tdir);
+            //    }
+            //    else
+            //    {
+            //        var finaldir = new double[]{0,0,0};
+            //        foreach (var dup in duplication)
+            //        {
+            //            finaldir = finaldir.add(dup);
+            //        }
+            //        finaldir=finaldir.divide(duplication.Count);
+            //        dirs.Add(finaldir);
+            //    }
+            //}
+            //liner DOF
+
+            var allforcevector = new List<double[]>();
+            var para = new double[4];
+            var zaxis = new double[3];
+            var xaxis = new double[3];
+            var yaxis = new double[3];
+
+            var c = (Connection)checkarcs.First(a => a is Connection);
+            if (dirs.Count == 1)
+            {
+                linearDOF[0] = 0.5;
+                XYZaxles.Add(dirs[0]);
+
+            }
+            else if (dirs.Count == 2)
+            {
+                if (dirs[0].dotProduct(dirs[1]) < -0.95)
+                {
+                    TwodirectionalPjoint = true;
+                    linearDOF[0] = 0.5;
+                    linearDOF[1] = 0.5;
+                    xaxis = dirs[0];
+                    if (c.ToPartReactionForeceDirections.Count != 0)
+                    {
+                        zaxis = c.ToPartReactionForeceDirections[0];
+                        yaxis = zaxis.crossProduct(xaxis).normalize();
+                    }
+                }
+                if (dirs[0].dotProduct(dirs[1]) > 0.9)
+                {
+                    TwodirectionalPjoint = true;
+                    linearDOF[0] = 0.5;
+                    linearDOF[1] = 0.5;
+                    xaxis = dirs[0];
+                    if (c.ToPartReactionForeceDirections.Count != 0)
+                    {
+                        zaxis = c.ToPartReactionForeceDirections[0];
+                        yaxis = zaxis.crossProduct(xaxis).normalize();
+                    }
+                }
+            }
+            //    if (dirs.Count > 2 && c.ToPartReactionForeceDirections.Count > 0 && c.UnionAreaPointsCenter.Count != 0)
+            if (dirs.Count > 2)
+            // generate coordinate regardless of the footprint
+            {
+                // var c = (Connection)checkarcs.First(a => a is Connection);
+                double[] d0;
+                if (c.ToPartReactionForeceDirections.Count == 0)
+                {
+                    // d0 = dirs[0];
+                    var avgv = new double[3];
+                    for (int i = 0; i < dirs.Count; i++)
+                    {
+                        avgv = avgv.add(dirs[i]);
+                    }
+                    d0 = avgv.divide(dirs.Count);
+                }
+                else
+                {
+                    d0 = c.ToPartReactionForeceDirections[0];
+                }
+                d0 = d0.normalize();
+                var d1 = new double[3];
+                var allreactionidirs = new HashSet<double[]> { };
+                foreach (var carc in checkarcs)
+                {
+                    for (int j = 0; j < carc.FromPartReactionForeceDirections.Count; j++)
+                    {
+                        allreactionidirs.Add(carc.FromPartReactionForeceDirections[j]);
+                    }
+                    for (int k = 0; k < carc.ToPartReactionForeceDirections.Count; k++)
+                    {
+                        allreactionidirs.Add(carc.ToPartReactionForeceDirections[k]);
+                    }
+                }
+                if (c.UnionAreaPointsCenter.Count == 0)
+                {
+                    c.UnionAreaPointsCenter.Add(d0);
+                }
+                if (allreactionidirs.Any(td => Math.Abs(td.dotProduct(d0)) < 0.0001))
+                {
+                    d1 = allreactionidirs.First(td => Math.Abs(td.dotProduct(d0)) < 0.0001);
+                }
+                else if (c.UnionAreaPoints.Count == 0)
+                {
+                    d1 = c.UnionAreaPointsCenter[0].normalize();
+                }
+                else
+                {
+                    d1 = c.UnionAreaPoints[0][0].subtract(c.UnionAreaPointsCenter[0]).normalize();
+                }
+
+
+                if (allreactionidirs.Any(td => Math.Abs(td.dotProduct(d0)) < 0.0001))
+                {
+                    d1 = allreactionidirs.First(td => Math.Abs(td.dotProduct(d0)) < 0.0001);
+                }
+                else
+                {
+                    //phd
+                    d1 = alldirs.First(v => v.dotProduct(d0) < 0.45 && v.dotProduct(d0) > -0.45);
+
+                    //var alldots = new List<double>();
+                    //foreach (var dir in alldirs)
+                    //{
+
+                    //    var ssss =dir.Normalize();
+                    //    alldots.Add(d0.dotProduct(ssss));
+                    //}
+                    //d1 = d0;
+
+
+                }
+
+                //if (c.ToPartReactionForeceDirections.First(v => v.dotProduct(d0).Equals(0))!=null)
+                //{
+                //    d1 = c.ToPartReactionForeceDirections.First(v => v.dotProduct(d0).Equals(0));
+                //}
+                //allforcevector = new List<double[]> { dirs[0], dirs[1], new double[3] { 0.0, 0.0, 0.0 } }; //not always perpendicular or paralla to groud;
+
+                //   allforcevector = new List<double[]> { d0, d1, new double[3] { 0.0, 0.0, 0.0 } }; 
+                // para = Getplaneparameter(allforcevector);
+
+                zaxis = d1;
+                xaxis = d0;
+                yaxis = zaxis.crossProduct(xaxis).normalize();
+            }
+
+
+            if (currentremovaldirindexs.Count > 1 && TwodirectionalPjoint == false)
+            {
+                foreach (var fdir in dirs)
+                {
+                    var xxx = Math.Round(fdir.dotProduct(xaxis), 8);
+                    var yyy = Math.Round(fdir.dotProduct(yaxis), 8);
+                    var zzz = Math.Round(fdir.dotProduct(zaxis), 8);
+                    //hack ! if if there is one one removeal dir in x , y, and z , add one more on one of the axis
+                    if (linearDOF[0] + linearDOF[1] == 0.5 && linearDOF[2] + linearDOF[3] == 0.5 && linearDOF.Sum() == 1)
+                    {
+                        linearDOF[1] = 0.5;
+                    }
+
+                    if (Math.Round(fdir.dotProduct(xaxis), 8) > 0.07)
+                    {
+                        linearDOF[0] = 0.5;
+                    }
+                    var wer = fdir.dotProduct(xaxis);
+                    if (Math.Round(fdir.dotProduct(xaxis), 8) < -0.07)
+                    {
+                        linearDOF[1] = 0.5;
+                    }
+                    if (Math.Round(fdir.dotProduct(yaxis), 8) > 0.07)
+                    {
+                        linearDOF[2] = 0.5;
+                    }
+                    if (Math.Round(fdir.dotProduct(yaxis), 8) < -0.07)
+                    {
+                        linearDOF[3] = 0.5;
+                    }
+                    if (Math.Round(fdir.dotProduct(zaxis), 8) > 0.07)
+                    {
+                        linearDOF[4] = 0.5;
+                    }
+                    var ss = fdir.dotProduct(zaxis);
+                    if (Math.Round(fdir.dotProduct(zaxis), 8) < -0.07)
+                    {
+                        linearDOF[5] = 0.5;
+                    }
+                }
+            }
+
+            var cyaxesanchors = new List<double[]>();
+            var cyaxesDirs = new List<double[]>();
+            var cnaxesanchor = new List<double[]>();
+            ////Check # of cylindars
+            foreach (var olps in newolpfs)
+            {
+                foreach (var OL in olps.Overlappings)
+                {
+                    if (OL[0] is Cylinder && OL[1] is Cylinder)
+                    {
+                        var cy = (Cylinder)OL[0];
+
+                        cylindars.Add(cy);
+                        cyaxesanchors.Add(cy.Anchor);
+                        cyaxesDirs.Add(cy.Axis);
+                    }
+                }
+            }
+            bool samecyln = false;
+            if (cyaxesanchors.Count != 0)
+            {
+                samecyln = IsCoAxisCylns(cyaxesanchors, cyaxesDirs);
+            }
+
+            foreach (var olps in newolpfs)
+            {
+                foreach (var OL in olps.Overlappings)
+                {
+                    if (OL[0] is Cone && OL[1] is Cone)
+                    {
+                        var cone = (Cone)OL[0];
+                        cones.Add(cone);
+                        cnaxesanchor.Add(cone.Axis); //TBD
+                    }
+                }
+            }
+
+            var rotateDOF = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, };
+            //   int diffcyln = 0;
+            int diffcyln = cyaxesanchors.Union(cyaxesanchors).ToList().Count;
+            int diffcon = cnaxesanchor.Union(cnaxesanchor).ToList().Count;
+            var iscone = false;
+            var iscyln = false;
+            //for cyln
+            if (samecyln)
+            // if (diffcyln == 1 || diffcyln == 2) // old one is bad
+            {
+                iscyln = true;
+                //if (
+                //    (newforcedirections.Count == 0
+                //     || newforcedirections.All(f => f.dotProduct(cylindars[0].Axis).Equals(-1)
+                //                                    || f.dotProduct(cylindars[0].Axis).Equals(1))))
+
+                if (newforcedirections.Count == 0
+                     || newforcedirections.All(f => Math.Abs(f.dotProduct(cylindars[0].Axis)) > 0.95))
+                {
+                    if (linearDOF[0] == 0.5 || linearDOF[1] == 0.5)
+                    {
+                        rotateDOF[0] = 0.5;
+                        rotateDOF[1] = 0.5;
+                    }
+                    else if (linearDOF[2] == 0.5 || linearDOF[3] == 0.5)
+                    {
+                        rotateDOF[2] = 0.5;
+                        rotateDOF[3] = 0.5;
+                    }
+
+                    else if (linearDOF[4] == 0.5 || linearDOF[5] == 0.5)
+                    {
+                        rotateDOF[4] = 0.5;
+                        rotateDOF[5] = 0.5;
+                    }
+                    else
+                    {
+                        rotateDOF[0] = 0.5;
+                        rotateDOF[1] = 0.5;
+                    }
+                }
+
+                //cylinder with blockingface
+                var cannotrotate = false;
+                // var sss = cylindars[0].Axis.normalize();
+                var checkslop = false;
+                var pjaxle = new double[3];
+                if (iscyln)
+                {
+                    pjaxle = ProjectToFace(cyaxesanchors[0], cylindars[0].Axis.normalize());
+                }
+                if (iscone)
+                {
+                    pjaxle = ProjectToFace(cnaxesanchor[0], cones[0].Axis.normalize());
+                }
+                for (int i = 0; i < newforcedirections.Count; i++)
+                {
+                    var fd = newforcedirections[i].dotProduct(cylindars[0].Axis.normalize());
+                    if (fd < 0.99 && fd > -0.99)
+                    {
+                        var pjdir = ProjectToFace(newforcedirections[i], cylindars[0].Axis);
+                        var pjanchor = ProjectToFace(cylindars[0].Anchor, cylindars[0].Axis);
+                        var saverefcross = false;
+                        var refcross = new double[3];
+                        var currencross = new double[3];
+
+                        foreach (var point in newforcepoints[i])
+                        {
+                            if (saverefcross == false)
+                            {
+                                refcross =
+                                    ProjectToFace(point, cylindars[0].Axis)
+                                        .subtract(pjanchor)
+                                        .normalize()
+                                        .crossProduct(pjdir.normalize())
+                                        .normalize();
+                                saverefcross = true;
+                                continue;
+                            }
+                            currencross =
+                                ProjectToFace(point, cylindars[0].Axis)
+                                    .subtract(pjanchor)
+                                    .normalize()
+                                    .crossProduct(pjdir.normalize())
+                                    .normalize();
+                            if (cannotrotate == false)
+                            {
+                                var sasdf = refcross.dotProduct(currencross);
+                                if (refcross.dotProduct(currencross) > 0)
+                                {
+                                    continue;
+                                }
+                                cannotrotate = true;
+                                //  checkslop = true;
+                            }
+                        }
+                    }
+                    if (!cannotrotate)
+                    {
+                        rotateDOF[0] = 0.5;
+                    }
+                    else
+                    {
+                        rotateDOF[0] = 0;
+                    }
+                }
+            }
+
+
+            //for cone
+            if (diffcon == 1 || diffcon == 2) // old one is bad
+            {
+                iscone = true;
+                if (
+                    (newforcedirections.Count == 0
+                     || newforcedirections.All(f => Math.Round(f.dotProduct(cones[0].Axis), 8).Equals(-1)
+                                                    || Math.Round(f.dotProduct(cones[0].Axis), 8).Equals(1)))
+                    )
+                //for cone
+                {
+                    if (linearDOF[0] == 0 || linearDOF[1] == 0)
+                    {
+                        rotateDOF[0] = 0.5;
+                        rotateDOF[1] = 0.5;
+                    }
+                    else if (linearDOF[2] == 0 || linearDOF[3] == 0)
+                    {
+                        rotateDOF[2] = 0.5;
+                        rotateDOF[3] = 0.5;
+                    }
+
+                    else if (linearDOF[4] == 0 || linearDOF[5] == 0)
+                    {
+                        rotateDOF[4] = 0.5;
+                        rotateDOF[5] = 0.5;
+                    }
+                    else
+                    {
+                        rotateDOF[0] = 0.5;
+                        rotateDOF[1] = 0.5;
+                    }
+                }
+                //cone with blockingface
+                //temp
+                var cannotrotate = false;
+                // var sss = cylindars[0].Axis.normalize();
+                var checkslop = false;
+                var pjaxle = new double[3];
+                if (iscyln)
+                {
+                    pjaxle = ProjectToFace(cyaxesanchors[0], cylindars[0].Axis.normalize());
+                }
+                if (iscone)
+                {
+                    pjaxle = ProjectToFace(cnaxesanchor[0], cones[0].Axis.normalize());
+                }
+                for (int i = 1; i < newforcedirections.Count; i++)
+                {
+                    var fd = newforcedirections[i].dotProduct(cones[0].Axis.normalize());
+                    if (fd < 0.99 && fd > -0.99)
+                    {
+                        var pjdir = ProjectToFace(newforcedirections[i], cones[0].Axis);
+                        var pjanchor = ProjectToFace(cones[0].Apex, cones[0].Axis);
+                        var saverefcross = false;
+                        var refcross = new double[3];
+                        var currencross = new double[3];
+
+                        foreach (var point in newforcepoints[i])
+                        {
+                            if (saverefcross == false)
+                            {
+                                refcross =
+                                    ProjectToFace(point, cones[0].Axis)
+                                        .subtract(pjanchor)
+                                        .normalize()
+                                        .crossProduct(pjdir.normalize())
+                                        .normalize();
+                                saverefcross = true;
+                                continue;
+                            }
+                            currencross =
+                                ProjectToFace(point, cones[0].Axis)
+                                    .subtract(pjanchor)
+                                    .normalize()
+                                    .crossProduct(pjdir.normalize())
+                                    .normalize();
+                            if (cannotrotate == false)
+                            {
+                                var sasdf = refcross.dotProduct(currencross);
+                                if (refcross.dotProduct(currencross) > 0)
+                                {
+                                    continue;
+                                }
+                                cannotrotate = true;
+                                //  checkslop = true;
+                            }
+                        }
+                    }
+                    if (!cannotrotate)
+                    {
+                        rotateDOF[0] = 0.5;
+                    }
+                    else
+                    {
+                        rotateDOF[0] = 0;
+                    }
+                }
+            }
+            var rotateXaxis = linearDOF[0] + linearDOF[1];
+            var rotateYaxis = linearDOF[2] + linearDOF[3];
+            var rotateZaxis = linearDOF[4] + linearDOF[5];
+            if (rotateXaxis == 1 && rotateYaxis == 1)
+            {
+                rotateDOF[4] = 0.5;
+                rotateDOF[5] = 0.5;
+            }
+
+            if (rotateXaxis == 1 && rotateZaxis == 1)
+            {
+                rotateDOF[2] = 0.5;
+                rotateDOF[3] = 0.5;
+            }
+
+            if (rotateZaxis == 1 && rotateYaxis == 1)
+            {
+                rotateDOF[0] = 0.5;
+                rotateDOF[1] = 0.5;
+            }
+            //no cylindar rotateion
+            //Console.WriteLine("linearDOF");
+            //Console.WriteLine("X, -X, Y, -Y, Z, -Z");
+            //Console.WriteLine("X:{0}, -X:{1}, Y:{2}, -Y:{3}, Z:{4}, -Z:{5}", linearDOF[0], linearDOF[1], linearDOF[2],
+            //    linearDOF[3], linearDOF[4], linearDOF[5]);
+            //Console.WriteLine("rotateDOF");
+
+            //Console.WriteLine("X:{0}, -X:{1}, Y:{2}, -Y:{3}, Z:{4}, -Z:{5}", rotateDOF[0], rotateDOF[1], rotateDOF[2],
+            //    rotateDOF[3], rotateDOF[4], rotateDOF[5]);
+            var alldof = new double[12];
+            for (int i = 0; i < 6; i++)
+            {
+                alldof[i] = linearDOF[i];
+                alldof[i + 6] = rotateDOF[i];
+            }
+            XYZaxles.Add(xaxis);
+            XYZaxles.Add(yaxis);
+            XYZaxles.Add(zaxis);
+            return alldof; //need check
+        }
+        private static bool IsCoAxisCylns(List<double[]> cyaxesanchors, List<double[]> cyaxesDirs)
+        {
+
+            foreach (var dir in cyaxesDirs)
+            {
+                if (cyaxesDirs.Any(d => Math.Abs(d.normalize().dotProduct(dir.normalize())) < 0.95))
+                {
+                    return false;
+                }
+            }
+
+            var unianchors = cyaxesanchors.Distinct().ToList();
+            if (unianchors.Count <= 2)
+            {
+                var ss = 1;
+                //if only <=2, assume coaxis, need to be fiex for =2 may not coaxis in the future.
+                return true;
+            }
+
+            var alldotproducts = new List<double>();
+            for (int i = 0; i < unianchors.Count - 2; i++)
+            {
+                var p1 = cyaxesanchors[i];
+                var p2 = cyaxesanchors[i + 1];
+                var p3 = cyaxesanchors[i + 2];
+                var vector1 = p1.subtract(p2).normalize();
+                var vector2 = p1.subtract(p3).normalize();
+                var dot = Math.Abs(vector1.dotProduct(vector2));
+                if (double.IsNaN(dot))
+                {
+                    continue;
+                }
+                alldotproducts.Add(dot);
+            }
+            if (alldotproducts.Count == 0)
+            {
+                return false;
+            }
+            if (alldotproducts.Any(d => d < 0.9))
+            {
+                return false;
+            }
+            return true;
+        }
         private static double[] ProjectToFace(double[] COM, double[] projectnormal)
         {
             var d = COM.dotProduct(projectnormal);
@@ -296,15 +1160,13 @@ namespace Assembly_Planner
         private static Dictionary<string, List<int>> GetSubPartRemovealDirectionIndexs(node checknode, List<arc> refarcs,
             bool s)
         {
-
             var removedirsbetweeneveryparts = new Dictionary<string, List<int>>();
             var checkarcs = refarcs.FindAll(a => a.From.name.Equals(checknode.name) || a.To.name.Equals(checknode.name));
 
             foreach (Connection arc in checkarcs.Where(a => a is Connection))
-			{
-				
+            {
                 var currentindex = new List<int>();
-                var othernodes = new List<node>(); 
+                var othernodes = new List<node>();
                 if (arc.From.name == checknode.name)
                 {
                     othernodes.Add(arc.To);
@@ -315,8 +1177,7 @@ namespace Assembly_Planner
                     removedirsbetweeneveryparts.Add(arc.XmlTo, currentindex);
                 }
                 else
-					
-				{
+                {
                     othernodes.Add(arc.From);
                     foreach (var dir in arc.InfiniteDirections)
                     {
@@ -510,7 +1371,8 @@ namespace Assembly_Planner
                 {
                     d1 = c.UnionAreaPoints[0][0].subtract(c.UnionAreaPointsCenter[0]).normalize();
                 }
-        
+
+
                 if (allreactionidirs.Any(td => Math.Abs(td.dotProduct(d0)) < 0.0001))
                 {
                     d1 = allreactionidirs.First(td => Math.Abs(td.dotProduct(d0)) < 0.0001);
@@ -519,7 +1381,6 @@ namespace Assembly_Planner
                 {
                     d1 = c.UnionAreaPoints[0][0].subtract(c.UnionAreaPointsCenter[0]).normalize();
                 }
-                
 
                 //if (c.ToPartReactionForeceDirections.First(v => v.dotProduct(d0).Equals(0))!=null)
                 //{
@@ -1339,7 +2200,7 @@ namespace Assembly_Planner
                     List<Vertex> newConvexHullVerts = new List<Vertex>();
                     try
                     {
-                        var newconvexull = new TVGLConvexHull(uniquelistver, 1e-8);
+                        var newconvexull = new TVGLConvexHull(uniquelistver, 1e-20);
                         newConvexHullVerts = newconvexull.Vertices.ToList();
                         if (newConvexHullVerts == null)
                         {

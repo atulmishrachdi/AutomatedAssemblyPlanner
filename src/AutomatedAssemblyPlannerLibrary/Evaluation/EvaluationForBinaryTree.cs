@@ -1,17 +1,24 @@
-﻿using Assembly_Planner.GraphSynth.BaseClasses;
-using GPprocess;
-using GraphSynth.Representation;
-using StarMathLib;
-using System;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using AssemblyEvaluation;
+using GraphSynth.Representation;
+using MIConvexHull;
+using Assembly_Planner.GraphSynth.BaseClasses;
+using StarMathLib;
 using TVGL;
+using Constants = AssemblyEvaluation.Constants;
+using RandomGen;
+using GPprocess;
 namespace Assembly_Planner
 {
     /// <summary>
     /// Class EvaluationForBinaryTree - this is a stub for evaluating a particular install step
     /// </summary>
-    public class EvaluationForBinaryTree
+    internal class EvaluationForBinaryTree
     {
         internal static Dictionary<string, TVGLConvexHull> ConvexHullsForParts =
             new Dictionary<string, TVGLConvexHull>();
@@ -42,315 +49,60 @@ namespace Assembly_Planner
                     .Where(a => ((optNodes.Contains(a.To) && rest.Contains(a.From))
                                  || (optNodes.Contains(a.From) && rest.Contains(a.To))))
                     .ToList();
-            var install = new[] { rest, optNodes };
-            if (EitherRefOrMovHasSeperatedSubassemblies(install, subassemblyNodes))
-                return -1;
             var insertionDirections = InsertionDirectionsFromRemovalDirections(sub, optNodes, validDirs);
             var minDis = double.PositiveInfinity;
-            var distanceToFree = 0.0;
             var bestInstallDirection = new[] { 0.0, 0.0, 0.0 };
             foreach (var dir in insertionDirections)
             {
-                double cvhOverlapDist;
-                var dis = DetermineDistanceToSeparateHull(sub, dir, out cvhOverlapDist) / Program.MeshMagnifier;
+                var dis = DetermineDistanceToSeparateHull(sub, dir);
                 if (dis >= minDis) continue;
                 minDis = dis;
-                distanceToFree = cvhOverlapDist / Program.MeshMagnifier * 1000;
                 bestInstallDirection = dir;
             }
             sub.Install.InstallDirection = bestInstallDirection;
             sub.Install.InstallDistance = minDis;
-
+            // I need to add InstallationPoint also
+            var install = new[] { rest, optNodes };
+            if (EitherRefOrMovHasSeperatedSubassemblies(install, subassemblyNodes))
+                return -1;
             var moivingnames = sub.Install.Moving.PartNames;
             var refnames = sub.Install.Reference.PartNames;
             var movingnodes = subassemblyNodes.Where(n => moivingnames.Contains(n.name)).ToList();
             var refnodes = subassemblyNodes.Where(n => refnames.Contains(n.name)).ToList();
-            sub.Secure.Fasteners = ConnectingArcsFastener(connectingArcs, subassemblyNodes, optNodes, rest);
             /////time 
             sub.Install.Time = 0;
-            if (distanceToFree == 0)
-            {
-                distanceToFree = 0.3;
-            }
-            EvaluateSubFirstThreeTime(sub, refnodes, movingnodes, distanceToFree);
-         //   EvaluateSubFirstThreeTime(sub, refnodes, movingnodes, distanceToFree, out sub.Install.Time, out sub.Install.TimeSD, out sub.Secure.Time, out sub.Secure.TimeSD);
-
-            
+            EvaluateSubFirstThreeTime(sub, refnodes, movingnodes, minDis, out sub.Install.Time, out sub.Install.TimeSD, out sub.Secure.Time, out sub.Secure.TimeSD);
             if (sub.Install.Time < 0)
                 sub.Install.Time = 0.5;
-            
-            if (sub.MoveRoate.Time < 0)
-                sub.MoveRoate.Time = 0.5;
-          
-            //if (DetermineWeight)
-            //{
-            //    LeapSearch.InitialTimes.Add(sub.Install.Time+sub.MoveRoate.Time);
-            //}
             ///////stability
 
-            LeapSearch.stabilityscore = EvaluateSubStable(graph, refnodes, movingnodes, sub);
-            //if (DetermineWeight)
-            //{
-            //    LeapSearch.InitialStableScores.Add(stabilityscore);
-            //    return 1;
-            //}
-            //if (sub.Secure.Fasteners.Count != 0)
-            //{
-            //    foreach (var f in sub.Secure.Fasteners)
-            //    {
-            //        sub.Secure.Time += CalculateAssemblyTimeAndSD.GetSecureTime(f);
-            //    }
-            //}
+            //assembly gravity direction is oppositve to install directon
+            var Gravitydir = bestInstallDirection.multiply(-1);
+
+
+            var stbility1 =
+               Stabilityfunctions.EvaluateSubStability(Program.AssemblyGraph, refnodes, movingnodes, sub, Gravitydir);
+            if (refnodes.Count == 1)
+            {
+                stbility1 = -1;
+            }
+            var stbility2 =
+                Stabilityfunctions.EvaluateSubStability(Program.AssemblyGraph, movingnodes, refnodes, sub, Gravitydir);
+            if (movingnodes.Count == 1)
+            {
+                stbility2 = -1;
+            }
+            var stbility = stbility1 + stbility2;
+
+            sub.InternalStabilityInfo.Totalsecore = stbility;
+
+            sub.Secure.Fasteners = ConnectingArcsFastener(connectingArcs, subassemblyNodes, optNodes);
+
+
+
             return 1;
         }
 
-        private double EvaluateSubStable(designGraph graph, List<Component> optNodes, List<Component> rest,
-            SubAssembly sub)
-        {
-            var subassembly = new List<Component>();
-            var othersubassembly = new List<Component>();
-            double bothsubstatiblit = 0;
-            double finalscore = 0;
-            for (int i = 0; i < 2; i++) //check moving and reference
-            {
-                if (i == 0)
-                {
-                    subassembly = optNodes;
-                    othersubassembly = rest;
-                }
-                else
-                {
-                    subassembly = rest;
-                    othersubassembly = optNodes;
-                }
-                var overallstatiblity = 0.0;
-                var ss = EvaluationForBinaryTree.CreateCombinedConvexHull2(subassembly);
-                var reductedfaces = AssemblyEvaluator.MergingFaces(ss.Faces.ToList());
-                var maxsigleDOF = 0.0;
-                var minsigleSB = double.PositiveInfinity;
-                // double totaldof = 0;
-                // double totalSBscore = 0;
-                var totaldof = new List<double>();
-                var totalSBscore = new List<double>();
-                foreach (var refnode in subassembly)
-                {
-                    bool anyscoreinarc = false;
-                    double signlescore;
-                    bool isanyfastener = false;
-                    double stability = 0;
-                    var ministablility = double.PositiveInfinity;
-                    var alldof = new double[12];
-                    var othernodes = subassembly.Where(n => !n.name.Equals(refnode.name)).ToList();
-                    var refarcs =
-                        graph.arcs.Where(a => a is Connection).Cast<Connection>()
-                            .Where(
-                                a =>
-                                    (a.XmlFrom.Equals(refnode.name) && othernodes.Exists(on => on.name.Equals(a.XmlTo)))
-                                    ||
-                                    ((a.XmlTo.Equals(refnode.name) && othernodes.Exists(on => on.name.Equals(a.XmlFrom)))
-                                        )).ToList();
-                    var refarcsnames = new HashSet<string>();
-
-                    if (subassembly.Count == 1)
-                    {
-                        totaldof.Add(3.5);
-                        totalSBscore.Add(9.8);
-                        ; // TBD
-                        maxsigleDOF = 3.5;
-                        minsigleSB = 9.8;
-                        Program.DegreeOfFreedoms.Add(3.5);
-                        Program.StablbiblityScores.Add(9.8);
-                        continue;
-                    }
-                    foreach (Connection a in refarcs.Where(a => a is Connection))
-                    {
-                        refarcsnames.Add(a.name);
-                    }
-                    //debug
-                    var refnodename = refnode.name;
-                    var othernames = new List<string>();
-                    //debug
-                    foreach (var on in othernodes)
-                    {
-                        if (!on.Equals(refnodename))
-                            othernames.Add(on.name);
-                    }
-                    var firstkey = new HashSet<string>();
-                    if (graph.nodes.Where(n => n is Component).Cast<Component>().First(n => n.name.Equals(refnode.name))
-                        .SingleStabilityAndDOF.Keys.Any(
-                            k =>
-                                (k.Intersect(refarcsnames).Count().Equals(k.Count) &&
-                                 k.Intersect(refarcsnames).Count().Equals(refarcsnames.Count))))
-                    {
-                        firstkey = graph.nodes.Where(n => n is Component)
-                            .Cast<Component>()
-                            .First(n => n.name.Equals(refnode.name))
-                            .SingleStabilityAndDOF.Keys.First(
-                                k =>
-                                    (k.Intersect(refarcsnames).Count().Equals(k.Count) &&
-                                     k.Intersect(refarcsnames).Count().Equals(refarcsnames.Count)));
-                        anyscoreinarc = true;
-                    }
-                    var val = new List<double>();
-
-                    if (anyscoreinarc == true)
-                    {
-                        val =
-                            graph.nodes.Where(n => n is Component)
-                                .Cast<Component>()
-                                .First(n => n.name.Equals(refnode.name))
-                                .SingleStabilityAndDOF[firstkey];
-                        ministablility = val[0];
-                        for (int j = 1; j < 13; j++)
-                        {
-                            alldof[j - 1] = val[j];
-                        }
-                    }
-                    foreach (Connection carc in refarcs.Where(a => a is Connection))
-                    {
-                        if (carc.Fasteners.Count != 0)
-                        {
-                            isanyfastener = true;
-                            break;
-                        }
-                    }
-                    if (refnode.name.StartsWith("PumpAssembly.21"))
-                    {
-                        var s = 123;
-                    }
-
-                    if (isanyfastener == true && anyscoreinarc == false)
-                    {
-                        alldof = new double[12];
-                    }
-                    else if (isanyfastener == false && anyscoreinarc == false)
-                    {
-                        alldof = Stabilityfunctions.GetDOF(refnode, refarcs);
-                    }
-                    /////////////anyscoreinarc == false
-                    var linearDOF = new double[6];
-                    var rotateDOF = new double[6];
-                    var sumlinearDOF = new double();
-                    var sumrotateDOF = new double();
-                    for (int k = 0; k < 6; k++)
-                    {
-                        linearDOF[k] = alldof[k];
-                        rotateDOF[k] = alldof[6 + k];
-                        sumlinearDOF += alldof[k];
-                        sumrotateDOF += alldof[6 + k];
-                    }
-                    //debug wait nima to fix bug
-                    if (linearDOF.Sum() == 3)
-                    {
-                        alldof = Stabilityfunctions.GetDOF(refnode, refarcs);
-                    }
-
-                    var sumdof = alldof.SumAllElements();
-                    Program.DegreeOfFreedoms.Add(sumdof);
-
-                    totaldof.Add(sumdof);
-                    if (sumdof > maxsigleDOF)
-                    {
-                        maxsigleDOF = sumdof;
-                    }
-
-
-                    /////check stability
-                    var mindir = new double[3];
-
-
-                    if ((sumlinearDOF <= 1 && sumrotateDOF <= 1) || isanyfastener == true)
-                    //need new if only 1 DOF or 1 roitate DOF
-                    {
-                        minsigleSB = 9.8; //50??
-                        ministablility = 9.8;
-                        Program.StablbiblityScores.Add(9.8);
-                    }
-                    else if (anyscoreinarc == false)
-                    {
-                        var removalindex = Stabilityfunctions.GetSubPartRemovealDirectionIndexs(refnode, refarcs);
-                        var Gdirection = new double[3];
-                        ///perpendicular to the ground. TBD
-                        foreach (var indxe in removalindex) ///siglepare stability
-                        {
-                            //Gdirection = Gdirection.add(DisassemblyDirections.Directions[indxe]);
-
-                            Gdirection = Gdirection.add(DisassemblyDirections.Directions[indxe].multiply(-1));
-                        }
-
-                        var selected = new double[3];
-                        // stability = RotateBeforeTreeSearch.Getstabilityscore(refnode, refarcs, reduceface.Normal, out mindir);
-
-                        stability = Stabilityfunctions.Getstabilityscore(refnode, refarcs, Gdirection.normalize(),
-                            out mindir,
-                            out selected);
-                        if (stability > 9.8)
-                        {
-                            stability = 9.8;
-                        }
-                        if (stability < ministablility)
-                        {
-                            ministablility = stability;
-                        }
-                        if (stability == 0) //at least one part can tip without any acceleration
-                            sub.InternalStabilityInfo.needfixture = true;
-                        //minimum acceleration to tip a part
-
-                        var stabilityanddof = new List<double>();
-                        stabilityanddof.Add(ministablility);
-                        Program.StablbiblityScores.Add(ministablility);
-                        for (int j = 0; j < 12; j++)
-                        {
-                            stabilityanddof.Add(alldof[j]);
-                        }
-                        graph.nodes.Where(n => n is Component).Cast<Component>().First(n => n.name.Equals(refnode.name))
-                            .SingleStabilityAndDOF.Add(refarcsnames, stabilityanddof);
-                    }
-
-                    if (100000000000000 < ministablility)
-                    {
-                        var bug2 = 1;
-                    }
-                    if (ministablility < minsigleSB)
-                    {
-                        minsigleSB = ministablility;
-                    }
-
-                    totalSBscore.Add(ministablility);
-                }
-                //old stable score
-                //finalscore += totaldof.Sum() / subassembly.Count + maxsigleDOF - (minsigleSB + totalSBscore.Sum() / subassembly.Count)+GetSD(totaldof)+GetSD(totalSBscore);
-                finalscore += (totaldof.Sum() / subassembly.Count + maxsigleDOF) / 12 -
-                              ((minsigleSB + totalSBscore.Sum() / subassembly.Count)) / 19.6;
-                var score = (totaldof.Sum() / subassembly.Count + maxsigleDOF) / 12 -
-                            ((minsigleSB + totalSBscore.Sum() / subassembly.Count)) / 19.6;
-                //the less the better
-                if (finalscore < -99999)
-                {
-                    var sdf = 1;
-                }
-                if (i == 1)
-                {
-                    finalscore = (finalscore + 2) / 4;
-                    UpdateInternalStabilityInfo(sub, totaldof, maxsigleDOF, totalSBscore, minsigleSB);
-                    sub.InternalStabilityInfo.Totalsecore = finalscore;
-                }
-                var subnames = new List<string>();
-                var othersubnames = new List<string>();
-                var allname = new List<List<string>>();
-                foreach (var sn in subassembly)
-                {
-                    subnames.Add(sn.name);
-                }
-                foreach (var osn in othersubassembly)
-                {
-                    othersubnames.Add(osn.name);
-                }
-                allname.Add(subnames);
-                allname.Add(othersubnames);
-            }
-            return finalscore; //return score between 0-1;
-        }
 
         public static double GetSD(IEnumerable<double> values)
         {
@@ -368,7 +120,7 @@ namespace Assembly_Planner
         }
 
         public static void EvaluateSubFirstThreeTime(SubAssembly sub, List<Component> refnodes, List<Component> movingnodes,
-            double olpdis)
+            double olpdis, out double totaltime, out double totalSD, out double securetime, out double securesd)
         {
             var inputunitscaler = Program.MeshMagnifier / 1000;//magnifier translate unit to cm
             var movingsolids = new List<TessellatedSolid>();
@@ -446,8 +198,8 @@ namespace Assembly_Planner
             ///////
             ///secure
             ///////
-            var securetime = 0.0;
-            var securesd = 0.0;
+            securetime = 0.0;
+            securesd = 0.0;
             if (sub.Secure.Fasteners != null)
             {
                 foreach (var f in sub.Secure.Fasteners)
@@ -457,8 +209,6 @@ namespace Assembly_Planner
                     var secureinput = new double[6];
                     if (f.SecureModelInputs == null)
                     {
-                        if (f.Diameter == 0) f.Diameter = 1;
-                        if (f.OverallLength == 0) f.OverallLength = 1;
                         var OBBmax = (f.Diameter / inputunitscaler) * (f.OverallLength / inputunitscaler);
                         var OBBmin = (f.Diameter / inputunitscaler) * (f.Diameter / inputunitscaler);
                         var numberofthreads = f.NumberOfThreads;
@@ -477,7 +227,7 @@ namespace Assembly_Planner
                         {
                             nut = 2;
                         }
-                        secureinput = new double[6] { Math.Log(OBBmax / (double)1000), Math.Log(OBBmin / (double)1000), Math.Log(numberofthreads), Math.Log(insertdistance), nut, tool };
+                        secureinput = new double[6] { Math.Log(OBBmax / 1000), Math.Log(OBBmin / 1000), Math.Log(numberofthreads), Math.Log(insertdistance), nut, tool };
                         f.SecureModelInputs = OnlineGPupdating.RowtoMatrix(secureinput);
                     }
                     else
@@ -489,12 +239,12 @@ namespace Assembly_Planner
                     securesd += eachsecureSD;
                     f.Time = eachseucretime;
                     f.TimeSD = eachsecureSD;
-                    if (eachseucretime > 30)
-                    {
-                        var sssss = 1;
-                    }
-                    if (securetime != 0)
-                        Program.gpsecuretime.Add(eachseucretime);
+                    //   if (eachseucretime > 30)
+                    //   {
+                    //       var sssss = 1;
+                    //   }
+                    ////   if (securetime != 0)
+                    //      // Bridge.gpsecuretime.Add(eachseucretime);
                 }
             }
             if (installtime < 0)
@@ -503,17 +253,25 @@ namespace Assembly_Planner
                 movingtime = 0.5;
             sub.MoveRoate.Time = movingtime;
             sub.MoveRoate.TimeSD = movingSD;
-            var totalSD = instalSD + movingSD;
+            totalSD = instalSD + movingSD;
             sub.Install.Time = installtime;
             sub.Install.TimeSD = totalSD;
             sub.Secure.Time = securetime;
             sub.Secure.TimeSD = securesd;
-            var totaltime = installtime + movingtime;
+            totaltime = installtime + movingtime;
+
+            if (movingtime > 2.9 && movingtime < 3.01)
+            {
+                var sss = 1;
+            }
+            if (installtime > 2.9 && installtime < 3.01)
+            {
+                var sss = 1;
+            }
 
 
-
-            Program.gpinstalltime.Add(installtime);
-            Program.gpmovingtime.Add(movingtime);
+            // Bridge.gpinstalltime.Add(installtime);
+            //  Bridge.gpmovingtime.Add(movingtime);
         }
 
 
@@ -566,7 +324,7 @@ namespace Assembly_Planner
         }
 
         private List<Fastener> ConnectingArcsFastener(List<Connection> connectingArcs,
-            HashSet<Component> subassemblyNodes, List<Component> optNodes, List<Component> rest)
+            HashSet<Component> subassemblyNodes, List<Component> optNodes)
         {
             // if all of the parts exist in the partsLockedByFastener, are in the subassemblyNodes, add the fastenrs to subAssembly,
             // otherwise it's removed before
@@ -591,10 +349,7 @@ namespace Assembly_Planner
                 foreach (var fas in arc.Fasteners.Where(a => !fasteners.Contains(a)))
                 {
                     if (fas.PartsLockedByFastener.All(ind => subassemblyNodes.Contains(Program.AssemblyGraph.nodes[ind])))
-                    {
-                        if (fasteners.Contains(fas)) continue;
                         fasteners.Add(fas);
-                    }
                 }
             }
 
@@ -606,18 +361,9 @@ namespace Assembly_Planner
             {
                 var howManyInOption = AdjacentParts[part].Count(optNodes.Contains);
                 if (AdjacentParts[part].All(subassemblyNodes.Contains) && howManyInOption > 0 &&
-                    howManyInOption <= AdjacentParts[part].Count)
+                    howManyInOption < AdjacentParts[part].Count)
                 {
-                    fasteners.AddRange(part.Pins.Where(p => !fasteners.Contains(p)));
-                }
-                else
-                {
-                    var howManyInOption2 = AdjacentParts[part].Count(rest.Contains);
-                    if (AdjacentParts[part].All(subassemblyNodes.Contains) && howManyInOption2 > 0 &&
-                        howManyInOption2 <= AdjacentParts[part].Count)
-                    {
-                        fasteners.AddRange(part.Pins.Where(p => !fasteners.Contains(p)));
-                    }
+                    fasteners.AddRange(part.Pins);
                 }
             }
             return fasteners;
@@ -714,7 +460,7 @@ namespace Assembly_Planner
         {
             var pointCloud = new List<Vertex>(refCVXHull.Vertices);
             pointCloud.AddRange(movingCVXHull.Vertices);
-            return new TVGLConvexHull(pointCloud, 1e-8);
+            return new TVGLConvexHull(pointCloud);
         }
 
         public static TVGLConvexHull CreateCombinedConvexHull2(List<Component> nodes)
@@ -725,20 +471,20 @@ namespace Assembly_Planner
                 var nodeName = n.name;
                 pointCloud.AddRange(ConvexHullsForParts[nodeName].Vertices);
             }
-            return new TVGLConvexHull(pointCloud, 1e-8);
+            return new TVGLConvexHull(pointCloud);
         }
 
-        public static double GetSubassemblyVolume(List<Component> nodes)
+        private double GetSubassemblyVolume(List<Component> nodes)
         {
             return nodes.Sum(n => n.Volume);
         }
 
-        public static double GetSubassemblyMass(List<Component> nodes)
+        private double GetSubassemblyMass(List<Component> nodes)
         {
             return nodes.Sum(n => n.Mass);
         }
 
-        public static Vertex GetSubassemblyCenterOfMass(List<Component> nodes)
+        private Vertex GetSubassemblyCenterOfMass(List<Component> nodes)
         {
             var sumMx = 0.0;
             var sumMy = 0.0;
@@ -819,18 +565,18 @@ namespace Assembly_Planner
             /* if the former face area does not take up a significant portion of 
              * the new faces then we do not have the confidence to make the judgement
              * based on this fact. */
-            if (formerFacesArea / totalFaceArea > Constants.CVXFormerFaceConfidence)
+            if (formerFacesArea / totalFaceArea > Constants.Values.CVXFormerFaceConfidence)
             {
                 /* there are two check here: if the common area is very small, we assume the 
                  * subassembly is inside the other. If not, maybe it is more on the outside
                  * but a smaller effect on resulting convex hull. */
-                if (refFaceArea / formerFacesArea < Constants.CVXOnInsideThreshold)
+                if (refFaceArea / formerFacesArea < Constants.Values.CVXOnInsideThreshold)
                     return InstallCharacterType.ReferenceIsInsideMoving;
-                if (movingFaceArea / formerFacesArea < Constants.CVXOnInsideThreshold)
+                if (movingFaceArea / formerFacesArea < Constants.Values.CVXOnInsideThreshold)
                     return InstallCharacterType.MovingIsInsideReference;
-                if (refFaceArea / formerFacesArea < Constants.CVXOnOutsideThreshold)
+                if (refFaceArea / formerFacesArea < Constants.Values.CVXOnOutsideThreshold)
                     return InstallCharacterType.ReferenceIsOnOutsideOfMoving;
-                if (movingFaceArea / formerFacesArea < Constants.CVXOnOutsideThreshold)
+                if (movingFaceArea / formerFacesArea < Constants.Values.CVXOnOutsideThreshold)
                     return InstallCharacterType.MovingIsOnOutsideOfReference;
             }
             /* if we cannot confidently use face area then we switch to comparing
@@ -899,7 +645,7 @@ namespace Assembly_Planner
             return false;
         }
 
-        private static double DetermineDistanceToSeparateHull(SubAssembly newSubAsm, Double[] insertionDirection, out double cvhOverlapDis)
+        private static double DetermineDistanceToSeparateHull(SubAssembly newSubAsm, Double[] insertionDirection)
         {
             var refMaxValue =
                 GeometryFunctions.FindMaxPlaneHeightInDirection(newSubAsm.Install.Reference.CVXHull.Vertices,
@@ -915,15 +661,13 @@ namespace Assembly_Planner
                 GeometryFunctions.FindMinPlaneHeightInDirection(newSubAsm.Install.Moving.CVXHull.Vertices,
                     insertionDirection);
 
-            var distanceToFree = Math.Abs(movingMaxValue - refMinValue); //new
-            //var distanceToFree = Math.Abs(refMaxValue - movingMinValue);
+            var distanceToFree = Math.Abs(refMaxValue - movingMinValue);
             if (distanceToFree < 0)
             {
                 distanceToFree = 0;
                 throw new Exception("How is distance to free less than zero?");
             }
-            cvhOverlapDis = distanceToFree;
-            return distanceToFree + (movingMaxValue - movingMinValue) / 2.0 + (refMaxValue - refMinValue) / 2.0;
+            return distanceToFree + (movingMaxValue - movingMinValue) + (refMaxValue - refMinValue);
         }
     }
 }
