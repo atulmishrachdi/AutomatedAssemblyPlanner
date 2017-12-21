@@ -1,0 +1,339 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <SchemaVersion>2.0</SchemaVersion>
+        <ProjectGuid>{e5587a64-56c8-4043-8b9d-76f7a694bf01}</ProjectGuid>
+        <ProjectHome>..\</ProjectHome>
+        <ProjectView>ShowAllFiles</ProjectView>
+        <StartupFile>server.js</StartupFile>
+        <WorkingDirectory>.</WorkingDirectory>
+        <OutputPath>.</OutputPath>
+        <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
+        <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>
+        <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+    <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+    <ItemGroup>
+        <Content Include="package-lock.json" />
+        <Content Include="README.md" />
+        <Compile Include="server.js" />
+        <Content Include="examples\input.xml" />
+        <Content Include="visAPI\index.html" />
+        <Content Include="visAPI\data.json" />
+        <Compile Include="visAPI\api.js" />
+        <Content Include="bin\netcoreapp2.0\AssemblyPlanSearch.deps.json" />
+        <Content Include="bin\netcoreapp2.0\AssemblyPlanSearch.runtimeconfig.dev.json" />
+        <Content Include="bin\netcoreapp2.0\AssemblyPlanSearch.runtimeconfig.json" />
+        <Content Include="bin\netcoreapp2.0\DisassemblyDirectionDetection.deps.json" />
+        <Content Include="bin\netcoreapp2.0\DisassemblyDirectionDetection.runtimeconfig.dev.json" />
+        <Content Include="bin\netcoreapp2.0\DisassemblyDirectionDetection.runtimeconfig.json" />
+        <Content Include="bin\netcoreapp2.0\FastenerDetection.deps.json" />
+        <Content Include="bin\netcoreapp2.0\FastenerDetection.runtimeconfig.dev.json" />
+        <Content Include="bin\netcoreapp2.0\FastenerDetection.runtimeconfig.json" />
+        <Content Include="bin\netcoreapp2.0\VerificationBeforePlanning.deps.json" />
+        <Content Include="bin\netcoreapp2.0\VerificationBeforePlanning.runtimeconfig.dev.json" />
+        <Content Include="bin\netcoreapp2.0\VerificationBeforePlanning.runtimeconfig.json" />
+        <Content Include="bin\netstandard2.0\AutomatedAssemblyPlannerLibrary.deps.json" />
+        <Content Include="examples\Cubes\Cube\solution.xml" />
+        <Content Include="examples\Cubes\CubeTXT\OneByOne - A0-1.txt" />
+        <Content Include="examples\Cubes\CubeTXT\OneByOne - ABF0-1.txt" />
+        <Content Include="examples\Cubes\CubeTXT\OneByOne - ADE0-1.txt" />
+        <Content Include="examples\Cubes\CubeTXT\OneByOne - B0-1.txt" />
+        <Content Include="examples\Cubes\CubeTXT\OneByOne - BCG0-1.txt" />
+        <Content Include="examples\Cubes\CubeTXT\OneByOne - C0-1.txt" />
+        <Content Include="examples\Cubes\CubeTXT\OneByOne - CDH0-1.txt" />
+        <Content Include="examples\Cubes\CubeTXT\OneByOne - D0-1.txt" />
+        <Content Include="examples\Cubes\CubeTXT\OneByOne - E0-1.txt" />
+        <Content Include="examples\Cubes\CubeTXT\OneByOne - F0-1.txt" />
+        <Content Include="examples\Cubes\CubeTXT\OneByOne - G0-1.txt" />
+        <Content Include="examples\Cubes\CubeTXT\OneByOne - GKJ0-1.txt" />
+        <Content Include="examples\Cubes\CubeTXT\OneByOne - H0-1.txt" />
+        <Content Include="examples\Cubes\CubeTXT\OneByOne - I0-1.txt" />
+        <Content Include="examples\Cubes\CubeTXT\OneByOne - IFJ0-1.txt" />
+        <Content Include="examples\Cubes\CubeTXT\OneByOne - J0-1.txt" />
+        <Content Include="examples\Cubes\CubeTXT\OneByOne - K0-1.txt" />
+        <Content Include="examples\Cubes\CubeTXT\OneByOne - KHL0-1.txt" />
+        <Content Include="examples\Cubes\CubeTXT\OneByOne - L0-1.txt" />
+        <Content Include="examples\Cubes\CubeTXT\OneByOne - LEI0-1.txt" />
+        <Content Include="examples\Cubes\Double\solution (double).xml" />
+        <Content Include="examples\Pumps\pumpWExt\solution(pumpWExt).xml" />
+        <Content Include="examples\Pumps\pumpWExt\solution.xml" />
+        <Content Include="examples\Pumps\PumpWithThreadedBolts\parts_properties2.xml" />
+        <Compile Include="src\webVis\base3D.js" />
+        <Compile Include="src\webVis\dirConfirmScript.js" />
+        <Compile Include="src\webVis\jquery.js" />
+        <Compile Include="src\webVis\jsstl.js" />
+        <Compile Include="src\webVis\partRender.js" />
+        <Compile Include="src\webVis\partTableScript.js" />
+        <Compile Include="src\webVis\partTableScript_new.js" />
+        <Compile Include="src\webVis\renderScript.js" />
+        <Compile Include="src\webVis\three.min.js" />
+        <Compile Include="src\webVis\treequence.js" />
+        <Content Include="src\AssemblyPlanSearch\obj\project.assets.json" />
+        <Content Include="src\AssemblyPlanSearch\obj\Debug\netcoreapp2.0\AssemblyPlanSearch.csproj.FileListAbsolute.txt" />
+        <Content Include="src\AssemblyPlanSearch\obj\Release\netcoreapp2.0\AssemblyPlanSearch.csproj.FileListAbsolute.txt" />
+        <Content Include="src\AutomatedAssemblyPlannerLibrary\obj\project.assets.json" />
+        <Content Include="src\AutomatedAssemblyPlannerLibrary\obj\Debug\netstandard2.0\AutomatedAssemblyPlannerLibrary.csproj.FileListAbsolute.txt" />
+        <Content Include="src\AutomatedAssemblyPlannerLibrary\obj\Release\netstandard2.0\AutomatedAssemblyPlannerLibrary.csproj.FileListAbsolute.txt" />
+        <Content Include="src\DisassemblyDirectionDetection\obj\project.assets.json" />
+        <Content Include="src\DisassemblyDirectionDetection\obj\Debug\netcoreapp2.0\DisassemblyDirectionDetection.csproj.FileListAbsolute.txt" />
+        <Content Include="src\DisassemblyDirectionDetection\obj\Release\netcoreapp2.0\DisassemblyDirectionDetection.csproj.FileListAbsolute.txt" />
+        <Content Include="src\FastenerDetection\obj\project.assets.json" />
+        <Content Include="src\FastenerDetection\obj\Debug\netcoreapp2.0\FastenerDetection.csproj.FileListAbsolute.txt" />
+        <Content Include="src\FastenerDetection\obj\Release\netcoreapp2.0\FastenerDetection.csproj.FileListAbsolute.txt" />
+        <Content Include="src\obj\Debug\AAPWebInterface.njsproj.FileListAbsolute.txt" />
+        <Content Include="src\VerificationBeforePlanning\obj\project.assets.json" />
+        <Content Include="src\VerificationBeforePlanning\obj\Debug\netcoreapp2.0\VerificationBeforePlanning.csproj.FileListAbsolute.txt" />
+        <Content Include="src\VerificationBeforePlanning\obj\Release\netcoreapp2.0\VerificationBeforePlanning.csproj.FileListAbsolute.txt" />
+        <Content Include="visAPI\assets\index.html" />
+        <Content Include="visAPI\assets\favicon.ico" />
+        <Content Include="visAPI\classes\directionConfirmGlobal.html" />
+        <Content Include="visAPI\classes\index.html" />
+        <Content Include="visAPI\classes\partTableGlobal.html" />
+        <Content Include="visAPI\classes\renderGlobal.html" />
+        <Content Include="visAPI\elements\index.html" />
+        <Content Include="visAPI\elements\inputState.html" />
+        <Content Include="visAPI\files\index.html" />
+        <Content Include="visAPI\files\.._src_webVis_renderScript.js.html" />
+        <Content Include="visAPI\files\.._src_webVis_partTableScript.js.html" />
+        <Content Include="visAPI\files\.._src_webVis_treequence.js.html" />
+        <Content Include="visAPI\files\.._src_webVis_sigma.canvas.edges.curvedArrow.js.html" />
+        <Content Include="visAPI\files\.._src_webVis_dirConfirmScript.js.html" />
+        <Content Include="visAPI\files\.._src_webVis_jquery.js.html" />
+        <Content Include="visAPI\files\.._src_webVis_jsstl.js.html" />
+        <Content Include="visAPI\files\.._src_webVis_partRender.js.html" />
+        <Content Include="visAPI\modules\index.html" />
+        <Content Include="visAPI\assets\css\main.css" />
+        <Content Include="visAPI\assets\css\external-small.png" />
+        <Content Include="visAPI\assets\css\logo.png" />
+        <Content Include="visAPI\assets\img\spinner.gif" />
+        <Compile Include="visAPI\assets\js\api-filter.js" />
+        <Compile Include="visAPI\assets\js\api-list.js" />
+        <Compile Include="visAPI\assets\js\api-search.js" />
+        <Compile Include="visAPI\assets\js\apidocs.js" />
+        <Compile Include="visAPI\assets\js\yui-prettify.js" />
+        <Content Include="visAPI\assets\vendor\prettify\CHANGES.html" />
+        <Content Include="visAPI\assets\vendor\prettify\README.html" />
+        <Content Include="visAPI\assets\vendor\prettify\prettify-min.css" />
+        <Compile Include="visAPI\assets\vendor\prettify\prettify-min.js" />
+        <Content Include="workspace\templates\manifest.txt" />
+        <Content Include="workspace\templates\dirCon.html" />
+        <Content Include="workspace\templates\pageBase.html" />
+        <Content Include="workspace\templates\partProp.html" />
+        <Content Include="workspace\templates\progress.html" />
+        <Content Include="workspace\templates\render.html" />
+        <Content Include="workspace\templates\stageBase.html" />
+        <Content Include="workspace\templates\upload.html" />
+        <Content Include="workspace\templates\datatables.css" />
+        <Content Include="workspace\templates\dirConStyle.css" />
+        <Content Include="workspace\templates\pageBaseStyle.css" />
+        <Content Include="workspace\templates\partPropStyle.css" />
+        <Content Include="workspace\templates\progress.css" />
+        <Content Include="workspace\templates\progressStyle.css" />
+        <Content Include="workspace\templates\renderStyle.css" />
+        <Content Include="workspace\templates\upload.css" />
+        <Content Include="workspace\templates\uploadStyle.css" />
+        <Compile Include="workspace\templates\datatables.js" />
+        <Compile Include="workspace\templates\dirConScript.js" />
+        <Compile Include="workspace\templates\directionList.js" />
+        <Compile Include="workspace\templates\jquery.js" />
+        <Compile Include="workspace\templates\jsstl.js" />
+        <Compile Include="workspace\templates\pageBaseScript.js" />
+        <Compile Include="workspace\templates\partPropScript.js" />
+        <Compile Include="workspace\templates\partRender.js" />
+        <Compile Include="workspace\templates\progressScript.js" />
+        <Compile Include="workspace\templates\renderScript.js" />
+        <Compile Include="workspace\templates\three.min.js" />
+        <Compile Include="workspace\templates\treequence.js" />
+        <Compile Include="workspace\templates\upload.js" />
+        <Compile Include="workspace\templates\uploadScript.js" />
+    </ItemGroup>
+    <ItemGroup>
+        <Folder Include="bin" />
+        <Folder Include="bin\netcoreapp2.0" />
+        <Folder Include="bin\netstandard2.0" />
+        <Folder Include="examples" />
+        <Folder Include="examples\AVM Integration" />
+        <Folder Include="examples\AVM Integration\Torsion Bar Stl" />
+        <Folder Include="examples\Cubes" />
+        <Folder Include="examples\Cubes\Cube" />
+        <Folder Include="examples\Cubes\CubeSTL" />
+        <Folder Include="examples\Cubes\CubeTXT" />
+        <Folder Include="examples\Cubes\Double" />
+        <Folder Include="examples\Cubes\double_binary" />
+        <Folder Include="examples\Cubes\DoubleBinary" />
+        <Folder Include="examples\FoodPackagingMachine" />
+        <Folder Include="examples\FoodPackagingMachine\FPMSTL" />
+        <Folder Include="examples\FoodPackagingMachine\FPMSTL2" />
+        <Folder Include="examples\FoodPackagingMachine\SolidWorks" />
+        <Folder Include="examples\FoodPackagingMachine\SolidWorksModified" />
+        <Folder Include="examples\FPM2" />
+        <Folder Include="examples\Mc Cormik" />
+        <Folder Include="examples\Mc Cormik\STL2" />
+        <Folder Include="examples\Mc Cormik\STL2\New folder" />
+        <Folder Include="examples\PremadeGraphs" />
+        <Folder Include="examples\Pumps" />
+        <Folder Include="examples\Pumps\Pump Assembly" />
+        <Folder Include="examples\Pumps\Pump No fastener" />
+        <Folder Include="examples\Pumps\pumpWExt" />
+        <Folder Include="examples\Pumps\PumpWExtention" />
+        <Folder Include="examples\Pumps\PumpWExtentionBinary" />
+        <Folder Include="examples\Pumps\PumpWithThreadedBolts" />
+        <Folder Include="examples\TXT-ASCII" />
+        <Folder Include="examples\TXT-Binary" />
+        <Folder Include="src" />
+        <Folder Include="src\AAPWebInterface" />
+        <Folder Include="src\AssemblyPlanSearch" />
+        <Folder Include="src\AssemblyPlanSearch\obj" />
+        <Folder Include="src\AssemblyPlanSearch\obj\Debug" />
+        <Folder Include="src\AssemblyPlanSearch\obj\Debug\netcoreapp2.0" />
+        <Folder Include="src\AssemblyPlanSearch\obj\Release" />
+        <Folder Include="src\AssemblyPlanSearch\obj\Release\netcoreapp2.0" />
+        <Folder Include="src\AssemblyPlanSearch\old" />
+        <Folder Include="src\AutomatedAssemblyPlannerLibrary" />
+        <Folder Include="src\AutomatedAssemblyPlannerLibrary\DegreeOfFreedomGraph" />
+        <Folder Include="src\AutomatedAssemblyPlannerLibrary\DisassemblyProcess" />
+        <Folder Include="src\AutomatedAssemblyPlannerLibrary\DisassemblyProcess\LeapSearch" />
+        <Folder Include="src\AutomatedAssemblyPlannerLibrary\Evaluation" />
+        <Folder Include="src\AutomatedAssemblyPlannerLibrary\Evaluation\OutputXML" />
+        <Folder Include="src\AutomatedAssemblyPlannerLibrary\Evaluation\ShapeStringDataFiles" />
+        <Folder Include="src\AutomatedAssemblyPlannerLibrary\GeometryReasoning" />
+        <Folder Include="src\AutomatedAssemblyPlannerLibrary\GPprocess" />
+        <Folder Include="src\AutomatedAssemblyPlannerLibrary\GraphSynth.BaseClasses" />
+        <Folder Include="src\AutomatedAssemblyPlannerLibrary\GraphSynth.BaseClasses\BasicGraphClasses" />
+        <Folder Include="src\AutomatedAssemblyPlannerLibrary\GraphSynth.BaseClasses\Logistics" />
+        <Folder Include="src\AutomatedAssemblyPlannerLibrary\GraphSynth.BaseClasses\Logistics\Converters" />
+        <Folder Include="src\AutomatedAssemblyPlannerLibrary\GraphSynth.BaseClasses\RuleClasses" />
+        <Folder Include="src\AutomatedAssemblyPlannerLibrary\GraphSynth.BaseClasses\SearchProcess" />
+        <Folder Include="src\AutomatedAssemblyPlannerLibrary\InitialGraphMaker" />
+        <Folder Include="src\AutomatedAssemblyPlannerLibrary\InitialGraphMaker\BoltAndGearDetector" />
+        <Folder Include="src\AutomatedAssemblyPlannerLibrary\Input" />
+        <Folder Include="src\AutomatedAssemblyPlannerLibrary\obj" />
+        <Folder Include="src\AutomatedAssemblyPlannerLibrary\obj\Debug" />
+        <Folder Include="src\AutomatedAssemblyPlannerLibrary\obj\Debug\netstandard2.0" />
+        <Folder Include="src\AutomatedAssemblyPlannerLibrary\obj\Release" />
+        <Folder Include="src\AutomatedAssemblyPlannerLibrary\obj\Release\netstandard2.0" />
+        <Folder Include="src\AutomatedAssemblyPlannerLibrary\Output" />
+        <Folder Include="src\AutomatedAssemblyPlannerLibrary\PostProcessor" />
+        <Folder Include="src\AutomatedAssemblyPlannerLibrary\StateSaving" />
+        <Folder Include="src\bin" />
+        <Folder Include="src\DisassemblyDirectionDetection" />
+        <Folder Include="src\DisassemblyDirectionDetection\obj" />
+        <Folder Include="src\DisassemblyDirectionDetection\obj\Debug" />
+        <Folder Include="src\DisassemblyDirectionDetection\obj\Debug\netcoreapp2.0" />
+        <Folder Include="src\DisassemblyDirectionDetection\obj\Release" />
+        <Folder Include="src\DisassemblyDirectionDetection\obj\Release\netcoreapp2.0" />
+        <Folder Include="src\DisassemblyDirectionDetection\old" />
+        <Folder Include="src\FastenerDetection" />
+        <Folder Include="src\FastenerDetection\obj" />
+        <Folder Include="src\FastenerDetection\obj\Debug" />
+        <Folder Include="src\FastenerDetection\obj\Debug\netcoreapp2.0" />
+        <Folder Include="src\FastenerDetection\obj\Release" />
+        <Folder Include="src\FastenerDetection\obj\Release\netcoreapp2.0" />
+        <Folder Include="src\obj" />
+        <Folder Include="src\obj\Debug" />
+        <Folder Include="src\VerificationBeforePlanning" />
+        <Folder Include="src\VerificationBeforePlanning\obj" />
+        <Folder Include="src\VerificationBeforePlanning\obj\Debug" />
+        <Folder Include="src\VerificationBeforePlanning\obj\Debug\netcoreapp2.0" />
+        <Folder Include="src\VerificationBeforePlanning\obj\Release" />
+        <Folder Include="src\VerificationBeforePlanning\obj\Release\netcoreapp2.0" />
+        <Folder Include="src\webVis" />
+        <Folder Include="training" />
+        <Folder Include="training\BoltAndGearDetector" />
+        <Folder Include="training\BoltAndGearDetector\ClassifierFiles" />
+        <Folder Include="training\BoltAndGearDetector\TrainingSTLs" />
+        <Folder Include="training\BoltAndGearDetector\TrainingSTLs\Fastener" />
+        <Folder Include="training\BoltAndGearDetector\TrainingSTLs\notFastener" />
+        <Folder Include="training\More Sample Cases" />
+        <Folder Include="training\More Sample Cases\ChamferedCube" />
+        <Folder Include="training\More Sample Cases\Cone-Cone" />
+        <Folder Include="training\More Sample Cases\Cone-Cone\1" />
+        <Folder Include="training\More Sample Cases\Cylinder-Cylinder" />
+        <Folder Include="training\More Sample Cases\Cylinder-Cylinder\1" />
+        <Folder Include="training\More Sample Cases\Cylinder-Cylinder\2" />
+        <Folder Include="training\More Sample Cases\Flat-Cone" />
+        <Folder Include="training\More Sample Cases\Flat-Cylinder" />
+        <Folder Include="training\More Sample Cases\newCone" />
+        <Folder Include="training\TrainningTimeData" />
+        <Folder Include="training\TrainningTimeData\backup" />
+        <Folder Include="training\TrainningTimeData\installdata" />
+        <Folder Include="training\TrainningTimeData\installdata\dataset1" />
+        <Folder Include="training\TrainningTimeData\installdata\dataset1X10" />
+        <Folder Include="training\TrainningTimeData\installdata\dataset2" />
+        <Folder Include="training\TrainningTimeData\installdata\dataset3" />
+        <Folder Include="training\TrainningTimeData\movingdata" />
+        <Folder Include="training\TrainningTimeData\movingdata\dataset3" />
+        <Folder Include="training\TrainningTimeData\movingdata\dataset4" />
+        <Folder Include="training\TrainningTimeData\rotatedata" />
+        <Folder Include="training\TrainningTimeData\rotatedata\dataset1" />
+        <Folder Include="training\TrainningTimeData\rotatedata\dataset1withonlyangles" />
+        <Folder Include="training\TrainningTimeData\rotatedata\dataset2" />
+        <Folder Include="training\TrainningTimeData\rotatedata\dataset3" />
+        <Folder Include="visAPI" />
+        <Folder Include="visAPI\assets" />
+        <Folder Include="visAPI\assets\css" />
+        <Folder Include="visAPI\assets\img" />
+        <Folder Include="visAPI\assets\js" />
+        <Folder Include="visAPI\assets\vendor" />
+        <Folder Include="visAPI\assets\vendor\prettify" />
+        <Folder Include="visAPI\classes" />
+        <Folder Include="visAPI\elements" />
+        <Folder Include="visAPI\files" />
+        <Folder Include="visAPI\modules" />
+        <Folder Include="workspace" />
+        <Folder Include="workspace\709D4EE12B9CDA295FDBE6BA15B94D386ADC1606" />
+        <Folder Include="workspace\709D4EE12B9CDA295FDBE6BA15B94D386ADC1606\intermediate" />
+        <Folder Include="workspace\709D4EE12B9CDA295FDBE6BA15B94D386ADC1606\models" />
+        <Folder Include="workspace\709D4EE12B9CDA295FDBE6BA15B94D386ADC1606\XML" />
+        <Folder Include="workspace\A2DABE6A76983F13BC3833EE6D927E91EF7DB904" />
+        <Folder Include="workspace\A2DABE6A76983F13BC3833EE6D927E91EF7DB904\intermediate" />
+        <Folder Include="workspace\A2DABE6A76983F13BC3833EE6D927E91EF7DB904\models" />
+        <Folder Include="workspace\A2DABE6A76983F13BC3833EE6D927E91EF7DB904\XML" />
+        <Folder Include="workspace\templates" />
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <!--Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them.-->
+    <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="False" />
+    <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsTools.targets" />
+    <ProjectExtensions>
+        <VisualStudio>
+          <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+            <WebProjectProperties>
+              <UseIIS>False</UseIIS>
+              <AutoAssignPort>True</AutoAssignPort>
+              <DevelopmentServerPort>0</DevelopmentServerPort>
+              <DevelopmentServerVPath>/</DevelopmentServerVPath>
+              <IISUrl>http://localhost:48022/</IISUrl>
+              <NTLMAuthentication>False</NTLMAuthentication>
+              <UseCustomServer>True</UseCustomServer>
+              <CustomServerUrl>http://localhost:1337</CustomServerUrl>
+              <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+            </WebProjectProperties>
+          </FlavorProperties>
+          <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
+            <WebProjectProperties>
+              <StartPageUrl>
+              </StartPageUrl>
+              <StartAction>CurrentPage</StartAction>
+              <AspNetDebugging>True</AspNetDebugging>
+              <SilverlightDebugging>False</SilverlightDebugging>
+              <NativeDebugging>False</NativeDebugging>
+              <SQLDebugging>False</SQLDebugging>
+              <ExternalProgram>
+              </ExternalProgram>
+              <StartExternalURL>
+              </StartExternalURL>
+              <StartCmdLineArguments>
+              </StartCmdLineArguments>
+              <StartWorkingDirectory>
+              </StartWorkingDirectory>
+              <EnableENC>False</EnableENC>
+              <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
+            </WebProjectProperties>
+          </FlavorProperties>
+        </VisualStudio>
+    </ProjectExtensions>
+</Project>

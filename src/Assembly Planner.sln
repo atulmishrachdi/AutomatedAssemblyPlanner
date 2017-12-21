@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomatedAssemblyPlannerLib
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyPlanSearch", "AssemblyPlanSearch\AssemblyPlanSearch.csproj", "{8977628A-34AC-41B2-9DA6-D5B233C2882B}"
 EndProject
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "AAPWebInterface", "AAPWebInterface.njsproj", "{E5587A64-56C8-4043-8B9D-76F7A694BF01}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{8977628A-34AC-41B2-9DA6-D5B233C2882B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8977628A-34AC-41B2-9DA6-D5B233C2882B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8977628A-34AC-41B2-9DA6-D5B233C2882B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5587A64-56C8-4043-8B9D-76F7A694BF01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5587A64-56C8-4043-8B9D-76F7A694BF01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5587A64-56C8-4043-8B9D-76F7A694BF01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5587A64-56C8-4043-8B9D-76F7A694BF01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
