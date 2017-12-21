@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "StartNodeServer": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Program Files\\nodejs\\node.exe",
+      "commandLineArgs": "server.js",
+      "workingDirectory": "C:\\Users\\matth\\Source\\Repos\\AutomatedAssemblyPlanner\\"
+    }
+  }
+}
