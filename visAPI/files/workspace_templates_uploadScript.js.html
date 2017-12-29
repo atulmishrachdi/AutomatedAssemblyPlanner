@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>inputState</title>
+    <title>workspace\templates\uploadScript.js</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -84,33 +84,202 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>&lt;inputState&gt;</h1>
-<div class="box meta">
-        <div class="foundat">
-            Defined in: <a href="../files/workspace_templates_pageBaseScript.js.html#l69"><code>workspace\templates\pageBaseScript.js:69</code></a>
-        </div>
+<h1 class="file-heading">File: workspace\templates\uploadScript.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+;
 
 
-</div>
+if( typeof(startupScripts) == &#x27;undefined&#x27;){
+
+	var startupScripts = {
+		&quot;0&quot;:function(){},
+		&quot;1&quot;:function(){},
+		&quot;2&quot;:function(){},
+		&quot;3&quot;:function(){},
+		&quot;4&quot;:function(){},
+		&quot;5&quot;:function(){},
+		&quot;6&quot;:function(){},
+		&quot;7&quot;:function(){}
+	};
+
+}
 
 
-<div class="box intro">
-    <p>Contains a representation of the last keyboard events reported by the
-web page for each given key that acts as input for manipulating the
-visulization: 'W','A','S','D','R','F', and the 'Space' key</p>
+/**
+*
+* Accepts a fileinput event, presumably from a file upload event listener, and assigns
+* functions to each file reader listed in the event to be called upon the full loading
+* of that given reader&#x27;s files
+*
+* @method readMultipleFiles
+* @for renderGlobal
+* @param {Event} evt A fileinput event, to be given by a fileinput event listener
+* @return {Void}
+*
+*/
+function readMultipleFiles(evt) {
+	//Retrieve all the files from the FileList object
+	var files = evt.target.files;
+	if (files) {
+		for (var i=0, f; f=files[i]; i++) {
+
+			var r = new FileReader();
+			var extension=grabExtension(f.name)[0];
+			//console.log(f.name);
+
+			if(extension===undefined){
+				continue;
+			}
+			if(extension.toLowerCase()===&quot;stl&quot;){
+				r.onload = (function(f) {
+					return function(e) {
+						loadParts();
+					};
+				})(f);
+				r.readAsArrayBuffer(f);
+				fileReaders.push({Reader: r, Name: f.name});
+			}
+		}
+		//&#x60;console.log(fileReaders);
+	}
+	else {
+		  alert(&quot;Failed to load files&quot;);
+	}
+}
 
 
-    <ul class="definitions">
-
-    </ul>
-</div>
 
 
 
-<div class="index-section attrs">
-    <h2>Attributes</h2>
+/**
+*
+* Called internally upon every recieved fileload event. Checks if every file reader in the
+* array &quot;fileReaders&quot; has fully read each of their files. If so, then the function converts
+* all recieved stl files into threeJS models and executes &quot;renderParts&quot;.
+*
+* @method loadParts
+* @for renderGlobal
+* @return {Void}
+*
+*/
+function loadParts (){
 
-    <p>This element has no defined attributes.</p>
+
+		// Looks for unloaded files
+		var pos=0;
+		var lim=fileReaders.length;
+		while(pos&lt;lim){
+			if(!(fileReaders[pos].Reader.readyState===2)){
+				//console.log(pos);
+				//console.log(fileReaders[pos].Name);
+				break;
+			}
+			pos++;
+		}
+
+
+	// Executes if all files are loaded
+	if(pos===lim){
+		spinOff(handleModels);
+	}
+
+}
+
+function handleModels(){
+
+	console.log(&quot;Processing model data...&quot;);
+	//parts.length=0;
+	var pos=0;
+	var lim=fileReaders.length;
+	var partGeom=null;
+	var partMesh;
+	var theCenter;
+	var ext;
+	var theReader;
+
+	while(pos&lt;lim){
+		theReader = fileReaders[pos];
+		ext=grabExtension(theReader.Name)[0];
+		if(ext.toLowerCase()===&quot;stl&quot;){
+			modelNum++;
+		}
+		pos++;
+	}
+
+	console.log(&quot;Found &quot;+modelNum+&quot; models&quot;);
+
+	pos = 0;
+	while(pos&lt;lim){
+		theReader = fileReaders[pos];
+		spinOff((function(r){
+			return function(){
+				ext=grabExtension(r.Name)[0];
+				if(ext.toLowerCase()===&quot;stl&quot;){
+					partGeom=parseStl(r.Reader.result);
+					if(partGeom===null){
+						partGeom=parseStlBinary(r.Reader.result);
+					}
+					//console.log(partGeom);
+					var postMaterial =
+					partMesh=new THREE.Mesh(
+							partGeom,
+							getStdMaterial()
+					);
+					parts.push({
+						Mesh: partMesh,
+						Name: r.Name
+					});
+					scene.add(partMesh);
+					console.log(&quot;Parts: &quot;+parts.length);
+					spinOff(handleSTLs);
+				}
+			}
+		}) (theReader));
+		pos++;
+	}
+	console.log(&quot;Model data processed&quot;);
+
+}
+
+function handleSTLs(){
+
+	stlNum++;
+	if(stlNum &lt; modelNum){
+		return;
+	}
+	console.log(&quot;Handling &quot;+stlNum+&quot; model files&quot;);
+
+	//parts.length=0;
+	var pos=0;
+	var lim=fileReaders.length;
+	var ext;
+	while(pos&lt;lim){
+		theReader = fileReaders[pos];
+		spinOff((function(r){
+			return function(){
+				ext=grabExtension(r.Name)[0];
+				if(ext.toLowerCase()===&quot;stl&quot;){
+					STLs.push({ Name: r.Name, Data: arrayToString(r.Reader.result) });
+					spinOff(giveModels());
+				}
+			}
+		}) (theReader));
+		pos++;
+	}
+
+
+}
+
+
+startupScripts[&quot;0&quot;] = function (){
+	// Inserts the file loading manager into the document
+	document.getElementById(&#x27;fileinput&#x27;).addEventListener(&#x27;change&#x27;, readMultipleFiles, false);
+
+}
+
+    </pre>
 </div>
                     </div>
                 </div>

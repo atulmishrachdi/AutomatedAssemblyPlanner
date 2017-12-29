@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>..\src\webVis\sigma.canvas.edges.curvedArrow.js</title>
+    <title></title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -39,6 +39,8 @@
                 
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/.html"></a></li>
+                                <li><a href="../classes/DataTable.Api.html">DataTable.Api</a></li>
                                 <li><a href="../classes/directionConfirmGlobal.html">directionConfirmGlobal</a></li>
                                 <li><a href="../classes/partTableGlobal.html">partTableGlobal</a></li>
                                 <li><a href="../classes/renderGlobal.html">renderGlobal</a></li>
@@ -82,110 +84,50 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1 class="file-heading">File: ..\src\webVis\sigma.canvas.edges.curvedArrow.js</h1>
+<h1> Class</h1>
+<div class="box meta">
 
-<div class="file">
-    <pre class="code prettyprint linenums">
-;(function() {
-  &#x27;use strict&#x27;;
 
-  sigma.utils.pkg(&#x27;sigma.canvas.edges&#x27;);
+        <div class="foundat">
+            Defined in: <a href="../files/workspace_templates_datatables.js.html#l74"><code>workspace\templates\datatables.js:74</code></a>
+        </div>
 
-  /**
-   * This edge renderer will display edges as curves with arrow heading.
-   *
-   * @param  {object}                   edge         The edge object.
-   * @param  {object}                   source node  The edge source node.
-   * @param  {object}                   target node  The edge target node.
-   * @param  {CanvasRenderingContext2D} context      The canvas context.
-   * @param  {configurable}             settings     The settings function.
-   */
-  sigma.canvas.edges.curvedArrow =
-    function(edge, source, target, context, settings) {
-    var color = edge.color,
-        prefix = settings(&#x27;prefix&#x27;) || &#x27;&#x27;,
-        edgeColor = settings(&#x27;edgeColor&#x27;),
-        defaultNodeColor = settings(&#x27;defaultNodeColor&#x27;),
-        defaultEdgeColor = settings(&#x27;defaultEdgeColor&#x27;),
-        cp = {},
-        size = edge[prefix + &#x27;size&#x27;] || 1,
-        tSize = target[prefix + &#x27;size&#x27;],
-        sX = source[prefix + &#x27;x&#x27;],
-        sY = source[prefix + &#x27;y&#x27;],
-        tX = target[prefix + &#x27;x&#x27;],
-        tY = target[prefix + &#x27;y&#x27;],
-        aSize = Math.max(size * 2.5, settings(&#x27;minArrowSize&#x27;)),
-        d,
-        aX,
-        aY,
-        vX,
-        vY;
 
-    cp = (source.id === target.id) ?
-      sigma.utils.getSelfLoopControlPoints(sX, sY, tSize) :
-      sigma.utils.getQuadraticControlPoint(sX, sY, tX, tY);
-	  
-	// BS I added. Don&#x27;t actually use this renderer for anything
-	// other than the treequences specifically
-	if(Math.abs(tX-sX)&lt;Math.abs(tY-sY) &amp;&amp; !(source.id===target.id)){
-		var slope=(tY-sY)/(tX-sX);
-		var constant=sY-sX*slope;
-		var dVal=(cp.x+(cp.y-constant)*slope)/(1+Math.pow(slope,2));
-		cp.x=2*dVal-cp.x;
-		cp.y=2*dVal*slope-cp.y+2*constant;		
-	}
+</div>
 
-    if (source.id === target.id) {
-      d = Math.sqrt(Math.pow(tX - cp.x1, 2) + Math.pow(tY - cp.y1, 2));
-      aX = cp.x1 + (tX - cp.x1) * (d - aSize - tSize) / d;
-      aY = cp.y1 + (tY - cp.y1) * (d - aSize - tSize) / d;
-      vX = (tX - cp.x1) * aSize / d;
-      vY = (tY - cp.y1) * aSize / d;
-    }
-    else {
-      d = Math.sqrt(Math.pow(tX - cp.x, 2) + Math.pow(tY - cp.y, 2));
-      aX = cp.x + (tX - cp.x) * (d - aSize - tSize) / d;
-      aY = cp.y + (tY - cp.y) * (d - aSize - tSize) / d;
-      vX = (tX - cp.x) * aSize / d;
-      vY = (tY - cp.y) * aSize / d;
-    }
 
-    if (!color)
-      switch (edgeColor) {
-        case &#x27;source&#x27;:
-          color = source.color || defaultNodeColor;
-          break;
-        case &#x27;target&#x27;:
-          color = target.color || defaultNodeColor;
-          break;
-        default:
-          color = defaultEdgeColor;
-          break;
-      }
+<div class="box intro">
+    <p>DataTables is a plug-in for the jQuery Javascript library. It is a highly
+flexible tool, based upon the foundations of progressive enhancement,
+which will add advanced interaction controls to any HTML table. For a
+full list of features please refer to
+<a href="href=%22http://datatables.net">DataTables.net</a>.</p>
+<p>Note that the <code>DataTable</code> object is not a global variable but is aliased
+to <code>jQuery.fn.DataTable</code> and <code>jQuery.fn.dataTable</code> through which it may
+be  accessed.</p>
 
-    context.strokeStyle = color;
-    context.lineWidth = size;
-    context.beginPath();
-    context.moveTo(sX, sY);
-    if (source.id === target.id) {
-      context.bezierCurveTo(cp.x2, cp.y2, cp.x1, cp.y1, aX, aY);
-    } else {
-      context.quadraticCurveTo(cp.x,cp.y, aX, aY);
-    }
-    context.stroke();
+</div>
 
-    context.fillStyle = color;
-    context.beginPath();
-    context.moveTo(aX + vX, aY + vY);
-    context.lineTo(aX + vY * 0.6, aY - vX * 0.6);
-    context.lineTo(aX - vY * 0.6, aY + vX * 0.6);
-    context.lineTo(aX + vX, aY + vY);
-    context.closePath();
-    context.fill();
-  };
-})();
 
-    </pre>
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+
+
+
+        </div>
+
+
+
+
+    </div>
 </div>
                     </div>
                 </div>

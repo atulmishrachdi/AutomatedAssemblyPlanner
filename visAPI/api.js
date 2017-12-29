@@ -1,9 +1,11 @@
 YUI.add("yuidoc-meta", function(Y) {
    Y.YUIDoc = { meta: {
     "classes": [
+        "DataTable.Api",
         "directionConfirmGlobal",
         "partTableGlobal",
-        "renderGlobal"
+        "renderGlobal",
+        null
     ],
     "modules": [],
     "allModules": [],
