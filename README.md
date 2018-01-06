@@ -7,6 +7,8 @@ However, the first one has significantly changed given the functionality of IC.I
 2012 to 2015 and then by DMDII from 2015 to 2017.
 The work is being done primarily by the Design Engineering Lab at Oregon State University.
 
+In addition to this README, there are API documents posted at: https://designengrlab.github.io/AutomatedAssemblyPlanner/
+
 ## What does the application do? ##
 Given an CAD assembly representing a product to be assembled, the application searches for the best way to assemble it. Essentially, the application is a planning algorithm. It produces a plan along with estimates for timing for each step in the plan.
 
@@ -41,4 +43,4 @@ Currently, the tool is not "live" on a website. However, you can run the softwar
 13. To explore the assembly process, hide the overlay and press on the "mouse lock" button on the top-right of the page. Your mouse will disapear. This means that your mouse is locked. One may exit mouse lock at any time by pressing the escape key. While in mouse lock, the virtual camera linked to the display may be angled through mouse movement. Furthermore, the camera may be moved using the W,S,A,D, and Space keys. For ease of viewing, time progression in the assembly animation may be sped up through scrolling up on the mouse wheel or slowed down by scrolling down.
 
 ## Contribution guidelines ##
-Current efforts are being completed by the Design Engineering Lab at Oregon State University. If you are interested in contributing contact Prof. Matt Campbell at matt<dot>campbell<at>oregonstate<dot>edu.
+Current efforts are being completed by the Design Engineering Lab at Oregon State University. If you are interested in contributing contact Prof. Matt.Campbell<at>oregonstate<dot>edu.
